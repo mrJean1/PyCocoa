@@ -9,7 +9,7 @@ import unittest
 
 
 __all__ = ('TestSuite',)
-__version__ = '18.03.02'
+__version__ = '18.03.10'
 
 _python_exe = sys.executable
 
@@ -53,9 +53,6 @@ class TestSuite(unittest.TestCase):
     def test_Protocols(self):
         self._run('list_protocols NSColor')
 
-    def test_SubClasses(self):
-        self._run('simple_subclass')
-
     def test_Application(self):
         self._run('simple_application 3')  # waits 3 secs
 
@@ -64,6 +61,12 @@ class TestSuite(unittest.TestCase):
 
     def test_Drawing(self):
         self._run('simple_drawing 2')  # waits 2 secs
+
+    def test_Menu(self):
+        self._run('simple_menu 3')
+
+    def test_SubClasses(self):
+        self._run('simple_subclass')
 
 #   def test_VLCplayer(self):
 #       self._run('simple_VLCplayer <secs> <video_file_name>')

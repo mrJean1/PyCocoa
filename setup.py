@@ -22,7 +22,7 @@
 from setuptools import setup
 
 __all__ = ()
-__version__ = '18.03.02'
+__version__ = '18.03.10'
 
 
 def _c2(*names):
@@ -45,12 +45,12 @@ def _long_description():
         return t
 
 
-_KeyWords=('Cocoa', 'ctypes', 'Objective-C', 'VLC',)
+_KeyWords=('Cocoa', 'ctypes', 'Objective-C', 'VLC', 'VLCplayer')
 
 setup(
     name='PyCocoa',
     packages=['pycocoa'],
-    description='Pure Python Cocoa Objective-C ctypes',
+    description="Python binding to macOS' Objective-C Cocoa",
     version=_version(),
 
     author='Jean M. Brouwers',

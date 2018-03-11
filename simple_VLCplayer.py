@@ -8,12 +8,17 @@
 # be installed on macOS, see <http://www.VideoLan.org/index.html> with
 # the Python-VLC binding, see <http://PyPI.Python.org/pypi/python-vlc>.
 
+# This VLC player has only been tested with VLC 2.2.6 and 3.0.1 and the
+# corresponding vlc.py Python-VLC binding using 64-bit Python 2.7.14 and
+# 3.6.4 on macOS 10.13.3 High Sierra.  The player does not work (yet)
+# with PyPy Python <http://pypy.org> nor with Intel(R) Python
+# <http://software.intel.com/en-us/distribution-for-python>.
+
 import os
 import sys
 if not sys.platform.startswith('darwin'):
     raise ImportError('unsupported platform: %s' % (sys.platform,))
 
-# similarly, raise ImportError for vlc.py if pycocoa package is missing
 try:  # the imports listed explicitly to help PyChecker
     from pycocoa import NSAlternateKeyMask, NSApplication, \
                         NSBackingStoreBuffered, NSCommandKeyMask, \
@@ -24,10 +29,11 @@ try:  # the imports listed explicitly to help PyChecker
                         ObjCSubclass, PyObjectEncoding, \
                         get_selector, nsString2str, send_super
 except ImportError:
-    raise ImportError('no %s module (%s)' % ('pycocoa', '<TBA>'))
+    raise ImportError('no %s module (%s)' % ('pycocoa',
+                      '<http://PyPI.Python.org/pypi/PyCocoa>'))
 
 __all__  = ('appVLC',)
-__version__ = '18.03.09'
+__version__ = '18.03.10'
 
 _Title  = os.path.basename(__file__)
 _Movies = '.mov', '.mp4'  # lower-case file types for movies, videos
@@ -257,7 +263,7 @@ def appVLC(title=_Title, video='', player=None, timeout=None):
 if __name__ == '__main__':
 
     secs = None
-    arg0 = os.path.basename(sys.argv[0])
+    arg0 = os.path.basename(sys.argv[0])  # _Title
 
     args = sys.argv[1:]
     while args and args[0].startswith('-'):
@@ -274,7 +280,7 @@ if __name__ == '__main__':
 
     if args:
         video = args.pop(0)
-    else:  # select a video from the panel
+    else:
         print('\n%s: select a video from the open file panel ...\n' % (arg0,))
         video = _OpenFilePanel(_Movies)
 
@@ -283,10 +289,11 @@ if __name__ == '__main__':
             import vlc
         except ImportError:
             raise ImportError('no %s module (%s)' % ('vlc.py',
-                              '<http=://PyPI.Python.org/pypi/python-vlc>'))
+                              '<http://PyPI.Python.org/pypi/python-vlc>'))
 
         print('\n%s using: vlc.py %s, libVLC %s, Python %s\n' % (arg0,
               vlc.__version__, vlc.libvlc_get_version(), sys.version.split()[0]))
+
         inst = vlc.Instance()
         player = inst.media_player_new()
         media = inst.media_new(video)

@@ -10,7 +10,7 @@
 from pycocoa import NSBackingStoreBuffered, NSMakeRect, NSString, \
                     NSUsualWindowMask, send_message
 
-__version__ = '17.11.18'
+__version__ = '18.03.10'
 
 
 def create_window():
@@ -40,5 +40,12 @@ def application():
 
 if __name__ == '__main__':
 
+    import sys
+
     app = application()
+
+    if len(sys.argv) > 1:
+        from test import terminating
+        terminating(app, sys.argv[1])
+
     send_message(app, 'run')  # never returns

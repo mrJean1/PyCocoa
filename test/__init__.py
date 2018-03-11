@@ -71,16 +71,36 @@ from time import sleep
 
 from testsuite import TestSuite  # PYCHOK for setup.py
 
-__all__ = ('testing',)
-__version__ = '17.11.18'
+__all__ = ('terminating', 'testing',)
+__version__ = '18.03.10'
+
+
+def terminating(app, testime):
+    '''Set up a separate thread to terminate an NSApplication
+    by calling the C{.terminate_} method after the given time
+    has elapsed.
+    '''
+    try:
+        secs = float(testime) + 0.5
+    except ValueError:
+        return
+
+    def _terminate():
+        sleep(secs)
+        app.terminate_(app)
+
+    t = Thread(target=_terminate)
+    t.start()
 
 
 def testing(delegate, testime):
     '''Set up a separate thread to terminate an NSApplication
     by closing the main window after the given time has elapsed.
 
-    The I{delegate} is the NSWindow or NSApp C{Delegate} instance
-    which must include the C{.windowWillClose_} method.
+    The I{delegate} is the NSWindow or NSApplication C{Delegate}
+    instance which must include the C{.windowWillClose_} method
+    which in turn terminates the NSApplication by calling its
+    C{.terminate_} method.
     '''
     try:
         quit = delegate.windowWillClose_
@@ -90,9 +110,9 @@ def testing(delegate, testime):
     except ValueError:
         return  # no testime
 
-    def terminate():
+    def _terminate():
         sleep(secs)
         quit(None)
 
-    t = Thread(target=terminate)
+    t = Thread(target=_terminate)
     t.start()

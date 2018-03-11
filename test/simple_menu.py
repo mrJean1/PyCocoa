@@ -12,7 +12,7 @@ from pycocoa import NSApplication, NSAutoreleasePool, \
                     NSMenuItem, NSString, NSUsualWindowMask, \
                     NSWindow, get_selector
 
-__version__ = '17.11.18'
+__version__ = '18.03.10'
 
 
 def create_window(title=''):
@@ -66,6 +66,12 @@ def application(name='app'):
 if __name__ == '__main__':
 
     import os
+    import sys
 
     app = application(os.path.basename(__file__))
+
+    if len(sys.argv) > 1:
+        from test import terminating
+        terminating(app, sys.argv.pop(1))
+
     app.run()  # never returns

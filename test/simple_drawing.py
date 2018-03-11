@@ -1,7 +1,7 @@
 
 # encoding: utf-8
 
-# Reworked from <http://github.com/ActiveState/code/tree/master/recipes/Python/303058_Simple_PyObjC_Example>
+# Reworked from <http://GitHub.com/ActiveState/code/tree/master/recipes/Python/303058_Simple_PyObjC_Example>
 # showing an NSWindow with a basic, drawable NSView.
 
 from math import sin, cos, pi as PI
@@ -13,7 +13,7 @@ from pycocoa import NSApplication, NSBackingStoreBuffered, \
                     ObjCSubclass, send_super
 from pycocoa.oclibs import libAppKit
 
-__version__ = '18.03.09'
+__version__ = '18.03.10'
 
 NSRectFill = libAppKit.NSRectFill
 
