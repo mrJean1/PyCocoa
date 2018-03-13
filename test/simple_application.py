@@ -18,7 +18,7 @@ from pycocoa import get_selector, NSApplication, NSAutoreleasePool, \
                     PyObjectEncoding, ObjCClass, ObjCInstance, \
                     ObjCSubclass, send_super
 
-__version__ = '17.11.17'
+__version__ = '18.03.12'
 
 # <http://StackOverflow.com/questions/24024723/swift-using-
 #  nsstatusbar-statusitemwithlength-and-nsvariablestatusitemlength>
@@ -91,7 +91,7 @@ class TheDelegate_Implementation(object):  # NSObject):
             self.app.terminate_(self)
 
 
-def main(testime=None):
+def main(timeout=None):
 
     # prepare and set our delegate
     app = NSApplication.sharedApplication()
@@ -100,6 +100,7 @@ def main(testime=None):
 
     delegate = TheDelegate.alloc().init()  # PYCHOK expected
     app.setDelegate_(delegate)
+    delegate.app = app
 
     delegate.badge = app.dockTile()
     delegate.writer(0)
@@ -109,10 +110,13 @@ def main(testime=None):
     t.setDaemon(1)
     t.start()
 
-    if testime:
-        from test import testing
-        delegate.app = app
-        testing(delegate, testime)
+    # set up the timeout
+    if timeout is not None:
+        try:  # PyCocoa/test
+            from test import terminating
+            terminating(app, timeout)
+        except ImportError:
+            pass
 
     # let her rip!-)
     app.run()  # AppHelper.runEventLoop()

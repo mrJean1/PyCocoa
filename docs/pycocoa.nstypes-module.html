@@ -61,7 +61,7 @@
 <h1 class="epydoc">Module nstypes</h1><p class="nomargin-top"></p>
 <hr />
 <div class="fields">      <p><strong>Version:</strong>
-        17.11.19
+        18.03.11
       </p>
 </div><!-- ==================== CLASSES ==================== -->
 <a name="section-Classes"></a>
@@ -123,7 +123,9 @@
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
         <a href="pycocoa.nstypes.NSString-class.html" class="summary-name">NSString</a><br />
-      Auto-released version of CFString class.
+      Auto-released version of the <a 
+        href="pycocoa.nstypes.CFString-class.html" 
+        class="link">CFString</a> class.
     </td>
   </tr>
 <tr>
@@ -131,7 +133,8 @@
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
         <a href="pycocoa.nstypes.at-class.html" class="summary-name">at</a><br />
-      Acronym for NSString class.
+      Acronym for the <a href="pycocoa.nstypes.NSString-class.html" 
+        class="link">NSString</a> class.
     </td>
   </tr>
 </table>
@@ -386,8 +389,8 @@
         <tr>
           <td><span class="summary-sig"><a href="pycocoa.nstypes-module.html#ns2py" class="summary-sig-name">ns2py</a>(<span class="summary-sig-arg">nsObj</span>,
         <span class="summary-sig-arg">default</span>=<span class="summary-sig-default">None</span>)</span><br />
-      From an (instance of an) NS/CFObject create the equivalent Python 
-      type and value.</td>
+      Convert an (instance of an) NS/CFObject to the equivalent Python type
+      and value.</td>
           <td align="right" valign="top">
             
             
@@ -404,7 +407,7 @@
       <table width="100%" cellpadding="0" cellspacing="0" border="0">
         <tr>
           <td><span class="summary-sig"><a href="pycocoa.nstypes-module.html#py2NS" class="summary-sig-name">py2NS</a>(<span class="summary-sig-arg">pyobj</span>)</span><br />
-      Convert an NS...</td>
+      Convert an (instance of a) Python object into an instance of an NS...</td>
           <td align="right" valign="top">
             
             
@@ -658,44 +661,44 @@
     </td>
   </tr></table>
   
-  <p>From an (instance of an) NS/CFObject create the equivalent Python type
+  <p>Convert an (instance of an) NS/CFObject to the equivalent Python type 
   and value.</p>
   <ul>
     <li>
-      NSArray         - tuple
+      NSArray         -&gt; tuple
     </li>
     <li>
-      NSBoolean       - bool
+      NSBoolean       -&gt; bool
     </li>
     <li>
-      NSData          - bytes
+      NSData          -&gt; bytes
     </li>
     <li>
-      NSDecimalNumber - Decimal
+      NSDecimalNumber -&gt; Decimal
     </li>
     <li>
-      NSDictionary    - dict
+      NSDictionary    -&gt; dict
     </li>
     <li>
-      NSMutableArray  - list
+      NSMutableArray  -&gt; list
     </li>
     <li>
-      NSMutableSet    - set
+      NSMutableSet    -&gt; set
     </li>
     <li>
-      NSMutableString - str
+      NSMutableString -&gt; str
     </li>
     <li>
-      NSNumber        - int or float
+      NSNumber        -&gt; int or float
     </li>
     <li>
-      NSNull          - None
+      NSNull          -&gt; None
     </li>
     <li>
-      NSSet           - frozenset
+      NSSet           -&gt; frozenset
     </li>
     <li>
-      NSString        - str
+      NSString        -&gt; str
     </li>
   </ul>
   <dl class="fields">
@@ -716,50 +719,50 @@
     </td>
   </tr></table>
   
-  <p>Convert an NS... Objective-C class instance from an (instance of a) 
-  Python object:</p>
+  <p>Convert an (instance of a) Python object into an instance of an NS... 
+  Objective-C class as follows:</p>
   <ul>
     <li>
-      bool      - NSBoolean/NSNumber
+      bool      -&gt; NSBoolean/NSNumber
     </li>
     <li>
-      bytes     - NSData
+      bytes     -&gt; NSData
     </li>
     <li>
-      bytearray - NSData
+      bytearray -&gt; NSData
     </li>
     <li>
-      Decimal   - NSDecimalNumber
+      Decimal   -&gt; NSDecimalNumber
     </li>
     <li>
-      dict      - NSMutableDictionary
+      dict      -&gt; NSMutableDictionary
     </li>
     <li>
-      float     - NSNumber
+      float     -&gt; NSNumber
     </li>
     <li>
-      frozenset - NSSet, immutable
+      frozenset -&gt; NSSet, immutable
     </li>
     <li>
-      int       - NSNumber
+      int       -&gt; NSNumber
     </li>
     <li>
-      list      - NSMutableArray
+      list      -&gt; NSMutableArray
     </li>
     <li>
-      None      - NSNull
+      None      -&gt; NSNull
     </li>
     <li>
-      set       - NSMutableSet
+      set       -&gt; NSMutableSet
     </li>
     <li>
-      str       - NSString, immutable
+      str       -&gt; NSString, immutable
     </li>
     <li>
-      tuple     - NSArray, immutable
+      tuple     -&gt; NSArray, immutable
     </li>
     <li>
-      unicode   - NSString, immutable
+      unicode   -&gt; NSString, immutable
     </li>
   </ul>
   <dl class="fields">
@@ -844,7 +847,7 @@
 <table border="0" cellpadding="0" cellspacing="0" width="100%%">
   <tr>
     <td align="left" class="footer">
-    Generated by Epydoc 3.0.1 on Sun Mar 11 14:35:03 2018
+    Generated by Epydoc 3.0.1 on Tue Mar 13 13:36:01 2018
     </td>
     <td align="right" class="footer">
       <a target="mainFrame" href="http://epydoc.sourceforge.net"

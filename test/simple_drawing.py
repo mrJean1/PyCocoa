@@ -13,7 +13,7 @@ from pycocoa import NSApplication, NSBackingStoreBuffered, \
                     ObjCSubclass, send_super
 from pycocoa.oclibs import libAppKit
 
-__version__ = '18.03.10'
+__version__ = '18.03.12'
 
 NSRectFill = libAppKit.NSRectFill
 
@@ -75,7 +75,7 @@ class _Delegate_Implementation(object):
 _Delegate = ObjCClass('_Delegate')  # the actual class
 
 
-def main(testime=None):
+def main(timeout=None):
 
     app = NSApplication.sharedApplication()
 
@@ -96,9 +96,13 @@ def main(testime=None):
     window.display()
     window.orderFrontRegardless()
 
-    if testime:
-        from test import testing
-        testing(delegate, testime)
+    # set up the timeout
+    if timeout is not None:
+        try:  # PyCocoa/test
+            from test import terminating
+            terminating(app, timeout)
+        except ImportError:
+            pass
 
     app.run()
 #   print('Done')

@@ -10,7 +10,7 @@ from pycocoa import NSApplication, NSBackingStoreBuffered, \
                     NSWindow, PyObjectEncoding, ObjCClass, \
                     ObjCInstance, ObjCSubclass, send_super
 
-__version__ = '17.11.16'
+__version__ = '18.03.12'
 
 
 class _Delegate_Implementation(object):
@@ -45,7 +45,7 @@ class _Delegate_Implementation(object):
 _Delegate = ObjCClass('_Delegate')  # the actual class
 
 
-def main(testime=None):
+def main(timeout=None):
     # Create a new application instance ...
     app = NSApplication.sharedApplication()
     # ... and create its delgate.  Note the use of the
@@ -73,9 +73,13 @@ def main(testime=None):
     # All set.  Now we can show the window
     window.orderFrontRegardless()
 
-    if testime:
-        from test import testing
-        testing(delegate, testime)
+    # set up the timeout
+    if timeout is not None:
+        try:  # PyCocoa/test
+            from test import terminating
+            terminating(app, timeout)
+        except ImportError:
+            pass
 
     # ... and start the application
     app.run()  # .runEventLoop()

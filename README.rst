@@ -4,10 +4,10 @@ PyCocoa
 =======
 
 A basic, partial, ctypes_-based Python binding to the macOS_ Objective-C
-Cocoa runtime and several macOS_ libraries.
+Cocoa runtime and several other macOS_ libraries.
 
-This is package `cocoa-python`_ by *Phillip Nguyen (C) 2011* enhanced,
-modified, tested, documented and published under the original
+This is package `cocoa-python`_ by *Phillip Nguyen (C) 2011*, modified,
+extended, tested, documented and published under the original
 `New BSD License`_ and the `MIT License`_.
 
 In addition to the pycocoa_ package, the distribution files contain several
@@ -30,11 +30,11 @@ or GitHub_, ``unzip`` the downloaded file, ``cd`` to directory
 ``PyCocoa-`` and type ``python setup.py install``.  To run all PyCocoa
 tests, type ``python setup.py test`` before installation.
 
-Some alternatives to PyCocoa are PyObjC_, the most comprehensive Python to
-Objective-C bridge and `Rubicon-ObjC`_ for Python 3.5+, taking advantage
-of Python's new typing_ annotations.
+Two alternatives to PyCocoa are (a) PyObjC_, the most comprehensive
+Python to Objective-C bridge and (b) `Rubicon-ObjC`_ for Python 3.5+,
+taking advantage of Python's new typing_ annotations.
 
-*Last updated: Mar 10, 2018.*
+*Last updated: Mar 12, 2018.*
 
 .. _checked: http://GitHub.com/ActiveState/code/tree/master/recipes/Python/546532_PyChecker_postprocessor
 .. _cocoa-python: http://GitHub.com/phillip-nguyen/cocoa-python

@@ -61,58 +61,43 @@
 from os.path import abspath, dirname
 import sys
 
-_test_dir = dirname(abspath(__file__))
-# extend sys.path to include the ../.. directory
-if _test_dir not in sys.path:  # Python 3+ ModuleNotFoundError
-    sys.path.insert(0, _test_dir)
+d = dirname(abspath(__file__))
+# extend sys.path ... Python 3+ ModuleNotFoundError
+if d not in sys.path:
+    sys.path.insert(0, d)
+del d
 
 from threading import Thread
 from time import sleep
 
 from testsuite import TestSuite  # PYCHOK for setup.py
 
-__all__ = ('terminating', 'testing',)
-__version__ = '18.03.10'
+__all__ = ('terminating',)
+__version__ = '18.03.12'
 
 
-def terminating(app, testime):
+def terminating(app, timeout):
     '''Set up a separate thread to terminate an NSApplication
     by calling the C{.terminate_} method after the given time
     has elapsed.
+
+    Similarly, the NSWindow could be closed, provided the
+    NSWindow or NSApplication C{Delegate} instance includes the
+    C{.windowWillClose_} method which in turn terminates the
+    NSApplication's C{.terminate_} method.
     '''
     try:
-        secs = float(testime) + 0.5
+        terminate = app.terminate_
+        secs = float(timeout) + 0.5
+    except AttributeError:
+        raise ValueError('%s invalid: %r' % ('app', app))
     except ValueError:
         return
 
-    def _terminate():
+    def _terminating():
         sleep(secs)
-        app.terminate_(app)
+        # <http://developer.apple.com/documentation/appkit/nsapplication/1428417-terminate>
+        terminate(app)
 
-    t = Thread(target=_terminate)
-    t.start()
-
-
-def testing(delegate, testime):
-    '''Set up a separate thread to terminate an NSApplication
-    by closing the main window after the given time has elapsed.
-
-    The I{delegate} is the NSWindow or NSApplication C{Delegate}
-    instance which must include the C{.windowWillClose_} method
-    which in turn terminates the NSApplication by calling its
-    C{.terminate_} method.
-    '''
-    try:
-        quit = delegate.windowWillClose_
-        secs = float(testime) + 0.5
-    except AttributeError:
-        raise ValueError('not a Delegate %r' % (delegate,))
-    except ValueError:
-        return  # no testime
-
-    def _terminate():
-        sleep(secs)
-        quit(None)
-
-    t = Thread(target=_terminate)
+    t = Thread(target=_terminating)
     t.start()

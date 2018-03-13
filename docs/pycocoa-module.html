@@ -61,10 +61,10 @@
 <p>A basic, partial, <a 
   href="http://Docs.Python.org/2.7/library/ctypes.html" 
   target="_top">ctypes</a>-based Python binding to the <i>macOS</i> 
-  Objective-C Cocoa runtime and several <i>macOS</i> libraries.</p>
+  Objective-C Cocoa runtime and several other <i>macOS</i> libraries.</p>
   <p>This is the <a href="http://GitHub.com/phillip-nguyen/cocoa-python" 
-  target="_top">cocoa-python</a> package by <i>Phillip Nguyen (C) 2011</i> 
-  enhanced, modified, tested, documented and published under the original 
+  target="_top">cocoa-python</a> package by <i>Phillip Nguyen (C) 2011</i>,
+  modified, extended, tested, documented and published under the original 
   <a href="http://OpenSource.org/licenses/BSD-3-Clause" target="_top">New 
   BSD License</a> and the <a href="http://OpenSource.org/licenses/MIT" 
   target="_top">MIT License</a>.</p>
@@ -105,9 +105,9 @@
   <code>PyCocoa-</code> and type <code>python setup.py install</code>.  To 
   run the PyCocoa tests, type <code>python setup.py test</code> before 
   installation.</p>
-  <p>Some alternatives to PyCocoa are <a 
+  <p>Two alternatives to PyCocoa are (a) <a 
   href="http://PyPI.Python.org/pypi/pyobjc/" target="_top">PyObjC</a>, the 
-  most comprehensive Python to Objective-C bridge and <a 
+  most comprehensive Python to Objective-C bridge and (b) <a 
   href="http://PyPI.Python.org/pypi/rubicon-objc/" 
   target="_top">Rubicon-ObjC</a> for Python 3.5+, taking advantage of 
   Python's new <a href="http://Docs.Python.org/3/library/typing.html" 
@@ -164,7 +164,7 @@
 
 <hr />
 <div class="fields">      <p><strong>Version:</strong>
-        18.03.10
+        18.03.12
       </p>
 </div><!-- ==================== SUBMODULES ==================== -->
 <a name="section-Submodules"></a>
@@ -375,7 +375,9 @@
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
         <a href="pycocoa.nstypes.NSString-class.html" class="summary-name">NSString</a><br />
-      Auto-released version of CFString class.
+      Auto-released version of the <a 
+        href="pycocoa.nstypes.CFString-class.html" 
+        class="link">CFString</a> class.
     </td>
   </tr>
 <tr>
@@ -445,7 +447,8 @@
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
         <a href="pycocoa.nstypes.at-class.html" class="summary-name">at</a><br />
-      Acronym for NSString class.
+      Acronym for the <a href="pycocoa.nstypes.NSString-class.html" 
+        class="link">NSString</a> class.
     </td>
   </tr>
 <tr>
@@ -464,6 +467,40 @@
   <td align="left" colspan="2" class="table-header">
     <span class="table-header">Functions</span></td>
 </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a name="abspath"></a><span class="summary-sig-name">abspath</span>(<span class="summary-sig-arg">path</span>)</span><br />
+      Return an absolute path.</td>
+          <td align="right" valign="top">
+            
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a name="dirname"></a><span class="summary-sig-name">dirname</span>(<span class="summary-sig-arg">p</span>)</span><br />
+      Returns the directory component of a pathname</td>
+          <td align="right" valign="top">
+            
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
 <tr>
     <td width="15%" align="right" valign="top" class="summary">
       <span class="summary-type">&nbsp;</span>
@@ -981,8 +1018,8 @@
         <tr>
           <td><span class="summary-sig"><a href="pycocoa-module.html#ns2py" class="summary-sig-name">ns2py</a>(<span class="summary-sig-arg">nsObj</span>,
         <span class="summary-sig-arg">default</span>=<span class="summary-sig-default">None</span>)</span><br />
-      From an (instance of an) NS/CFObject create the equivalent Python 
-      type and value.</td>
+      Convert an (instance of an) NS/CFObject to the equivalent Python type
+      and value.</td>
           <td align="right" valign="top">
             
             
@@ -1160,7 +1197,7 @@
       <table width="100%" cellpadding="0" cellspacing="0" border="0">
         <tr>
           <td><span class="summary-sig"><a href="pycocoa-module.html#py2NS" class="summary-sig-name">py2NS</a>(<span class="summary-sig-arg">pyobj</span>)</span><br />
-      Convert an NS...</td>
+      Convert an (instance of a) Python object into an instance of an NS...</td>
           <td align="right" valign="top">
             
             
@@ -2787,44 +2824,44 @@
     </td>
   </tr></table>
   
-  <p>From an (instance of an) NS/CFObject create the equivalent Python type
+  <p>Convert an (instance of an) NS/CFObject to the equivalent Python type 
   and value.</p>
   <ul>
     <li>
-      NSArray         - tuple
+      NSArray         -&gt; tuple
     </li>
     <li>
-      NSBoolean       - bool
+      NSBoolean       -&gt; bool
     </li>
     <li>
-      NSData          - bytes
+      NSData          -&gt; bytes
     </li>
     <li>
-      NSDecimalNumber - Decimal
+      NSDecimalNumber -&gt; Decimal
     </li>
     <li>
-      NSDictionary    - dict
+      NSDictionary    -&gt; dict
     </li>
     <li>
-      NSMutableArray  - list
+      NSMutableArray  -&gt; list
     </li>
     <li>
-      NSMutableSet    - set
+      NSMutableSet    -&gt; set
     </li>
     <li>
-      NSMutableString - str
+      NSMutableString -&gt; str
     </li>
     <li>
-      NSNumber        - int or float
+      NSNumber        -&gt; int or float
     </li>
     <li>
-      NSNull          - None
+      NSNull          -&gt; None
     </li>
     <li>
-      NSSet           - frozenset
+      NSSet           -&gt; frozenset
     </li>
     <li>
-      NSString        - str
+      NSString        -&gt; str
     </li>
   </ul>
   <dl class="fields">
@@ -2845,50 +2882,50 @@
     </td>
   </tr></table>
   
-  <p>Convert an NS... Objective-C class instance from an (instance of a) 
-  Python object:</p>
+  <p>Convert an (instance of a) Python object into an instance of an NS... 
+  Objective-C class as follows:</p>
   <ul>
     <li>
-      bool      - NSBoolean/NSNumber
+      bool      -&gt; NSBoolean/NSNumber
     </li>
     <li>
-      bytes     - NSData
+      bytes     -&gt; NSData
     </li>
     <li>
-      bytearray - NSData
+      bytearray -&gt; NSData
     </li>
     <li>
-      Decimal   - NSDecimalNumber
+      Decimal   -&gt; NSDecimalNumber
     </li>
     <li>
-      dict      - NSMutableDictionary
+      dict      -&gt; NSMutableDictionary
     </li>
     <li>
-      float     - NSNumber
+      float     -&gt; NSNumber
     </li>
     <li>
-      frozenset - NSSet, immutable
+      frozenset -&gt; NSSet, immutable
     </li>
     <li>
-      int       - NSNumber
+      int       -&gt; NSNumber
     </li>
     <li>
-      list      - NSMutableArray
+      list      -&gt; NSMutableArray
     </li>
     <li>
-      None      - NSNull
+      None      -&gt; NSNull
     </li>
     <li>
-      set       - NSMutableSet
+      set       -&gt; NSMutableSet
     </li>
     <li>
-      str       - NSString, immutable
+      str       -&gt; NSString, immutable
     </li>
     <li>
-      tuple     - NSArray, immutable
+      tuple     -&gt; NSArray, immutable
     </li>
     <li>
-      unicode   - NSString, immutable
+      unicode   -&gt; NSString, immutable
     </li>
   </ul>
   <dl class="fields">
@@ -2914,10 +2951,11 @@
   
   <p>Send message to the given <i>receiver</i>.</p>
   <p>By default, the result and all arguments are <code>c_void_p</code> 
-  wrapped. Use keyword arguments <i>restype=c_void_p</i> and 
-  <i>argtypes=[]</i> to change the defaults.  The <i>restype</i> defines 
-  the <code>ctypes</code> type for the returned result and <i>argtypes</i> 
-  is the list of <code>ctypes</code> types for the message arguments only 
+  wrapped.</p>
+  <p>Use keyword arguments <i>restype=c_void_p</i> and <i>argtypes=[]</i> 
+  to change the defaults.  The <i>restype</i> defines the 
+  <code>ctypes</code> type for the returned result and <i>argtypes</i> is 
+  the list of <code>ctypes</code> types for the message arguments only 
   (without the <code>id/self</code> and <code>self/cmd</code> 
   arguments).</p>
   <dl class="fields">
@@ -2943,10 +2981,11 @@
   
   <p>Send message to the superclass of the given <i>receiver</i>.</p>
   <p>By default, the result and all arguments are <code>c_void_p</code> 
-  wrapped. Use keyword arguments <i>restype=c_void_p</i> and 
-  <i>argtypes=[]</i> to change the defaults.  The <i>restype</i> defines 
-  the <code>ctypes</code> type for the returned result and <i>argtypes</i> 
-  is the list of <code>ctypes</code> types for the message arguments only 
+  wrapped.</p>
+  <p>Use keyword arguments <i>restype=c_void_p</i> and <i>argtypes=[]</i> 
+  to change the defaults.  The <i>restype</i> defines the 
+  <code>ctypes</code> type for the returned result and <i>argtypes</i> is 
+  the list of <code>ctypes</code> types for the message arguments only 
   (without the <code>id/self</code> and <code>self/cmd</code> 
   arguments).</p>
   <dl class="fields">
@@ -3191,7 +3230,7 @@
 <table border="0" cellpadding="0" cellspacing="0" width="100%%">
   <tr>
     <td align="left" class="footer">
-    Generated by Epydoc 3.0.1 on Sun Mar 11 14:35:03 2018
+    Generated by Epydoc 3.0.1 on Tue Mar 13 13:36:01 2018
     </td>
     <td align="right" class="footer">
       <a target="mainFrame" href="http://epydoc.sourceforge.net"

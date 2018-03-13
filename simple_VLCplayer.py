@@ -23,7 +23,7 @@ try:  # the imports listed explicitly to help PyChecker
     from pycocoa import NSAlternateKeyMask, NSApplication, \
                         NSBackingStoreBuffered, NSCommandKeyMask, \
                         NSControlKeyMask, NSMakeRect, NSMenu, \
-                        NSMenuItem, NSOpenPanel, NSScreen, \
+                        NSMenuItem, NSOpenPanel, NSScreen, NSSize, \
                         NSShiftKeyMask, NSString, NSUsualWindowMask, \
                         NSView, NSWindow, ObjCClass, ObjCInstance, \
                         ObjCSubclass, PyObjectEncoding, \
@@ -32,8 +32,17 @@ except ImportError:
     raise ImportError('no %s module (%s)' % ('pycocoa',
                       '<http://PyPI.Python.org/pypi/PyCocoa>'))
 
+try:
+    from math import gcd  # Python 3+
+except ImportError:
+    try:
+        from fractions import gcd  # Python 2-
+    except ImportError:
+        def gcd(*unused):
+            return 10
+
 __all__  = ('appVLC',)
-__version__ = '18.03.10'
+__version__ = '18.03.12'
 
 _Title  = os.path.basename(__file__)
 _Movies = '.mov', '.mp4'  # lower-case file types for movies, videos
@@ -61,6 +70,7 @@ class _Delegate_Implementation(object):
         self.app    = app
         self.badge  = None
         self.player = player
+        self.ratio  = None
         self.title  = title
         self.video  = video  # file name in window banner
         self.window = None
@@ -106,6 +116,8 @@ class _Delegate_Implementation(object):
         self.app.setMainMenu_(menuBar)
 
         self.play_(None)
+        # adjust the contents' aspect ratio
+        self.windowDidResize_(None)
 
     @_Delegate.method(b'@' + PyObjectEncoding)
     def badgelabel(self, label):
@@ -149,6 +161,22 @@ class _Delegate_Implementation(object):
             self.badgelabel('R')
 
     @_Delegate.method('v@')
+    def windowDidResize_(self, notification):
+        # this method is only called if this
+        # _Delegate is the window's delegate
+        if self.player and self.window and not self.ratio:
+            # get and maintain the aspect ratio
+            # (the first player.video_get_size()
+            #  call returns (0, 0), subsequent
+            #  calls return (w, h) correctly)
+            w, h = self.player.video_get_size(0)
+            r = gcd(w, h)
+            if r and w and h:
+                r = NSSize(w // r , h // r)
+                self.window.setContentAspectRatio_(r)
+                self.ratio = r
+
+    @_Delegate.method('v@')
     def windowWillClose_(self, notification):
         # this method is only called if this
         # _Delegate is the window's delegate
@@ -161,6 +189,7 @@ _Delegate = ObjCClass('_Delegate')  # the actual class
 def _MenuItem(label, action=None, key='', alt=False, cmd=True, ctrl=False, shift=False):
     '''New menu item with action and optional shortcut key.
     '''
+    # <http://developer.apple.com/documentation/appkit/nsmenuitem/1514858-initwithtitle>
     item = NSMenuItem.alloc().initWithTitle_action_keyEquivalent_(
            NSString(label), get_selector(action), NSString(key))
     if key:
@@ -207,14 +236,18 @@ def _OpenFilePanel(filetypes, aliases=False, files=True, dirs=False, multiple=Fa
 
 
 def _Window2(title=_Title, fraction=0.5):
-    '''Create the main window and drawable view.
+    '''Create the main window and the drawable view.
     '''
+    def _m10(x):  # multiple of 10
+        return max(1, int(x * 0.1) - 1) * 10
+
     screen = NSScreen.alloc().init()
     frame = screen.mainScreen().frame()
     if 0.1 < fraction < 1.0:
+        # use the lower left quarter of the screen size as frame
         frame = NSMakeRect(frame.origin.x + 10, frame.origin.y + 10,
-                           max(10, int(frame.size.width * fraction) - 10),
-                           max(10, int(frame.size.height * fraction) - 10))
+                          _m10(frame.size.width * fraction),
+                          _m10(frame.size.height * fraction))
 
     window = NSWindow.alloc().initWithContentRect_styleMask_backing_defer_(
                 frame,
@@ -225,12 +258,15 @@ def _Window2(title=_Title, fraction=0.5):
     if title:
         window.setTitle_(NSString(title))
 
-    # create the drawable_nsobject NSView for vlc.py see vlc.MediaPlayer.set_nsobject()
+    # create the drawable_nsobject NSView for vlc.py, see vlc.MediaPlayer.set_nsobject()
     # for an alternate NSView object with protocol VLCOpenGLVideoViewEmbedding
     # <http://StackOverflow.com/questions/11562587/create-nsview-directly-from-code>
     # <http://GitHub.com/ariabuckles/pyobjc-framework-Cocoa/blob/master/Examples/AppKit/DotView/DotView.py>
     view = NSView.alloc().initWithFrame_(frame)
     window.setContentView_(view)
+    # force the video/window aspect ratio, adjusted
+    # above when the window is/has been resized
+    window.setContentAspectRatio_(frame.size)
 
     window.makeKeyAndOrderFront_(None)
     return window, view
@@ -245,6 +281,7 @@ def appVLC(title=_Title, video='', player=None, timeout=None):
 
     dlg = _Delegate.alloc().init(app, title, video, player)
     app.setDelegate_(dlg)
+
     # <http://Developer.Apple.com/documentation/appkit/nsdocktile>
     # <http://Developer.Apple.com/documentation/appkit/nsapplication>
     dlg.badge = app.dockTile()  # get the app's NSDockTile instance
@@ -252,8 +289,8 @@ def appVLC(title=_Title, video='', player=None, timeout=None):
     # set up the timeout
     if timeout is not None:
         try:  # PyCocoa/test
-            from test import testing
-            testing(dlg, timeout)
+            from test import terminating
+            terminating(app, timeout)
         except ImportError:
             pass
 
@@ -262,26 +299,27 @@ def appVLC(title=_Title, video='', player=None, timeout=None):
 
 if __name__ == '__main__':
 
-    secs = None
-    arg0 = os.path.basename(sys.argv[0])  # _Title
+    argv0 = os.path.basename(sys.argv[0])  # _Title
+
+    _timeout = None
 
     args = sys.argv[1:]
     while args and args[0].startswith('-'):
         o = args.pop(0)
         t = o.lower()
         if t in ('-h', '--help'):
-            print('usage: %s  [-h|--help]  [-timeout <secs>]  [video_file_name]' % (arg0,))
+            print('usage: %s  [-h|--help]  [-timeout <secs>]  [video_file_name]' % (argv0,))
             sys.exit(0)
         elif '-timeout'.startswith(t) and len(t) > 1 and args:
-            secs = float(args.pop(0))
+            _timeout = args.pop(0)
         else:
-            print('%s invalid option: %s' % (arg0, o))
+            print('%s invalid option: %s' % (argv0, o))
             sys.exit(1)
 
     if args:
         video = args.pop(0)
     else:
-        print('\n%s: select a video from the open file panel ...\n' % (arg0,))
+        print('\n%s: select a video from the open file panel ...\n' % (argv0,))
         video = _OpenFilePanel(_Movies)
 
     if video:
@@ -291,7 +329,7 @@ if __name__ == '__main__':
             raise ImportError('no %s module (%s)' % ('vlc.py',
                               '<http://PyPI.Python.org/pypi/python-vlc>'))
 
-        print('\n%s using: vlc.py %s, libVLC %s, Python %s\n' % (arg0,
+        print('\n%s using: vlc.py %s, libVLC %s, Python %s\n' % (argv0,
               vlc.__version__, vlc.libvlc_get_version(), sys.version.split()[0]))
 
         inst = vlc.Instance()
@@ -300,5 +338,5 @@ if __name__ == '__main__':
         player.set_media(media)
 #       player.play()  # NOT YET!
 
-        app = appVLC(title=arg0, video=video, player=player, timeout=secs)
+        app = appVLC(title=argv0, video=video, player=player, timeout=_timeout)
         app.run()  # never returns

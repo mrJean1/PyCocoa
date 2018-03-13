@@ -76,7 +76,7 @@ from octypes import __i386__, __LP64__, _2bytes, _2str, Class, \
                     Id, IMP, Ivar, Protocol, objc_super, SEL, \
                     split_encoding, split_emcoding2
 
-__version__ = '17.11.19'
+__version__ = '18.03.11'
 
 # <http://Developer.Apple.com/documentation/objectivec/
 #         objc_associationpolicy?language=objc>
@@ -1036,6 +1036,7 @@ def send_message(receiver, selName, *args, **resargtypes):
     '''Send message to the given I{receiver}.
 
     By default, the result and all arguments are C{c_void_p} wrapped.
+
     Use keyword arguments I{restype=c_void_p} and I{argtypes=[]} to
     change the defaults.  The I{restype} defines the C{ctypes} type
     for the returned result and I{argtypes} is the list of C{ctypes}
@@ -1077,6 +1078,7 @@ def send_super(receiver, selName, *args, **resargtypes):
     '''Send message to the superclass of the given I{receiver}.
 
     By default, the result and all arguments are C{c_void_p} wrapped.
+
     Use keyword arguments I{restype=c_void_p} and I{argtypes=[]} to
     change the defaults.  The I{restype} defines the C{ctypes} type
     for the returned result and I{argtypes} is the list of C{ctypes}
@@ -1116,18 +1118,18 @@ def set_ivar(obj, name, value, ctype=None):
 
 class _DeallocObserver_Implementation(object):
     '''Instances of DeallocObserver are associated with every
-    Objective-C object that gets wrapped inside an ObjCInstance.
+    Objective-C object that gets wrapped inside an I{ObjCInstanc}.
 
     Their sole purpose is to watch when the Objective-C object is
-    de-allocated, and then remove the object from the dictionary
-    of cached ObjCInstance objects kept by the ObjCInstance class.
+    de-allocated, and then remove the object from the dictionary of
+    cached I{ObjCInstanc} objects kept by the I{ObjCInstanc} class.
 
     The methods of the class defined below are decorated with
-    rawmethod() instead of method() because DeallocObservers
-    are created inside of ObjCInstance's __new__ method and we have
-    to be careful to not create another ObjCInstance here (which
-    happens when the usual method decorator turns the self argument
-    into an ObjCInstance), or else get trapped in an infinite recursion.
+    I{.rawmethod()} instead of I{.method()} because DeallocObservers
+    are created inside of I{ObjCInstanc}'s __new__ method and we have
+    to be careful to not create another I{ObjCInstanc} here (which
+    happens when the usual method decorator turns the I{self} argument
+    into an I{ObjCInstanc}), or else get trapped in an infinite recursion.
     '''
     DeallocObserver = ObjCSubclass('NSObject', 'DeallocObserver',
                                     observed_obj=Id)  # ivar
@@ -1159,8 +1161,8 @@ def DeallocObserver(obj):
     '''Deallocation observer for an instance object.
 
     When the Objective-C object is de-allocated, the observer
-    removes the corresponding ObjCInstance object from the cached
-    objects dictionary, effectively destroying the ObjCInstance.
+    removes the corresponding I{ObjCInstanc} object from the cached
+    objects dictionary, effectively destroying the I{ObjCInstanc}.
     '''
     alloc = send_message('DeallocObserver', 'alloc',
                          restype=Id, argtypes=[])

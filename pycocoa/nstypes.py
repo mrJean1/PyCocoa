@@ -72,7 +72,7 @@ from octypes import _2bytes, _2clip, _2str, _iterbytes, \
 from runtime import _xargs, isInstanceOf, ObjCClass, ObjCInstance, \
                     get_selector
 
-__version__ = '17.11.19'
+__version__ = '18.03.11'
 
 
 def _noop(arg):
@@ -204,7 +204,7 @@ def NSMakeSize(w, h):
 
 
 class NSString(CFString):
-    '''Auto-released version of CFString class.
+    '''Auto-released version of the L{CFString} class.
     '''
     def __new__(cls, ustr):
         # the Objective-C class is .objc_class or __NSCFString
@@ -214,7 +214,7 @@ class NSString(CFString):
 
 
 class at(NSString):
-    '''Acronym for NSString class.
+    '''Acronym for the L{NSString} class.
     '''
     # XXX Other possible names for this method: at, ampersat, arobe,
     # apenstaartje (little monkey tail), strudel, klammeraffe (spider
@@ -409,21 +409,21 @@ _CFTypeID2py = {libCF.CFArrayGetTypeID():      nsArray2listuple,
 
 
 def ns2py(nsObj, default=None):  # XXX an NSObject method?
-    '''From an (instance of an) NS/CFObject create the
+    '''Convert an (instance of an) NS/CFObject to the
     equivalent Python type and value.
 
-     - NSArray         - tuple
-     - NSBoolean       - bool
-     - NSData          - bytes
-     - NSDecimalNumber - Decimal
-     - NSDictionary    - dict
-     - NSMutableArray  - list
-     - NSMutableSet    - set
-     - NSMutableString - str
-     - NSNumber        - int or float
-     - NSNull          - None
-     - NSSet           - frozenset
-     - NSString        - str
+     - NSArray         -> tuple
+     - NSBoolean       -> bool
+     - NSData          -> bytes
+     - NSDecimalNumber -> Decimal
+     - NSDictionary    -> dict
+     - NSMutableArray  -> list
+     - NSMutableSet    -> set
+     - NSMutableString -> str
+     - NSNumber        -> int or float
+     - NSNull          -> None
+     - NSSet           -> frozenset
+     - NSString        -> str
     '''
     if nsObj is not None:
         # see Rubicon-ObjC/objc/core_foundation.py
@@ -549,23 +549,23 @@ except NameError:  # Python 3+
 
 
 def py2NS(pyobj):
-    '''Convert an NS... Objective-C class instance from an
-    (instance of a) Python object:
+    '''Convert an (instance of a) Python object into an
+    instance of an NS... Objective-C class as follows:
 
-     - bool      - NSBoolean/NSNumber
-     - bytes     - NSData
-     - bytearray - NSData
-     - Decimal   - NSDecimalNumber
-     - dict      - NSMutableDictionary
-     - float     - NSNumber
-     - frozenset - NSSet, immutable
-     - int       - NSNumber
-     - list      - NSMutableArray
-     - None      - NSNull
-     - set       - NSMutableSet
-     - str       - NSString, immutable
-     - tuple     - NSArray, immutable
-     - unicode   - NSString, immutable
+     - bool      -> NSBoolean/NSNumber
+     - bytes     -> NSData
+     - bytearray -> NSData
+     - Decimal   -> NSDecimalNumber
+     - dict      -> NSMutableDictionary
+     - float     -> NSNumber
+     - frozenset -> NSSet, immutable
+     - int       -> NSNumber
+     - list      -> NSMutableArray
+     - None      -> NSNull
+     - set       -> NSMutableSet
+     - str       -> NSString, immutable
+     - tuple     -> NSArray, immutable
+     - unicode   -> NSString, immutable
     '''
     if isinstance(pyobj, ObjCInstance):
         return pyobj

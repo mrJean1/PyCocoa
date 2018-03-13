@@ -5,10 +5,10 @@
 
 u'''A basic, partial, U{ctypes
 <http://Docs.Python.org/2.7/library/ctypes.html>}-based Python binding to
-the I{macOS} Objective-C Cocoa runtime and several I{macOS} libraries.
+the I{macOS} Objective-C Cocoa runtime and several other I{macOS} libraries.
 
 This is the U{cocoa-python<http://GitHub.com/phillip-nguyen/cocoa-python>}
-package by I{Phillip Nguyen (C) 2011} enhanced, modified, tested,
+package by I{Phillip Nguyen (C) 2011}, modified, extended, tested,
 documented and published under the original
 U{New BSD License<http://OpenSource.org/licenses/BSD-3-Clause>} and the
 U{MIT License<http://OpenSource.org/licenses/MIT>}.
@@ -42,8 +42,8 @@ U{GitHub<http://GitHub.com/mrJean1/PyCocoa>}, C{unzip} the downloaded file,
 C{cd} to directory C{PyCocoa-} and type C{python setup.py install}.  To
 run the PyCocoa tests, type C{python setup.py test} before installation.
 
-Some alternatives to PyCocoa are U{PyObjC<http://PyPI.Python.org/pypi/pyobjc/>},
-the most comprehensive Python to Objective-C bridge and
+Two alternatives to PyCocoa are (a) U{PyObjC<http://PyPI.Python.org/pypi/pyobjc/>},
+the most comprehensive Python to Objective-C bridge and (b)
 U{Rubicon-ObjC<http://PyPI.Python.org/pypi/rubicon-objc/>} for Python 3.5+,
 taking advantage of Python's new
 U{typing<http://Docs.Python.org/3/library/typing.html>} annotations.
@@ -109,16 +109,19 @@ OTHER DEALINGS IN THE SOFTWARE.}
 @var libobjc: The macOS C{objc} library (C{ctypes.CDLL})
 '''
 
+from os.path import abspath, dirname
 import sys
+
 p = sys.platform
 if not p.startswith('darwin'):
     raise NotImplementedError('%s not supported, only %s' % (p, 'macOS'))
-import os
+del p
+
 # PyChecker chockes on .import
-d = os.path.dirname(__file__)
+d = dirname(abspath(__file__))
 if d not in sys.path:
     sys.path.insert(0, d)
-del d, p, os, sys
+del d
 
 from nstypes import *  # PYCHOK expected
 from oclibs  import *  # PYCHOK expected
@@ -129,7 +132,7 @@ from runtime import *  # PYCHOK expected
 NSUsualWindowMask = NSClosableWindowMask  | NSMiniaturizableWindowMask \
                   | NSResizableWindowMask | NSTitledWindowMask  # PYCHOK expected
 
-# if needed, for backward compatibility with cocoa-python
+# if needed, for backward compatibility with cocoa-python:
 # CFSTR                         = CFString                   # PYCHOK expected
 # objc                          = libobjc                    # PYCHOK expected
 # OBJC_SUPER                    = objc_super                 # PYCHOK expected
@@ -151,7 +154,7 @@ NSUsualWindowMask = NSClosableWindowMask  | NSMiniaturizableWindowMask \
 
 __all__ = tuple(sorted(set(_ for _ in locals().keys() if
                        not _.startswith(('_', 'CFUNCTION', 'c_', 'lib')))))
-__version__ = '18.03.10'
+__version__ = '18.03.12'
 
 if __name__ == '__main__':
 
