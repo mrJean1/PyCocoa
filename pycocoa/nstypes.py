@@ -72,7 +72,7 @@ from octypes import _2bytes, _2clip, _2str, _iterbytes, \
 from runtime import _xargs, isInstanceOf, ObjCClass, ObjCInstance, \
                     get_selector
 
-__version__ = '18.03.11'
+__version__ = '17.11.19'
 
 
 def _noop(arg):

@@ -154,7 +154,7 @@ NSUsualWindowMask = NSClosableWindowMask  | NSMiniaturizableWindowMask \
 
 __all__ = tuple(sorted(set(_ for _ in locals().keys() if
                        not _.startswith(('_', 'CFUNCTION', 'c_', 'lib')))))
-__version__ = '18.03.12'
+__version__ = '18.03.15'
 
 if __name__ == '__main__':
 

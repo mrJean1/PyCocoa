@@ -34,7 +34,7 @@ Two alternatives to PyCocoa are (a) PyObjC_, the most comprehensive
 Python to Objective-C bridge and (b) `Rubicon-ObjC`_ for Python 3.5+,
 taking advantage of Python's new typing_ annotations.
 
-*Last updated: Mar 12, 2018.*
+*Last updated: Mar 15, 2018.*
 
 .. _checked: http://GitHub.com/ActiveState/code/tree/master/recipes/Python/546532_PyChecker_postprocessor
 .. _cocoa-python: http://GitHub.com/phillip-nguyen/cocoa-python

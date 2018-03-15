@@ -69,7 +69,7 @@ from octypes import c_ptrdiff_t, CFArray, CFIndex, CFNumberType, \
                     NSPoint, NSRect, objc_method_description, \
                     objc_property_t, Protocol, SEL, UniChar  # DEFAULT_UNICODE
 
-__version__ = '17.11.19'
+__version__ = '18.03.14'
 
 c_void = None
 

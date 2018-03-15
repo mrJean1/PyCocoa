@@ -1,4 +1,5 @@
 graft docs
 include docs.html
+include simple_VLCplayer.jpg
 include simple_VLCplayer.py
 graft test
