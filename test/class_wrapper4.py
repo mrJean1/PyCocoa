@@ -7,11 +7,11 @@
 # ObjCClass and ObjCInstance use cached objects with __new__
 
 # all imports listed explicitly to help PyChecker
-from pycocoa import NSApplication, NSBackingStoreBuffered, \
-                    NSMakeRect, NSString, NSUsualWindowMask, NSWindow, \
-                    libobjc, ObjCClass, ObjCInstance, ObjCSubclass
+from pycocoa import NSApplication, NSBackingStoreBuffered, NSRect4_t, \
+                    NSStr, NSWindow, NSWindowStyleMaskUsual, libobjc, \
+                    ObjCClass, ObjCInstance, ObjCSubclass
 
-__version__ = '17.11.18'
+__version__ = '18.04.06'
 
 
 class MySubclassImplementation(object):
@@ -37,11 +37,11 @@ def run_window():
 
     window = NSWindow.alloc()
     window.initWithContentRect_styleMask_backing_defer_(
-        NSMakeRect(100,100,300,300),
-        NSUsualWindowMask,
-        NSBackingStoreBuffered,
-        False)
-    window.setTitle_(NSString("Class Window"))
+           NSRect4_t(100,100,300,300),
+           NSWindowStyleMaskUsual,
+           NSBackingStoreBuffered,
+           False)
+    window.setTitle_(NSStr("Class Window"))
     window.makeKeyAndOrderFront_(None)
 
     app.run()
@@ -100,10 +100,10 @@ if __name__ == '__main__':
     x.doSomething()
     x.doSomething()
 
-    print(ObjCInstance._objects_cache)
+    print(len(ObjCInstance._objc_cache))
     x.release()
     del x
-    print(ObjCInstance._objects_cache)
+    print(len(ObjCInstance._objc_cache))
 
     stupid_stuff(class_name)
 #   run_window()

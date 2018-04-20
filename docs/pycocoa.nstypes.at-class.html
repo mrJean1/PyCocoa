@@ -61,20 +61,22 @@
 <!-- ==================== CLASS DESCRIPTION ==================== -->
 <h1 class="epydoc">Class at</h1><p class="nomargin-top"></p>
 <pre class="base-tree">
-          object --+            
+      object --+                
+               |                
+<a href="pycocoa.runtime.ObjCBase-class.html">runtime.ObjCBase</a> --+            
                    |            
 <a href="pycocoa.runtime.ObjCInstance-class.html">runtime.ObjCInstance</a> --+        
                        |        
-                <a href="pycocoa.nstypes.CFString-class.html">CFString</a> --+    
+                   <a href="pycocoa.nstypes.CFStr-class.html">CFStr</a> --+    
                            |    
-                    <a href="pycocoa.nstypes.NSString-class.html">NSString</a> --+
+                       <a href="pycocoa.nstypes.NSStr-class.html">NSStr</a> --+
                                |
                               <strong class="uidshort">at</strong>
 </pre>
 
 <hr />
-<p>Acronym for the <a href="pycocoa.nstypes.NSString-class.html" 
-  class="link">NSString</a> class.</p>
+<p>Acronym for the <a href="pycocoa.nstypes.NSStr-class.html" 
+  class="link">NSStr</a> wrapper.</p>
 
 <!-- ==================== INSTANCE METHODS ==================== -->
 <a name="section-InstanceMethods"></a>
@@ -86,13 +88,16 @@
 </tr>
   <tr>
     <td colspan="2" class="summary">
-    <p class="indent-wrapped-lines"><b>Inherited from <code><a href="pycocoa.nstypes.CFString-class.html">CFString</a></code></b>:
-      <code><a href="pycocoa.nstypes.CFString-class.html#objc_classname">objc_classname</a></code>
+    <p class="indent-wrapped-lines"><b>Inherited from <code><a href="pycocoa.nstypes.CFStr-class.html">CFStr</a></code></b>:
+      <code><a href="pycocoa.nstypes.CFStr-class.html#__str__">__str__</a></code>
       </p>
     <p class="indent-wrapped-lines"><b>Inherited from <code><a href="pycocoa.runtime.ObjCInstance-class.html">runtime.ObjCInstance</a></code></b>:
       <code><a href="pycocoa.runtime.ObjCInstance-class.html#__getattr__">__getattr__</a></code>,
-      <code><a href="pycocoa.runtime.ObjCInstance-class.html#__repr__">__repr__</a></code>,
+      <code><a href="pycocoa.runtime.ObjCInstance-class.html#release">release</a></code>,
       <code><a href="pycocoa.runtime.ObjCInstance-class.html#set_ivar">set_ivar</a></code>
+      </p>
+    <p class="indent-wrapped-lines"><b>Inherited from <code><a href="pycocoa.runtime.ObjCBase-class.html">runtime.ObjCBase</a></code></b>:
+      <code><a href="pycocoa.runtime.ObjCBase-class.html#__repr__">__repr__</a></code>
       </p>
     <p class="indent-wrapped-lines"><b>Inherited from <code>object</code></b>:
       <code>__delattr__</code>,
@@ -104,7 +109,6 @@
       <code>__reduce_ex__</code>,
       <code>__setattr__</code>,
       <code>__sizeof__</code>,
-      <code>__str__</code>,
       <code>__subclasshook__</code>
       </p>
     </td>
@@ -120,25 +124,8 @@
 </tr>
   <tr>
     <td colspan="2" class="summary">
-    <p class="indent-wrapped-lines"><b>Inherited from <code><a href="pycocoa.nstypes.NSString-class.html">NSString</a></code></b>:
-      <code><a href="pycocoa.nstypes.NSString-class.html#__new__">__new__</a></code>
-      </p>
-    </td>
-  </tr>
-</table>
-<!-- ==================== CLASS VARIABLES ==================== -->
-<a name="section-ClassVariables"></a>
-<table class="summary" border="1" cellpadding="3"
-       cellspacing="0" width="100%" bgcolor="white">
-<tr bgcolor="#70b0f0" class="table-header">
-  <td align="left" colspan="2" class="table-header">
-    <span class="table-header">Class Variables</span></td>
-</tr>
-  <tr>
-    <td colspan="2" class="summary">
-    <p class="indent-wrapped-lines"><b>Inherited from <code><a href="pycocoa.runtime.ObjCInstance-class.html">runtime.ObjCInstance</a></code></b>:
-      <code><a href="pycocoa.runtime.ObjCInstance-class.html#objc_class">objc_class</a></code>,
-      <code><a href="pycocoa.runtime.ObjCInstance-class.html#ptr">ptr</a></code>
+    <p class="indent-wrapped-lines"><b>Inherited from <code><a href="pycocoa.nstypes.NSStr-class.html">NSStr</a></code></b>:
+      <code><a href="pycocoa.nstypes.NSStr-class.html#__new__">__new__</a></code>
       </p>
     </td>
   </tr>
@@ -153,6 +140,17 @@
 </tr>
   <tr>
     <td colspan="2" class="summary">
+    <p class="indent-wrapped-lines"><b>Inherited from <code><a href="pycocoa.nstypes.CFStr-class.html">CFStr</a></code></b>:
+      <code><a href="pycocoa.nstypes.CFStr-class.html#str">str</a></code>,
+      <code><a href="pycocoa.nstypes.CFStr-class.html#value">value</a></code>
+      </p>
+    <p class="indent-wrapped-lines"><b>Inherited from <code><a href="pycocoa.runtime.ObjCInstance-class.html">runtime.ObjCInstance</a></code></b>:
+      <code><a href="pycocoa.runtime.ObjCInstance-class.html#NS">NS</a></code>,
+      <code><a href="pycocoa.runtime.ObjCInstance-class.html#Type">Type</a></code>,
+      <code><a href="pycocoa.runtime.ObjCInstance-class.html#objc_class">objc_class</a></code>,
+      <code><a href="pycocoa.runtime.ObjCInstance-class.html#objc_classname">objc_classname</a></code>,
+      <code><a href="pycocoa.runtime.ObjCInstance-class.html#ptr">ptr</a></code>
+      </p>
     <p class="indent-wrapped-lines"><b>Inherited from <code>object</code></b>:
       <code>__class__</code>
       </p>
@@ -190,7 +188,7 @@
 <table border="0" cellpadding="0" cellspacing="0" width="100%%">
   <tr>
     <td align="left" class="footer">
-    Generated by Epydoc 3.0.1 on Thu Mar 15 14:18:44 2018
+    Generated by Epydoc 3.0.1 on Fri Apr 20 15:50:11 2018
     </td>
     <td align="right" class="footer">
       <a target="mainFrame" href="http://epydoc.sourceforge.net"

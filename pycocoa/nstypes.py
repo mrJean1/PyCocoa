@@ -35,6 +35,8 @@
 # ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 # POSSIBILITY OF SUCH DAMAGE.
 
+# MIT License <http://opensource.org/licenses/MIT>
+#
 # Copyright (C) 2017-2018 mrJean1 at Gmail dot com
 #
 # Permission is hereby granted, free of charge, to any person obtaining
@@ -55,166 +57,230 @@
 # ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
 # OTHER DEALINGS IN THE SOFTWARE.
 
-# Several Objective-C/Cheader files are also available at
+# Several Objective-C/C header files are also available at
 # <http://GitHub.com/gnustep/libs-gui/tree/master/Headers>
 
 # all imports listed explicitly to help PyChecker
-from decimal import Decimal
-from ctypes  import ArgumentError, byref, cast, CFUNCTYPE, \
-                    c_buffer, c_byte, c_char, c_double, c_float, \
-                    c_int, c_int8, c_int16, c_int32, c_int64, \
-                    c_long, c_longlong, c_short, c_void_p
-from oclibs  import CGFloat, CFIndex, kCFStringEncodingUTF8, \
-                    libCF, libF, libobjc
-from octypes import _2bytes, _2clip, _2str, _iterbytes, \
-                    DEFAULT_UNICODE, Class, Id, NSInteger, \
-                    NSPoint, NSRect, NSSize, SEL
-from runtime import _xargs, isInstanceOf, ObjCClass, ObjCInstance, \
-                    get_selector
+from decimal import Decimal as _Decimal
+from ctypes  import ArgumentError, byref, cast, c_buffer, c_byte, \
+                    CFUNCTYPE, c_void_p
+from getters import get_selector
+from oclibs  import cfNumber2bool, cfNumber2num, kCFStringEncodingUTF8, \
+                    libCF, libFoundation, libobjc
+from octypes import Array_t, Class_t, Id_t, SEL_t, Set_t
+from runtime import isInstanceOf, ObjCClass, ObjCInstance, _Xargs
+from utils   import bytes2str, clip, DEFAULT_UNICODE, _exports, \
+                    _Globals, instanceof, iterbytes, missing, str2bytes
 
-__version__ = '17.11.19'
+__version__ = '18.04.18'
 
 
-def _noop(arg):
+def _lambda(arg):
     # inlieu of  lambda arg: arg
     return arg
 
 
-class CFString(ObjCInstance):
-    '''Create a CFString instance for a Python string.
-    '''
-    def __new__(cls, ustr):
-        ustr = libCF.CFStringCreateWithCString(None, _2bytes(ustr), kCFStringEncodingUTF8)
-        # the Objective-C class is .objc_class or __NSCFConstantString
-        return super(CFString, cls).__new__(cls, c_void_p(ustr))
+def _ns2ctype2Py(ns, ctype):
+    # helper function
+    if not isinstance(ns, ctype):
+        ns = ctype(ns)
+    return ns2py(ns)
 
-    def objc_classname(self):
-        return '%s(%r)' % (self.__class__.__name__, _2clip(nsString2str(self)))
+
+class _Constants(object):
+    '''Only constant, readable attributes.
+    '''
+    def __init__(self, *unused):
+        raise AssertionError('%s is constant' % (self.__class__.__name__,))
+
+    __setattr__ = __init__
+
+
+class _Types(_Constants):
+    '''Holder of the Python Types, to avoid circular imports.
+    '''
+    Dict       = None  # set by .dicts.py
+    Item       = None
+    FrozenDict = None  # set by .dicts.py
+    FrozenSet  = None  # set by .sets.py
+    List       = None  # set by .listuples.py
+    Menu       = None
+    OpenPanel  = None
+    Set        = None  # set by .sets.py
+    Str        = None  # set by .strs.py
+    Table      = None
+    Tuple      = None  # set by .listuples.py
+    Window     = None
+
+    @staticmethod
+    def listypes():
+        for a, v in sorted(_Types.__dict__.items()):
+            if not a.startswith('_'):
+                print('_Types.%-11s %r' % (a + ':', v))
+
+
+class CFStr(ObjCInstance):
+    '''Python wrapper for the ObjC C{CFString} class,
+    creating I{retained} instances, by default.
+    '''
+    _str = None
+
+    def __new__(cls, ustr):
+        ustr = str(ustr)
+        ns = libCF.CFStringCreateWithCString(None, str2bytes(ustr), kCFStringEncodingUTF8)
+        # the ObjC class is ._objc_class or __NSCFConstantString
+        self = super(CFStr, cls).__new__(cls, ns)  # Id_t
+        self._str = ustr
+        return self
+
+    def __str__(self):
+        return '%s(%r)' % (self.objc_classname, clip(self.value))
+
+#   @property
+#   def objc_classname(self):
+#       return self.__class__.__name__
+
+    @property
+    def value(self):
+        '''Return the C{CFStr} value as str.
+        '''
+        if self._str is None:
+            self._str = nsString2str(self)
+        return self._str
+
+    str = value
 
 
 # some commonly used Foundation and Cocoa classes, described here
 # <http://omz-software.com/pythonista/docs/ios/objc_util.html>
-NSApplication       = ObjCClass('NSApplication')
-NSArray             = ObjCClass('NSArray')
-NSAutoreleasePool   = ObjCClass('NSAutoreleasePool')
-NSBezierPath        = ObjCClass('NSBezierPath')
-NSColor             = ObjCClass('NSColor')
-NSData              = ObjCClass('NSData')
-NSDecimalNumber_    = ObjCClass('NSDecimalNumber')  # see NSDecimalNumber below
-NSDictionary        = ObjCClass('NSDictionary')
-NSEnumerator        = ObjCClass('NSEnumerator')
-NSImage             = ObjCClass('NSImage')
-NSMenu              = ObjCClass('NSMenu')
-NSMenuItem          = ObjCClass('NSMenuItem')
-NSMutableArray      = ObjCClass('NSMutableArray')
-NSMutableData       = ObjCClass('NSMutableData')
-NSMutableDictionary = ObjCClass('NSMutableDictionary')
-NSMutableSet        = ObjCClass('NSMutableSet')
-NSMutableString     = ObjCClass('NSMutableString')
-NSNull              = ObjCClass('NSNull')
-NSNumber            = ObjCClass('NSNumber')
-NSObject            = ObjCClass('NSObject')
-NSOpenPanel         = ObjCClass('NSOpenPanel')
-NSScreen            = ObjCClass('NSScreen')
-NSSet               = ObjCClass('NSSet')
-NSStatusBar         = ObjCClass('NSStatusBar')
-NSString_           = ObjCClass('NSString')  # see NSString, at below
-NSThread            = ObjCClass('NSThread')
-NSURL               = ObjCClass('NSURL')
-NSView              = ObjCClass('NSView')
-NSWindow            = ObjCClass('NSWindow')
-NSZeroPoint         = NSPoint(0, 0)
+
+# NS... classes marked ** have Python versions, like NSStr, for
+# for use by runtime.isInstanceOf repectively octypes.instanceof
+NSApplication          = ObjCClass('NSApplication')
+NSArray                = ObjCClass('NSArray')  # immutable
+NSAutoreleasePool      = ObjCClass('NSAutoreleasePool')
+NSBezierPath           = ObjCClass('NSBezierPath')
+NSBundle               = ObjCClass('NSBundle')
+NSColor                = ObjCClass('NSColor')
+NSConstantString       = ObjCClass('NSConstantString')  # use NSStr
+NSData                 = ObjCClass('NSData')
+NSDecimalNumber        = ObjCClass('NSDecimalNumber')  # ** use NSDecimal
+NSDictionary           = ObjCClass('NSDictionary')  # immutable
+NSDockTile             = ObjCClass('NSDockTile')
+NSEnumerator           = ObjCClass('NSEnumerator')
+NSFont                 = ObjCClass('NSFont')
+NSImage                = ObjCClass('NSImage')
+NSMenu                 = ObjCClass('NSMenu')
+NSMenuItem             = ObjCClass('NSMenuItem')
+NSMutableArray         = ObjCClass('NSMutableArray')
+NSMutableData          = ObjCClass('NSMutableData')
+NSMutableDictionary    = ObjCClass('NSMutableDictionary')
+NSMutableSet           = ObjCClass('NSMutableSet')
+NSMutableString        = ObjCClass('NSMutableString')
+NSConcreteNotification = ObjCClass('NSConcreteNotification')
+NSNotification         = ObjCClass('NSNotification')
+NSNull                 = ObjCClass('NSNull')
+NSNumber               = ObjCClass('NSNumber')
+NSObject               = ObjCClass('NSObject')
+NSOpenPanel            = ObjCClass('NSOpenPanel')
+# NSPoint              = ObjCClass('NSPoint')  # doesn't exist, use NSPoint_t
+# NSRect               = ObjCClass('NSRect')  # doesn't exist, use NSRect_t
+# NSRange              = ObjCClass('NSRange')  # doesn't exist, use NSRange_t
+NSScreen               = ObjCClass('NSScreen')
+NSScrollView           = ObjCClass('NSScrollView')
+NSSet                  = ObjCClass('NSSet')
+# NSSize               = ObjCClass('NSSize')  # doesn't exist, use NSSize_t
+NSStatusBar            = ObjCClass('NSStatusBar')
+NSString               = ObjCClass('NSString')  # ** use NSStr or 'at'
+NSTableColumn          = ObjCClass('NSTableColumn')
+NSTableView            = ObjCClass('NSTableView')
+NSThread               = ObjCClass('NSThread')
+NSURL                  = ObjCClass('NSURL')
+NSView                 = ObjCClass('NSView')
+NSWindow               = ObjCClass('NSWindow')
+
+# some NS... types and /singletons
+NSBool     = NSNumber.numberWithBool_
+NSDouble   = NSNumber.numberWithDouble_
+NSFalse    = False  # NSBool(False)  # c_byte
+NSFloat    = NSNumber.numberWithDouble_
+NSInt      = NSNumber.numberWithInt_
+NSLong     = NSNumber.numberWithLong_
+NSLongLong = NSNumber.numberWithLongLong_
+NSnil      = None  # nil return value
+NSNone     = NSNull.alloc().init()  # singleton
+NSTrue     = True  # NSBool(True)  # c_byte
 
 
 # We need to be able to create raw NSDecimalNumber objects.  If we use
 # a normal ObjCClass() wrapper, the return values of constructors will
 # be auto-converted back into Python Decimals.  However, we want to
 # cache class/selector/method lookups without that overhead every time.
-# Originally Rubicon-ObjC/objc/core_foundation.py>
-class NSDecimalNumber(ObjCInstance):
-    '''Optimized NSDecimalNumber class.
+# Originally, an older rev of .../Rubicon-ObjC/objc/core_foundation.py.
+class NSDecimal(ObjCInstance):
+    '''Optimized C{NSDecimalNumber} class.
     '''
-    objc_class = NSDecimalNumber_
-    selector   = None
+    _Class = NSDecimalNumber
+    _IMP   = None
+    _SEL   = None
 
-    def __new__(cls, pyobj):
-        if not isinstance(pyobj, Decimal):
-            raise TypeError('not %s: %r' % ('Decimal', pyobj))
+    def __new__(cls, py):
+        if isinstance(py, NSDecimal):
+            py = py.Decimal
+        else:
+            py = _Decimal(py)  # from Decimal, float, int, str
+        py = py.to_eng_string()  # XXX to maintain accuracy
 
-        if cls.selector is None:
-            cls.selector = get_selector('decimalNumberWithString:')
-            m = libobjc.class_getClassMethod(cls.objc_class, cls.selector)
-            impl = libobjc.method_getImplementation(m)
-            cls.constructor = cast(impl, CFUNCTYPE(Id, Id, SEL, Id))
+        if None in (cls._IMP, cls._SEL):
+            cls._SEL = get_selector('decimalNumberWithString:')
+            m = libobjc.class_getClassMethod(cls._Class, cls._SEL)
+            m = libobjc.method_getImplementation(m)
+            cls._IMP = cast(m, CFUNCTYPE(Id_t, Id_t, SEL_t, Id_t))
 
-        d = cls.constructor(cast(cls.objc_class, Id), cls.selector,
-                            NSString(pyobj.to_eng_string()))
-        self = super(NSDecimalNumber, cls).__new__(cls, d)
+        d = cls._IMP(cast(cls._Class, Id_t), cls._SEL, NSStr(py))
+        self = super(NSDecimal, cls).__new__(cls, d)
+# XXX?  self._objc_ptr = self._as_parameter_ = d  # for ctypes
         return self
+
+    def __str__(self):
+        return '%s(%s)' % (self.objc_classname, self.value)
+
+    @property
+    def double(self):
+        '''Return this C{NSDecimal} as float.
+        '''
+        return self.doubleValue()  # PYCHOK expected
+
+#   @property
+#   def objc_classname(self):
+#       return self.__class__.__name__
 
     @property
     def value(self):
-        '''Return the NSDecimalNumber value as int or float.
+        '''Return this C{NSDecimal} as Python C{Decimal}.
         '''
-        d = self.doubleValue()  # PYCHOK axpected
+        d = self.doubleValue()  # PYCHOK expected
         if d.is_integer():
             d = int(d)
-        return d
+        return _Decimal(d)
 
-    def ns2decimal(self):
-        '''Create a Python Decimal from this NSDecimalNumber.
-        '''
-        return Decimal(self.value)
-
-    def objc_classname(self):
-        '''Return class name as a string.
-        '''
-        return '%s(%s)' % (self.__class__.__name__, _2clip(str(self.value)))
-
-    def release(self):
-        '''Garbage collect this NSDecimalNumber.
-        '''
-        self.autorelease()  # PYCHOK expected
+    Decimal = value
 
 
-def NSLog(fmt, *args):
-    '''Formatted write to the console.
+class NSStr(CFStr):
+    '''Python wrapper for the ObjC L{NSString} class,
+    creating I{auto-released} instances, by default.
     '''
-    if args:
-        fmt %= args
-    libF.NSLog(NSString(fmt))
-
-
-def NSMakePoint(x, y):
-    '''Return an NSPoint instance for the given x and y.
-    '''
-    return NSPoint(x, y)
-
-
-def NSMakeRect(x, y, w, h):
-    '''Return an NSRect instance for the given point and size.
-    '''
-    return NSRect(NSPoint(x, y), NSSize(w, h))
-
-
-def NSMakeSize(w, h):
-    '''Return an NSSize instance for the given w and h.
-    '''
-    return NSSize(w, h)
-
-
-class NSString(CFString):
-    '''Auto-released version of the L{CFString} class.
-    '''
-    def __new__(cls, ustr):
-        # the Objective-C class is .objc_class or __NSCFString
-        self = super(NSString, cls).__new__(cls, ustr)
-        self.autorelease()  # PYCHOK expected
+    def __new__(cls, ustr, auto=True):
+        # the ObjC class is .objc_class or __NSCFString
+        self = super(NSStr, cls).__new__(cls, ustr)
+        if auto:
+            self.autorelease()  # PYCHOK expected
         return self
 
 
-class at(NSString):
-    '''Acronym for the L{NSString} class.
+class at(NSStr):
+    '''Acronym for the L{NSStr} wrapper.
     '''
     # XXX Other possible names for this method: at, ampersat, arobe,
     # apenstaartje (little monkey tail), strudel, klammeraffe (spider
@@ -223,179 +289,176 @@ class at(NSString):
     pass
 
 
-def _NS2py(obj, ctype):
-    # helper function
-    if not isinstance(obj, ctype):
-        obj = ctype(obj)
-    return ns2py(obj)
-
-
-def nsArray2listuple(nsArray, ctype=c_void_p):  # XXX an NS*Array method?
-    '''Create a Python list or tuple from an NS/CFArray.
+def isNone(obj):
+    '''Return True if I{obj} is nil, None, C{NSNone}, etc.
     '''
-    if isInstanceOf(nsArray, NSMutableArray):
+    return obj in (None, NSnil, NSNone)
+
+
+def nsArray2listuple(ns, ctype=Array_t):  # XXX an NS*Array method?
+    '''Create a Python list or tuple from an C{NSArray}.
+    '''
+    # XXX order is critial, NSMutableArray before NSArray
+    if isInstanceOf(ns, NSMutableArray, NSArray, name='ns') is NSMutableArray:
         t = list
-    elif isInstanceOf(nsArray, NSArray):
-        t = tuple
     else:
-        raise TypeError('not an %s: %r' % ('NS/CFArray', nsArray))
+        t = tuple
+    n = libCF.CFArrayGetCount(ns)
+    f = libCF.CFArrayGetValueAtIndex
+    return t(_ns2ctype2Py(f(ns, i), ctype) for i in range(n))
 
-    n = libCF.CFArrayGetCount(nsArray)
-    return t(_NS2py(libCF.CFArrayGetValueAtIndex(nsArray, i), ctype) for i in range(n))
 
-
-def nsBoolean2bool(nsBool, default=None):  # XXX an NSBoolean method?
-    '''Create a Python bool from an NS/CFBoolean.
+def nsBoolean2bool(ns, dflt=missing):  # XXX an NSBoolean method?
+    '''Create a Python bool from an C{NSBool[ean]}.
     '''
     # XXX need allow c_void_p for nested booleans in lists, sets, etc.?
-    if not isInstanceOf(nsBool, NSNumber, c_void_p=c_void_p):
-        raise TypeError('not an %s: %r' % ('NS/CFBoolean', nsBool))
+    isInstanceOf(ns, NSNumber, c_void_p, name='ns')
 
-    cfType = libCF.CFNumberGetType(nsBool)
-    assert cfType == kCFNumberCharType
-    num = c_byte()
-    if libCF.CFNumberGetValue(nsBool, cfType, byref(num)):
-        return True if num.value else False
-    return default
+    return cfNumber2bool(ns, dflt=dflt)
 
 
-def nsData2bytes(nsData, default=b''):  # XXX an NSData method?
-    '''Create Python bytes from NS/CFData.
+def nsBundleRename(nsTitle, match='Python'):
+    '''Change the bundle title if the current title matches.
+
+    @param nsTitle: New bundle title (L{NSStr}).
+    @keyword match: Optional, previous title to match (string).
+
+    @return: The previous bundle title (string) or None.
+
+    @note: Used to mimick C{NSApplication.setTitle_(nsTitle)},
+           the name of the app shown in the menu bar.
     '''
-    if not isInstanceOf(nsData, NSData):
-        raise TypeError('not %s: %r' % ('NS/CFData', nsData))
+    t = nsTitle and ns2py(nsTitle)
+    if t:
+        _Globals.argv0 = bytes2str(t)
 
-    n = nsData.length()
+    p, ns = None, NSBundle.mainBundle()
+    if ns:
+        ns = ns.localizedInfoDictionary() or ns.infoDictionary()
+        if ns:
+            p = ns.objectForKey_(_CFBundleName) or None
+            if p:
+                p = ns2py(p, dflt='') or ''
+                if match in ('', None, p) and t:  # can't be empty
+                    ns.setObject_forKey_(nsTitle, _CFBundleName)
+    return p
+
+
+def nsData2bytes(ns, dflt=b''):  # XXX an NSData method?
+    '''Create Python bytes from C{NSData}.
+    '''
+    isInstanceOf(ns, NSData, name='ns')
+    n = ns.length()
     if n:
         buf = (c_byte * n)()
-        nsData.getBytes_length_(byref(buf), n)
-        return b''.join(_iterbytes(buf[:n]))
-    return default
+        ns.getBytes_length_(byref(buf), n)
+        return b''.join(iterbytes(buf[:n]))
+    return dflt
 
 
-def nsDecimalNumber2decimal(nsDecimal):
-    '''Create a Python Decimal from an NS/CFDecimalNumber.
+def nsDecimalNumber2decimal(ns):
+    '''Create a Python Decimal from an C{NSDecimalNumber}.
     '''
-    if not isinstance(nsDecimal, NSDecimalNumber):  # PYCHOK expected
-        raise TypeError('not an %s: %r' % ('NS/CFDecimalNumber', nsDecimal))
-
-    return nsDecimal.ns2decimal()
+    instanceof(ns, NSDecimal, name='ns')
+    return ns.Decimal
 
 
-def nsDictionary2dict(nsDict, ctype_keys=c_void_p, ctype_vals=c_void_p):  # XXX an NS*Dictionary method?
-    '''Create a Python dict from an NS/CFDictionary.
+def nsDictionary2dict(ns, ctype_keys=c_void_p, ctype_vals=c_void_p):  # XXX an NS*Dictionary method?
+    '''Create a Python dict from an C{NSDictionary}.
     '''
-    if not isInstanceOf(nsDict, NSMutableDictionary, NSDictionary):
-        raise TypeError('not an %s: %r' % ('NS/CFDictionary', nsDict))
-
     # <http://Developer.Apple.com/documentation/corefoundation/cfdictionary-rum>
-    n = libCF.CFDictionaryGetCount(nsDict)
+    n = libCF.CFDictionaryGetCount(ns)
     keys = (ctype_keys * n)()
     vals = (ctype_vals * n)()
-    libCF.CFDictionaryGetKeysAndValues(nsDict, byref(keys), byref(vals))
-    return dict((_NS2py(keys[i], ctype_keys),
-                 _NS2py(vals[i], ctype_vals)) for i in range(n))
+    libCF.CFDictionaryGetKeysAndValues(ns, byref(keys), byref(vals))
+    return dict((_ns2ctype2Py(keys[i], ctype_keys),
+                 _ns2ctype2Py(vals[i], ctype_vals)) for i in range(n))
 
 
-def nsNull2none(nsNull):
-    '''Creat Python None from an NS/CFNull.
+def nsIter2(ns, reverse=False):
+    '''Iterate over an C{NS...}'s enumerator.
     '''
-    if isInstanceOf(nsNull, NSNull, c_void_p=c_void_p):
-        return None
-    raise TypeError('not %s: %r' % ('NS/CFNull', nsNull))
-
-
-# <http://GitHub.com/opensource-apple/CF/blob/master/CFNumber.h>
-kCFNumberSInt8Type     = 1
-kCFNumberSInt16Type    = 2
-kCFNumberSInt32Type    = 3
-kCFNumberSInt64Type    = 4
-kCFNumberFloat32Type   = 5
-kCFNumberFloat64Type   = 6
-kCFNumberCharType      = 7
-kCFNumberShortType     = 8
-kCFNumberIntType       = 9
-kCFNumberLongType      = 10
-kCFNumberLongLongType  = 11
-kCFNumberFloatType     = 12
-kCFNumberDoubleType    = 13
-kCFNumberCFIndexType   = 14
-kCFNumberNSIntegerType = 15
-kCFNumberCGFloatType   = 16
-kCFNumberMaxType       = 16
-
-_CFNumberType2ctype = {kCFNumberSInt8Type:     c_int8,
-                       kCFNumberSInt16Type:    c_int16,
-                       kCFNumberSInt32Type:    c_int32,
-                       kCFNumberSInt64Type:    c_int64,
-                       kCFNumberFloat32Type:   c_float,
-                       kCFNumberFloat64Type:   c_double,
-                       kCFNumberCharType:      c_char,
-                       kCFNumberShortType:     c_short,
-                       kCFNumberIntType:       c_int,
-                       kCFNumberLongType:      c_long,
-                       kCFNumberLongLongType:  c_longlong,
-                       kCFNumberFloatType:     c_float,
-                       kCFNumberDoubleType:    c_double,
-                       kCFNumberCFIndexType:   CFIndex,
-                       kCFNumberNSIntegerType: NSInteger,
-                       kCFNumberCGFloatType:   CGFloat}
-
-
-def nsNumber2num(nsNumber, default=None):  # XXX an NSNumber method?
-    '''Create a Python decimal, int or float from an NS/CFNumber.
-    '''
-    # XXX need c_void_p for nested numbers in lists, sets, etc.?
-    if not isInstanceOf(nsNumber, NSNumber, c_void_p=c_void_p):
-        raise TypeError('not an %s: %r' % ('NS/CFNumber', nsNumber))
-    # special case for NSDecimalNumber, would become a float
-    # since cfType of NSDecimalNumber is kCFNumberDoubleType
-    if isinstance(nsNumber, NSDecimalNumber):
-        return nsDecimalNumber2decimal(nsNumber)
-
-    cfType = libCF.CFNumberGetType(nsNumber)
-    try:
-        ctype = _CFNumberType2ctype[cfType]
-        num = ctype()
-        if libCF.CFNumberGetValue(nsNumber, cfType, byref(num)):
-            return num.value
-    except KeyError:
-        raise TypeError('unhandled %s: %r ' % ('CFNumberType', cfType))
-    return default
-
-
-def nsSet2set(nsSet, ctype=c_void_p):  # XXX NS*Set method?
-    '''Create a Python set or frozenset from an NS/CFSet.
-    '''
-    if isInstanceOf(nsSet, NSMutableSet):
-        t = set
-    elif isInstanceOf(nsSet, NSSet):
-        t = frozenset
+    if reverse:
+        ns = ns.reverseObjectEnumerator()
     else:
-        raise TypeError('not an %s: %r' % ('NS/CFSet', nsSet))
+        ns = ns.objectEnumerator()
+    while True:
+        o = ns.nextObject()  # nil for end
+        if o in (NSnil, None):
+            break
+        yield ns2Type(o), o
 
-    n = libCF.CFSetGetCount(nsSet)  # == nsSet.count()
+
+def nsLog(fmt, *args):
+    '''Formatted write to the console.
+    '''
+    if args:
+        fmt %= args
+    # NSLog is variadic, printf-like
+    libFoundation.NSLog(NSStr(fmt))
+
+
+def nsNull2none(ns):
+    '''Creat Python None from an C{NS/CFNull}.
+    '''
+    isInstanceOf(ns, NSNull, c_void_p, name='ns')
+    return None
+
+
+def nsNumber2num(ns, dflt=missing):  # XXX an NSNumber method?
+    '''Create a Python decimal, int or float from an C{NSNumber}.
+    '''
+    # special case for NSDecimal, would become a float
+    # since cfType of NSDecimal is kCFNumberDoubleType
+    if isinstance(ns, NSDecimal):
+        return nsDecimalNumber2decimal(ns)
+    # XXX need c_void_p for nested numbers in lists, sets, etc.?
+    isInstanceOf(ns, NSNumber, c_void_p, name='ns')
+
+    return cfNumber2num(ns, dflt=dflt)
+
+
+def nsOf(inst):
+    '''Return the C{.NS} object of a Python Type instance.
+    '''
+    try:
+        return inst.NS
+    except AttributeError:
+        if isinstance(inst, ObjCInstance):
+            return inst  # XXXX ????
+    raise TypeError('%s is non-NS: %r' % ('inst', inst))
+
+
+def nsSet2set(ns, ctype=Set_t):  # XXX NS*Set method?
+    '''Create a Python set or frozenset from an C{NSSet}.
+    '''
+    if isInstanceOf(ns, NSMutableSet, NSSet, name='ns') is NSSet:
+        s = frozenset
+    else:
+        s = set
+
+    n = libCF.CFSetGetCount(ns)  # == nsSet.count()
     buf = (ctype * n)()
-    libCF.CFSetGetValues(nsSet, byref(buf))
-    return t(_NS2py(buf[i], ctype) for i in range(n))
+    libCF.CFSetGetValues(ns, byref(buf))
+    return s(_ns2ctype2Py(buf[i], ctype) for i in range(n))
 
 
-def nsString2str(nsString, default=None):  # XXX an NS*String method
-    '''Create a Python string or unicode from an NS/CFString.
+def nsString2str(ns, dflt=None):  # XXX an NS*String method
+    '''Create a Python string or unicode from an L{NSStr}.
     '''
     # XXX need c_void_p for nested strings in lists, sets, etc.?
-    if not (isinstance(nsString, (CFString, NSString, c_void_p)) or
-            isInstanceOf(nsString, NSString_, NSMutableString)):
-        raise TypeError('not an %s: %r' % ('NS/CFString', nsString))
+    if not instanceof(ns, CFStr, NSStr, c_void_p):
+        isInstanceOf(ns, NSConstantString, NSMutableString, NSString,
+                         c_void_p, name='ns')
 
-    n = libCF.CFStringGetLength(nsString)
+    n = libCF.CFStringGetLength(ns)
     u = libCF.CFStringGetMaximumSizeForEncoding(n, kCFStringEncodingUTF8)
     buf = c_buffer(u + 2)
-    if libCF.CFStringGetCString(nsString, buf, len(buf), kCFStringEncodingUTF8):
-        # assert(isinstance(buf.value, bytes))
-        # bytes to unicode in Python 2 or str in Python 3+
-        return _2str(buf.value)  # XXX was .decode(DEFAULT_UNICODE)
-    return default
+    if libCF.CFStringGetCString(ns, buf, len(buf), kCFStringEncodingUTF8):
+        # XXX assert(isinstance(buf.value, _Bytes))
+        # bytes to unicode in Python 2, to str in Python 3+
+        return bytes2str(buf.value)  # XXX was .decode(DEFAULT_UNICODE)
+    return dflt
 
 
 _CFTypeID2py = {libCF.CFArrayGetTypeID():      nsArray2listuple,
@@ -408,9 +471,14 @@ _CFTypeID2py = {libCF.CFArrayGetTypeID():      nsArray2listuple,
                 libCF.CFStringGetTypeID():     nsString2str}
 
 
-def ns2py(nsObj, default=None):  # XXX an NSObject method?
-    '''Convert an (instance of an) NS/CFObject to the
-    equivalent Python type and value.
+def _CFTypeID2py_items():
+    for i, ns in _CFTypeID2py.items():
+        yield int(i), ns.__name__
+
+
+def ns2py(ns, dflt=None):  # XXX an NSObject method?
+    '''Convert (an instance of) an ObjC class to an instance
+    of the equivalent Python type and value or Python wrapper.
 
      - NSArray         -> tuple
      - NSBoolean       -> bool
@@ -424,138 +492,208 @@ def ns2py(nsObj, default=None):  # XXX an NSObject method?
      - NSNull          -> None
      - NSSet           -> frozenset
      - NSString        -> str
+     - NSStr/CFStr     -> str
     '''
-    if nsObj is not None:
+    if isinstance(ns, (CFStr, NSStr)):
+        return ns.str
+
+    elif ns is not None:  # not isNone(ns)
         # see Rubicon-ObjC/objc/core_foundation.py
-        # if isinstance(nsObj, ObjCInstance):
-        #     nsObj = nsObj._as_parameter_
+        # if isinstance(ns, ObjCInstance):
+        #     ns = ns._as_parameter_
         try:
-            typeID = libCF.CFGetTypeID(nsObj)
-            r = _CFTypeID2py[typeID](nsObj)
-            c = {Class: ObjCClass,
-                 Id:    ObjCInstance}.get(type(r), _noop)
+            typeID = libCF.CFGetTypeID(ns)
+            r = _CFTypeID2py[typeID](ns)
+            c = {Class_t: ObjCClass,
+                 Id_t:    ObjCInstance}.get(type(r), _lambda)
             return c(r)
+
         except ArgumentError as x:
-            _xargs(x, libCF.CFGetTypeID.__name__,
+            _Xargs(x, libCF.CFGetTypeID.__name__,
                       libCF.CFGetTypeID.argtypes,
                       libCF.CFGetTypeID.restype)
             raise
+
         except KeyError:
-            if default is None:
-                t = ', '.join('%d: %s' % t for t in sorted((int(i), f.__name__)
-                                           for i, f in _CFTypeID2py.items()))
-                t = (typeID, nsObj, t)
-                raise TypeError('unhandled TypeID %r: %r {%s}' % t)
-    return default
+            if dflt is None:
+                t = ', '.join('TypeID[%d]: %s' % t for t in
+                              sorted(_CFTypeID2py_items()))
+                raise TypeError('unhandled %s[%r]: %r {%s}' %
+                               ('TypeID', typeID, ns, t))
+    return dflt
 
 
-def _bytes2NS(pyobj):
-    '''Create NS/CFData from Python bytes.
+def ns2Type(ns):
+    '''Convert an C{NS/Instance} object to an instance of
+    the corresponding Python Type.
     '''
-    def _length(ns):
+    try:
+        return ns.Type(ns)
+    except AttributeError:
+        pass
+
+    # XXX order is critial, NSMutableArray first
+    if isInstanceOf(ns, NSMutableArray) is NSMutableArray:
+        _Type = _Types.List
+    elif isInstanceOf(ns, NSArray) is NSArray:
+        _Type = _Types.Tuple
+
+    # XXX order is critial, NSMutableDictionary first
+    elif isInstanceOf(ns, NSMutableDictionary) is NSMutableDictionary:
+        _Type = _Types.Dict
+    elif isInstanceOf(ns, NSDictionary) is NSDictionary:
+        _Type = _Types.FrozenDict
+
+    # XXX order is critial, NSMutableSet first
+    elif isInstanceOf(ns, NSMutableSet) is NSMutableSet:
+        _Type = _Types.Set
+    elif isInstanceOf(ns, NSSet) is NSSet:
+        _Type = _Types.FrozenSet
+
+    elif instanceof(ns, NSStr):
+        _Type = _Types.Str
+
+    else:
+        # print('ns2Type(%r) -> %s' % (ns.objc_class, type(ns2py(ns))))
+        _Type = ns2py
+
+    # save the Python Type or ns2py convertor at the NS/Class
+    # to expedite future conversions of such class instances
+    ns.objc_class._Type = _Type
+    return _Type(ns)
+
+
+_NSFalse = NSBool(False)  # singleton
+_NSTrue  = NSBool(True)   # singleton
+
+
+def bool2NS(py):
+    '''Create an C{NSBool} instance from a Python bool.
+    '''
+    return _NSTrue if py else _NSFalse
+
+
+def bytes2NS(py):
+    '''Create an C{NSData} instance from Python bytes.
+    '''
+    def _NSData_length(ns):  # XXX lambda ns: ns.length()
         return ns.length()
 
-    return _len2NS(pyobj, NSData.dataWithBytes_length_(pyobj, len(pyobj)),
-                         _length)  # XXX lambda ns: ns.length()
+    return _len2NS(py, NSData.dataWithBytes_length_(py, len(py)),
+                      _NSData_length)
 
 
-def _dict2NS(pyobj):
-    '''Create an NSMutableDictionary from a Python dict.
+def dict2NS(py):
+    '''Create an C{NSMutableDictionary} instance from a Python dict.
     '''
     # http://Developer.Apple.com/library/content/documentation/Cocoa/
     #        Conceptual/Collections/Articles/Dictionaries.html
     ns = NSMutableDictionary.dictionary()
-    for k, v in pyobj.get('iteritems', pyobj.items)():
+    for k, v in py.get('iteritems', py.items)():
         ns.setObject_forKey_(py2NS(v), py2NS(k))
-    return _len2NS(pyobj, ns, libCF.CFDictionaryGetCount)
+    return _len2NS(py, ns, libCF.CFDictionaryGetCount)
 
 
-def _frozenset2NS(pyobj):
-    '''Create an immutable NSSet from a Python frozenset.
+def frozenset2NS(py):
+    '''Create an (immutable) C{NSSet} instance from a Python frozenset.
     '''
-    return _len2NS(pyobj, NSSet.alloc().initWithSet_(_set2NS(pyobj)),
-                          libCF.CFSetGetCount)
+    return _len2NS(py, NSSet.alloc().initWithSet_(set2NS(py)),
+                       libCF.CFSetGetCount)
 
 
-def _iter2NS(ns, pyobj, getCount):
+def int2NS(py):
+    '''Create an C{NSNumber} instance from a Python int or long.
+    '''
+    if abs(py) < 1 << 31:
+        return NSInt(py)
+    elif abs(py) < 1 << 63:
+        return NSLong(py)
+    else:
+        return NSLongLong(py)
+
+
+def _iter2NS(ns, py, getCount):
     # create NS objects for each Python list, frozen/set, tuple item
-    for nsobj in map(py2NS, pyobj):
-        ns.addObject_(nsobj)
-    return _len2NS(pyobj, ns, getCount)
+    for ns_obj in map(py2NS, py):
+        ns.addObject_(ns_obj)
+    return _len2NS(py, ns, getCount)
 
 
-def _len2NS(pyobj, ns, getCount):
+def _len2NS(py, ns, getCount):
     # check the Python len and NS instance count
-    n, m = len(pyobj), getCount(ns)
+    n, m = len(py), getCount(ns)
     if m != n:
-        t = (ns.objc_classname(), m, _2clip(repr(pyobj)), n)
+        t = (ns.objc_classname, m, clip(repr(py)), n)
         raise AssertionError('%s[%s] vs %s[%s]' % t)
     return ns
 
 
-def _list2NS(pyobj):
-    '''Create an NSMutableArray from a Python list.
+def list2NS(py):
+    '''Create an C{NSMutableArray} instance from a Python list.
     '''
-    return _iter2NS(NSMutableArray.array(), pyobj, libCF.CFArrayGetCount)
+    return _iter2NS(NSMutableArray.array(), py, libCF.CFArrayGetCount)
 
 
-_nsNull = NSNull.alloc().init()
-
-
-def _none2NS(pyobj):
-    '''Create an NSNull from Python's None.
+def None2NS(py):
+    '''Create an C{NSNone} from Python's None.
     '''
-    if pyobj is None:
-        return _nsNull
-    raise TypeError('not %s: %r' % ('None', pyobj))
+    if py is None:
+        return NSNone
+    raise TypeError('not %s: %r' % ('None', py))
 
 
-def _set2NS(pyobj):
-    '''Create an NSMutableSet from a Python set.
+def set2NS(py):
+    '''Create an C{NSMutableSet} instance from a Python set.
     '''
-    return _iter2NS(NSMutableSet.set(), pyobj, libCF.CFSetGetCount)
+    return _iter2NS(NSMutableSet.set(), py, libCF.CFSetGetCount)
 
 
-def _tuple2NS(pyobj):
-    '''Create an immutable NSArray from a Python tuple.
+def str2NS(py, auto=True):
+    '''Create an NSStr instance from a Python str.
     '''
-    return _len2NS(pyobj, NSArray.alloc().initWithArray_(_list2NS(pyobj)),
-                          libCF.CFArrayGetCount)
+    return NSStr(py, auto=auto)
 
 
-def _unicode2NS(pyobj):
-    '''Create an NSString from a Python unicode string.
+def tuple2NS(py):
+    '''Create an immutable C{NSArray} instance from a Python tuple.
     '''
-    return NSString(pyobj.encode(DEFAULT_UNICODE))  # .stringWithUTF8String_
+    return _len2NS(py, NSArray.alloc().initWithArray_(list2NS(py)),
+                       libCF.CFArrayGetCount)
 
 
-_py2NS = {bool:        NSNumber.numberWithBool_,
-          Decimal:     NSDecimalNumber,
-          dict:       _dict2NS,
-          float:       NSNumber.numberWithDouble_,
-          frozenset:  _frozenset2NS,
-          int:         NSNumber.numberWithInt_,  # Long_, LongLong_
-          list:       _list2NS,
-          set:        _set2NS,
-          str:         NSString,
-          tuple:      _tuple2NS,
-          type(None): _none2NS}
+def unicode2NS(py):
+    '''Create an C{NSStr} instance from a Python unicode string.
+    '''
+    return NSStr(py.encode(DEFAULT_UNICODE))  # .stringWithUTF8String_
+
+
+_py2NS = {bool:       bool2NS,
+         _Decimal:    NSDecimal,
+          dict:       dict2NS,
+          float:      NSDouble,
+          frozenset:  frozenset2NS,
+          int:        int2NS,
+          list:       list2NS,
+          set:        set2NS,
+          str:        str2NS,
+          tuple:      tuple2NS,
+          type(None): None2NS}
 try:
-    _py2NS.update({bytearray: _bytes2NS,
-                   long:       NSNumber.numberWithLongLong_,
-                   unicode:   _unicode2NS})
+    _py2NS.update({bytearray: bytes2NS,
+                   long:      int2NS,
+                   unicode:   unicode2NS})
 except NameError:  # Python 3+
-    _py2NS.update({bytes: _bytes2NS})
+    _py2NS.update({bytes: bytes2NS})
 
 
-def py2NS(pyobj):
-    '''Convert an (instance of a) Python object into an
-    instance of an NS... Objective-C class as follows:
+def py2NS(py):
+    '''Convert (an instance of) a Python object into an
+    instance of the equivalent C{NS...} ObjC class:
 
      - bool      -> NSBoolean/NSNumber
      - bytes     -> NSData
      - bytearray -> NSData
-     - Decimal   -> NSDecimalNumber
+     - Decimal   -> NSDecimal
      - dict      -> NSMutableDictionary
      - float     -> NSNumber
      - frozenset -> NSSet, immutable
@@ -563,27 +701,47 @@ def py2NS(pyobj):
      - list      -> NSMutableArray
      - None      -> NSNull
      - set       -> NSMutableSet
-     - str       -> NSString, immutable
+     - str       -> NSStr, immutable
      - tuple     -> NSArray, immutable
-     - unicode   -> NSString, immutable
+     - unicode   -> NSStr, immutable
     '''
-    if isinstance(pyobj, ObjCInstance):
-        return pyobj
-    elif isinstance(pyobj, c_void_p):
-        return ObjCInstance(pyobj)
+    if isinstance(py, ObjCInstance):
+        return py
+    elif isinstance(py, c_void_p):
+        return ObjCInstance(py)
 
-    ns = _py2NS.get(type(pyobj), None)
-    if ns:
-        return ns(pyobj)
-    raise TypeError('unhandled %r' % (pyobj,))
+    ns = _py2NS.get(type(py), None)
+    if not ns:
+        # handle Set, other (mutable) Types,
+        # by extending the _py2NS table
+        for ty, ns in _py2NS.items():
+            if isinstance(py, ty):
+                break
+        else:
+            raise TypeError('unhandled %s(%s): %r' % ('type', 'py', py))
+        _py2NS[type(py)] = ns
+    return ns(py)
 
+
+def type2NS(py):
+    '''Return the C{NS/Instance} of/for a Python Type instance.
+    '''
+    try:
+        return py.NS
+    except AttributeError:
+        return py2NS(py)
+
+
+# moved to the end, to let CFStr settle
+_CFBundleName = CFStr('CFBundleName')
 
 # filter locals() for .__init__.py
-__all__ = tuple(_ for _ in locals().keys() if _.startswith((
-               'NS', 'ns'))) + ('at', 'CFString', 'py2NS')
+__all__ = _exports(locals(), 'at', 'CFStr', 'isNone',
+                   starts=('NS', 'ns'),
+                   ends='2NS')
 
 if __name__ == '__main__':
 
-    from octypes import _allist
+    from utils import _allisting
 
-    _allist(__all__, locals(), __version__, __file__)
+    _allisting(__all__, locals(), __version__, __file__)

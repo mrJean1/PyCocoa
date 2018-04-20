@@ -14,11 +14,11 @@ import threading
 import time
 # all imports listed explicitly to help PyChecker
 from pycocoa import get_selector, NSApplication, NSAutoreleasePool, \
-                    NSMenu, NSMenuItem, NSStatusBar, NSString, \
+                    NSMenu, NSMenuItem, NSStatusBar, NSStr, \
                     PyObjectEncoding, ObjCClass, ObjCInstance, \
                     ObjCSubclass, send_super
 
-__version__ = '18.03.12'
+__version__ = '18.04.06'
 
 # <http://StackOverflow.com/questions/24024723/swift-using-
 #  nsstatusbar-statusitemwithlength-and-nsvariablestatusitemlength>
@@ -72,18 +72,18 @@ class TheDelegate_Implementation(object):  # NSObject):
         statusbar = NSStatusBar.systemStatusBar()
         statusitem = statusbar.statusItemWithLength_(NSVariableStatusItemLength)
 #       statusitem.setHighlightMode_(1)
-#       statusitem.setToolTip_(NSString('Example'))
-#       statusitem.setTitle_(NSString('Example'))
+#       statusitem.setToolTip_(NSStr('Example'))
+#       statusitem.setTitle_(NSStr('Example'))
 
         menu = NSMenu.alloc().init()
         menuitem = NSMenuItem.alloc().initWithTitle_action_keyEquivalent_(
-                   NSString('Quit'), get_selector('terminate:'), NSString(''))
+                   NSStr('Quit'), get_selector('terminate:'), NSStr(''))
         menu.addItem_(menuitem)
         statusitem.setMenu_(menu)
 
     @TheDelegate.method(b'v' + PyObjectEncoding)
     def writer(self, s):
-        self.badge.setBadgeLabel_(NSString(str(s)))
+        self.badge.setBadgeLabel_(NSStr(str(s)))
 
     @TheDelegate.method(b'v@')
     def windowWillClose_(self, notification):

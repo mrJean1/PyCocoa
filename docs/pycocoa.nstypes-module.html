@@ -61,7 +61,7 @@
 <h1 class="epydoc">Module nstypes</h1><p class="nomargin-top"></p>
 <hr />
 <div class="fields">      <p><strong>Version:</strong>
-        17.11.19
+        18.04.18
       </p>
 </div><!-- ==================== CLASSES ==================== -->
 <a name="section-Classes"></a>
@@ -75,57 +75,28 @@
     <td width="15%" align="right" valign="top" class="summary">
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
-        <a href="ctypes.c_long-class.html" class="summary-name">NSInteger</a>
+        <a href="pycocoa.nstypes.CFStr-class.html" class="summary-name">CFStr</a><br />
+      Python wrapper for the ObjC <code>CFString</code> class, creating 
+        <i>retained</i> instances, by default.
     </td>
   </tr>
 <tr>
     <td width="15%" align="right" valign="top" class="summary">
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
-        <a href="pycocoa.octypes.NSPoint-class.html" class="summary-name">NSPoint</a><br />
-      ObjC struct with x and y.
+        <a href="pycocoa.nstypes.NSDecimal-class.html" class="summary-name">NSDecimal</a><br />
+      Optimized <code>NSDecimalNumber</code> class.
     </td>
   </tr>
 <tr>
     <td width="15%" align="right" valign="top" class="summary">
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
-        <a href="pycocoa.octypes.NSRect-class.html" class="summary-name">NSRect</a><br />
-      ObjC struc with origin and size.
-    </td>
-  </tr>
-<tr>
-    <td width="15%" align="right" valign="top" class="summary">
-      <span class="summary-type">&nbsp;</span>
-    </td><td class="summary">
-        <a href="pycocoa.octypes.NSSize-class.html" class="summary-name">NSSize</a><br />
-      ObjC struct with width and height.
-    </td>
-  </tr>
-<tr>
-    <td width="15%" align="right" valign="top" class="summary">
-      <span class="summary-type">&nbsp;</span>
-    </td><td class="summary">
-        <a href="pycocoa.nstypes.CFString-class.html" class="summary-name">CFString</a><br />
-      Create a CFString instance for a Python string.
-    </td>
-  </tr>
-<tr>
-    <td width="15%" align="right" valign="top" class="summary">
-      <span class="summary-type">&nbsp;</span>
-    </td><td class="summary">
-        <a href="pycocoa.nstypes.NSDecimalNumber-class.html" class="summary-name">NSDecimalNumber</a><br />
-      Optimized NSDecimalNumber class.
-    </td>
-  </tr>
-<tr>
-    <td width="15%" align="right" valign="top" class="summary">
-      <span class="summary-type">&nbsp;</span>
-    </td><td class="summary">
-        <a href="pycocoa.nstypes.NSString-class.html" class="summary-name">NSString</a><br />
-      Auto-released version of the <a 
-        href="pycocoa.nstypes.CFString-class.html" 
-        class="link">CFString</a> class.
+        <a href="pycocoa.nstypes.NSStr-class.html" class="summary-name">NSStr</a><br />
+      Python wrapper for the ObjC <a 
+        href="pycocoa.nstypes-module.html#NSString" 
+        class="link">NSString</a> class, creating <i>auto-released</i> 
+        instances, by default.
     </td>
   </tr>
 <tr>
@@ -133,8 +104,8 @@
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
         <a href="pycocoa.nstypes.at-class.html" class="summary-name">at</a><br />
-      Acronym for the <a href="pycocoa.nstypes.NSString-class.html" 
-        class="link">NSString</a> class.
+      Acronym for the <a href="pycocoa.nstypes.NSStr-class.html" 
+        class="link">NSStr</a> wrapper.
     </td>
   </tr>
 </table>
@@ -152,7 +123,150 @@
     </td><td class="summary">
       <table width="100%" cellpadding="0" cellspacing="0" border="0">
         <tr>
-          <td><span class="summary-sig"><a name="NSLog"></a><span class="summary-sig-name">NSLog</span>(<span class="summary-sig-arg">fmt</span>,
+          <td><span class="summary-sig"><a name="isNone"></a><span class="summary-sig-name">isNone</span>(<span class="summary-sig-arg">obj</span>)</span><br />
+      Return True if <i>obj</i> is nil, None, <code>NSNone</code>, etc.</td>
+          <td align="right" valign="top">
+            
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a name="nsArray2listuple"></a><span class="summary-sig-name">nsArray2listuple</span>(<span class="summary-sig-arg">ns</span>,
+        <span class="summary-sig-arg">ctype</span>=<span class="summary-sig-default">&lt;class 'ctypes.c_void_p'&gt;</span>)</span><br />
+      Create a Python list or tuple from an <code>NSArray</code>.</td>
+          <td align="right" valign="top">
+            
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a name="nsBoolean2bool"></a><span class="summary-sig-name">nsBoolean2bool</span>(<span class="summary-sig-arg">ns</span>,
+        <span class="summary-sig-arg">dflt</span>=<span class="summary-sig-default">missing()</span>)</span><br />
+      Create a Python bool from an <code>NSBool[ean]</code>.</td>
+          <td align="right" valign="top">
+            
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a href="pycocoa.nstypes-module.html#nsBundleRename" class="summary-sig-name">nsBundleRename</a>(<span class="summary-sig-arg">nsTitle</span>,
+        <span class="summary-sig-arg">match</span>=<span class="summary-sig-default"><code class="variable-quote">'</code><code class="variable-string">Python</code><code class="variable-quote">'</code></span>)</span><br />
+      Change the bundle title if the current title matches.</td>
+          <td align="right" valign="top">
+            
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a name="nsData2bytes"></a><span class="summary-sig-name">nsData2bytes</span>(<span class="summary-sig-arg">ns</span>,
+        <span class="summary-sig-arg">dflt</span>=<span class="summary-sig-default"><code class="variable-quote">'</code><code class="variable-string"></code><code class="variable-quote">'</code></span>)</span><br />
+      Create Python bytes from <code>NSData</code>.</td>
+          <td align="right" valign="top">
+            
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a name="nsDecimalNumber2decimal"></a><span class="summary-sig-name">nsDecimalNumber2decimal</span>(<span class="summary-sig-arg">ns</span>)</span><br />
+      Create a Python Decimal from an <code>NSDecimalNumber</code>.</td>
+          <td align="right" valign="top">
+            
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a name="nsDictionary2dict"></a><span class="summary-sig-name">nsDictionary2dict</span>(<span class="summary-sig-arg">ns</span>,
+        <span class="summary-sig-arg">ctype_keys</span>=<span class="summary-sig-default">&lt;class 'ctypes.c_void_p'&gt;</span>,
+        <span class="summary-sig-arg">ctype_vals</span>=<span class="summary-sig-default">&lt;class 'ctypes.c_void_p'&gt;</span>)</span><br />
+      Create a Python dict from an <code>NSDictionary</code>.</td>
+          <td align="right" valign="top">
+            
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a name="nsIter2"></a><span class="summary-sig-name">nsIter2</span>(<span class="summary-sig-arg">ns</span>,
+        <span class="summary-sig-arg">reverse</span>=<span class="summary-sig-default">False</span>)</span><br />
+      Iterate over an <code>NS...</code>'s enumerator.</td>
+          <td align="right" valign="top">
+            
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a name="nsLog"></a><span class="summary-sig-name">nsLog</span>(<span class="summary-sig-arg">fmt</span>,
         <span class="summary-sig-arg">*args</span>)</span><br />
       Formatted write to the console.</td>
           <td align="right" valign="top">
@@ -170,9 +284,8 @@
     </td><td class="summary">
       <table width="100%" cellpadding="0" cellspacing="0" border="0">
         <tr>
-          <td><span class="summary-sig"><a name="NSMakePoint"></a><span class="summary-sig-name">NSMakePoint</span>(<span class="summary-sig-arg">x</span>,
-        <span class="summary-sig-arg">y</span>)</span><br />
-      Return an NSPoint instance for the given x and y.</td>
+          <td><span class="summary-sig"><a name="nsNull2none"></a><span class="summary-sig-name">nsNull2none</span>(<span class="summary-sig-arg">ns</span>)</span><br />
+      Creat Python None from an <code>NS/CFNull</code>.</td>
           <td align="right" valign="top">
             
             
@@ -188,11 +301,9 @@
     </td><td class="summary">
       <table width="100%" cellpadding="0" cellspacing="0" border="0">
         <tr>
-          <td><span class="summary-sig"><a name="NSMakeRect"></a><span class="summary-sig-name">NSMakeRect</span>(<span class="summary-sig-arg">x</span>,
-        <span class="summary-sig-arg">y</span>,
-        <span class="summary-sig-arg">w</span>,
-        <span class="summary-sig-arg">h</span>)</span><br />
-      Return an NSRect instance for the given point and size.</td>
+          <td><span class="summary-sig"><a name="nsNumber2num"></a><span class="summary-sig-name">nsNumber2num</span>(<span class="summary-sig-arg">ns</span>,
+        <span class="summary-sig-arg">dflt</span>=<span class="summary-sig-default">missing()</span>)</span><br />
+      Create a Python decimal, int or float from an <code>NSNumber</code>.</td>
           <td align="right" valign="top">
             
             
@@ -208,9 +319,8 @@
     </td><td class="summary">
       <table width="100%" cellpadding="0" cellspacing="0" border="0">
         <tr>
-          <td><span class="summary-sig"><a name="NSMakeSize"></a><span class="summary-sig-name">NSMakeSize</span>(<span class="summary-sig-arg">w</span>,
-        <span class="summary-sig-arg">h</span>)</span><br />
-      Return an NSSize instance for the given w and h.</td>
+          <td><span class="summary-sig"><a name="nsOf"></a><span class="summary-sig-name">nsOf</span>(<span class="summary-sig-arg">inst</span>)</span><br />
+      Return the <code>.NS</code> object of a Python Type instance.</td>
           <td align="right" valign="top">
             
             
@@ -226,9 +336,9 @@
     </td><td class="summary">
       <table width="100%" cellpadding="0" cellspacing="0" border="0">
         <tr>
-          <td><span class="summary-sig"><a name="nsArray2listuple"></a><span class="summary-sig-name">nsArray2listuple</span>(<span class="summary-sig-arg">nsArray</span>,
+          <td><span class="summary-sig"><a name="nsSet2set"></a><span class="summary-sig-name">nsSet2set</span>(<span class="summary-sig-arg">ns</span>,
         <span class="summary-sig-arg">ctype</span>=<span class="summary-sig-default">&lt;class 'ctypes.c_void_p'&gt;</span>)</span><br />
-      Create a Python list or tuple from an NS/CFArray.</td>
+      Create a Python set or frozenset from an <code>NSSet</code>.</td>
           <td align="right" valign="top">
             
             
@@ -244,9 +354,10 @@
     </td><td class="summary">
       <table width="100%" cellpadding="0" cellspacing="0" border="0">
         <tr>
-          <td><span class="summary-sig"><a name="nsBoolean2bool"></a><span class="summary-sig-name">nsBoolean2bool</span>(<span class="summary-sig-arg">nsBool</span>,
-        <span class="summary-sig-arg">default</span>=<span class="summary-sig-default">None</span>)</span><br />
-      Create a Python bool from an NS/CFBoolean.</td>
+          <td><span class="summary-sig"><a name="nsString2str"></a><span class="summary-sig-name">nsString2str</span>(<span class="summary-sig-arg">ns</span>,
+        <span class="summary-sig-arg">dflt</span>=<span class="summary-sig-default">None</span>)</span><br />
+      Create a Python string or unicode from an <a 
+      href="pycocoa.nstypes.NSStr-class.html" class="link">NSStr</a>.</td>
           <td align="right" valign="top">
             
             
@@ -262,9 +373,10 @@
     </td><td class="summary">
       <table width="100%" cellpadding="0" cellspacing="0" border="0">
         <tr>
-          <td><span class="summary-sig"><a name="nsData2bytes"></a><span class="summary-sig-name">nsData2bytes</span>(<span class="summary-sig-arg">nsData</span>,
-        <span class="summary-sig-arg">default</span>=<span class="summary-sig-default"><code class="variable-quote">'</code><code class="variable-string"></code><code class="variable-quote">'</code></span>)</span><br />
-      Create Python bytes from NS/CFData.</td>
+          <td><span class="summary-sig"><a href="pycocoa.nstypes-module.html#ns2py" class="summary-sig-name">ns2py</a>(<span class="summary-sig-arg">ns</span>,
+        <span class="summary-sig-arg">dflt</span>=<span class="summary-sig-default">None</span>)</span><br />
+      Convert (an instance of) an ObjC class to an instance of the 
+      equivalent Python type and value or Python wrapper.</td>
           <td align="right" valign="top">
             
             
@@ -280,8 +392,9 @@
     </td><td class="summary">
       <table width="100%" cellpadding="0" cellspacing="0" border="0">
         <tr>
-          <td><span class="summary-sig"><a name="nsDecimalNumber2decimal"></a><span class="summary-sig-name">nsDecimalNumber2decimal</span>(<span class="summary-sig-arg">nsDecimal</span>)</span><br />
-      Create a Python Decimal from an NS/CFDecimalNumber.</td>
+          <td><span class="summary-sig"><a name="ns2Type"></a><span class="summary-sig-name">ns2Type</span>(<span class="summary-sig-arg">ns</span>)</span><br />
+      Convert an <code>NS/Instance</code> object to an instance of the 
+      corresponding Python Type.</td>
           <td align="right" valign="top">
             
             
@@ -297,10 +410,8 @@
     </td><td class="summary">
       <table width="100%" cellpadding="0" cellspacing="0" border="0">
         <tr>
-          <td><span class="summary-sig"><a name="nsDictionary2dict"></a><span class="summary-sig-name">nsDictionary2dict</span>(<span class="summary-sig-arg">nsDict</span>,
-        <span class="summary-sig-arg">ctype_keys</span>=<span class="summary-sig-default">&lt;class 'ctypes.c_void_p'&gt;</span>,
-        <span class="summary-sig-arg">ctype_vals</span>=<span class="summary-sig-default">&lt;class 'ctypes.c_void_p'&gt;</span>)</span><br />
-      Create a Python dict from an NS/CFDictionary.</td>
+          <td><span class="summary-sig"><a name="bool2NS"></a><span class="summary-sig-name">bool2NS</span>(<span class="summary-sig-arg">py</span>)</span><br />
+      Create an <code>NSBool</code> instance from a Python bool.</td>
           <td align="right" valign="top">
             
             
@@ -316,8 +427,8 @@
     </td><td class="summary">
       <table width="100%" cellpadding="0" cellspacing="0" border="0">
         <tr>
-          <td><span class="summary-sig"><a name="nsNull2none"></a><span class="summary-sig-name">nsNull2none</span>(<span class="summary-sig-arg">nsNull</span>)</span><br />
-      Creat Python None from an NS/CFNull.</td>
+          <td><span class="summary-sig"><a name="bytes2NS"></a><span class="summary-sig-name">bytes2NS</span>(<span class="summary-sig-arg">py</span>)</span><br />
+      Create an <code>NSData</code> instance from Python bytes.</td>
           <td align="right" valign="top">
             
             
@@ -333,9 +444,9 @@
     </td><td class="summary">
       <table width="100%" cellpadding="0" cellspacing="0" border="0">
         <tr>
-          <td><span class="summary-sig"><a name="nsNumber2num"></a><span class="summary-sig-name">nsNumber2num</span>(<span class="summary-sig-arg">nsNumber</span>,
-        <span class="summary-sig-arg">default</span>=<span class="summary-sig-default">None</span>)</span><br />
-      Create a Python decimal, int or float from an NS/CFNumber.</td>
+          <td><span class="summary-sig"><a name="dict2NS"></a><span class="summary-sig-name">dict2NS</span>(<span class="summary-sig-arg">py</span>)</span><br />
+      Create an <code>NSMutableDictionary</code> instance from a Python 
+      dict.</td>
           <td align="right" valign="top">
             
             
@@ -351,9 +462,9 @@
     </td><td class="summary">
       <table width="100%" cellpadding="0" cellspacing="0" border="0">
         <tr>
-          <td><span class="summary-sig"><a name="nsSet2set"></a><span class="summary-sig-name">nsSet2set</span>(<span class="summary-sig-arg">nsSet</span>,
-        <span class="summary-sig-arg">ctype</span>=<span class="summary-sig-default">&lt;class 'ctypes.c_void_p'&gt;</span>)</span><br />
-      Create a Python set or frozenset from an NS/CFSet.</td>
+          <td><span class="summary-sig"><a name="frozenset2NS"></a><span class="summary-sig-name">frozenset2NS</span>(<span class="summary-sig-arg">py</span>)</span><br />
+      Create an (immutable) <code>NSSet</code> instance from a Python 
+      frozenset.</td>
           <td align="right" valign="top">
             
             
@@ -369,9 +480,8 @@
     </td><td class="summary">
       <table width="100%" cellpadding="0" cellspacing="0" border="0">
         <tr>
-          <td><span class="summary-sig"><a name="nsString2str"></a><span class="summary-sig-name">nsString2str</span>(<span class="summary-sig-arg">nsString</span>,
-        <span class="summary-sig-arg">default</span>=<span class="summary-sig-default">None</span>)</span><br />
-      Create a Python string or unicode from an NS/CFString.</td>
+          <td><span class="summary-sig"><a name="int2NS"></a><span class="summary-sig-name">int2NS</span>(<span class="summary-sig-arg">py</span>)</span><br />
+      Create an <code>NSNumber</code> instance from a Python int or long.</td>
           <td align="right" valign="top">
             
             
@@ -387,10 +497,8 @@
     </td><td class="summary">
       <table width="100%" cellpadding="0" cellspacing="0" border="0">
         <tr>
-          <td><span class="summary-sig"><a href="pycocoa.nstypes-module.html#ns2py" class="summary-sig-name">ns2py</a>(<span class="summary-sig-arg">nsObj</span>,
-        <span class="summary-sig-arg">default</span>=<span class="summary-sig-default">None</span>)</span><br />
-      Convert an (instance of an) NS/CFObject to the equivalent Python type
-      and value.</td>
+          <td><span class="summary-sig"><a name="list2NS"></a><span class="summary-sig-name">list2NS</span>(<span class="summary-sig-arg">py</span>)</span><br />
+      Create an <code>NSMutableArray</code> instance from a Python list.</td>
           <td align="right" valign="top">
             
             
@@ -406,8 +514,113 @@
     </td><td class="summary">
       <table width="100%" cellpadding="0" cellspacing="0" border="0">
         <tr>
-          <td><span class="summary-sig"><a href="pycocoa.nstypes-module.html#py2NS" class="summary-sig-name">py2NS</a>(<span class="summary-sig-arg">pyobj</span>)</span><br />
-      Convert an (instance of a) Python object into an instance of an NS...</td>
+          <td><span class="summary-sig"><a name="None2NS"></a><span class="summary-sig-name">None2NS</span>(<span class="summary-sig-arg">py</span>)</span><br />
+      Create an <code>NSNone</code> from Python's None.</td>
+          <td align="right" valign="top">
+            
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a name="set2NS"></a><span class="summary-sig-name">set2NS</span>(<span class="summary-sig-arg">py</span>)</span><br />
+      Create an <code>NSMutableSet</code> instance from a Python set.</td>
+          <td align="right" valign="top">
+            
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a name="str2NS"></a><span class="summary-sig-name">str2NS</span>(<span class="summary-sig-arg">py</span>,
+        <span class="summary-sig-arg">auto</span>=<span class="summary-sig-default">True</span>)</span><br />
+      Create an NSStr instance from a Python str.</td>
+          <td align="right" valign="top">
+            
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a name="tuple2NS"></a><span class="summary-sig-name">tuple2NS</span>(<span class="summary-sig-arg">py</span>)</span><br />
+      Create an immutable <code>NSArray</code> instance from a Python 
+      tuple.</td>
+          <td align="right" valign="top">
+            
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a name="unicode2NS"></a><span class="summary-sig-name">unicode2NS</span>(<span class="summary-sig-arg">py</span>)</span><br />
+      Create an <code>NSStr</code> instance from a Python unicode string.</td>
+          <td align="right" valign="top">
+            
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a href="pycocoa.nstypes-module.html#py2NS" class="summary-sig-name">py2NS</a>(<span class="summary-sig-arg">py</span>)</span><br />
+      Convert (an instance of) a Python object into an instance of the 
+      equivalent <code>NS...</code> ObjC class:</td>
+          <td align="right" valign="top">
+            
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a name="type2NS"></a><span class="summary-sig-name">type2NS</span>(<span class="summary-sig-arg">py</span>)</span><br />
+      Return the <code>NS/Instance</code> of/for a Python Type instance.</td>
           <td align="right" valign="top">
             
             
@@ -430,210 +643,337 @@
     <td width="15%" align="right" valign="top" class="summary">
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
-        <a name="NSApplication"></a><span class="summary-name">NSApplication</span> = <code title="&lt;ObjCClass NSApplication at 140735626076272&gt;">&lt;ObjCClass NSApplication at 140735626076272&gt;</code>
+        <a name="NSApplication"></a><span class="summary-name">NSApplication</span> = <code title="ObjCClass('NSApplication')">ObjCClass('NSApplication')</code>
     </td>
   </tr>
 <tr>
     <td width="15%" align="right" valign="top" class="summary">
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
-        <a name="NSArray"></a><span class="summary-name">NSArray</span> = <code title="&lt;ObjCClass NSArray at 140735632965600&gt;">&lt;ObjCClass NSArray at 140735632965600&gt;</code>
+        <a name="NSArray"></a><span class="summary-name">NSArray</span> = <code title="ObjCClass('NSArray')">ObjCClass('NSArray')</code>
     </td>
   </tr>
 <tr>
     <td width="15%" align="right" valign="top" class="summary">
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
-        <a href="pycocoa.nstypes-module.html#NSAutoreleasePool" class="summary-name">NSAutoreleasePool</a> = <code title="&lt;ObjCClass NSAutoreleasePool at 140735637587560&gt;">&lt;ObjCClass NSAutoreleasePool at 1407356375<code class="variable-ellipsis">...</code></code>
+        <a name="NSAutoreleasePool"></a><span class="summary-name">NSAutoreleasePool</span> = <code title="ObjCClass('NSAutoreleasePool')">ObjCClass('NSAutoreleasePool')</code>
     </td>
   </tr>
 <tr>
     <td width="15%" align="right" valign="top" class="summary">
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
-        <a name="NSBezierPath"></a><span class="summary-name">NSBezierPath</span> = <code title="&lt;ObjCClass NSBezierPath at 140735626076552&gt;">&lt;ObjCClass NSBezierPath at 140735626076552&gt;</code>
+        <a name="NSBezierPath"></a><span class="summary-name">NSBezierPath</span> = <code title="ObjCClass('NSBezierPath')">ObjCClass('NSBezierPath')</code>
     </td>
   </tr>
 <tr>
     <td width="15%" align="right" valign="top" class="summary">
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
-        <a name="NSColor"></a><span class="summary-name">NSColor</span> = <code title="&lt;ObjCClass NSColor at 140735626078472&gt;">&lt;ObjCClass NSColor at 140735626078472&gt;</code>
+        <a name="NSBundle"></a><span class="summary-name">NSBundle</span> = <code title="ObjCClass('NSBundle')">ObjCClass('NSBundle')</code>
     </td>
   </tr>
 <tr>
     <td width="15%" align="right" valign="top" class="summary">
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
-        <a name="NSData"></a><span class="summary-name">NSData</span> = <code title="&lt;ObjCClass NSData at 140735632965800&gt;">&lt;ObjCClass NSData at 140735632965800&gt;</code>
+        <a name="NSColor"></a><span class="summary-name">NSColor</span> = <code title="ObjCClass('NSColor')">ObjCClass('NSColor')</code>
     </td>
   </tr>
 <tr>
     <td width="15%" align="right" valign="top" class="summary">
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
-        <a name="NSDecimalNumber_"></a><span class="summary-name">NSDecimalNumber_</span> = <code title="&lt;ObjCClass NSDecimalNumber at 140735637589320&gt;">&lt;ObjCClass NSDecimalNumber at 140735637589320&gt;</code>
+        <a name="NSConstantString"></a><span class="summary-name">NSConstantString</span> = <code title="ObjCClass('NSConstantString')">ObjCClass('NSConstantString')</code>
     </td>
   </tr>
 <tr>
     <td width="15%" align="right" valign="top" class="summary">
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
-        <a name="NSDictionary"></a><span class="summary-name">NSDictionary</span> = <code title="&lt;ObjCClass NSDictionary at 140735632965920&gt;">&lt;ObjCClass NSDictionary at 140735632965920&gt;</code>
+        <a name="NSData"></a><span class="summary-name">NSData</span> = <code title="ObjCClass('NSData')">ObjCClass('NSData')</code>
     </td>
   </tr>
 <tr>
     <td width="15%" align="right" valign="top" class="summary">
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
-        <a name="NSEnumerator"></a><span class="summary-name">NSEnumerator</span> = <code title="&lt;ObjCClass NSEnumerator at 140735632965960&gt;">&lt;ObjCClass NSEnumerator at 140735632965960&gt;</code>
+        <a name="NSDecimalNumber"></a><span class="summary-name">NSDecimalNumber</span> = <code title="ObjCClass('NSDecimalNumber')">ObjCClass('NSDecimalNumber')</code>
     </td>
   </tr>
 <tr>
     <td width="15%" align="right" valign="top" class="summary">
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
-        <a name="NSImage"></a><span class="summary-name">NSImage</span> = <code title="&lt;ObjCClass NSImage at 140735626005792&gt;">&lt;ObjCClass NSImage at 140735626005792&gt;</code>
+        <a name="NSDictionary"></a><span class="summary-name">NSDictionary</span> = <code title="ObjCClass('NSDictionary')">ObjCClass('NSDictionary')</code>
     </td>
   </tr>
 <tr>
     <td width="15%" align="right" valign="top" class="summary">
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
-        <a name="NSMenu"></a><span class="summary-name">NSMenu</span> = <code title="&lt;ObjCClass NSMenu at 140735626007472&gt;">&lt;ObjCClass NSMenu at 140735626007472&gt;</code>
+        <a name="NSDockTile"></a><span class="summary-name">NSDockTile</span> = <code title="ObjCClass('NSDockTile')">ObjCClass('NSDockTile')</code>
     </td>
   </tr>
 <tr>
     <td width="15%" align="right" valign="top" class="summary">
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
-        <a name="NSMenuItem"></a><span class="summary-name">NSMenuItem</span> = <code title="&lt;ObjCClass NSMenuItem at 140735626007552&gt;">&lt;ObjCClass NSMenuItem at 140735626007552&gt;</code>
+        <a name="NSEnumerator"></a><span class="summary-name">NSEnumerator</span> = <code title="ObjCClass('NSEnumerator')">ObjCClass('NSEnumerator')</code>
     </td>
   </tr>
 <tr>
     <td width="15%" align="right" valign="top" class="summary">
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
-        <a name="NSMutableArray"></a><span class="summary-name">NSMutableArray</span> = <code title="&lt;ObjCClass NSMutableArray at 140735632966240&gt;">&lt;ObjCClass NSMutableArray at 140735632966240&gt;</code>
+        <a name="NSFont"></a><span class="summary-name">NSFont</span> = <code title="ObjCClass('NSFont')">ObjCClass('NSFont')</code>
     </td>
   </tr>
 <tr>
     <td width="15%" align="right" valign="top" class="summary">
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
-        <a name="NSMutableData"></a><span class="summary-name">NSMutableData</span> = <code title="&lt;ObjCClass NSMutableData at 140735632966280&gt;">&lt;ObjCClass NSMutableData at 140735632966280&gt;</code>
+        <a name="NSImage"></a><span class="summary-name">NSImage</span> = <code title="ObjCClass('NSImage')">ObjCClass('NSImage')</code>
     </td>
   </tr>
 <tr>
     <td width="15%" align="right" valign="top" class="summary">
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
-        <a href="pycocoa.nstypes-module.html#NSMutableDictionary" class="summary-name">NSMutableDictionary</a> = <code title="&lt;ObjCClass NSMutableDictionary at 140735632966320&gt;">&lt;ObjCClass NSMutableDictionary at 140735<code class="variable-ellipsis">...</code></code>
+        <a name="NSMenu"></a><span class="summary-name">NSMenu</span> = <code title="ObjCClass('NSMenu')">ObjCClass('NSMenu')</code>
     </td>
   </tr>
 <tr>
     <td width="15%" align="right" valign="top" class="summary">
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
-        <a name="NSMutableSet"></a><span class="summary-name">NSMutableSet</span> = <code title="&lt;ObjCClass NSMutableSet at 140735632966400&gt;">&lt;ObjCClass NSMutableSet at 140735632966400&gt;</code>
+        <a name="NSMenuItem"></a><span class="summary-name">NSMenuItem</span> = <code title="ObjCClass('NSMenuItem')">ObjCClass('NSMenuItem')</code>
     </td>
   </tr>
 <tr>
     <td width="15%" align="right" valign="top" class="summary">
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
-        <a name="NSMutableString"></a><span class="summary-name">NSMutableString</span> = <code title="&lt;ObjCClass NSMutableString at 140735637593680&gt;">&lt;ObjCClass NSMutableString at 140735637593680&gt;</code>
+        <a name="NSMutableArray"></a><span class="summary-name">NSMutableArray</span> = <code title="ObjCClass('NSMutableArray')">ObjCClass('NSMutableArray')</code>
     </td>
   </tr>
 <tr>
     <td width="15%" align="right" valign="top" class="summary">
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
-        <a name="NSNull"></a><span class="summary-name">NSNull</span> = <code title="&lt;ObjCClass NSNull at 140735632966440&gt;">&lt;ObjCClass NSNull at 140735632966440&gt;</code>
+        <a name="NSMutableData"></a><span class="summary-name">NSMutableData</span> = <code title="ObjCClass('NSMutableData')">ObjCClass('NSMutableData')</code>
     </td>
   </tr>
 <tr>
     <td width="15%" align="right" valign="top" class="summary">
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
-        <a name="NSNumber"></a><span class="summary-name">NSNumber</span> = <code title="&lt;ObjCClass NSNumber at 140735637593960&gt;">&lt;ObjCClass NSNumber at 140735637593960&gt;</code>
+        <a name="NSMutableDictionary"></a><span class="summary-name">NSMutableDictionary</span> = <code title="ObjCClass('NSMutableDictionary')">ObjCClass('NSMutableDictionary')</code>
     </td>
   </tr>
 <tr>
     <td width="15%" align="right" valign="top" class="summary">
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
-        <a name="NSObject"></a><span class="summary-name">NSObject</span> = <code title="&lt;ObjCClass NSObject at 140735736934720&gt;">&lt;ObjCClass NSObject at 140735736934720&gt;</code>
+        <a name="NSMutableSet"></a><span class="summary-name">NSMutableSet</span> = <code title="ObjCClass('NSMutableSet')">ObjCClass('NSMutableSet')</code>
     </td>
   </tr>
 <tr>
     <td width="15%" align="right" valign="top" class="summary">
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
-        <a name="NSOpenPanel"></a><span class="summary-name">NSOpenPanel</span> = <code title="&lt;ObjCClass NSOpenPanel at 140735626011912&gt;">&lt;ObjCClass NSOpenPanel at 140735626011912&gt;</code>
+        <a name="NSMutableString"></a><span class="summary-name">NSMutableString</span> = <code title="ObjCClass('NSMutableString')">ObjCClass('NSMutableString')</code>
     </td>
   </tr>
 <tr>
     <td width="15%" align="right" valign="top" class="summary">
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
-        <a name="NSScreen"></a><span class="summary-name">NSScreen</span> = <code title="&lt;ObjCClass NSScreen at 140735626015832&gt;">&lt;ObjCClass NSScreen at 140735626015832&gt;</code>
+        <a name="NSConcreteNotification"></a><span class="summary-name">NSConcreteNotification</span> = <code title="ObjCClass('NSConcreteNotification')">ObjCClass('NSConcreteNotification')</code>
     </td>
   </tr>
 <tr>
     <td width="15%" align="right" valign="top" class="summary">
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
-        <a name="NSSet"></a><span class="summary-name">NSSet</span> = <code title="&lt;ObjCClass NSSet at 140735632966600&gt;">&lt;ObjCClass NSSet at 140735632966600&gt;</code>
+        <a name="NSNotification"></a><span class="summary-name">NSNotification</span> = <code title="ObjCClass('NSNotification')">ObjCClass('NSNotification')</code>
     </td>
   </tr>
 <tr>
     <td width="15%" align="right" valign="top" class="summary">
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
-        <a name="NSStatusBar"></a><span class="summary-name">NSStatusBar</span> = <code title="&lt;ObjCClass NSStatusBar at 140735626018792&gt;">&lt;ObjCClass NSStatusBar at 140735626018792&gt;</code>
+        <a name="NSNull"></a><span class="summary-name">NSNull</span> = <code title="ObjCClass('NSNull')">ObjCClass('NSNull')</code>
     </td>
   </tr>
 <tr>
     <td width="15%" align="right" valign="top" class="summary">
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
-        <a name="NSString_"></a><span class="summary-name">NSString_</span> = <code title="&lt;ObjCClass NSString at 140735637597800&gt;">&lt;ObjCClass NSString at 140735637597800&gt;</code>
+        <a name="NSNumber"></a><span class="summary-name">NSNumber</span> = <code title="ObjCClass('NSNumber')">ObjCClass('NSNumber')</code>
     </td>
   </tr>
 <tr>
     <td width="15%" align="right" valign="top" class="summary">
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
-        <a name="NSThread"></a><span class="summary-name">NSThread</span> = <code title="&lt;ObjCClass NSThread at 140735637598160&gt;">&lt;ObjCClass NSThread at 140735637598160&gt;</code>
+        <a name="NSObject"></a><span class="summary-name">NSObject</span> = <code title="ObjCClass('NSObject')">ObjCClass('NSObject')</code>
     </td>
   </tr>
 <tr>
     <td width="15%" align="right" valign="top" class="summary">
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
-        <a name="NSURL"></a><span class="summary-name">NSURL</span> = <code title="&lt;ObjCClass NSURL at 140735632966880&gt;">&lt;ObjCClass NSURL at 140735632966880&gt;</code>
+        <a name="NSOpenPanel"></a><span class="summary-name">NSOpenPanel</span> = <code title="ObjCClass('NSOpenPanel')">ObjCClass('NSOpenPanel')</code>
     </td>
   </tr>
 <tr>
     <td width="15%" align="right" valign="top" class="summary">
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
-        <a name="NSView"></a><span class="summary-name">NSView</span> = <code title="&lt;ObjCClass NSView at 140735626025032&gt;">&lt;ObjCClass NSView at 140735626025032&gt;</code>
+        <a name="NSScreen"></a><span class="summary-name">NSScreen</span> = <code title="ObjCClass('NSScreen')">ObjCClass('NSScreen')</code>
     </td>
   </tr>
 <tr>
     <td width="15%" align="right" valign="top" class="summary">
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
-        <a name="NSWindow"></a><span class="summary-name">NSWindow</span> = <code title="&lt;ObjCClass NSWindow at 140735626025592&gt;">&lt;ObjCClass NSWindow at 140735626025592&gt;</code>
+        <a name="NSScrollView"></a><span class="summary-name">NSScrollView</span> = <code title="ObjCClass('NSScrollView')">ObjCClass('NSScrollView')</code>
     </td>
   </tr>
 <tr>
     <td width="15%" align="right" valign="top" class="summary">
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
-        <a name="NSZeroPoint"></a><span class="summary-name">NSZeroPoint</span> = <code title="NSPoint(0, 0)">NSPoint(0, 0)</code>
+        <a name="NSSet"></a><span class="summary-name">NSSet</span> = <code title="ObjCClass('NSSet')">ObjCClass('NSSet')</code>
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a name="NSStatusBar"></a><span class="summary-name">NSStatusBar</span> = <code title="ObjCClass('NSStatusBar')">ObjCClass('NSStatusBar')</code>
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a name="NSString"></a><span class="summary-name">NSString</span> = <code title="ObjCClass('NSString')">ObjCClass('NSString')</code>
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a name="NSTableColumn"></a><span class="summary-name">NSTableColumn</span> = <code title="ObjCClass('NSTableColumn')">ObjCClass('NSTableColumn')</code>
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a name="NSTableView"></a><span class="summary-name">NSTableView</span> = <code title="ObjCClass('NSTableView')">ObjCClass('NSTableView')</code>
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a name="NSThread"></a><span class="summary-name">NSThread</span> = <code title="ObjCClass('NSThread')">ObjCClass('NSThread')</code>
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a name="NSURL"></a><span class="summary-name">NSURL</span> = <code title="ObjCClass('NSURL')">ObjCClass('NSURL')</code>
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a name="NSView"></a><span class="summary-name">NSView</span> = <code title="ObjCClass('NSView')">ObjCClass('NSView')</code>
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a name="NSWindow"></a><span class="summary-name">NSWindow</span> = <code title="ObjCClass('NSWindow')">ObjCClass('NSWindow')</code>
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a name="NSBool"></a><span class="summary-name">NSBool</span> = <code title="NSNumber.numberWithBool_">NSNumber.numberWithBool_</code>
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a name="NSDouble"></a><span class="summary-name">NSDouble</span> = <code title="NSNumber.numberWithDouble_">NSNumber.numberWithDouble_</code>
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a name="NSFalse"></a><span class="summary-name">NSFalse</span> = <code title="False">False</code>
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a name="NSFloat"></a><span class="summary-name">NSFloat</span> = <code title="NSNumber.numberWithDouble_">NSNumber.numberWithDouble_</code>
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a name="NSInt"></a><span class="summary-name">NSInt</span> = <code title="NSNumber.numberWithInt_">NSNumber.numberWithInt_</code>
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a name="NSLong"></a><span class="summary-name">NSLong</span> = <code title="NSNumber.numberWithLong_">NSNumber.numberWithLong_</code>
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a name="NSLongLong"></a><span class="summary-name">NSLongLong</span> = <code title="NSNumber.numberWithLongLong_">NSNumber.numberWithLongLong_</code>
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a name="NSnil"></a><span class="summary-name">NSnil</span> = <code title="None">None</code><br />
+      hash(x)
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a name="NSNone"></a><span class="summary-name">NSNone</span> = <code title="NSNone">NSNone</code>
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a name="NSTrue"></a><span class="summary-name">NSTrue</span> = <code title="True">True</code>
     </td>
   </tr>
 </table>
@@ -646,6 +986,38 @@
     <span class="table-header">Function Details</span></td>
 </tr>
 </table>
+<a name="nsBundleRename"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">nsBundleRename</span>(<span class="sig-arg">nsTitle</span>,
+        <span class="sig-arg">match</span>=<span class="sig-default"><code class="variable-quote">'</code><code class="variable-string">Python</code><code class="variable-quote">'</code></span>)</span>
+  </h3>
+  </td><td align="right" valign="top"
+    >&nbsp;
+    </td>
+  </tr></table>
+  
+  <p>Change the bundle title if the current title matches.</p>
+  <dl class="fields">
+    <dt>Parameters:</dt>
+    <dd><ul class="nomargin-top">
+        <li><strong class="pname"><code>nsTitle</code></strong> - New bundle title (<a href="pycocoa.nstypes.NSStr-class.html" 
+          class="link">NSStr</a>).</li>
+        <li><strong class="pname"><code>match</code></strong> - Optional, previous title to match (string).</li>
+    </ul></dd>
+    <dt>Returns:</dt>
+        <dd>The previous bundle title (string) or None.</dd>
+  </dl>
+<div class="fields">      <p><strong>Note:</strong>
+        Used to mimick <code>NSApplication.setTitle_(nsTitle)</code>, the 
+        name of the app shown in the menu bar.
+      </p>
+</div></td></tr></table>
+</div>
 <a name="ns2py"></a>
 <div>
 <table class="details" border="1" cellpadding="3"
@@ -653,16 +1025,16 @@
 <tr><td>
   <table width="100%" cellpadding="0" cellspacing="0" border="0">
   <tr valign="top"><td>
-  <h3 class="epydoc"><span class="sig"><span class="sig-name">ns2py</span>(<span class="sig-arg">nsObj</span>,
-        <span class="sig-arg">default</span>=<span class="sig-default">None</span>)</span>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">ns2py</span>(<span class="sig-arg">ns</span>,
+        <span class="sig-arg">dflt</span>=<span class="sig-default">None</span>)</span>
   </h3>
   </td><td align="right" valign="top"
     >&nbsp;
     </td>
   </tr></table>
   
-  <p>Convert an (instance of an) NS/CFObject to the equivalent Python type 
-  and value.</p>
+  <p>Convert (an instance of) an ObjC class to an instance of the 
+  equivalent Python type and value or Python wrapper.</p>
   <ul>
     <li>
       NSArray         -&gt; tuple
@@ -700,6 +1072,9 @@
     <li>
       NSString        -&gt; str
     </li>
+    <li>
+      NSStr/CFStr     -&gt; str
+    </li>
   </ul>
   <dl class="fields">
   </dl>
@@ -712,15 +1087,15 @@
 <tr><td>
   <table width="100%" cellpadding="0" cellspacing="0" border="0">
   <tr valign="top"><td>
-  <h3 class="epydoc"><span class="sig"><span class="sig-name">py2NS</span>(<span class="sig-arg">pyobj</span>)</span>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">py2NS</span>(<span class="sig-arg">py</span>)</span>
   </h3>
   </td><td align="right" valign="top"
     >&nbsp;
     </td>
   </tr></table>
   
-  <p>Convert an (instance of a) Python object into an instance of an NS... 
-  Objective-C class as follows:</p>
+  <p>Convert (an instance of) a Python object into an instance of the 
+  equivalent <code>NS...</code> ObjC class:</p>
   <ul>
     <li>
       bool      -&gt; NSBoolean/NSNumber
@@ -732,7 +1107,7 @@
       bytearray -&gt; NSData
     </li>
     <li>
-      Decimal   -&gt; NSDecimalNumber
+      Decimal   -&gt; NSDecimal
     </li>
     <li>
       dict      -&gt; NSMutableDictionary
@@ -756,62 +1131,16 @@
       set       -&gt; NSMutableSet
     </li>
     <li>
-      str       -&gt; NSString, immutable
+      str       -&gt; NSStr, immutable
     </li>
     <li>
       tuple     -&gt; NSArray, immutable
     </li>
     <li>
-      unicode   -&gt; NSString, immutable
+      unicode   -&gt; NSStr, immutable
     </li>
   </ul>
   <dl class="fields">
-  </dl>
-</td></tr></table>
-</div>
-<br />
-<!-- ==================== VARIABLES DETAILS ==================== -->
-<a name="section-VariablesDetails"></a>
-<table class="details" border="1" cellpadding="3"
-       cellspacing="0" width="100%" bgcolor="white">
-<tr bgcolor="#70b0f0" class="table-header">
-  <td align="left" colspan="2" class="table-header">
-    <span class="table-header">Variables Details</span></td>
-</tr>
-</table>
-<a name="NSAutoreleasePool"></a>
-<div>
-<table class="details" border="1" cellpadding="3"
-       cellspacing="0" width="100%" bgcolor="white">
-<tr><td>
-  <h3 class="epydoc">NSAutoreleasePool</h3>
-  
-  <dl class="fields">
-  </dl>
-  <dl class="fields">
-    <dt>Value:</dt>
-      <dd><table><tr><td><pre class="variable">
-&lt;ObjCClass NSAutoreleasePool at 140735637587560&gt;
-</pre></td></tr></table>
-</dd>
-  </dl>
-</td></tr></table>
-</div>
-<a name="NSMutableDictionary"></a>
-<div>
-<table class="details" border="1" cellpadding="3"
-       cellspacing="0" width="100%" bgcolor="white">
-<tr><td>
-  <h3 class="epydoc">NSMutableDictionary</h3>
-  
-  <dl class="fields">
-  </dl>
-  <dl class="fields">
-    <dt>Value:</dt>
-      <dd><table><tr><td><pre class="variable">
-&lt;ObjCClass NSMutableDictionary at 140735632966320&gt;
-</pre></td></tr></table>
-</dd>
   </dl>
 </td></tr></table>
 </div>
@@ -847,7 +1176,7 @@
 <table border="0" cellpadding="0" cellspacing="0" width="100%%">
   <tr>
     <td align="left" class="footer">
-    Generated by Epydoc 3.0.1 on Thu Mar 15 14:18:44 2018
+    Generated by Epydoc 3.0.1 on Fri Apr 20 15:50:11 2018
     </td>
     <td align="right" class="footer">
       <a target="mainFrame" href="http://epydoc.sourceforge.net"

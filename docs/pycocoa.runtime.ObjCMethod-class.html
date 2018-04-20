@@ -61,13 +61,22 @@
 <!-- ==================== CLASS DESCRIPTION ==================== -->
 <h1 class="epydoc">Class ObjCMethod</h1><p class="nomargin-top"></p>
 <pre class="base-tree">
-object --+
-         |
-        <strong class="uidshort">ObjCMethod</strong>
+object --+    
+         |    
+  <a href="pycocoa.runtime.ObjCBase-class.html">ObjCBase</a> --+
+             |
+            <strong class="uidshort">ObjCMethod</strong>
 </pre>
 
+<dl><dt>Known Subclasses:</dt>
+<dd>
+      <ul class="subclass-list">
+<li><a href="pycocoa.runtime.ObjCClassMethod-class.html">ObjCClassMethod</a></li>  </ul>
+</dd></dl>
+
 <hr />
-<p>This represents an unbound Objective-C method (really an IMP).</p>
+<p>This represents an unbound ObjC method (really an <a 
+  href="pycocoa.octypes.IMP_t-class.html" class="link">IMP_t</a>).</p>
 
 <!-- ==================== INSTANCE METHODS ==================== -->
 <a name="section-InstanceMethods"></a>
@@ -85,7 +94,7 @@ object --+
         <tr>
           <td><span class="summary-sig"><a href="pycocoa.runtime.ObjCMethod-class.html#__init__" class="summary-sig-name">__init__</a>(<span class="summary-sig-arg">self</span>,
         <span class="summary-sig-arg">method</span>)</span><br />
-      Initialize with an Objective-C Method pointer.</td>
+      Initialize with an ObjC method pointer.</td>
           <td align="right" valign="top">
             
             
@@ -120,8 +129,8 @@ object --+
     </td><td class="summary">
       <table width="100%" cellpadding="0" cellspacing="0" border="0">
         <tr>
-          <td><span class="summary-sig"><a href="pycocoa.runtime.ObjCMethod-class.html#__repr__" class="summary-sig-name">__repr__</a>(<span class="summary-sig-arg">self</span>)</span><br />
-      repr(x)</td>
+          <td><span class="summary-sig"><a href="pycocoa.runtime.ObjCMethod-class.html#__str__" class="summary-sig-name">__str__</a>(<span class="summary-sig-arg">self</span>)</span><br />
+      str(x)</td>
           <td align="right" valign="top">
             
             
@@ -133,6 +142,9 @@ object --+
   </tr>
   <tr>
     <td colspan="2" class="summary">
+    <p class="indent-wrapped-lines"><b>Inherited from <code><a href="pycocoa.runtime.ObjCBase-class.html">ObjCBase</a></code></b>:
+      <code><a href="pycocoa.runtime.ObjCBase-class.html#__repr__">__repr__</a></code>
+      </p>
     <p class="indent-wrapped-lines"><b>Inherited from <code>object</code></b>:
       <code>__delattr__</code>,
       <code>__format__</code>,
@@ -143,9 +155,39 @@ object --+
       <code>__reduce_ex__</code>,
       <code>__setattr__</code>,
       <code>__sizeof__</code>,
-      <code>__str__</code>,
       <code>__subclasshook__</code>
       </p>
+    </td>
+  </tr>
+</table>
+<!-- ==================== CLASS VARIABLES ==================== -->
+<a name="section-ClassVariables"></a>
+<table class="summary" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr bgcolor="#70b0f0" class="table-header">
+  <td align="left" colspan="2" class="table-header">
+    <span class="table-header">Class Variables</span></td>
+</tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a name="argtypes"></a><span class="summary-name">argtypes</span> = <code title="[]"><code class="variable-group">[</code><code class="variable-group">]</code></code>
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a name="encoding"></a><span class="summary-name">encoding</span> = <code title="''"><code class="variable-quote">'</code><code class="variable-string"></code><code class="variable-quote">'</code></code>
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a name="restype"></a><span class="summary-name">restype</span> = <code title="None">None</code><br />
+      hash(x)
     </td>
   </tr>
 </table>
@@ -162,7 +204,8 @@ object --+
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
         <a href="pycocoa.runtime.ObjCMethod-class.html#callable" class="summary-name">callable</a><br />
-      Returns a Python-callable for the method's IMP.
+      Returns a Python-callable for this method's <a 
+      href="pycocoa.octypes.IMP_t-class.html" class="link">IMP_t</a>.
     </td>
   </tr>
 <tr>
@@ -170,7 +213,15 @@ object --+
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
         <a href="pycocoa.runtime.ObjCMethod-class.html#cfunctype" class="summary-name">cfunctype</a><br />
-      Returns a ctypes CFUNCTYPE for the method.
+      Returns a ctypes CFUNCTYPE for this method.
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="pycocoa.runtime.ObjCMethod-class.html#name" class="summary-name">name</a><br />
+      Get the method/selector name (string).
     </td>
   </tr>
   <tr>
@@ -206,7 +257,7 @@ object --+
     </td>
   </tr></table>
   
-  <p>Initialize with an Objective-C Method pointer.</p>
+  <p>Initialize with an ObjC method pointer.</p>
   <p>We then determine the return type and argument type information of the
   method.</p>
   <dl class="fields">
@@ -234,31 +285,31 @@ object --+
   </tr></table>
   
   <p>Call the method with the given id and arguments.</p>
-  <p>You do not need to pass in the selector as an argument since it will 
-  be automatically provided.</p>
+  <p>You do not need to pass in the selector as an argument since it is 
+  provided automatically.</p>
   <dl class="fields">
   </dl>
 </td></tr></table>
 </div>
-<a name="__repr__"></a>
+<a name="__str__"></a>
 <div>
 <table class="details" border="1" cellpadding="3"
        cellspacing="0" width="100%" bgcolor="white">
 <tr><td>
   <table width="100%" cellpadding="0" cellspacing="0" border="0">
   <tr valign="top"><td>
-  <h3 class="epydoc"><span class="sig"><span class="sig-name">__repr__</span>(<span class="sig-arg">self</span>)</span>
-    <br /><em class="fname">(Representation operator)</em>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">__str__</span>(<span class="sig-arg">self</span>)</span>
+    <br /><em class="fname">(Informal representation operator)</em>
   </h3>
   </td><td align="right" valign="top"
     >&nbsp;
     </td>
   </tr></table>
   
-  <p>repr(x)</p>
+  <p>str(x)</p>
   <dl class="fields">
     <dt>Overrides:
-        object.__repr__
+        object.__str__
         <dd><em class="note">(inherited documentation)</em></dd>
     </dt>
   </dl>
@@ -280,11 +331,13 @@ object --+
        cellspacing="0" width="100%" bgcolor="white">
 <tr><td>
   <h3 class="epydoc">callable</h3>
-  <p>Returns a Python-callable for the method's IMP.</p>
+  <p>Returns a Python-callable for this method's <a 
+  href="pycocoa.octypes.IMP_t-class.html" class="link">IMP_t</a>.</p>
   <dl class="fields">
     <dt>Get Method:</dt>
     <dd class="value"><span class="summary-sig">callable(<span class="summary-sig-arg">self</span>)</span>
-        - Returns a Python-callable for the method's IMP.
+        - Returns a Python-callable for this method's <a 
+href="pycocoa.octypes.IMP_t-class.html" class="link">IMP_t</a>.
     </dd>
   </dl>
 </td></tr></table>
@@ -295,11 +348,26 @@ object --+
        cellspacing="0" width="100%" bgcolor="white">
 <tr><td>
   <h3 class="epydoc">cfunctype</h3>
-  <p>Returns a ctypes CFUNCTYPE for the method.</p>
+  <p>Returns a ctypes CFUNCTYPE for this method.</p>
   <dl class="fields">
     <dt>Get Method:</dt>
     <dd class="value"><span class="summary-sig">cfunctype(<span class="summary-sig-arg">self</span>)</span>
-        - Returns a ctypes CFUNCTYPE for the method.
+        - Returns a ctypes CFUNCTYPE for this method.
+    </dd>
+  </dl>
+</td></tr></table>
+</div>
+<a name="name"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <h3 class="epydoc">name</h3>
+  <p>Get the method/selector name (string).</p>
+  <dl class="fields">
+    <dt>Get Method:</dt>
+    <dd class="value"><span class="summary-sig">name(<span class="summary-sig-arg">self</span>)</span>
+        - Get the method/selector name (string).
     </dd>
   </dl>
 </td></tr></table>
@@ -336,7 +404,7 @@ object --+
 <table border="0" cellpadding="0" cellspacing="0" width="100%%">
   <tr>
     <td align="left" class="footer">
-    Generated by Epydoc 3.0.1 on Thu Mar 15 14:18:44 2018
+    Generated by Epydoc 3.0.1 on Fri Apr 20 15:50:11 2018
     </td>
     <td align="right" class="footer">
       <a target="mainFrame" href="http://epydoc.sourceforge.net"

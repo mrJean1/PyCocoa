@@ -7,13 +7,13 @@
 from math import sin, cos, pi as PI
 # all imports listed explicitly to help PyChecker
 from pycocoa import NSApplication, NSBackingStoreBuffered, \
-                    NSBezierPath, NSColor, NSMakeRect, NSPoint, \
-                    NSString, NSUsualWindowMask, NSWindow, \
+                    NSBezierPath, NSColor, NSMakeRect, NSPoint_t, \
+                    NSStr, NSWindow, NSWindowStyleMaskUsual, \
                     PyObjectEncoding, ObjCClass, ObjCInstance, \
                     ObjCSubclass, send_super
 from pycocoa.oclibs import libAppKit
 
-__version__ = '18.03.12'
+__version__ = '18.04.06'
 
 NSRectFill = libAppKit.NSRectFill
 
@@ -50,8 +50,8 @@ class _View_Implementation(object):
         NSColor.blackColor().set()
         for f in self.loop:
             for g in self.loop:
-                p1 = NSPoint(_x(f, w), _y(f, h))
-                p2 = NSPoint(_x(g, w), _y(g, h))
+                p1 = NSPoint_t(_x(f, w), _y(f, h))
+                p2 = NSPoint_t(_x(g, w), _y(g, h))
                 NSBezierPath.strokeLineFromPoint_toPoint_(p1, p2)
 
 
@@ -81,11 +81,11 @@ def main(timeout=None):
 
     frame = NSMakeRect(10, 10, 500, 400)
     window = NSWindow.alloc().initWithContentRect_styleMask_backing_defer_(
-                frame,
-                NSUsualWindowMask,
-                NSBackingStoreBuffered,
-                False)
-    window.setTitle_(NSString('Drawing - Close window to Quit'))
+                      frame,
+                      NSWindowStyleMaskUsual,
+                      NSBackingStoreBuffered,
+                      False)
+    window.setTitle_(NSStr('Drawing - Close window to Quit'))
 
     view = _View.alloc().initWithFrame_(frame, 10)
     window.setContentView_(view)

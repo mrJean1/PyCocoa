@@ -7,9 +7,8 @@ import os
 import sys
 import unittest
 
-
 __all__ = ('TestSuite',)
-__version__ = '18.03.10'
+__version__ = '18.04.10'
 
 _python_exe = sys.executable
 
@@ -26,50 +25,65 @@ class TestSuite(unittest.TestCase):
         # check the exit status code
         self.assertEqual(x, 0)
 
-    def test_Class(self):
+    def test_class_wrapper(self):
         self._run('class_wrapper4 NSColor')
 
-    def test_Classes(self):
+    def test_list_classes(self):
         self._run('list_classes NS')
 
-    def test_Inheritance(self):
+    def test_list_inheritance(self):
         self._run('list_inheritance NSAutoreleasePool')
 
-    def test_Ivalues(self):
+    def test_list_ivalues(self):
         self._run('list_ivalues NSApplication')
 
-    def test_Ivars(self):
+    def test_list_ivars(self):
         self._run('list_ivars NSView')  # NSObject crashes
 
-    def test_Methods(self):
+    def test_list_methods(self):
         self._run('list_methods NSWindow set')
 
-    def test_NStypes(self):
+    def test_list_nstypes(self):
         self._run('list_nstypes')
 
-    def test_Properties(self):
+    def test_list_properties(self):
         self._run('list_properties NSWindow')
 
-    def test_Protocols(self):
+    def test_list_protocols(self):
         self._run('list_protocols NSColor')
 
-    def test_Application(self):
+    def test_simple_application(self):
         self._run('simple_application 3')  # waits 3 secs
 
-    def test_Delegate(self):
+    def test_simple_delegate(self):
         self._run('simple_delegate 1')  # waits 1 secs
 
-    def test_Drawing(self):
+    def test_simple_drawing(self):
         self._run('simple_drawing 2')  # waits 2 secs
 
-    def test_Menu(self):
+    def test_simple_menu(self):
         self._run('simple_menu 3')
 
-    def test_SubClasses(self):
+    def test_simple_subClass(self):
         self._run('simple_subclass')
 
-#   def test_VLCplayer(self):
+    def test_simple_table(self):
+        self._run('simple_table 2')
+
+#   def test_simple_VLCplayer(self):
 #       self._run('simple_VLCplayer <secs> <video_file_name>')
+
+    def test_simple_window(self):
+        self._run('simple_window 1')
+
+    def test_Dicts(self):
+        self._run('test_Dicts')
+
+    def test_NStypes(self):
+        self._run('test_NStypes')
+
+    def test_Types(self):
+        self._run('test_Types')
 
 
 if __name__ == '__main__':

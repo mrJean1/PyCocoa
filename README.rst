@@ -18,11 +18,11 @@ The example *simple_VLCplayer.py* requires installation of the `VLC App`_
 and the corresponding `Python-VLC`_ binding.
 
 The tests and examples have only been run with 64-bit Python 2.7.14 and
-3.6.4 (with VLC_ 2.2.6 and 3.0.1) and only on macOS 10.13.3 High Sierra.
+3.6.5 (with VLC_ 2.2.6 and 3.0.1) and only on macOS 10.13.4 High Sierra.
 
 All PyCocoa source code has been statically checked_ with PyChecker_,
 PyFlakes_, PyCodeStyle_ (formerly Pep8) and McCabe_ using 64-bit Python
-2.7.14 and with Flake8_ on 64-bit Python 3.6.4.
+2.7.14 and with Flake8_ on 64-bit Python 3.6.5.
 
 To install PyCocoa, type ``pip install PyCocoa`` or ``easy_install PyCocoa``
 in a terminal window.  Alternatively, download ``PyCocoa-`` from PyPI_
@@ -34,12 +34,12 @@ Two alternatives to PyCocoa are (a) PyObjC_, the most comprehensive
 Python to Objective-C bridge and (b) `Rubicon-ObjC`_ for Python 3.5+,
 taking advantage of Python's new typing_ annotations.
 
-*Last updated: Mar 15, 2018.*
+*Last updated: Apr 18, 2018.*
 
 .. _checked: http://GitHub.com/ActiveState/code/tree/master/recipes/Python/546532_PyChecker_postprocessor
 .. _cocoa-python: http://GitHub.com/phillip-nguyen/cocoa-python
 .. _ctypes: http://Docs.Python.org/2.7/library/ctypes.html
-.. _documentation: http://mrjean1.GitHub.io/PyCocoa
+.. _documentation: http://mrJean1.GitHub.io/PyCocoa
 .. _Epydoc: http://PyPI.Python.org/pypi/epydoc
 .. _Flake8: http://PyPI.Python.org/pypi/flake8
 .. _GitHub: http://GitHub.com/mrJean1/PyCocoa

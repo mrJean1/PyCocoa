@@ -61,19 +61,21 @@
 <!-- ==================== CLASS DESCRIPTION ==================== -->
 <h1 class="epydoc">Class ObjCInstance</h1><p class="nomargin-top"></p>
 <pre class="base-tree">
-object --+
-         |
-        <strong class="uidshort">ObjCInstance</strong>
+object --+    
+         |    
+  <a href="pycocoa.runtime.ObjCBase-class.html">ObjCBase</a> --+
+             |
+            <strong class="uidshort">ObjCInstance</strong>
 </pre>
 
 <dl><dt>Known Subclasses:</dt>
 <dd>
       <ul class="subclass-list">
-<li><a href="pycocoa.nstypes.CFString-class.html">nstypes.CFString</a></li><li>, <a href="pycocoa.nstypes.NSDecimalNumber-class.html">nstypes.NSDecimalNumber</a></li>  </ul>
+<li><a href="pycocoa.nstypes.CFStr-class.html">nstypes.CFStr</a></li><li>, <a href="pycocoa.nstypes.NSDecimal-class.html">nstypes.NSDecimal</a></li>  </ul>
 </dd></dl>
 
 <hr />
-<p>Python wrapper for an Objective-C instance.</p>
+<p>Python wrapper for an ObjC instance.</p>
 
 <!-- ==================== INSTANCE METHODS ==================== -->
 <a name="section-InstanceMethods"></a>
@@ -107,8 +109,8 @@ object --+
     </td><td class="summary">
       <table width="100%" cellpadding="0" cellspacing="0" border="0">
         <tr>
-          <td><span class="summary-sig"><a href="pycocoa.runtime.ObjCInstance-class.html#__repr__" class="summary-sig-name">__repr__</a>(<span class="summary-sig-arg">self</span>)</span><br />
-      repr(x)</td>
+          <td><span class="summary-sig"><a href="pycocoa.runtime.ObjCInstance-class.html#__str__" class="summary-sig-name">__str__</a>(<span class="summary-sig-arg">self</span>)</span><br />
+      str(x)</td>
           <td align="right" valign="top">
             
             
@@ -124,8 +126,8 @@ object --+
     </td><td class="summary">
       <table width="100%" cellpadding="0" cellspacing="0" border="0">
         <tr>
-          <td><span class="summary-sig"><a name="objc_classname"></a><span class="summary-sig-name">objc_classname</span>(<span class="summary-sig-arg">self</span>)</span><br />
-      Return the name of this object's Objective-C class.</td>
+          <td><span class="summary-sig"><a href="pycocoa.runtime.ObjCInstance-class.html#release" class="summary-sig-name">release</a>(<span class="summary-sig-arg">self</span>)</span><br />
+      Garbage collect this instance.</td>
           <td align="right" valign="top">
             
             
@@ -157,6 +159,9 @@ object --+
   </tr>
   <tr>
     <td colspan="2" class="summary">
+    <p class="indent-wrapped-lines"><b>Inherited from <code><a href="pycocoa.runtime.ObjCBase-class.html">ObjCBase</a></code></b>:
+      <code><a href="pycocoa.runtime.ObjCBase-class.html#__repr__">__repr__</a></code>
+      </p>
     <p class="indent-wrapped-lines"><b>Inherited from <code>object</code></b>:
       <code>__delattr__</code>,
       <code>__format__</code>,
@@ -167,7 +172,6 @@ object --+
       <code>__reduce_ex__</code>,
       <code>__setattr__</code>,
       <code>__sizeof__</code>,
-      <code>__str__</code>,
       <code>__subclasshook__</code>
       </p>
     </td>
@@ -188,9 +192,10 @@ object --+
       <table width="100%" cellpadding="0" cellspacing="0" border="0">
         <tr>
           <td><span class="summary-sig"><a href="pycocoa.runtime.ObjCInstance-class.html#__new__" class="summary-sig-name">__new__</a>(<span class="summary-sig-arg">cls</span>,
-        <span class="summary-sig-arg">object_ptr</span>)</span><br />
+        <span class="summary-sig-arg">objc_ptr</span>)</span><br />
       Create a new ObjCInstance or return a previously created one for the 
-      given object_ptr which should be an Objective-C id.</td>
+      given objc_ptr which should be an ObjC <a 
+      href="pycocoa.octypes.Id_t-class.html" class="link">Id_t</a>.</td>
           <td align="right" valign="top">
             
             
@@ -198,29 +203,6 @@ object --+
         </tr>
       </table>
       
-    </td>
-  </tr>
-</table>
-<!-- ==================== CLASS VARIABLES ==================== -->
-<a name="section-ClassVariables"></a>
-<table class="summary" border="1" cellpadding="3"
-       cellspacing="0" width="100%" bgcolor="white">
-<tr bgcolor="#70b0f0" class="table-header">
-  <td align="left" colspan="2" class="table-header">
-    <span class="table-header">Class Variables</span></td>
-</tr>
-<tr>
-    <td width="15%" align="right" valign="top" class="summary">
-      <span class="summary-type">&nbsp;</span>
-    </td><td class="summary">
-        <a name="ptr"></a><span class="summary-name">ptr</span> = <code title="None">None</code>
-    </td>
-  </tr>
-<tr>
-    <td width="15%" align="right" valign="top" class="summary">
-      <span class="summary-type">&nbsp;</span>
-    </td><td class="summary">
-        <a name="objc_class"></a><span class="summary-name">objc_class</span> = <code title="None">None</code>
     </td>
   </tr>
 </table>
@@ -232,6 +214,49 @@ object --+
   <td align="left" colspan="2" class="table-header">
     <span class="table-header">Properties</span></td>
 </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="pycocoa.runtime.ObjCInstance-class.html#objc_class" class="summary-name">objc_class</a><br />
+      Get this instance' ObjC class.
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="pycocoa.runtime.ObjCInstance-class.html#objc_classname" class="summary-name">objc_classname</a><br />
+      Get the name of this instance' ObjC class (str).
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="pycocoa.runtime.ObjCInstance-class.html#ptr" class="summary-name">ptr</a><br />
+      Get this instance' equivalent ObjC instance (<a 
+      href="pycocoa.octypes.Id_t-class.html" class="link">Id_t</a>).
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="pycocoa.runtime.ObjCInstance-class.html#NS" class="summary-name">NS</a><br />
+      Get this instance' equivalent ObjC instance (<a 
+      href="pycocoa.octypes.Id_t-class.html" class="link">Id_t</a>).
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="pycocoa.runtime.ObjCInstance-class.html#Type" class="summary-name">Type</a><br />
+      Get the Python Type for this instance' ObjC class 
+      (<code>class</code>).
+    </td>
+  </tr>
   <tr>
     <td colspan="2" class="summary">
     <p class="indent-wrapped-lines"><b>Inherited from <code>object</code></b>:
@@ -257,7 +282,7 @@ object --+
   <table width="100%" cellpadding="0" cellspacing="0" border="0">
   <tr valign="top"><td>
   <h3 class="epydoc"><span class="sig"><span class="sig-name">__new__</span>(<span class="sig-arg">cls</span>,
-        <span class="sig-arg">object_ptr</span>)</span>
+        <span class="sig-arg">objc_ptr</span>)</span>
     <br /><em class="fname">Static Method</em>
   </h3>
   </td><td align="right" valign="top"
@@ -266,7 +291,8 @@ object --+
   </tr></table>
   
   <p>Create a new ObjCInstance or return a previously created one for the 
-  given object_ptr which should be an Objective-C id.</p>
+  given objc_ptr which should be an ObjC <a 
+  href="pycocoa.octypes.Id_t-class.html" class="link">Id_t</a>.</p>
   <dl class="fields">
     <dt>Returns: a new object with type S, a subtype of T</dt>
     <dt>Overrides:
@@ -275,27 +301,139 @@ object --+
   </dl>
 </td></tr></table>
 </div>
-<a name="__repr__"></a>
+<a name="__str__"></a>
 <div>
 <table class="details" border="1" cellpadding="3"
        cellspacing="0" width="100%" bgcolor="white">
 <tr><td>
   <table width="100%" cellpadding="0" cellspacing="0" border="0">
   <tr valign="top"><td>
-  <h3 class="epydoc"><span class="sig"><span class="sig-name">__repr__</span>(<span class="sig-arg">self</span>)</span>
-    <br /><em class="fname">(Representation operator)</em>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">__str__</span>(<span class="sig-arg">self</span>)</span>
+    <br /><em class="fname">(Informal representation operator)</em>
   </h3>
   </td><td align="right" valign="top"
     >&nbsp;
     </td>
   </tr></table>
   
-  <p>repr(x)</p>
+  <p>str(x)</p>
   <dl class="fields">
     <dt>Overrides:
-        object.__repr__
+        object.__str__
         <dd><em class="note">(inherited documentation)</em></dd>
     </dt>
+  </dl>
+</td></tr></table>
+</div>
+<a name="release"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">release</span>(<span class="sig-arg">self</span>)</span>
+  </h3>
+  </td><td align="right" valign="top"
+    >&nbsp;
+    </td>
+  </tr></table>
+  
+  <p>Garbage collect this instance.</p>
+  <dl class="fields">
+  </dl>
+<div class="fields">      <p><strong>Note:</strong>
+        May result in Python memory errors, aborts and/or segfaults
+      </p>
+</div></td></tr></table>
+</div>
+<br />
+<!-- ==================== PROPERTY DETAILS ==================== -->
+<a name="section-PropertyDetails"></a>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr bgcolor="#70b0f0" class="table-header">
+  <td align="left" colspan="2" class="table-header">
+    <span class="table-header">Property Details</span></td>
+</tr>
+</table>
+<a name="objc_class"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <h3 class="epydoc">objc_class</h3>
+  <p>Get this instance' ObjC class.</p>
+  <dl class="fields">
+    <dt>Get Method:</dt>
+    <dd class="value"><span class="summary-sig">objc_class(<span class="summary-sig-arg">self</span>)</span>
+        - Get this instance' ObjC class.
+    </dd>
+  </dl>
+</td></tr></table>
+</div>
+<a name="objc_classname"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <h3 class="epydoc">objc_classname</h3>
+  <p>Get the name of this instance' ObjC class (str).</p>
+  <dl class="fields">
+    <dt>Get Method:</dt>
+    <dd class="value"><span class="summary-sig">objc_classname(<span class="summary-sig-arg">self</span>)</span>
+        - Get the name of this instance' ObjC class (str).
+    </dd>
+  </dl>
+</td></tr></table>
+</div>
+<a name="ptr"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <h3 class="epydoc">ptr</h3>
+  <p>Get this instance' equivalent ObjC instance (<a 
+  href="pycocoa.octypes.Id_t-class.html" class="link">Id_t</a>).</p>
+  <dl class="fields">
+    <dt>Get Method:</dt>
+    <dd class="value"><span class="summary-sig">ptr(<span class="summary-sig-arg">self</span>)</span>
+        - Get this instance' equivalent ObjC instance (<a 
+href="pycocoa.octypes.Id_t-class.html" class="link">Id_t</a>).
+    </dd>
+  </dl>
+</td></tr></table>
+</div>
+<a name="NS"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <h3 class="epydoc">NS</h3>
+  <p>Get this instance' equivalent ObjC instance (<a 
+  href="pycocoa.octypes.Id_t-class.html" class="link">Id_t</a>).</p>
+  <dl class="fields">
+    <dt>Get Method:</dt>
+    <dd class="value"><span class="summary-sig">ptr(<span class="summary-sig-arg">self</span>)</span>
+        - Get this instance' equivalent ObjC instance (<a 
+href="pycocoa.octypes.Id_t-class.html" class="link">Id_t</a>).
+    </dd>
+  </dl>
+</td></tr></table>
+</div>
+<a name="Type"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <h3 class="epydoc">Type</h3>
+  <p>Get the Python Type for this instance' ObjC class 
+  (<code>class</code>).</p>
+  <dl class="fields">
+    <dt>Get Method:</dt>
+    <dd class="value"><span class="summary-sig">Type(<span class="summary-sig-arg">self</span>)</span>
+        - Get the Python Type for this instance' ObjC class (<code>class</code>).
+    </dd>
   </dl>
 </td></tr></table>
 </div>
@@ -331,7 +469,7 @@ object --+
 <table border="0" cellpadding="0" cellspacing="0" width="100%%">
   <tr>
     <td align="left" class="footer">
-    Generated by Epydoc 3.0.1 on Thu Mar 15 14:18:44 2018
+    Generated by Epydoc 3.0.1 on Fri Apr 20 15:50:11 2018
     </td>
     <td align="right" class="footer">
       <a target="mainFrame" href="http://epydoc.sourceforge.net"

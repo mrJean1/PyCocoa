@@ -61,13 +61,15 @@
 <!-- ==================== CLASS DESCRIPTION ==================== -->
 <h1 class="epydoc">Class ObjCClass</h1><p class="nomargin-top"></p>
 <pre class="base-tree">
-object --+
-         |
-        <strong class="uidshort">ObjCClass</strong>
+object --+    
+         |    
+  <a href="pycocoa.runtime.ObjCBase-class.html">ObjCBase</a> --+
+             |
+            <strong class="uidshort">ObjCClass</strong>
 </pre>
 
 <hr />
-<p>Python wrapper for an Objective-C class.</p>
+<p>Python wrapper for an ObjC class.</p>
 
 <!-- ==================== INSTANCE METHODS ==================== -->
 <a name="section-InstanceMethods"></a>
@@ -101,8 +103,28 @@ object --+
     </td><td class="summary">
       <table width="100%" cellpadding="0" cellspacing="0" border="0">
         <tr>
-          <td><span class="summary-sig"><a href="pycocoa.runtime.ObjCClass-class.html#__repr__" class="summary-sig-name">__repr__</a>(<span class="summary-sig-arg">self</span>)</span><br />
-      repr(x)</td>
+          <td><span class="summary-sig"><a href="pycocoa.runtime.ObjCClass-class.html#__str__" class="summary-sig-name">__str__</a>(<span class="summary-sig-arg">self</span>)</span><br />
+      str(x)</td>
+          <td align="right" valign="top">
+            
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a name="add_protocol"></a><span class="summary-sig-name">add_protocol</span>(<span class="summary-sig-arg">self</span>,
+        <span class="summary-sig-arg">protocol</span>)</span><br />
+      Add a protocol to this class, where <i>protocol</i> is a string or <a
+      href="pycocoa.octypes.Protocol_t-class.html" 
+      class="link">Protocol_t</a> instance.</td>
           <td align="right" valign="top">
             
             
@@ -120,9 +142,7 @@ object --+
         <tr>
           <td><span class="summary-sig"><a name="get_classmethod"></a><span class="summary-sig-name">get_classmethod</span>(<span class="summary-sig-arg">self</span>,
         <span class="summary-sig-arg">name</span>)</span><br />
-      Return a Python representation of the named class method, either by 
-      looking it up in the cached list of methods or by searching for and 
-      creating a new method object.</td>
+      Return a Python wrapper of the named class method, or None.</td>
           <td align="right" valign="top">
             
             
@@ -140,9 +160,7 @@ object --+
         <tr>
           <td><span class="summary-sig"><a name="get_method"></a><span class="summary-sig-name">get_method</span>(<span class="summary-sig-arg">self</span>,
         <span class="summary-sig-arg">name</span>)</span><br />
-      Return a Python representation of a named instance method, either by 
-      looking it up in the cached list of methods or by searching for and 
-      creating a new method object.</td>
+      Return a Python wrapper of a named instance method, or None.</td>
           <td align="right" valign="top">
             
             
@@ -154,6 +172,9 @@ object --+
   </tr>
   <tr>
     <td colspan="2" class="summary">
+    <p class="indent-wrapped-lines"><b>Inherited from <code><a href="pycocoa.runtime.ObjCBase-class.html">ObjCBase</a></code></b>:
+      <code><a href="pycocoa.runtime.ObjCBase-class.html#__repr__">__repr__</a></code>
+      </p>
     <p class="indent-wrapped-lines"><b>Inherited from <code>object</code></b>:
       <code>__delattr__</code>,
       <code>__format__</code>,
@@ -164,7 +185,6 @@ object --+
       <code>__reduce_ex__</code>,
       <code>__setattr__</code>,
       <code>__sizeof__</code>,
-      <code>__str__</code>,
       <code>__subclasshook__</code>
       </p>
     </td>
@@ -185,9 +205,10 @@ object --+
       <table width="100%" cellpadding="0" cellspacing="0" border="0">
         <tr>
           <td><span class="summary-sig"><a href="pycocoa.runtime.ObjCClass-class.html#__new__" class="summary-sig-name">__new__</a>(<span class="summary-sig-arg">cls</span>,
-        <span class="summary-sig-arg">name_or_ptr</span>)</span><br />
+        <span class="summary-sig-arg">name_or_ptr</span>,
+        <span class="summary-sig-arg">*protocols</span>)</span><br />
       Create a new ObjCClass instance or return a previously created 
-      instance for the given Objective-C class.</td>
+      instance for the given ObjC class.</td>
           <td align="right" valign="top">
             
             
@@ -195,29 +216,6 @@ object --+
         </tr>
       </table>
       
-    </td>
-  </tr>
-</table>
-<!-- ==================== CLASS VARIABLES ==================== -->
-<a name="section-ClassVariables"></a>
-<table class="summary" border="1" cellpadding="3"
-       cellspacing="0" width="100%" bgcolor="white">
-<tr bgcolor="#70b0f0" class="table-header">
-  <td align="left" colspan="2" class="table-header">
-    <span class="table-header">Class Variables</span></td>
-</tr>
-<tr>
-    <td width="15%" align="right" valign="top" class="summary">
-      <span class="summary-type">&nbsp;</span>
-    </td><td class="summary">
-        <a name="name"></a><span class="summary-name">name</span> = <code title="''"><code class="variable-quote">'</code><code class="variable-string"></code><code class="variable-quote">'</code></code>
-    </td>
-  </tr>
-<tr>
-    <td width="15%" align="right" valign="top" class="summary">
-      <span class="summary-type">&nbsp;</span>
-    </td><td class="summary">
-        <a name="ptr"></a><span class="summary-name">ptr</span> = <code title="None">None</code>
     </td>
   </tr>
 </table>
@@ -229,6 +227,27 @@ object --+
   <td align="left" colspan="2" class="table-header">
     <span class="table-header">Properties</span></td>
 </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="pycocoa.runtime.ObjCClass-class.html#name" class="summary-name">name</a>
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="pycocoa.runtime.ObjCClass-class.html#ptr" class="summary-name">ptr</a>
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="pycocoa.runtime.ObjCClass-class.html#NS" class="summary-name">NS</a>
+    </td>
+  </tr>
   <tr>
     <td colspan="2" class="summary">
     <p class="indent-wrapped-lines"><b>Inherited from <code>object</code></b>:
@@ -254,7 +273,8 @@ object --+
   <table width="100%" cellpadding="0" cellspacing="0" border="0">
   <tr valign="top"><td>
   <h3 class="epydoc"><span class="sig"><span class="sig-name">__new__</span>(<span class="sig-arg">cls</span>,
-        <span class="sig-arg">name_or_ptr</span>)</span>
+        <span class="sig-arg">name_or_ptr</span>,
+        <span class="sig-arg">*protocols</span>)</span>
     <br /><em class="fname">Static Method</em>
   </h3>
   </td><td align="right" valign="top"
@@ -263,7 +283,7 @@ object --+
   </tr></table>
   
   <p>Create a new ObjCClass instance or return a previously created 
-  instance for the given Objective-C class.</p>
+  instance for the given ObjC class.</p>
   <p>The argument is either the name of the class to retrieve or a pointer 
   to the class.</p>
   <dl class="fields">
@@ -274,27 +294,79 @@ object --+
   </dl>
 </td></tr></table>
 </div>
-<a name="__repr__"></a>
+<a name="__str__"></a>
 <div>
 <table class="details" border="1" cellpadding="3"
        cellspacing="0" width="100%" bgcolor="white">
 <tr><td>
   <table width="100%" cellpadding="0" cellspacing="0" border="0">
   <tr valign="top"><td>
-  <h3 class="epydoc"><span class="sig"><span class="sig-name">__repr__</span>(<span class="sig-arg">self</span>)</span>
-    <br /><em class="fname">(Representation operator)</em>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">__str__</span>(<span class="sig-arg">self</span>)</span>
+    <br /><em class="fname">(Informal representation operator)</em>
   </h3>
   </td><td align="right" valign="top"
     >&nbsp;
     </td>
   </tr></table>
   
-  <p>repr(x)</p>
+  <p>str(x)</p>
   <dl class="fields">
     <dt>Overrides:
-        object.__repr__
+        object.__str__
         <dd><em class="note">(inherited documentation)</em></dd>
     </dt>
+  </dl>
+</td></tr></table>
+</div>
+<br />
+<!-- ==================== PROPERTY DETAILS ==================== -->
+<a name="section-PropertyDetails"></a>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr bgcolor="#70b0f0" class="table-header">
+  <td align="left" colspan="2" class="table-header">
+    <span class="table-header">Property Details</span></td>
+</tr>
+</table>
+<a name="name"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <h3 class="epydoc">name</h3>
+  
+  <dl class="fields">
+    <dt>Get Method:</dt>
+    <dd class="value"><span class="summary-sig">name(<span class="summary-sig-arg">self</span>)</span>
+    </dd>
+  </dl>
+</td></tr></table>
+</div>
+<a name="ptr"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <h3 class="epydoc">ptr</h3>
+  
+  <dl class="fields">
+    <dt>Get Method:</dt>
+    <dd class="value"><span class="summary-sig">ptr(<span class="summary-sig-arg">self</span>)</span>
+    </dd>
+  </dl>
+</td></tr></table>
+</div>
+<a name="NS"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <h3 class="epydoc">NS</h3>
+  
+  <dl class="fields">
+    <dt>Get Method:</dt>
+    <dd class="value"><span class="summary-sig">ptr(<span class="summary-sig-arg">self</span>)</span>
+    </dd>
   </dl>
 </td></tr></table>
 </div>
@@ -330,7 +402,7 @@ object --+
 <table border="0" cellpadding="0" cellspacing="0" width="100%%">
   <tr>
     <td align="left" class="footer">
-    Generated by Epydoc 3.0.1 on Thu Mar 15 14:18:44 2018
+    Generated by Epydoc 3.0.1 on Fri Apr 20 15:50:11 2018
     </td>
     <td align="right" class="footer">
       <a target="mainFrame" href="http://epydoc.sourceforge.net"

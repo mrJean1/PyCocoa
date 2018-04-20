@@ -6,9 +6,9 @@
 # Minimal example of displaying an NSOpenPanel.
 
 # all imports listed explicitly to help PyChecker
-from pycocoa import NSLog, NSOpenPanel, nsString2str
+from pycocoa import NSOpenPanel, nsString2str, nsLog
 
-__version__ = '17.11.18'
+__version__ = '18.03.28'
 
 
 def show_open_panel():
@@ -28,4 +28,4 @@ if __name__ == '__main__':
 
     # Create and display an NSOpenPanel.
     selected = show_open_panel()
-    NSLog('selected: %s' % (selected,))
+    nsLog('selected: %s' % (selected,))

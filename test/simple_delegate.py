@@ -6,11 +6,11 @@
 
 # all imports listed explicitly to help PyChecker
 from pycocoa import NSApplication, NSBackingStoreBuffered, \
-                    NSMakeRect, NSString, NSUsualWindowMask, \
-                    NSWindow, PyObjectEncoding, ObjCClass, \
-                    ObjCInstance, ObjCSubclass, send_super
+                    NSMakeRect, NSStr, NSWindow, \
+                    NSWindowStyleMaskUsual, PyObjectEncoding, \
+                    ObjCClass, ObjCInstance, ObjCSubclass, send_super
 
-__version__ = '18.03.12'
+__version__ = '18.04.06'
 
 
 class _Delegate_Implementation(object):
@@ -60,16 +60,16 @@ def main(timeout=None):
     # (Don't worry about these parameters for the moment. They just
     # specify the type of window, its size and position etc)
     window = NSWindow.alloc().initWithContentRect_styleMask_backing_defer_(
-                frame,
-                NSUsualWindowMask,
-                NSBackingStoreBuffered,
-                False)  # or 0
+                      frame,
+                      NSWindowStyleMaskUsual,
+                      NSBackingStoreBuffered,
+                      False)  # or 0
     # tell it which delegate object to use (here it happens
     # to be the same delegate as the application is using),
     # otherwise method .windowWillClose_ will not be called
     window.setDelegate_(delegate)
     # set some properties. Unicode strings are preferred.
-    window.setTitle_(NSString('Delegated - Close window to Quit'))
+    window.setTitle_(NSStr('Delegated - Close window to Quit'))
     # All set.  Now we can show the window
     window.orderFrontRegardless()
 

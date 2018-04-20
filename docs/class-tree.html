@@ -61,42 +61,84 @@
     <li> <strong class="uidlink">object</strong>:
       <em class="summary">The most base type</em>
     <ul>
+    <li> <strong class="uidlink">exceptions.BaseException</strong>:
+      <em class="summary">Common base class for all exceptions</em>
+    <ul>
+    <li> <strong class="uidlink">exceptions.Exception</strong>:
+      <em class="summary">Common base class for all non-exit exceptions.</em>
+    <ul>
+    <li> <strong class="uidlink">exceptions.StandardError</strong>:
+      <em class="summary">Base class for all standard Python exceptions that do not represent
+        interpreter exiting.</em>
+    <ul>
+    <li> <strong class="uidlink">exceptions.ValueError</strong>:
+      <em class="summary">Inappropriate argument value (of correct type).</em>
+    <ul>
+    <li> <strong class="uidlink"><a href="pycocoa.octypes.TypeCodeError-class.html">pycocoa.octypes.TypeCodeError</a></strong>:
+      <em class="summary">Error in ObjC type encoding.</em>
+    </li>
+    </ul>
+    </li>
+    </ul>
+    </li>
+    </ul>
+    </li>
+    </ul>
+    </li>
+    <li> <strong class="uidlink"><a href="pycocoa.runtime.ObjCBase-class.html">pycocoa.runtime.ObjCBase</a></strong>:
+      <em class="summary">Base class for ObjC...</em>
+    <ul>
     <li> <strong class="uidlink"><a href="pycocoa.runtime.ObjCBoundMethod-class.html">pycocoa.runtime.ObjCBoundMethod</a></strong>:
-      <em class="summary">Python wrapper for an Objective-C method (an IMP) which has been 
-        bound to some Id which is passed as the first method argument.</em>
+      <em class="summary">Python wrapper for an ObjC class or instance method, an <a 
+        href="pycocoa.octypes.IMP_t-class.html" class="link">IMP_t</a>.</em>
+    <ul>
+    <li> <strong class="uidlink"><a href="pycocoa.runtime.ObjCBoundClassMethod-class.html">pycocoa.runtime.ObjCBoundClassMethod</a></strong>:
+      <em class="summary">Only to distinguish bound class from bound instance methods.</em>
+    </li>
+    </ul>
     </li>
     <li> <strong class="uidlink"><a href="pycocoa.runtime.ObjCClass-class.html">pycocoa.runtime.ObjCClass</a></strong>:
-      <em class="summary">Python wrapper for an Objective-C class.</em>
+      <em class="summary">Python wrapper for an ObjC class.</em>
     </li>
     <li> <strong class="uidlink"><a href="pycocoa.runtime.ObjCInstance-class.html">pycocoa.runtime.ObjCInstance</a></strong>:
-      <em class="summary">Python wrapper for an Objective-C instance.</em>
+      <em class="summary">Python wrapper for an ObjC instance.</em>
     <ul>
-    <li> <strong class="uidlink"><a href="pycocoa.nstypes.CFString-class.html">pycocoa.nstypes.CFString</a></strong>:
-      <em class="summary">Create a CFString instance for a Python string.</em>
+    <li> <strong class="uidlink"><a href="pycocoa.nstypes.CFStr-class.html">pycocoa.nstypes.CFStr</a></strong>:
+      <em class="summary">Python wrapper for the ObjC <code>CFString</code> class, creating 
+        <i>retained</i> instances, by default.</em>
     <ul>
-    <li> <strong class="uidlink"><a href="pycocoa.nstypes.NSString-class.html">pycocoa.nstypes.NSString</a></strong>:
-      <em class="summary">Auto-released version of the <a 
-        href="pycocoa.nstypes.CFString-class.html" 
-        class="link">CFString</a> class.</em>
+    <li> <strong class="uidlink"><a href="pycocoa.nstypes.NSStr-class.html">pycocoa.nstypes.NSStr</a></strong>:
+      <em class="summary">Python wrapper for the ObjC <a 
+        href="pycocoa.nstypes-module.html#NSString" 
+        class="link">NSString</a> class, creating <i>auto-released</i> 
+        instances, by default.</em>
     <ul>
     <li> <strong class="uidlink"><a href="pycocoa.nstypes.at-class.html">pycocoa.nstypes.at</a></strong>:
-      <em class="summary">Acronym for the <a href="pycocoa.nstypes.NSString-class.html" 
-        class="link">NSString</a> class.</em>
+      <em class="summary">Acronym for the <a href="pycocoa.nstypes.NSStr-class.html" 
+        class="link">NSStr</a> wrapper.</em>
     </li>
     </ul>
     </li>
     </ul>
     </li>
-    <li> <strong class="uidlink"><a href="pycocoa.nstypes.NSDecimalNumber-class.html">pycocoa.nstypes.NSDecimalNumber</a></strong>:
-      <em class="summary">Optimized NSDecimalNumber class.</em>
+    <li> <strong class="uidlink"><a href="pycocoa.nstypes.NSDecimal-class.html">pycocoa.nstypes.NSDecimal</a></strong>:
+      <em class="summary">Optimized <code>NSDecimalNumber</code> class.</em>
     </li>
     </ul>
     </li>
     <li> <strong class="uidlink"><a href="pycocoa.runtime.ObjCMethod-class.html">pycocoa.runtime.ObjCMethod</a></strong>:
-      <em class="summary">This represents an unbound Objective-C method (really an IMP).</em>
+      <em class="summary">This represents an unbound ObjC method (really an <a 
+        href="pycocoa.octypes.IMP_t-class.html" class="link">IMP_t</a>).</em>
+    <ul>
+    <li> <strong class="uidlink"><a href="pycocoa.runtime.ObjCClassMethod-class.html">pycocoa.runtime.ObjCClassMethod</a></strong>:
+      <em class="summary">Only to distinguish class from instance methods.</em>
+    </li>
+    </ul>
     </li>
     <li> <strong class="uidlink"><a href="pycocoa.runtime.ObjCSubclass-class.html">pycocoa.runtime.ObjCSubclass</a></strong>:
-      <em class="summary">Use this to create a subclass of an existing Objective-C class.</em>
+      <em class="summary">Use this to create a sub-class of an existing ObjC class.</em>
+    </li>
+    </ul>
     </li>
     <li> <strong class="uidlink">_CData</strong>:
       <em class="summary">XXX to be provided</em>
@@ -104,39 +146,69 @@
     <li> <strong class="uidlink">_ctypes.Structure</strong>:
       <em class="summary">Structure base class</em>
     <ul>
-    <li> <strong class="uidlink"><a href="pycocoa.octypes.CFRange-class.html">pycocoa.octypes.CFRange</a></strong>:
-      <em class="summary">ObjC struct with location and length (CFIndex-s).</em>
+    <li> <strong class="uidlink"><a href="pycocoa.octypes.c_struct_t-class.html">pycocoa.octypes.c_struct_t</a></strong>:
+      <em class="summary">Base type to pretty-print <i>ctypes</i> <code>Structures</code>.</em>
+    <ul>
+    <li> <strong class="uidlink"><a href="pycocoa.octypes.CGRange_t-class.html">pycocoa.octypes.CGRange_t</a></strong>:
+      <em class="summary">ObjC struct with .location and .length (CF/Index-s).</em>
     </li>
-    <li> <strong class="uidlink"><a href="pycocoa.octypes.NSPoint-class.html">pycocoa.octypes.NSPoint</a></strong>:
-      <em class="summary">ObjC struct with x and y.</em>
+    <li> <strong class="uidlink"><a href="pycocoa.octypes.NSPoint_t-class.html">pycocoa.octypes.NSPoint_t</a></strong>:
+      <em class="summary">ObjC struct with .x and .y.</em>
     </li>
-    <li> <strong class="uidlink"><a href="pycocoa.octypes.NSRange-class.html">pycocoa.octypes.NSRange</a></strong>:
-      <em class="summary">ObjC struct with location and length (NSInteger-s).</em>
+    <li> <strong class="uidlink"><a href="pycocoa.octypes.NSRange_t-class.html">pycocoa.octypes.NSRange_t</a></strong>:
+      <em class="summary">ObjC struct with .loc[ation] and .len[gth] (NSUInteger-s).</em>
     </li>
-    <li> <strong class="uidlink"><a href="pycocoa.octypes.NSRect-class.html">pycocoa.octypes.NSRect</a></strong>:
-      <em class="summary">ObjC struc with origin and size.</em>
+    <li> <strong class="uidlink"><a href="pycocoa.octypes.NSRect_t-class.html">pycocoa.octypes.NSRect_t</a></strong>:
+      <em class="summary">ObjC struct with .origin and .size.</em>
+    <ul>
+    <li> <strong class="uidlink"><a href="pycocoa.octypes.NSRect4_t-class.html">pycocoa.octypes.NSRect4_t</a></strong>:
+      <em class="summary">Class NSRect_t with different signature and properties.</em>
     </li>
-    <li> <strong class="uidlink"><a href="pycocoa.octypes.NSSize-class.html">pycocoa.octypes.NSSize</a></strong>:
-      <em class="summary">ObjC struct with width and height.</em>
+    </ul>
+    </li>
+    <li> <strong class="uidlink"><a href="pycocoa.octypes.NSSize_t-class.html">pycocoa.octypes.NSSize_t</a></strong>:
+      <em class="summary">ObjC struct with .width and .height.</em>
+    </li>
+    <li> <strong class="uidlink"><a href="pycocoa.octypes.objc_method_description_t-class.html">pycocoa.octypes.objc_method_description_t</a></strong>:
+      <em class="summary">ObjC struct with .name and .types.</em>
+    </li>
+    <li> <strong class="uidlink"><a href="pycocoa.octypes.objc_property_attribute_t-class.html">pycocoa.octypes.objc_property_attribute_t</a></strong>:
+      <em class="summary">ObjC struct with .name and .value.</em>
+    </li>
+    <li> <strong class="uidlink"><a href="pycocoa.octypes.objc_super_t-class.html">pycocoa.octypes.objc_super_t</a></strong>:
+      <em class="summary">ObjC struct with .receiver and .class.</em>
+    </li>
+    </ul>
     </li>
     </ul>
     </li>
     <li> <strong class="uidlink">_ctypes._SimpleCData</strong>:
       <em class="summary">XXX to be provided</em>
     <ul>
-    <li> <strong class="uidlink"><a href="ctypes.c_double.__ctype_be__-class.html">ctypes.c_double.__ctype_be__</a></strong>
+    <li> <strong class="uidlink"><a href="ctypes.c_ushort.__ctype_be__-class.html">ctypes.c_ushort.__ctype_be__</a></strong>
     </li>
     <li> <strong class="uidlink"><a href="ctypes.c_long.__ctype_be__-class.html">ctypes.c_long.__ctype_be__</a></strong>
     </li>
     <li> <strong class="uidlink"><a href="ctypes.c_uint.__ctype_be__-class.html">ctypes.c_uint.__ctype_be__</a></strong>
     </li>
-    <li> <strong class="uidlink"><a href="ctypes.c_ushort.__ctype_be__-class.html">ctypes.c_ushort.__ctype_be__</a></strong>
+    <li> <strong class="uidlink"><a href="ctypes.c_float.__ctype_be__-class.html">ctypes.c_float.__ctype_be__</a></strong>
+    </li>
+    <li> <strong class="uidlink"><a href="ctypes.c_double.__ctype_be__-class.html">ctypes.c_double.__ctype_be__</a></strong>
     </li>
     <li> <strong class="uidlink"><a href="ctypes.c_int.__ctype_be__-class.html">ctypes.c_int.__ctype_be__</a></strong>
     </li>
     <li> <strong class="uidlink"><a href="ctypes.c_ulong.__ctype_be__-class.html">ctypes.c_ulong.__ctype_be__</a></strong>
     </li>
+    <li> <strong class="uidlink">ctypes.c_bool</strong>
+    <ul>
+    <li> <strong class="uidlink"><a href="pycocoa.octypes.BOOL_t-class.html">pycocoa.octypes.BOOL_t</a></strong>:
+      <em class="summary">ObjC boolean type.</em>
+    </li>
+    </ul>
+    </li>
     <li> <strong class="uidlink"><a href="ctypes.c_double-class.html">ctypes.c_double</a></strong>
+    </li>
+    <li> <strong class="uidlink"><a href="ctypes.c_float-class.html">ctypes.c_float</a></strong>
     </li>
     <li> <strong class="uidlink"><a href="ctypes.c_int-class.html">ctypes.c_int</a></strong>
     </li>
@@ -150,11 +222,191 @@
     </li>
     <li> <strong class="uidlink"><a href="ctypes.c_void_p-class.html">ctypes.c_void_p</a></strong>
     <ul>
+    <li> <strong class="uidlink"><a href="pycocoa.octypes.ObjC_t-class.html">pycocoa.octypes.ObjC_t</a></strong>:
+      <em class="summary">Base type to pretty-print <i>ctypes</i> <code>c_void_p</code>.</em>
+    <ul>
+    <li> <strong class="uidlink"><a href="pycocoa.octypes.Allocator_t-class.html">pycocoa.octypes.Allocator_t</a></strong>:
+      <em class="summary">ObjC allocator type.</em>
+    </li>
+    <li> <strong class="uidlink"><a href="pycocoa.octypes.Block_t-class.html">pycocoa.octypes.Block_t</a></strong>:
+      <em class="summary">ObjC block type.</em>
+    </li>
+    <li> <strong class="uidlink"><a href="pycocoa.octypes.IMP_t-class.html">pycocoa.octypes.IMP_t</a></strong>:
+      <em class="summary">ObjC implementation type.</em>
+    </li>
+    <li> <strong class="uidlink"><a href="pycocoa.octypes.Id_t-class.html">pycocoa.octypes.Id_t</a></strong>:
+      <em class="summary">ObjC id/self type, end=coding b'@'.</em>
+    <ul>
+    <li> <strong class="uidlink"><a href="pycocoa.octypes.Class_t-class.html">pycocoa.octypes.Class_t</a></strong>:
+      <em class="summary">ObjC class type, encoding b'#'.</em>
+    </li>
+    <li> <strong class="uidlink"><a href="pycocoa.octypes.Protocol_t-class.html">pycocoa.octypes.Protocol_t</a></strong>:
+      <em class="summary">ObjC protocol type.</em>
+    </li>
+    <li> <strong class="uidlink"><a href="pycocoa.octypes.Union_t-class.html">pycocoa.octypes.Union_t</a></strong>:
+      <em class="summary">ObjC union type.</em>
+    </li>
+    </ul>
+    </li>
+    <li> <strong class="uidlink"><a href="pycocoa.octypes.Ivar_t-class.html">pycocoa.octypes.Ivar_t</a></strong>:
+      <em class="summary">ObjC instance variable type.</em>
+    </li>
+    <li> <strong class="uidlink"><a href="pycocoa.octypes.Method_t-class.html">pycocoa.octypes.Method_t</a></strong>:
+      <em class="summary">ObjC method type.</em>
+    </li>
+    <li> <strong class="uidlink"><a href="pycocoa.octypes.SEL_t-class.html">pycocoa.octypes.SEL_t</a></strong>:
+      <em class="summary">ObjC selector/cmd type, encoding b':'.</em>
+    </li>
+    <li> <strong class="uidlink"><a href="pycocoa.octypes.Struct_t-class.html">pycocoa.octypes.Struct_t</a></strong>:
+      <em class="summary">ObjC struct type.</em>
+    </li>
+    <li> <strong class="uidlink"><a href="pycocoa.octypes.TypeRef_t-class.html">pycocoa.octypes.TypeRef_t</a></strong>:
+      <em class="summary">ObjC opaque type.</em>
+    </li>
+    <li> <strong class="uidlink"><a href="pycocoa.octypes.UnknownPtr_t-class.html">pycocoa.octypes.UnknownPtr_t</a></strong>:
+      <em class="summary">Unknown pointer.</em>
+    </li>
+    <li> <strong class="uidlink"><a href="pycocoa.octypes.Unknown_t-class.html">pycocoa.octypes.Unknown_t</a></strong>:
+      <em class="summary">Unknown type.</em>
+    </li>
+    <li> <strong class="uidlink"><a href="pycocoa.octypes.VoidPtr_t-class.html">pycocoa.octypes.VoidPtr_t</a></strong>:
+      <em class="summary">Same as, but distinguishable from <code>c_void_p</code>.</em>
+    </li>
+    <li> <strong class="uidlink"><a href="pycocoa.octypes.objc_property_t-class.html">pycocoa.octypes.objc_property_t</a></strong>:
+      <em class="summary">ObjC property Class.</em>
+    </li>
+    </ul>
+    </li>
     </ul>
     </li>
     <li> <strong class="uidlink"><a href="ctypes.c_wchar-class.html">ctypes.c_wchar</a></strong>
     </li>
     </ul>
+    </li>
+    </ul>
+    </li>
+    <li> <strong class="uidlink">pycocoa.nstypes._Constants</strong>:
+      <em class="summary">Only constant, readable attributes.</em>
+    <ul>
+    <li> <strong class="uidlink"><a href="pycocoa.windows.Style-class.html">pycocoa.windows.Style</a></strong>:
+      <em class="summary">Window style masks.</em>
+    </li>
+    </ul>
+    </li>
+    <li> <strong class="uidlink">pycocoa.bases._Type0</strong>:
+      <em class="summary">The base Type.</em>
+    <ul>
+    <li> <strong class="uidlink"><a href="pycocoa.dicts.FrozenDict-class.html">pycocoa.dicts.FrozenDict</a></strong>:
+      <em class="summary">Python Type equivalent of an (immutable) ObjC NSDictionary.</em>
+    <ul>
+    <li> <strong class="uidlink"><a href="pycocoa.dicts.Dict-class.html">pycocoa.dicts.Dict</a></strong>:
+      <em class="summary">Python Type equivalent of a mutable ObjC NSMutableDictionary.</em>
+    </li>
+    </ul>
+    </li>
+    <li> <strong class="uidlink"><a href="pycocoa.sets.FrozenSet-class.html">pycocoa.sets.FrozenSet</a></strong>:
+      <em class="summary">Python Type equivalent of an immutable ObjC NSSet.</em>
+    </li>
+    <li> <strong class="uidlink"><a href="pycocoa.sets.Set-class.html">pycocoa.sets.Set</a></strong>:
+      <em class="summary">Python Type equivalent of a mutable ObjC NSSet.</em>
+    </li>
+    <li> <strong class="uidlink"><a href="pycocoa.strs.Str-class.html">pycocoa.strs.Str</a></strong>:
+      <em class="summary">Python Type equivalent of an (immutable) ObjC NSStr[ing].</em>
+    </li>
+    <li> <strong class="uidlink"><a href="pycocoa.tuples.Tuple-class.html">pycocoa.tuples.Tuple</a></strong>:
+      <em class="summary">Python Type equivalent of an immutable ObjC NSArray.</em>
+    <ul>
+    <li> <strong class="uidlink"><a href="pycocoa.lists.List-class.html">pycocoa.lists.List</a></strong>:
+      <em class="summary">Python Type equivalent of of an ObjC NSMutableArray.</em>
+    </li>
+    </ul>
+    </li>
+    <li> <strong class="uidlink">pycocoa.bases._Type1</strong>:
+      <em class="summary">Basic Type with app and delegate.</em>
+    <ul>
+    <li> <strong class="uidlink"><a href="pycocoa.windows.Frame-class.html">pycocoa.windows.Frame</a></strong>:
+      <em class="summary">Frame class, signature like <code>NSRect_t</code>.</em>
+    <ul>
+    <li> <strong class="uidlink"><a href="pycocoa.windows.Frame4-class.html">pycocoa.windows.Frame4</a></strong>:
+      <em class="summary">Frame class, signature like <code>NSRect4_t</code>.</em>
+    </li>
+    <li> <strong class="uidlink"><a href="pycocoa.windows.Screen-class.html">pycocoa.windows.Screen</a></strong>:
+      <em class="summary">Screen frame class.</em>
+    </li>
+    </ul>
+    </li>
+    <li> <strong class="uidlink"><a href="pycocoa.menus.Separator-class.html">pycocoa.menus.Separator</a></strong>:
+      <em class="summary">Menu items separator class.</em>
+    </li>
+    <li> <strong class="uidlink">pycocoa.bases._Type2</strong>:
+      <em class="summary">Basic Type with app, delegate, tag and title.</em>
+    <ul>
+    <li> <strong class="uidlink"><a href="pycocoa.apps.App-class.html">pycocoa.apps.App</a></strong>:
+      <em class="summary">The basic App class.</em>
+    </li>
+    <li> <strong class="uidlink"><a href="pycocoa.menus.Item-class.html">pycocoa.menus.Item</a></strong>:
+      <em class="summary">Menu item class.</em>
+    </li>
+    <li> <strong class="uidlink"><a href="pycocoa.menus.Menu-class.html">pycocoa.menus.Menu</a></strong>:
+      <em class="summary">New menu, item and separator.</em>
+    </li>
+    <li> <strong class="uidlink"><a href="pycocoa.menus.MenuBar-class.html">pycocoa.menus.MenuBar</a></strong>:
+      <em class="summary">New menu bar of sub-menus.</em>
+    </li>
+    <li> <strong class="uidlink"><a href="pycocoa.panels.OpenPanel-class.html">pycocoa.panels.OpenPanel</a></strong>
+    </li>
+    <li> <strong class="uidlink"><a href="pycocoa.tables.Table-class.html">pycocoa.tables.Table</a></strong>:
+      <em class="summary">A table display of rows and columns.</em>
+    </li>
+    <li> <strong class="uidlink"><a href="pycocoa.apps.Tile-class.html">pycocoa.apps.Tile</a></strong>:
+      <em class="summary">The dock tile for an <a href="pycocoa.apps.App-class.html" 
+        class="link">App</a>.</em>
+    </li>
+    <li> <strong class="uidlink"><a href="pycocoa.windows.Window-class.html">pycocoa.windows.Window</a></strong>:
+      <em class="summary">Basic, base window class.</em>
+    <ul>
+    <li> <strong class="uidlink"><a href="pycocoa.windows.MediaWindow-class.html">pycocoa.windows.MediaWindow</a></strong>:
+      <em class="summary">Media window class.</em>
+    </li>
+    <li> <strong class="uidlink"><a href="pycocoa.tables.TableWindow-class.html">pycocoa.tables.TableWindow</a></strong>:
+      <em class="summary">An ObjC Delegate class for vertically scrollable window.</em>
+    </li>
+    </ul>
+    </li>
+    </ul>
+    </li>
+    </ul>
+    </li>
+    </ul>
+    </li>
+    <li> <strong class="uidlink">basestring</strong>:
+      <em class="summary">Type basestring cannot be instantiated; it is the base for str and 
+        unicode.</em>
+    <ul>
+    <li> <strong class="uidlink">str</strong>:
+      <em class="summary">str(object='') -&gt; string</em>
+    <ul>
+    <li> <strong class="uidlink"><a href="pycocoa.strs.Str-class.html">pycocoa.strs.Str</a></strong>:
+      <em class="summary">Python Type equivalent of an (immutable) ObjC NSStr[ing].</em>
+    </li>
+    </ul>
+    </li>
+    </ul>
+    </li>
+    <li> <strong class="uidlink">frozenset</strong>:
+      <em class="summary">frozenset() -&gt; empty frozenset object frozenset(iterable) -&gt; 
+        frozenset object</em>
+    <ul>
+    <li> <strong class="uidlink"><a href="pycocoa.sets.FrozenSet-class.html">pycocoa.sets.FrozenSet</a></strong>:
+      <em class="summary">Python Type equivalent of an immutable ObjC NSSet.</em>
+    </li>
+    </ul>
+    </li>
+    <li> <strong class="uidlink">set</strong>:
+      <em class="summary">set() -&gt; new empty set object set(iterable) -&gt; new set object</em>
+    <ul>
+    <li> <strong class="uidlink"><a href="pycocoa.sets.Set-class.html">pycocoa.sets.Set</a></strong>:
+      <em class="summary">Python Type equivalent of a mutable ObjC NSSet.</em>
     </li>
     </ul>
     </li>
@@ -192,7 +444,7 @@
 <table border="0" cellpadding="0" cellspacing="0" width="100%%">
   <tr>
     <td align="left" class="footer">
-    Generated by Epydoc 3.0.1 on Thu Mar 15 14:18:44 2018
+    Generated by Epydoc 3.0.1 on Fri Apr 20 15:50:10 2018
     </td>
     <td align="right" class="footer">
       <a target="mainFrame" href="http://epydoc.sourceforge.net"
