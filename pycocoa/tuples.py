@@ -25,16 +25,19 @@
 # ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
 # OTHER DEALINGS IN THE SOFTWARE.
 
+'''Type L{Tuple}, wrapping (immutable) ObjC C{NSArray}.
+'''
+# all imports listed explicitly to help PyChecker
 from bases   import _Type0
 from oclibs  import libCF
 from octypes import NSNotFound, NSRange_t
 from nstypes import ns2Type, NSArray, nsIter2, NSMutableArray, py2NS, \
-                    _Types
+                    tuple2NS, _Types
 from runtime import isImmutable
 from utils   import instanceof, _Ints
 
 __all__ = ('Tuple',)
-__version__ = '18.04.10'
+__version__ = '18.04.21'
 
 
 def _at(inst, index):
@@ -49,7 +52,7 @@ def _at(inst, index):
 
 
 class Tuple(_Type0):  # note, List subclasses Tuple
-    '''Python Type equivalent of an immutable ObjC NSArray.
+    '''Python C{tuple} Type, wrapping an immutable ObjC C{NSArray}.
     '''
     _type = tuple
 
@@ -69,8 +72,10 @@ class Tuple(_Type0):  # note, List subclasses Tuple
 #       raise NotImplementedError('%s.%s' % (self, '__iadd__'))
 
     def __init__(self, ns_tuple=()):
+        '''New L{Tuple} from a C{tupe}, L{Tuple}, L{List} or C{NS[Mutable]Array}.
+        '''
         if isinstance(ns_tuple, tuple):
-            self.NS = py2NS(ns_tuple)
+            self.NS = tuple2NS(ns_tuple)
         elif isinstance(ns_tuple, Tuple):
             self.NS = ns_tuple.NS
         elif isinstance(ns_tuple, _Types.List):
@@ -99,12 +104,16 @@ class Tuple(_Type0):  # note, List subclasses Tuple
             return ns2Type(self.NS.objectAtIndex_(_at(self, index)))
 
     def __iter__(self):
+        '''Yield the items in forward order.
+        '''
         for value, _ in nsIter2(self.NS):
             yield value
 #       for i in range(len(self)):
 #           yield ns2Type(self.NS.objectAtIndex_(i))
 
     def __len__(self):
+        '''Return the number of items.
+        '''
         # can't use self.NS.count()  <http://developer.apple.com/
         # documentation/foundation/nsarray/1409982-count>
         return libCF.CFArrayGetCount(self.NS)
@@ -113,6 +122,8 @@ class Tuple(_Type0):  # note, List subclasses Tuple
         return not self.__eq__(other)
 
     def __reversed__(self):  # PYCHOK Python 3+
+        '''Yield the items in reverse order.
+        '''
         for value, _ in nsIter2(self.NS, reverse=True):
             yield value
 #       i = len(self)
@@ -121,12 +132,18 @@ class Tuple(_Type0):  # note, List subclasses Tuple
 #           yield ns2Type(self.NS.objectAtIndex_(i))
 
     def copy(self, *ranged):
-        '''Make a shallow copy, optionally just a range of items.
+        '''Make a shallow copy of this tuple.
+
+          @param ranged: Optional index range.
+
+          @return: The copy (L{Tuple}).
         '''
         return self.__class__(self._NS_copy(False, *ranged))
 
     def count(self, value, identical=False):
-        '''Like list./tuple.count(), except I{identical} option.
+        '''Count the number of occurances of an item, like C{tuple./list.count}.
+
+           @keyword idential: Use ObjC C{idential} as comparison (bool).
         '''
         v = py2NS(value)
         n = len(self)
@@ -143,7 +160,9 @@ class Tuple(_Type0):  # note, List subclasses Tuple
         return c
 
     def index(self, value, identical=False):
-        '''Like list./tuple.index(), except an I{identical} option.
+        '''Find an item, like C{tuple./list.index}.
+
+           @keyword idential: Use ObjC C{idential} as comparison (bool).
         '''
         if identical:
             i = self.NS.indexOfObjectIdenticalTo_(py2NS(value))
@@ -154,6 +173,8 @@ class Tuple(_Type0):  # note, List subclasses Tuple
         return i
 
     def _NS_copy(self, mutable, *ranged):
+        '''(INTERNAL) Copy into an ObjC C{NS[Mutable]Array}.
+        '''
         if ranged:
             ns = NSMutableArray.array()
             for i in range(*slice(*ranged).indices(len(self))):

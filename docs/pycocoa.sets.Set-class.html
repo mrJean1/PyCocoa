@@ -73,7 +73,7 @@ bases._Type0 --+
 </pre>
 
 <hr />
-<p>Python Type equivalent of a mutable ObjC NSSet.</p>
+<p>Python c{Set} Type, wrapping an ObjC <code>NSMutableSet</code>.</p>
 
 <!-- ==================== INSTANCE METHODS ==================== -->
 <a name="section-InstanceMethods"></a>
@@ -91,7 +91,11 @@ bases._Type0 --+
         <tr>
           <td><span class="summary-sig"><a href="pycocoa.sets.Set-class.html#__init__" class="summary-sig-name">__init__</a>(<span class="summary-sig-arg">self</span>,
         <span class="summary-sig-arg">ns_set</span>=<span class="summary-sig-default">[]</span>)</span><br />
-      x.__init__(...) initializes x; see help(type(x)) for signature</td>
+      New <a href="pycocoa.sets.Set-class.html" class="link">Set</a> from a
+      <code>set</code>, <code>list</code>, <a 
+      href="pycocoa.sets.FrozenSet-class.html" class="link">FrozenSet</a>, 
+      <a href="pycocoa.sets.Set-class.html" class="link">Set</a> or 
+      <code>NSMutableSet</code>.</td>
           <td align="right" valign="top">
             
             
@@ -181,7 +185,7 @@ bases._Type0 --+
         <tr>
           <td><span class="summary-sig"><a href="pycocoa.sets.Set-class.html#add" class="summary-sig-name">add</a>(<span class="summary-sig-arg">self</span>,
         <span class="summary-sig-arg">elem</span>)</span><br />
-      Like set.add().</td>
+      Like <code>set.add</code>.</td>
           <td align="right" valign="top">
             
             
@@ -198,7 +202,7 @@ bases._Type0 --+
       <table width="100%" cellpadding="0" cellspacing="0" border="0">
         <tr>
           <td><span class="summary-sig"><a href="pycocoa.sets.Set-class.html#clear" class="summary-sig-name">clear</a>(<span class="summary-sig-arg">self</span>)</span><br />
-      Like set.clear().</td>
+      Like <code>set.clear</code>.</td>
           <td align="right" valign="top">
             
             
@@ -216,7 +220,7 @@ bases._Type0 --+
         <tr>
           <td><span class="summary-sig"><a href="pycocoa.sets.Set-class.html#difference_update" class="summary-sig-name">difference_update</a>(<span class="summary-sig-arg">self</span>,
         <span class="summary-sig-arg">*others</span>)</span><br />
-      Like set.difference_update().</td>
+      Like <code>set.difference_update</code>.</td>
           <td align="right" valign="top">
             
             
@@ -234,7 +238,7 @@ bases._Type0 --+
         <tr>
           <td><span class="summary-sig"><a href="pycocoa.sets.Set-class.html#discard" class="summary-sig-name">discard</a>(<span class="summary-sig-arg">self</span>,
         <span class="summary-sig-arg">elems</span>)</span><br />
-      Like set.discard().</td>
+      Like <code>set.discard</code>.</td>
           <td align="right" valign="top">
             
             
@@ -252,7 +256,7 @@ bases._Type0 --+
         <tr>
           <td><span class="summary-sig"><a href="pycocoa.sets.Set-class.html#intersection_update" class="summary-sig-name">intersection_update</a>(<span class="summary-sig-arg">self</span>,
         <span class="summary-sig-arg">*others</span>)</span><br />
-      Like set.intersection_update().</td>
+      Like <code>set.intersection_update</code>.</td>
           <td align="right" valign="top">
             
             
@@ -269,7 +273,7 @@ bases._Type0 --+
       <table width="100%" cellpadding="0" cellspacing="0" border="0">
         <tr>
           <td><span class="summary-sig"><a href="pycocoa.sets.Set-class.html#pop" class="summary-sig-name">pop</a>(<span class="summary-sig-arg">self</span>)</span><br />
-      Like set.pop().</td>
+      Like <code>set.pop</code>.</td>
           <td align="right" valign="top">
             
             
@@ -287,7 +291,7 @@ bases._Type0 --+
         <tr>
           <td><span class="summary-sig"><a href="pycocoa.sets.Set-class.html#remove" class="summary-sig-name">remove</a>(<span class="summary-sig-arg">self</span>,
         <span class="summary-sig-arg">elems</span>)</span><br />
-      Like set.remove().</td>
+      Like <code>set.remove</code>.</td>
           <td align="right" valign="top">
             
             
@@ -305,7 +309,7 @@ bases._Type0 --+
         <tr>
           <td><span class="summary-sig"><a href="pycocoa.sets.Set-class.html#symmetric_difference_update" class="summary-sig-name">symmetric_difference_update</a>(<span class="summary-sig-arg">self</span>,
         <span class="summary-sig-arg">other</span>)</span><br />
-      Like set.symmetric_difference_update().</td>
+      Like <code>set.symmetric_difference_update</code>.</td>
           <td align="right" valign="top">
             
             
@@ -323,7 +327,7 @@ bases._Type0 --+
         <tr>
           <td><span class="summary-sig"><a href="pycocoa.sets.Set-class.html#update" class="summary-sig-name">update</a>(<span class="summary-sig-arg">self</span>,
         <span class="summary-sig-arg">*others</span>)</span><br />
-      Like set.update().</td>
+      Like <code>set.update</code>.</td>
           <td align="right" valign="top">
             
             
@@ -340,7 +344,7 @@ bases._Type0 --+
       <table width="100%" cellpadding="0" cellspacing="0" border="0">
         <tr>
           <td><span class="summary-sig"><a href="pycocoa.sets.Set-class.html#copy" class="summary-sig-name">copy</a>(<span class="summary-sig-arg">self</span>)</span><br />
-      Return a shallow copy of a set.</td>
+      Make a copy of this set.</td>
           <td align="right" valign="top">
             
             
@@ -412,7 +416,11 @@ bases._Type0 --+
       <table width="100%" cellpadding="0" cellspacing="0" border="0">
         <tr>
           <td><span class="summary-sig"><a href="pycocoa.sets.Set-class.html#__new__" class="summary-sig-name">__new__</a>(<span class="summary-sig-arg">cls</span>,
-        <span class="summary-sig-arg">ns_set</span>=<span class="summary-sig-default"><code class="variable-group">[</code><code class="variable-group">]</code></span>)</span></td>
+        <span class="summary-sig-arg">ns_set</span>=<span class="summary-sig-default"><code class="variable-group">[</code><code class="variable-group">]</code></span>)</span><br />
+      New <a href="pycocoa.sets.Set-class.html" class="link">Set</a> from a
+      <code>set</code>, <code>list</code>, <a 
+      href="pycocoa.sets.Set-class.html" class="link">Set</a> or 
+      <code>NSMutableSet</code>.</td>
           <td align="right" valign="top">
             
             
@@ -488,12 +496,15 @@ bases._Type0 --+
     </td>
   </tr></table>
   
-  <p>x.__init__(...) initializes x; see help(type(x)) for signature</p>
+  <p>New <a href="pycocoa.sets.Set-class.html" class="link">Set</a> from a 
+  <code>set</code>, <code>list</code>, <a 
+  href="pycocoa.sets.FrozenSet-class.html" class="link">FrozenSet</a>, <a 
+  href="pycocoa.sets.Set-class.html" class="link">Set</a> or 
+  <code>NSMutableSet</code>.</p>
   <dl class="fields">
     <dt>Returns: new empty set object</dt>
     <dt>Overrides:
         object.__init__
-        <dd><em class="note">(inherited documentation)</em></dd>
     </dt>
   </dl>
 </td></tr></table>
@@ -609,7 +620,7 @@ bases._Type0 --+
     </td>
   </tr></table>
   
-  <p>Like set.add().</p>
+  <p>Like <code>set.add</code>.</p>
   <dl class="fields">
     <dt>Overrides:
         set.add
@@ -631,7 +642,7 @@ bases._Type0 --+
     </td>
   </tr></table>
   
-  <p>Like set.clear().</p>
+  <p>Like <code>set.clear</code>.</p>
   <dl class="fields">
     <dt>Overrides:
         set.clear
@@ -654,7 +665,7 @@ bases._Type0 --+
     </td>
   </tr></table>
   
-  <p>Like set.difference_update().</p>
+  <p>Like <code>set.difference_update</code>.</p>
   <dl class="fields">
     <dt>Overrides:
         set.difference_update
@@ -677,7 +688,7 @@ bases._Type0 --+
     </td>
   </tr></table>
   
-  <p>Like set.discard().</p>
+  <p>Like <code>set.discard</code>.</p>
   <dl class="fields">
     <dt>Overrides:
         set.discard
@@ -700,7 +711,7 @@ bases._Type0 --+
     </td>
   </tr></table>
   
-  <p>Like set.intersection_update().</p>
+  <p>Like <code>set.intersection_update</code>.</p>
   <dl class="fields">
     <dt>Overrides:
         set.intersection_update
@@ -722,7 +733,7 @@ bases._Type0 --+
     </td>
   </tr></table>
   
-  <p>Like set.pop().</p>
+  <p>Like <code>set.pop</code>.</p>
   <dl class="fields">
     <dt>Overrides:
         set.pop
@@ -745,7 +756,7 @@ bases._Type0 --+
     </td>
   </tr></table>
   
-  <p>Like set.remove().</p>
+  <p>Like <code>set.remove</code>.</p>
   <dl class="fields">
     <dt>Overrides:
         set.remove
@@ -768,7 +779,7 @@ bases._Type0 --+
     </td>
   </tr></table>
   
-  <p>Like set.symmetric_difference_update().</p>
+  <p>Like <code>set.symmetric_difference_update</code>.</p>
   <dl class="fields">
     <dt>Overrides:
         set.symmetric_difference_update
@@ -791,7 +802,7 @@ bases._Type0 --+
     </td>
   </tr></table>
   
-  <p>Like set.update().</p>
+  <p>Like <code>set.update</code>.</p>
   <dl class="fields">
     <dt>Overrides:
         set.update
@@ -815,12 +826,14 @@ bases._Type0 --+
     </td>
   </tr></table>
   
-  
+  <p>New <a href="pycocoa.sets.Set-class.html" class="link">Set</a> from a 
+  <code>set</code>, <code>list</code>, <a 
+  href="pycocoa.sets.Set-class.html" class="link">Set</a> or 
+  <code>NSMutableSet</code>.</p>
   <dl class="fields">
     <dt>Returns: a new object with type S, a subtype of T</dt>
     <dt>Overrides:
         object.__new__
-        <dd><em class="note">(inherited documentation)</em></dd>
     </dt>
   </dl>
 </td></tr></table>
@@ -839,11 +852,13 @@ bases._Type0 --+
     </td>
   </tr></table>
   
-  <p>Return a shallow copy of a set.</p>
+  <p>Make a copy of this set.</p>
   <dl class="fields">
+    <dt>Returns:</dt>
+        <dd>The copy (<a href="pycocoa.sets.Set-class.html" 
+          class="link">Set</a>).</dd>
     <dt>Overrides:
         set.copy
-        <dd><em class="note">(inherited documentation)</em></dd>
     </dt>
   </dl>
 </td></tr></table>
@@ -904,7 +919,7 @@ bases._Type0 --+
 <table border="0" cellpadding="0" cellspacing="0" width="100%%">
   <tr>
     <td align="left" class="footer">
-    Generated by Epydoc 3.0.1 on Fri Apr 20 15:50:11 2018
+    Generated by Epydoc 3.0.1 on Sun Apr 22 21:13:16 2018
     </td>
     <td align="right" class="footer">
       <a target="mainFrame" href="http://epydoc.sourceforge.net"

@@ -25,32 +25,43 @@
 # ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
 # OTHER DEALINGS IN THE SOFTWARE.
 
+'''Type L{Str}, wrapping ObjC C{NSStr[ing]}.
+'''
+# all imports listed explicitly to help PyChecker
 from bases   import _Type0
-from nstypes import ns2py, NSConstantString, NSStr, NSString, \
-                    py2NS, _Types
+from nstypes import NSConstantString, NSStr, NSString, nsString2str, \
+                    str2NS, _Types
 from utils   import instanceof, _Strs
 
 __all__ = ('Str',)
-__version__ = '18.04.18'
+__version__ = '18.04.21'
 
 
 class Str(str, _Type0):  # str, first to maintain str behavior
-    '''Python Type equivalent of an (immutable) ObjC NSStr[ing].
+    '''Python C{str} Type, wrapping (immutable) ObjC C{NSStr[ing]}.
     '''
 
     def __new__(cls, ns_str=''):
+        '''New L{Str} from C{str}, L{Str} or C{NSStr[ing]}.
+        '''
         if isinstance(ns_str, Str):
-            ns = ns_str.NS
+            return ns_str
         elif isinstance(ns_str, _Strs):
-            ns = py2NS(ns_str)
+            ns, py = str2NS(ns_str), ns_str
         elif instanceof(ns_str, NSStr, name='ns_str'):
-            ns = ns_str
+            ns, py = ns_str, nsString2str(ns_str)
 
-        self = super(Str, cls).__new__(cls, ns2py(ns))
+        self = super(Str, cls).__new__(cls, py)
         self.NS = ns  # immutable
         return self
 
     def copy(self, *ranged):
+        '''Return a copy of this string.
+
+          @param ranged: Optional index range.
+
+          @return: The copy (L{Str}).
+        '''
         if ranged:
             s = self[slice(*ranged)]
         else:

@@ -57,6 +57,8 @@
 # ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
 # OTHER DEALINGS IN THE SOFTWARE.
 
+'''C{get_...} functions for obtaining ObjC classes, methods, protocols, etc.
+'''
 # all imports listed explicitly to help PyChecker
 from ctypes  import byref, c_uint, cast, CFUNCTYPE
 from oclibs  import libobjc  # get_lib
@@ -66,7 +68,7 @@ from octypes import emcoding2ctype, encoding2ctype, \
 from utils   import bytes2str, _exports, instanceof, missing, \
                     name2objc, str2bytes
 
-__version__ = '18.04.12'
+__version__ = '18.04.21'
 
 _cfunctype_cache = {}
 

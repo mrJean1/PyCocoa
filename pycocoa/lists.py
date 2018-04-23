@@ -25,7 +25,10 @@
 # ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
 # OTHER DEALINGS IN THE SOFTWARE.
 
-from nstypes import NSMutableArray, py2NS, _Types
+'''Type L{List}, wrapping ObjC C{NSMutableArray}.
+'''
+# all imports listed explicitly to help PyChecker
+from nstypes import list2NS, NSMutableArray, py2NS, _Types
 from runtime import isInstanceOf
 from tuples  import _at, Tuple
 from utils   import missing
@@ -36,17 +39,19 @@ except ImportError:  # Python 2-
     from itertools import izip_longest as zip_longest
 
 __all__ = ('List',)
-__version__ = '18.04.09'
+__version__ = '18.04.21'
 
 
 class List(Tuple):
-    '''Python Type equivalent of of an ObjC NSMutableArray.
+    '''Python C{list} Type, wrapping an ObjC C{NSMutableArray}.
     '''
     _type = list
 
     def __init__(self, ns_list=[]):
+        '''New L{List} from a C{list}, L{List}, L{Tuple} or C{NSMutableArry}.
+        '''
         if isinstance(ns_list, list):
-            self.NS = py2NS(ns_list)
+            self.NS = list2NS(ns_list)
         elif isinstance(ns_list, (List, Tuple)):
             self.NS = ns_list.NS.mutableCopy()  # PYCHOK safe
         elif isInstanceOf(ns_list, NSMutableArray, name='ns_list'):
@@ -72,33 +77,37 @@ class List(Tuple):
             self.NS.removeObjectAtIndex_(_at(self, index))
 
     def append(self, value):
-        '''Like list.append().
+        '''Add an item to this list, like C{list.append}.
         '''
         self.NS.addObject_(py2NS(value))
 
     def clear(self):
-        '''Like list.clear().
+        '''Remove all items from this list, like C{list.clear}.
         '''
         self.NS.removeAllObjects()
 
     def copy(self, *ranged):
-        '''Make a shallow copy, optionally just a range of items.
+        '''Make a shallow copy of this list.
+
+          @param ranged: Optional index range.
+
+          @return: The copy (L{List}).
         '''
         return self.__class__(self._NS_copy(True, *ranged))
 
     def extend(self, values):
-        '''Like list.extend().
+        '''Add one or more items to this list, like C{list.extend}.
         '''
         for v in values:
             self.NS.addObject_(py2NS(v))
 
     def insert(self, index, value):
-        '''Like list.insert().
+        '''Insert an item into this list, like C{list.insert}.
         '''
         self.NS.insertObject_atIndex_(py2NS(value), _at(self, index))
 
     def pop(self, index=-1):
-        '''Like list.pop().
+        '''Remove an item from this list, like C{list.pop}.
         '''
         i = _at(self, index)
         v = self[i]
@@ -106,13 +115,15 @@ class List(Tuple):
         return v
 
     def remove(self, value, identical=False):
-        '''Like list.remove(), except an I{identical} option.
+        '''Remove an item from this list, like C{list.remove}.
+
+           @keyword idential: Use ObjC C{idential} as comparison (bool).
         '''
         i = self.index(value, identical=identical)
         del self[i]  # __delitem__
 
     def reverse(self):
-        '''Like list.reverse(), reverse list in-place.
+        '''Reverse this list in-place, like C{list.reverse}.
         '''
         self.NS.setArray_(self.NS.reverseObjectEnumerator().allObjects())
 #       i, n = 0, len(self)-1
@@ -124,7 +135,7 @@ class List(Tuple):
 #           n -= 1
 
 #   def sort(self, **unused):
-#       '''Like list.sort(cmp=None, key=None, reverse=False), in-place.
+#       '''Sort this list in-place, like C{list.sort(cmp=None, key=None, reverse=False).
 #       '''
 #       raise NotImplementedError('%s.%s' % (self, 'sort'))
 

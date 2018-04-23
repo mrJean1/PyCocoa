@@ -68,6 +68,8 @@
 # 3. <http://Developer.Apple.com/library/content/documentation/Cocoa/Conceptual/
 # MemoryMgmt/Articles/MemoryMgmt.html#//apple_ref/doc/uid/10000011i>
 
+'''Classes C{ObjCClass}, C{ObjCInstance}, C{ObjCMethod}, C{ObjCSubclass}, etc.
+'''
 # all imports listed explicitly to help PyChecker
 from ctypes  import alignment, ArgumentError, byref, cast, c_buffer, \
                     c_char_p, c_double, c_float, c_longdouble, c_uint, \
@@ -82,7 +84,7 @@ from octypes import __i386__, __LP64__, c_struct_t, c_void, \
                     ObjC_t, SEL_t, split_emcoding2
 from utils   import bytes2str, _exports, missing, name2py, printf, str2bytes
 
-__version__ = '18.04.18'
+__version__ = '18.04.19'
 
 # <http://Developer.Apple.com/documentation/objectivec/
 #         objc_associationpolicy?language=objc>

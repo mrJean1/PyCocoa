@@ -23,12 +23,16 @@
 # ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
 # OTHER DEALINGS IN THE SOFTWARE.
 
+'''(INTERNAL) Base classes for Python C{Types}.
+'''
+# all imports listed explicitly to help PyChecker
 from nstypes import isNone, NSNone, NSStr
+from octypes import c_struct_t, ObjC_t
 from runtime import ObjCInstance
 from utils   import bytes2str, instanceof, type2strepr
 
 __all__ = ()
-__version__ = '18.04.18'
+__version__ = '18.04.21'
 
 
 class _Type0(object):
@@ -53,8 +57,8 @@ class _Type0(object):
     def NS(self, ns):
         '''Set the C{NS...} instance.
         '''
-        if not isNone(ns):
-            instanceof(ns, ObjCInstance, name='ns')
+        if not isNone(ns):  # see also .nstypes.nsOf
+            instanceof(ns, ObjCInstance, c_struct_t, ObjC_t, name='ns')
         elif not isNone(self.NS):
             # self.NS.release()
             pass
@@ -67,10 +71,10 @@ class _Type1(_Type0):
     _app = None
     _NS  = NSNone
 
-    def __init__(self, *args, **attrs):
+    def __init__(self, *args, **kwds):
         # ignore __init__ from __new__, like Item
-        if attrs and not args:
-            for a, v in attrs.items():
+        if kwds and not args:
+            for a, v in kwds.items():
                 if hasattr(self, a):
                     raise AttributeError('%s=%r exists' % (a, v))
                 setattr(self, a, v)

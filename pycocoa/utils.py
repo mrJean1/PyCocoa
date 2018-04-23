@@ -57,14 +57,25 @@
 # ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
 # OTHER DEALINGS IN THE SOFTWARE.
 
-__version__ = '18.04.18'
+'''(INTERNAL) Utility functions, constants, etc.
+'''
+# all imports listed explicitly to help PyChecker
+__version__ = '18.04.21'
 
-DEFAULT_UNICODE = 'utf-8'  # default Python encoding
+try:
+    from math import gcd  # Python 3+
+except ImportError:
+    try:
+        from fractions import gcd  # Python 2-
+    except ImportError:
+        def gcd(a, b):
+            while b:
+                a, b = b, (a % b)
+            return a
 
 
-class _Globals(object):
-    # some PyCocoa-internal globals
-    App     = None
+class _Globals(object):  # some PyCocoa-internal globals
+    App     = None  # XXX single instance only
     argv0   = 'PyCocoa'  # set by .nstypes.nsBundleRename
     Items   = {}
     raiser  = False
@@ -74,7 +85,7 @@ class _Globals(object):
 
 class missing(object):  # singleton class, lost on purpose
 
-    def __eq__(self, unused):
+    def __eq__(self, unused):  # avoid assignment '=='
         raise SyntaxError("use 'is %s' or 'is not %s'" % (self, self))
 
     def __ne__(self, other):
@@ -84,17 +95,54 @@ class missing(object):  # singleton class, lost on purpose
         return 'missing'
 
 
-missing = missing()  # private, singleton
+DEFAULT_UNICODE = 'utf-8'    # default Python encoding
+missing         = missing()  # private, singleton
+
+
+def aspect_ratio(width, height):
+    '''Compute the smallest, int aspect ratio.
+
+       @param width: The width (float or int).
+       @param height: The height (float or int).
+
+       @return: 2-Tuple (width, height) or None.
+
+       @example:
+       >>> aspect_ratio(10, 15)
+       (2, 3)
+       >>> aspect_ratio(10.0, 15)
+       (2, 3)
+       >>> aspect_ratio(10, -15)
+       (-2, 3)
+       >>> aspect_ratio(-10, -15)
+       (2, 3)
+       >>> aspect_ratio(10.5, 15)
+       (7, 10)
+       >>> aspect_ratio(0, 15)
+       ()
+    '''
+    # video 4:3, 16:9, 21:9 [14:10, 19:10]
+    # photo 1:1, 3:2, 4:3, 5:3, 5:4, 7:5, 16:9,
+    #            2:3  3:4  3:5  4:5  5:7  9:16
+    r = gcd(width, height)
+    if r and width and height:
+        return int(width / r), int(height / r)
+    else:
+        return None
 
 
 try:  # MCCABE 22
+
     # in Python 2- bytes *is* str and bytes.__name__ == 'str'
     _Bytes = unicode, bytearray
     _Ints  = int, long  # PYCHOK for export
     _Strs  = basestring
 
     def bytes2repr(bytestr):
-        '''Like repr(bytestr) for bytes:  b'...'.
+        '''Represent bytes like C{repr(bytestr)}.
+
+           @param bytestr: Str or bytes.
+           @return: Representation C{b'...'} (str).
         '''
         return 'b%r' % (bytestr,)
 
@@ -107,7 +155,7 @@ try:  # MCCABE 22
            @return: Str or I{dflt}.
 
            @raise TypeError: If neither str nor bytes, but
-                             only I{dflt} is not provided.
+                             iff no I{dflt} is provided.
         '''
         if isinstance(bytestr, _Strs):
             return bytestr
@@ -129,7 +177,7 @@ try:  # MCCABE 22
            @return: Bytes or I{dflt}.
 
            @raise TypeError: If neither bytes nor str, but
-                             only I{dflt} is not provided.
+                             iff no I{dflt} is provided.
         '''
         if isinstance(bytestr, _Strs):
             return bytestr
@@ -144,7 +192,7 @@ except NameError:  # Python 3+
     _Ints  = int
     _Strs  = str
 
-    bytes2repr = repr
+    bytes2repr = repr  # always b'...'
 
     def bytes2str(bytestr, dflt=missing):  # PYCHOK expected
         '''Convert bytes to str if needed.
@@ -155,7 +203,7 @@ except NameError:  # Python 3+
            @return: Str or I{dflt}.
 
            @raise TypeError: If neither str nor bytes, but
-                             only if I{dflt} is not provided.
+                             iff no I{dflt} is provided.
         '''
         if isinstance(bytestr, _Strs):
             return bytestr
@@ -167,6 +215,8 @@ except NameError:  # Python 3+
 
     # iter(bytes) yields an int in Python 3+
     def iterbytes(bytestr):
+        '''Iterate bytes, yielding each as C{byte}.
+        '''
         for b in bytestr:  # convert int to bytes
             yield bytes([b])
 
@@ -184,7 +234,7 @@ except NameError:  # Python 3+
            @return: Bytes or I{dflt}.
 
            @raise TypeError: If neither bytes nor str, but
-                             only if I{dflt} is not provided.
+                             iff no I{dflt} is provided.
         '''
         if isinstance(bytestr, _Bytes):
             return bytestr
@@ -198,7 +248,7 @@ _ByteStrs = _Bytes + (_Strs,)  # bytes and/or str types
 
 
 def _allisting(alls, localls, version, filename):
-    '''Print sorted __all__ names and values.
+    '''(INTERNAL) Print sorted __all__ names and values.
     '''
     import os
 
@@ -232,6 +282,11 @@ def _allisting(alls, localls, version, filename):
 
 def clip(bytestr, limit=50):
     '''Clip a string or bytes to the given length limit.
+
+       @param bytestr: Bytes or str.
+       @keyword limit: Length limit (int).
+
+       @return: Bytes or str.
     '''
     if bytestr and limit > 10:
         n = len(bytestr)
@@ -245,7 +300,7 @@ def clip(bytestr, limit=50):
 
 
 def _exports(localls, *names, **starts_ends):  # starts=(), ends=(), not_starts=())
-    '''Return a tuple of __all__ exported names.
+    '''(INTYERNAL) Return a tuple of __all__ exported names.
     '''
     s = starts_ends.pop('starts', ()) or ()
     e = starts_ends.pop('ends', ()) or ()
@@ -267,8 +322,13 @@ def _exports(localls, *names, **starts_ends):  # starts=(), ends=(), not_starts=
 
 
 def inst2strepr(inst, strepr, *attrs):
-    '''Convert an instance's attributes to str or repr,
-    maintaining the order of the attributes.
+    '''Convert an instance's attributes, maintaining the order.
+
+       @param inst: Instance (any).
+       @param strepr: Conversion (C{repr} or C{str}).
+       @param attrs: Instance attribute names (I{all positional}).
+
+       @return: Instance representation (str).
     '''
     def _strepr(v):
         return repr(v) if isinstance(v, _ByteStrs) else strepr(v)
@@ -280,16 +340,16 @@ def inst2strepr(inst, strepr, *attrs):
 def instanceof(inst, *classes, **name_missing):
     '''Check whether a Python object is an instance of some Python class.
 
-    @param inst: The instance to check (I{any}).
-    @param classes: One or several classes (I{all positional}).
-    @keyword name: The name of the instance (string).
+       @param inst: The instance to check (I{any}).
+       @param classes: One or several classes (I{all positional}).
+       @keyword name: The name of the instance (str).
 
-    @return: The matching I{class} from I{classes}, None otherwise.
+       @return: The matching I{class} from I{classes}, None otherwise.
 
-    @raise TypeError: If I{inst} does not match any of the I{classes},
-                      and only if keyword I{name='...'} is provided.
+       @raise TypeError: If I{inst} does not match any of the I{classes},
+                         but iff keyword I{name='...'} is provided.
 
-    @see: Function L{isInstanceOf} for checking ObjC instances.
+       @see: Function L{isInstanceOf} for checking ObjC instances.
     '''
     if isinstance(inst, classes):
         return inst.__class__
@@ -303,28 +363,46 @@ def instanceof(inst, *classes, **name_missing):
 
 
 def name2objc(name):
-    '''Convert a (selector) name to bytes and ObjC rules.
+    '''Convert a (selector) name to bytes and ObjC naming rules.
+
+       @param name: Name to convert (str).
+
+       @return: Converted name (str).
     '''
     return str2bytes(name).replace(b'_', b':')
 
 
 def name2py(name):
-    '''Convert a (selector) name to str and Python conventions.
+    '''Convert a (selector) name to str and Python naming conventions.
+
+       @param name: Name to convert (str).
+
+       @return: Converted name (str).
     '''
     return bytes2str(name).replace(':', '_')
 
 
 def name2pymethod(name):
-    '''Convert a (selector) name to Python callback method.
+    '''Convert a (selector) name to a valid Python callback method.
+
+       @param name: Name to convert (str).
+
+       @return: Converted name (str).
+
+       @raise ValueError: Invalid, non-alphanumeric I{name}.
     '''
     m = name2py(name)
-    if not m.replace('_', '').isalnum():
+    if not (m and m.replace('_', '').isalnum()):
         raise ValueError('%s invalid: %r' % ('name', name))
     return m
 
 
 def printf(fmt, *args, **kwds):  # nl=0, nt=0
-    '''Formatted print.
+    '''Formatted print I{fmt % args} with optional keywords I{nl=o} and
+       I{nt=0} for leading, respectively trailing blank lines.
+
+       @param fmt: Print-like format (str).
+       @param args: Optional arguments to include (I{all positional}).
     '''
     t = (fmt % args) if args else fmt
     nl = '\n' * kwds.get('nl', 0)
@@ -333,7 +411,12 @@ def printf(fmt, *args, **kwds):  # nl=0, nt=0
 
 
 def type2strepr(inst, strepr=str):
-    '''Return a Python Type instance as string.
+    '''Return a Python Type instance as L{str} or L{repr}.
+
+       @param inst: Instance (any).
+       @keyword strepr: Conversion (C{repr} or C{str}).
+
+       @return: Instance representation (str).
     '''
     try:
         t = getattr(inst.NS, 'objc_classname', '')  # PYCHOK expected
@@ -347,8 +430,13 @@ def type2strepr(inst, strepr=str):
 
 
 def z1000str(size, sep='_'):
-    '''Convert a size to string with 1_000's seperator.
-    '''
+    '''Convert a size value to string with 1_000's seperator.
+
+       @param size: Value to convert (float or int).
+
+       @return: "-" if I{size} is negative, otheriwse
+                "<1or2digits><sep><3digits>..." (str).
+   '''
     z = int(size)
     if z < 0:
         return '-'
@@ -368,25 +456,30 @@ def z1000str(size, sep='_'):
     return t
 
 
-def zSIstr(size):
-    '''Convert a size to string with SI-units.
+def zSIstr(size, B='B'):
+    '''Convert a size value to string with SI-units.
+
+       @param size: Value to convert (float or int).
+
+       @return: "<Size> <B><SI>" (str).
     '''
     z, si = float(size), ''
     if z > 1024.0:
         for si in iter('KMGTPE'):
             z /= 1024.0
             if z < 1024.0:
-                si = '%.1f %siB' % (z, si)
+                si = '%.1f %si%s' % (z, si, B)
                 break
         else:
-            si = '%.3e B' % (float(size),)
+            si = '%.3e %s' % (float(size), B)
     else:
-        si = '%d B' % (int(size),)
+        si = '%d %s' % (int(size), B)
     return si
 
 
-__all__ = _exports(locals(), 'clip', 'DEFAULT_UNICODE', 'iterbytes',
-                             'missing', 'printf', 'type2strepr',
+__all__ = _exports(locals(), 'aspect_ratio', 'clip', 'DEFAULT_UNICODE',
+                             'gcd', 'iterbytes', 'missing', 'printf',
+                             'type2strepr',
                    starts=('bytes', 'inst', 'str', 'z'))
 
 

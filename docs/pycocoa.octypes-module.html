@@ -59,15 +59,15 @@
 </table>
 <!-- ==================== MODULE DESCRIPTION ==================== -->
 <h1 class="epydoc">Module octypes</h1><p class="nomargin-top"></p>
-<p>Module defining ObjC <i>..._t</i> types from standard 
-  <i>ctypes</i>.</p>
-  <p>Names starting with <i>c_</i> are <i>ctypes</i>, names ending with 
-  <i>_t</i> are ObjC types defined in terms of a <i>ctypes</i> <i>c_</i> 
-  type.</p>
+<p>ObjC <code>..._t</code> type definitions and some additional 
+  <code>ctypes</code>.</p>
+  <p>Names starting with <code>c_</code> are <code>ctypes</code>, names 
+  ending with <code>_t</code> are ObjC types defined in terms of a 
+  <code>ctypes</code> <code>c_</code> type.</p>
 
 <hr />
 <div class="fields">      <p><strong>Version:</strong>
-        18.04.16
+        18.04.21
       </p>
 </div><!-- ==================== CLASSES ==================== -->
 <a name="section-Classes"></a>
@@ -163,7 +163,7 @@
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
         <a href="pycocoa.octypes.Block_t-class.html" class="summary-name">Block_t</a><br />
-      ObjC block type.
+      ObjC <code>block</code> type.
     </td>
   </tr>
 <tr>
@@ -171,7 +171,7 @@
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
         <a href="pycocoa.octypes.BOOL_t-class.html" class="summary-name">BOOL_t</a><br />
-      ObjC boolean type.
+      ObjC <code>boolean</code> type.
     </td>
   </tr>
 <tr>
@@ -193,7 +193,7 @@
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
         <a href="pycocoa.octypes.Id_t-class.html" class="summary-name">Id_t</a><br />
-      ObjC id/self type, end=coding b'@'.
+      ObjC <code>Id/self</code> type, encoding b'@'.
     </td>
   </tr>
 <tr>
@@ -201,7 +201,7 @@
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
         <a href="pycocoa.octypes.Class_t-class.html" class="summary-name">Class_t</a><br />
-      ObjC class type, encoding b'#'.
+      ObjC <code>class</code> type, encoding b'#'.
     </td>
   </tr>
 <tr>
@@ -209,7 +209,7 @@
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
         <a href="pycocoa.octypes.IMP_t-class.html" class="summary-name">IMP_t</a><br />
-      ObjC implementation type.
+      ObjC <code>IMPlementation</code> type.
     </td>
   </tr>
 <tr>
@@ -217,7 +217,7 @@
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
         <a href="pycocoa.octypes.Ivar_t-class.html" class="summary-name">Ivar_t</a><br />
-      ObjC instance variable type.
+      ObjC <code>instance variable</code> type.
     </td>
   </tr>
 <tr>
@@ -225,7 +225,7 @@
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
         <a href="pycocoa.octypes.Method_t-class.html" class="summary-name">Method_t</a><br />
-      ObjC method type.
+      ObjC <code>method</code> type.
     </td>
   </tr>
 <tr>
@@ -247,7 +247,7 @@
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
         <a href="pycocoa.octypes.Union_t-class.html" class="summary-name">Union_t</a><br />
-      ObjC union type.
+      ObjC <code>union</code> type.
     </td>
   </tr>
 <tr>
@@ -255,7 +255,7 @@
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
         <a href="pycocoa.octypes.Protocol_t-class.html" class="summary-name">Protocol_t</a><br />
-      ObjC protocol type.
+      ObjC <code>protocol</code> type.
     </td>
   </tr>
 <tr>
@@ -263,7 +263,7 @@
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
         <a href="pycocoa.octypes.SEL_t-class.html" class="summary-name">SEL_t</a><br />
-      ObjC selector/cmd type, encoding b':'.
+      ObjC <code>SELector/cmd</code> type, encoding <code>b':'</code>.
     </td>
   </tr>
 <tr>
@@ -285,7 +285,7 @@
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
         <a href="pycocoa.octypes.Struct_t-class.html" class="summary-name">Struct_t</a><br />
-      ObjC struct type.
+      ObjC <code>struct</code> type.
     </td>
   </tr>
 <tr>
@@ -324,7 +324,8 @@
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
         <a href="pycocoa.octypes.VoidPtr_t-class.html" class="summary-name">VoidPtr_t</a><br />
-      Same as, but distinguishable from <code>c_void_p</code>.
+      Same as <code>c_void_p</code>, but distinguishable from 
+        <code>c_void_p</code>.
     </td>
   </tr>
 <tr>
@@ -332,7 +333,8 @@
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
         <a href="pycocoa.octypes.objc_method_description_t-class.html" class="summary-name">objc_method_description_t</a><br />
-      ObjC struct with .name and .types.
+      ObjC <code>struct</code> with <code>.name</code> and 
+        <code>.types</code> (<code>SEL_t</code>, <code>c_char_p</code>).
     </td>
   </tr>
 <tr>
@@ -340,7 +342,7 @@
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
         <a href="pycocoa.octypes.objc_property_t-class.html" class="summary-name">objc_property_t</a><br />
-      ObjC property Class.
+      ObjC <code>property</code> Class.
     </td>
   </tr>
 <tr>
@@ -348,7 +350,8 @@
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
         <a href="pycocoa.octypes.objc_property_attribute_t-class.html" class="summary-name">objc_property_attribute_t</a><br />
-      ObjC struct with .name and .value.
+      ObjC <code>struct</code> with <code>.name</code> and 
+        <code>.value</code> (both <code>c_char_p</code>).
     </td>
   </tr>
 <tr>
@@ -356,7 +359,8 @@
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
         <a href="pycocoa.octypes.objc_super_t-class.html" class="summary-name">objc_super_t</a><br />
-      ObjC struct with .receiver and .class.
+      ObjC <code>struct</code> with <code>.receiver</code> and 
+        <code>.class</code> (<code>Id_t</code>, <code>Class_t</code>).
     </td>
   </tr>
 <tr>
@@ -378,7 +382,8 @@
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
         <a href="pycocoa.octypes.NSRange_t-class.html" class="summary-name">NSRange_t</a><br />
-      ObjC struct with .loc[ation] and .len[gth] (NSUInteger-s).
+      ObjC <code>struct</code> with <code>.loc[ation]</code> and 
+        <code>.len[gth]</code> (both <code>NSUInteger</code>).
     </td>
   </tr>
 <tr>
@@ -386,7 +391,8 @@
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
         <a href="pycocoa.octypes.NSPoint_t-class.html" class="summary-name">NSPoint_t</a><br />
-      ObjC struct with .x and .y.
+      ObjC <code>struct</code> with <code>.x</code> and <code>.y.</code> 
+        (both <code>CGFloat</code>)
     </td>
   </tr>
 <tr>
@@ -394,7 +400,8 @@
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
         <a href="pycocoa.octypes.NSSize_t-class.html" class="summary-name">NSSize_t</a><br />
-      ObjC struct with .width and .height.
+      ObjC <code>struct</code> with <code>.width</code> and 
+        <code>.height</code>.
     </td>
   </tr>
 <tr>
@@ -402,7 +409,8 @@
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
         <a href="pycocoa.octypes.NSRect_t-class.html" class="summary-name">NSRect_t</a><br />
-      ObjC struct with .origin and .size.
+      ObjC <code>struct</code> with <code>.origin</code> and 
+        <code>.size</code>.
     </td>
   </tr>
 <tr>
@@ -410,7 +418,9 @@
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
         <a href="pycocoa.octypes.NSRect4_t-class.html" class="summary-name">NSRect4_t</a><br />
-      Class NSRect_t with different signature and properties.
+      ObjC <code>struct</code>, like <a 
+        href="pycocoa.octypes.NSRect_t-class.html" 
+        class="link">NSRect_t</a> with different signature and properties.
     </td>
   </tr>
 <tr>
@@ -453,7 +463,8 @@
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
         <a href="pycocoa.octypes.NSPoint_t-class.html" class="summary-name">CGPoint_t</a><br />
-      ObjC struct with .x and .y.
+      ObjC <code>struct</code> with <code>.x</code> and <code>.y.</code> 
+        (both <code>CGFloat</code>)
     </td>
   </tr>
 <tr>
@@ -461,7 +472,8 @@
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
         <a href="pycocoa.octypes.NSRect_t-class.html" class="summary-name">CGRect_t</a><br />
-      ObjC struct with .origin and .size.
+      ObjC <code>struct</code> with <code>.origin</code> and 
+        <code>.size</code>.
     </td>
   </tr>
 <tr>
@@ -469,7 +481,8 @@
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
         <a href="pycocoa.octypes.NSSize_t-class.html" class="summary-name">CGSize_t</a><br />
-      ObjC struct with .width and .height.
+      ObjC <code>struct</code> with <code>.width</code> and 
+        <code>.height</code>.
     </td>
   </tr>
 <tr>
@@ -491,7 +504,8 @@
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
         <a href="pycocoa.octypes.CGRange_t-class.html" class="summary-name">CGRange_t</a><br />
-      ObjC struct with .location and .length (CF/Index-s).
+      ObjC <code>struct</code> with <i>.location</i> and <i>.length</i> 
+        (CF/Index-s).
     </td>
   </tr>
 <tr>
@@ -499,7 +513,8 @@
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
         <a href="pycocoa.octypes.NSPoint_t-class.html" class="summary-name">NSMakePoint</a><br />
-      ObjC struct with .x and .y.
+      ObjC <code>struct</code> with <code>.x</code> and <code>.y.</code> 
+        (both <code>CGFloat</code>)
     </td>
   </tr>
 <tr>
@@ -507,7 +522,8 @@
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
         <a href="pycocoa.octypes.NSRange_t-class.html" class="summary-name">NSMakeRange</a><br />
-      ObjC struct with .loc[ation] and .len[gth] (NSUInteger-s).
+      ObjC <code>struct</code> with <code>.loc[ation]</code> and 
+        <code>.len[gth]</code> (both <code>NSUInteger</code>).
     </td>
   </tr>
 <tr>
@@ -515,7 +531,9 @@
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
         <a href="pycocoa.octypes.NSRect4_t-class.html" class="summary-name">NSMakeRect</a><br />
-      Class NSRect_t with different signature and properties.
+      ObjC <code>struct</code>, like <a 
+        href="pycocoa.octypes.NSRect_t-class.html" 
+        class="link">NSRect_t</a> with different signature and properties.
     </td>
   </tr>
 <tr>
@@ -523,7 +541,8 @@
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
         <a href="pycocoa.octypes.NSSize_t-class.html" class="summary-name">NSMakeSize</a><br />
-      ObjC struct with .width and .height.
+      ObjC <code>struct</code> with <code>.width</code> and 
+        <code>.height</code>.
     </td>
   </tr>
 <tr>
@@ -714,21 +733,30 @@
   <p>Split the type encoding of a <i>method</i> signature into separate, 
   single encodings and the combined encoding.</p>
   <p>If necessary, the encoding is extended with the type encoding for the 
-  hidden method arguments <code>id/self</code> and 
+  hidden method arguments <code>Id/self</code> and 
   <code>SEL/cmd</code>.</p>
-  <p>Does not handle bitfields, arrays, structs, unions, etc. and strips 
-  any offset, size or width specifiers from the encoding.</p>
-  <p>In the returned 2-tuple (<i>codes, encoding</i>), <i>codes</i> is the 
-  list of individual type encodings from item <i>start=0</i> and 
-  <i>encoding</i> the combined type encoding in <code>bytes</code> and both
-  extended if needed.</p>
-  <p>Example:</p>
-<pre class="py-doctest">
-<span class="py-prompt">&gt;&gt;&gt; </span>split_emcoding2(<span class="py-string">'v*'</span>)
-<span class="py-prompt">&gt;&gt;&gt; </span>([<span class="py-string">'v'</span>, <span class="py-string">'@'</span>, <span class="py-string">':'</span>, <span class="py-string">'*'</span>], <span class="py-string">'v@:*'</span>)</pre>
   <dl class="fields">
+    <dt>Returns:</dt>
+        <dd>2-Tuple (<i>codes, encoding</i>), where <i>codes</i> is the list 
+          of individual type encodings from item <i>start=0</i> and 
+          <i>encoding</i> is the combined type encoding in 
+          <code>bytes</code>, both extended with <code>Id/self</code> and 
+          <code>SEL/cmd</code> iff needed.</dd>
+    <dt>Raises:</dt>
+    <dd><ul class="nomargin-top">
+        <li><code><strong class='fraise'><a href="pycocoa.octypes.TypeCodeError-class.html">TypeCodeError</a></strong></code> - Invalid or unbalanced <i>encoding</i>.</li>
+    </ul></dd>
   </dl>
-</td></tr></table>
+<div class="fields">      <p><strong>Note:</strong>
+        Does not handle <code>bitfield</code>s, <code>array</code>s, 
+        <code>struct</code>s, <code>union</code>s, etc. and strips any 
+        offset, size or width specifiers from the encoding.
+      </p>
+      <p><strong>Example:</strong>
+        &gt;&gt;&gt; split_emcoding2('v*') &gt;&gt;&gt; (['v', '@', ':', 
+        '*'], 'v@:*')
+      </p>
+</div></td></tr></table>
 </div>
 <a name="split_encoding"></a>
 <div>
@@ -745,119 +773,133 @@
   </tr></table>
   
   <p>Split a type encoding into separate type encodings.</p>
-  <p>Does not handle bitfields, arrays, structs, unions, etc. and strips 
-  any offset, size or width specifiers from the encoding.</p>
-  <p>Examples:</p>
-<pre class="py-doctest">
-<span class="py-prompt">&gt;&gt;&gt; </span>split_encoding(<span class="py-string">'^v16@0:8'</span>)
-<span class="py-prompt">&gt;&gt;&gt; </span>[<span class="py-string">'^v'</span>, <span class="py-string">'@'</span>, <span class="py-string">':'</span>]</pre>
+  <p>Does not handle <code>bitfield</code>s, <code>array</code>s, 
+  <code>struct</code>s, <code>union</code>s, etc. and strips any offset, 
+  size or width specifiers from the encoding.</p>
+  <dl class="fields">
+    <dt>Returns:</dt>
+        <dd>Individual encodings (<code>list</code>).</dd>
+    <dt>Raises:</dt>
+    <dd><ul class="nomargin-top">
+        <li><code><strong class='fraise'><a href="pycocoa.octypes.TypeCodeError-class.html">TypeCodeError</a></strong></code> - Invalid or unbalanced <i>encoding</i>.</li>
+    </ul></dd>
+  </dl>
+<div class="fields">      <p><strong>Example:</strong>
+        &gt;&gt;&gt; split_encoding('^v16@0:8') &gt;&gt;&gt; ['^v', '@', 
+        ':']
 <pre class="py-doctest">
 <span class="py-prompt">&gt;&gt;&gt; </span>split_encoding(<span class="py-string">'{CGSize=dd}40@0:8{PyObject=@}Q32'</span>)
 <span class="py-prompt">&gt;&gt;&gt; </span>[<span class="py-string">'{CGSize=dd}'</span>, <span class="py-string">'@'</span>, <span class="py-string">':'</span>, <span class="py-string">'{PyObject=@}'</span>, <span class="py-string">'Q'</span>]</pre>
-  <p>Supported Type Encodings:</p>
-  <ul>
-    <li>
-      B = bool (C++ bool, C99 _Bool)
-    </li>
-    <li>
-      c, C = char, unsigned char
-    </li>
-    <li>
-      f, d = float, double
-    </li>
-    <li>
-      i, I = int, unsigned int
-    </li>
-    <li>
-      l, L = long, unsigned long (32-bit)
-    </li>
-    <li>
-      q, Q = long long, unsigned long long
-    </li>
-    <li>
-      s, S = short, unsigned short
-    </li>
-    <li>
-      t, T = 128-bit int, unsigned int
-    </li>
-    <li>
-      v = void
-    </li>
-    <li>
-      * = string (char *)
-    </li>
-    <li>
-      : = method selector (SEL/cmd)
-    </li>
-    <li>
-      # = class
-    </li>
-    <li>
-      #&quot;name&quot; = class &quot;name&quot;
-    </li>
-    <li>
-      @ = object (instance, statically typed, typed id, etc.)
-    </li>
-    <li>
-      @&quot;name&quot; = instance of class &quot;name&quot;
-    </li>
-    <li>
-      ^type = pointer to type
-    </li>
-    <li>
-      ? = unknown type (among other things, used for function pointers)
-    </li>
-    <li>
-      P = Python object (like PyObjectEncoding)
-    </li>
-  </ul>
-  <p>Unsupported Type Encodings:</p>
-  <ul>
-    <li>
-      bW = bitfield of width W
-    </li>
-    <li>
-      [Ltype] = array of L items of type
-    </li>
-    <li>
-      {name=type...} = structure
-    </li>
-    <li>
-      (name=type...) = union
-    </li>
-    <li>
-      &lt;...&gt; = block
-    </li>
-  </ul>
-  <p>For ObjC internal use only:</p>
-  <ul>
-    <li>
-      n, N = in, inout
-    </li>
-    <li>
-      o, O = out, bycopy
-    </li>
-    <li>
-      r, R = const, byref
-    </li>
-    <li>
-      V = oneway
-    </li>
-  </ul>
-  <p>Type encodings may be preceeded by a <code>&quot;name&quot;</code>, 
-  for example a bitfield <code>&quot;name&quot;b1</code>, structure items 
-  <code>{CGsize=&quot;width&quot;d&quot;heigth&quot;d}</code>, union items,
-  etc. and all such <code>&quot;name&quot;</code> prefixes are ignored.  
-  See also <a 
-  href="http://Developer.Apple.com/library/content/documentation/Cocoa/Conceptual/ObjCRuntimeGuide/Articles/ocrtTypeEncodings.html"
-  target="_top">Type Encodings</a>, <a 
-  href="http://NSHipster.com/type-encodings/" target="_top">NSHipster Type 
-  Encodings</a> and <a 
-  href="http://StackOverflow.com/questions/11527385/how-are-the-digits-in-objc-method-type-encoding-calculated/"
-  target="_top">Digits in type encoding</a>.</p>
-  <dl class="fields">
-  </dl>
-</td></tr></table>
+        <p>Supported Type Encodings:</p>
+        <ul>
+          <li>
+            B = bool (C++ bool, C99 _Bool)
+          </li>
+          <li>
+            c, C = char, unsigned char
+          </li>
+          <li>
+            f, d = float, double
+          </li>
+          <li>
+            i, I = int, unsigned int
+          </li>
+          <li>
+            l, L = long, unsigned long (32-bit)
+          </li>
+          <li>
+            q, Q = long long, unsigned long long
+          </li>
+          <li>
+            s, S = short, unsigned short
+          </li>
+          <li>
+            t, T = 128-bit int, unsigned int
+          </li>
+          <li>
+            v = void
+          </li>
+          <li>
+            * = string (char *)
+          </li>
+          <li>
+            : = method selector (SEL/cmd)
+          </li>
+          <li>
+            # = class
+          </li>
+          <li>
+            #&quot;name&quot; = class &quot;name&quot;
+          </li>
+          <li>
+            @ = object (instance, statically typed, typed id, etc.)
+          </li>
+          <li>
+            @&quot;name&quot; = instance of class &quot;name&quot;
+          </li>
+          <li>
+            ^type = pointer to type
+          </li>
+          <li>
+            ? = unknown type (among other things, used for function 
+            pointers)
+          </li>
+          <li>
+            P = Python object (shorthand for <code>PyObjectEncoding</code>)
+          </li>
+        </ul>
+        <p>Unsupported Type Encodings:</p>
+        <ul>
+          <li>
+            bW = bitfield of width W
+          </li>
+          <li>
+            [Ltype] = array of L items of type
+          </li>
+          <li>
+            {name=type...} = structure
+          </li>
+          <li>
+            (name=type...) = union
+          </li>
+          <li>
+            &lt;...&gt; = block
+          </li>
+        </ul>
+        <p>For ObjC internal use only:</p>
+        <ul>
+          <li>
+            n, N = in, inout
+          </li>
+          <li>
+            o, O = out, bycopy
+          </li>
+          <li>
+            r, R = const, byref
+          </li>
+          <li>
+            V = oneway
+          </li>
+        </ul>
+      </p>
+      <p><strong>Note:</strong>
+        Type encodings may be preceeded by <code>&quot;name&quot;</code>, 
+        for example a <code>bitfield</code> 
+        <code>&quot;name&quot;b1</code>, <code>struct</code> items 
+        <code>{CGsize=&quot;width&quot;d&quot;heigth&quot;d}</code>, 
+        <code>union</code> items, etc. and all such 
+        <code>&quot;name&quot;</code> prefixes are ignored.
+      </p>
+      <p><strong>See Also:</strong>
+        Also <a 
+        href="http://Developer.Apple.com/library/content/documentation/Cocoa/Conceptual/ObjCRuntimeGuide/Articles/ocrtTypeEncodings.html"
+        target="_top">Type Encodings</a>, <a 
+        href="http://NSHipster.com/type-encodings/" target="_top">NSHipster
+        Type Encodings</a> and <a 
+        href="http://StackOverflow.com/questions/11527385/how-are-the-digits-in-objc-method-type-encoding-calculated/"
+        target="_top">Digits in type encoding</a>.
+      </p>
+</div></td></tr></table>
 </div>
 <br />
 <!-- ==================== NAVIGATION BAR ==================== -->
@@ -891,7 +933,7 @@
 <table border="0" cellpadding="0" cellspacing="0" width="100%%">
   <tr>
     <td align="left" class="footer">
-    Generated by Epydoc 3.0.1 on Fri Apr 20 15:50:11 2018
+    Generated by Epydoc 3.0.1 on Sun Apr 22 21:13:09 2018
     </td>
     <td align="right" class="footer">
       <a target="mainFrame" href="http://epydoc.sourceforge.net"

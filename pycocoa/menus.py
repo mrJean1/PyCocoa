@@ -23,6 +23,9 @@
 # ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
 # OTHER DEALINGS IN THE SOFTWARE.
 
+'''Types L{Item}, L{Menu}, L{MenuBar} and L{Separator}, wrapping ObjC C{NSMenuItem} and C{Menu}.
+'''
+# all imports listed explicitly to help PyChecker
 from bases   import _Type1, _Type2
 from getters import get_selector, get_selectornameof
 from nstypes import int2NS, NSMenu, NSMenuItem, nsOf, NSStr
@@ -35,58 +38,61 @@ from utils   import _Globals, instanceof, name2pymethod
 __all__ = ('Item',
            'Menu', 'MenuBar',
            'Separator',
-           'ns2Item')
-__version__ = '18.04.18'
+           'ns2Item',
+           'title2action')
+__version__ = '18.04.21'
 
 _menuItemHandler_name = 'menuItemHandler_'
 
 
 class Item(_Type2):
-    '''Menu item class.
+    '''Menu item Python Type, wrapping ObjC C{NSMenuItem}.
     '''
     _action = _menuItemHandler_name
     _key    = ''
     _mask   = 0
-    _sel_   = get_selector(_menuItemHandler_name)
+    _SEL_   = get_selector(_menuItemHandler_name)
 
     def __init__(self, title, action=None, key='',
                                            alt=False,
                                            cmd=True,
                                           ctrl=False,
                                          shift=False):
-        '''New menu item with action and optional shortcut key.
+        '''New menu L{Item}.
 
-        @param title: Item title (string).
-        @keyword action: Callback, the delegate method to be called
-                         (string ending with ':' or _', C{SEL_t} or None).
-        @keyword key: The shortcut key, if any (string).
-        @keyword alt: Key modifier (bool).
-        @keyword cmd: Key modifier (bool).
-        @keyword cntl: Key modifier (bool).
-        @keyword shift: Key modifier (bool).
+           @param title: Item title (string).
+           @keyword action: Callback, the method to be called (string
+                            ending with ':' or _', C{SEL_t} or C{None}).
+           @keyword key: The shortcut key, if any (string).
+           @keyword alt: Hold C{option} or C{alt} with I{key} (bool).
+           @keyword cmd: Hold C{command} with I{key} (bool).
+           @keyword cntl: Hold C{control} with I{key} (bool).
+           @keyword shift: Hold C{shift} with {key} (bool).
 
-        @note: A None I{action} is set to the I{title} with spaces
-               removed, etc. see C{title2action}.
+           @raise ValueError: Invalid I{title} for C{None} I{action}.
+
+           @note: A C{None} I{action} is set to the I{title}, spaces and
+                  dots removed, etc., see function L{title2action}.
         '''
         self.title = title
 
         if action is None:
-            a = self.title2action(self.title)
-            # self._sel_ = get_selector(a)
+            a = title2action(self.title)
+            # self._SEL_ = get_selector(a)
         elif instanceof(action, SEL_t):  # or isInstanceOf(sel, NSSelector)
-            self._sel_ = action
+            self._SEL_ = action
             a = name2pymethod(get_selectornameof(action))
         else:
             a = name2pymethod(action)
             if a[-1:] not in ':_':
                 raise ValueError('%s invalid: %r' % ('action', action))
-            # self._sel_ = get_selector(a)
+            # self._SEL_ = get_selector(a)
         self._action = a
 
         # <http://developer.apple.com/documentation/appkit/
         #       nsmenuitem/1514858-initwithtitle>
         self.NS = NSMenuItem.alloc().initWithTitle_action_keyEquivalent_(
-                                     NSStr(self.title), self._sel_, NSStr(key))
+                                     NSStr(self.title), self._SEL_, NSStr(key))
         if key:
             mask = 0
             if alt:
@@ -113,24 +119,24 @@ class Item(_Type2):
         return '%s(%r, %r, %s)' % (self.__class__.__name__,
                                    self.title, self.action, k)
 
-#     def _dup(self, item):
-#         '''Duplicate an item.
-#         '''
-#         if isinstance(item, Item):
-#             self.title   = item.title
-#             self._action = item._action
-#             self._key    = item._key
-#             self._mask   = item._mask
-#             self._sel_   = item._sel_
-#             self._NS     = item.NS
+#   def copy(self, other):
+#       '''Duplicate an item.
+#       '''
+#       if isinstance(other, Item):
+#           self.title   = other.title
+#           self._action = other._action
+#           self._key    = other._key
+#           self._mask   = other._mask
+#           self._NS     = other.NS
+#           self._SEL_   = other._SEL_
 #
-#         elif isInstanceOf(item, NSMenuItem, name='item'):
-#             self.title   = nsString2str(item.title())
-#             self._action = get_selectornameof(item.action())
-#             self._key    = nsString2str(item.keyEquivalent())
-#             self._mask   = item.keyEquivalentModifierMask()
-#             self._NS     = item
-#             self._sel_   = item.action()
+#       elif isInstanceOf(other, NSMenuItem, name='other'):
+#           self.title   = nsString2str(other.title())
+#           self._action = get_selectornameof(other.action())
+#           self._key    = nsString2str(other.keyEquivalent())
+#           self._mask   = other.keyEquivalentModifierMask()
+#           self._NS     = other
+#           self._SEL_   = other.action()
 
     @property
     def action(self):
@@ -154,31 +160,31 @@ class Item(_Type2):
 
     @property
     def shift(self):
-        return bool(self._mask & NSShiftKeyMask)
 
-    def title2action(self, title):
-        '''Convert item title to the action/method name.
-        '''
-        t = title.strip().rstrip('.')
-        return 'menu' + ''.join(t.split()) + '_'
+        return bool(self._mask & NSShiftKeyMask)
 
 
 class Menu(_Type2):
-    '''New menu, item and separator.
+    '''Menu Python Type, wrapping ObjC C{NSMenu}.
     '''
     _items = []
 
     def __init__(self, title=''):
+        '''New L{Menu}.
+
+           @keyword title: The menu title (str).
+        '''
         self._items = []
         self.NS = NSMenu.alloc().init()
-        if title:
-            self.title = title
+        self.title = title
 
     def __len__(self):
         return len(self._items)  # self.NS.numberOfItems()
 
     def append(self, *items):
-        '''Add one or more items or separators.
+        '''Add one or more items or separators to this menu.
+
+           @param items: The items to add (L{Item} or L{Separator}).
         '''
         for item in items:
             instanceof(item, Item, Separator, name='item')
@@ -187,26 +193,21 @@ class Menu(_Type2):
 #   def click(self):
 #       self.NS.performActionForItemAtIndex_(...)
 
-    def item(self, title, action=None, key='', alt  =False,
-                                               cmd  =True,
-                                               ctrl =False,
-                                               shift=False):
+    def item(self, title, action=None, **kwds):
         '''New menu item with action and optional shortcut key.
 
-        A None I{action} is set to the I{title} with spaces
-        removed and lowercase first letter.
+           @param title: Item title (string).
+           @keyword action: See L{Item}.__init__.
+           @keyword kwds: See L{Item}.__init__.
 
-        The I{action} is a string, usually the delegate method or
-        C{SEL} to be called.  The I{action} string must end with
-        ':' or '_'.
+           @return: New item (L{Item}).
         '''
-        return Item(title, action=action, key=key, alt=alt,
-                           cmd=cmd, ctrl=ctrl, shift=shift)
+        return Item(title, action=action, **kwds)
 
     def items(self, separators=False):
-        '''Yield this menu's items (L{Item}).
+        '''Yield each of the items in this menu (L{Item}).
 
-           @keyword separators: Yield or skip separator items (bool).
+           @keyword separators: Yield or skip L{Separator} items (bool).
         '''
         if separators:
             for item in self._items:
@@ -217,7 +218,9 @@ class Menu(_Type2):
                     yield item
 
     def separator(self):
-        '''A menu items separator.
+        '''New menu item separator.
+
+           @return: New item (L{Separator}).
         '''
         return Separator()
 
@@ -225,11 +228,19 @@ class Menu(_Type2):
 # <http://developer.apple.com/library/content/qa/qa1420/_index.html
 #      #//apple_ref/doc/uid/DTS10004127>
 class MenuBar(_Type2):
-    '''New menu bar of sub-menus.
+    '''Menu bar Python Type, wrapping ObjC C{NSMenu}.
     '''
     _menus = []
 
     def __init__(self, app=None):
+        '''New L{MenuBar}.
+
+           @keyword app: The application (L{App} or None).
+
+           @raise TypeError: If I{app} not an L{App}.
+
+           @see: Also method L{MenuBar}.main.
+        '''
         self._menus = []
         self.NS = NSMenu.alloc().init()
         if app:
@@ -237,10 +248,14 @@ class MenuBar(_Type2):
             # self.main(app)  # trashes menu bar
 
     def __len__(self):
+        '''Return the number of menus in this menu bar.
+        '''
         return len(self._menus)  # self.NS.numberOfItems()
 
     def append(self, *menus):
-        '''Add one or more sub-menus.
+        '''Add one or more sub-menus to this menu bar.
+
+           @param menus: The menus to add (L{Menu}).
         '''
         for menu in menus:
             instanceof(menu, Menu, name='menu')
@@ -260,34 +275,61 @@ class MenuBar(_Type2):
 
     def main(self, app=None):
         '''Make this menu bar the app's main menu.
+
+           @keyword app: The application (L{App} or None).
+
+           @raise TypeError: If I{app} not an L{App}.
+
+           @raise ValueError: If I{app} missing.
         '''
         if app:
             self.app = app
+        if not self.app:
+            raise ValueError('%s invalid: %s' % ('app', 'missing'))
         self.app.NS.setMainMenu_(self.NS)
 
     def menus(self):
-        '''Yield this menu bar's menus (L{Menu}).
+        '''Yield each menu of this menu bar (L{Menu}).
         '''
         for menu in self._menus:
             yield menu
 
 
 class Separator(_Type1):
-    '''Menu items separator class.
+    '''Menu items separator Python Type, wrapping ObjC C{NSMenuItem}.
     '''
-    def __init__(self, **attrs):
-        '''New menu items separator.
+    def __init__(self):
+        '''New L{Separator}.
+
+           @keyword kws: Optional, additional keyword arguments.
         '''
         self.NS = NSMenuItem.separatorItem()  # can't be singleton
-        if attrs:
-            super(Separator, self).__init__(**attrs)
 
 
 def ns2Item(ns):
     '''Get the L{Item} instance for an C{NSMenuItem}.
+
+       @param ns: The ObjC instance (C{NSMenuItem}).
+
+       @return: The item instance (L{Item}).
+
+       @raise TypeError: Invalid I{ns} type.
     '''
     if isInstanceOf(ns, NSMenuItem, name='ns'):
         return _Globals.Items[ns.representedObject()]
+
+
+def title2action(title):
+    '''Convert an item title to the action callback method.
+
+       @param title: The item's title (str).
+
+       @return: Item callback method (str).
+
+       @raise ValueError: Invalid I{title}.
+    '''
+    t = title.strip().rstrip('.')
+    return name2pymethod('menu' + ''.join(t.split()) + '_')
 
 
 if __name__ == '__main__':

@@ -25,72 +25,96 @@
 # ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
 # OTHER DEALINGS IN THE SOFTWARE.
 
+'''Types L{FrozenSet} and L{Set}, wrapping ObjC C{NS[Mutable]Set}.
+'''
+# all imports listed explicitly to help PyChecker
 from bases   import _Type0
-from nstypes import isNone, ns2py, NSMutableSet, py2NS, NSSet, _Types
+from nstypes import frozenset2NS, isNone, ns2py, NSMutableSet, \
+                    nsSet2set, NSSet, py2NS, set2NS, _Types
 from runtime import isImmutable, isInstanceOf, ObjCInstance
 
 __all__ = ('FrozenSet',
            'Set')
-__version__ = '18.04.18'
+__version__ = '18.04.21'
 
 
 if True:  # MCCABE 66
 
     class FrozenSet(frozenset, _Type0):  # frozenset, first to maintain frozenset behavior
-        '''Python Type equivalent of an immutable ObjC NSSet.
+        '''Python C{frozenset} Type, wrapping an immutable ObjC C{NSSet}.
         '''
         def __new__(cls, ns_frozenset=()):
+            '''New L{FrozenSet} from a C{frozenset}, C{tuple}, L{FrozenSet} or C{NSSet}.
+            '''
             if isinstance(ns_frozenset, FrozenSet):
-                ns = ns_frozenset.NS
+                return ns_frozenset
             elif isinstance(ns_frozenset, frozenset):
-                ns = py2NS(ns_frozenset)
+                py = ns_frozenset
+                ns = frozenset2NS(py)
             elif isinstance(ns_frozenset, tuple):
-                ns = py2NS(frozenset(ns_frozenset))
+                py = frozenset(ns_frozenset)
+                ns = frozenset2NS(py)
             elif isImmutable(ns_frozenset, NSMutableSet,
                                            NSSet, name=FrozenSet.__name__):
                 ns = ns_frozenset
+                py = nsSet2set(ns)
 
-            self = super(FrozenSet, cls).__new__(cls, ns2py(ns))
+            self = super(FrozenSet, cls).__new__(cls, py)
             self.NS = ns
             return self
 
         def copy(self):
+            '''Make a copy of this frozen set.
+
+               @return: The copy (L{FrozenSet}).
+            '''
             return self.__class__(self)
 
     class Set(set, _Type0):  # set, first to maintain set behavior
-        '''Python Type equivalent of a mutable ObjC NSSet.
+        '''Python c{Set} Type, wrapping an ObjC C{NSMutableSet}.
         '''
         def __new__(cls, ns_set=[]):
+            '''New L{Set} from a C{set}, C{list}, L{Set} or C{NSMutableSet}.
+            '''
             if isinstance(ns_set, Set):
-                ns = ns_set.NS
+                ns, py = ns_set.NS, ns_set
             elif isinstance(ns_set, set):
-                ns = py2NS(ns_set)
+                py = ns_set
+                ns = set2NS(py)
             elif isinstance(ns_set, list):
-                ns = py2NS(set(ns_set))
+                py = set(ns_set)
+                ns = set2NS(py)
             elif isInstanceOf(ns_set, NSMutableSet, name=Set.__name__):
                 ns = ns_set
+                py = nsSet2set(ns)
 
-            self = super(Set, cls).__new__(cls, ns2py(ns))
+            self = super(Set, cls).__new__(cls, py)
             self.NS = ns
             return self
 
         def copy(self):
+            '''Make a copy of this set.
+
+               @return: The copy (L{Set}).
+            '''
             return self.__class__(self)
 
         @property
         def NS(self):
-            self.NS = py2NS(self)  # mutable
+            self.NS = set2NS(self)  # mutable
             return self._NS
 
 else:  # XXX far too much duplication
 
     class FrozenSet(_Type0):  # PYCHOK expected
-        '''Python Type equivalent of an immutable ObjC NSSet.
+        '''Python C{frozenset} Type, wrapping an immutable ObjC C{NSSet}.
         '''
         _set  = frozenset()  # or set(), empty to start
         _type = frozenset
 
         def __init__(self, ns_set=()):
+            '''New L{FrozenSet} from a C{frozenset}, C{tuple}, L{FrozenSet} or C{NSSet}.
+            '''
             if isinstance(ns_set, frozenset):
                 self._set = ns_set
             elif isinstance(ns_set, tuple):
@@ -101,7 +125,7 @@ else:  # XXX far too much duplication
                 self._set = frozenset(ns_set._set)
             elif isImmutable(ns_set, NSMutableSet,  # mutable first
                                      NSSet, name=FrozenSet.__name__):
-                self._set = ns2py(ns_set)
+                self._set = nsSet2set(ns_set)
 
         def __contains__(self, elem):
             if isinstance(elem, ObjCInstance):
@@ -163,34 +187,40 @@ else:  # XXX far too much duplication
             return self._set.__xor__(elem)
 
         def copy(self):
-            '''Make a shallow copy, returning a Frozen/Set instance.
+            '''Make a copy of this frozen/set.
+
+               @return: The copy (L{FrozenSet} or L{Set}).
             '''
             return self.__class__(self._type(self._set))
 
         def difference(self, *others):
-            '''Like frozen/set.difference(), but return Frozen/Set instance.
+            '''Like C{frozen/set.difference}.
+
+               @return: New instance (L{FrozenSet} or L{Set}).
             '''
             return self.__class__(self._set.difference(*others))
 
         def intersection(self, *others):  # &
-            '''Like frozen/set.intersection(), but return Frozen/Set instance.
+            '''Like C{frozen/set.intersection}.
+
+               @return: New instance (L{FrozenSet} or L{Set}).
             '''
             return self.__class__(self._set.intersection(*others))
 
         def isdisjoint(self, other):
-            '''Like frozen/set.isdisjoint().
+            '''Like C{frozen/set.isdisjoint}.
             '''
-            return self.__class__(self._set.isdisjoint(other))
+            return self._set.isdisjoint(other)
 
         def issubset(self, other):  # <= / <
-            '''Like frozen/set.issubset(), but return Frozen/Set instance.
+            '''Like C{frozen/set.issubset}.
             '''
-            return self.__class__(self._set.issubset(other))
+            return self._set.issubset(other)
 
         def issuperset(self, other):  # >= / >
-            '''Like frozen/set.issuperset(), but return Frozen/Set instance.
+            '''Like C{frozen/set.issuperset}.
             '''
-            return self.__class__(self._set.issuperset(other))
+            return self._set.issuperset(other)
 
         @property
         def NS(self):
@@ -199,29 +229,35 @@ else:  # XXX far too much duplication
             return self._NS
 
         def symmetric_difference(self, other):  # ^
-            '''Like frozen/set.symmetric_difference(), but return Frozen/Set instance.
+            '''Like C{frozen/set.symmetric_difference}.
+
+               @return: New instance (L{FrozenSet} or L{Set}).
             '''
             return self.__class__(self._set.symmetric_difference(other))
 
         def union(self, *others):  # |
-            '''Like frozen/set.union(), but return Frozen/Set instance.
+            '''Like C{frozen/set.union}.
+
+               @return: New instance (L{FrozenSet} or L{Set}).
             '''
             return self.__class__(self._set.union(*others))
 
     class Set(FrozenSet):  # PYCHOK expected
-        '''Python Type equivalent of a mutable ObjC NSSet.
+        '''Python C{Set} Type, wrapping an ObjC C{NSMutableSet}.
         '''
         _type = set
 
         def __init__(self, ns_set=[]):
+            '''New L{Set} from a C{set}, C{list}, L{FrozenSet}, L{Set} or C{NSMutableSet}.
+            '''
             if isinstance(ns_set, set):
                 self._set = ns_set
             elif isinstance(ns_set, list):
                 self._set = set(ns_set)
             elif isinstance(ns_set, (Set, FrozenSet)):
-                self._set = ns_set._set
+                self._set = set(ns_set._set)
             elif isInstanceOf(ns_set, NSMutableSet, name=Set.__name__):
-                self._set = ns2py(ns_set)
+                self._set = nsSet2set(ns_set)
 
         def __iand__(self, elem):
             return self._set.__iand__(elem)
@@ -236,58 +272,59 @@ else:  # XXX far too much duplication
             return self._set.__ixor__(elem)
 
         def add(self, elem):
-            '''Like set.add().
+            '''Like C{set.add}.
             '''
             self.NS = None
             self._set.add(elem)
 
         def clear(self):
-            '''Like set.clear().
+            '''Like C{set.clear}.
             '''
             self.NS = None
             self._set.clear()
 
         def difference_update(self, *others):  # -=
-            '''Like set.difference_update().
+            '''Like C{set.difference_update}.
             '''
             self.NS = None
             self._set.difference_update(*others)
 
         def discard(self, elems):
-            '''Like set.discard().
+            '''Like C{set.discard}.
             '''
             self.NS = None
             self._set.discard(elems)
 
         def intersection_update(self, *others):  # &=
-            '''Like set.intersection_update().
+            '''Like C{set.intersection_update}.
             '''
             self.NS = None
             self._set.intersection_update(*others)
 
         def pop(self):
-            '''Like set.pop().
+            '''Like C{set.pop}.
             '''
             self.NS = None
             return self._set.pop(self)
 
         def remove(self, elems):
-            '''Like set.remove().
+            '''Like C{set.remove}.
             '''
             self.NS = None
             self._set.remove(elems)
 
         def symmetric_difference_update(self, other):  # ^=
-            '''Like set.symmetric_difference_update().
+            '''Like C{set.symmetric_difference_update}.
             '''
             self.NS = None
             self._set.symmetric_difference_update(other)
 
         def update(self, *others):  # |=
-            '''Like set.update().
+            '''Like C{set.update}.
             '''
             self.NS = None
             self._set.update(*others)
+
 
 NSSet._Type        = _Types.FrozenSet = FrozenSet
 NSMutableSet._Type = _Types.Set       = Set

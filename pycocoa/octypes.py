@@ -57,10 +57,10 @@
 # ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
 # OTHER DEALINGS IN THE SOFTWARE.
 
-'''Module defining ObjC I{..._t} types from standard I{ctypes}.
+'''ObjC C{..._t} type definitions and some additional C{ctypes}.
 
-   Names starting with I{c_} are I{ctypes}, names ending with I{_t}
-   are ObjC types defined in terms of a I{ctypes} I{c_} type.
+   Names starting with C{c_} are C{ctypes}, names ending with C{_t}
+   are ObjC types defined in terms of a C{ctypes} C{c_} type.
 '''
 # all imports listed explicitly to help PyChecker
 from ctypes import c_bool, c_byte, c_char, c_char_p, c_double, \
@@ -79,14 +79,16 @@ from platform import machine  # as machine
 from utils import bytes2str, _exports, inst2strepr, iterbytes, \
                   missing, str2bytes
 
-__version__ = '18.04.16'
+__version__ = '18.04.21'
 
-if sizeof(c_void_p) == 4:
+z = sizeof(c_void_p)
+if z == 4:
     c_ptrdiff_t = c_int32
-elif sizeof(c_void_p) == 8:
+elif z == 8:
     c_ptrdiff_t = c_int64
 else:
-    raise ValueError('sizeof(c_void_p): %s' % (sizeof(c_void_p),))
+    raise ValueError('sizeof(c_void_p): %s' % (z,))
+del z
 
 __i386__ = machine() == 'i386'  # PYCHOK expected
 __LP64__ = c_ptrdiff_t is c_int64   # 64-bits
@@ -172,13 +174,13 @@ Array_t = c_void_p  # ObjC array type.
 
 
 class Block_t(ObjC_t):
-    '''ObjC block type.
+    '''ObjC C{block} type.
     '''
     pass
 
 
 class BOOL_t(c_bool):
-    '''ObjC boolean type.
+    '''ObjC C{boolean} type.
     '''
     pass
 
@@ -188,7 +190,7 @@ Dictionary_t = c_void_p
 
 
 class Id_t(ObjC_t):
-    '''ObjC id/self type, end=coding b'@'.
+    '''ObjC C{Id/self} type, encoding b'@'.
     '''
     pass
 
@@ -196,25 +198,25 @@ class Id_t(ObjC_t):
 
 
 class Class_t(Id_t):  # ObjC_t
-    '''ObjC class type, encoding b'#'.
+    '''ObjC C{class} type, encoding b'#'.
     '''
     pass
 
 
 class IMP_t(ObjC_t):
-    '''ObjC implementation type.
+    '''ObjC C{IMPlementation} type.
     '''
     pass
 
 
 class Ivar_t(ObjC_t):
-    '''ObjC instance variable type.
+    '''ObjC C{instance variable} type.
     '''
     pass
 
 
 class Method_t(ObjC_t):
-    '''ObjC method type.
+    '''ObjC C{method} type.
     '''
     pass
 
@@ -224,19 +226,19 @@ NumberType_t = c_ulong  # c_uint32
 
 
 class Union_t(Id_t):  # XXX or ObjC_t?
-    '''ObjC union type.
+    '''ObjC C{union} type.
     '''
     pass
 
 
 class Protocol_t(Id_t):
-    '''ObjC protocol type.
+    '''ObjC C{protocol} type.
     '''
     pass
 
 
 class SEL_t(ObjC_t):
-    '''ObjC selector/cmd type, encoding b':'.
+    '''ObjC C{SELector/cmd} type, encoding C{b':'}.
     '''
     _name = None
 #   def __new__(cls, name=None):
@@ -264,7 +266,7 @@ String_t = c_void_p  # ObjC string type.
 
 
 class Struct_t(ObjC_t):
-    '''ObjC struct type.
+    '''ObjC C{struct} type.
     '''
     pass
 
@@ -292,7 +294,7 @@ class UnknownPtr_t(ObjC_t):
 
 
 class VoidPtr_t(ObjC_t):
-    '''Same as, but distinguishable from C{c_void_p}.
+    '''Same as C{c_void_p}, but distinguishable from C{c_void_p}.
     '''
     pass
 
@@ -300,25 +302,25 @@ class VoidPtr_t(ObjC_t):
 # <http://StackOverflow.com/questions/41502199/
 #  how-to-decipher-objc-method-description-from-protocol-method-description-list>
 class objc_method_description_t(c_struct_t):
-    '''ObjC struct with .name and .types.
+    '''ObjC C{struct} with C{.name} and C{.types} (C{SEL_t}, C{c_char_p}).
     '''
     _fields_ = ('name', SEL_t), ('types', c_char_p)
 
 
 class objc_property_t(ObjC_t):
-    '''ObjC property Class.
+    '''ObjC C{property} Class.
     '''
     pass
 
 
 class objc_property_attribute_t(c_struct_t):
-    '''ObjC struct with .name and .value.
+    '''ObjC C{struct} with C{.name} and C{.value} (both C{c_char_p}).
     '''
     _fields_ = ('name', c_char_p), ('value', c_char_p)
 
 
 class objc_super_t(c_struct_t):
-    '''ObjC struct with .receiver and .class.
+    '''ObjC C{struct} with C{.receiver} and C{.class} (C{Id_t}, C{Class_t}).
     '''
     _fields_ = ('receiver', Id_t), ('super_class', Class_t)
 
@@ -329,42 +331,42 @@ NSFloat_t  = c_float   # always 32-bit float
 
 # NSRange.h
 class NSRange_t(c_struct_t):  # !+ CGRange_t!!!
-    '''ObjC struct with .loc[ation] and .len[gth] (NSUInteger-s).
+    '''ObjC C{struct} with C{.loc[ation]} and C{.len[gth]} (both C{NSUInteger}).
     '''
     _fields_ = ('location', NSUInteger_t), ('length', NSUInteger_t)
 
 
 # from /System/Library/Frameworks/Foundation.framework/Headers/NSGeometry.h
 class NSPoint_t(c_struct_t):  # == CGPoint_t
-    '''ObjC struct with .x and .y.
+    '''ObjC C{struct} with C{.x} and C{.y.} (both C{CGFloat})
     '''
     _fields_ = ('x', CGFloat_t), ('y', CGFloat_t)
 
 
 # from /System/Library/Frameworks/Foundation.framework/Headers/NSGeometry.h
 class NSSize_t(c_struct_t):  # == CGSize_t
-    '''ObjC struct with .width and .height.
+    '''ObjC C{struct} with C{.width} and C{.height}.
     '''
     _fields_ = ('width', CGFloat_t), ('height', CGFloat_t)
 
 
 class NSRect_t(c_struct_t):  # == CGRect_t
-    '''ObjC struct with .origin and .size.
+    '''ObjC C{struct} with C{.origin} and C{.size}.
     '''
     _fields_ = ('origin', NSPoint_t), ('size', NSSize_t)
 
 
 class NSRect4_t(NSRect_t):
-    '''Class NSRect_t with different signature and properties.
+    '''ObjC C{struct}, like L{NSRect_t} with different signature and properties.
     '''
     def __init__(self, x=0, y=0, width=0, height=0):
         if width < 0:
-            x += width
             width = -width
+            x -= width
 
         if height < 0:
-            y += height
             height = -height
+            y -= height
 
         super(NSRect4_t, self).__init__(NSPoint_t(x, y), NSSize_t(width, height))
 
@@ -377,34 +379,50 @@ class NSRect4_t(NSRect_t):
 
     @property
     def bottom(self):
+        '''Get the bottom y coordinate (float).
+        '''
         return self.y
 
     @property
-    def left(self):
-        return self.x
-
-    @property
     def height(self):
+        '''Get the height (float).
+        '''
         return self.size.height
 
     @property
+    def left(self):
+        '''Get the lower x coordinate (float).
+        '''
+        return self.x
+
+    @property
     def right(self):
+        '''Get the upper x coordinate (float).
+        '''
         return self.x + self.width
 
     @property
     def top(self):
+        '''Get the upper y coordinate (float).
+        '''
         return self.y + self.heigth
 
     @property
     def width(self):
+        '''Get the width (float).
+        '''
         return self.size.width
 
     @property
     def x(self):
+        '''Get the x coordinate (float).
+        '''
         return self.origin.x
 
     @property
     def y(self):
+        '''Get the y coordinate (float).
+        '''
         return self.origin.y
 
 
@@ -422,7 +440,7 @@ CTFontSymbolicTraits_t = c_uint32  # CTFontTraits.h
 
 # CF/Range struct defined in CFBase.h
 class CGRange_t(c_struct_t):
-    '''ObjC struct with .location and .length (CF/Index-s).
+    '''ObjC C{struct} with I{.location} and I{.length} (CF/Index-s).
     '''
     _fields_ = ('location', CGIndex_t), ('length', CGIndex_t)
 
@@ -466,6 +484,11 @@ if sizeof(c_ulonglong) != sizeof(c_ulong):
 
 def ctype2encoding(ctype, dflt=b'?'):
     '''Return the type encoding for a given C{ctypes} type.
+
+       @param ctype: The type (C{ctypes}).
+       @keyword dflt: Default encoding (bytes).
+
+       @return: The type encoding (bytes).
     '''
     return _ctype2encoding.get(ctype, dflt)
 
@@ -520,7 +543,15 @@ _emcoding2ctype = {b'Vv': c_void,
 
 def emcoding2ctype(code, dflt=missing, name='type'):
     '''Return the C{ctypes} type for a single ObjC type encoding
-    for a I{method} result or I{method} argument.
+       code for a I{method} result or I{method} argument.
+
+       @param code: The type encoding (bytes).
+       @keyword dflt: Default result (C{ctype}).
+       @keyword name: Name of the method (str).
+
+       @return: The C{ctype} (C{ctypes}).
+
+       @raise TypeCodeError: Invalid or unbalanced I{code}.
     '''
     try:
         return _emcoding2ctype[code]
@@ -530,7 +561,15 @@ def emcoding2ctype(code, dflt=missing, name='type'):
 
 
 def encoding2ctype(code, dflt=missing, name='type'):  # MCCABE 20
-    '''Return the C{ctypes} type for a single ObjC type encoding.
+    '''Return the C{ctypes} type for a single ObjC type encoding code.
+
+       @param code: The type encoding (bytes).
+       @keyword dflt: Default encoding (C{ctype}).
+       @keyword name: Name of the type (str).
+
+       @return: The C{ctype} (C{ctypes}).
+
+       @raise TypeCodeError: Invalid or unbalanced I{code}.
     '''
     try:
         return _encoding2ctype[code]
@@ -592,24 +631,25 @@ def encoding2ctype(code, dflt=missing, name='type'):  # MCCABE 20
 
 def split_emcoding2(encoding, start=0):
     '''Split the type encoding of a I{method} signature into
-    separate, single encodings and the combined encoding.
+       separate, single encodings and the combined encoding.
 
-    If necessary, the encoding is extended with the type encoding
-    for the hidden method arguments C{id/self} and C{SEL/cmd}.
+       If necessary, the encoding is extended with the type encoding
+       for the hidden method arguments C{Id/self} and C{SEL/cmd}.
 
-    Does not handle bitfields, arrays, structs, unions, etc. and
-    strips any offset, size or width specifiers from the encoding.
+       @note: Does not handle C{bitfield}s, C{array}s, C{struct}s,
+              C{union}s, etc. and strips any offset, size or width
+              specifiers from the encoding.
 
-    In the returned 2-tuple (I{codes, encoding}), I{codes} is
-    the list of individual type encodings from item I{start=0}
-    and I{encoding} the combined type encoding in C{bytes} and
-    both extended if needed.
+       @return: 2-Tuple (I{codes, encoding}), where I{codes} is the list
+                of individual type encodings from item I{start=0} and
+                I{encoding} is the combined type encoding in C{bytes},
+                both extended with C{Id/self} and C{SEL/cmd} iff needed.
 
-    Example:
+       @raise TypeCodeError: Invalid or unbalanced I{encoding}.
 
-    >>> split_emcoding2('v*')
-    >>> (['v', '@', ':', '*'], 'v@:*')
-
+       @example:
+       >>> split_emcoding2('v*')
+       >>> (['v', '@', ':', '*'], 'v@:*')
     '''
     codes = split_encoding(encoding)
     if codes[1:3] != [b'@', b':']:
@@ -633,62 +673,66 @@ _TYPECLOSERS = set(_TYPE2CLOSER.values())
 def split_encoding(encoding):  # MCCABE 18
     '''Split a type encoding into separate type encodings.
 
-    Does not handle bitfields, arrays, structs, unions, etc. and
-    strips any offset, size or width specifiers from the encoding.
+       Does not handle C{bitfield}s, C{array}s, C{struct}s, C{union}s,
+       etc. and strips any offset, size or width specifiers from the
+       encoding.
 
-    Examples:
+       @return: Individual encodings (C{list}).
 
-    >>> split_encoding('^v16@0:8')
-    >>> ['^v', '@', ':']
+       @raise TypeCodeError: Invalid or unbalanced I{encoding}.
 
-    >>> split_encoding('{CGSize=dd}40@0:8{PyObject=@}Q32')
-    >>> ['{CGSize=dd}', '@', ':', '{PyObject=@}', 'Q']
+       @example:
+       >>> split_encoding('^v16@0:8')
+       >>> ['^v', '@', ':']
 
-    Supported Type Encodings:
+       >>> split_encoding('{CGSize=dd}40@0:8{PyObject=@}Q32')
+       >>> ['{CGSize=dd}', '@', ':', '{PyObject=@}', 'Q']
 
-        - B = bool (C++ bool, C99 _Bool)
-        - c, C = char, unsigned char
-        - f, d = float, double
-        - i, I = int, unsigned int
-        - l, L = long, unsigned long (32-bit)
-        - q, Q = long long, unsigned long long
-        - s, S = short, unsigned short
-        - t, T = 128-bit int, unsigned int
-        - v = void
-        - * = string (char *)
-        - : = method selector (SEL/cmd)
-        - # = class
-        - #"name" = class "name"
-        - @ = object (instance, statically typed, typed id, etc.)
-        - @"name" = instance of class "name"
-        - ^type = pointer to type
-        - ? = unknown type (among other things, used for function pointers)
+       Supported Type Encodings:
 
-        - P = Python object (like PyObjectEncoding)
+           - B = bool (C++ bool, C99 _Bool)
+           - c, C = char, unsigned char
+           - f, d = float, double
+           - i, I = int, unsigned int
+           - l, L = long, unsigned long (32-bit)
+           - q, Q = long long, unsigned long long
+           - s, S = short, unsigned short
+           - t, T = 128-bit int, unsigned int
+           - v = void
+           - * = string (char *)
+           - : = method selector (SEL/cmd)
+           - # = class
+           - #"name" = class "name"
+           - @ = object (instance, statically typed, typed id, etc.)
+           - @"name" = instance of class "name"
+           - ^type = pointer to type
+           - ? = unknown type (among other things, used for function pointers)
+           - P = Python object (shorthand for C{PyObjectEncoding})
 
-    Unsupported Type Encodings:
+       Unsupported Type Encodings:
 
-        - bW = bitfield of width W
-        - [Ltype] = array of L items of type
-        - E{lb}name=type...E{rb} = structure
-        - (name=type...) = union
-        - <...> = block
+           - bW = bitfield of width W
+           - [Ltype] = array of L items of type
+           - E{lb}name=type...E{rb} = structure
+           - (name=type...) = union
+           - <...> = block
 
-    For ObjC internal use only:
+       For ObjC internal use only:
 
-        - n, N = in, inout
-        - o, O = out, bycopy
-        - r, R = const, byref
-        - V = oneway
+           - n, N = in, inout
+           - o, O = out, bycopy
+           - r, R = const, byref
+           - V = oneway
 
-    Type encodings may be preceeded by a C{"name"}, for example a bitfield
-    C{"name"b1}, structure items C{E{lb}CGsize="width"d"heigth"dE{rb}},
-    union items, etc. and all such C{"name"} prefixes are ignored.  See
-    also U{Type Encodings<http://Developer.Apple.com/library/content/
-    documentation/Cocoa/Conceptual/ObjCRuntimeGuide/Articles/ocrtTypeEncodings.html>},
-    U{NSHipster Type Encodings<http://NSHipster.com/type-encodings/>} and
-    U{Digits in type encoding<http://StackOverflow.com/questions/11527385/
-    how-are-the-digits-in-objc-method-type-encoding-calculated/>}.
+       @note: Type encodings may be preceeded by C{"name"}, for example a
+              C{bitfield} C{"name"b1}, C{struct} items C{E{lb}CGsize="width"d"heigth"dE{rb}},
+              C{union} items, etc. and all such C{"name"} prefixes are ignored.
+
+       @see: Also U{Type Encodings<http://Developer.Apple.com/library/content/
+             documentation/Cocoa/Conceptual/ObjCRuntimeGuide/Articles/ocrtTypeEncodings.html>},
+             U{NSHipster Type Encodings<http://NSHipster.com/type-encodings/>} and
+             U{Digits in type encoding<http://StackOverflow.com/questions/11527385/
+             how-are-the-digits-in-objc-method-type-encoding-calculated/>}.
     '''
     code   = []
     codes  = []

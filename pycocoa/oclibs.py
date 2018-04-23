@@ -60,6 +60,8 @@
 # Several Objective-C/C header files are also available at
 # <http://GitHub.com/gnustep/libs-gui/tree/master/Headers>
 
+'''Various ObjC libraries, signatures, constants, etc.
+'''
 # all imports listed explicitly to help PyChecker
 from ctypes  import byref, cdll, c_byte, c_char, c_char_p, \
                     c_double, c_float, \
@@ -80,7 +82,7 @@ from octypes import Allocator_t, Array_t, BOOL_t, CGBitmapInfo_t, \
                     TypeRef_t, UniChar_t
 from utils   import _exports
 
-__version__ = '18.04.12'
+__version__ = '18.04.19'
 
 NO  = False
 YES = True

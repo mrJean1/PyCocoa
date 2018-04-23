@@ -60,6 +60,8 @@
 # Several Objective-C/C header files are also available at
 # <http://GitHub.com/gnustep/libs-gui/tree/master/Headers>
 
+'''ObjC classes C{NS...} and conversions from C{NS...} to Python and vice versa.
+'''
 # all imports listed explicitly to help PyChecker
 from decimal import Decimal as _Decimal
 from ctypes  import ArgumentError, byref, cast, c_buffer, c_byte, \
@@ -67,12 +69,12 @@ from ctypes  import ArgumentError, byref, cast, c_buffer, c_byte, \
 from getters import get_selector
 from oclibs  import cfNumber2bool, cfNumber2num, kCFStringEncodingUTF8, \
                     libCF, libFoundation, libobjc
-from octypes import Array_t, Class_t, Id_t, SEL_t, Set_t
+from octypes import Array_t, Class_t, c_struct_t, Id_t, ObjC_t, SEL_t, Set_t
 from runtime import isInstanceOf, ObjCClass, ObjCInstance, _Xargs
 from utils   import bytes2str, clip, DEFAULT_UNICODE, _exports, \
                     _Globals, instanceof, iterbytes, missing, str2bytes
 
-__version__ = '18.04.18'
+__version__ = '18.04.21'
 
 
 def _lambda(arg):
@@ -80,7 +82,7 @@ def _lambda(arg):
     return arg
 
 
-def _ns2ctype2Py(ns, ctype):
+def _ns2ctype2py(ns, ctype):
     # helper function
     if not isinstance(ns, ctype):
         ns = ctype(ns)
@@ -305,7 +307,7 @@ def nsArray2listuple(ns, ctype=Array_t):  # XXX an NS*Array method?
         t = tuple
     n = libCF.CFArrayGetCount(ns)
     f = libCF.CFArrayGetValueAtIndex
-    return t(_ns2ctype2Py(f(ns, i), ctype) for i in range(n))
+    return t(_ns2ctype2py(f(ns, i), ctype) for i in range(n))
 
 
 def nsBoolean2bool(ns, dflt=missing):  # XXX an NSBoolean method?
@@ -371,8 +373,8 @@ def nsDictionary2dict(ns, ctype_keys=c_void_p, ctype_vals=c_void_p):  # XXX an N
     keys = (ctype_keys * n)()
     vals = (ctype_vals * n)()
     libCF.CFDictionaryGetKeysAndValues(ns, byref(keys), byref(vals))
-    return dict((_ns2ctype2Py(keys[i], ctype_keys),
-                 _ns2ctype2Py(vals[i], ctype_vals)) for i in range(n))
+    return dict((_ns2ctype2py(keys[i], ctype_keys),
+                 _ns2ctype2py(vals[i], ctype_vals)) for i in range(n))
 
 
 def nsIter2(ns, reverse=False):
@@ -423,8 +425,8 @@ def nsOf(inst):
     '''
     try:
         return inst.NS
-    except AttributeError:
-        if isinstance(inst, ObjCInstance):
+    except AttributeError:  # see also .bases.NS.setter
+        if isinstance(inst, (ObjCInstance, c_struct_t, ObjC_t)):
             return inst  # XXXX ????
     raise TypeError('%s is non-NS: %r' % ('inst', inst))
 
@@ -440,7 +442,7 @@ def nsSet2set(ns, ctype=Set_t):  # XXX NS*Set method?
     n = libCF.CFSetGetCount(ns)  # == nsSet.count()
     buf = (ctype * n)()
     libCF.CFSetGetValues(ns, byref(buf))
-    return s(_ns2ctype2Py(buf[i], ctype) for i in range(n))
+    return s(_ns2ctype2py(buf[i], ctype) for i in range(n))
 
 
 def nsString2str(ns, dflt=None):  # XXX an NS*String method

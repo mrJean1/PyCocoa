@@ -23,22 +23,27 @@
 # ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
 # OTHER DEALINGS IN THE SOFTWARE.
 
+'''Types L{Table} and L{TableWindow}, wrapping ObjC C{NSTableView}, C{NSWindow}.
+'''
 # <http://stackoverflow.com/questions/15519296/pyobjc-crashes-by-using-nstableview>
 # <http://github.com/versluis/Mac-TableViewCode/tree/master/Mac%20TableViewCode>
-from bases   import _Type2
-from nstypes import NSNone, NSScrollView, NSStr, nsString2str, \
-                    NSTableColumn, NSTableView, NSTrue
-from oclibs  import NSTableViewSolidHorizontalGridLineMask, \
-                    NSTableViewSolidVerticalGridLineMask
-from octypes import NSSize_t
-from runtime import isInstanceOf, ObjCClass, ObjCInstance, \
-                    ObjCSubclass, send_super
-from utils   import _Globals, instanceof
-from windows import Frame4, Screen, Style, Window
+
+# all imports listed explicitly to help PyChecker
+from bases    import _Type2
+from geometry import Rect4
+from nstypes  import NSNone, NSScrollView, NSStr, nsString2str, \
+                     NSTableColumn, NSTableView, NSTrue
+from oclibs   import NSTableViewSolidHorizontalGridLineMask, \
+                     NSTableViewSolidVerticalGridLineMask
+from octypes  import NSSize_t
+from runtime  import isInstanceOf, ObjCClass, ObjCInstance, \
+                     ObjCSubclass, send_super
+from utils    import _Globals, instanceof
+from windows  import Screen, Style, Window
 
 __all__ = ('Table', 'TableWindow', 'TableDataDelegate',
            'closeTables')
-__version__ = '18.04.18'
+__version__ = '18.04.21'
 
 _EmptyCell = NSStr('-', auto=False)  # PYCHOK false
 _Separator = NSStr('',  auto=False)
@@ -54,13 +59,19 @@ def closeTables():
 
 
 class Table(_Type2):
-    '''A table display of rows and columns.
+    '''Python Type table of rows and columns, wrapping an ObjC C{NSTableView}.
     '''
     _headers = ()
     _rows    = []
     _window  = None
 
     def __init__(self, *headers):
+        '''New L{Table}.
+
+           @param headers: Column headers (str), either just the "title"
+                           or "title:width" to specify the column width
+                           (int or float).
+        '''
         self._headers = tuple(map(str, headers))
         self._rows    = []
 
@@ -83,12 +94,20 @@ class Table(_Type2):
 
     def display(self, title, width=600, height=400):
         '''Show the table in a scrollable window.
+
+           @param title: Window title (str).
+           @keyword width: Window frame width (float or int).
+           @keyword height: Window fram height (float or int).
+
+           @return: The window (L{TableWindow}).
+
+           @raise ValueError: Invalide header "title:width".
         '''
-        f = Frame4(0, 0, width, height)
+        f = Rect4(0, 0, width, height)
         self.NS = vuw = NSTableView.alloc().initWithFrame_(f.NS)
 
         cols = []
-        wide = width  # == view.frame().size.width
+        wide = f.width  # == vuw.frame().size.width
         # <http://developer.apple.com/documentation/appkit/nstablecolumn>
         for i, h in enumerate(self._headers):
             # note, the Identifier MUSt be an NSStr (to avoid warnings)
@@ -99,7 +118,11 @@ class Table(_Type2):
             t = h.split(':')  # split column title:width
             if len(t) == 2:
                 h, w = t
-                c.setWidth_(float(w))
+                try:
+                    w = float(w)
+                except (TypeError, ValueError):
+                    raise ValueError('%s invalid: %s' % ('header', ':'.join(t)))
+                c.setWidth_(w)
             c.setTitle_(NSStr(h))  # == c.headerCell().setStringValue_(NSStr(h))
             # c.sizeToFit()  # fits width of title, headerCell text!
             # <http://developer.apple.com/documentation/uikit/nstextalignment>
@@ -128,14 +151,16 @@ class Table(_Type2):
         return w
 
     def separator(self):
-        '''Append a row separator.
+        '''Append a row separator, an empty row.
         '''
         self._rows.append(_Separator)
 
 
 class _TableDataDelegate(object):
-    '''An ObjC Delegate class with an C{NSTableViewDataSource} protocol.
-       See the C{_AppDelegate} for more Delegate details.
+    '''An ObjC-callable I{Delegate} class, providing an ObjC
+       C{NSTableViewDataSource} protocol.
+
+       @see: The C{_AppDelegate} for more I{Delegate} details.
     '''
     # <http://developer.apple.com/documentation/appkit/nstableviewdatasource>
     _ObjC = ObjCSubclass('NSObject', '_TableDataDelegate')
@@ -185,11 +210,18 @@ TableDataDelegate = ObjCClass('_TableDataDelegate',  # the actual class
 
 
 class TableWindow(Window):
-    '''An ObjC Delegate class for vertically scrollable window.
+    '''Python Type for a vertically scrollable window, wrapping
+       ObjC C{NSWindow/NSScrollView}.
     '''
     _table = None
 
     def __init__(self, title='', table=None, frame=None):
+        '''New L{TableWindow}.
+
+           @keyword title: Window name or title (string).
+           @keyword table: Table data (L{Table}).
+           @keyword frame: Optional window frame (L{Rect}).
+        '''
         instanceof(table, Table, name='table')
         self._table = table
 
@@ -208,9 +240,10 @@ class TableWindow(Window):
             f.size = NSSize_t(f.size.width, h)
             tbl.setFrameSize_(f.size)
 
-        Window.__init__(self, title=title, frame=f,
+        super(TableWindow, self).__init__(title=title,
+                                          frame=f,
                                            excl=Style.Miniaturizable,
-                                           auto=True)
+                                           auto=True)  # XXX =False?
         self.NSview = vuw = NSScrollView.alloc().initWithFrame_(f)
 
         vuw.setDocumentView_(tbl)
@@ -229,13 +262,15 @@ class TableWindow(Window):
         return self._table
 
     def windowClose_(self):
+        '''Closing this window callback.
+        '''
         try:
             _Globals.Tables.remove(self)
         except ValueError:
             pass
         self._table = None
 #       self.close()
-        Window.windowClose_(self)  # super(Window, self)...
+        super(TableWindow, self).windowClose_()
 
 
 if __name__ == '__main__':

@@ -75,7 +75,8 @@
   href="http://PyPI.Python.org/pypi/epydoc" target="_top">Epydoc</a> using 
   command line: <code>epydoc --html --no-private --no-source --name=PyCocoa
   --url=... -v pycocoa</code>).</p>
-  <p>The example <i>simple_VLCplayer.py</i> requires installation of the <a
+  <p>The examples <i>macVLC.py</i> and <i>simple_VLCplayer.py</i> require 
+  installation of the <a 
   href="http://www.VideoLan.org/vlc/download-macosx.html" target="_top">VLC
   App</a> for <i>macOS</i> and the corresponding <a 
   href="http://PyPI.Python.org/pypi/python-vlc" 
@@ -164,7 +165,7 @@
 
 <hr />
 <div class="fields">      <p><strong>Version:</strong>
-        18.04.18
+        18.04.21
       </p>
 </div><!-- ==================== SUBMODULES ==================== -->
 <a name="section-Submodules"></a>
@@ -176,24 +177,63 @@
 </tr>
   <tr><td class="summary">
   <ul class="nomargin">
-    <li> <strong class="uidlink"><a href="pycocoa.apps-module.html">pycocoa.apps</a></strong>    </li>
-    <li> <strong class="uidlink"><a href="pycocoa.bases-module.html">pycocoa.bases</a></strong>    </li>
-    <li> <strong class="uidlink"><a href="pycocoa.dicts-module.html">pycocoa.dicts</a></strong>    </li>
-    <li> <strong class="uidlink"><a href="pycocoa.getters-module.html">pycocoa.getters</a></strong>    </li>
-    <li> <strong class="uidlink"><a href="pycocoa.lists-module.html">pycocoa.lists</a></strong>    </li>
-    <li> <strong class="uidlink"><a href="pycocoa.menus-module.html">pycocoa.menus</a></strong>    </li>
-    <li> <strong class="uidlink"><a href="pycocoa.nstypes-module.html">pycocoa.nstypes</a></strong>    </li>
-    <li> <strong class="uidlink"><a href="pycocoa.oclibs-module.html">pycocoa.oclibs</a></strong>    </li>
-    <li> <strong class="uidlink"><a href="pycocoa.octypes-module.html">pycocoa.octypes</a></strong>: <em class="summary">Module defining ObjC <i>..._t</i> types from standard 
-        <i>ctypes</i>.</em>    </li>
-    <li> <strong class="uidlink"><a href="pycocoa.panels-module.html">pycocoa.panels</a></strong>    </li>
-    <li> <strong class="uidlink"><a href="pycocoa.runtime-module.html">pycocoa.runtime</a></strong>    </li>
-    <li> <strong class="uidlink"><a href="pycocoa.sets-module.html">pycocoa.sets</a></strong>    </li>
-    <li> <strong class="uidlink"><a href="pycocoa.strs-module.html">pycocoa.strs</a></strong>    </li>
-    <li> <strong class="uidlink"><a href="pycocoa.tables-module.html">pycocoa.tables</a></strong>    </li>
-    <li> <strong class="uidlink"><a href="pycocoa.tuples-module.html">pycocoa.tuples</a></strong>    </li>
-    <li> <strong class="uidlink"><a href="pycocoa.utils-module.html">pycocoa.utils</a></strong>    </li>
-    <li> <strong class="uidlink"><a href="pycocoa.windows-module.html">pycocoa.windows</a></strong>    </li>
+    <li> <strong class="uidlink"><a href="pycocoa.apps-module.html">pycocoa.apps</a></strong>: <em class="summary">Types <a href="pycocoa.apps.App-class.html" class="link">App</a> 
+        and <a href="pycocoa.apps.Tile-class.html" class="link">Tile</a>, 
+        wrapping ObjC <code>NSApplication</code> and 
+        <code>NSDocktile</code>.</em>    </li>
+    <li> <strong class="uidlink"><a href="pycocoa.bases-module.html">pycocoa.bases</a></strong>: <em class="summary">(INTERNAL) Base classes for Python <code>Types</code>.</em>    </li>
+    <li> <strong class="uidlink"><a href="pycocoa.dicts-module.html">pycocoa.dicts</a></strong>: <em class="summary">Types <a href="pycocoa.dicts.FrozenDict-class.html" 
+        class="link">FrozenDict</a> and <a 
+        href="pycocoa.dicts.Dict-class.html" class="link">Dict</a>, 
+        wrapping ObjC <code>NS[Mutable]Dictionary</code>.</em>    </li>
+    <li> <strong class="uidlink"><a href="pycocoa.geometry-module.html">pycocoa.geometry</a></strong>: <em class="summary">Types <a href="pycocoa.geometry.Point-class.html" 
+        class="link">Point</a>, <a href="pycocoa.geometry.Rect-class.html" 
+        class="link">Rect</a> and <a 
+        href="pycocoa.geometry.Size-class.html" class="link">Size</a>, 
+        wrapping ObjC <code>NSPoint_t</code>, <code>NSRect_t</code>, 
+        <code>NSSize_t</code>.</em>    </li>
+    <li> <strong class="uidlink"><a href="pycocoa.getters-module.html">pycocoa.getters</a></strong>: <em class="summary"><code>get_...</code> functions for obtaining ObjC classes, methods,
+        protocols, etc.</em>    </li>
+    <li> <strong class="uidlink"><a href="pycocoa.lists-module.html">pycocoa.lists</a></strong>: <em class="summary">Type <a href="pycocoa.lists.List-class.html" class="link">List</a>,
+        wrapping ObjC <code>NSMutableArray</code>.</em>    </li>
+    <li> <strong class="uidlink"><a href="pycocoa.menus-module.html">pycocoa.menus</a></strong>: <em class="summary">Types <a href="pycocoa.menus.Item-class.html" 
+        class="link">Item</a>, <a href="pycocoa.menus.Menu-class.html" 
+        class="link">Menu</a>, <a href="pycocoa.menus.MenuBar-class.html" 
+        class="link">MenuBar</a> and <a 
+        href="pycocoa.menus.Separator-class.html" 
+        class="link">Separator</a>, wrapping ObjC <code>NSMenuItem</code> 
+        and <code>Menu</code>.</em>    </li>
+    <li> <strong class="uidlink"><a href="pycocoa.nstypes-module.html">pycocoa.nstypes</a></strong>: <em class="summary">ObjC classes <code>NS...</code> and conversions from 
+        <code>NS...</code> to Python and vice versa.</em>    </li>
+    <li> <strong class="uidlink"><a href="pycocoa.oclibs-module.html">pycocoa.oclibs</a></strong>: <em class="summary">Various ObjC libraries, signatures, constants, etc.</em>    </li>
+    <li> <strong class="uidlink"><a href="pycocoa.octypes-module.html">pycocoa.octypes</a></strong>: <em class="summary">ObjC <code>..._t</code> type definitions and some additional 
+        <code>ctypes</code>.</em>    </li>
+    <li> <strong class="uidlink"><a href="pycocoa.panels-module.html">pycocoa.panels</a></strong>: <em class="summary">Type <a href="pycocoa.panels.OpenPanel-class.html" 
+        class="link">OpenPanel</a>, wrapping ObjC <code>NSOpenPanel</code>.</em>    </li>
+    <li> <strong class="uidlink"><a href="pycocoa.runtime-module.html">pycocoa.runtime</a></strong>: <em class="summary">Classes <code>ObjCClass</code>, <code>ObjCInstance</code>, 
+        <code>ObjCMethod</code>, <code>ObjCSubclass</code>, etc.</em>    </li>
+    <li> <strong class="uidlink"><a href="pycocoa.sets-module.html">pycocoa.sets</a></strong>: <em class="summary">Types <a href="pycocoa.sets.FrozenSet-class.html" 
+        class="link">FrozenSet</a> and <a 
+        href="pycocoa.sets.Set-class.html" class="link">Set</a>, wrapping 
+        ObjC <code>NS[Mutable]Set</code>.</em>    </li>
+    <li> <strong class="uidlink"><a href="pycocoa.strs-module.html">pycocoa.strs</a></strong>: <em class="summary">Type <a href="pycocoa.strs.Str-class.html" class="link">Str</a>, 
+        wrapping ObjC <code>NSStr[ing]</code>.</em>    </li>
+    <li> <strong class="uidlink"><a href="pycocoa.tables-module.html">pycocoa.tables</a></strong>: <em class="summary">Types <a href="pycocoa.tables.Table-class.html" 
+        class="link">Table</a> and <a 
+        href="pycocoa.tables.TableWindow-class.html" 
+        class="link">TableWindow</a>, wrapping ObjC 
+        <code>NSTableView</code>, <code>NSWindow</code>.</em>    </li>
+    <li> <strong class="uidlink"><a href="pycocoa.tuples-module.html">pycocoa.tuples</a></strong>: <em class="summary">Type <a href="pycocoa.tuples.Tuple-class.html" 
+        class="link">Tuple</a>, wrapping (immutable) ObjC 
+        <code>NSArray</code>.</em>    </li>
+    <li> <strong class="uidlink"><a href="pycocoa.utils-module.html">pycocoa.utils</a></strong>: <em class="summary">(INTERNAL) Utility functions, constants, etc.</em>    </li>
+    <li> <strong class="uidlink"><a href="pycocoa.windows-module.html">pycocoa.windows</a></strong>: <em class="summary">Types <a href="pycocoa.windows.Window-class.html" 
+        class="link">Window</a>, <a 
+        href="pycocoa.windows.MediaWindow-class.html" 
+        class="link">MediaWindow</a>, <a 
+        href="pycocoa.windows.Screen-class.html" class="link">Screen</a>, 
+        <a href="pycocoa.windows.Style-class.html" class="link">Style</a>, 
+        wrapping ObjC <code>NSWindow</code>, etc.</em>    </li>
   </ul></td></tr>
 </table>
 
@@ -219,7 +259,8 @@
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
         <a href="pycocoa.apps.App-class.html" class="summary-name">App</a><br />
-      The basic App class.
+      Application Python Type, wrapping an ObjC 
+        <code>NSApplication</code>.
     </td>
   </tr>
 <tr>
@@ -234,7 +275,7 @@
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
         <a href="pycocoa.octypes.BOOL_t-class.html" class="summary-name">BOOL_t</a><br />
-      ObjC boolean type.
+      ObjC <code>boolean</code> type.
     </td>
   </tr>
 <tr>
@@ -242,7 +283,7 @@
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
         <a href="pycocoa.octypes.Block_t-class.html" class="summary-name">Block_t</a><br />
-      ObjC block type.
+      ObjC <code>block</code> type.
     </td>
   </tr>
 <tr>
@@ -308,7 +349,8 @@
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
         <a href="pycocoa.octypes.NSPoint_t-class.html" class="summary-name">CGPoint_t</a><br />
-      ObjC struct with .x and .y.
+      ObjC <code>struct</code> with <code>.x</code> and <code>.y.</code> 
+        (both <code>CGFloat</code>)
     </td>
   </tr>
 <tr>
@@ -316,7 +358,8 @@
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
         <a href="pycocoa.octypes.CGRange_t-class.html" class="summary-name">CGRange_t</a><br />
-      ObjC struct with .location and .length (CF/Index-s).
+      ObjC <code>struct</code> with <i>.location</i> and <i>.length</i> 
+        (CF/Index-s).
     </td>
   </tr>
 <tr>
@@ -324,7 +367,8 @@
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
         <a href="pycocoa.octypes.NSRect_t-class.html" class="summary-name">CGRect_t</a><br />
-      ObjC struct with .origin and .size.
+      ObjC <code>struct</code> with <code>.origin</code> and 
+        <code>.size</code>.
     </td>
   </tr>
 <tr>
@@ -332,7 +376,8 @@
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
         <a href="pycocoa.octypes.NSSize_t-class.html" class="summary-name">CGSize_t</a><br />
-      ObjC struct with .width and .height.
+      ObjC <code>struct</code> with <code>.width</code> and 
+        <code>.height</code>.
     </td>
   </tr>
 <tr>
@@ -354,7 +399,7 @@
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
         <a href="pycocoa.octypes.Class_t-class.html" class="summary-name">Class_t</a><br />
-      ObjC class type, encoding b'#'.
+      ObjC <code>class</code> type, encoding b'#'.
     </td>
   </tr>
 <tr>
@@ -369,7 +414,8 @@
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
         <a href="pycocoa.dicts.Dict-class.html" class="summary-name">Dict</a><br />
-      Python Type equivalent of a mutable ObjC NSMutableDictionary.
+      Python <code>dict</code> Type, wrapping an ObjC 
+        <code>NSMutableDictionary</code>.
     </td>
   </tr>
 <tr>
@@ -383,24 +429,9 @@
     <td width="15%" align="right" valign="top" class="summary">
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
-        <a href="pycocoa.windows.Frame-class.html" class="summary-name">Frame</a><br />
-      Frame class, signature like <code>NSRect_t</code>.
-    </td>
-  </tr>
-<tr>
-    <td width="15%" align="right" valign="top" class="summary">
-      <span class="summary-type">&nbsp;</span>
-    </td><td class="summary">
-        <a href="pycocoa.windows.Frame4-class.html" class="summary-name">Frame4</a><br />
-      Frame class, signature like <code>NSRect4_t</code>.
-    </td>
-  </tr>
-<tr>
-    <td width="15%" align="right" valign="top" class="summary">
-      <span class="summary-type">&nbsp;</span>
-    </td><td class="summary">
         <a href="pycocoa.dicts.FrozenDict-class.html" class="summary-name">FrozenDict</a><br />
-      Python Type equivalent of an (immutable) ObjC NSDictionary.
+      Python <code>dit</code> Type, wrapping an (immutable) ObjC 
+        <code>NSDictionary</code>.
     </td>
   </tr>
 <tr>
@@ -408,7 +439,8 @@
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
         <a href="pycocoa.sets.FrozenSet-class.html" class="summary-name">FrozenSet</a><br />
-      Python Type equivalent of an immutable ObjC NSSet.
+      Python <code>frozenset</code> Type, wrapping an immutable ObjC 
+        <code>NSSet</code>.
     </td>
   </tr>
 <tr>
@@ -416,7 +448,7 @@
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
         <a href="pycocoa.octypes.IMP_t-class.html" class="summary-name">IMP_t</a><br />
-      ObjC implementation type.
+      ObjC <code>IMPlementation</code> type.
     </td>
   </tr>
 <tr>
@@ -424,7 +456,7 @@
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
         <a href="pycocoa.octypes.Id_t-class.html" class="summary-name">Id_t</a><br />
-      ObjC id/self type, end=coding b'@'.
+      ObjC <code>Id/self</code> type, encoding b'@'.
     </td>
   </tr>
 <tr>
@@ -432,7 +464,7 @@
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
         <a href="pycocoa.menus.Item-class.html" class="summary-name">Item</a><br />
-      Menu item class.
+      Menu item Python Type, wrapping ObjC <code>NSMenuItem</code>.
     </td>
   </tr>
 <tr>
@@ -440,7 +472,7 @@
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
         <a href="pycocoa.octypes.Ivar_t-class.html" class="summary-name">Ivar_t</a><br />
-      ObjC instance variable type.
+      ObjC <code>instance variable</code> type.
     </td>
   </tr>
 <tr>
@@ -448,7 +480,8 @@
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
         <a href="pycocoa.lists.List-class.html" class="summary-name">List</a><br />
-      Python Type equivalent of of an ObjC NSMutableArray.
+      Python <code>list</code> Type, wrapping an ObjC 
+        <code>NSMutableArray</code>.
     </td>
   </tr>
 <tr>
@@ -456,7 +489,8 @@
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
         <a href="pycocoa.windows.MediaWindow-class.html" class="summary-name">MediaWindow</a><br />
-      Media window class.
+      Media window Python Type, wrapping ObjC 
+        <code>NSWindow/NSView</code>.
     </td>
   </tr>
 <tr>
@@ -464,7 +498,7 @@
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
         <a href="pycocoa.menus.Menu-class.html" class="summary-name">Menu</a><br />
-      New menu, item and separator.
+      Menu Python Type, wrapping ObjC <code>NSMenu</code>.
     </td>
   </tr>
 <tr>
@@ -472,7 +506,7 @@
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
         <a href="pycocoa.menus.MenuBar-class.html" class="summary-name">MenuBar</a><br />
-      New menu bar of sub-menus.
+      Menu bar Python Type, wrapping ObjC <code>NSMenu</code>.
     </td>
   </tr>
 <tr>
@@ -480,7 +514,7 @@
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
         <a href="pycocoa.octypes.Method_t-class.html" class="summary-name">Method_t</a><br />
-      ObjC method type.
+      ObjC <code>method</code> type.
     </td>
   </tr>
 <tr>
@@ -517,7 +551,8 @@
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
         <a href="pycocoa.octypes.NSPoint_t-class.html" class="summary-name">NSMakePoint</a><br />
-      ObjC struct with .x and .y.
+      ObjC <code>struct</code> with <code>.x</code> and <code>.y.</code> 
+        (both <code>CGFloat</code>)
     </td>
   </tr>
 <tr>
@@ -525,7 +560,8 @@
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
         <a href="pycocoa.octypes.NSRange_t-class.html" class="summary-name">NSMakeRange</a><br />
-      ObjC struct with .loc[ation] and .len[gth] (NSUInteger-s).
+      ObjC <code>struct</code> with <code>.loc[ation]</code> and 
+        <code>.len[gth]</code> (both <code>NSUInteger</code>).
     </td>
   </tr>
 <tr>
@@ -533,7 +569,9 @@
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
         <a href="pycocoa.octypes.NSRect4_t-class.html" class="summary-name">NSMakeRect</a><br />
-      Class NSRect_t with different signature and properties.
+      ObjC <code>struct</code>, like <a 
+        href="pycocoa.octypes.NSRect_t-class.html" 
+        class="link">NSRect_t</a> with different signature and properties.
     </td>
   </tr>
 <tr>
@@ -541,7 +579,8 @@
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
         <a href="pycocoa.octypes.NSSize_t-class.html" class="summary-name">NSMakeSize</a><br />
-      ObjC struct with .width and .height.
+      ObjC <code>struct</code> with <code>.width</code> and 
+        <code>.height</code>.
     </td>
   </tr>
 <tr>
@@ -549,7 +588,8 @@
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
         <a href="pycocoa.octypes.NSPoint_t-class.html" class="summary-name">NSPoint_t</a><br />
-      ObjC struct with .x and .y.
+      ObjC <code>struct</code> with <code>.x</code> and <code>.y.</code> 
+        (both <code>CGFloat</code>)
     </td>
   </tr>
 <tr>
@@ -557,7 +597,8 @@
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
         <a href="pycocoa.octypes.NSRange_t-class.html" class="summary-name">NSRange_t</a><br />
-      ObjC struct with .loc[ation] and .len[gth] (NSUInteger-s).
+      ObjC <code>struct</code> with <code>.loc[ation]</code> and 
+        <code>.len[gth]</code> (both <code>NSUInteger</code>).
     </td>
   </tr>
 <tr>
@@ -565,7 +606,9 @@
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
         <a href="pycocoa.octypes.NSRect4_t-class.html" class="summary-name">NSRect4_t</a><br />
-      Class NSRect_t with different signature and properties.
+      ObjC <code>struct</code>, like <a 
+        href="pycocoa.octypes.NSRect_t-class.html" 
+        class="link">NSRect_t</a> with different signature and properties.
     </td>
   </tr>
 <tr>
@@ -573,7 +616,8 @@
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
         <a href="pycocoa.octypes.NSRect_t-class.html" class="summary-name">NSRect_t</a><br />
-      ObjC struct with .origin and .size.
+      ObjC <code>struct</code> with <code>.origin</code> and 
+        <code>.size</code>.
     </td>
   </tr>
 <tr>
@@ -581,7 +625,8 @@
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
         <a href="pycocoa.octypes.NSSize_t-class.html" class="summary-name">NSSize_t</a><br />
-      ObjC struct with .width and .height.
+      ObjC <code>struct</code> with <code>.width</code> and 
+        <code>.height</code>.
     </td>
   </tr>
 <tr>
@@ -701,7 +746,26 @@
     <td width="15%" align="right" valign="top" class="summary">
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
-        <a href="pycocoa.panels.OpenPanel-class.html" class="summary-name">OpenPanel</a>
+        <a href="pycocoa.panels.OpenPanel-class.html" class="summary-name">OpenPanel</a><br />
+      Python Type to select a file, wrapping ObjC 
+        <code>NSOpenPanel</code>.
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="pycocoa.geometry.Point-class.html" class="summary-name">Point</a><br />
+      Python Type, wrapping an ObjC <code>NSPoint_t</code>.
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="pycocoa.geometry.Point2-class.html" class="summary-name">Point2</a><br />
+      Python Type, like <a href="pycocoa.geometry.Point-class.html" 
+        class="link">Point</a>, different signature.
     </td>
   </tr>
 <tr>
@@ -709,7 +773,25 @@
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
         <a href="pycocoa.octypes.Protocol_t-class.html" class="summary-name">Protocol_t</a><br />
-      ObjC protocol type.
+      ObjC <code>protocol</code> type.
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="pycocoa.geometry.Rect-class.html" class="summary-name">Rect</a><br />
+      Python Type, wrapping an ObjC <code>NSRect_t</code>.
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="pycocoa.geometry.Rect4-class.html" class="summary-name">Rect4</a><br />
+      Python Type, like <a href="pycocoa.geometry.Rect-class.html" 
+        class="link">Rect</a>, but signature as ObjC 
+        <code>NSRect4_t</code>.
     </td>
   </tr>
 <tr>
@@ -717,7 +799,7 @@
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
         <a href="pycocoa.octypes.SEL_t-class.html" class="summary-name">SEL_t</a><br />
-      ObjC selector/cmd type, encoding b':'.
+      ObjC <code>SELector/cmd</code> type, encoding <code>b':'</code>.
     </td>
   </tr>
 <tr>
@@ -725,7 +807,7 @@
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
         <a href="pycocoa.windows.Screen-class.html" class="summary-name">Screen</a><br />
-      Screen frame class.
+      Screen Python Type, wrapping ObjC <code>NSRect_t</code>.
     </td>
   </tr>
 <tr>
@@ -733,7 +815,8 @@
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
         <a href="pycocoa.menus.Separator-class.html" class="summary-name">Separator</a><br />
-      Menu items separator class.
+      Menu items separator Python Type, wrapping ObjC 
+        <code>NSMenuItem</code>.
     </td>
   </tr>
 <tr>
@@ -741,7 +824,7 @@
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
         <a href="pycocoa.sets.Set-class.html" class="summary-name">Set</a><br />
-      Python Type equivalent of a mutable ObjC NSSet.
+      Python c{Set} Type, wrapping an ObjC <code>NSMutableSet</code>.
     </td>
   </tr>
 <tr>
@@ -755,8 +838,26 @@
     <td width="15%" align="right" valign="top" class="summary">
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
+        <a href="pycocoa.geometry.Size-class.html" class="summary-name">Size</a><br />
+      Python Type, wrapping an ObjC <code>NSSize_t</code>.
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="pycocoa.geometry.Size2-class.html" class="summary-name">Size2</a><br />
+      Python Type, like <a href="pycocoa.geometry.Size-class.html" 
+        class="link">Size</a>, different signature.
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
         <a href="pycocoa.strs.Str-class.html" class="summary-name">Str</a><br />
-      Python Type equivalent of an (immutable) ObjC NSStr[ing].
+      Python <code>str</code> Type, wrapping (immutable) ObjC 
+        <code>NSStr[ing]</code>.
     </td>
   </tr>
 <tr>
@@ -771,7 +872,7 @@
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
         <a href="pycocoa.octypes.Struct_t-class.html" class="summary-name">Struct_t</a><br />
-      ObjC struct type.
+      ObjC <code>struct</code> type.
     </td>
   </tr>
 <tr>
@@ -779,7 +880,7 @@
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
         <a href="pycocoa.windows.Style-class.html" class="summary-name">Style</a><br />
-      Window style masks.
+      Window style mask constants.
     </td>
   </tr>
 <tr>
@@ -787,7 +888,8 @@
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
         <a href="pycocoa.tables.Table-class.html" class="summary-name">Table</a><br />
-      A table display of rows and columns.
+      Python Type table of rows and columns, wrapping an ObjC 
+        <code>NSTableView</code>.
     </td>
   </tr>
 <tr>
@@ -795,7 +897,8 @@
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
         <a href="pycocoa.tables.TableWindow-class.html" class="summary-name">TableWindow</a><br />
-      An ObjC Delegate class for vertically scrollable window.
+      Python Type for a vertically scrollable window, wrapping ObjC 
+        <code>NSWindow/NSScrollView</code>.
     </td>
   </tr>
 <tr>
@@ -804,7 +907,7 @@
     </td><td class="summary">
         <a href="pycocoa.apps.Tile-class.html" class="summary-name">Tile</a><br />
       The dock tile for an <a href="pycocoa.apps.App-class.html" 
-        class="link">App</a>.
+        class="link">App</a>, wrapping an ObjC <code>NSDockTile</code>.
     </td>
   </tr>
 <tr>
@@ -812,7 +915,8 @@
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
         <a href="pycocoa.tuples.Tuple-class.html" class="summary-name">Tuple</a><br />
-      Python Type equivalent of an immutable ObjC NSArray.
+      Python <code>tuple</code> Type, wrapping an immutable ObjC 
+        <code>NSArray</code>.
     </td>
   </tr>
 <tr>
@@ -850,7 +954,7 @@
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
         <a href="pycocoa.octypes.Union_t-class.html" class="summary-name">Union_t</a><br />
-      ObjC union type.
+      ObjC <code>union</code> type.
     </td>
   </tr>
 <tr>
@@ -874,7 +978,8 @@
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
         <a href="pycocoa.octypes.VoidPtr_t-class.html" class="summary-name">VoidPtr_t</a><br />
-      Same as, but distinguishable from <code>c_void_p</code>.
+      Same as <code>c_void_p</code>, but distinguishable from 
+        <code>c_void_p</code>.
     </td>
   </tr>
 <tr>
@@ -882,7 +987,8 @@
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
         <a href="pycocoa.windows.Window-class.html" class="summary-name">Window</a><br />
-      Basic, base window class.
+      Basic, base window Python Type, wrapping ObjC 
+        <code>NSWindow</code>.
     </td>
   </tr>
 <tr>
@@ -899,7 +1005,8 @@
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
         <a href="pycocoa.octypes.objc_method_description_t-class.html" class="summary-name">objc_method_description_t</a><br />
-      ObjC struct with .name and .types.
+      ObjC <code>struct</code> with <code>.name</code> and 
+        <code>.types</code> (<code>SEL_t</code>, <code>c_char_p</code>).
     </td>
   </tr>
 <tr>
@@ -907,7 +1014,8 @@
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
         <a href="pycocoa.octypes.objc_property_attribute_t-class.html" class="summary-name">objc_property_attribute_t</a><br />
-      ObjC struct with .name and .value.
+      ObjC <code>struct</code> with <code>.name</code> and 
+        <code>.value</code> (both <code>c_char_p</code>).
     </td>
   </tr>
 <tr>
@@ -915,7 +1023,7 @@
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
         <a href="pycocoa.octypes.objc_property_t-class.html" class="summary-name">objc_property_t</a><br />
-      ObjC property Class.
+      ObjC <code>property</code> Class.
     </td>
   </tr>
 <tr>
@@ -923,7 +1031,8 @@
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
         <a href="pycocoa.octypes.objc_super_t-class.html" class="summary-name">objc_super_t</a><br />
-      ObjC struct with .receiver and .class.
+      ObjC <code>struct</code> with <code>.receiver</code> and 
+        <code>.class</code> (<code>Id_t</code>, <code>Class_t</code>).
     </td>
   </tr>
 <tr>
@@ -1042,9 +1151,9 @@
     </td><td class="summary">
       <table width="100%" cellpadding="0" cellspacing="0" border="0">
         <tr>
-          <td><span class="summary-sig"><a name="aspect_ratio"></a><span class="summary-sig-name">aspect_ratio</span>(<span class="summary-sig-arg">width</span>,
+          <td><span class="summary-sig"><a href="pycocoa-module.html#aspect_ratio" class="summary-sig-name">aspect_ratio</a>(<span class="summary-sig-arg">width</span>,
         <span class="summary-sig-arg">height</span>)</span><br />
-      Return the smallest ratio as 2-tuple (width, height).</td>
+      Compute the smallest, int aspect ratio.</td>
           <td align="right" valign="top">
             
             
@@ -1094,8 +1203,8 @@
     </td><td class="summary">
       <table width="100%" cellpadding="0" cellspacing="0" border="0">
         <tr>
-          <td><span class="summary-sig"><a name="bytes2repr"></a><span class="summary-sig-name">bytes2repr</span>(<span class="summary-sig-arg">bytestr</span>)</span><br />
-      Like repr(bytestr) for bytes:  b'...'.</td>
+          <td><span class="summary-sig"><a href="pycocoa-module.html#bytes2repr" class="summary-sig-name">bytes2repr</a>(<span class="summary-sig-arg">bytestr</span>)</span><br />
+      Represent bytes like <code>repr(bytestr)</code>.</td>
           <td align="right" valign="top">
             
             
@@ -1129,7 +1238,7 @@
     </td><td class="summary">
       <table width="100%" cellpadding="0" cellspacing="0" border="0">
         <tr>
-          <td><span class="summary-sig"><a name="clip"></a><span class="summary-sig-name">clip</span>(<span class="summary-sig-arg">bytestr</span>,
+          <td><span class="summary-sig"><a href="pycocoa-module.html#clip" class="summary-sig-name">clip</a>(<span class="summary-sig-arg">bytestr</span>,
         <span class="summary-sig-arg">limit</span>=<span class="summary-sig-default">50</span>)</span><br />
       Clip a string or bytes to the given length limit.</td>
           <td align="right" valign="top">
@@ -1591,11 +1700,10 @@
     </td><td class="summary">
       <table width="100%" cellpadding="0" cellspacing="0" border="0">
         <tr>
-          <td><span class="summary-sig"><a name="inst2strepr"></a><span class="summary-sig-name">inst2strepr</span>(<span class="summary-sig-arg">inst</span>,
+          <td><span class="summary-sig"><a href="pycocoa-module.html#inst2strepr" class="summary-sig-name">inst2strepr</a>(<span class="summary-sig-arg">inst</span>,
         <span class="summary-sig-arg">strepr</span>,
         <span class="summary-sig-arg">*attrs</span>)</span><br />
-      Convert an instance's attributes to str or repr, maintaining the 
-      order of the attributes.</td>
+      Convert an instance's attributes, maintaining the order.</td>
           <td align="right" valign="top">
             
             
@@ -1789,9 +1897,9 @@
     </td><td class="summary">
       <table width="100%" cellpadding="0" cellspacing="0" border="0">
         <tr>
-          <td><span class="summary-sig"><a name="ns2App"></a><span class="summary-sig-name">ns2App</span>(<span class="summary-sig-arg">ns</span>)</span><br />
+          <td><span class="summary-sig"><a href="pycocoa-module.html#ns2App" class="summary-sig-name">ns2App</a>(<span class="summary-sig-arg">ns</span>)</span><br />
       Get the <a href="pycocoa.apps.App-class.html" class="link">App</a> 
-      instance for an <code>NSApplication</code> or an 
+      instance from an <code>NSApplication</code> or an 
       <code>NSNotification</code> instance.</td>
           <td align="right" valign="top">
             
@@ -1808,7 +1916,7 @@
     </td><td class="summary">
       <table width="100%" cellpadding="0" cellspacing="0" border="0">
         <tr>
-          <td><span class="summary-sig"><a name="ns2Item"></a><span class="summary-sig-name">ns2Item</span>(<span class="summary-sig-arg">ns</span>)</span><br />
+          <td><span class="summary-sig"><a href="pycocoa-module.html#ns2Item" class="summary-sig-name">ns2Item</a>(<span class="summary-sig-arg">ns</span>)</span><br />
       Get the <a href="pycocoa.menus.Item-class.html" class="link">Item</a>
       instance for an <code>NSMenuItem</code>.</td>
           <td align="right" valign="top">
@@ -1844,9 +1952,9 @@
     </td><td class="summary">
       <table width="100%" cellpadding="0" cellspacing="0" border="0">
         <tr>
-          <td><span class="summary-sig"><a name="ns2Window"></a><span class="summary-sig-name">ns2Window</span>(<span class="summary-sig-arg">ns</span>)</span><br />
+          <td><span class="summary-sig"><a href="pycocoa-module.html#ns2Window" class="summary-sig-name">ns2Window</a>(<span class="summary-sig-arg">ns</span>)</span><br />
       Get the <a href="pycocoa.windows.Window-class.html" 
-      class="link">Window</a> instance for an <code>NSWindow</code> or an 
+      class="link">Window</a> instance for an ObjC <code>NSWindow</code> or
       <code>NSNotification</code> instance.</td>
           <td align="right" valign="top">
             
@@ -2115,10 +2223,11 @@
     </td><td class="summary">
       <table width="100%" cellpadding="0" cellspacing="0" border="0">
         <tr>
-          <td><span class="summary-sig"><a name="printf"></a><span class="summary-sig-name">printf</span>(<span class="summary-sig-arg">fmt</span>,
+          <td><span class="summary-sig"><a href="pycocoa-module.html#printf" class="summary-sig-name">printf</a>(<span class="summary-sig-arg">fmt</span>,
         <span class="summary-sig-arg">*args</span>,
         <span class="summary-sig-arg">**kwds</span>)</span><br />
-      Formatted print.</td>
+      Formatted print <i>fmt % args</i> with optional keywords <i>nl=o</i> 
+      and <i>nt=0</i> for leading, respectively trailing blank lines.</td>
           <td align="right" valign="top">
             
             
@@ -2318,6 +2427,23 @@
     </td><td class="summary">
       <table width="100%" cellpadding="0" cellspacing="0" border="0">
         <tr>
+          <td><span class="summary-sig"><a href="pycocoa-module.html#title2action" class="summary-sig-name">title2action</a>(<span class="summary-sig-arg">title</span>)</span><br />
+      Convert an item title to the action callback method.</td>
+          <td align="right" valign="top">
+            
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
           <td><span class="summary-sig"><a name="tuple2NS"></a><span class="summary-sig-name">tuple2NS</span>(<span class="summary-sig-arg">py</span>)</span><br />
       Create an immutable <code>NSArray</code> instance from a Python 
       tuple.</td>
@@ -2353,9 +2479,10 @@
     </td><td class="summary">
       <table width="100%" cellpadding="0" cellspacing="0" border="0">
         <tr>
-          <td><span class="summary-sig"><a name="type2strepr"></a><span class="summary-sig-name">type2strepr</span>(<span class="summary-sig-arg">inst</span>,
+          <td><span class="summary-sig"><a href="pycocoa-module.html#type2strepr" class="summary-sig-name">type2strepr</a>(<span class="summary-sig-arg">inst</span>,
         <span class="summary-sig-arg">strepr</span>=<span class="summary-sig-default">&lt;type 'str'&gt;</span>)</span><br />
-      Return a Python Type instance as string.</td>
+      Return a Python Type instance as <code class="link">str</code> or 
+      <code class="link">repr</code>.</td>
           <td align="right" valign="top">
             
             
@@ -2388,9 +2515,9 @@
     </td><td class="summary">
       <table width="100%" cellpadding="0" cellspacing="0" border="0">
         <tr>
-          <td><span class="summary-sig"><a name="z1000str"></a><span class="summary-sig-name">z1000str</span>(<span class="summary-sig-arg">size</span>,
+          <td><span class="summary-sig"><a href="pycocoa-module.html#z1000str" class="summary-sig-name">z1000str</a>(<span class="summary-sig-arg">size</span>,
         <span class="summary-sig-arg">sep</span>=<span class="summary-sig-default"><code class="variable-quote">'</code><code class="variable-string">_</code><code class="variable-quote">'</code></span>)</span><br />
-      Convert a size to string with 1_000's seperator.</td>
+      Convert a size value to string with 1_000's seperator.</td>
           <td align="right" valign="top">
             
             
@@ -2406,8 +2533,9 @@
     </td><td class="summary">
       <table width="100%" cellpadding="0" cellspacing="0" border="0">
         <tr>
-          <td><span class="summary-sig"><a name="zSIstr"></a><span class="summary-sig-name">zSIstr</span>(<span class="summary-sig-arg">size</span>)</span><br />
-      Convert a size to string with SI-units.</td>
+          <td><span class="summary-sig"><a href="pycocoa-module.html#zSIstr" class="summary-sig-name">zSIstr</a>(<span class="summary-sig-arg">size</span>,
+        <span class="summary-sig-arg">B</span>=<span class="summary-sig-default"><code class="variable-quote">'</code><code class="variable-string">B</code><code class="variable-quote">'</code></span>)</span><br />
+      Convert a size value to string with SI-units.</td>
           <td align="right" valign="top">
             
             
@@ -3544,6 +3672,64 @@
       </p>
 </div></td></tr></table>
 </div>
+<a name="aspect_ratio"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">aspect_ratio</span>(<span class="sig-arg">width</span>,
+        <span class="sig-arg">height</span>)</span>
+  </h3>
+  </td><td align="right" valign="top"
+    >&nbsp;
+    </td>
+  </tr></table>
+  
+  <p>Compute the smallest, int aspect ratio.</p>
+  <dl class="fields">
+    <dt>Parameters:</dt>
+    <dd><ul class="nomargin-top">
+        <li><strong class="pname"><code>width</code></strong> - The width (float or int).</li>
+        <li><strong class="pname"><code>height</code></strong> - The height (float or int).</li>
+    </ul></dd>
+    <dt>Returns:</dt>
+        <dd>2-Tuple (width, height) or None.</dd>
+  </dl>
+<div class="fields">      <p><strong>Example:</strong>
+        &gt;&gt;&gt; aspect_ratio(10, 15) (2, 3) &gt;&gt;&gt; 
+        aspect_ratio(10.0, 15) (2, 3) &gt;&gt;&gt; aspect_ratio(10, -15) 
+        (-2, 3) &gt;&gt;&gt; aspect_ratio(-10, -15) (2, 3) &gt;&gt;&gt; 
+        aspect_ratio(10.5, 15) (7, 10) &gt;&gt;&gt; aspect_ratio(0, 15) ()
+      </p>
+</div></td></tr></table>
+</div>
+<a name="bytes2repr"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">bytes2repr</span>(<span class="sig-arg">bytestr</span>)</span>
+  </h3>
+  </td><td align="right" valign="top"
+    >&nbsp;
+    </td>
+  </tr></table>
+  
+  <p>Represent bytes like <code>repr(bytestr)</code>.</p>
+  <dl class="fields">
+    <dt>Parameters:</dt>
+    <dd><ul class="nomargin-top">
+        <li><strong class="pname"><code>bytestr</code></strong> - Str or bytes.</li>
+    </ul></dd>
+    <dt>Returns:</dt>
+        <dd>Representation <code>b'...'</code> (str).</dd>
+  </dl>
+</td></tr></table>
+</div>
 <a name="bytes2str"></a>
 <div>
 <table class="details" border="1" cellpadding="3"
@@ -3570,8 +3756,35 @@
         <dd>Str or <i>dflt</i>.</dd>
     <dt>Raises:</dt>
     <dd><ul class="nomargin-top">
-        <li><code><strong class='fraise'>TypeError</strong></code> - If neither str nor bytes, but only <i>dflt</i> is not provided.</li>
+        <li><code><strong class='fraise'>TypeError</strong></code> - If neither str nor bytes, but iff no <i>dflt</i> is provided.</li>
     </ul></dd>
+  </dl>
+</td></tr></table>
+</div>
+<a name="clip"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">clip</span>(<span class="sig-arg">bytestr</span>,
+        <span class="sig-arg">limit</span>=<span class="sig-default">50</span>)</span>
+  </h3>
+  </td><td align="right" valign="top"
+    >&nbsp;
+    </td>
+  </tr></table>
+  
+  <p>Clip a string or bytes to the given length limit.</p>
+  <dl class="fields">
+    <dt>Parameters:</dt>
+    <dd><ul class="nomargin-top">
+        <li><strong class="pname"><code>bytestr</code></strong> - Bytes or str.</li>
+        <li><strong class="pname"><code>limit</code></strong> - Length limit (int).</li>
+    </ul></dd>
+    <dt>Returns:</dt>
+        <dd>Bytes or str.</dd>
   </dl>
 </td></tr></table>
 </div>
@@ -4033,6 +4246,35 @@
   </dl>
 </td></tr></table>
 </div>
+<a name="inst2strepr"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">inst2strepr</span>(<span class="sig-arg">inst</span>,
+        <span class="sig-arg">strepr</span>,
+        <span class="sig-arg">*attrs</span>)</span>
+  </h3>
+  </td><td align="right" valign="top"
+    >&nbsp;
+    </td>
+  </tr></table>
+  
+  <p>Convert an instance's attributes, maintaining the order.</p>
+  <dl class="fields">
+    <dt>Parameters:</dt>
+    <dd><ul class="nomargin-top">
+        <li><strong class="pname"><code>inst</code></strong> - Instance (any).</li>
+        <li><strong class="pname"><code>strepr</code></strong> - Conversion (<code>repr</code> or <code>str</code>).</li>
+        <li><strong class="pname"><code>attrs</code></strong> - Instance attribute names (<i>all positional</i>).</li>
+    </ul></dd>
+    <dt>Returns:</dt>
+        <dd>Instance representation (str).</dd>
+  </dl>
+</td></tr></table>
+</div>
 <a name="instanceof"></a>
 <div>
 <table class="details" border="1" cellpadding="3"
@@ -4055,14 +4297,14 @@
     <dd><ul class="nomargin-top">
         <li><strong class="pname"><code>inst</code></strong> - The instance to check (<i>any</i>).</li>
         <li><strong class="pname"><code>classes</code></strong> - One or several classes (<i>all positional</i>).</li>
-        <li><strong class="pname"><code>name</code></strong> - The name of the instance (string).</li>
+        <li><strong class="pname"><code>name</code></strong> - The name of the instance (str).</li>
     </ul></dd>
     <dt>Returns:</dt>
         <dd>The matching <i>class</i> from <i>classes</i>, None otherwise.</dd>
     <dt>Raises:</dt>
     <dd><ul class="nomargin-top">
-        <li><code><strong class='fraise'>TypeError</strong></code> - If <i>inst</i> does not match any of the <i>classes</i>, and only 
-        if keyword <i>name='...'</i> is provided.</li>
+        <li><code><strong class='fraise'>TypeError</strong></code> - If <i>inst</i> does not match any of the <i>classes</i>, but iff 
+        keyword <i>name='...'</i> is provided.</li>
     </ul></dd>
   </dl>
 <div class="fields">      <p><strong>See Also:</strong>
@@ -4226,6 +4468,102 @@
   </dl>
 </td></tr></table>
 </div>
+<a name="ns2App"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">ns2App</span>(<span class="sig-arg">ns</span>)</span>
+  </h3>
+  </td><td align="right" valign="top"
+    >&nbsp;
+    </td>
+  </tr></table>
+  
+  <p>Get the <a href="pycocoa.apps.App-class.html" class="link">App</a> 
+  instance from an <code>NSApplication</code> or an 
+  <code>NSNotification</code> instance.</p>
+  <dl class="fields">
+    <dt>Parameters:</dt>
+    <dd><ul class="nomargin-top">
+        <li><strong class="pname"><code>ns</code></strong> - The ObjC instance (<code>NS...</code>).</li>
+    </ul></dd>
+    <dt>Returns:</dt>
+        <dd>The app instance (<a href="pycocoa.apps.App-class.html" 
+          class="link">App</a>).</dd>
+    <dt>Raises:</dt>
+    <dd><ul class="nomargin-top">
+        <li><code><strong class='fraise'>AssertionError</strong></code> - Mismatched instances.</li>
+    </ul></dd>
+  </dl>
+</td></tr></table>
+</div>
+<a name="ns2Item"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">ns2Item</span>(<span class="sig-arg">ns</span>)</span>
+  </h3>
+  </td><td align="right" valign="top"
+    >&nbsp;
+    </td>
+  </tr></table>
+  
+  <p>Get the <a href="pycocoa.menus.Item-class.html" class="link">Item</a> 
+  instance for an <code>NSMenuItem</code>.</p>
+  <dl class="fields">
+    <dt>Parameters:</dt>
+    <dd><ul class="nomargin-top">
+        <li><strong class="pname"><code>ns</code></strong> - The ObjC instance (<code>NSMenuItem</code>).</li>
+    </ul></dd>
+    <dt>Returns:</dt>
+        <dd>The item instance (<a href="pycocoa.menus.Item-class.html" 
+          class="link">Item</a>).</dd>
+    <dt>Raises:</dt>
+    <dd><ul class="nomargin-top">
+        <li><code><strong class='fraise'>TypeError</strong></code> - Invalid <i>ns</i> type.</li>
+    </ul></dd>
+  </dl>
+</td></tr></table>
+</div>
+<a name="ns2Window"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">ns2Window</span>(<span class="sig-arg">ns</span>)</span>
+  </h3>
+  </td><td align="right" valign="top"
+    >&nbsp;
+    </td>
+  </tr></table>
+  
+  <p>Get the <a href="pycocoa.windows.Window-class.html" 
+  class="link">Window</a> instance for an ObjC <code>NSWindow</code> or 
+  <code>NSNotification</code> instance.</p>
+  <dl class="fields">
+    <dt>Parameters:</dt>
+    <dd><ul class="nomargin-top">
+        <li><strong class="pname"><code>ns</code></strong> - The ObjC instance (<code>NS...</code>).</li>
+    </ul></dd>
+    <dt>Returns:</dt>
+        <dd>The window instance (<a href="pycocoa.windows.Window-class.html" 
+          class="link">Window</a>).</dd>
+    <dt>Raises:</dt>
+    <dd><ul class="nomargin-top">
+        <li><code><strong class='fraise'>AssertionError</strong></code> - Mismatched instances.</li>
+        <li><code><strong class='fraise'>TypeError</strong></code> - Invalid <i>ns</i> type.</li>
+    </ul></dd>
+  </dl>
+</td></tr></table>
+</div>
 <a name="ns2py"></a>
 <div>
 <table class="details" border="1" cellpadding="3"
@@ -4319,6 +4657,33 @@
         name of the app shown in the menu bar.
       </p>
 </div></td></tr></table>
+</div>
+<a name="printf"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">printf</span>(<span class="sig-arg">fmt</span>,
+        <span class="sig-arg">*args</span>,
+        <span class="sig-arg">**kwds</span>)</span>
+  </h3>
+  </td><td align="right" valign="top"
+    >&nbsp;
+    </td>
+  </tr></table>
+  
+  <p>Formatted print <i>fmt % args</i> with optional keywords <i>nl=o</i> 
+  and <i>nt=0</i> for leading, respectively trailing blank lines.</p>
+  <dl class="fields">
+    <dt>Parameters:</dt>
+    <dd><ul class="nomargin-top">
+        <li><strong class="pname"><code>fmt</code></strong> - Print-like format (str).</li>
+        <li><strong class="pname"><code>args</code></strong> - Optional arguments to include (<i>all positional</i>).</li>
+    </ul></dd>
+  </dl>
+</td></tr></table>
 </div>
 <a name="py2NS"></a>
 <div>
@@ -4537,21 +4902,30 @@
   <p>Split the type encoding of a <i>method</i> signature into separate, 
   single encodings and the combined encoding.</p>
   <p>If necessary, the encoding is extended with the type encoding for the 
-  hidden method arguments <code>id/self</code> and 
+  hidden method arguments <code>Id/self</code> and 
   <code>SEL/cmd</code>.</p>
-  <p>Does not handle bitfields, arrays, structs, unions, etc. and strips 
-  any offset, size or width specifiers from the encoding.</p>
-  <p>In the returned 2-tuple (<i>codes, encoding</i>), <i>codes</i> is the 
-  list of individual type encodings from item <i>start=0</i> and 
-  <i>encoding</i> the combined type encoding in <code>bytes</code> and both
-  extended if needed.</p>
-  <p>Example:</p>
-<pre class="py-doctest">
-<span class="py-prompt">&gt;&gt;&gt; </span>split_emcoding2(<span class="py-string">'v*'</span>)
-<span class="py-prompt">&gt;&gt;&gt; </span>([<span class="py-string">'v'</span>, <span class="py-string">'@'</span>, <span class="py-string">':'</span>, <span class="py-string">'*'</span>], <span class="py-string">'v@:*'</span>)</pre>
   <dl class="fields">
+    <dt>Returns:</dt>
+        <dd>2-Tuple (<i>codes, encoding</i>), where <i>codes</i> is the list 
+          of individual type encodings from item <i>start=0</i> and 
+          <i>encoding</i> is the combined type encoding in 
+          <code>bytes</code>, both extended with <code>Id/self</code> and 
+          <code>SEL/cmd</code> iff needed.</dd>
+    <dt>Raises:</dt>
+    <dd><ul class="nomargin-top">
+        <li><code><strong class='fraise'><a href="pycocoa.octypes.TypeCodeError-class.html">TypeCodeError</a></strong></code> - Invalid or unbalanced <i>encoding</i>.</li>
+    </ul></dd>
   </dl>
-</td></tr></table>
+<div class="fields">      <p><strong>Note:</strong>
+        Does not handle <code>bitfield</code>s, <code>array</code>s, 
+        <code>struct</code>s, <code>union</code>s, etc. and strips any 
+        offset, size or width specifiers from the encoding.
+      </p>
+      <p><strong>Example:</strong>
+        &gt;&gt;&gt; split_emcoding2('v*') &gt;&gt;&gt; (['v', '@', ':', 
+        '*'], 'v@:*')
+      </p>
+</div></td></tr></table>
 </div>
 <a name="split_encoding"></a>
 <div>
@@ -4568,119 +4942,133 @@
   </tr></table>
   
   <p>Split a type encoding into separate type encodings.</p>
-  <p>Does not handle bitfields, arrays, structs, unions, etc. and strips 
-  any offset, size or width specifiers from the encoding.</p>
-  <p>Examples:</p>
-<pre class="py-doctest">
-<span class="py-prompt">&gt;&gt;&gt; </span>split_encoding(<span class="py-string">'^v16@0:8'</span>)
-<span class="py-prompt">&gt;&gt;&gt; </span>[<span class="py-string">'^v'</span>, <span class="py-string">'@'</span>, <span class="py-string">':'</span>]</pre>
+  <p>Does not handle <code>bitfield</code>s, <code>array</code>s, 
+  <code>struct</code>s, <code>union</code>s, etc. and strips any offset, 
+  size or width specifiers from the encoding.</p>
+  <dl class="fields">
+    <dt>Returns:</dt>
+        <dd>Individual encodings (<code>list</code>).</dd>
+    <dt>Raises:</dt>
+    <dd><ul class="nomargin-top">
+        <li><code><strong class='fraise'><a href="pycocoa.octypes.TypeCodeError-class.html">TypeCodeError</a></strong></code> - Invalid or unbalanced <i>encoding</i>.</li>
+    </ul></dd>
+  </dl>
+<div class="fields">      <p><strong>Example:</strong>
+        &gt;&gt;&gt; split_encoding('^v16@0:8') &gt;&gt;&gt; ['^v', '@', 
+        ':']
 <pre class="py-doctest">
 <span class="py-prompt">&gt;&gt;&gt; </span>split_encoding(<span class="py-string">'{CGSize=dd}40@0:8{PyObject=@}Q32'</span>)
 <span class="py-prompt">&gt;&gt;&gt; </span>[<span class="py-string">'{CGSize=dd}'</span>, <span class="py-string">'@'</span>, <span class="py-string">':'</span>, <span class="py-string">'{PyObject=@}'</span>, <span class="py-string">'Q'</span>]</pre>
-  <p>Supported Type Encodings:</p>
-  <ul>
-    <li>
-      B = bool (C++ bool, C99 _Bool)
-    </li>
-    <li>
-      c, C = char, unsigned char
-    </li>
-    <li>
-      f, d = float, double
-    </li>
-    <li>
-      i, I = int, unsigned int
-    </li>
-    <li>
-      l, L = long, unsigned long (32-bit)
-    </li>
-    <li>
-      q, Q = long long, unsigned long long
-    </li>
-    <li>
-      s, S = short, unsigned short
-    </li>
-    <li>
-      t, T = 128-bit int, unsigned int
-    </li>
-    <li>
-      v = void
-    </li>
-    <li>
-      * = string (char *)
-    </li>
-    <li>
-      : = method selector (SEL/cmd)
-    </li>
-    <li>
-      # = class
-    </li>
-    <li>
-      #&quot;name&quot; = class &quot;name&quot;
-    </li>
-    <li>
-      @ = object (instance, statically typed, typed id, etc.)
-    </li>
-    <li>
-      @&quot;name&quot; = instance of class &quot;name&quot;
-    </li>
-    <li>
-      ^type = pointer to type
-    </li>
-    <li>
-      ? = unknown type (among other things, used for function pointers)
-    </li>
-    <li>
-      P = Python object (like PyObjectEncoding)
-    </li>
-  </ul>
-  <p>Unsupported Type Encodings:</p>
-  <ul>
-    <li>
-      bW = bitfield of width W
-    </li>
-    <li>
-      [Ltype] = array of L items of type
-    </li>
-    <li>
-      {name=type...} = structure
-    </li>
-    <li>
-      (name=type...) = union
-    </li>
-    <li>
-      &lt;...&gt; = block
-    </li>
-  </ul>
-  <p>For ObjC internal use only:</p>
-  <ul>
-    <li>
-      n, N = in, inout
-    </li>
-    <li>
-      o, O = out, bycopy
-    </li>
-    <li>
-      r, R = const, byref
-    </li>
-    <li>
-      V = oneway
-    </li>
-  </ul>
-  <p>Type encodings may be preceeded by a <code>&quot;name&quot;</code>, 
-  for example a bitfield <code>&quot;name&quot;b1</code>, structure items 
-  <code>{CGsize=&quot;width&quot;d&quot;heigth&quot;d}</code>, union items,
-  etc. and all such <code>&quot;name&quot;</code> prefixes are ignored.  
-  See also <a 
-  href="http://Developer.Apple.com/library/content/documentation/Cocoa/Conceptual/ObjCRuntimeGuide/Articles/ocrtTypeEncodings.html"
-  target="_top">Type Encodings</a>, <a 
-  href="http://NSHipster.com/type-encodings/" target="_top">NSHipster Type 
-  Encodings</a> and <a 
-  href="http://StackOverflow.com/questions/11527385/how-are-the-digits-in-objc-method-type-encoding-calculated/"
-  target="_top">Digits in type encoding</a>.</p>
-  <dl class="fields">
-  </dl>
-</td></tr></table>
+        <p>Supported Type Encodings:</p>
+        <ul>
+          <li>
+            B = bool (C++ bool, C99 _Bool)
+          </li>
+          <li>
+            c, C = char, unsigned char
+          </li>
+          <li>
+            f, d = float, double
+          </li>
+          <li>
+            i, I = int, unsigned int
+          </li>
+          <li>
+            l, L = long, unsigned long (32-bit)
+          </li>
+          <li>
+            q, Q = long long, unsigned long long
+          </li>
+          <li>
+            s, S = short, unsigned short
+          </li>
+          <li>
+            t, T = 128-bit int, unsigned int
+          </li>
+          <li>
+            v = void
+          </li>
+          <li>
+            * = string (char *)
+          </li>
+          <li>
+            : = method selector (SEL/cmd)
+          </li>
+          <li>
+            # = class
+          </li>
+          <li>
+            #&quot;name&quot; = class &quot;name&quot;
+          </li>
+          <li>
+            @ = object (instance, statically typed, typed id, etc.)
+          </li>
+          <li>
+            @&quot;name&quot; = instance of class &quot;name&quot;
+          </li>
+          <li>
+            ^type = pointer to type
+          </li>
+          <li>
+            ? = unknown type (among other things, used for function 
+            pointers)
+          </li>
+          <li>
+            P = Python object (shorthand for <code>PyObjectEncoding</code>)
+          </li>
+        </ul>
+        <p>Unsupported Type Encodings:</p>
+        <ul>
+          <li>
+            bW = bitfield of width W
+          </li>
+          <li>
+            [Ltype] = array of L items of type
+          </li>
+          <li>
+            {name=type...} = structure
+          </li>
+          <li>
+            (name=type...) = union
+          </li>
+          <li>
+            &lt;...&gt; = block
+          </li>
+        </ul>
+        <p>For ObjC internal use only:</p>
+        <ul>
+          <li>
+            n, N = in, inout
+          </li>
+          <li>
+            o, O = out, bycopy
+          </li>
+          <li>
+            r, R = const, byref
+          </li>
+          <li>
+            V = oneway
+          </li>
+        </ul>
+      </p>
+      <p><strong>Note:</strong>
+        Type encodings may be preceeded by <code>&quot;name&quot;</code>, 
+        for example a <code>bitfield</code> 
+        <code>&quot;name&quot;b1</code>, <code>struct</code> items 
+        <code>{CGsize=&quot;width&quot;d&quot;heigth&quot;d}</code>, 
+        <code>union</code> items, etc. and all such 
+        <code>&quot;name&quot;</code> prefixes are ignored.
+      </p>
+      <p><strong>See Also:</strong>
+        Also <a 
+        href="http://Developer.Apple.com/library/content/documentation/Cocoa/Conceptual/ObjCRuntimeGuide/Articles/ocrtTypeEncodings.html"
+        target="_top">Type Encodings</a>, <a 
+        href="http://NSHipster.com/type-encodings/" target="_top">NSHipster
+        Type Encodings</a> and <a 
+        href="http://StackOverflow.com/questions/11527385/how-are-the-digits-in-objc-method-type-encoding-calculated/"
+        target="_top">Digits in type encoding</a>.
+      </p>
+</div></td></tr></table>
 </div>
 <a name="str2bytes"></a>
 <div>
@@ -4708,8 +5096,119 @@
         <dd>Bytes or <i>dflt</i>.</dd>
     <dt>Raises:</dt>
     <dd><ul class="nomargin-top">
-        <li><code><strong class='fraise'>TypeError</strong></code> - If neither bytes nor str, but only <i>dflt</i> is not provided.</li>
+        <li><code><strong class='fraise'>TypeError</strong></code> - If neither bytes nor str, but iff no <i>dflt</i> is provided.</li>
     </ul></dd>
+  </dl>
+</td></tr></table>
+</div>
+<a name="title2action"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">title2action</span>(<span class="sig-arg">title</span>)</span>
+  </h3>
+  </td><td align="right" valign="top"
+    >&nbsp;
+    </td>
+  </tr></table>
+  
+  <p>Convert an item title to the action callback method.</p>
+  <dl class="fields">
+    <dt>Parameters:</dt>
+    <dd><ul class="nomargin-top">
+        <li><strong class="pname"><code>title</code></strong> - The item's title (str).</li>
+    </ul></dd>
+    <dt>Returns:</dt>
+        <dd>Item callback method (str).</dd>
+    <dt>Raises:</dt>
+    <dd><ul class="nomargin-top">
+        <li><code><strong class='fraise'>ValueError</strong></code> - Invalid <i>title</i>.</li>
+    </ul></dd>
+  </dl>
+</td></tr></table>
+</div>
+<a name="type2strepr"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">type2strepr</span>(<span class="sig-arg">inst</span>,
+        <span class="sig-arg">strepr</span>=<span class="sig-default">&lt;type 'str'&gt;</span>)</span>
+  </h3>
+  </td><td align="right" valign="top"
+    >&nbsp;
+    </td>
+  </tr></table>
+  
+  <p>Return a Python Type instance as <code class="link">str</code> or 
+  <code class="link">repr</code>.</p>
+  <dl class="fields">
+    <dt>Parameters:</dt>
+    <dd><ul class="nomargin-top">
+        <li><strong class="pname"><code>inst</code></strong> - Instance (any).</li>
+        <li><strong class="pname"><code>strepr</code></strong> - Conversion (<code>repr</code> or <code>str</code>).</li>
+    </ul></dd>
+    <dt>Returns:</dt>
+        <dd>Instance representation (str).</dd>
+  </dl>
+</td></tr></table>
+</div>
+<a name="z1000str"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">z1000str</span>(<span class="sig-arg">size</span>,
+        <span class="sig-arg">sep</span>=<span class="sig-default"><code class="variable-quote">'</code><code class="variable-string">_</code><code class="variable-quote">'</code></span>)</span>
+  </h3>
+  </td><td align="right" valign="top"
+    >&nbsp;
+    </td>
+  </tr></table>
+  
+  <p>Convert a size value to string with 1_000's seperator.</p>
+  <dl class="fields">
+    <dt>Parameters:</dt>
+    <dd><ul class="nomargin-top">
+        <li><strong class="pname"><code>size</code></strong> - Value to convert (float or int).</li>
+    </ul></dd>
+    <dt>Returns:</dt>
+        <dd>&quot;-&quot; if <i>size</i> is negative, otheriwse 
+          &quot;&lt;1or2digits&gt;&lt;sep&gt;&lt;3digits&gt;...&quot; 
+          (str).</dd>
+  </dl>
+</td></tr></table>
+</div>
+<a name="zSIstr"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">zSIstr</span>(<span class="sig-arg">size</span>,
+        <span class="sig-arg">B</span>=<span class="sig-default"><code class="variable-quote">'</code><code class="variable-string">B</code><code class="variable-quote">'</code></span>)</span>
+  </h3>
+  </td><td align="right" valign="top"
+    >&nbsp;
+    </td>
+  </tr></table>
+  
+  <p>Convert a size value to string with SI-units.</p>
+  <dl class="fields">
+    <dt>Parameters:</dt>
+    <dd><ul class="nomargin-top">
+        <li><strong class="pname"><code>size</code></strong> - Value to convert (float or int).</li>
+    </ul></dd>
+    <dt>Returns:</dt>
+        <dd>&quot;&lt;Size&gt; &lt;B&gt;&lt;SI&gt;&quot; (str).</dd>
   </dl>
 </td></tr></table>
 </div>
@@ -4773,7 +5272,7 @@ ObjCClass('_TableDataDelegate', 'NSTableViewDataSource')
 <table border="0" cellpadding="0" cellspacing="0" width="100%%">
   <tr>
     <td align="left" class="footer">
-    Generated by Epydoc 3.0.1 on Fri Apr 20 15:50:10 2018
+    Generated by Epydoc 3.0.1 on Sun Apr 22 21:13:09 2018
     </td>
     <td align="right" class="footer">
       <a target="mainFrame" href="http://epydoc.sourceforge.net"

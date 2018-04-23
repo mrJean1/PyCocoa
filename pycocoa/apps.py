@@ -23,6 +23,9 @@
 # ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
 # OTHER DEALINGS IN THE SOFTWARE.
 
+'''Types L{App} and L{Tile}, wrapping ObjC C{NSApplication} and C{NSDocktile}.
+'''
+# all imports listed explicitly to help PyChecker
 from bases   import _Type2
 from menus   import _menuItemHandler_name, Menu, MenuBar, ns2Item
 from nstypes import NSApplication, nsBundleRename, \
@@ -37,21 +40,24 @@ from time import sleep
 __all__ = ('App',  'AppDelegate',
            'Tile',
            'ns2App')
-__version__ = '18.04.18'
+__version__ = '18.04.21'
 
 
 class App(_Type2):
-    '''The basic App class.
+    '''Application Python Type, wrapping an ObjC C{NSApplication}.
     '''
-    _bar        = None
     _badge      = None
     _isUp       = None
     _keyWindow  = None  # Window
     _mainWindow = None  # Window
+    _menubar    = None
     _timeout    = None
 
-    def __init__(self, title='PyCocao', **attrs):
-        '''Create an App.
+    def __init__(self, title='PyCocao', **kwds):
+        '''New L{App}.
+
+           @keyword title: App name or title (string).
+           @keyword kwds: Optional, additional keyword arguments.
         '''
         if _Globals.App:
             raise RuntimeError('%s already exists' % (_Globals.App,))
@@ -62,38 +68,43 @@ class App(_Type2):
         self.NS.setTitle_ = nsBundleRename
 #       pool = NSAutoreleasePool.alloc().init()  # created by NSApplication
         self.title = title
-        if attrs:  # optional, additional attributes
-            super(App, self).__init__(**attrs)
+
+        if kwds:  # optional, additional attributes
+            super(App, self).__init__(**kwds)
 
         self.delegate = AppDelegate.alloc().init(self)
 
     def append(self, menu):
-        '''Append a menu to the app's menu bar
+        '''Add a menu to this app's menu bar.
+
+           @param menu: The menu to add (L{Menu}).
+
+           @note: The first menu item of the bar menu is provided by default.
         '''
         instanceof(menu, Menu, name='menu')
 
-        if self._bar is None:
+        if self._menubar is None:
             # create the menu bar, once
-            self._bar = MenuBar(self)
+            self._menubar = MenuBar(self)
 
-            main = Menu(self.title)
-            main.append(
-                main.item('Full ' + 'Screen', key='f', ctrl=True),  # Ctrl-Cmd-F, Esc to exit
-                main.separator(),
-                main.item('Hide ' + self.title, 'menuHide_', key='h'),  # Cmd-H, implied
-                main.item('Hide Others', key='h', alt=True),  # Alt-Cmd-H
-                main.item('Show All'),  # no key
-                main.separator(),
-                main.item('Quit ' + self.title, 'menuTerminate_', key='q'),  # Cmd-Q
+            m = Menu(self.title)
+            m.append(
+                m.item('Full ' + 'Screen', key='f', ctrl=True),  # Ctrl-Cmd-F, Esc to exit
+                m.separator(),
+                m.item('Hide ' + self.title, 'menuHide_', key='h'),  # Cmd-H, implied
+                m.item('Hide Others', key='h', alt=True),  # Alt-Cmd-H
+                m.item('Show All'),  # no key
+                m.separator(),
+                m.item('Quit ' + self.title, 'menuTerminate_', key='q'),  # Cmd-Q
             )
-            self._bar.append(main)
-            self._bar.main(self)
+            self._menubar.append(m)
+            self._menubar.main(self)
 
-        self._bar.append(menu)
+        self._menubar.append(menu)
 
     @property
     def badge(self):
-        '''Get the dock tile/badge (L{Tile}).
+        '''Get this app's dock tile/badge (L{Tile}).
         '''
         # <http://Developer.Apple.com/documentation/appkit/nsdocktile>
         # <http://Developer.Apple.com/documentation/appkit/nsapplication>
@@ -101,8 +112,20 @@ class App(_Type2):
             self._badge = Tile(self)
         return self._badge
 
+    def full(self, full):
+        '''Enter or exit full screen mode for this app.
+
+           @param full: Enter or exit (bool).
+        '''
+        if full:
+            self.NS.enterFullScreenMode_(self.NS)
+        else:
+            self.NS.exitFullScreenMode_(self.NS)
+
     def hide(self, hide):
-        '''Hide or show this app.
+        '''Hide or show this app's main window.
+
+           @param hide: Hide or show (bool).
         '''
         if hide:
             self.NS.hide_(self.NS)
@@ -110,56 +133,58 @@ class App(_Type2):
             self.NS.unhide_(self.NS)
 
     def hideOther(self, hide):
-        '''Hide other or show all apps.
+        '''Hide other or show all apps's windows.
+
+           @param hide: Hide or show (bool).
         '''
         if hide:
             self.NS.hideOtherApplications_(self.NS)
         else:
             self.NS.unhideAllApplications_(self.NS)
 
-    def full(self, full):
-        '''Enter or exit full screen.
-        '''
-        if full:
-            self.NS.enterFullScreenMode_(self.NS)
-        else:
-            self.NS.exitFullScreenMode_(self.NS)
-
     @property
     def isHidden(self):
-        '''Get the hidden state (bool).
+        '''Get this app's hidden state (bool).
         '''
         return True if self.NS.isHidden() else False
 
     @property
     def isRunning(self):
-        '''Get the running state (bool).
+        '''Get this app's running state (bool).
         '''
         return True if self.NS.isRunning() else False
 
     @property
     def isUp(self):
-        '''Get the launched state (bool).
+        '''Get this app's launched state (bool).
         '''
         return self._isUp
 
     @property
     def keyWindow(self):
-        '''Get the key window (L{Window}).
+        '''Get this app's key window (L{Window}).
         '''
         return self._keyWindow
 
     @property
     def mainWindow(self):
-        '''Get the main window (L{Window}).
+        '''Get this app's main window (L{Window}).
         '''
         return self._mainWindow
 
-    def run(self, timeout=None):
-        '''Run the app, never returns.
+    @property
+    def menubar(self):
+        '''Get this app's menu bar (L{MenuBar}).
+        '''
+        return self._menubar
 
-           However, any Python threads started
-           earlier remain running, concurrently.
+    def run(self, timeout=None):
+        '''Run this app (never returns).
+
+           @keyword timeout: Run time limit in seconds (float).
+
+           @note: Although I{run} never returns, any Python threads
+           started earlier remain running, concurrently.
         '''
         if timeout is not None:
             try:
@@ -180,7 +205,7 @@ class App(_Type2):
         self.NS.run()
 
     def terminate(self):
-        '''Terminate the app.
+        '''Terminate this app (never returns).
         '''
         _ObjC_log_totals()
         # <http://Developer.Apple.com/documentation/
@@ -191,6 +216,8 @@ class App(_Type2):
     # menus, etc. to be overloaded as needed
 
     def appLaunched_(self, app):  # PYCHOK expected
+        '''Callback, the app launched and is up.
+        '''
         self._isUp = True
 
 #   def appStop_(self, sender=None):
@@ -200,44 +227,69 @@ class App(_Type2):
 #       self.NS.stop_(nsOf(sender or self))
 
     def menuFullScreen_(self, item):  # PYCHOK expected
+        '''Callback for C{Full Screen} menu I{item}.
+        '''
         self.full(True)
 
     def menuHide_(self, item):  # PYCHOK expected
+        '''Callback for C{Hide} menu I{item}.
+        '''
         self.hide(True)
 
     def menuHideOthers_(self, item):  # PYCHOK expected
+        '''Callback for C{Hide Other} menu I{item}.
+        '''
         self.hideOther(True)
 
     def menuShowAll_(self, item):  # PYCHOK expected
+        '''Callback for C{Show All} menu I{item}.
+        '''
         self.hideOther(False)
 
     def menuTerminate_(self, item):  # PYCHOK expected
+        '''Callback for C{Quit} menu I{item}.
+        '''
         self.terminate()
 
     def windowClose_(self, window):
+        '''Closing I{window} callback.
+        '''
         if self.keyWindow is window:
             self._keyWindow = None
         if self.mainWindow is window:
             self._mainWindow = None
 
     def windowCloseOK_(self, window):  # PYCHOK expected
-        # return False if the window should not close
+        '''Is it OK? to close I{window} callback.
+
+           @return: True if OK to close, False otherwise.
+        '''
         return True
 
     def windowKey_(self, window):
-        self._keyWindow = window
-#       if self._bar:
-#           self._bar.NS.update()
+        '''Callback I{window} becomes/resigns C{Key}.
+        '''
+        self._keyWindow = window or None
+#       if self._menubar:
+#           self._menubar.NS.update()
 
     def windowMain_(self, window):
-        self._mainWindow = window
+        '''Callback I{window} becomes/resigns C{Main}.
+        '''
+        self._mainWindow = window or None
 
-    def windowResize_(self, window, size=None):  # PYCHOK expected
-        # size is None, (w, h) or NSSize_t
-        return size
+    def windowResize_(self, window):  # PYCHOK expected
+        '''Resizing I{window} callback.
+        '''
+        pass
 
     def windowZoomOK_(self, window, frame=None):  # PYCHOK expected
-        # return True if toggling zoom is OK
+        '''Is it OK? to toggle zoom I{window} callback.
+
+           @keyword frame: The frame to zoom to (L{Rect}).
+
+           @return: True if OK to toggle, False otherwise.
+        '''
         return True
 
 
@@ -250,9 +302,9 @@ class App(_Type2):
 
 
 class _AppDelegate(object):
-    '''An ObjC Delegate class to handle C{NSApplication} and C{NSMenu}
-       events as L{App}.app..._ respectively L{App}.menu..._  method
-       calls.
+    '''An ObjC-callable I{Delegate} class to handle C{NSApplication},
+       C{NSMenu} and C{NSWindow} events as L{App}.app..._, L{App}.menu..._
+       respectively L{App}.window..._ callback calls.
     '''
     # Cobbled together from the pycocoa.ObjCSubClass.__doc__,
     # pycocoa.runtime._DeallocObserver and PyObjC examples:
@@ -271,6 +323,10 @@ class _AppDelegate(object):
 
     @_ObjC.method('@P')
     def init(self, app):
+        '''Initialize the allocated I{Delegate}.
+
+           @note: I{MUST} be called as C{.alloc().init(...)}.
+        '''
         instanceof(app, App, name='app')
 #       self = ObjCInstance(send_message('NSObject', 'alloc'))
         self = ObjCInstance(send_super(self, 'init'))
@@ -279,11 +335,15 @@ class _AppDelegate(object):
 
     @_ObjC.method('v@')
     def applicationDidFinishLaunching_(self, ns_notification):
+        '''ObjC callback to handle C{NSApplication} event.
+        '''
         self.app._isUp = True
         self.app.appLaunched_(ns2App(ns_notification))
 
     @_ObjC.method('v@')
     def menuItemHandler_(self, ns_item):
+        '''ObjC callback to handle C{NSMenuItem} events.
+        '''
         item = ns2Item(ns_item)
         act = item._action
         for t, i in ((self.app, item),
@@ -305,23 +365,27 @@ AppDelegate = ObjCClass('_AppDelegate')
 
 
 class Tile(_Type2):
-    '''The dock tile for an L{App}.
+    '''The dock tile for an L{App}, wrapping an ObjC C{NSDockTile}.
     '''
     _label = ''
 
     def __init__(self, app):
+        '''New dock tile.
+
+           @param app: The app (L{App}).
+        '''
         self.app = app
         self.NS = nsOf(app).dockTile()
 
     @property
     def label(self):
-        '''Get the badge text of the App's dock tile.
+        '''Get the badge text of the app's dock tile (str).
         '''
         return self._label
 
     @label.setter  # PYCHOK property.setter
     def label(self, label):
-        '''Set the badge text of the App's dock tile.
+        '''Set the badge text of the app's dock tile (str).
         '''
         self._label = bytes2str(label)
         self.NS.setBadgeLabel_(NSStr(self._label))
@@ -329,8 +393,14 @@ class Tile(_Type2):
 
 
 def ns2App(ns):
-    '''Get the L{App} instance for an C{NSApplication} or an
-    C{NSNotification} instance.
+    '''Get the L{App} instance from an C{NSApplication} or an
+       C{NSNotification} instance.
+
+       @param ns: The ObjC instance (C{NS...}).
+
+       @return: The app instance (L{App}).
+
+       @raise AssertionError: Mismatched instances.
     '''
     if isInstanceOf(ns, NSApplication):
         pass

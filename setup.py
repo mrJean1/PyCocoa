@@ -45,7 +45,10 @@ def _long_description():
         return t
 
 
-_KeyWords=('Cocoa', 'ctypes', 'Objective-C', 'VLC', 'VLCplayer')
+_KeyWords=('Cocoa', 'ctypes',
+           'macOS', 'macVLC',
+           'Objective-C',
+           'VLC', 'VLCplayer')
 
 setup(
     name='PyCocoa',

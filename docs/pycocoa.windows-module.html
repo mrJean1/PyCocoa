@@ -59,9 +59,15 @@
 </table>
 <!-- ==================== MODULE DESCRIPTION ==================== -->
 <h1 class="epydoc">Module windows</h1><p class="nomargin-top"></p>
+<p>Types <a href="pycocoa.windows.Window-class.html" 
+  class="link">Window</a>, <a href="pycocoa.windows.MediaWindow-class.html"
+  class="link">MediaWindow</a>, <a href="pycocoa.windows.Screen-class.html"
+  class="link">Screen</a>, <a href="pycocoa.windows.Style-class.html" 
+  class="link">Style</a>, wrapping ObjC <code>NSWindow</code>, etc.</p>
+
 <hr />
 <div class="fields">      <p><strong>Version:</strong>
-        18.04.18
+        18.04.21
       </p>
 </div><!-- ==================== CLASSES ==================== -->
 <a name="section-Classes"></a>
@@ -75,24 +81,8 @@
     <td width="15%" align="right" valign="top" class="summary">
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
-        <a href="pycocoa.windows.Frame-class.html" class="summary-name">Frame</a><br />
-      Frame class, signature like <code>NSRect_t</code>.
-    </td>
-  </tr>
-<tr>
-    <td width="15%" align="right" valign="top" class="summary">
-      <span class="summary-type">&nbsp;</span>
-    </td><td class="summary">
-        <a href="pycocoa.windows.Frame4-class.html" class="summary-name">Frame4</a><br />
-      Frame class, signature like <code>NSRect4_t</code>.
-    </td>
-  </tr>
-<tr>
-    <td width="15%" align="right" valign="top" class="summary">
-      <span class="summary-type">&nbsp;</span>
-    </td><td class="summary">
         <a href="pycocoa.windows.Screen-class.html" class="summary-name">Screen</a><br />
-      Screen frame class.
+      Screen Python Type, wrapping ObjC <code>NSRect_t</code>.
     </td>
   </tr>
 <tr>
@@ -100,7 +90,7 @@
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
         <a href="pycocoa.windows.Style-class.html" class="summary-name">Style</a><br />
-      Window style masks.
+      Window style mask constants.
     </td>
   </tr>
 <tr>
@@ -108,7 +98,8 @@
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
         <a href="pycocoa.windows.Window-class.html" class="summary-name">Window</a><br />
-      Basic, base window class.
+      Basic, base window Python Type, wrapping ObjC 
+        <code>NSWindow</code>.
     </td>
   </tr>
 <tr>
@@ -116,7 +107,8 @@
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
         <a href="pycocoa.windows.MediaWindow-class.html" class="summary-name">MediaWindow</a><br />
-      Media window class.
+      Media window Python Type, wrapping ObjC 
+        <code>NSWindow/NSView</code>.
     </td>
   </tr>
 </table>
@@ -134,45 +126,9 @@
     </td><td class="summary">
       <table width="100%" cellpadding="0" cellspacing="0" border="0">
         <tr>
-          <td><span class="summary-sig"><a href="pycocoa.windows-module.html#gcd" class="summary-sig-name">gcd</a>(<span class="summary-sig-arg">a</span>,
-        <span class="summary-sig-arg">b</span>)</span><br />
-      Calculate the Greatest Common Divisor of a and b.</td>
-          <td align="right" valign="top">
-            
-            
-          </td>
-        </tr>
-      </table>
-      
-    </td>
-  </tr>
-<tr>
-    <td width="15%" align="right" valign="top" class="summary">
-      <span class="summary-type">&nbsp;</span>
-    </td><td class="summary">
-      <table width="100%" cellpadding="0" cellspacing="0" border="0">
-        <tr>
-          <td><span class="summary-sig"><a name="aspect_ratio"></a><span class="summary-sig-name">aspect_ratio</span>(<span class="summary-sig-arg">width</span>,
-        <span class="summary-sig-arg">height</span>)</span><br />
-      Return the smallest ratio as 2-tuple (width, height).</td>
-          <td align="right" valign="top">
-            
-            
-          </td>
-        </tr>
-      </table>
-      
-    </td>
-  </tr>
-<tr>
-    <td width="15%" align="right" valign="top" class="summary">
-      <span class="summary-type">&nbsp;</span>
-    </td><td class="summary">
-      <table width="100%" cellpadding="0" cellspacing="0" border="0">
-        <tr>
-          <td><span class="summary-sig"><a name="ns2Window"></a><span class="summary-sig-name">ns2Window</span>(<span class="summary-sig-arg">ns</span>)</span><br />
+          <td><span class="summary-sig"><a href="pycocoa.windows-module.html#ns2Window" class="summary-sig-name">ns2Window</a>(<span class="summary-sig-arg">ns</span>)</span><br />
       Get the <a href="pycocoa.windows.Window-class.html" 
-      class="link">Window</a> instance for an <code>NSWindow</code> or an 
+      class="link">Window</a> instance for an ObjC <code>NSWindow</code> or
       <code>NSNotification</code> instance.</td>
           <td align="right" valign="top">
             
@@ -209,25 +165,36 @@
     <span class="table-header">Function Details</span></td>
 </tr>
 </table>
-<a name="gcd"></a>
+<a name="ns2Window"></a>
 <div>
 <table class="details" border="1" cellpadding="3"
        cellspacing="0" width="100%" bgcolor="white">
 <tr><td>
   <table width="100%" cellpadding="0" cellspacing="0" border="0">
   <tr valign="top"><td>
-  <h3 class="epydoc"><span class="sig"><span class="sig-name">gcd</span>(<span class="sig-arg">a</span>,
-        <span class="sig-arg">b</span>)</span>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">ns2Window</span>(<span class="sig-arg">ns</span>)</span>
   </h3>
   </td><td align="right" valign="top"
     >&nbsp;
     </td>
   </tr></table>
   
-  <p>Calculate the Greatest Common Divisor of a and b.</p>
-  <p>Unless b==0, the result will have the same sign as b (so that when b 
-  is divided by it, the result comes out positive).</p>
+  <p>Get the <a href="pycocoa.windows.Window-class.html" 
+  class="link">Window</a> instance for an ObjC <code>NSWindow</code> or 
+  <code>NSNotification</code> instance.</p>
   <dl class="fields">
+    <dt>Parameters:</dt>
+    <dd><ul class="nomargin-top">
+        <li><strong class="pname"><code>ns</code></strong> - The ObjC instance (<code>NS...</code>).</li>
+    </ul></dd>
+    <dt>Returns:</dt>
+        <dd>The window instance (<a href="pycocoa.windows.Window-class.html" 
+          class="link">Window</a>).</dd>
+    <dt>Raises:</dt>
+    <dd><ul class="nomargin-top">
+        <li><code><strong class='fraise'>AssertionError</strong></code> - Mismatched instances.</li>
+        <li><code><strong class='fraise'>TypeError</strong></code> - Invalid <i>ns</i> type.</li>
+    </ul></dd>
   </dl>
 </td></tr></table>
 </div>
@@ -263,7 +230,7 @@
 <table border="0" cellpadding="0" cellspacing="0" width="100%%">
   <tr>
     <td align="left" class="footer">
-    Generated by Epydoc 3.0.1 on Fri Apr 20 15:50:11 2018
+    Generated by Epydoc 3.0.1 on Sun Apr 22 21:13:09 2018
     </td>
     <td align="right" class="footer">
       <a target="mainFrame" href="http://epydoc.sourceforge.net"

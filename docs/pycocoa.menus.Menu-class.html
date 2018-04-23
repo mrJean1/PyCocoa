@@ -73,7 +73,7 @@ bases._Type0 --+
 </pre>
 
 <hr />
-<p>New menu, item and separator.</p>
+<p>Menu Python Type, wrapping ObjC <code>NSMenu</code>.</p>
 
 <!-- ==================== INSTANCE METHODS ==================== -->
 <a name="section-InstanceMethods"></a>
@@ -91,7 +91,7 @@ bases._Type0 --+
         <tr>
           <td><span class="summary-sig"><a href="pycocoa.menus.Menu-class.html#__init__" class="summary-sig-name">__init__</a>(<span class="summary-sig-arg">self</span>,
         <span class="summary-sig-arg">title</span>=<span class="summary-sig-default"><code class="variable-quote">'</code><code class="variable-string"></code><code class="variable-quote">'</code></span>)</span><br />
-      x.__init__(...) initializes x; see help(type(x)) for signature</td>
+      New <a href="pycocoa.menus.Menu-class.html" class="link">Menu</a>.</td>
           <td align="right" valign="top">
             
             
@@ -123,9 +123,9 @@ bases._Type0 --+
     </td><td class="summary">
       <table width="100%" cellpadding="0" cellspacing="0" border="0">
         <tr>
-          <td><span class="summary-sig"><a name="append"></a><span class="summary-sig-name">append</span>(<span class="summary-sig-arg">self</span>,
+          <td><span class="summary-sig"><a href="pycocoa.menus.Menu-class.html#append" class="summary-sig-name">append</a>(<span class="summary-sig-arg">self</span>,
         <span class="summary-sig-arg">*items</span>)</span><br />
-      Add one or more items or separators.</td>
+      Add one or more items or separators to this menu.</td>
           <td align="right" valign="top">
             
             
@@ -144,11 +144,7 @@ bases._Type0 --+
           <td><span class="summary-sig"><a href="pycocoa.menus.Menu-class.html#item" class="summary-sig-name">item</a>(<span class="summary-sig-arg">self</span>,
         <span class="summary-sig-arg">title</span>,
         <span class="summary-sig-arg">action</span>=<span class="summary-sig-default">None</span>,
-        <span class="summary-sig-arg">key</span>=<span class="summary-sig-default"><code class="variable-quote">'</code><code class="variable-string"></code><code class="variable-quote">'</code></span>,
-        <span class="summary-sig-arg">alt</span>=<span class="summary-sig-default">False</span>,
-        <span class="summary-sig-arg">cmd</span>=<span class="summary-sig-default">True</span>,
-        <span class="summary-sig-arg">ctrl</span>=<span class="summary-sig-default">False</span>,
-        <span class="summary-sig-arg">shift</span>=<span class="summary-sig-default">False</span>)</span><br />
+        <span class="summary-sig-arg">**kwds</span>)</span><br />
       New menu item with action and optional shortcut key.</td>
           <td align="right" valign="top">
             
@@ -167,8 +163,8 @@ bases._Type0 --+
         <tr>
           <td><span class="summary-sig"><a href="pycocoa.menus.Menu-class.html#items" class="summary-sig-name">items</a>(<span class="summary-sig-arg">self</span>,
         <span class="summary-sig-arg">separators</span>=<span class="summary-sig-default">False</span>)</span><br />
-      Yield this menu's items (<a href="pycocoa.menus.Item-class.html" 
-      class="link">Item</a>).</td>
+      Yield each of the items in this menu (<a 
+      href="pycocoa.menus.Item-class.html" class="link">Item</a>).</td>
           <td align="right" valign="top">
             
             
@@ -184,8 +180,8 @@ bases._Type0 --+
     </td><td class="summary">
       <table width="100%" cellpadding="0" cellspacing="0" border="0">
         <tr>
-          <td><span class="summary-sig"><a name="separator"></a><span class="summary-sig-name">separator</span>(<span class="summary-sig-arg">self</span>)</span><br />
-      A menu items separator.</td>
+          <td><span class="summary-sig"><a href="pycocoa.menus.Menu-class.html#separator" class="summary-sig-name">separator</a>(<span class="summary-sig-arg">self</span>)</span><br />
+      New menu item separator.</td>
           <td align="right" valign="top">
             
             
@@ -271,12 +267,42 @@ bases._Type0 --+
     </td>
   </tr></table>
   
-  <p>x.__init__(...) initializes x; see help(type(x)) for signature</p>
+  <p>New <a href="pycocoa.menus.Menu-class.html" class="link">Menu</a>.</p>
   <dl class="fields">
+    <dt>Parameters:</dt>
+    <dd><ul class="nomargin-top">
+        <li><strong class="pname"><code>title</code></strong> - The menu title (str).</li>
+    </ul></dd>
     <dt>Overrides:
         object.__init__
-        <dd><em class="note">(inherited documentation)</em></dd>
     </dt>
+  </dl>
+</td></tr></table>
+</div>
+<a name="append"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">append</span>(<span class="sig-arg">self</span>,
+        <span class="sig-arg">*items</span>)</span>
+  </h3>
+  </td><td align="right" valign="top"
+    >&nbsp;
+    </td>
+  </tr></table>
+  
+  <p>Add one or more items or separators to this menu.</p>
+  <dl class="fields">
+    <dt>Parameters:</dt>
+    <dd><ul class="nomargin-top">
+        <li><strong class="pname"><code>items</code></strong> - The items to add (<a href="pycocoa.menus.Item-class.html" 
+          class="link">Item</a> or <a 
+          href="pycocoa.menus.Separator-class.html" 
+          class="link">Separator</a>).</li>
+    </ul></dd>
   </dl>
 </td></tr></table>
 </div>
@@ -290,11 +316,7 @@ bases._Type0 --+
   <h3 class="epydoc"><span class="sig"><span class="sig-name">item</span>(<span class="sig-arg">self</span>,
         <span class="sig-arg">title</span>,
         <span class="sig-arg">action</span>=<span class="sig-default">None</span>,
-        <span class="sig-arg">key</span>=<span class="sig-default"><code class="variable-quote">'</code><code class="variable-string"></code><code class="variable-quote">'</code></span>,
-        <span class="sig-arg">alt</span>=<span class="sig-default">False</span>,
-        <span class="sig-arg">cmd</span>=<span class="sig-default">True</span>,
-        <span class="sig-arg">ctrl</span>=<span class="sig-default">False</span>,
-        <span class="sig-arg">shift</span>=<span class="sig-default">False</span>)</span>
+        <span class="sig-arg">**kwds</span>)</span>
   </h3>
   </td><td align="right" valign="top"
     >&nbsp;
@@ -302,12 +324,18 @@ bases._Type0 --+
   </tr></table>
   
   <p>New menu item with action and optional shortcut key.</p>
-  <p>A None <i>action</i> is set to the <i>title</i> with spaces removed 
-  and lowercase first letter.</p>
-  <p>The <i>action</i> is a string, usually the delegate method or 
-  <code>SEL</code> to be called.  The <i>action</i> string must end with 
-  ':' or '_'.</p>
   <dl class="fields">
+    <dt>Parameters:</dt>
+    <dd><ul class="nomargin-top">
+        <li><strong class="pname"><code>title</code></strong> - Item title (string).</li>
+        <li><strong class="pname"><code>action</code></strong> - See <a href="pycocoa.menus.Item-class.html" 
+          class="link">Item</a>.__init__.</li>
+        <li><strong class="pname"><code>kwds</code></strong> - See <a href="pycocoa.menus.Item-class.html" 
+          class="link">Item</a>.__init__.</li>
+    </ul></dd>
+    <dt>Returns:</dt>
+        <dd>New item (<a href="pycocoa.menus.Item-class.html" 
+          class="link">Item</a>).</dd>
   </dl>
 </td></tr></table>
 </div>
@@ -326,13 +354,36 @@ bases._Type0 --+
     </td>
   </tr></table>
   
-  <p>Yield this menu's items (<a href="pycocoa.menus.Item-class.html" 
-  class="link">Item</a>).</p>
+  <p>Yield each of the items in this menu (<a 
+  href="pycocoa.menus.Item-class.html" class="link">Item</a>).</p>
   <dl class="fields">
     <dt>Parameters:</dt>
     <dd><ul class="nomargin-top">
-        <li><strong class="pname"><code>separators</code></strong> - Yield or skip separator items (bool).</li>
+        <li><strong class="pname"><code>separators</code></strong> - Yield or skip <a href="pycocoa.menus.Separator-class.html" 
+          class="link">Separator</a> items (bool).</li>
     </ul></dd>
+  </dl>
+</td></tr></table>
+</div>
+<a name="separator"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">separator</span>(<span class="sig-arg">self</span>)</span>
+  </h3>
+  </td><td align="right" valign="top"
+    >&nbsp;
+    </td>
+  </tr></table>
+  
+  <p>New menu item separator.</p>
+  <dl class="fields">
+    <dt>Returns:</dt>
+        <dd>New item (<a href="pycocoa.menus.Separator-class.html" 
+          class="link">Separator</a>).</dd>
   </dl>
 </td></tr></table>
 </div>
@@ -368,7 +419,7 @@ bases._Type0 --+
 <table border="0" cellpadding="0" cellspacing="0" width="100%%">
   <tr>
     <td align="left" class="footer">
-    Generated by Epydoc 3.0.1 on Fri Apr 20 15:50:11 2018
+    Generated by Epydoc 3.0.1 on Sun Apr 22 21:13:10 2018
     </td>
     <td align="right" class="footer">
       <a target="mainFrame" href="http://epydoc.sourceforge.net"

@@ -42,7 +42,7 @@ import sys
 from time import strftime, strptime
 
 try:  # the imports listed explicitly to help PyChecker
-    from pycocoa import App, aspect_ratio, closeTables, gcd, Item, \
+    from pycocoa import App, aspect_ratio, closeTables, Item, \
                         MediaWindow, Menu, MenuBar, OpenPanel, printf, \
                         Table, z1000str, zSIstr, \
                         __version__ as __PyCocoa__  # PYCHOK false
@@ -56,7 +56,7 @@ except ImportError:
                       '<http://PyPI.Python.org/pypi/python-vlc>'))
 
 __all__  = ('AppVLC',)
-__version__ = '18.04.19'
+__version__ = '18.04.21'
 
 _macOS  = platform.mac_ver()[0:3:2]  # PYCHOK false
 _Movies = '.mov', '.mp4'  # lower-case file types for movies, videos
@@ -225,7 +225,7 @@ class AppVLC(App):
             self.terminate()
         App.windowClose_(self, window)  # super(AppVLC, self)...
 
-    def windowResize_(self, window, size=None):
+    def windowResize_(self, window):
         if window is self.window and self.ratio:
             # get and maintain the aspect ratio
             # (the first player.video_get_size()
@@ -233,7 +233,7 @@ class AppVLC(App):
             #  calls return (w, h) correctly)
             self.window.ratio = self.player.video_get_size(0)
             self.ratio -= 1
-        return App.windowResize_(self, window, size=size)  # super(AppVLC, self)...
+        App.windowResize_(self, window)  # super(AppVLC, self)...
 
     def _rate(self, unused, factor):
         r = self.player.get_rate() * factor
@@ -269,8 +269,8 @@ if __name__ == '__main__':
             printf('invalid option: %s', o)
             sys.exit(1)
 
-    if _raiser:  # get traceback at SIG- faults or
-        try:  # run as: python3 -X faulthandler ...
+    if _raiser:  # get traceback at SIG- faults or ...
+        try:  # ... use: python3 -X faulthandler ...
             import faulthandler
             faulthandler.enable()
         except ImportError:  # not in Python 3.3-

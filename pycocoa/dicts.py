@@ -25,6 +25,9 @@
 # ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
 # OTHER DEALINGS IN THE SOFTWARE.
 
+'''Types L{FrozenDict} and L{Dict}, wrapping ObjC C{NS[Mutable]Dictionary}.
+'''
+# all imports listed explicitly to help PyChecker
 from bases   import _Type0
 from nstypes import NSDictionary, nsIter2, NSMutableDictionary, \
                     NSnil, ns2Type, py2NS, type2NS, _Types
@@ -33,7 +36,7 @@ from utils   import instanceof, missing
 
 __all__ = ('Dict',
            'FrozenDict')
-__version__ = '18.04.10'
+__version__ = '18.04.21'
 
 
 def _dict_cmp(dict1, dict2):
@@ -63,9 +66,11 @@ def _dict_kwds(args, kwds, name):
 
 
 class FrozenDict(_Type0):
-    '''Python Type equivalent of an (immutable) ObjC NSDictionary.
+    '''Python C{dit} Type, wrapping an (immutable) ObjC C{NSDictionary}.
     '''
     def __init__(self, *ns_dict, **kwds):
+        '''New immutable L{FrozenDict}, like C{dict.__init__}.
+        '''
         ns_dict, kwds = _dict_kwds(ns_dict, kwds, FrozenDict.__name__)
         if isinstance(ns_dict, dict):
             if kwds:
@@ -104,6 +109,8 @@ class FrozenDict(_Type0):
         return value
 
     def __len__(self):
+        '''Return the length, like C{dict.__len__}.
+        '''
         # <http://developer.apple.com/documentation/foundation/
         #         nsdictionary/1409628-count>
         return self.NS.count()
@@ -112,7 +119,9 @@ class FrozenDict(_Type0):
         return not self.__eq__(other)
 
     def copy(self):
-        '''Make a shallow copy as an instance of this immutable class.
+        '''Make a shallow copy.
+
+           @return: The copy (L{FrozenDict}).
         '''
         return self.__class__(self._NS_copy(False))
 
@@ -120,10 +129,14 @@ class FrozenDict(_Type0):
 #       raise NotImplementedError('%s.%s' % (self, 'fromkeys'))
 
     def get(self, key, default=None):
+        '''Return the value for the given key, like C{dict.get}.
+        '''
         _, _, value = self._NS_get3(key)
         return default if value is missing else value
 
     def items(self):
+        '''Yield the key, value pairs, like C{dict.items}.
+        '''
         for key, k in nsIter2(self.NS.allKeys()):
             v = self.NS.objectForKey_(k)
             if v in (NSnil, None):  # missing key?
@@ -131,11 +144,15 @@ class FrozenDict(_Type0):
             yield key, ns2Type(v)
 
     def keys(self):
+        '''Yield the keys, like C{dict.keys}.
+        '''
         for key, _ in nsIter2(self.NS.allKeys()):
             yield key
     __iter__ = keys
 
     def values(self):
+        '''Yield the values, like C{dict.values}.
+        '''
         for value, _ in nsIter2(self.NS.allValues()):
             yield value
 
@@ -160,11 +177,13 @@ class FrozenDict(_Type0):
 
 
 class Dict(FrozenDict):
-    '''Python Type equivalent of a mutable ObjC NSMutableDictionary.
+    '''Python C{dict} Type, wrapping an ObjC C{NSMutableDictionary}.
     '''
     __iter__ = FrozenDict.keys
 
     def __init__(self, *ns_dict, **kwds):
+        '''New mutable L{Dict}, like C{dict.__init__}.
+        '''
         ns_dict, kwds = _dict_kwds(ns_dict, kwds, Dict.__name__)
         if isinstance(ns_dict, dict):
             self.NS = NSMutableDictionary.alloc().init()
@@ -180,6 +199,10 @@ class Dict(FrozenDict):
             self.update(kwds)
 
     def __delitem__(self, key):
+        '''Remove an item, like C{dict.__delitem__}.
+
+           @raise KeyError: No such I{key}.
+        '''
         k, _, value = self._NS_get3(key)
         if value is missing:
             self._NS_KeyError(key, k)
@@ -189,17 +212,21 @@ class Dict(FrozenDict):
         self.NS.setObject_forKey_(type2NS(value), type2NS(key))
 
     def clear(self):
-        '''Like dict.clear().
+        '''Remove all items, like C{dict.clear}.
         '''
         self.NS.removeAllObjects()
 
     def copy(self):
-        '''Make a shallow copy as an instance of this mutable class.
+        '''Make a shallow copy.
+
+           @return: The copy (L{Dict}).
         '''
         return self.__class__(self._NS_copy(True))
 
     def pop(self, key, default=missing):
-        '''Like dict.pop().
+        '''Remove an item, like C{dict.pop}.
+
+           @raise KeyError: No such I{key} and no I{default} provided.
         '''
         k, _, value = self._NS_get3(key)
         if value is not missing:
@@ -213,7 +240,9 @@ class Dict(FrozenDict):
 #       raise NotImplementedError('%s.%s' % (self, 'popitem'))
 
     def setdefault(self, key, default=missing):  # XXX default=None
-        '''Like dict.setdefault(), except the I{default} is required.
+        '''Get/set an item, like C{dict.setdefault}, except the I{default} is required.
+
+           @raise ValueError: No I{default} provided for new I{key}.
         '''
         k, _, value = self._NS_get3(key)
         if value is not missing:
@@ -224,9 +253,12 @@ class Dict(FrozenDict):
         return default
 
     def update(self, *other, **kwds):
-        '''Like dict.update(), except I{other} must be a dict, Dict or DictIM.
+        '''Update, like C{dict.update}, except I{other} must be a C{dict},
+           L{Dict} or L{FrozenDict}.
 
-        @see: <http://docs.python.org/3/library/stdtypes.html#dict.update>
+           @raise TypeError: Invalid type of I{other}.
+
+           @see: <http://docs.python.org/3/library/stdtypes.html#dict.update>
         '''
         other, kwds = _dict_kwds(other, kwds, 'other')
         if other:

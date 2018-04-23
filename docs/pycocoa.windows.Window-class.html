@@ -79,7 +79,8 @@ bases._Type0 --+
 </dd></dl>
 
 <hr />
-<p>Basic, base window class.</p>
+<p>Basic, base window Python Type, wrapping ObjC 
+  <code>NSWindow</code>.</p>
 
 <!-- ==================== INSTANCE METHODS ==================== -->
 <a name="section-InstanceMethods"></a>
@@ -100,8 +101,9 @@ bases._Type0 --+
         <span class="summary-sig-arg">frame</span>=<span class="summary-sig-default">None</span>,
         <span class="summary-sig-arg">excl</span>=<span class="summary-sig-default">0</span>,
         <span class="summary-sig-arg">auto</span>=<span class="summary-sig-default">False</span>,
-        <span class="summary-sig-arg">**attrs</span>)</span><br />
-      Create a new window.</td>
+        <span class="summary-sig-arg">**kwds</span>)</span><br />
+      Create a new <a href="pycocoa.windows.Window-class.html" 
+      class="link">Window</a>.</td>
           <td align="right" valign="top">
             
             
@@ -118,7 +120,7 @@ bases._Type0 --+
       <table width="100%" cellpadding="0" cellspacing="0" border="0">
         <tr>
           <td><span class="summary-sig"><a name="cascade"></a><span class="summary-sig-name">cascade</span>(<span class="summary-sig-arg">self</span>)</span><br />
-      Cascade window placement (from the top left corner of the screen).</td>
+      Cascade window placement (from the top left screen corner).</td>
           <td align="right" valign="top">
             
             
@@ -135,7 +137,7 @@ bases._Type0 --+
       <table width="100%" cellpadding="0" cellspacing="0" border="0">
         <tr>
           <td><span class="summary-sig"><a href="pycocoa.windows.Window-class.html#close" class="summary-sig-name">close</a>(<span class="summary-sig-arg">self</span>)</span><br />
-      Close this window by a click of the close button.</td>
+      Close this window (by a click of the close button).</td>
           <td align="right" valign="top">
             
             
@@ -151,9 +153,9 @@ bases._Type0 --+
     </td><td class="summary">
       <table width="100%" cellpadding="0" cellspacing="0" border="0">
         <tr>
-          <td><span class="summary-sig"><a name="front"></a><span class="summary-sig-name">front</span>(<span class="summary-sig-arg">self</span>,
+          <td><span class="summary-sig"><a href="pycocoa.windows.Window-class.html#front" class="summary-sig-name">front</a>(<span class="summary-sig-arg">self</span>,
         <span class="summary-sig-arg">focus</span>=<span class="summary-sig-default">False</span>)</span><br />
-      Order window to front.</td>
+      Order this window to the front.</td>
           <td align="right" valign="top">
             
             
@@ -169,9 +171,9 @@ bases._Type0 --+
     </td><td class="summary">
       <table width="100%" cellpadding="0" cellspacing="0" border="0">
         <tr>
-          <td><span class="summary-sig"><a name="full"></a><span class="summary-sig-name">full</span>(<span class="summary-sig-arg">self</span>,
+          <td><span class="summary-sig"><a href="pycocoa.windows.Window-class.html#full" class="summary-sig-name">full</a>(<span class="summary-sig-arg">self</span>,
         <span class="summary-sig-arg">full</span>)</span><br />
-      Show or exit full screen window.</td>
+      Enter or exit full screen mode for this window.</td>
           <td align="right" valign="top">
             
             
@@ -187,7 +189,7 @@ bases._Type0 --+
     </td><td class="summary">
       <table width="100%" cellpadding="0" cellspacing="0" border="0">
         <tr>
-          <td><span class="summary-sig"><a name="hide"></a><span class="summary-sig-name">hide</span>(<span class="summary-sig-arg">self</span>,
+          <td><span class="summary-sig"><a href="pycocoa.windows.Window-class.html#hide" class="summary-sig-name">hide</a>(<span class="summary-sig-arg">self</span>,
         <span class="summary-sig-arg">hide</span>)</span><br />
       Hide or unhide this window.</td>
           <td align="right" valign="top">
@@ -205,10 +207,10 @@ bases._Type0 --+
     </td><td class="summary">
       <table width="100%" cellpadding="0" cellspacing="0" border="0">
         <tr>
-          <td><span class="summary-sig"><a name="limit"></a><span class="summary-sig-name">limit</span>(<span class="summary-sig-arg">self</span>,
+          <td><span class="summary-sig"><a href="pycocoa.windows.Window-class.html#limit" class="summary-sig-name">limit</a>(<span class="summary-sig-arg">self</span>,
         <span class="summary-sig-arg">width</span>=<span class="summary-sig-default">3840</span>,
         <span class="summary-sig-arg">height</span>=<span class="summary-sig-default">4160</span>)</span><br />
-      Limit the window's content size.</td>
+      Limit this window's content size.</td>
           <td align="right" valign="top">
             
             
@@ -224,7 +226,8 @@ bases._Type0 --+
     </td><td class="summary">
       <table width="100%" cellpadding="0" cellspacing="0" border="0">
         <tr>
-          <td><span class="summary-sig"><a name="windowCloseOK_"></a><span class="summary-sig-name">windowCloseOK_</span>(<span class="summary-sig-arg">self</span>)</span></td>
+          <td><span class="summary-sig"><a href="pycocoa.windows.Window-class.html#windowCloseOK_" class="summary-sig-name">windowCloseOK_</a>(<span class="summary-sig-arg">self</span>)</span><br />
+      Is it OK? to close <i>window</i> callback.</td>
           <td align="right" valign="top">
             
             
@@ -240,7 +243,8 @@ bases._Type0 --+
     </td><td class="summary">
       <table width="100%" cellpadding="0" cellspacing="0" border="0">
         <tr>
-          <td><span class="summary-sig"><a name="windowClose_"></a><span class="summary-sig-name">windowClose_</span>(<span class="summary-sig-arg">self</span>)</span></td>
+          <td><span class="summary-sig"><a name="windowClose_"></a><span class="summary-sig-name">windowClose_</span>(<span class="summary-sig-arg">self</span>)</span><br />
+      Closing <i>window</i> callback.</td>
           <td align="right" valign="top">
             
             
@@ -256,8 +260,9 @@ bases._Type0 --+
     </td><td class="summary">
       <table width="100%" cellpadding="0" cellspacing="0" border="0">
         <tr>
-          <td><span class="summary-sig"><a name="windowKey_"></a><span class="summary-sig-name">windowKey_</span>(<span class="summary-sig-arg">self</span>,
-        <span class="summary-sig-arg">key</span>)</span></td>
+          <td><span class="summary-sig"><a href="pycocoa.windows.Window-class.html#windowKey_" class="summary-sig-name">windowKey_</a>(<span class="summary-sig-arg">self</span>,
+        <span class="summary-sig-arg">key</span>)</span><br />
+      Callback <i>window</i> becomes/resigns <code>Key</code>.</td>
           <td align="right" valign="top">
             
             
@@ -273,8 +278,9 @@ bases._Type0 --+
     </td><td class="summary">
       <table width="100%" cellpadding="0" cellspacing="0" border="0">
         <tr>
-          <td><span class="summary-sig"><a name="windowMain_"></a><span class="summary-sig-name">windowMain_</span>(<span class="summary-sig-arg">self</span>,
-        <span class="summary-sig-arg">main</span>)</span></td>
+          <td><span class="summary-sig"><a href="pycocoa.windows.Window-class.html#windowMain_" class="summary-sig-name">windowMain_</a>(<span class="summary-sig-arg">self</span>,
+        <span class="summary-sig-arg">main</span>)</span><br />
+      Callback <i>window</i> becomes/resigns <code>Main</code>.</td>
           <td align="right" valign="top">
             
             
@@ -290,8 +296,8 @@ bases._Type0 --+
     </td><td class="summary">
       <table width="100%" cellpadding="0" cellspacing="0" border="0">
         <tr>
-          <td><span class="summary-sig"><a name="windowResize_"></a><span class="summary-sig-name">windowResize_</span>(<span class="summary-sig-arg">self</span>,
-        <span class="summary-sig-arg">size</span>=<span class="summary-sig-default">None</span>)</span></td>
+          <td><span class="summary-sig"><a name="windowResize_"></a><span class="summary-sig-name">windowResize_</span>(<span class="summary-sig-arg">self</span>)</span><br />
+      Resizing <i>window</i> callback.</td>
           <td align="right" valign="top">
             
             
@@ -307,8 +313,9 @@ bases._Type0 --+
     </td><td class="summary">
       <table width="100%" cellpadding="0" cellspacing="0" border="0">
         <tr>
-          <td><span class="summary-sig"><a name="windowZoomOK_"></a><span class="summary-sig-name">windowZoomOK_</span>(<span class="summary-sig-arg">self</span>,
-        <span class="summary-sig-arg">frame</span>=<span class="summary-sig-default">None</span>)</span></td>
+          <td><span class="summary-sig"><a href="pycocoa.windows.Window-class.html#windowZoomOK_" class="summary-sig-name">windowZoomOK_</a>(<span class="summary-sig-arg">self</span>,
+        <span class="summary-sig-arg">frame</span>=<span class="summary-sig-default">None</span>)</span><br />
+      Is it OK? to toggle zoom <i>window</i> callback.</td>
           <td align="right" valign="top">
             
             
@@ -324,9 +331,9 @@ bases._Type0 --+
     </td><td class="summary">
       <table width="100%" cellpadding="0" cellspacing="0" border="0">
         <tr>
-          <td><span class="summary-sig"><a name="zoom"></a><span class="summary-sig-name">zoom</span>(<span class="summary-sig-arg">self</span>,
+          <td><span class="summary-sig"><a href="pycocoa.windows.Window-class.html#zoom" class="summary-sig-name">zoom</a>(<span class="summary-sig-arg">self</span>,
         <span class="summary-sig-arg">zoom</span>)</span><br />
-      Zoom or unzoom this window.</td>
+      Toggle, zoom or un-zoom this window.</td>
           <td align="right" valign="top">
             
             
@@ -373,7 +380,7 @@ bases._Type0 --+
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
         <a href="pycocoa.windows.Window-class.html#NSview" class="summary-name">NSview</a><br />
-      Get the <code>NS</code> view (<code>NSView...</code>).
+      Get this window's <code>NS</code> view (<code>NSView...</code>).
     </td>
   </tr>
 <tr>
@@ -381,8 +388,8 @@ bases._Type0 --+
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
         <a href="pycocoa.windows.Window-class.html#frame" class="summary-name">frame</a><br />
-      Get the window frame rectangle (<a 
-      href="pycocoa.windows.Frame-class.html" class="link">Frame</a>).
+      Get this window's frame (<a href="pycocoa.geometry.Rect-class.html" 
+      class="link">Rect</a>).
     </td>
   </tr>
 <tr>
@@ -390,7 +397,7 @@ bases._Type0 --+
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
         <a href="pycocoa.windows.Window-class.html#isFull" class="summary-name">isFull</a><br />
-      Get the full screen state (bool).
+      Get this window's full screen state (bool).
     </td>
   </tr>
 <tr>
@@ -398,7 +405,7 @@ bases._Type0 --+
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
         <a href="pycocoa.windows.Window-class.html#isHidden" class="summary-name">isHidden</a><br />
-      Get the hidden/miniaturized state (bool).
+      Get this window's hidden state (bool).
     </td>
   </tr>
 <tr>
@@ -406,7 +413,7 @@ bases._Type0 --+
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
         <a href="pycocoa.windows.Window-class.html#isKey" class="summary-name">isKey</a><br />
-      Get key state (bool).
+      Get this window's <code>Key</code> state (bool).
     </td>
   </tr>
 <tr>
@@ -414,7 +421,7 @@ bases._Type0 --+
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
         <a href="pycocoa.windows.Window-class.html#isMain" class="summary-name">isMain</a><br />
-      Get main state (bool).
+      Get this window's <code>Main</code> state (bool).
     </td>
   </tr>
 <tr>
@@ -422,7 +429,7 @@ bases._Type0 --+
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
         <a href="pycocoa.windows.Window-class.html#isVisible" class="summary-name">isVisible</a><br />
-      Get the visible state (bool).
+      Get this window's visible state (bool).
     </td>
   </tr>
 <tr>
@@ -430,7 +437,7 @@ bases._Type0 --+
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
         <a href="pycocoa.windows.Window-class.html#isZoomed" class="summary-name">isZoomed</a><br />
-      Get the zoomed state (bool).
+      Get this window's zoomed state (bool).
     </td>
   </tr>
 <tr>
@@ -438,7 +445,7 @@ bases._Type0 --+
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
         <a href="pycocoa.windows.Window-class.html#ratio" class="summary-name">ratio</a><br />
-      Get the aspect ratio as (width, height).
+      Get this window's aspect ratio as 2-tuple (width, height).
     </td>
   </tr>
   <tr>
@@ -481,7 +488,7 @@ bases._Type0 --+
         <span class="sig-arg">frame</span>=<span class="sig-default">None</span>,
         <span class="sig-arg">excl</span>=<span class="sig-default">0</span>,
         <span class="sig-arg">auto</span>=<span class="sig-default">False</span>,
-        <span class="sig-arg">**attrs</span>)</span>
+        <span class="sig-arg">**kwds</span>)</span>
     <br /><em class="fname">(Constructor)</em>
   </h3>
   </td><td align="right" valign="top"
@@ -489,21 +496,23 @@ bases._Type0 --+
     </td>
   </tr></table>
   
-  <p>Create a new window.</p>
+  <p>Create a new <a href="pycocoa.windows.Window-class.html" 
+  class="link">Window</a>.</p>
   <dl class="fields">
     <dt>Parameters:</dt>
     <dd><ul class="nomargin-top">
-        <li><strong class="pname"><code>title</code></strong> - Window title (string).</li>
-        <li><strong class="pname"><code>frame</code></strong> - Window frame (None, <a href="pycocoa.windows.Frame-class.html" 
-          class="link">Frame</a>, <a 
+        <li><strong class="pname"><code>title</code></strong> - Window title (str).</li>
+        <li><strong class="pname"><code>frame</code></strong> - Window frame (<a href="pycocoa.geometry.Rect-class.html" 
+          class="link">Rect</a>, <a 
           href="pycocoa.octypes.NSRect_t-class.html" 
-          class="link">NSRect_t</a> or <a 
+          class="link">NSRect_t</a>, <a 
           href="pycocoa.octypes.NSRect4_t-class.html" 
-          class="link">NSRect4_t</a>).</li>
+          class="link">NSRect4_t</a>, or None).</li>
         <li><strong class="pname"><code>excl</code></strong> - Window styles to exclude (<a 
           href="pycocoa.windows.Style-class.html" 
           class="link">Style</a><code>.attribute</code>).</li>
         <li><strong class="pname"><code>auto</code></strong> - Release window resource when closed (bool).</li>
+        <li><strong class="pname"><code>kwds</code></strong> - Optional, additional keyword arguments.</li>
     </ul></dd>
     <dt>Overrides:
         object.__init__
@@ -525,14 +534,232 @@ bases._Type0 --+
     </td>
   </tr></table>
   
-  <p>Close this window by a click of the close button.</p>
+  <p>Close this window (by a click of the close button).</p>
   <dl class="fields">
   </dl>
 <div class="fields">      <p><strong>Note:</strong>
-        The .windowWillClose_ action is invoked iff .windowShouldClose_ 
-        returns True.
+        The <code>.windowWillClose_</code> action is invoked iff 
+        <code>.windowShouldClose_</code> returns True.
       </p>
 </div></td></tr></table>
+</div>
+<a name="front"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">front</span>(<span class="sig-arg">self</span>,
+        <span class="sig-arg">focus</span>=<span class="sig-default">False</span>)</span>
+  </h3>
+  </td><td align="right" valign="top"
+    >&nbsp;
+    </td>
+  </tr></table>
+  
+  <p>Order this window to the front.</p>
+  <dl class="fields">
+    <dt>Parameters:</dt>
+    <dd><ul class="nomargin-top">
+        <li><strong class="pname"><code>focus</code></strong> - Make this window <code>Key</code> (bool).</li>
+    </ul></dd>
+  </dl>
+</td></tr></table>
+</div>
+<a name="full"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">full</span>(<span class="sig-arg">self</span>,
+        <span class="sig-arg">full</span>)</span>
+  </h3>
+  </td><td align="right" valign="top"
+    >&nbsp;
+    </td>
+  </tr></table>
+  
+  <p>Enter or exit full screen mode for this window.</p>
+  <dl class="fields">
+    <dt>Parameters:</dt>
+    <dd><ul class="nomargin-top">
+        <li><strong class="pname"><code>full</code></strong> - Enter or exit (bool).</li>
+    </ul></dd>
+  </dl>
+</td></tr></table>
+</div>
+<a name="hide"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">hide</span>(<span class="sig-arg">self</span>,
+        <span class="sig-arg">hide</span>)</span>
+  </h3>
+  </td><td align="right" valign="top"
+    >&nbsp;
+    </td>
+  </tr></table>
+  
+  <p>Hide or unhide this window.</p>
+  <dl class="fields">
+    <dt>Parameters:</dt>
+    <dd><ul class="nomargin-top">
+        <li><strong class="pname"><code>hide</code></strong> - Hide or show (bool).</li>
+    </ul></dd>
+  </dl>
+</td></tr></table>
+</div>
+<a name="limit"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">limit</span>(<span class="sig-arg">self</span>,
+        <span class="sig-arg">width</span>=<span class="sig-default">3840</span>,
+        <span class="sig-arg">height</span>=<span class="sig-default">4160</span>)</span>
+  </h3>
+  </td><td align="right" valign="top"
+    >&nbsp;
+    </td>
+  </tr></table>
+  
+  <p>Limit this window's content size.</p>
+  <dl class="fields">
+    <dt>Parameters:</dt>
+    <dd><ul class="nomargin-top">
+        <li><strong class="pname"><code>width</code></strong> - Width limit (float or int).</li>
+        <li><strong class="pname"><code>height</code></strong> - Height limit (float or int).</li>
+    </ul></dd>
+  </dl>
+</td></tr></table>
+</div>
+<a name="windowCloseOK_"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">windowCloseOK_</span>(<span class="sig-arg">self</span>)</span>
+  </h3>
+  </td><td align="right" valign="top"
+    >&nbsp;
+    </td>
+  </tr></table>
+  
+  <p>Is it OK? to close <i>window</i> callback.</p>
+  <dl class="fields">
+    <dt>Returns:</dt>
+        <dd>True if OK to close, False otherwise.</dd>
+  </dl>
+</td></tr></table>
+</div>
+<a name="windowKey_"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">windowKey_</span>(<span class="sig-arg">self</span>,
+        <span class="sig-arg">key</span>)</span>
+  </h3>
+  </td><td align="right" valign="top"
+    >&nbsp;
+    </td>
+  </tr></table>
+  
+  <p>Callback <i>window</i> becomes/resigns <code>Key</code>.</p>
+  <dl class="fields">
+    <dt>Parameters:</dt>
+    <dd><ul class="nomargin-top">
+        <li><strong class="pname"><code>key</code></strong> - Make or un-make <code>Key</code> (bool).</li>
+    </ul></dd>
+  </dl>
+</td></tr></table>
+</div>
+<a name="windowMain_"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">windowMain_</span>(<span class="sig-arg">self</span>,
+        <span class="sig-arg">main</span>)</span>
+  </h3>
+  </td><td align="right" valign="top"
+    >&nbsp;
+    </td>
+  </tr></table>
+  
+  <p>Callback <i>window</i> becomes/resigns <code>Main</code>.</p>
+  <dl class="fields">
+    <dt>Parameters:</dt>
+    <dd><ul class="nomargin-top">
+        <li><strong class="pname"><code>main</code></strong> - Make or un-make <code>Main</code> (bool).</li>
+    </ul></dd>
+  </dl>
+</td></tr></table>
+</div>
+<a name="windowZoomOK_"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">windowZoomOK_</span>(<span class="sig-arg">self</span>,
+        <span class="sig-arg">frame</span>=<span class="sig-default">None</span>)</span>
+  </h3>
+  </td><td align="right" valign="top"
+    >&nbsp;
+    </td>
+  </tr></table>
+  
+  <p>Is it OK? to toggle zoom <i>window</i> callback.</p>
+  <dl class="fields">
+    <dt>Parameters:</dt>
+    <dd><ul class="nomargin-top">
+        <li><strong class="pname"><code>frame</code></strong> - The frame to zoom to (<a href="pycocoa.geometry.Rect-class.html" 
+          class="link">Rect</a>).</li>
+    </ul></dd>
+    <dt>Returns:</dt>
+        <dd>True if OK to toggle, False otherwise.</dd>
+  </dl>
+</td></tr></table>
+</div>
+<a name="zoom"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">zoom</span>(<span class="sig-arg">self</span>,
+        <span class="sig-arg">zoom</span>)</span>
+  </h3>
+  </td><td align="right" valign="top"
+    >&nbsp;
+    </td>
+  </tr></table>
+  
+  <p>Toggle, zoom or un-zoom this window.</p>
+  <dl class="fields">
+    <dt>Parameters:</dt>
+    <dd><ul class="nomargin-top">
+        <li><strong class="pname"><code>zoom</code></strong> - Zoom or un-zoom (bool) or <code>None</code> to toggle.</li>
+    </ul></dd>
+  </dl>
+</td></tr></table>
 </div>
 <br />
 <!-- ==================== PROPERTY DETAILS ==================== -->
@@ -550,16 +777,16 @@ bases._Type0 --+
        cellspacing="0" width="100%" bgcolor="white">
 <tr><td>
   <h3 class="epydoc">NSview</h3>
-  <p>Get the <code>NS</code> view (<code>NSView...</code>).</p>
+  <p>Get this window's <code>NS</code> view (<code>NSView...</code>).</p>
   <dl class="fields">
     <dt>Get Method:</dt>
     <dd class="value"><span class="summary-sig">NSview(<span class="summary-sig-arg">self</span>)</span>
-        - Get the <code>NS</code> view (<code>NSView...</code>).
+        - Get this window's <code>NS</code> view (<code>NSView...</code>).
     </dd>
     <dt>Set Method:</dt>
     <dd class="value"><span class="summary-sig">NSview(<span class="summary-sig-arg">self</span>,
         <span class="summary-sig-arg">ns_view</span>)</span>
-        - Set the <code>NS</code> view (<code>NSView...</code>).
+        - Set this window's <code>NS</code> view (<code>NSView...</code>).
     </dd>
   </dl>
 </td></tr></table>
@@ -570,13 +797,13 @@ bases._Type0 --+
        cellspacing="0" width="100%" bgcolor="white">
 <tr><td>
   <h3 class="epydoc">frame</h3>
-  <p>Get the window frame rectangle (<a 
-  href="pycocoa.windows.Frame-class.html" class="link">Frame</a>).</p>
+  <p>Get this window's frame (<a href="pycocoa.geometry.Rect-class.html" 
+  class="link">Rect</a>).</p>
   <dl class="fields">
     <dt>Get Method:</dt>
     <dd class="value"><span class="summary-sig">frame(<span class="summary-sig-arg">self</span>)</span>
-        - Get the window frame rectangle (<a href="pycocoa.windows.Frame-class.html" 
-class="link">Frame</a>).
+        - Get this window's frame (<a href="pycocoa.geometry.Rect-class.html" 
+class="link">Rect</a>).
     </dd>
   </dl>
 </td></tr></table>
@@ -587,11 +814,11 @@ class="link">Frame</a>).
        cellspacing="0" width="100%" bgcolor="white">
 <tr><td>
   <h3 class="epydoc">isFull</h3>
-  <p>Get the full screen state (bool).</p>
+  <p>Get this window's full screen state (bool).</p>
   <dl class="fields">
     <dt>Get Method:</dt>
     <dd class="value"><span class="summary-sig">isFull(<span class="summary-sig-arg">self</span>)</span>
-        - Get the full screen state (bool).
+        - Get this window's full screen state (bool).
     </dd>
   </dl>
 </td></tr></table>
@@ -602,11 +829,11 @@ class="link">Frame</a>).
        cellspacing="0" width="100%" bgcolor="white">
 <tr><td>
   <h3 class="epydoc">isHidden</h3>
-  <p>Get the hidden/miniaturized state (bool).</p>
+  <p>Get this window's hidden state (bool).</p>
   <dl class="fields">
     <dt>Get Method:</dt>
     <dd class="value"><span class="summary-sig">isHidden(<span class="summary-sig-arg">self</span>)</span>
-        - Get the hidden/miniaturized state (bool).
+        - Get this window's hidden state (bool).
     </dd>
   </dl>
 </td></tr></table>
@@ -617,11 +844,11 @@ class="link">Frame</a>).
        cellspacing="0" width="100%" bgcolor="white">
 <tr><td>
   <h3 class="epydoc">isKey</h3>
-  <p>Get key state (bool).</p>
+  <p>Get this window's <code>Key</code> state (bool).</p>
   <dl class="fields">
     <dt>Get Method:</dt>
     <dd class="value"><span class="summary-sig">isKey(<span class="summary-sig-arg">self</span>)</span>
-        - Get key state (bool).
+        - Get this window's <code>Key</code> state (bool).
     </dd>
   </dl>
 </td></tr></table>
@@ -632,11 +859,11 @@ class="link">Frame</a>).
        cellspacing="0" width="100%" bgcolor="white">
 <tr><td>
   <h3 class="epydoc">isMain</h3>
-  <p>Get main state (bool).</p>
+  <p>Get this window's <code>Main</code> state (bool).</p>
   <dl class="fields">
     <dt>Get Method:</dt>
     <dd class="value"><span class="summary-sig">isMain(<span class="summary-sig-arg">self</span>)</span>
-        - Get main state (bool).
+        - Get this window's <code>Main</code> state (bool).
     </dd>
   </dl>
 </td></tr></table>
@@ -647,11 +874,11 @@ class="link">Frame</a>).
        cellspacing="0" width="100%" bgcolor="white">
 <tr><td>
   <h3 class="epydoc">isVisible</h3>
-  <p>Get the visible state (bool).</p>
+  <p>Get this window's visible state (bool).</p>
   <dl class="fields">
     <dt>Get Method:</dt>
     <dd class="value"><span class="summary-sig">isVisible(<span class="summary-sig-arg">self</span>)</span>
-        - Get the visible state (bool).
+        - Get this window's visible state (bool).
     </dd>
   </dl>
 </td></tr></table>
@@ -662,11 +889,11 @@ class="link">Frame</a>).
        cellspacing="0" width="100%" bgcolor="white">
 <tr><td>
   <h3 class="epydoc">isZoomed</h3>
-  <p>Get the zoomed state (bool).</p>
+  <p>Get this window's zoomed state (bool).</p>
   <dl class="fields">
     <dt>Get Method:</dt>
     <dd class="value"><span class="summary-sig">isZoomed(<span class="summary-sig-arg">self</span>)</span>
-        - Get the zoomed state (bool).
+        - Get this window's zoomed state (bool).
     </dd>
   </dl>
 </td></tr></table>
@@ -677,17 +904,16 @@ class="link">Frame</a>).
        cellspacing="0" width="100%" bgcolor="white">
 <tr><td>
   <h3 class="epydoc">ratio</h3>
-  <p>Get the aspect ratio as (width, height).</p>
+  <p>Get this window's aspect ratio as 2-tuple (width, height).</p>
   <dl class="fields">
     <dt>Get Method:</dt>
     <dd class="value"><span class="summary-sig">ratio(<span class="summary-sig-arg">self</span>)</span>
-        - Get the aspect ratio as (width, height).
+        - Get this window's aspect ratio as 2-tuple (width, height).
     </dd>
     <dt>Set Method:</dt>
     <dd class="value"><span class="summary-sig">ratio(<span class="summary-sig-arg">self</span>,
         <span class="summary-sig-arg">ratio</span>)</span>
-        - Set the aspect ratio (string &quot;w:h&quot;, 2-tuple (width, height) or 
-<code>NSSize_t</code>).
+        - Set this window's aspect ratio.
     </dd>
   </dl>
 </td></tr></table>
@@ -724,7 +950,7 @@ class="link">Frame</a>).
 <table border="0" cellpadding="0" cellspacing="0" width="100%%">
   <tr>
     <td align="left" class="footer">
-    Generated by Epydoc 3.0.1 on Fri Apr 20 15:50:12 2018
+    Generated by Epydoc 3.0.1 on Sun Apr 22 21:13:16 2018
     </td>
     <td align="right" class="footer">
       <a target="mainFrame" href="http://epydoc.sourceforge.net"

@@ -73,7 +73,8 @@ bases._Type0 --+
 </pre>
 
 <hr />
-<p>The basic App class.</p>
+<p>Application Python Type, wrapping an ObjC 
+  <code>NSApplication</code>.</p>
 
 <!-- ==================== INSTANCE METHODS ==================== -->
 <a name="section-InstanceMethods"></a>
@@ -91,8 +92,8 @@ bases._Type0 --+
         <tr>
           <td><span class="summary-sig"><a href="pycocoa.apps.App-class.html#__init__" class="summary-sig-name">__init__</a>(<span class="summary-sig-arg">self</span>,
         <span class="summary-sig-arg">title</span>=<span class="summary-sig-default"><code class="variable-quote">'</code><code class="variable-string">PyCocao</code><code class="variable-quote">'</code></span>,
-        <span class="summary-sig-arg">**attrs</span>)</span><br />
-      Create an App.</td>
+        <span class="summary-sig-arg">**kwds</span>)</span><br />
+      New <a href="pycocoa.apps.App-class.html" class="link">App</a>.</td>
           <td align="right" valign="top">
             
             
@@ -108,9 +109,9 @@ bases._Type0 --+
     </td><td class="summary">
       <table width="100%" cellpadding="0" cellspacing="0" border="0">
         <tr>
-          <td><span class="summary-sig"><a name="append"></a><span class="summary-sig-name">append</span>(<span class="summary-sig-arg">self</span>,
+          <td><span class="summary-sig"><a href="pycocoa.apps.App-class.html#append" class="summary-sig-name">append</a>(<span class="summary-sig-arg">self</span>,
         <span class="summary-sig-arg">menu</span>)</span><br />
-      Append a menu to the app's menu bar</td>
+      Add a menu to this app's menu bar.</td>
           <td align="right" valign="top">
             
             
@@ -126,45 +127,45 @@ bases._Type0 --+
     </td><td class="summary">
       <table width="100%" cellpadding="0" cellspacing="0" border="0">
         <tr>
-          <td><span class="summary-sig"><a name="hide"></a><span class="summary-sig-name">hide</span>(<span class="summary-sig-arg">self</span>,
-        <span class="summary-sig-arg">hide</span>)</span><br />
-      Hide or show this app.</td>
-          <td align="right" valign="top">
-            
-            
-          </td>
-        </tr>
-      </table>
-      
-    </td>
-  </tr>
-<tr>
-    <td width="15%" align="right" valign="top" class="summary">
-      <span class="summary-type">&nbsp;</span>
-    </td><td class="summary">
-      <table width="100%" cellpadding="0" cellspacing="0" border="0">
-        <tr>
-          <td><span class="summary-sig"><a name="hideOther"></a><span class="summary-sig-name">hideOther</span>(<span class="summary-sig-arg">self</span>,
-        <span class="summary-sig-arg">hide</span>)</span><br />
-      Hide other or show all apps.</td>
-          <td align="right" valign="top">
-            
-            
-          </td>
-        </tr>
-      </table>
-      
-    </td>
-  </tr>
-<tr>
-    <td width="15%" align="right" valign="top" class="summary">
-      <span class="summary-type">&nbsp;</span>
-    </td><td class="summary">
-      <table width="100%" cellpadding="0" cellspacing="0" border="0">
-        <tr>
-          <td><span class="summary-sig"><a name="full"></a><span class="summary-sig-name">full</span>(<span class="summary-sig-arg">self</span>,
+          <td><span class="summary-sig"><a href="pycocoa.apps.App-class.html#full" class="summary-sig-name">full</a>(<span class="summary-sig-arg">self</span>,
         <span class="summary-sig-arg">full</span>)</span><br />
-      Enter or exit full screen.</td>
+      Enter or exit full screen mode for this app.</td>
+          <td align="right" valign="top">
+            
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a href="pycocoa.apps.App-class.html#hide" class="summary-sig-name">hide</a>(<span class="summary-sig-arg">self</span>,
+        <span class="summary-sig-arg">hide</span>)</span><br />
+      Hide or show this app's main window.</td>
+          <td align="right" valign="top">
+            
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a href="pycocoa.apps.App-class.html#hideOther" class="summary-sig-name">hideOther</a>(<span class="summary-sig-arg">self</span>,
+        <span class="summary-sig-arg">hide</span>)</span><br />
+      Hide other or show all apps's windows.</td>
           <td align="right" valign="top">
             
             
@@ -182,7 +183,7 @@ bases._Type0 --+
         <tr>
           <td><span class="summary-sig"><a href="pycocoa.apps.App-class.html#run" class="summary-sig-name">run</a>(<span class="summary-sig-arg">self</span>,
         <span class="summary-sig-arg">timeout</span>=<span class="summary-sig-default">None</span>)</span><br />
-      Run the app, never returns.</td>
+      Run this app (never returns).</td>
           <td align="right" valign="top">
             
             
@@ -199,7 +200,7 @@ bases._Type0 --+
       <table width="100%" cellpadding="0" cellspacing="0" border="0">
         <tr>
           <td><span class="summary-sig"><a name="terminate"></a><span class="summary-sig-name">terminate</span>(<span class="summary-sig-arg">self</span>)</span><br />
-      Terminate the app.</td>
+      Terminate this app (never returns).</td>
           <td align="right" valign="top">
             
             
@@ -216,7 +217,8 @@ bases._Type0 --+
       <table width="100%" cellpadding="0" cellspacing="0" border="0">
         <tr>
           <td><span class="summary-sig"><a name="appLaunched_"></a><span class="summary-sig-name">appLaunched_</span>(<span class="summary-sig-arg">self</span>,
-        <span class="summary-sig-arg">app</span>)</span></td>
+        <span class="summary-sig-arg">app</span>)</span><br />
+      Callback, the app launched and is up.</td>
           <td align="right" valign="top">
             
             
@@ -233,7 +235,8 @@ bases._Type0 --+
       <table width="100%" cellpadding="0" cellspacing="0" border="0">
         <tr>
           <td><span class="summary-sig"><a name="menuFullScreen_"></a><span class="summary-sig-name">menuFullScreen_</span>(<span class="summary-sig-arg">self</span>,
-        <span class="summary-sig-arg">item</span>)</span></td>
+        <span class="summary-sig-arg">item</span>)</span><br />
+      Callback for <code>Full Screen</code> menu <i>item</i>.</td>
           <td align="right" valign="top">
             
             
@@ -250,7 +253,8 @@ bases._Type0 --+
       <table width="100%" cellpadding="0" cellspacing="0" border="0">
         <tr>
           <td><span class="summary-sig"><a name="menuHide_"></a><span class="summary-sig-name">menuHide_</span>(<span class="summary-sig-arg">self</span>,
-        <span class="summary-sig-arg">item</span>)</span></td>
+        <span class="summary-sig-arg">item</span>)</span><br />
+      Callback for <code>Hide</code> menu <i>item</i>.</td>
           <td align="right" valign="top">
             
             
@@ -267,7 +271,8 @@ bases._Type0 --+
       <table width="100%" cellpadding="0" cellspacing="0" border="0">
         <tr>
           <td><span class="summary-sig"><a name="menuHideOthers_"></a><span class="summary-sig-name">menuHideOthers_</span>(<span class="summary-sig-arg">self</span>,
-        <span class="summary-sig-arg">item</span>)</span></td>
+        <span class="summary-sig-arg">item</span>)</span><br />
+      Callback for <code>Hide Other</code> menu <i>item</i>.</td>
           <td align="right" valign="top">
             
             
@@ -284,7 +289,8 @@ bases._Type0 --+
       <table width="100%" cellpadding="0" cellspacing="0" border="0">
         <tr>
           <td><span class="summary-sig"><a name="menuShowAll_"></a><span class="summary-sig-name">menuShowAll_</span>(<span class="summary-sig-arg">self</span>,
-        <span class="summary-sig-arg">item</span>)</span></td>
+        <span class="summary-sig-arg">item</span>)</span><br />
+      Callback for <code>Show All</code> menu <i>item</i>.</td>
           <td align="right" valign="top">
             
             
@@ -301,7 +307,8 @@ bases._Type0 --+
       <table width="100%" cellpadding="0" cellspacing="0" border="0">
         <tr>
           <td><span class="summary-sig"><a name="menuTerminate_"></a><span class="summary-sig-name">menuTerminate_</span>(<span class="summary-sig-arg">self</span>,
-        <span class="summary-sig-arg">item</span>)</span></td>
+        <span class="summary-sig-arg">item</span>)</span><br />
+      Callback for <code>Quit</code> menu <i>item</i>.</td>
           <td align="right" valign="top">
             
             
@@ -318,7 +325,8 @@ bases._Type0 --+
       <table width="100%" cellpadding="0" cellspacing="0" border="0">
         <tr>
           <td><span class="summary-sig"><a name="windowClose_"></a><span class="summary-sig-name">windowClose_</span>(<span class="summary-sig-arg">self</span>,
-        <span class="summary-sig-arg">window</span>)</span></td>
+        <span class="summary-sig-arg">window</span>)</span><br />
+      Closing <i>window</i> callback.</td>
           <td align="right" valign="top">
             
             
@@ -334,8 +342,9 @@ bases._Type0 --+
     </td><td class="summary">
       <table width="100%" cellpadding="0" cellspacing="0" border="0">
         <tr>
-          <td><span class="summary-sig"><a name="windowCloseOK_"></a><span class="summary-sig-name">windowCloseOK_</span>(<span class="summary-sig-arg">self</span>,
-        <span class="summary-sig-arg">window</span>)</span></td>
+          <td><span class="summary-sig"><a href="pycocoa.apps.App-class.html#windowCloseOK_" class="summary-sig-name">windowCloseOK_</a>(<span class="summary-sig-arg">self</span>,
+        <span class="summary-sig-arg">window</span>)</span><br />
+      Is it OK? to close <i>window</i> callback.</td>
           <td align="right" valign="top">
             
             
@@ -352,7 +361,8 @@ bases._Type0 --+
       <table width="100%" cellpadding="0" cellspacing="0" border="0">
         <tr>
           <td><span class="summary-sig"><a name="windowKey_"></a><span class="summary-sig-name">windowKey_</span>(<span class="summary-sig-arg">self</span>,
-        <span class="summary-sig-arg">window</span>)</span></td>
+        <span class="summary-sig-arg">window</span>)</span><br />
+      Callback <i>window</i> becomes/resigns <code>Key</code>.</td>
           <td align="right" valign="top">
             
             
@@ -369,7 +379,8 @@ bases._Type0 --+
       <table width="100%" cellpadding="0" cellspacing="0" border="0">
         <tr>
           <td><span class="summary-sig"><a name="windowMain_"></a><span class="summary-sig-name">windowMain_</span>(<span class="summary-sig-arg">self</span>,
-        <span class="summary-sig-arg">window</span>)</span></td>
+        <span class="summary-sig-arg">window</span>)</span><br />
+      Callback <i>window</i> becomes/resigns <code>Main</code>.</td>
           <td align="right" valign="top">
             
             
@@ -386,8 +397,8 @@ bases._Type0 --+
       <table width="100%" cellpadding="0" cellspacing="0" border="0">
         <tr>
           <td><span class="summary-sig"><a name="windowResize_"></a><span class="summary-sig-name">windowResize_</span>(<span class="summary-sig-arg">self</span>,
-        <span class="summary-sig-arg">window</span>,
-        <span class="summary-sig-arg">size</span>=<span class="summary-sig-default">None</span>)</span></td>
+        <span class="summary-sig-arg">window</span>)</span><br />
+      Resizing <i>window</i> callback.</td>
           <td align="right" valign="top">
             
             
@@ -403,9 +414,10 @@ bases._Type0 --+
     </td><td class="summary">
       <table width="100%" cellpadding="0" cellspacing="0" border="0">
         <tr>
-          <td><span class="summary-sig"><a name="windowZoomOK_"></a><span class="summary-sig-name">windowZoomOK_</span>(<span class="summary-sig-arg">self</span>,
+          <td><span class="summary-sig"><a href="pycocoa.apps.App-class.html#windowZoomOK_" class="summary-sig-name">windowZoomOK_</a>(<span class="summary-sig-arg">self</span>,
         <span class="summary-sig-arg">window</span>,
-        <span class="summary-sig-arg">frame</span>=<span class="summary-sig-default">None</span>)</span></td>
+        <span class="summary-sig-arg">frame</span>=<span class="summary-sig-default">None</span>)</span><br />
+      Is it OK? to toggle zoom <i>window</i> callback.</td>
           <td align="right" valign="top">
             
             
@@ -452,8 +464,8 @@ bases._Type0 --+
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
         <a href="pycocoa.apps.App-class.html#badge" class="summary-name">badge</a><br />
-      Get the dock tile/badge (<a href="pycocoa.apps.Tile-class.html" 
-      class="link">Tile</a>).
+      Get this app's dock tile/badge (<a 
+      href="pycocoa.apps.Tile-class.html" class="link">Tile</a>).
     </td>
   </tr>
 <tr>
@@ -461,7 +473,7 @@ bases._Type0 --+
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
         <a href="pycocoa.apps.App-class.html#isHidden" class="summary-name">isHidden</a><br />
-      Get the hidden state (bool).
+      Get this app's hidden state (bool).
     </td>
   </tr>
 <tr>
@@ -469,7 +481,7 @@ bases._Type0 --+
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
         <a href="pycocoa.apps.App-class.html#isRunning" class="summary-name">isRunning</a><br />
-      Get the running state (bool).
+      Get this app's running state (bool).
     </td>
   </tr>
 <tr>
@@ -477,7 +489,7 @@ bases._Type0 --+
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
         <a href="pycocoa.apps.App-class.html#isUp" class="summary-name">isUp</a><br />
-      Get the launched state (bool).
+      Get this app's launched state (bool).
     </td>
   </tr>
 <tr>
@@ -485,8 +497,8 @@ bases._Type0 --+
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
         <a href="pycocoa.apps.App-class.html#keyWindow" class="summary-name">keyWindow</a><br />
-      Get the key window (<a href="pycocoa.windows.Window-class.html" 
-      class="link">Window</a>).
+      Get this app's key window (<a 
+      href="pycocoa.windows.Window-class.html" class="link">Window</a>).
     </td>
   </tr>
 <tr>
@@ -494,8 +506,17 @@ bases._Type0 --+
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
         <a href="pycocoa.apps.App-class.html#mainWindow" class="summary-name">mainWindow</a><br />
-      Get the main window (<a href="pycocoa.windows.Window-class.html" 
-      class="link">Window</a>).
+      Get this app's main window (<a 
+      href="pycocoa.windows.Window-class.html" class="link">Window</a>).
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="pycocoa.apps.App-class.html#menubar" class="summary-name">menubar</a><br />
+      Get this app's menu bar (<a href="pycocoa.menus.MenuBar-class.html" 
+      class="link">MenuBar</a>).
     </td>
   </tr>
   <tr>
@@ -535,7 +556,7 @@ bases._Type0 --+
   <tr valign="top"><td>
   <h3 class="epydoc"><span class="sig"><span class="sig-name">__init__</span>(<span class="sig-arg">self</span>,
         <span class="sig-arg">title</span>=<span class="sig-default"><code class="variable-quote">'</code><code class="variable-string">PyCocao</code><code class="variable-quote">'</code></span>,
-        <span class="sig-arg">**attrs</span>)</span>
+        <span class="sig-arg">**kwds</span>)</span>
     <br /><em class="fname">(Constructor)</em>
   </h3>
   </td><td align="right" valign="top"
@@ -543,11 +564,116 @@ bases._Type0 --+
     </td>
   </tr></table>
   
-  <p>Create an App.</p>
+  <p>New <a href="pycocoa.apps.App-class.html" class="link">App</a>.</p>
   <dl class="fields">
+    <dt>Parameters:</dt>
+    <dd><ul class="nomargin-top">
+        <li><strong class="pname"><code>title</code></strong> - App name or title (string).</li>
+        <li><strong class="pname"><code>kwds</code></strong> - Optional, additional keyword arguments.</li>
+    </ul></dd>
     <dt>Overrides:
         object.__init__
     </dt>
+  </dl>
+</td></tr></table>
+</div>
+<a name="append"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">append</span>(<span class="sig-arg">self</span>,
+        <span class="sig-arg">menu</span>)</span>
+  </h3>
+  </td><td align="right" valign="top"
+    >&nbsp;
+    </td>
+  </tr></table>
+  
+  <p>Add a menu to this app's menu bar.</p>
+  <dl class="fields">
+    <dt>Parameters:</dt>
+    <dd><ul class="nomargin-top">
+        <li><strong class="pname"><code>menu</code></strong> - The menu to add (<a href="pycocoa.menus.Menu-class.html" 
+          class="link">Menu</a>).</li>
+    </ul></dd>
+  </dl>
+<div class="fields">      <p><strong>Note:</strong>
+        The first menu item of the bar menu is provided by default.
+      </p>
+</div></td></tr></table>
+</div>
+<a name="full"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">full</span>(<span class="sig-arg">self</span>,
+        <span class="sig-arg">full</span>)</span>
+  </h3>
+  </td><td align="right" valign="top"
+    >&nbsp;
+    </td>
+  </tr></table>
+  
+  <p>Enter or exit full screen mode for this app.</p>
+  <dl class="fields">
+    <dt>Parameters:</dt>
+    <dd><ul class="nomargin-top">
+        <li><strong class="pname"><code>full</code></strong> - Enter or exit (bool).</li>
+    </ul></dd>
+  </dl>
+</td></tr></table>
+</div>
+<a name="hide"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">hide</span>(<span class="sig-arg">self</span>,
+        <span class="sig-arg">hide</span>)</span>
+  </h3>
+  </td><td align="right" valign="top"
+    >&nbsp;
+    </td>
+  </tr></table>
+  
+  <p>Hide or show this app's main window.</p>
+  <dl class="fields">
+    <dt>Parameters:</dt>
+    <dd><ul class="nomargin-top">
+        <li><strong class="pname"><code>hide</code></strong> - Hide or show (bool).</li>
+    </ul></dd>
+  </dl>
+</td></tr></table>
+</div>
+<a name="hideOther"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">hideOther</span>(<span class="sig-arg">self</span>,
+        <span class="sig-arg">hide</span>)</span>
+  </h3>
+  </td><td align="right" valign="top"
+    >&nbsp;
+    </td>
+  </tr></table>
+  
+  <p>Hide other or show all apps's windows.</p>
+  <dl class="fields">
+    <dt>Parameters:</dt>
+    <dd><ul class="nomargin-top">
+        <li><strong class="pname"><code>hide</code></strong> - Hide or show (bool).</li>
+    </ul></dd>
   </dl>
 </td></tr></table>
 </div>
@@ -566,10 +692,66 @@ bases._Type0 --+
     </td>
   </tr></table>
   
-  <p>Run the app, never returns.</p>
-  <p>However, any Python threads started earlier remain running, 
-  concurrently.</p>
+  <p>Run this app (never returns).</p>
   <dl class="fields">
+    <dt>Parameters:</dt>
+    <dd><ul class="nomargin-top">
+        <li><strong class="pname"><code>timeout</code></strong> - Run time limit in seconds (float).</li>
+    </ul></dd>
+  </dl>
+<div class="fields">      <p><strong>Note:</strong>
+        Although <i>run</i> never returns, any Python threads started 
+        earlier remain running, concurrently.
+      </p>
+</div></td></tr></table>
+</div>
+<a name="windowCloseOK_"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">windowCloseOK_</span>(<span class="sig-arg">self</span>,
+        <span class="sig-arg">window</span>)</span>
+  </h3>
+  </td><td align="right" valign="top"
+    >&nbsp;
+    </td>
+  </tr></table>
+  
+  <p>Is it OK? to close <i>window</i> callback.</p>
+  <dl class="fields">
+    <dt>Returns:</dt>
+        <dd>True if OK to close, False otherwise.</dd>
+  </dl>
+</td></tr></table>
+</div>
+<a name="windowZoomOK_"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">windowZoomOK_</span>(<span class="sig-arg">self</span>,
+        <span class="sig-arg">window</span>,
+        <span class="sig-arg">frame</span>=<span class="sig-default">None</span>)</span>
+  </h3>
+  </td><td align="right" valign="top"
+    >&nbsp;
+    </td>
+  </tr></table>
+  
+  <p>Is it OK? to toggle zoom <i>window</i> callback.</p>
+  <dl class="fields">
+    <dt>Parameters:</dt>
+    <dd><ul class="nomargin-top">
+        <li><strong class="pname"><code>frame</code></strong> - The frame to zoom to (<a href="pycocoa.geometry.Rect-class.html" 
+          class="link">Rect</a>).</li>
+    </ul></dd>
+    <dt>Returns:</dt>
+        <dd>True if OK to toggle, False otherwise.</dd>
   </dl>
 </td></tr></table>
 </div>
@@ -589,12 +771,12 @@ bases._Type0 --+
        cellspacing="0" width="100%" bgcolor="white">
 <tr><td>
   <h3 class="epydoc">badge</h3>
-  <p>Get the dock tile/badge (<a href="pycocoa.apps.Tile-class.html" 
+  <p>Get this app's dock tile/badge (<a href="pycocoa.apps.Tile-class.html"
   class="link">Tile</a>).</p>
   <dl class="fields">
     <dt>Get Method:</dt>
     <dd class="value"><span class="summary-sig">badge(<span class="summary-sig-arg">self</span>)</span>
-        - Get the dock tile/badge (<a href="pycocoa.apps.Tile-class.html" 
+        - Get this app's dock tile/badge (<a href="pycocoa.apps.Tile-class.html" 
 class="link">Tile</a>).
     </dd>
   </dl>
@@ -606,11 +788,11 @@ class="link">Tile</a>).
        cellspacing="0" width="100%" bgcolor="white">
 <tr><td>
   <h3 class="epydoc">isHidden</h3>
-  <p>Get the hidden state (bool).</p>
+  <p>Get this app's hidden state (bool).</p>
   <dl class="fields">
     <dt>Get Method:</dt>
     <dd class="value"><span class="summary-sig">isHidden(<span class="summary-sig-arg">self</span>)</span>
-        - Get the hidden state (bool).
+        - Get this app's hidden state (bool).
     </dd>
   </dl>
 </td></tr></table>
@@ -621,11 +803,11 @@ class="link">Tile</a>).
        cellspacing="0" width="100%" bgcolor="white">
 <tr><td>
   <h3 class="epydoc">isRunning</h3>
-  <p>Get the running state (bool).</p>
+  <p>Get this app's running state (bool).</p>
   <dl class="fields">
     <dt>Get Method:</dt>
     <dd class="value"><span class="summary-sig">isRunning(<span class="summary-sig-arg">self</span>)</span>
-        - Get the running state (bool).
+        - Get this app's running state (bool).
     </dd>
   </dl>
 </td></tr></table>
@@ -636,11 +818,11 @@ class="link">Tile</a>).
        cellspacing="0" width="100%" bgcolor="white">
 <tr><td>
   <h3 class="epydoc">isUp</h3>
-  <p>Get the launched state (bool).</p>
+  <p>Get this app's launched state (bool).</p>
   <dl class="fields">
     <dt>Get Method:</dt>
     <dd class="value"><span class="summary-sig">isUp(<span class="summary-sig-arg">self</span>)</span>
-        - Get the launched state (bool).
+        - Get this app's launched state (bool).
     </dd>
   </dl>
 </td></tr></table>
@@ -651,12 +833,12 @@ class="link">Tile</a>).
        cellspacing="0" width="100%" bgcolor="white">
 <tr><td>
   <h3 class="epydoc">keyWindow</h3>
-  <p>Get the key window (<a href="pycocoa.windows.Window-class.html" 
+  <p>Get this app's key window (<a href="pycocoa.windows.Window-class.html"
   class="link">Window</a>).</p>
   <dl class="fields">
     <dt>Get Method:</dt>
     <dd class="value"><span class="summary-sig">keyWindow(<span class="summary-sig-arg">self</span>)</span>
-        - Get the key window (<a href="pycocoa.windows.Window-class.html" 
+        - Get this app's key window (<a href="pycocoa.windows.Window-class.html" 
 class="link">Window</a>).
     </dd>
   </dl>
@@ -668,13 +850,30 @@ class="link">Window</a>).
        cellspacing="0" width="100%" bgcolor="white">
 <tr><td>
   <h3 class="epydoc">mainWindow</h3>
-  <p>Get the main window (<a href="pycocoa.windows.Window-class.html" 
-  class="link">Window</a>).</p>
+  <p>Get this app's main window (<a 
+  href="pycocoa.windows.Window-class.html" class="link">Window</a>).</p>
   <dl class="fields">
     <dt>Get Method:</dt>
     <dd class="value"><span class="summary-sig">mainWindow(<span class="summary-sig-arg">self</span>)</span>
-        - Get the main window (<a href="pycocoa.windows.Window-class.html" 
+        - Get this app's main window (<a href="pycocoa.windows.Window-class.html" 
 class="link">Window</a>).
+    </dd>
+  </dl>
+</td></tr></table>
+</div>
+<a name="menubar"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <h3 class="epydoc">menubar</h3>
+  <p>Get this app's menu bar (<a href="pycocoa.menus.MenuBar-class.html" 
+  class="link">MenuBar</a>).</p>
+  <dl class="fields">
+    <dt>Get Method:</dt>
+    <dd class="value"><span class="summary-sig">menubar(<span class="summary-sig-arg">self</span>)</span>
+        - Get this app's menu bar (<a href="pycocoa.menus.MenuBar-class.html" 
+class="link">MenuBar</a>).
     </dd>
   </dl>
 </td></tr></table>
@@ -711,7 +910,7 @@ class="link">Window</a>).
 <table border="0" cellpadding="0" cellspacing="0" width="100%%">
   <tr>
     <td align="left" class="footer">
-    Generated by Epydoc 3.0.1 on Fri Apr 20 15:50:11 2018
+    Generated by Epydoc 3.0.1 on Sun Apr 22 21:13:10 2018
     </td>
     <td align="right" class="footer">
       <a target="mainFrame" href="http://epydoc.sourceforge.net"

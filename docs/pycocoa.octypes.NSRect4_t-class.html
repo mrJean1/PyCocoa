@@ -75,7 +75,9 @@ _ctypes.Structure --+
 </pre>
 
 <hr />
-<p>Class NSRect_t with different signature and properties.</p>
+<p>ObjC <code>struct</code>, like <a 
+  href="pycocoa.octypes.NSRect_t-class.html" class="link">NSRect_t</a> with
+  different signature and properties.</p>
 
 <!-- ==================== INSTANCE METHODS ==================== -->
 <a name="section-InstanceMethods"></a>
@@ -193,56 +195,64 @@ _ctypes.Structure --+
     <td width="15%" align="right" valign="top" class="summary">
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
-        <a href="pycocoa.octypes.NSRect4_t-class.html#bottom" class="summary-name">bottom</a>
+        <a href="pycocoa.octypes.NSRect4_t-class.html#bottom" class="summary-name">bottom</a><br />
+      Get the bottom y coordinate (float).
     </td>
   </tr>
 <tr>
     <td width="15%" align="right" valign="top" class="summary">
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
-        <a href="pycocoa.octypes.NSRect4_t-class.html#left" class="summary-name">left</a>
+        <a href="pycocoa.octypes.NSRect4_t-class.html#height" class="summary-name">height</a><br />
+      Get the height (float).
     </td>
   </tr>
 <tr>
     <td width="15%" align="right" valign="top" class="summary">
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
-        <a href="pycocoa.octypes.NSRect4_t-class.html#height" class="summary-name">height</a>
+        <a href="pycocoa.octypes.NSRect4_t-class.html#left" class="summary-name">left</a><br />
+      Get the lower x coordinate (float).
     </td>
   </tr>
 <tr>
     <td width="15%" align="right" valign="top" class="summary">
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
-        <a href="pycocoa.octypes.NSRect4_t-class.html#right" class="summary-name">right</a>
+        <a href="pycocoa.octypes.NSRect4_t-class.html#right" class="summary-name">right</a><br />
+      Get the upper x coordinate (float).
     </td>
   </tr>
 <tr>
     <td width="15%" align="right" valign="top" class="summary">
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
-        <a href="pycocoa.octypes.NSRect4_t-class.html#top" class="summary-name">top</a>
+        <a href="pycocoa.octypes.NSRect4_t-class.html#top" class="summary-name">top</a><br />
+      Get the upper y coordinate (float).
     </td>
   </tr>
 <tr>
     <td width="15%" align="right" valign="top" class="summary">
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
-        <a href="pycocoa.octypes.NSRect4_t-class.html#width" class="summary-name">width</a>
+        <a href="pycocoa.octypes.NSRect4_t-class.html#width" class="summary-name">width</a><br />
+      Get the width (float).
     </td>
   </tr>
 <tr>
     <td width="15%" align="right" valign="top" class="summary">
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
-        <a href="pycocoa.octypes.NSRect4_t-class.html#x" class="summary-name">x</a>
+        <a href="pycocoa.octypes.NSRect4_t-class.html#x" class="summary-name">x</a><br />
+      Get the x coordinate (float).
     </td>
   </tr>
 <tr>
     <td width="15%" align="right" valign="top" class="summary">
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
-        <a href="pycocoa.octypes.NSRect4_t-class.html#y" class="summary-name">y</a>
+        <a href="pycocoa.octypes.NSRect4_t-class.html#y" class="summary-name">y</a><br />
+      Get the y coordinate (float).
     </td>
   </tr>
   <tr>
@@ -358,24 +368,11 @@ _ctypes.Structure --+
        cellspacing="0" width="100%" bgcolor="white">
 <tr><td>
   <h3 class="epydoc">bottom</h3>
-  
+  <p>Get the bottom y coordinate (float).</p>
   <dl class="fields">
     <dt>Get Method:</dt>
     <dd class="value"><span class="summary-sig">bottom(<span class="summary-sig-arg">self</span>)</span>
-    </dd>
-  </dl>
-</td></tr></table>
-</div>
-<a name="left"></a>
-<div>
-<table class="details" border="1" cellpadding="3"
-       cellspacing="0" width="100%" bgcolor="white">
-<tr><td>
-  <h3 class="epydoc">left</h3>
-  
-  <dl class="fields">
-    <dt>Get Method:</dt>
-    <dd class="value"><span class="summary-sig">left(<span class="summary-sig-arg">self</span>)</span>
+        - Get the bottom y coordinate (float).
     </dd>
   </dl>
 </td></tr></table>
@@ -386,10 +383,26 @@ _ctypes.Structure --+
        cellspacing="0" width="100%" bgcolor="white">
 <tr><td>
   <h3 class="epydoc">height</h3>
-  
+  <p>Get the height (float).</p>
   <dl class="fields">
     <dt>Get Method:</dt>
     <dd class="value"><span class="summary-sig">height(<span class="summary-sig-arg">self</span>)</span>
+        - Get the height (float).
+    </dd>
+  </dl>
+</td></tr></table>
+</div>
+<a name="left"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <h3 class="epydoc">left</h3>
+  <p>Get the lower x coordinate (float).</p>
+  <dl class="fields">
+    <dt>Get Method:</dt>
+    <dd class="value"><span class="summary-sig">left(<span class="summary-sig-arg">self</span>)</span>
+        - Get the lower x coordinate (float).
     </dd>
   </dl>
 </td></tr></table>
@@ -400,10 +413,11 @@ _ctypes.Structure --+
        cellspacing="0" width="100%" bgcolor="white">
 <tr><td>
   <h3 class="epydoc">right</h3>
-  
+  <p>Get the upper x coordinate (float).</p>
   <dl class="fields">
     <dt>Get Method:</dt>
     <dd class="value"><span class="summary-sig">right(<span class="summary-sig-arg">self</span>)</span>
+        - Get the upper x coordinate (float).
     </dd>
   </dl>
 </td></tr></table>
@@ -414,10 +428,11 @@ _ctypes.Structure --+
        cellspacing="0" width="100%" bgcolor="white">
 <tr><td>
   <h3 class="epydoc">top</h3>
-  
+  <p>Get the upper y coordinate (float).</p>
   <dl class="fields">
     <dt>Get Method:</dt>
     <dd class="value"><span class="summary-sig">top(<span class="summary-sig-arg">self</span>)</span>
+        - Get the upper y coordinate (float).
     </dd>
   </dl>
 </td></tr></table>
@@ -428,10 +443,11 @@ _ctypes.Structure --+
        cellspacing="0" width="100%" bgcolor="white">
 <tr><td>
   <h3 class="epydoc">width</h3>
-  
+  <p>Get the width (float).</p>
   <dl class="fields">
     <dt>Get Method:</dt>
     <dd class="value"><span class="summary-sig">width(<span class="summary-sig-arg">self</span>)</span>
+        - Get the width (float).
     </dd>
   </dl>
 </td></tr></table>
@@ -442,10 +458,11 @@ _ctypes.Structure --+
        cellspacing="0" width="100%" bgcolor="white">
 <tr><td>
   <h3 class="epydoc">x</h3>
-  
+  <p>Get the x coordinate (float).</p>
   <dl class="fields">
     <dt>Get Method:</dt>
     <dd class="value"><span class="summary-sig">x(<span class="summary-sig-arg">self</span>)</span>
+        - Get the x coordinate (float).
     </dd>
   </dl>
 </td></tr></table>
@@ -456,10 +473,11 @@ _ctypes.Structure --+
        cellspacing="0" width="100%" bgcolor="white">
 <tr><td>
   <h3 class="epydoc">y</h3>
-  
+  <p>Get the y coordinate (float).</p>
   <dl class="fields">
     <dt>Get Method:</dt>
     <dd class="value"><span class="summary-sig">y(<span class="summary-sig-arg">self</span>)</span>
+        - Get the y coordinate (float).
     </dd>
   </dl>
 </td></tr></table>
@@ -496,7 +514,7 @@ _ctypes.Structure --+
 <table border="0" cellpadding="0" cellspacing="0" width="100%%">
   <tr>
     <td align="left" class="footer">
-    Generated by Epydoc 3.0.1 on Fri Apr 20 15:50:11 2018
+    Generated by Epydoc 3.0.1 on Sun Apr 22 21:13:16 2018
     </td>
     <td align="right" class="footer">
       <a target="mainFrame" href="http://epydoc.sourceforge.net"

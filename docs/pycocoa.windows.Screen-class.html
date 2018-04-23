@@ -61,19 +61,17 @@
 <!-- ==================== CLASS DESCRIPTION ==================== -->
 <h1 class="epydoc">Class Screen</h1><p class="nomargin-top"></p>
 <pre class="base-tree">
-  object --+            
-           |            
-bases._Type0 --+        
-               |        
-    bases._Type1 --+    
-                   |    
-               <a href="pycocoa.windows.Frame-class.html">Frame</a> --+
-                       |
-                      <strong class="uidshort">Screen</strong>
+  object --+        
+           |        
+bases._Type0 --+    
+               |    
+   <a href="pycocoa.geometry.Rect-class.html">geometry.Rect</a> --+
+                   |
+                  <strong class="uidshort">Screen</strong>
 </pre>
 
 <hr />
-<p>Screen frame class.</p>
+<p>Screen Python Type, wrapping ObjC <code>NSRect_t</code>.</p>
 
 <!-- ==================== INSTANCE METHODS ==================== -->
 <a name="section-InstanceMethods"></a>
@@ -90,8 +88,10 @@ bases._Type0 --+
       <table width="100%" cellpadding="0" cellspacing="0" border="0">
         <tr>
           <td><span class="summary-sig"><a href="pycocoa.windows.Screen-class.html#__init__" class="summary-sig-name">__init__</a>(<span class="summary-sig-arg">self</span>,
-        <span class="summary-sig-arg">fraction</span>=<span class="summary-sig-default">0.5</span>)</span><br />
-      New (partial) screen frame.</td>
+        <span class="summary-sig-arg">fraction</span>=<span class="summary-sig-default">0.5</span>,
+        <span class="summary-sig-arg">cascade</span>=<span class="summary-sig-default">10</span>)</span><br />
+      New, partial screen <a href="pycocoa.geometry.Rect-class.html" 
+      class="link">Rect</a>.</td>
           <td align="right" valign="top">
             
             
@@ -133,17 +133,21 @@ bases._Type0 --+
 </tr>
   <tr>
     <td colspan="2" class="summary">
-    <p class="indent-wrapped-lines"><b>Inherited from <code><a href="pycocoa.windows.Frame-class.html">Frame</a></code></b>:
-      <code><a href="pycocoa.windows.Frame-class.html#NS">NS</a></code>,
-      <code><a href="pycocoa.windows.Frame-class.html#frame">frame</a></code>,
-      <code><a href="pycocoa.windows.Frame-class.html#height">height</a></code>,
-      <code><a href="pycocoa.windows.Frame-class.html#width">width</a></code>,
-      <code><a href="pycocoa.windows.Frame-class.html#x">x</a></code>,
-      <code><a href="pycocoa.windows.Frame-class.html#y">y</a></code>
+    <p class="indent-wrapped-lines"><b>Inherited from <code><a href="pycocoa.geometry.Rect-class.html">geometry.Rect</a></code></b>:
+      <code><a href="pycocoa.geometry.Rect-class.html#bottom">bottom</a></code>,
+      <code><a href="pycocoa.geometry.Rect-class.html#height">height</a></code>,
+      <code><a href="pycocoa.geometry.Rect-class.html#left">left</a></code>,
+      <code><a href="pycocoa.geometry.Rect-class.html#origin">origin</a></code>,
+      <code><a href="pycocoa.geometry.Rect-class.html#rect">rect</a></code>,
+      <code><a href="pycocoa.geometry.Rect-class.html#right">right</a></code>,
+      <code><a href="pycocoa.geometry.Rect-class.html#size">size</a></code>,
+      <code><a href="pycocoa.geometry.Rect-class.html#top">top</a></code>,
+      <code><a href="pycocoa.geometry.Rect-class.html#width">width</a></code>,
+      <code><a href="pycocoa.geometry.Rect-class.html#x">x</a></code>,
+      <code><a href="pycocoa.geometry.Rect-class.html#y">y</a></code>
       </p>
-    <p class="indent-wrapped-lines"><b>Inherited from <code>bases._Type1</code></b>:
-      <code>app</code>,
-      <code>delegate</code>
+    <p class="indent-wrapped-lines"><b>Inherited from <code>bases._Type0</code></b>:
+      <code>NS</code>
       </p>
     <p class="indent-wrapped-lines"><b>Inherited from <code>object</code></b>:
       <code>__class__</code>
@@ -168,7 +172,8 @@ bases._Type0 --+
   <table width="100%" cellpadding="0" cellspacing="0" border="0">
   <tr valign="top"><td>
   <h3 class="epydoc"><span class="sig"><span class="sig-name">__init__</span>(<span class="sig-arg">self</span>,
-        <span class="sig-arg">fraction</span>=<span class="sig-default">0.5</span>)</span>
+        <span class="sig-arg">fraction</span>=<span class="sig-default">0.5</span>,
+        <span class="sig-arg">cascade</span>=<span class="sig-default">10</span>)</span>
     <br /><em class="fname">(Constructor)</em>
   </h3>
   </td><td align="right" valign="top"
@@ -176,8 +181,18 @@ bases._Type0 --+
     </td>
   </tr></table>
   
-  <p>New (partial) screen frame.</p>
+  <p>New, partial screen <a href="pycocoa.geometry.Rect-class.html" 
+  class="link">Rect</a>.</p>
   <dl class="fields">
+    <dt>Parameters:</dt>
+    <dd><ul class="nomargin-top">
+        <li><strong class="pname"><code>fraction</code></strong> - Size of the screen (float).</li>
+        <li><strong class="pname"><code>cascade</code></strong> - Shift from lower left corner (float or int).</li>
+    </ul></dd>
+    <dt>Raises:</dt>
+    <dd><ul class="nomargin-top">
+        <li><code><strong class='fraise'>ValueError</strong></code> - Invalid <i>fraction</i> value.</li>
+    </ul></dd>
     <dt>Overrides:
         object.__init__
     </dt>
@@ -216,7 +231,7 @@ bases._Type0 --+
 <table border="0" cellpadding="0" cellspacing="0" width="100%%">
   <tr>
     <td align="left" class="footer">
-    Generated by Epydoc 3.0.1 on Fri Apr 20 15:50:12 2018
+    Generated by Epydoc 3.0.1 on Sun Apr 22 21:13:16 2018
     </td>
     <td align="right" class="footer">
       <a target="mainFrame" href="http://epydoc.sourceforge.net"

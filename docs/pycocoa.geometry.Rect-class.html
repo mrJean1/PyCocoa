@@ -3,7 +3,7 @@
           "DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
 <head>
-  <title>pycocoa.windows.Frame</title>
+  <title>pycocoa.geometry.Rect</title>
   <link rel="stylesheet" href="epydoc.css" type="text/css" />
   <script type="text/javascript" src="epydoc.js"></script>
 </head>
@@ -43,8 +43,8 @@
     <td width="100%">
       <span class="breadcrumbs">
         <a href="pycocoa-module.html">Package&nbsp;pycocoa</a> ::
-        <a href="pycocoa.windows-module.html">Module&nbsp;windows</a> ::
-        Class&nbsp;Frame
+        <a href="pycocoa.geometry-module.html">Module&nbsp;geometry</a> ::
+        Class&nbsp;Rect
       </span>
     </td>
     <td>
@@ -52,32 +52,30 @@
         <!-- hide/show private -->
         <tr><td align="right"><span class="options"
             >[<a href="frames.html" target="_top">frames</a
-            >]&nbsp;|&nbsp;<a href="pycocoa.windows.Frame-class.html"
+            >]&nbsp;|&nbsp;<a href="pycocoa.geometry.Rect-class.html"
             target="_top">no&nbsp;frames</a>]</span></td></tr>
       </table>
     </td>
   </tr>
 </table>
 <!-- ==================== CLASS DESCRIPTION ==================== -->
-<h1 class="epydoc">Class Frame</h1><p class="nomargin-top"></p>
+<h1 class="epydoc">Class Rect</h1><p class="nomargin-top"></p>
 <pre class="base-tree">
-  object --+        
-           |        
-bases._Type0 --+    
-               |    
-    bases._Type1 --+
-                   |
-                  <strong class="uidshort">Frame</strong>
+  object --+    
+           |    
+bases._Type0 --+
+               |
+              <strong class="uidshort">Rect</strong>
 </pre>
 
 <dl><dt>Known Subclasses:</dt>
 <dd>
       <ul class="subclass-list">
-<li><a href="pycocoa.windows.Frame4-class.html">Frame4</a></li><li>, <a href="pycocoa.windows.Screen-class.html">Screen</a></li>  </ul>
+<li><a href="pycocoa.geometry.Rect4-class.html">Rect4</a></li><li>, <a href="pycocoa.windows.Screen-class.html">windows.Screen</a></li>  </ul>
 </dd></dl>
 
 <hr />
-<p>Frame class, signature like <code>NSRect_t</code>.</p>
+<p>Python Type, wrapping an ObjC <code>NSRect_t</code>.</p>
 
 <!-- ==================== INSTANCE METHODS ==================== -->
 <a name="section-InstanceMethods"></a>
@@ -93,10 +91,12 @@ bases._Type0 --+
     </td><td class="summary">
       <table width="100%" cellpadding="0" cellspacing="0" border="0">
         <tr>
-          <td><span class="summary-sig"><a href="pycocoa.windows.Frame-class.html#__init__" class="summary-sig-name">__init__</a>(<span class="summary-sig-arg">self</span>,
-        <span class="summary-sig-arg">frame</span>,
-        <span class="summary-sig-arg">**attrs</span>)</span><br />
-      New frame from another frame.</td>
+          <td><span class="summary-sig"><a href="pycocoa.geometry.Rect-class.html#__init__" class="summary-sig-name">__init__</a>(<span class="summary-sig-arg">self</span>,
+        <span class="summary-sig-arg">rect</span>)</span><br />
+      New <a href="pycocoa.geometry.Rect-class.html" class="link">Rect</a> 
+      from another <a href="pycocoa.geometry.Rect-class.html" 
+      class="link">Rect</a>, <code>list</code>, <code>tuple</code> or 
+      <code>NSRect[4]_t</code>.</td>
           <td align="right" valign="top">
             
             
@@ -140,51 +140,97 @@ bases._Type0 --+
     <td width="15%" align="right" valign="top" class="summary">
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
-        <a href="pycocoa.windows.Frame-class.html#frame" class="summary-name">frame</a><br />
-      Get the <code>NS</code> instance (<code>NSRect</code>).
+        <a href="pycocoa.geometry.Rect-class.html#bottom" class="summary-name">bottom</a><br />
+      Get the lower y coordinate (float).
     </td>
   </tr>
 <tr>
     <td width="15%" align="right" valign="top" class="summary">
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
-        <a href="pycocoa.windows.Frame-class.html#height" class="summary-name">height</a>
+        <a href="pycocoa.geometry.Rect-class.html#height" class="summary-name">height</a><br />
+      Get the height (float).
     </td>
   </tr>
 <tr>
     <td width="15%" align="right" valign="top" class="summary">
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
-        <a href="pycocoa.windows.Frame-class.html#NS" class="summary-name">NS</a><br />
-      Get the <code>NS</code> instance (<code>NSRect</code>).
+        <a href="pycocoa.geometry.Rect-class.html#left" class="summary-name">left</a><br />
+      Get the lower x coordinate (float).
     </td>
   </tr>
 <tr>
     <td width="15%" align="right" valign="top" class="summary">
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
-        <a href="pycocoa.windows.Frame-class.html#width" class="summary-name">width</a>
+        <a href="pycocoa.geometry.Rect-class.html#origin" class="summary-name">origin</a><br />
+      Get the origin (<a href="pycocoa.geometry.Point-class.html" 
+      class="link">Point</a>, <code>list</code>, <code>tuple</code> or 
+      <code>NSPoint_t</code>).
     </td>
   </tr>
 <tr>
     <td width="15%" align="right" valign="top" class="summary">
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
-        <a href="pycocoa.windows.Frame-class.html#x" class="summary-name">x</a>
+        <a href="pycocoa.geometry.Rect-class.html#rect" class="summary-name">rect</a><br />
+      Get x, y, width, height (4-tuple).
     </td>
   </tr>
 <tr>
     <td width="15%" align="right" valign="top" class="summary">
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
-        <a href="pycocoa.windows.Frame-class.html#y" class="summary-name">y</a>
+        <a href="pycocoa.geometry.Rect-class.html#right" class="summary-name">right</a><br />
+      Get the upper x coordinate (float).
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="pycocoa.geometry.Rect-class.html#size" class="summary-name">size</a><br />
+      Get the size (<a href="pycocoa.geometry.Size-class.html" 
+      class="link">Size</a>).
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="pycocoa.geometry.Rect-class.html#top" class="summary-name">top</a><br />
+      Get the upper y coordinate (float).
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="pycocoa.geometry.Rect-class.html#width" class="summary-name">width</a><br />
+      Get the width (float).
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="pycocoa.geometry.Rect-class.html#x" class="summary-name">x</a><br />
+      Get the x coordinate (float).
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="pycocoa.geometry.Rect-class.html#y" class="summary-name">y</a><br />
+      Get the y coordinate (float).
     </td>
   </tr>
   <tr>
     <td colspan="2" class="summary">
-    <p class="indent-wrapped-lines"><b>Inherited from <code>bases._Type1</code></b>:
-      <code>app</code>,
-      <code>delegate</code>
+    <p class="indent-wrapped-lines"><b>Inherited from <code>bases._Type0</code></b>:
+      <code>NS</code>
       </p>
     <p class="indent-wrapped-lines"><b>Inherited from <code>object</code></b>:
       <code>__class__</code>
@@ -209,8 +255,7 @@ bases._Type0 --+
   <table width="100%" cellpadding="0" cellspacing="0" border="0">
   <tr valign="top"><td>
   <h3 class="epydoc"><span class="sig"><span class="sig-name">__init__</span>(<span class="sig-arg">self</span>,
-        <span class="sig-arg">frame</span>,
-        <span class="sig-arg">**attrs</span>)</span>
+        <span class="sig-arg">rect</span>)</span>
     <br /><em class="fname">(Constructor)</em>
   </h3>
   </td><td align="right" valign="top"
@@ -218,7 +263,10 @@ bases._Type0 --+
     </td>
   </tr></table>
   
-  <p>New frame from another frame.</p>
+  <p>New <a href="pycocoa.geometry.Rect-class.html" class="link">Rect</a> 
+  from another <a href="pycocoa.geometry.Rect-class.html" 
+  class="link">Rect</a>, <code>list</code>, <code>tuple</code> or 
+  <code>NSRect[4]_t</code>.</p>
   <dl class="fields">
     <dt>Overrides:
         object.__init__
@@ -236,21 +284,17 @@ bases._Type0 --+
     <span class="table-header">Property Details</span></td>
 </tr>
 </table>
-<a name="frame"></a>
+<a name="bottom"></a>
 <div>
 <table class="details" border="1" cellpadding="3"
        cellspacing="0" width="100%" bgcolor="white">
 <tr><td>
-  <h3 class="epydoc">frame</h3>
-  <p>Get the <code>NS</code> instance (<code>NSRect</code>).</p>
+  <h3 class="epydoc">bottom</h3>
+  <p>Get the lower y coordinate (float).</p>
   <dl class="fields">
     <dt>Get Method:</dt>
-    <dd class="value"><span class="summary-sig">frame(<span class="summary-sig-arg">self</span>)</span>
-        - Get the <code>NS</code> instance (<code>NSRect</code>).
-    </dd>
-    <dt>Set Method:</dt>
-    <dd class="value"><span class="summary-sig">frame(<span class="summary-sig-arg">self</span>,
-        <span class="summary-sig-arg">frame</span>)</span>
+    <dd class="value"><span class="summary-sig">bottom(<span class="summary-sig-arg">self</span>)</span>
+        - Get the lower y coordinate (float).
     </dd>
   </dl>
 </td></tr></table>
@@ -261,25 +305,131 @@ bases._Type0 --+
        cellspacing="0" width="100%" bgcolor="white">
 <tr><td>
   <h3 class="epydoc">height</h3>
-  
+  <p>Get the height (float).</p>
   <dl class="fields">
     <dt>Get Method:</dt>
     <dd class="value"><span class="summary-sig">height(<span class="summary-sig-arg">self</span>)</span>
+        - Get the height (float).
+    </dd>
+    <dt>Set Method:</dt>
+    <dd class="value"><span class="summary-sig">height(<span class="summary-sig-arg">self</span>,
+        <span class="summary-sig-arg">height</span>)</span>
+        - Set the height (float).
     </dd>
   </dl>
 </td></tr></table>
 </div>
-<a name="NS"></a>
+<a name="left"></a>
 <div>
 <table class="details" border="1" cellpadding="3"
        cellspacing="0" width="100%" bgcolor="white">
 <tr><td>
-  <h3 class="epydoc">NS</h3>
-  <p>Get the <code>NS</code> instance (<code>NSRect</code>).</p>
+  <h3 class="epydoc">left</h3>
+  <p>Get the lower x coordinate (float).</p>
   <dl class="fields">
     <dt>Get Method:</dt>
-    <dd class="value"><span class="summary-sig">NS(<span class="summary-sig-arg">self</span>)</span>
-        - Get the <code>NS</code> instance (<code>NSRect</code>).
+    <dd class="value"><span class="summary-sig">left(<span class="summary-sig-arg">self</span>)</span>
+        - Get the lower x coordinate (float).
+    </dd>
+  </dl>
+</td></tr></table>
+</div>
+<a name="origin"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <h3 class="epydoc">origin</h3>
+  <p>Get the origin (<a href="pycocoa.geometry.Point-class.html" 
+  class="link">Point</a>, <code>list</code>, <code>tuple</code> or 
+  <code>NSPoint_t</code>).</p>
+  <dl class="fields">
+    <dt>Get Method:</dt>
+    <dd class="value"><span class="summary-sig">origin(<span class="summary-sig-arg">self</span>)</span>
+        - Get the origin (<a href="pycocoa.geometry.Point-class.html" 
+class="link">Point</a>, <code>list</code>, <code>tuple</code> or 
+<code>NSPoint_t</code>).
+    </dd>
+    <dt>Set Method:</dt>
+    <dd class="value"><span class="summary-sig">origin(<span class="summary-sig-arg">self</span>,
+        <span class="summary-sig-arg">origin</span>)</span>
+        - Set the origin (Point).
+    </dd>
+  </dl>
+</td></tr></table>
+</div>
+<a name="rect"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <h3 class="epydoc">rect</h3>
+  <p>Get x, y, width, height (4-tuple).</p>
+  <dl class="fields">
+    <dt>Get Method:</dt>
+    <dd class="value"><span class="summary-sig">rect(<span class="summary-sig-arg">self</span>)</span>
+        - Get x, y, width, height (4-tuple).
+    </dd>
+    <dt>Set Method:</dt>
+    <dd class="value"><span class="summary-sig">rect(<span class="summary-sig-arg">self</span>,
+        <span class="summary-sig-arg">rect</span>)</span>
+        - Set the rect (<a href="pycocoa.geometry.Rect-class.html" 
+class="link">Rect</a>, <code>list</code>, <code>tuple</code> or 
+<code>NSRect[4]_t</code>).
+    </dd>
+  </dl>
+</td></tr></table>
+</div>
+<a name="right"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <h3 class="epydoc">right</h3>
+  <p>Get the upper x coordinate (float).</p>
+  <dl class="fields">
+    <dt>Get Method:</dt>
+    <dd class="value"><span class="summary-sig">right(<span class="summary-sig-arg">self</span>)</span>
+        - Get the upper x coordinate (float).
+    </dd>
+  </dl>
+</td></tr></table>
+</div>
+<a name="size"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <h3 class="epydoc">size</h3>
+  <p>Get the size (<a href="pycocoa.geometry.Size-class.html" 
+  class="link">Size</a>).</p>
+  <dl class="fields">
+    <dt>Get Method:</dt>
+    <dd class="value"><span class="summary-sig">size(<span class="summary-sig-arg">self</span>)</span>
+        - Get the size (<a href="pycocoa.geometry.Size-class.html" 
+class="link">Size</a>).
+    </dd>
+    <dt>Set Method:</dt>
+    <dd class="value"><span class="summary-sig">size(<span class="summary-sig-arg">self</span>,
+        <span class="summary-sig-arg">size</span>)</span>
+        - Set the size (<a href="pycocoa.geometry.Size-class.html" 
+class="link">Size</a>, <code>list</code>, <code>tuple</code> or 
+<code>NSSize_t</code>).
+    </dd>
+  </dl>
+</td></tr></table>
+</div>
+<a name="top"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <h3 class="epydoc">top</h3>
+  <p>Get the upper y coordinate (float).</p>
+  <dl class="fields">
+    <dt>Get Method:</dt>
+    <dd class="value"><span class="summary-sig">top(<span class="summary-sig-arg">self</span>)</span>
+        - Get the upper y coordinate (float).
     </dd>
   </dl>
 </td></tr></table>
@@ -290,10 +440,16 @@ bases._Type0 --+
        cellspacing="0" width="100%" bgcolor="white">
 <tr><td>
   <h3 class="epydoc">width</h3>
-  
+  <p>Get the width (float).</p>
   <dl class="fields">
     <dt>Get Method:</dt>
     <dd class="value"><span class="summary-sig">width(<span class="summary-sig-arg">self</span>)</span>
+        - Get the width (float).
+    </dd>
+    <dt>Set Method:</dt>
+    <dd class="value"><span class="summary-sig">width(<span class="summary-sig-arg">self</span>,
+        <span class="summary-sig-arg">width</span>)</span>
+        - Set the width (float).
     </dd>
   </dl>
 </td></tr></table>
@@ -304,10 +460,16 @@ bases._Type0 --+
        cellspacing="0" width="100%" bgcolor="white">
 <tr><td>
   <h3 class="epydoc">x</h3>
-  
+  <p>Get the x coordinate (float).</p>
   <dl class="fields">
     <dt>Get Method:</dt>
     <dd class="value"><span class="summary-sig">x(<span class="summary-sig-arg">self</span>)</span>
+        - Get the x coordinate (float).
+    </dd>
+    <dt>Set Method:</dt>
+    <dd class="value"><span class="summary-sig">x(<span class="summary-sig-arg">self</span>,
+        <span class="summary-sig-arg">x</span>)</span>
+        - Set the x coordinate (float).
     </dd>
   </dl>
 </td></tr></table>
@@ -318,10 +480,16 @@ bases._Type0 --+
        cellspacing="0" width="100%" bgcolor="white">
 <tr><td>
   <h3 class="epydoc">y</h3>
-  
+  <p>Get the y coordinate (float).</p>
   <dl class="fields">
     <dt>Get Method:</dt>
     <dd class="value"><span class="summary-sig">y(<span class="summary-sig-arg">self</span>)</span>
+        - Get the y coordinate (float).
+    </dd>
+    <dt>Set Method:</dt>
+    <dd class="value"><span class="summary-sig">y(<span class="summary-sig-arg">self</span>,
+        <span class="summary-sig-arg">y</span>)</span>
+        - Set the y coordinate (float).
     </dd>
   </dl>
 </td></tr></table>
@@ -358,7 +526,7 @@ bases._Type0 --+
 <table border="0" cellpadding="0" cellspacing="0" width="100%%">
   <tr>
     <td align="left" class="footer">
-    Generated by Epydoc 3.0.1 on Fri Apr 20 15:50:12 2018
+    Generated by Epydoc 3.0.1 on Sun Apr 22 21:13:10 2018
     </td>
     <td align="right" class="footer">
       <a target="mainFrame" href="http://epydoc.sourceforge.net"

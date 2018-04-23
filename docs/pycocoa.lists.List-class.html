@@ -71,7 +71,8 @@ bases._Type0 --+
 </pre>
 
 <hr />
-<p>Python Type equivalent of of an ObjC NSMutableArray.</p>
+<p>Python <code>list</code> Type, wrapping an ObjC 
+  <code>NSMutableArray</code>.</p>
 
 <!-- ==================== INSTANCE METHODS ==================== -->
 <a name="section-InstanceMethods"></a>
@@ -89,7 +90,10 @@ bases._Type0 --+
         <tr>
           <td><span class="summary-sig"><a href="pycocoa.lists.List-class.html#__init__" class="summary-sig-name">__init__</a>(<span class="summary-sig-arg">self</span>,
         <span class="summary-sig-arg">ns_list</span>=<span class="summary-sig-default"><code class="variable-group">[</code><code class="variable-group">]</code></span>)</span><br />
-      x.__init__(...) initializes x; see help(type(x)) for signature</td>
+      New <a href="pycocoa.lists.List-class.html" class="link">List</a> 
+      from a <code>list</code>, <a href="pycocoa.lists.List-class.html" 
+      class="link">List</a>, <a href="pycocoa.tuples.Tuple-class.html" 
+      class="link">Tuple</a> or <code>NSMutableArry</code>.</td>
           <td align="right" valign="top">
             
             
@@ -142,7 +146,7 @@ bases._Type0 --+
         <tr>
           <td><span class="summary-sig"><a name="append"></a><span class="summary-sig-name">append</span>(<span class="summary-sig-arg">self</span>,
         <span class="summary-sig-arg">value</span>)</span><br />
-      Like list.append().</td>
+      Add an item to this list, like <code>list.append</code>.</td>
           <td align="right" valign="top">
             
             
@@ -159,7 +163,7 @@ bases._Type0 --+
       <table width="100%" cellpadding="0" cellspacing="0" border="0">
         <tr>
           <td><span class="summary-sig"><a name="clear"></a><span class="summary-sig-name">clear</span>(<span class="summary-sig-arg">self</span>)</span><br />
-      Like list.clear().</td>
+      Remove all items from this list, like <code>list.clear</code>.</td>
           <td align="right" valign="top">
             
             
@@ -177,7 +181,7 @@ bases._Type0 --+
         <tr>
           <td><span class="summary-sig"><a href="pycocoa.lists.List-class.html#copy" class="summary-sig-name">copy</a>(<span class="summary-sig-arg">self</span>,
         <span class="summary-sig-arg">*ranged</span>)</span><br />
-      Make a shallow copy, optionally just a range of items.</td>
+      Make a shallow copy of this list.</td>
           <td align="right" valign="top">
             
             
@@ -195,7 +199,7 @@ bases._Type0 --+
         <tr>
           <td><span class="summary-sig"><a name="extend"></a><span class="summary-sig-name">extend</span>(<span class="summary-sig-arg">self</span>,
         <span class="summary-sig-arg">values</span>)</span><br />
-      Like list.extend().</td>
+      Add one or more items to this list, like <code>list.extend</code>.</td>
           <td align="right" valign="top">
             
             
@@ -214,7 +218,7 @@ bases._Type0 --+
           <td><span class="summary-sig"><a name="insert"></a><span class="summary-sig-name">insert</span>(<span class="summary-sig-arg">self</span>,
         <span class="summary-sig-arg">index</span>,
         <span class="summary-sig-arg">value</span>)</span><br />
-      Like list.insert().</td>
+      Insert an item into this list, like <code>list.insert</code>.</td>
           <td align="right" valign="top">
             
             
@@ -232,7 +236,7 @@ bases._Type0 --+
         <tr>
           <td><span class="summary-sig"><a name="pop"></a><span class="summary-sig-name">pop</span>(<span class="summary-sig-arg">self</span>,
         <span class="summary-sig-arg">index</span>=<span class="summary-sig-default">-1</span>)</span><br />
-      Like list.pop().</td>
+      Remove an item from this list, like <code>list.pop</code>.</td>
           <td align="right" valign="top">
             
             
@@ -248,10 +252,10 @@ bases._Type0 --+
     </td><td class="summary">
       <table width="100%" cellpadding="0" cellspacing="0" border="0">
         <tr>
-          <td><span class="summary-sig"><a name="remove"></a><span class="summary-sig-name">remove</span>(<span class="summary-sig-arg">self</span>,
+          <td><span class="summary-sig"><a href="pycocoa.lists.List-class.html#remove" class="summary-sig-name">remove</a>(<span class="summary-sig-arg">self</span>,
         <span class="summary-sig-arg">value</span>,
         <span class="summary-sig-arg">identical</span>=<span class="summary-sig-default">False</span>)</span><br />
-      Like list.remove(), except an <i>identical</i> option.</td>
+      Remove an item from this list, like <code>list.remove</code>.</td>
           <td align="right" valign="top">
             
             
@@ -268,7 +272,7 @@ bases._Type0 --+
       <table width="100%" cellpadding="0" cellspacing="0" border="0">
         <tr>
           <td><span class="summary-sig"><a name="reverse"></a><span class="summary-sig-name">reverse</span>(<span class="summary-sig-arg">self</span>)</span><br />
-      Like list.reverse(), reverse list in-place.</td>
+      Reverse this list in-place, like <code>list.reverse</code>.</td>
           <td align="right" valign="top">
             
             
@@ -355,11 +359,13 @@ bases._Type0 --+
     </td>
   </tr></table>
   
-  <p>x.__init__(...) initializes x; see help(type(x)) for signature</p>
+  <p>New <a href="pycocoa.lists.List-class.html" class="link">List</a> from
+  a <code>list</code>, <a href="pycocoa.lists.List-class.html" 
+  class="link">List</a>, <a href="pycocoa.tuples.Tuple-class.html" 
+  class="link">Tuple</a> or <code>NSMutableArry</code>.</p>
   <dl class="fields">
     <dt>Overrides:
         object.__init__
-        <dd><em class="note">(inherited documentation)</em></dd>
     </dt>
   </dl>
 </td></tr></table>
@@ -379,11 +385,43 @@ bases._Type0 --+
     </td>
   </tr></table>
   
-  <p>Make a shallow copy, optionally just a range of items.</p>
+  <p>Make a shallow copy of this list.</p>
   <dl class="fields">
+    <dt>Parameters:</dt>
+    <dd><ul class="nomargin-top">
+        <li><strong class="pname"><code>ranged</code></strong> - Optional index range.</li>
+    </ul></dd>
+    <dt>Returns:</dt>
+        <dd>The copy (<a href="pycocoa.lists.List-class.html" 
+          class="link">List</a>).</dd>
     <dt>Overrides:
         <a href="pycocoa.tuples.Tuple-class.html#copy">tuples.Tuple.copy</a>
     </dt>
+  </dl>
+</td></tr></table>
+</div>
+<a name="remove"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">remove</span>(<span class="sig-arg">self</span>,
+        <span class="sig-arg">value</span>,
+        <span class="sig-arg">identical</span>=<span class="sig-default">False</span>)</span>
+  </h3>
+  </td><td align="right" valign="top"
+    >&nbsp;
+    </td>
+  </tr></table>
+  
+  <p>Remove an item from this list, like <code>list.remove</code>.</p>
+  <dl class="fields">
+    <dt>Parameters:</dt>
+    <dd><ul class="nomargin-top">
+        <li><strong class="pname"><code>idential</code></strong> - Use ObjC <code>idential</code> as comparison (bool).</li>
+    </ul></dd>
   </dl>
 </td></tr></table>
 </div>
@@ -419,7 +457,7 @@ bases._Type0 --+
 <table border="0" cellpadding="0" cellspacing="0" width="100%%">
   <tr>
     <td align="left" class="footer">
-    Generated by Epydoc 3.0.1 on Fri Apr 20 15:50:11 2018
+    Generated by Epydoc 3.0.1 on Sun Apr 22 21:13:10 2018
     </td>
     <td align="right" class="footer">
       <a target="mainFrame" href="http://epydoc.sourceforge.net"
