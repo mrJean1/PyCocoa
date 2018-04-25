@@ -143,11 +143,11 @@ object --+
     </td><td class="summary">
       <table width="100%" cellpadding="0" cellspacing="0" border="0">
         <tr>
-          <td><span class="summary-sig"><a name="set_ivar"></a><span class="summary-sig-name">set_ivar</span>(<span class="summary-sig-arg">self</span>,
+          <td><span class="summary-sig"><a href="pycocoa.runtime.ObjCInstance-class.html#set_ivar" class="summary-sig-name">set_ivar</a>(<span class="summary-sig-arg">self</span>,
         <span class="summary-sig-arg">name</span>,
         <span class="summary-sig-arg">value</span>,
         <span class="summary-sig-arg">ctype</span>=<span class="summary-sig-default">None</span>)</span><br />
-      Set an instance variable to the given value.</td>
+      Set an instance variable (ivar) to the given value.</td>
           <td align="right" valign="top">
             
             
@@ -193,9 +193,8 @@ object --+
         <tr>
           <td><span class="summary-sig"><a href="pycocoa.runtime.ObjCInstance-class.html#__new__" class="summary-sig-name">__new__</a>(<span class="summary-sig-arg">cls</span>,
         <span class="summary-sig-arg">objc_ptr</span>)</span><br />
-      Create a new ObjCInstance or return a previously created one for the 
-      given objc_ptr which should be an ObjC <a 
-      href="pycocoa.octypes.Id_t-class.html" class="link">Id_t</a>.</td>
+      New <a href="pycocoa.runtime.ObjCInstance-class.html" 
+      class="link">ObjCInstance</a> or return a previously created one.</td>
           <td align="right" valign="top">
             
             
@@ -219,7 +218,9 @@ object --+
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
         <a href="pycocoa.runtime.ObjCInstance-class.html#objc_class" class="summary-name">objc_class</a><br />
-      Get this instance' ObjC class.
+      Get this instance' ObjC class (<a 
+      href="pycocoa.runtime.ObjCClass-class.html" 
+      class="link">ObjCClass</a>).
     </td>
   </tr>
 <tr>
@@ -290,10 +291,14 @@ object --+
     </td>
   </tr></table>
   
-  <p>Create a new ObjCInstance or return a previously created one for the 
-  given objc_ptr which should be an ObjC <a 
-  href="pycocoa.octypes.Id_t-class.html" class="link">Id_t</a>.</p>
+  <p>New <a href="pycocoa.runtime.ObjCInstance-class.html" 
+  class="link">ObjCInstance</a> or return a previously created one.</p>
   <dl class="fields">
+    <dt>Parameters:</dt>
+    <dd><ul class="nomargin-top">
+        <li><strong class="pname"><code>objc_ptr</code></strong> - The ObjC class <a href="pycocoa.octypes.Id_t-class.html" 
+          class="link">Id_t</a>.</li>
+    </ul></dd>
     <dt>Returns: a new object with type S, a subtype of T</dt>
     <dt>Overrides:
         object.__new__
@@ -343,9 +348,46 @@ object --+
   <dl class="fields">
   </dl>
 <div class="fields">      <p><strong>Note:</strong>
-        May result in Python memory errors, aborts and/or segfaults
+        May result in Python memory errors, aborts and/or segfaults.  Run 
+        with python3 -X faulthandler ... the get the Python traceback.
       </p>
 </div></td></tr></table>
+</div>
+<a name="set_ivar"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">set_ivar</span>(<span class="sig-arg">self</span>,
+        <span class="sig-arg">name</span>,
+        <span class="sig-arg">value</span>,
+        <span class="sig-arg">ctype</span>=<span class="sig-default">None</span>)</span>
+  </h3>
+  </td><td align="right" valign="top"
+    >&nbsp;
+    </td>
+  </tr></table>
+  
+  <p>Set an instance variable (ivar) to the given value.</p>
+  <dl class="fields">
+    <dt>Parameters:</dt>
+    <dd><ul class="nomargin-top">
+        <li><strong class="pname"><code>name</code></strong> - Name of the ivar (str).</li>
+        <li><strong class="pname"><code>value</code></strong> - Value for the ivar (<code>any</code>).</li>
+        <li><strong class="pname"><code>ctype</code></strong> - The type code of the ivar (<code>ctypes</code>).</li>
+    </ul></dd>
+    <dt>Returns:</dt>
+        <dd>The ivar (<a href="pycocoa.octypes.Ivar_t-class.html" 
+          class="link">Ivar_t</a>).</dd>
+    <dt>Raises:</dt>
+    <dd><ul class="nomargin-top">
+        <li><code><strong class='fraise'>ArgumentError</strong></code> - Invalid <i>name</i>, <i>value</i> or <i>ctype</i>.</li>
+        <li><code><strong class='fraise'>TypeError</strong></code> - Invalid <i>name</i>, <i>value</i> or <i>ctype</i> type.</li>
+    </ul></dd>
+  </dl>
+</td></tr></table>
 </div>
 <br />
 <!-- ==================== PROPERTY DETAILS ==================== -->
@@ -363,11 +405,14 @@ object --+
        cellspacing="0" width="100%" bgcolor="white">
 <tr><td>
   <h3 class="epydoc">objc_class</h3>
-  <p>Get this instance' ObjC class.</p>
+  <p>Get this instance' ObjC class (<a 
+  href="pycocoa.runtime.ObjCClass-class.html" 
+  class="link">ObjCClass</a>).</p>
   <dl class="fields">
     <dt>Get Method:</dt>
     <dd class="value"><span class="summary-sig">objc_class(<span class="summary-sig-arg">self</span>)</span>
-        - Get this instance' ObjC class.
+        - Get this instance' ObjC class (<a 
+href="pycocoa.runtime.ObjCClass-class.html" class="link">ObjCClass</a>).
     </dd>
   </dl>
 </td></tr></table>
@@ -469,7 +514,7 @@ href="pycocoa.octypes.Id_t-class.html" class="link">Id_t</a>).
 <table border="0" cellpadding="0" cellspacing="0" width="100%%">
   <tr>
     <td align="left" class="footer">
-    Generated by Epydoc 3.0.1 on Sun Apr 22 21:13:16 2018
+    Generated by Epydoc 3.0.1 on Tue Apr 24 20:38:11 2018
     </td>
     <td align="right" class="footer">
       <a target="mainFrame" href="http://epydoc.sourceforge.net"

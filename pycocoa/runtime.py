@@ -74,17 +74,17 @@
 from ctypes  import alignment, ArgumentError, byref, cast, c_buffer, \
                     c_char_p, c_double, c_float, c_longdouble, c_uint, \
                     CFUNCTYPE, c_void_p, POINTER, sizeof
-from getters import _ivar_ctype, get_cfunctype, get_class, get_classname, \
+from getters import _ivar_ctype, get_c_func_t, get_class, get_classname, \
                     get_classof, get_ivar, get_metaclass, get_protocol, \
                     get_selector, get_superclassof
-from oclibs  import libobjc
 from octypes import __i386__, __LP64__, c_struct_t, c_void, \
                     ctype2encoding, emcoding2ctype, encoding2ctype, \
                     Class_t, Id_t, IMP_t, Ivar_t, objc_super_t, \
-                    ObjC_t, SEL_t, split_emcoding2
+                    ObjC_t, SEL_t, split_emcoding2, TypeCodeError
+from oslibs  import libobjc
 from utils   import bytes2str, _exports, missing, name2py, printf, str2bytes
 
-__version__ = '18.04.19'
+__version__ = '18.04.24'
 
 # <http://Developer.Apple.com/documentation/objectivec/
 #         objc_associationpolicy?language=objc>
@@ -105,14 +105,16 @@ def _argtypestr(argtypes):
     return ', '.join(getattr(t, '__name__', str(t)) for t in argtypes)
 
 
-def _libobjcall(func_name, restype, argtypes, *args):
+def _libobjcall(name, restype, argtypes, *args):
     '''Call an ObjC library function and return the result.
 
-    @raise ArgumentError: Decorated by _Xargs.
+       @return: The result (C{any}).
 
-    @raise TypeError: Decorated by _Xargs.
+       @raise ArgumentError: Decorated by _Xargs.
+
+       @raise TypeError: Decorated by _Xargs.
     '''
-    objc_func = libobjc[func_name]  # XXX thread-specific?
+    objc_func = libobjc[name]  # XXX thread-specific?
     objc_func.restype  = restype
     objc_func.argtypes = argtypes
     try:
@@ -133,11 +135,6 @@ def _obj_and_name(name_or_obj, getter):
     if name is not None:
         name_or_obj = getter(name)
     return name_or_obj, name
-#   try:
-#       name = str2bytes(name_or_obj)
-#   except TypeError:
-#       return name_or_obj, None
-#   return getter(name), name
 
 
 def _ObjC_log(inst, what, T, *args):  # B, C, I, M, S
@@ -206,8 +203,9 @@ class ObjCBase(object):
 class ObjCBoundMethod(ObjCBase):
     '''Python wrapper for an ObjC class or instance method, an L{IMP_t}.
 
-    @note: Each ObjC method invocation requires creation of another, new
-    L{ObjCBoundMethod} instance and immediately discarded thereafter.
+       @note: Each ObjC method invocation requires creation of another,
+       new L{ObjCBoundMethod} instance wich is immediately discarded
+       thereafter.
     '''
     __slots__ = ('method', 'objc_id')
 
@@ -245,18 +243,18 @@ class ObjCClass(ObjCBase):
 
     _Type = None  # Python Type, e.g. Dict, List, Tuple, etc.
 
-    # Only one Python object is created for each ObjC class.
-    # Any future calls with the same class will return the previously
-    # created Python object.  Note that these aren't weak references.
-    # Each ObjCClass created will exist until the end of the program.
+    # Only one Python object is created for each ObjC class.  Any
+    # future calls with the same class will return the previously
+    # created Python object.  Note that these aren't weak references,
+    # each ObjCClass created will exist until the end of the program.
     _objc_cache = {}
 
     def __new__(cls, name_or_ptr, *protocols):
         '''Create a new ObjCClass instance or return a previously
-        created instance for the given ObjC class.
+           created instance for the given ObjC class.
 
-        The argument is either the name of the class to retrieve
-        or a pointer to the class.
+           The argument is either the name of the class to retrieve
+           or a pointer to the class.
         '''
         # Determine name and ptr values from passed in argument.
         ptr, name = _obj_and_name(name_or_ptr, get_class)
@@ -315,7 +313,7 @@ class ObjCClass(ObjCBase):
             return method
 
         # Otherwise, raise an exception.
-        raise AttributeError('no [class]method: %s.%r' % (self, name))
+        raise AttributeError('no %r [class]method: %s ' % (name, self))
 
     def __str__(self):
         return '%s of %#x' % (bytes2str(self.name), self.ptr.value)
@@ -324,7 +322,7 @@ class ObjCClass(ObjCBase):
         # get and cache a class or instance method
         method = getter(self._ptr, get_selector(name))
         # XXX add a check that .alloc() is called
-        # before .init() for any _Delegate class
+        # before .init() for any _NSDelegate class
         # printf('%s.%s', self.name, name)
         if method and method.value:
             method = Class(method)
@@ -341,16 +339,24 @@ class ObjCClass(ObjCBase):
             for method in libobjc.class_copyMethodList(which, byref(n)):
                 method = ObjCMethod(method)
                 cache[method.name] = method
+                _ObjC_log(method, 'new', 'M')
         return cache
 
     def add_protocol(self, protocol):
-        '''Add a protocol to this class, where I{protocol}
-        is a string or L{Protocol_t} instance.
+        '''Add a protocol to this class.
+
+           @param protocol: The protocol to add (str or L{Protocol_t}).
+
+           @return: True if the protocol was added, False otherwise.
         '''
         return add_protocol(self._ptr, protocol)
 
     def get_classmethod(self, name):
-        '''Return a Python wrapper of the named class method, or None.
+        '''Find a class method.
+
+           @param name: Name of the method (str).
+
+           @return: The class method wrapper (L{ObjCClassMethod}) or None.
         '''
         try:
             return self._classmethods[name2py(name)]
@@ -359,7 +365,11 @@ class ObjCClass(ObjCBase):
                    self._classmethods, libobjc.class_getClassMethod)
 
     def get_method(self, name):
-        '''Return a Python wrapper of a named instance method, or None.
+        '''Find an instance method.
+
+           @param name: Name of the method (str).
+
+           @return: The instance method wrapper (L{ObjCMethod}) or None.
         '''
         try:
             return self._methods[name2py(name)]
@@ -378,38 +388,32 @@ class ObjCClass(ObjCBase):
     NS = ptr
 
 
-def _objs_cache_pop(inst, name, send=''):
-    # Remove an C{ObjCInstance} from the objects cache
-    obj = get_ivar(inst, name, ctype=Id_t)
-    ObjCInstance._objc_cache.pop(obj, None)
-    if send:
-        send_super(inst, send)
-
-
 class ObjCInstance(ObjCBase):
     '''Python wrapper for an ObjC instance.
     '''
     _as_paramater = None  # for ctypes
 
-    _objc_cache = {}  # see _DeallocObserver, example class_wrapper4.py
+    _objc_cache = {}  # see _NSDeallocObserver, example class_wrapper4.py
     _objc_class = None
     _objc_ptr   = None  # shut PyChecker up
 
     def __new__(cls, objc_ptr):
-        '''Create a new ObjCInstance or return a previously created one
-        for the given objc_ptr which should be an ObjC L{Id_t}.
+        '''New L{ObjCInstance} or return a previously created one.
+
+           @param objc_ptr: The ObjC class L{Id_t}.
         '''
-        # Make sure that obj_ptr is wrapped in an Id.
+        # Make sure that obj_ptr is wrapped in an Id_t.
         if not isinstance(objc_ptr, Id_t):
             objc_ptr = cast(objc_ptr, Id_t)
 
         if not objc_ptr.value:
             return None  # nil pointer
 
-        # Check if we've already created an python ObjCInstance for this
-        # objc_ptr id and if so, return it.  A single ObjCInstance will
-        # be created for any object pointer when it is first encountered.
-        # This ObjCInstance will persist until the object is deallocated.
+        # Check if we've already created an ObjCInstance for this
+        # Id_t(objc_ptr) and if so, return it.  Otherwise, create
+        # an ObjCInstance any object pointer first encountered.
+        # That ObjCInstance will persist until the object is de-
+        # allocated by ObjC, see _NSDeallocObserver below.
         try:
             return cls._objc_cache[objc_ptr.value]
         except KeyError:
@@ -428,10 +432,10 @@ class ObjCInstance(ObjCBase):
         # by the (integer) memory address pointed to by the obj_ptr.
         cls._objc_cache[objc_ptr.value] = self
 
-        # Create a _DeallocObserver associated with this object,
-        # but only if this object is not an ObjC class.
+        # Associate a _NSDeallocObserver with this object, but only
+        # if this object is not an ObjC class.
         if not isClass(self):
-            deallocObserver(self)
+            nsDeallocObserver(self)
 
         return self
 
@@ -466,7 +470,7 @@ class ObjCInstance(ObjCBase):
 
     @property
     def objc_class(self):
-        '''Get this instance' ObjC class.
+        '''Get this instance' ObjC class (L{ObjCClass}).
         '''
         return self._objc_class
 
@@ -487,7 +491,9 @@ class ObjCInstance(ObjCBase):
     def release(self):
         '''Garbage collect this instance.
 
-        @note: May result in Python memory errors, aborts and/or segfaults
+           @note: May result in Python memory errors, aborts and/or
+                  segfaults.  Run with python3 -X faulthandler ...
+                  the get the Python traceback.
         '''
         # _libobjcall('objc_msgSend', c_void, (Id_t, SEL_t),
         #              self.ptr, get_selector('autorelease'))
@@ -495,9 +501,19 @@ class ObjCInstance(ObjCBase):
 #   __del__ = release  # XXX test.simple_application crashes
 
     def set_ivar(self, name, value, ctype=None):
-        '''Set an instance variable to the given value.
+        '''Set an instance variable (ivar) to the given value.
+
+           @param name: Name of the ivar (str).
+           @param value: Value for the ivar (C{any}).
+           @keyword ctype: The type code of the ivar (C{ctypes}).
+
+           @return: The ivar (L{Ivar_t}).
+
+           @raise ArgumentError: Invalid I{name}, I{value} or I{ctype}.
+
+           @raise TypeError: Invalid I{name}, I{value} or I{ctype} type.
         '''
-        set_ivar(self._objc_ptr, name, value, ctype=ctype)
+        return set_ivar(self._objc_ptr, name, value, ctype=ctype)
 
     @property
     def Type(self):
@@ -513,12 +529,12 @@ class ObjCInstance(ObjCBase):
 
 
 class ObjCMethod(ObjCBase):
-    '''This represents an unbound ObjC method (really an L{IMP_t}).
+    '''Represent an unbound ObjC class or instance method (really an L{IMP_t}).
     '''
     _callable = None
-    _imp      = None
+    _IMP      = None
     _name     = b''
-    _sel      = None
+    _SEL      = None
 
     argtypes = []
     encoding = b''
@@ -528,14 +544,14 @@ class ObjCMethod(ObjCBase):
         return result
 
     def __init__(self, method):
-        '''Initialize with an ObjC method pointer.
+        '''New ObjC method, initialized with an ObjC method pointer.
 
-        We then determine the return type and argument type
-        information of the method.
+           We then determine the return type and argument type
+           information of the method.
         '''
-        self._imp = libobjc.method_getImplementation(method)
-        self._sel = libobjc.method_getName(method)
-        self._name = libobjc.sel_getName(self._sel)
+        self._IMP = libobjc.method_getImplementation(method)
+        self._SEL = libobjc.method_getName(method)
+        self._name = libobjc.sel_getName(self._SEL)
 
         self.encoding = libobjc.method_getTypeEncoding(method)
         try:  # Get the ctype for all args
@@ -562,17 +578,17 @@ class ObjCMethod(ObjCBase):
         else:
             try:  # Get the ctype for the result encoding.
                 self.restype = emcoding2ctype(rescode, name=self._name)
-            except TypeError:
+            except TypeCodeError:
                 self.restype = None
 
     def __call__(self, objc_id, *args):
         '''Call the method with the given id and arguments.
 
-        You do not need to pass in the selector as an argument
-        since it is provided automatically.
+           You do not need to pass in the selector as an argument
+           since it is provided automatically.
         '''
         try:
-            r = self.callable(objc_id, self._sel, *args)
+            r = self.callable(objc_id, self._SEL, *args)
             return self._pyresult(r)
         except (ArgumentError, TypeError) as x:
             n = '%s.%s' % (objc_id.objc_classname, self.name)
@@ -590,36 +606,36 @@ class ObjCMethod(ObjCBase):
 
     @property
     def callable(self):
-        '''Returns a Python-callable for this method's L{IMP_t}.
+        '''Get a Python-callable for this method's L{IMP_t}.
         '''
         if not self._callable:
-            self._callable = cast(self._imp, self.cfunctype)
+            self._callable = cast(self._IMP, self.c_func_t)
             self._callable.restype  = self.restype
             self._callable.argtypes = self.argtypes
         return self._callable
 
     @property
-    def cfunctype(self):
-        '''Returns a ctypes CFUNCTYPE for this method.
+    def c_func_t(self):
+        '''Get a C{ctypes} prototype for this method (C{CFUNCTYPE}).
         '''
         return CFUNCTYPE(self.restype, *self.argtypes)
 
     @property
     def name(self):
-        '''Get the method/selector name (string).
+        '''Get the method/SELector/cmd name (str).
         '''
         return name2py(self._name)
 
 
 class ObjCClassMethod(ObjCMethod):
-    '''Only to distinguish class from instance methods.
+    '''Only to distinguish class methods from instance methods.
     '''
     pass
 
 
 def _pyargs(codes3, args):
     '''Used by L{ObjCSubclass} to convert ObjC method arguments to
-    Python values before passing those to the Python-defined method.
+       Python values before passing those to the Python-defined method.
     '''
     if len(codes3) != len(args):
         raise ValueError('mismatch codes3 %r and args %r' % (codes3, args))
@@ -634,7 +650,7 @@ def _pyargs(codes3, args):
 
 def _pyresult(result):
     '''Used by L{ObjCSubclass} to convert the result of an ObjC
-    method to the corresponding Python type/value.
+       method to the corresponding Python type/value.
     '''
     if isinstance(result, (ObjCInstance, ObjCClass)):
         return result.ptr.value
@@ -643,63 +659,63 @@ def _pyresult(result):
 
 
 class ObjCSubclass(ObjCBase):
-    '''Use this to create a sub-class of an existing ObjC class.
+    '''Python class to create an ObjC sub-class of an existing ObjC (super-)class.
 
-    This class is used only to *define* the interface and implementation
-    of an ObjC sub-class from Python.  It should not be used in
-    any other way.  If you want a Python representation of the resulting
-    class, create it with ObjCClass.
+       This class is used only to *define* the interface and implementation
+       of an ObjC sub-class from Python.  It should not be used in
+       any other way.  If you want a Python representation of the resulting
+       class, create it with ObjCClass.
 
-    It consists primarily of function decorators which you use to add
-    methods to the sub-class.
+       It consists primarily of function decorators which you use to add
+       methods to the sub-class.
 
-    ObjCSubclass is used to define an ObjC sub-class of an existing
-    class registered with the runtime.  When you create an instance of
-    ObjCSubclass, it registers the new sub-class with the ObjC
-    runtime and creates a set of function decorators that you can use to
-    add instance methods or class methods to the sub-class.
+       ObjCSubclass is used to define an ObjC sub-class of an existing
+       class registered with the runtime.  When you create an instance of
+       ObjCSubclass, it registers the new sub-class with the ObjC
+       runtime and creates a set of function decorators that you can use to
+       add instance methods or class methods to the sub-class.
 
-    Typical usage would be to first create and register the sub-class:
+       Typical usage would be to first create and register the sub-class:
 
-    >>> MySubclass = ObjCSubclass('NSObject', 'MySubclassName')
+       >>> MySubclass = ObjCSubclass('NSObject', 'MySubclassName')
 
-    then add methods with:
+       then add methods with:
 
-    >>> @MySubclass.method('v')
-    >>> def methodThatReturnsVoid(self):
-    >>>     pass
+       >>> @MySubclass.method('v')
+       >>> def methodThatReturnsVoid(self):
+       >>>     pass
 
-    >>> @MySubclass.method('Bi')
-    >>> def boolReturningMethodWithInt_(self, x):
-    >>>     return True
+       >>> @MySubclass.method('Bi')
+       >>> def boolReturningMethodWithInt_(self, x):
+       >>>     return True
 
-    >>> @MySubclass.classmethod('@')
-    >>> def classMethodThatReturnsId(self):
-    >>>     return self
+       >>> @MySubclass.classmethod('@')
+       >>> def classMethodThatReturnsId(self):
+       >>>     return self
 
-    It is probably a good idea to organize the code related to a single
-    sub-class by either putting it in its own module (note that you don't
-    actually need to expose any of the method names or the ObjCSubclass)
-    or by bundling it all up inside a Python class definition, perhaps
-    called MySubclassImplementation.
+       It is probably a good idea to organize the code related to a single
+       sub-class by either putting it in its own module (note that you don't
+       actually need to expose any of the method names or the ObjCSubclass)
+       or by bundling it all up inside a Python class definition, perhaps
+       called MySubclassImplementation.
 
-    It is also possible to add ObjC ivars to the sub-class, however if
-    you do so, you must call the __init__ method with register=False,
-    and then call the register method after the ivars have been added.
+       It is also possible to add ObjC ivars to the sub-class, however if
+       you do so, you must call the __init__ method with register=False,
+       and then call the register method after the ivars have been added.
 
-    However, instead of creating the ivars in ObjC land, it is easier
-    to just define Python-based instance variables in your sub-class's
-    init method.
+       However, instead of creating the ivars in ObjC land, it is easier
+       to just define Python-based instance variables in your sub-class's
+       init method.
 
-    Instances are created as a pointer to the objc object by using:
+       Instances are created as a pointer to the objc object by using:
 
-    >>> myinstance = send_message('MySubclassName', 'alloc')
-    >>> myinstance = send_message(myinstance, 'init')
+       >>> myinstance = send_message('MySubclassName', 'alloc')
+       >>> myinstance = send_message(myinstance, 'init')
 
-    or wrapped inside an ObjCInstance object by using:
+       or wrapped inside an ObjCInstance object by using:
 
-    >>> myclass = ObjCClass('MySubclassName')
-    >>> myinstance = myclass.alloc().init()
+       >>> myclass = ObjCClass('MySubclassName')
+       >>> myinstance = myclass.alloc().init()
     '''
     _imp_cache = {}  # decorated class/method cache
     _name      = b''
@@ -708,16 +724,16 @@ class ObjCSubclass(ObjCBase):
     _objc_metaclass = None  # None means, not (yet) registered
 
     def __init__(self, parent, name, register=True, **ivars):
-        '''New sub_class of the given (super-)class.
+        '''New sub-class of the given (super-)class.
 
-        @param parent: The parent class (string or C{NS...}).
-        @param name: The sub-class name (string).
-        @keyword register: Optionally, register the new sub-class (bool).
-        @keyword ivars: Optionally, specify any number of instance
-                        variables to be added I{before} registering
-                        the new class, each with a keyword argument
-                        C{ivarname=ctype} to specify the name and ctype
-                        of the instance variable.
+           @param parent: The super-class (str or C{NS...}).
+           @param name: The sub-class name (str).
+           @keyword register: Optionally, register the new sub-class (bool).
+           @keyword ivars: Optionally, specify any number of instance
+                           variables to be added I{before} registering
+                           the new class, each with a keyword argument
+                           C{ivarname=ctype} to specify the name and ctype
+                           of the instance variable.
         '''
         self._imp_cache = {}
         self._name = name
@@ -749,13 +765,13 @@ class ObjCSubclass(ObjCBase):
     def add_ivar(self, name, ctype):
         '''Add an instance variable to the sub-class.
 
-        @param name: Name of the ivar (string).
-        @param ctype: The ivar type (C{ctypes}).
+           @param name: Name of the ivar (str).
+           @param ctype: The ivar type (C{ctypes}).
 
-        @raise ValueError: Class is already registered.
+           @raise ValueError: Class is already registered.
 
-        @note: Instance variables can only be added
-               BEFORE the class is registered.
+           @note: Instance variables can only be added
+                  BEFORE the class is registered.
         '''
         if self._objc_metaclass:
             raise ValueError('add ivar %s to already registered %s %r' %
@@ -765,7 +781,9 @@ class ObjCSubclass(ObjCBase):
     def classmethod(self, encoding):
         '''Decorator for class methods.
 
-        @param encoding: Signature of the method (C{encoding}).
+           @param encoding: Signature of the method (C{encoding}).
+
+           @return: Decorater.
         '''
         codes3, encoding = split_emcoding2(encoding, 3)
 
@@ -785,7 +803,9 @@ class ObjCSubclass(ObjCBase):
     def method(self, encoding):
         '''Decorator for instance methods.
 
-        @param encoding: Signature of the method (C{encoding}).
+           @param encoding: Signature of the method (C{encoding}).
+
+           @return: Decorater.
         '''
         codes3, encoding = split_emcoding2(encoding, 3)
 
@@ -804,7 +824,7 @@ class ObjCSubclass(ObjCBase):
 
     @property
     def name(self):
-        '''Get the name of this ObjC sub-class (string).
+        '''Get the name of this ObjC sub-class (str).
         '''
         return bytes2str(self._name)
 
@@ -823,11 +843,13 @@ class ObjCSubclass(ObjCBase):
     def rawmethod(self, encoding):
         '''Decorator for instance methods without any fancy shenanigans.
 
-        @param encoding: Signature of the method (C{encoding}).
+           @param encoding: Signature of the method (C{encoding}).
 
-        @note: The method must have signature M{m(self, cmd, *args)}
-               where both C{self} and C{cmd} are just pointers to
-               ObjC objects.
+           @return: Decorater.
+
+           @note: The method must have signature M{m(self, cmd, *args)}
+                  where both C{self} and C{cmd} are just pointers to
+                  ObjC objects.
         '''
         _, encoding = split_emcoding2(encoding)
 
@@ -849,83 +871,97 @@ class ObjCSubclass(ObjCBase):
 
 def add_ivar(clas, name, ctype):
     '''Add an instance variable to an ObjC class,
-    see also C{_DeallocObserver} below.
 
-    @param clas: Class to add the ivar to (C{ObjCClass/Subclass}).
-    @param name: Name of the iver (string).
-    @param ctype: The ivar type (C{ctypes} or C{encoding}).
+       @param clas: Class to add the ivar to (C{ObjCClass/Subclass}).
+       @param name: Name of the iver (str).
+       @param ctype: The ivar type code (C{ctypes} or C{encoding}).
 
-    @note: The I{ctype} must be a C{ctypes} type or a valid
-           ObjC type encoding.
+       @return: True if the ivar was added, False otherwise.
+
+       @raise TypeCodeError: Invalid I{ctype}.
+
+       @note: The I{ctype} must be a C{ctypes} type or a valid
+              ObjC type encoding.
+
+       @see: The C{_NSDeallocObserver} below.
     '''
     try:
         code = ctype2encoding(ctype, dflt=None)
         if code is None:
             code, ctype = ctype, encoding2ctype(str2bytes(ctype))
     except TypeError:
-        raise TypeError('ivar %s type invalid: %r' % (name, ctype))
+        raise TypeCodeError('%s %s type invalid: %r' % ('type', name, ctype))
 
-    return libobjc.class_addIvar(clas, str2bytes(name), sizeof(ctype),
-                                        alignment(ctype), code)
+    return bool(libobjc.class_addIvar(clas, str2bytes(name), sizeof(ctype),
+                                            alignment(ctype), code))
 
 
 def add_method(clas, name_, method, encoding):
     '''Add a method to an ObjC class.
 
-    @param clas: Class to add the method to (C{ObjCClass/Subclass}).
-    @param name_: Selector name (string).
-    @param encoding: Method signature (C{encoding}).
+       @param clas: Class to add the method to (C{ObjCClass/Subclass}).
+       @param name_: Selector name (str).
+       @param method: Decorated class or instance method (C{callable}).
+       @param encoding: Method signature (C{encoding}).
 
-    @return: The method (C{cfunctype}).
+       @return: The method (L{IMP_t}) if added, C{None} otherwise.
+
+       @raise TypeError: If I{method} is not a Python callable.
     '''
+    if isinstance(method, ObjCBase) or not callable(method):
+        raise TypeError('%s not a %s: %r' % ('method', 'callable', method))
+
     codes, signature = split_emcoding2(encoding)
 
-    cfunctype = get_cfunctype(signature, codes)
-    imp = cfunctype(method)
+    imp = get_c_func_t(signature, codes)
+    imp = imp(method)
+    imp = cast(imp, IMP_t)
 
-#   libobjc.class_addMethod.argtypes = [Class, SEL_t, IMP_t, c_char_p]
-    libobjc.class_addMethod(clas, get_selector(name_), cast(imp, IMP_t), signature)
-    return imp
+#   libobjc.class_addMethod.argtypes = [Class_t, SEL_t, IMP_t, c_char_p]
+    return imp if libobjc.class_addMethod(clas, get_selector(name_),
+                                                imp, signature) else None
 
 
 def add_protocol(clas, protocol):
     '''Add a protocol to an ObjC class.
 
-    @param clas: Class to add the protocol to (C{ObjCClass/Subclass}).
-    @param protocol: The C{protocol} to add (string or L{Protocol_t} instance).
+       @param clas: Class to add the protocol to (C{ObjCClass/Subclass}).
+       @param protocol: The C{protocol} to add (string or L{Protocol_t} instance).
+
+       @return: The protocol (L{Protocol_t}) if added, C{None} otherwise.
     '''
     protocol, _ = _obj_and_name(protocol, get_protocol)
-    return libobjc.class_addProtocol(clas, protocol)
+    return protocol if libobjc.class_addProtocol(clas, protocol) else None
 
 
 def add_subclass(superclas, name, register=False):
     '''Create a new sub-class of the given super-class.
 
-    @param superclas: The parent class (string or C{NS...}).
-    @param name: The name of the sub-class (string).
-    @keyword register: Optionally, register the new sub-class (bool).
+       @param superclas: The parent class (string or C{NS...}).
+       @param name: The name of the sub-class (str).
+       @keyword register: Optionally, register the new sub-class (bool).
 
-    @return: The new sub-class (C{Class}).
+       @return: The sub-class (C{Class_t}) if added, C{None} otherwise.
 
-    @note: After calling C{add_subclass}, you I{MUST} register the
-           new sub-class with L{register_subclass}, I{before} using
-           the new sub-class.  New methods can be added I{after} the
-           sub-class has been registered, but any C{ivar}s must be
-           added I{BEFORE} the class is registrated.
+       @note: After calling C{add_subclass}, you I{MUST} register the
+              new sub-class with L{register_subclass}, I{before} using
+              the new sub-class.  New methods can be added I{after} the
+              sub-class has been registered, but any C{ivar}s must be
+              added I{BEFORE} the class is registrated.
     '''
     superclas, _ = _obj_and_name(superclas, get_class)
     clas = libobjc.objc_allocateClassPair(superclas, str2bytes(name), 0)
-    if register:
+    if clas and register:
         register_subclass(clas)
-    return clas
+    return clas or None
 
 
 def isClass(obj):
-    '''Check whether an object is an ObjC class.
+    '''Check whether an object is an ObjC clas.
 
-    @param obj: Object to check (C{Object} or C{Class}).
+       @param obj: Object to check (C{Object} or C{Class}).
 
-    @return: True if the I{obj} is a class, False otherwise.
+       @return: True if the I{obj} is a clas, False otherwise.
     '''
     # an obj is a class if its super-class is a metaclass
     return isMetaClass(get_classof(obj))
@@ -934,15 +970,15 @@ def isClass(obj):
 def isImmutable(obj, mutableClass, immutableClass, name='ns'):
     '''Check that an Obj object is an instance of the immutable class.
 
-    @param obj: The instance to check (L{ObjCInstance}).
-    @param mutableClass: The mutable ObjC classes (C{NSMutable...}).
-    @param immutableClass: The immutable ObjC classes (C{NS...}).
-    @keyword name: The name of the instance (string).
+       @param obj: The instance to check (L{ObjCInstance}).
+       @param mutableClass: The mutable ObjC classes (C{NSMutable...}).
+       @param immutableClass: The immutable ObjC classes (C{NS...}).
+       @keyword name: The name of the instance (str).
 
-    @return: True if I{obj} is an I{immutableClass} instance, False otherwise.
+       @return: True if I{obj} is an I{immutableClass} instance, False otherwise.
 
-    @raise TypeError: If I{obj} is a I{mutableClass} instance, provided
-                      keyword argument I{name='...'} is given.
+       @raise TypeError: If I{obj} is a I{mutableClass} instance, provided
+                         keyword argument I{name='...'} is given.
     '''
     # check for the NSMutable- class first, since the mutable
     # classes seem to be sub-class of the immutable one
@@ -954,17 +990,17 @@ def isImmutable(obj, mutableClass, immutableClass, name='ns'):
 def isInstanceOf(obj, *Classes, **name_missing):
     '''Check whether an ObjC object is an instance of some ObjC class.
 
-    @param obj: The instance to check (L{ObjCInstance} or C{c_void_p}).
-    @param Classes: One or several ObjC classes (C{NS...}).
-    @keyword name: The name of the instance (string).
+       @param obj: The instance to check (L{ObjCInstance} or C{c_void_p}).
+       @param Classes: One or several ObjC classes (C{NS...}).
+       @keyword name: The name of the instance (str).
 
-    @return: The matching I{Class} from I{Classes}, None otherwise.
+       @return: The matching I{Class} from I{Classes}, None otherwise.
 
-    @raise TypeError: If I{obj} is not an L{ObjCInstance} or C{c_void_p}
-                      or if I{obj} does not match any of the I{Classes}
-                      and only if keyword I{name='...'} is provided.
+       @raise TypeError: If I{obj} is not an L{ObjCInstance} or C{c_void_p}
+                         or if I{obj} does not match any of the I{Classes}
+                         and only if keyword I{name='...'} is provided.
 
-    @see: Function L{instanceof} for checking Python instances.
+       @see: Function L{instanceof} for checking Python instances.
     '''
     if isinstance(obj, ObjCInstance):
         try:
@@ -1001,19 +1037,19 @@ def isInstanceOf(obj, *Classes, **name_missing):
 def isMetaClass(obj):
     '''Check whether an object is an ObjC metaclass.
 
-    @param obj: Object to check (C{Object} or C{Class}).
+       @param obj: Object to check (C{Object} or C{Class}).
 
-    @return: True if the I{obj} is a metaclass, False otherwise.
+       @return: True if the I{obj} is a metaclass, False otherwise.
     '''
-    return libobjc.class_isMetaClass(obj)
+    return bool(libobjc.class_isMetaClass(obj))
 
 
 def register_subclass(subclas):
     '''Register an ObjC sub-class.
 
-    @param subclas: Class to be registered (C{Class}).
+       @param subclas: Class to be registered (C{Class}).
 
-    @see: L{_DeallocObserver} below.
+       @see: L{nsDeallocObserver} below.
     '''
     if not isinstance(subclas, Class_t):
         subclas = Class_t(subclas)
@@ -1058,19 +1094,26 @@ else:
 def send_message(receiver, name_, *args, **resargtypes):
     '''Send message to an ObjC object.
 
-    @param receiver: The recipient (I{Object}).
-    @param name_: Message selector (string).
-    @param args: Message arguments (I{all positional}).
-    @keyword resargtypes: Optional, result and argument types (C{ctypes}).
+       @param receiver: The recipient (I{Object}).
+       @param name_: Message selector (str).
+       @param args: Message arguments (I{all positional}).
+       @keyword resargtypes: Optional, result and argument types (C{ctypes}).
 
-    @return: Message result (I{restype}).
+       @return: Message result (I{restype}).
 
-    @note: By default, the result and all arguments are C{c_void_p}
-    wrapped.  Use keyword arguments I{restype=c_void_p} and I{argtypes=[]}
-    to change the defaults.  The I{restype} defines the C{ctypes} type
-    for the returned result and I{argtypes} is the list of C{ctypes}
-    types for the message arguments only (without the C{Id/self} and
-    C{SEL/cmd} arguments).
+       @raise ArgumentError: Invalid I{receiver}, I{name}, I{args}
+                             or I{resargtypes}.
+
+       @raise TypeError: Invalid I{receiver}, I{name}, I{args} or
+                         I{resargtypes} type.
+
+       @note: By default, the result and all arguments are C{c_void_p}
+              wrapped.  Use keyword arguments I{restype=c_void_p} and
+              I{argtypes=[]} to change the defaults.  The I{restype}
+              defines the C{ctypes} type for the returned result and
+              I{argtypes} is the list of C{ctypes} types for the message
+              arguments only (without the C{Id/self} and C{SEL/cmd}
+              arguments).
     '''
     receiver, _ = _obj_and_name(receiver, get_class)
     _ObjC_logf('send_message(%r, %s, %r) %r', receiver, name_, args, resargtypes)
@@ -1102,19 +1145,26 @@ objc_super_t_ptr = POINTER(objc_super_t)  # XXX backward compatibility
 def send_super(receiver, name_, *args, **resargtypes):
     '''Send message to the super-class of an ObjC object.
 
-    @param receiver: The recipient (I{Object}).
-    @param name_: Message selector (string).
-    @param args: Message arguments (I{all positional}).
-    @keyword resargtypes: Optional, result and argument types (C{ctypes}).
+       @param receiver: The recipient (I{Object}).
+       @param name_: Message selector (str).
+       @param args: Message arguments (I{all positional}).
+       @keyword resargtypes: Optional, result and argument types (C{ctypes}).
 
-    @return: Message result (I{restype}).
+       @return: Message result (I{restype}).
 
-    @note: By default, the result and all arguments are C{c_void_p}
-    wrapped.  Use keyword arguments I{restype=c_void_p} and I{argtypes=[]}
-    to change the defaults.  The I{restype} defines the C{ctypes} type
-    for the returned result and I{argtypes} is the list of C{ctypes}
-    types for the message arguments only (without the C{Id/self} and
-    C{SEL/cmd} arguments).
+       @raise ArgumentError: Invalid I{receiver}, I{name}, I{args}
+                             or I{resargtypes}.
+
+       @raise TypeError: Invalid I{receiver}, I{name}, I{args} or
+                         I{resargtypes} type.
+
+       @note: By default, the result and all arguments are C{c_void_p}
+              wrapped.  Use keyword arguments I{restype=c_void_p} and
+              I{argtypes=[]} to change the defaults.  The I{restype}
+              defines the C{ctypes} type for the returned result and
+              I{argtypes} is the list of C{ctypes} types for the message
+              arguments only (without the C{Id/self} and C{SEL/cmd}
+              arguments).
     '''
     _ObjC_logf('send_super(%r, %s, %r)', receiver, name_, args)
     receiver = getattr(receiver, '_as_parameter_', receiver)
@@ -1133,50 +1183,71 @@ def send_super(receiver, name_, *args, **resargtypes):
 def set_ivar(obj, name, value, ctype=None):
     '''Set an instance variable of an ObjC object.
 
-    @param obj: The instance (I{Object}).
-    @param name: Name if the ivar (string).
-    @param value: New value (any).
-    @keyword ctype: Optional, the ivar type (C{ctypes}).
+       @param obj: The instance (I{Object}).
+       @param name: Name of the ivar (str).
+       @param value: New value for the ivar (C{any}).
+       @keyword ctype: Optional, the ivar type (C{ctypes}).
+
+       @return: The ivar (L{Ivar_t}).
+
+       @raise ArgumentError: Invalid I{name}, I{value} or I{ctype}.
+
+       @raise TypeError: Invalid I{name}, I{value} or I{ctype} type.
     '''
-    if ctype is None:
+    if ctype is None or ctype is missing:
         ctype = _ivar_ctype(obj, name)
 
     argtypes = [Ivar_t, c_char_p, ctype]
-    _libobjcall('object_setInstanceVariable', c_void, argtypes,
-                 obj, str2bytes(name), value)
+    return _libobjcall('object_setInstanceVariable', c_void, argtypes,
+                        obj, str2bytes(name), value)
 
 
-class _DeallocObserver(object):
-    '''Instances of C{_DeallocObserver} are associated with every
-    ObjC object that gets wrapped inside an L{ObjCInstance}.
+_ObservedObjName = '_ObservedObj'
 
-    Their sole purpose is to watch when the ObjC object is
-    de-allocated, and then remove the object from the dictionary of
-    cached L{ObjCInstance} objects kept by the L{ObjCInstance} class.
 
-    The methods of the class defined below are decorated with
-    C{.rawmethod()} instead of C{.method()} because C{_DeallocObserver}s
-    are created inside of L{ObjCInstance}'s __new__ method and we have
-    to be careful to not create another L{ObjCInstance} here (which
-    happens when the usual method decorator turns the C{self} argument
-    into an L{ObjCInstance}), or else get trapped in an infinite recursion.
+def _objc_cache_pop(inst, cmd):
+    '''(INTERNAL) Remove an C{ObjCInstance} from the objects cache.
+    '''
+    obj = get_ivar(inst, _ObservedObjName, ctype=Id_t)
+    ObjCInstance._objc_cache.pop(obj, None)
+    send_super(inst, cmd)
+
+
+class _NSDeallocObserver(object):
+    '''Instances of C{_NSDeallocObserver} are associated with every
+       ObjC object that gets wrapped and cached by an L{ObjCInstance}.
+
+       Their sole purpose is to watch when the ObjC object is de-allocated,
+       and then remove the object from the L{ObjCInstance}C{._objc_cache_}
+       dictionary kept by the L{ObjCInstance} class.
+
+       The methods of the class defined below are decorated with
+       C{.rawmethod} instead of C{.method} because C{_NSDeallocObserver}s
+       are created inside the L{ObjCInstance}C{.__new__} method and we've
+       to be careful to not create another L{ObjCInstance} here (which
+       happens when the usual method decorator turns the C{self} argument
+       into an L{ObjCInstance}) and get trapped in an infinite recursion.
+
+       The I{unused} argument in all decorated methods below represents
+       the C{SEL/cmd}, see L{ObjCSubclass.rawmethod}.
     '''
 
-    _ObjC = ObjCSubclass('NSObject', '_DeallocObserver', observed_obj=Id_t)  # ivar
+    _ObjC = ObjCSubclass('NSObject', '_NSDeallocObserver',
+                                       observed_obj=Id_t)  # ivar
 #   ... instead of, previously:
-#   _ObjC = ObjCSubclass('NSObject', '_DeallocObserver', register=False)
+#   _ObjC = ObjCSubclass('NSObject', '_NSDeallocObserver', register=False)
 #   _ObjC.add_ivar('observed_obj', c_void_p)
 #   _ObjC.register()
 
     @_ObjC.rawmethod('@@')
     def initWithObject_(self, unused, obj):
         self = send_super(self, 'init').value
-        set_ivar(self, 'observed_obj', obj, Id_t)
+        set_ivar(self, _ObservedObjName, obj, Id_t)
         return self
 
     @_ObjC.rawmethod('@')
     def dealloc(self, unused):
-        _objs_cache_pop(self, 'observed_obj', send='dealloc')
+        _objc_cache_pop(self, 'dealloc')
 
     @_ObjC.rawmethod('@')
     def finalize(self, unused):
@@ -1184,34 +1255,37 @@ class _DeallocObserver(object):
         # (which would have to be explicitly started with
         # objc_startCollectorThread(), so probably not much
         # reason to have this here, but it can't hurt.)
-        _objs_cache_pop(self, 'observed_obj', send='finalize')
+        _objc_cache_pop(self, 'finalize')
 
 
-def deallocObserver(obj):
-    '''Deallocation observer for an ObjC instance/object.
+def nsDeallocObserver(obj):
+    '''Create a de-allocation observer for an ObjC instance.
 
-    @param obj: The object to be observed (C{Object}).
+       @param obj: The object to be observed (L{ObjCInstance}).
 
-    @note: When the observed ObjC object is de-allocated, the
-    C{_DeallocObserver} removes the corresponding L{ObjCInstance}
-    from the cached objects dictionary, effectively destroying
-    the L{ObjCInstance}.
+       @return: The observer (C{_NSDeallocObserver}).
+
+       @note: When the observed ObjC object is de-allocated, the
+              C{_NSDeallocObserver} removes the corresponding
+              L{ObjCInstance} from the dictionary of cached objects
+              L{ObjCInstance}C{._objc_cache_}, effectively destroying
+              the L{ObjCInstance}.
     '''
-    alloc = send_message('_DeallocObserver', 'alloc',
-                         restype=Id_t, argtypes=[])
+    alloc = send_message('_NSDeallocObserver', 'alloc',
+                           restype=Id_t, argtypes=[])
     observer = send_message(alloc, 'initWithObject:', obj,
                             restype=Id_t, argtypes=[Id_t])
+    # The observer is retained by the object we associate it to.
     libobjc.objc_setAssociatedObject(obj, observer, observer,
                                      OBJC_ASSOCIATION_RETAIN)
-    # The observer is retained by the object we associate it to.
-    # Release the observer now so that it will be deallocated
-    # when the associated object is deallocated.
+    # Release the observer now so that it will be de-allocated
+    # when the associated object is de-allocated.
     send_message(observer, 'release')
     return observer
 
 
 # filter locals() for .__init__.py
-__all__ = _exports(locals(), 'deallocObserver', 'libobjc',
+__all__ = _exports(locals(), 'libobjc', 'nsDeallocObserver',
                              'register_subclass',
                    starts=('add_', 'is', 'OBJC_', 'ObjC', 'send_', 'set_'))
 

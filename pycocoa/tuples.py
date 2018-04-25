@@ -29,15 +29,15 @@
 '''
 # all imports listed explicitly to help PyChecker
 from bases   import _Type0
-from oclibs  import libCF
 from octypes import NSNotFound, NSRange_t
-from nstypes import ns2Type, NSArray, nsIter2, NSMutableArray, py2NS, \
-                    tuple2NS, _Types
+from oslibs  import libCF
+from nstypes import ns2Type, NSArray, nsIter2, NSMutableArray
+from pytypes import py2NS, tuple2NS
 from runtime import isImmutable
-from utils   import instanceof, _Ints
+from utils   import instanceof, _Ints, _Types
 
 __all__ = ('Tuple',)
-__version__ = '18.04.21'
+__version__ = '18.04.24'
 
 
 def _at(inst, index):

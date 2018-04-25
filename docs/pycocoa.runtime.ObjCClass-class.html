@@ -120,11 +120,9 @@ object --+
     </td><td class="summary">
       <table width="100%" cellpadding="0" cellspacing="0" border="0">
         <tr>
-          <td><span class="summary-sig"><a name="add_protocol"></a><span class="summary-sig-name">add_protocol</span>(<span class="summary-sig-arg">self</span>,
+          <td><span class="summary-sig"><a href="pycocoa.runtime.ObjCClass-class.html#add_protocol" class="summary-sig-name">add_protocol</a>(<span class="summary-sig-arg">self</span>,
         <span class="summary-sig-arg">protocol</span>)</span><br />
-      Add a protocol to this class, where <i>protocol</i> is a string or <a
-      href="pycocoa.octypes.Protocol_t-class.html" 
-      class="link">Protocol_t</a> instance.</td>
+      Add a protocol to this class.</td>
           <td align="right" valign="top">
             
             
@@ -140,9 +138,9 @@ object --+
     </td><td class="summary">
       <table width="100%" cellpadding="0" cellspacing="0" border="0">
         <tr>
-          <td><span class="summary-sig"><a name="get_classmethod"></a><span class="summary-sig-name">get_classmethod</span>(<span class="summary-sig-arg">self</span>,
+          <td><span class="summary-sig"><a href="pycocoa.runtime.ObjCClass-class.html#get_classmethod" class="summary-sig-name">get_classmethod</a>(<span class="summary-sig-arg">self</span>,
         <span class="summary-sig-arg">name</span>)</span><br />
-      Return a Python wrapper of the named class method, or None.</td>
+      Find a class method.</td>
           <td align="right" valign="top">
             
             
@@ -158,9 +156,9 @@ object --+
     </td><td class="summary">
       <table width="100%" cellpadding="0" cellspacing="0" border="0">
         <tr>
-          <td><span class="summary-sig"><a name="get_method"></a><span class="summary-sig-name">get_method</span>(<span class="summary-sig-arg">self</span>,
+          <td><span class="summary-sig"><a href="pycocoa.runtime.ObjCClass-class.html#get_method" class="summary-sig-name">get_method</a>(<span class="summary-sig-arg">self</span>,
         <span class="summary-sig-arg">name</span>)</span><br />
-      Return a Python wrapper of a named instance method, or None.</td>
+      Find an instance method.</td>
           <td align="right" valign="top">
             
             
@@ -318,6 +316,90 @@ object --+
   </dl>
 </td></tr></table>
 </div>
+<a name="add_protocol"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">add_protocol</span>(<span class="sig-arg">self</span>,
+        <span class="sig-arg">protocol</span>)</span>
+  </h3>
+  </td><td align="right" valign="top"
+    >&nbsp;
+    </td>
+  </tr></table>
+  
+  <p>Add a protocol to this class.</p>
+  <dl class="fields">
+    <dt>Parameters:</dt>
+    <dd><ul class="nomargin-top">
+        <li><strong class="pname"><code>protocol</code></strong> - The protocol to add (str or <a 
+          href="pycocoa.octypes.Protocol_t-class.html" 
+          class="link">Protocol_t</a>).</li>
+    </ul></dd>
+    <dt>Returns:</dt>
+        <dd>True if the protocol was added, False otherwise.</dd>
+  </dl>
+</td></tr></table>
+</div>
+<a name="get_classmethod"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">get_classmethod</span>(<span class="sig-arg">self</span>,
+        <span class="sig-arg">name</span>)</span>
+  </h3>
+  </td><td align="right" valign="top"
+    >&nbsp;
+    </td>
+  </tr></table>
+  
+  <p>Find a class method.</p>
+  <dl class="fields">
+    <dt>Parameters:</dt>
+    <dd><ul class="nomargin-top">
+        <li><strong class="pname"><code>name</code></strong> - Name of the method (str).</li>
+    </ul></dd>
+    <dt>Returns:</dt>
+        <dd>The class method wrapper (<a 
+          href="pycocoa.runtime.ObjCClassMethod-class.html" 
+          class="link">ObjCClassMethod</a>) or None.</dd>
+  </dl>
+</td></tr></table>
+</div>
+<a name="get_method"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">get_method</span>(<span class="sig-arg">self</span>,
+        <span class="sig-arg">name</span>)</span>
+  </h3>
+  </td><td align="right" valign="top"
+    >&nbsp;
+    </td>
+  </tr></table>
+  
+  <p>Find an instance method.</p>
+  <dl class="fields">
+    <dt>Parameters:</dt>
+    <dd><ul class="nomargin-top">
+        <li><strong class="pname"><code>name</code></strong> - Name of the method (str).</li>
+    </ul></dd>
+    <dt>Returns:</dt>
+        <dd>The instance method wrapper (<a 
+          href="pycocoa.runtime.ObjCMethod-class.html" 
+          class="link">ObjCMethod</a>) or None.</dd>
+  </dl>
+</td></tr></table>
+</div>
 <br />
 <!-- ==================== PROPERTY DETAILS ==================== -->
 <a name="section-PropertyDetails"></a>
@@ -402,7 +484,7 @@ object --+
 <table border="0" cellpadding="0" cellspacing="0" width="100%%">
   <tr>
     <td align="left" class="footer">
-    Generated by Epydoc 3.0.1 on Sun Apr 22 21:13:16 2018
+    Generated by Epydoc 3.0.1 on Tue Apr 24 20:38:11 2018
     </td>
     <td align="right" class="footer">
       <a target="mainFrame" href="http://epydoc.sourceforge.net"

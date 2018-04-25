@@ -29,16 +29,17 @@
 '''
 # all imports listed explicitly to help PyChecker
 from bases   import _Type0
-from nstypes import frozenset2NS, isNone, ns2py, NSMutableSet, \
-                    nsSet2set, NSSet, py2NS, set2NS, _Types
+from nstypes import isNone, ns2py, NSMutableSet, nsSet2set, NSSet
+from pytypes import frozenset2NS, py2NS, set2NS
 from runtime import isImmutable, isInstanceOf, ObjCInstance
+from utils   import _Types
 
 __all__ = ('FrozenSet',
            'Set')
-__version__ = '18.04.21'
+__version__ = '18.04.24'
 
 
-if True:  # MCCABE 66
+if True:  # MCCABE 69
 
     class FrozenSet(frozenset, _Type0):  # frozenset, first to maintain frozenset behavior
         '''Python C{frozenset} Type, wrapping an immutable ObjC C{NSSet}.

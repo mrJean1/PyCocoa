@@ -60,7 +60,7 @@
 # Several Objective-C/C header files are also available at
 # <http://GitHub.com/gnustep/libs-gui/tree/master/Headers>
 
-'''Various ObjC libraries, signatures, constants, etc.
+'''Various ObjC and macOS libraries, signatures, constants, etc.
 '''
 # all imports listed explicitly to help PyChecker
 from ctypes  import byref, cdll, c_byte, c_char, c_char_p, \
@@ -69,10 +69,10 @@ from ctypes  import byref, cdll, c_byte, c_char, c_char_p, \
                     c_long, c_longlong, c_short, c_size_t, \
                     c_uint, c_uint8, c_uint32, c_void_p, \
                     POINTER, sizeof, util  # c_ubyte, string_at
-from octypes import Allocator_t, Array_t, BOOL_t, CGBitmapInfo_t, \
-                    CGDirectDisplayID_t, CGError_t, CGFloat_t, \
-                    CGGlyph_t, CGIndex_t, CGPoint_t, CGRange_t, CGRect_t, \
-                    CGSize_t, Class_t, c_ptrdiff_t, \
+from octypes import Allocator_t, Array_t, BOOL_t, CFIndex_t, \
+                    CFRange_t, CGBitmapInfo_t, CGDirectDisplayID_t, \
+                    CGError_t, CGFloat_t, CGGlyph_t, CGPoint_t, \
+                    CGRect_t, CGSize_t, Class_t, c_ptrdiff_t, \
                     CTFontOrientation_t, CTFontSymbolicTraits_t, \
                     c_void, Data_t, Dictionary_t, Id_t, IMP_t, Ivar_t, \
                     Method_t, Number_t, NumberType_t, TypeID_t, \
@@ -82,7 +82,7 @@ from octypes import Allocator_t, Array_t, BOOL_t, CGBitmapInfo_t, \
                     TypeRef_t, UniChar_t
 from utils   import _exports
 
-__version__ = '18.04.19'
+__version__ = '18.04.24'
 
 NO  = False
 YES = True
@@ -149,7 +149,13 @@ def _dup(result, ctype):
 
 
 def get_lib(name):
-    '''Find and load the C{.dylib} library.
+    '''Find and load a C{.dylib} library.
+
+       @param name: The library name (str).
+
+       @return: The library (C{ctypes.CDLL}).
+
+       @note: Private attribute C{._name} shows the library file name.
     '''
     try:
         lib = _libs_cache[name]
@@ -175,8 +181,10 @@ del _libc
 
 
 def leaked2():
-    '''Return the number of memory leaks and
-    the total number of bytes leaked.
+    '''Return the number of memory leaks.
+
+       @return: 2-Tuple (I{number}, I{size}) with the I{number} of
+                memory leaks and total I{size} leaked, in bytes.
     '''
     return len(_leaked2), sum(t[1] for t in _leaked2)
 
@@ -220,21 +228,21 @@ CFStringEncoding_t = c_uint32  # a ctype
 
 _csignature(libCF.CFArrayAppendValue, Array_t, c_void_p)
 # <http://Developer.Apple.com/documentation/corefoundation/1388741-cfarraycreate?language=objc>
-_csignature(libCF.CFArrayCreate, Array_t, Allocator_t, c_void_p, CGIndex_t, c_void_p)
+_csignature(libCF.CFArrayCreate, Array_t, Allocator_t, c_void_p, CFIndex_t, c_void_p)
 # <http://Developer.Apple.com/library/content/documentation/CoreFoundation/
 #         Conceptual/CFStrings/Articles/ComparingAndSearching.html>
-_csignature(libCF.CFArrayCreateMutable, Array_t, Allocator_t, CGIndex_t, c_void_p)
-_csignature(libCF.CFArrayGetCount, CGIndex_t, Array_t)
+_csignature(libCF.CFArrayCreateMutable, Array_t, Allocator_t, CFIndex_t, c_void_p)
+_csignature(libCF.CFArrayGetCount, CFIndex_t, Array_t)
 _csignature(libCF.CFArrayGetTypeID, TypeID_t)
-_csignature(libCF.CFArrayGetValueAtIndex, c_void_p, Array_t, CGIndex_t)
+_csignature(libCF.CFArrayGetValueAtIndex, c_void_p, Array_t, CFIndex_t)
 
 _csignature(libCF.CFAttributedStringCreate, c_void_p, Allocator_t, c_void_p, c_void_p)
 
 _csignature(libCF.CFBooleanGetTypeID, TypeID_t)
 
-_csignature(libCF.CFDataCreate, Data_t, Allocator_t, c_void_p, CGIndex_t)
-_csignature(libCF.CFDataGetBytes, c_void, Data_t, CGRange_t, c_void_p)
-_csignature(libCF.CFDataGetLength, CGIndex_t, Data_t)
+_csignature(libCF.CFDataCreate, Data_t, Allocator_t, c_void_p, CFIndex_t)
+_csignature(libCF.CFDataGetBytes, c_void, Data_t, CFRange_t, c_void_p)
+_csignature(libCF.CFDataGetLength, CFIndex_t, Data_t)
 _csignature(libCF.CFDataGetTypeID, TypeID_t)
 
 # <http://developer.apple.com/documentation/corefoundation/cfdictionary-rum>
@@ -244,10 +252,10 @@ _csignature(libCF.CFDataGetTypeID, TypeID_t)
 _csignature(libCF.CFDictionaryAddValue, c_void, Dictionary_t, c_void_p, c_void_p)  # (d, key, val)
 _csignature(libCF.CFDictionaryContainsKey, BOOL_t, Dictionary_t, c_void_p)
 _csignature(libCF.CFDictionaryContainsValue, BOOL_t, Dictionary_t, c_void_p)
-_csignature(libCF.CFDictionaryCreateMutable, c_void_p, Allocator_t, CGIndex_t, c_void_p, c_void_p)
-_csignature(libCF.CFDictionaryGetCount, CGIndex_t, Dictionary_t)
-_csignature(libCF.CFDictionaryGetCountOfKey, CGIndex_t, Dictionary_t, c_void_p)
-_csignature(libCF.CFDictionaryGetCountOfValue, CGIndex_t, Dictionary_t, c_void_p)
+_csignature(libCF.CFDictionaryCreateMutable, c_void_p, Allocator_t, CFIndex_t, c_void_p, c_void_p)
+_csignature(libCF.CFDictionaryGetCount, CFIndex_t, Dictionary_t)
+_csignature(libCF.CFDictionaryGetCountOfKey, CFIndex_t, Dictionary_t, c_void_p)
+_csignature(libCF.CFDictionaryGetCountOfValue, CFIndex_t, Dictionary_t, c_void_p)
 _csignature(libCF.CFDictionaryGetKeysAndValues, Dictionary_t, c_void_p, c_void_p)
 _csignature(libCF.CFDictionaryGetTypeID, TypeID_t)
 _csignature(libCF.CFDictionaryGetValue, c_void_p, Dictionary_t, c_void_p)  # (d, key)
@@ -298,13 +306,20 @@ _CFNumberType2ctype = {kCFNumberSInt8Type:     c_int8,
                        kCFNumberLongLongType:  c_longlong,
                        kCFNumberFloatType:     c_float,
                        kCFNumberDoubleType:    c_double,
-                       kCFNumberCFIndexType:   CGIndex_t,
+                       kCFNumberCFIndexType:   CFIndex_t,
                        kCFNumberNSIntegerType: NSInteger_t,
                        kCFNumberCGFloatType:   CGFloat_t}
 
 
 def cfNumber2bool(ns, dflt=None):
-    '''Create a Python bool from an NS/CFBoolNumber, special case.
+    '''Create a Python C{bool} from an C{NS/CFBoolNumber}, special case.
+
+       @param ns: The C{NS/CFBoolNumber} (L{ObjCInstance}).
+       @keyword dflt: Default for missing value (C{None}).
+
+       @raise TypeError: Unexpected C{NumberType}.
+
+       @return: The bool (C{bool}) or I{dflt}.
     '''
     numType = libCF.CFNumberGetType(ns)
     if numType != kCFNumberCharType:
@@ -317,7 +332,14 @@ def cfNumber2bool(ns, dflt=None):
 
 
 def cfNumber2num(ns, dflt=None):
-    '''Create a Python int or float from an NS/CFNumber.
+    '''Create a Python C{int} or C{float} from an C{NS/CFNumber}.
+
+       @param ns: The C{NS/CFNumber} (L{ObjCInstance}).
+       @keyword dflt: Default for missing, unobtainable value (C{None}).
+
+       @raise TypeError: Unexpected C{NumberType}.
+
+       @return: The number (C{int} or C{float}) or I{dflt}.
     '''
     numType = libCF.CFNumberGetType(ns)
     try:
@@ -338,8 +360,8 @@ _csignature(libCF.CFRunLoopGetCurrent, c_void_p)
 _csignature(libCF.CFRunLoopGetMain, c_void_p)
 
 _csignature(libCF.CFSetContainsValue, BOOL_t, Set_t, c_void_p)
-_csignature(libCF.CFSetGetCount, CGIndex_t, Set_t)
-_csignature(libCF.CFSetGetCountOfValue, CGIndex_t, Set_t, c_void_p)
+_csignature(libCF.CFSetGetCount, CFIndex_t, Set_t)
+_csignature(libCF.CFSetGetCountOfValue, CFIndex_t, Set_t, c_void_p)
 _csignature(libCF.CFSetGetValue, c_void_p, Set_t, c_void_p)
 # PyPy 1.7 is fine with the 2nd arg as POINTER(c_void_p),
 # but CPython ctypes 1.1.0 complains, so just use c_void_p.
@@ -347,9 +369,9 @@ _csignature(libCF.CFSetGetValues, c_void, Set_t, c_void_p)
 _csignature(libCF.CFSetGetValueIfPresent, BOOL_t, Set_t, c_void_p, POINTER(c_void_p))
 
 _csignature(libCF.CFStringCreateWithCString, String_t, Allocator_t, c_char_p, CFStringEncoding_t)
-_csignature(libCF.CFStringGetCString, BOOL_t, String_t, c_char_p, CGIndex_t, CFStringEncoding_t)
-_csignature(libCF.CFStringGetLength, CGIndex_t, String_t)
-_csignature(libCF.CFStringGetMaximumSizeForEncoding, CGIndex_t, CGIndex_t, CFStringEncoding_t)
+_csignature(libCF.CFStringGetCString, BOOL_t, String_t, c_char_p, CFIndex_t, CFStringEncoding_t)
+_csignature(libCF.CFStringGetLength, CFIndex_t, String_t)
+_csignature(libCF.CFStringGetMaximumSizeForEncoding, CFIndex_t, CFIndex_t, CFStringEncoding_t)
 _csignature(libCF.CFStringGetTypeID, TypeID_t)
 
 # APPLICATION KIT
@@ -361,6 +383,19 @@ NSApplicationDidHideNotification   = c_void_p.in_dll(libAppKit, 'NSApplicationDi
 NSApplicationDidUnhideNotification = c_void_p.in_dll(libAppKit, 'NSApplicationDidUnhideNotification')
 NSDefaultRunLoopMode               = c_void_p.in_dll(libAppKit, 'NSDefaultRunLoopMode')
 NSEventTrackingRunLoopMode         = c_void_p.in_dll(libAppKit, 'NSEventTrackingRunLoopMode')
+
+# <http://github.com/gnustep/libs-gui/blob/master/Headers/AppKit/NSPanel.h>
+# <http://github.com/gnustep/libs-gui/blob/master/Headers/AppKit/NSSavePanel.h>
+NSFileHandlingPanelCancelButton = NSCancelButton = 0
+NSFileHandlingPanelOKButton     = NSOKButton     = 1
+# original enum, assumed values from here down
+# NSFileHandlingPanelImageButton     = 2
+# NSFileHandlingPanelTitleField      = 3
+# NSFileHandlingPanelBrowser         = 4
+# NSFileHandlingPanelForm            = 5
+# NSFileHandlingPanelHomeButton      = 6
+# NSFileHandlingPanelDiskButton      = 7
+# NSFileHandlingPanelDiskEjectButton = 8
 
 # /System/Library/Frameworks/AppKit.framework/Headers/NSEvent.h
 NSAnyEventMask = 0xFFFFFFFF     # NSUIntegerMax
@@ -609,11 +644,11 @@ _csignature(libCT.CTFontCopyFullName, c_void_p, c_void_p)
 _csignature(libCT.CTLineCreateWithAttributedString, c_void_p, c_void_p)
 _csignature(libCT.CTFontCreateWithFontDescriptor, c_void_p, c_void_p, CGFloat_t, c_void_p)
 _csignature(libCT.CTFontDescriptorCreateWithAttributes, c_void_p, c_void_p)
-_csignature(libCT.CTFontGetBoundingRectsForGlyphs, CGRect_t, c_void_p, CTFontOrientation_t, POINTER(CGGlyph_t), POINTER(CGRect_t), CGIndex_t)
-_csignature(libCT.CTFontGetAdvancesForGlyphs, c_double, c_void_p, CTFontOrientation_t, POINTER(CGGlyph_t), POINTER(CGSize_t), CGIndex_t)
+_csignature(libCT.CTFontGetBoundingRectsForGlyphs, CGRect_t, c_void_p, CTFontOrientation_t, POINTER(CGGlyph_t), POINTER(CGRect_t), CFIndex_t)
+_csignature(libCT.CTFontGetAdvancesForGlyphs, c_double, c_void_p, CTFontOrientation_t, POINTER(CGGlyph_t), POINTER(CGSize_t), CFIndex_t)
 _csignature(libCT.CTFontGetAscent, CGFloat_t, c_void_p)
 _csignature(libCT.CTFontGetDescent, CGFloat_t, c_void_p)
-_csignature(libCT.CTFontGetGlyphsForCharacters, BOOL_t, c_void_p, POINTER(UniChar_t), POINTER(CGGlyph_t), CGIndex_t)
+_csignature(libCT.CTFontGetGlyphsForCharacters, BOOL_t, c_void_p, POINTER(UniChar_t), POINTER(CGGlyph_t), CFIndex_t)
 _csignature(libCT.CTFontGetSymbolicTraits, CTFontSymbolicTraits_t, c_void_p)
 _csignature(libCT.CTLineDraw, c_void, c_void_p, c_void_p)
 
@@ -830,7 +865,7 @@ _csignature(libobjc.sel_registerName, SEL_t, c_char_p)
 # filter locals() for .__init__.py
 __all__ = _exports(locals(), 'get_lib', 'leaked2', 'NO', 'YES',
                    starts=('CF', 'CG', 'ct', 'CTF', 'kCF', 'kCG',
-                           'kCTF', 'NS'))  # 'lib'
+                           'kCTF', 'lib', 'NS'))  # 'lib'
 
 if __name__ == '__main__':
 

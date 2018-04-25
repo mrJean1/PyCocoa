@@ -33,17 +33,18 @@ from bases    import _Type2
 from geometry import Rect4
 from nstypes  import NSNone, NSScrollView, NSStr, nsString2str, \
                      NSTableColumn, NSTableView, NSTrue
-from oclibs   import NSTableViewSolidHorizontalGridLineMask, \
-                     NSTableViewSolidVerticalGridLineMask
 from octypes  import NSSize_t
+from oslibs   import NSTableViewSolidHorizontalGridLineMask, \
+                     NSTableViewSolidVerticalGridLineMask
 from runtime  import isInstanceOf, ObjCClass, ObjCInstance, \
                      ObjCSubclass, send_super
-from utils    import _Globals, instanceof
+from utils    import _Globals, instanceof, _Types
 from windows  import Screen, Style, Window
 
-__all__ = ('Table', 'TableWindow', 'TableDataDelegate',
+__all__ = ('NSTableViewDelegate',
+           'Table', 'TableWindow',
            'closeTables')
-__version__ = '18.04.21'
+__version__ = '18.04.24'
 
 _EmptyCell = NSStr('-', auto=False)  # PYCHOK false
 _Separator = NSStr('',  auto=False)
@@ -110,7 +111,7 @@ class Table(_Type2):
         wide = f.width  # == vuw.frame().size.width
         # <http://developer.apple.com/documentation/appkit/nstablecolumn>
         for i, h in enumerate(self._headers):
-            # note, the Identifier MUSt be an NSStr (to avoid warnings)
+            # note, the identifier MUST be an NSStr (to avoid warnings)
             c = NSTableColumn.alloc().initWithIdentifier_(NSStr(i))
             # print(i, h, c.identifier(), c.headerCell(),
             #             c.width(), c.minWidth(), c.maxWidth())
@@ -141,8 +142,8 @@ class Table(_Type2):
                               NSTableViewSolidVerticalGridLineMask)
 #       vuw.setDrawsGrid_(NSTrue)  # XXX obsolete, not needed
 
-        self.delegate = TableDataDelegate.alloc().init(cols, self._rows)
-        vuw.setDataSource_(self.delegate)
+        self.NSdelegate = NSTableViewDelegate.alloc().init(cols, self._rows)
+        vuw.setDataSource_(self.NSdelegate)
 #       vuw.setEditing_(NSFalse)
         vuw.reloadData()
 
@@ -156,22 +157,26 @@ class Table(_Type2):
         self._rows.append(_Separator)
 
 
-class _TableDataDelegate(object):
-    '''An ObjC-callable I{Delegate} class, providing an ObjC
+class _NSTableViewDelegate(object):
+    '''An ObjC-callable I{NSDelegate} class, providing an ObjC
        C{NSTableViewDataSource} protocol.
 
-       @see: The C{_AppDelegate} for more I{Delegate} details.
+       @see: The C{_NSApplicationDelegate} for more I{NSDelegate} details.
     '''
     # <http://developer.apple.com/documentation/appkit/nstableviewdatasource>
-    _ObjC = ObjCSubclass('NSObject', '_TableDataDelegate')
+    _ObjC = ObjCSubclass('NSObject', '_NSTableViewDelegate')
 
     @_ObjC.method('@PP')
     def init(self, cols, rows):
+        '''Initialize the allocated C{NSTableViewDelegate}.
+
+           @note: I{MUST} be called as C{.alloc().init(...)}.
+        '''
         instanceof(cols, list, tuple, name='cols')
         instanceof(rows, list, tuple, name='rows')
 #       self = ObjCInstance(send_message('NSObject', 'alloc'))
         self = ObjCInstance(send_super(self, 'init'))
-        self.cols = cols  # column titles
+        self.cols = cols  # column headers/titles
         self.rows = rows
         return self
 
@@ -187,12 +192,12 @@ class _TableDataDelegate(object):
     def tableView_objectValueForTableColumn_row_(self, table, col, row):
         # row is the row number, but col is an
         # NSTableColumn instance, not an index
-        # and col.identifier must be an NSStr.
+        # (and col.identifier must be an NSStr).
         c = col.identifier()
         try:
             r = self.rows[row]
             if r is _Separator:
-                # XXX vary row height of row separato?
+                # XXX reduce the height of row separator?
                 # <http://developer.apple.com/library/content/samplecode/
                 #       CocoaTipsAndTricks/Listings/TableViewVariableRowHeights_
                 #       TableViewVariableRowHeightsAppDelegate_m.html>
@@ -204,9 +209,9 @@ class _TableDataDelegate(object):
         return NSStr('[C%r, R%d]' % (c, row))
 
 
-TableDataDelegate = ObjCClass('_TableDataDelegate',  # the actual class
-                              'NSTableViewDataSource')
-# XXX or TableDataDelegate.add_protocol('NSTableViewDataSource')
+NSTableViewDelegate = ObjCClass('_NSTableViewDelegate',  # the actual class
+                                 'NSTableViewDataSource')
+# XXX or NSTableViewDelegate.add_protocol('NSTableViewDataSource')
 
 
 class TableWindow(Window):
@@ -272,6 +277,9 @@ class TableWindow(Window):
 #       self.close()
         super(TableWindow, self).windowClose_()
 
+
+_Types.Table       = Table
+_Types.TableWindow = TableWindow
 
 if __name__ == '__main__':
 

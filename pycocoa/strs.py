@@ -29,12 +29,12 @@
 '''
 # all imports listed explicitly to help PyChecker
 from bases   import _Type0
-from nstypes import NSConstantString, NSStr, NSString, nsString2str, \
-                    str2NS, _Types
-from utils   import instanceof, _Strs
+from nstypes import NSConstantString, NSStr, NSString, nsString2str
+from pytypes import str2NS
+from utils   import instanceof, _Strs, _Types
 
 __all__ = ('Str',)
-__version__ = '18.04.21'
+__version__ = '18.04.24'
 
 
 class Str(str, _Type0):  # str, first to maintain str behavior

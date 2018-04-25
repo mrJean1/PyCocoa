@@ -64,7 +64,7 @@
 
 <hr />
 <div class="fields">      <p><strong>Version:</strong>
-        18.04.21
+        18.04.24
       </p>
 </div><!-- ==================== CLASSES ==================== -->
 <a name="section-Classes"></a>
@@ -107,8 +107,8 @@
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
         <a href="pycocoa.nstypes.at-class.html" class="summary-name">at</a><br />
-      Acronym for the <a href="pycocoa.nstypes.NSStr-class.html" 
-        class="link">NSStr</a> wrapper.
+      Acronym for the Python wrapper of <a 
+        href="pycocoa.nstypes.NSStr-class.html" class="link">NSStr</a>.
     </td>
   </tr>
 </table>
@@ -126,7 +126,7 @@
     </td><td class="summary">
       <table width="100%" cellpadding="0" cellspacing="0" border="0">
         <tr>
-          <td><span class="summary-sig"><a name="isNone"></a><span class="summary-sig-name">isNone</span>(<span class="summary-sig-arg">obj</span>)</span><br />
+          <td><span class="summary-sig"><a href="pycocoa.nstypes-module.html#isNone" class="summary-sig-name">isNone</a>(<span class="summary-sig-arg">obj</span>)</span><br />
       Return True if <i>obj</i> is nil, None, <code>NSNone</code>, etc.</td>
           <td align="right" valign="top">
             
@@ -143,9 +143,10 @@
     </td><td class="summary">
       <table width="100%" cellpadding="0" cellspacing="0" border="0">
         <tr>
-          <td><span class="summary-sig"><a name="nsArray2listuple"></a><span class="summary-sig-name">nsArray2listuple</span>(<span class="summary-sig-arg">ns</span>,
+          <td><span class="summary-sig"><a href="pycocoa.nstypes-module.html#nsArray2listuple" class="summary-sig-name">nsArray2listuple</a>(<span class="summary-sig-arg">ns</span>,
         <span class="summary-sig-arg">ctype</span>=<span class="summary-sig-default">&lt;class 'ctypes.c_void_p'&gt;</span>)</span><br />
-      Create a Python list or tuple from an <code>NSArray</code>.</td>
+      Create a Python <code>list</code> or <code>tuple</code> from an 
+      <code>NS[Mutable]Array</code>.</td>
           <td align="right" valign="top">
             
             
@@ -161,9 +162,9 @@
     </td><td class="summary">
       <table width="100%" cellpadding="0" cellspacing="0" border="0">
         <tr>
-          <td><span class="summary-sig"><a name="nsBoolean2bool"></a><span class="summary-sig-name">nsBoolean2bool</span>(<span class="summary-sig-arg">ns</span>,
+          <td><span class="summary-sig"><a href="pycocoa.nstypes-module.html#nsBoolean2bool" class="summary-sig-name">nsBoolean2bool</a>(<span class="summary-sig-arg">ns</span>,
         <span class="summary-sig-arg">dflt</span>=<span class="summary-sig-default">missing()</span>)</span><br />
-      Create a Python bool from an <code>NSBool[ean]</code>.</td>
+      Create a Python <code>bool</code> from an <code>NSBool[ean]</code>.</td>
           <td align="right" valign="top">
             
             
@@ -197,9 +198,9 @@
     </td><td class="summary">
       <table width="100%" cellpadding="0" cellspacing="0" border="0">
         <tr>
-          <td><span class="summary-sig"><a name="nsData2bytes"></a><span class="summary-sig-name">nsData2bytes</span>(<span class="summary-sig-arg">ns</span>,
+          <td><span class="summary-sig"><a href="pycocoa.nstypes-module.html#nsData2bytes" class="summary-sig-name">nsData2bytes</a>(<span class="summary-sig-arg">ns</span>,
         <span class="summary-sig-arg">dflt</span>=<span class="summary-sig-default"><code class="variable-quote">'</code><code class="variable-string"></code><code class="variable-quote">'</code></span>)</span><br />
-      Create Python bytes from <code>NSData</code>.</td>
+      Create Python <code>bytes</code> from <code>NSData</code>.</td>
           <td align="right" valign="top">
             
             
@@ -215,8 +216,9 @@
     </td><td class="summary">
       <table width="100%" cellpadding="0" cellspacing="0" border="0">
         <tr>
-          <td><span class="summary-sig"><a name="nsDecimalNumber2decimal"></a><span class="summary-sig-name">nsDecimalNumber2decimal</span>(<span class="summary-sig-arg">ns</span>)</span><br />
-      Create a Python Decimal from an <code>NSDecimalNumber</code>.</td>
+          <td><span class="summary-sig"><a href="pycocoa.nstypes-module.html#nsDecimal2decimal" class="summary-sig-name">nsDecimal2decimal</a>(<span class="summary-sig-arg">ns</span>)</span><br />
+      Create a Python <code>Decimal</code> from an 
+      <code>NSDecimalNumber</code>.</td>
           <td align="right" valign="top">
             
             
@@ -232,10 +234,11 @@
     </td><td class="summary">
       <table width="100%" cellpadding="0" cellspacing="0" border="0">
         <tr>
-          <td><span class="summary-sig"><a name="nsDictionary2dict"></a><span class="summary-sig-name">nsDictionary2dict</span>(<span class="summary-sig-arg">ns</span>,
+          <td><span class="summary-sig"><a href="pycocoa.nstypes-module.html#nsDictionary2dict" class="summary-sig-name">nsDictionary2dict</a>(<span class="summary-sig-arg">ns</span>,
         <span class="summary-sig-arg">ctype_keys</span>=<span class="summary-sig-default">&lt;class 'ctypes.c_void_p'&gt;</span>,
         <span class="summary-sig-arg">ctype_vals</span>=<span class="summary-sig-default">&lt;class 'ctypes.c_void_p'&gt;</span>)</span><br />
-      Create a Python dict from an <code>NSDictionary</code>.</td>
+      Create a Python <code>dict</code> from an 
+      <code>NS[Mutable]Dictionary</code>.</td>
           <td align="right" valign="top">
             
             
@@ -251,9 +254,9 @@
     </td><td class="summary">
       <table width="100%" cellpadding="0" cellspacing="0" border="0">
         <tr>
-          <td><span class="summary-sig"><a name="nsIter2"></a><span class="summary-sig-name">nsIter2</span>(<span class="summary-sig-arg">ns</span>,
+          <td><span class="summary-sig"><a href="pycocoa.nstypes-module.html#nsIter2" class="summary-sig-name">nsIter2</a>(<span class="summary-sig-arg">ns</span>,
         <span class="summary-sig-arg">reverse</span>=<span class="summary-sig-default">False</span>)</span><br />
-      Iterate over an <code>NS...</code>'s enumerator.</td>
+      Iterate over an <code>NS..</code> objects's (reverse) enumerator.</td>
           <td align="right" valign="top">
             
             
@@ -269,7 +272,7 @@
     </td><td class="summary">
       <table width="100%" cellpadding="0" cellspacing="0" border="0">
         <tr>
-          <td><span class="summary-sig"><a name="nsLog"></a><span class="summary-sig-name">nsLog</span>(<span class="summary-sig-arg">fmt</span>,
+          <td><span class="summary-sig"><a href="pycocoa.nstypes-module.html#nsLog" class="summary-sig-name">nsLog</a>(<span class="summary-sig-arg">fmt</span>,
         <span class="summary-sig-arg">*args</span>)</span><br />
       Formatted write to the console.</td>
           <td align="right" valign="top">
@@ -287,8 +290,9 @@
     </td><td class="summary">
       <table width="100%" cellpadding="0" cellspacing="0" border="0">
         <tr>
-          <td><span class="summary-sig"><a name="nsNull2none"></a><span class="summary-sig-name">nsNull2none</span>(<span class="summary-sig-arg">ns</span>)</span><br />
-      Creat Python None from an <code>NS/CFNull</code>.</td>
+          <td><span class="summary-sig"><a href="pycocoa.nstypes-module.html#nsNull2none" class="summary-sig-name">nsNull2none</a>(<span class="summary-sig-arg">ns</span>)</span><br />
+      Return Python <code>None</code> for an <code>NS/CFNull</code> or 
+      <code>nil</code>.</td>
           <td align="right" valign="top">
             
             
@@ -304,9 +308,10 @@
     </td><td class="summary">
       <table width="100%" cellpadding="0" cellspacing="0" border="0">
         <tr>
-          <td><span class="summary-sig"><a name="nsNumber2num"></a><span class="summary-sig-name">nsNumber2num</span>(<span class="summary-sig-arg">ns</span>,
+          <td><span class="summary-sig"><a href="pycocoa.nstypes-module.html#nsNumber2num" class="summary-sig-name">nsNumber2num</a>(<span class="summary-sig-arg">ns</span>,
         <span class="summary-sig-arg">dflt</span>=<span class="summary-sig-default">missing()</span>)</span><br />
-      Create a Python decimal, int or float from an <code>NSNumber</code>.</td>
+      Create a Python <code>Decimal</code>, <code>int</code> or 
+      <code>float</code> from an <code>NSNumber</code>.</td>
           <td align="right" valign="top">
             
             
@@ -322,8 +327,9 @@
     </td><td class="summary">
       <table width="100%" cellpadding="0" cellspacing="0" border="0">
         <tr>
-          <td><span class="summary-sig"><a name="nsOf"></a><span class="summary-sig-name">nsOf</span>(<span class="summary-sig-arg">inst</span>)</span><br />
-      Return the <code>.NS</code> object of a Python Type instance.</td>
+          <td><span class="summary-sig"><a href="pycocoa.nstypes-module.html#nsOf" class="summary-sig-name">nsOf</a>(<span class="summary-sig-arg">inst</span>)</span><br />
+      Return the <code>.NS</code> object of a Python wrapper or Type 
+      instance.</td>
           <td align="right" valign="top">
             
             
@@ -339,9 +345,10 @@
     </td><td class="summary">
       <table width="100%" cellpadding="0" cellspacing="0" border="0">
         <tr>
-          <td><span class="summary-sig"><a name="nsSet2set"></a><span class="summary-sig-name">nsSet2set</span>(<span class="summary-sig-arg">ns</span>,
+          <td><span class="summary-sig"><a href="pycocoa.nstypes-module.html#nsSet2set" class="summary-sig-name">nsSet2set</a>(<span class="summary-sig-arg">ns</span>,
         <span class="summary-sig-arg">ctype</span>=<span class="summary-sig-default">&lt;class 'ctypes.c_void_p'&gt;</span>)</span><br />
-      Create a Python set or frozenset from an <code>NSSet</code>.</td>
+      Create a Python <code>set</code> or <code>frozenset</code> from an 
+      <code>NS[Mutable]Set</code>.</td>
           <td align="right" valign="top">
             
             
@@ -357,10 +364,10 @@
     </td><td class="summary">
       <table width="100%" cellpadding="0" cellspacing="0" border="0">
         <tr>
-          <td><span class="summary-sig"><a name="nsString2str"></a><span class="summary-sig-name">nsString2str</span>(<span class="summary-sig-arg">ns</span>,
+          <td><span class="summary-sig"><a href="pycocoa.nstypes-module.html#nsString2str" class="summary-sig-name">nsString2str</a>(<span class="summary-sig-arg">ns</span>,
         <span class="summary-sig-arg">dflt</span>=<span class="summary-sig-default">None</span>)</span><br />
-      Create a Python string or unicode from an <a 
-      href="pycocoa.nstypes.NSStr-class.html" class="link">NSStr</a>.</td>
+      Create a Python <code>str</code> or <code>unicode</code> from an 
+      <code>NS[Mutable]Str[ing]</code>.</td>
           <td align="right" valign="top">
             
             
@@ -379,7 +386,7 @@
           <td><span class="summary-sig"><a href="pycocoa.nstypes-module.html#ns2py" class="summary-sig-name">ns2py</a>(<span class="summary-sig-arg">ns</span>,
         <span class="summary-sig-arg">dflt</span>=<span class="summary-sig-default">None</span>)</span><br />
       Convert (an instance of) an ObjC class to an instance of the 
-      equivalent Python type and value or Python wrapper.</td>
+      equivalent Python standard type or wrapper and value.</td>
           <td align="right" valign="top">
             
             
@@ -395,235 +402,9 @@
     </td><td class="summary">
       <table width="100%" cellpadding="0" cellspacing="0" border="0">
         <tr>
-          <td><span class="summary-sig"><a name="ns2Type"></a><span class="summary-sig-name">ns2Type</span>(<span class="summary-sig-arg">ns</span>)</span><br />
+          <td><span class="summary-sig"><a href="pycocoa.nstypes-module.html#ns2Type" class="summary-sig-name">ns2Type</a>(<span class="summary-sig-arg">ns</span>)</span><br />
       Convert an <code>NS/Instance</code> object to an instance of the 
-      corresponding Python Type.</td>
-          <td align="right" valign="top">
-            
-            
-          </td>
-        </tr>
-      </table>
-      
-    </td>
-  </tr>
-<tr>
-    <td width="15%" align="right" valign="top" class="summary">
-      <span class="summary-type">&nbsp;</span>
-    </td><td class="summary">
-      <table width="100%" cellpadding="0" cellspacing="0" border="0">
-        <tr>
-          <td><span class="summary-sig"><a name="bool2NS"></a><span class="summary-sig-name">bool2NS</span>(<span class="summary-sig-arg">py</span>)</span><br />
-      Create an <code>NSBool</code> instance from a Python bool.</td>
-          <td align="right" valign="top">
-            
-            
-          </td>
-        </tr>
-      </table>
-      
-    </td>
-  </tr>
-<tr>
-    <td width="15%" align="right" valign="top" class="summary">
-      <span class="summary-type">&nbsp;</span>
-    </td><td class="summary">
-      <table width="100%" cellpadding="0" cellspacing="0" border="0">
-        <tr>
-          <td><span class="summary-sig"><a name="bytes2NS"></a><span class="summary-sig-name">bytes2NS</span>(<span class="summary-sig-arg">py</span>)</span><br />
-      Create an <code>NSData</code> instance from Python bytes.</td>
-          <td align="right" valign="top">
-            
-            
-          </td>
-        </tr>
-      </table>
-      
-    </td>
-  </tr>
-<tr>
-    <td width="15%" align="right" valign="top" class="summary">
-      <span class="summary-type">&nbsp;</span>
-    </td><td class="summary">
-      <table width="100%" cellpadding="0" cellspacing="0" border="0">
-        <tr>
-          <td><span class="summary-sig"><a name="dict2NS"></a><span class="summary-sig-name">dict2NS</span>(<span class="summary-sig-arg">py</span>)</span><br />
-      Create an <code>NSMutableDictionary</code> instance from a Python 
-      dict.</td>
-          <td align="right" valign="top">
-            
-            
-          </td>
-        </tr>
-      </table>
-      
-    </td>
-  </tr>
-<tr>
-    <td width="15%" align="right" valign="top" class="summary">
-      <span class="summary-type">&nbsp;</span>
-    </td><td class="summary">
-      <table width="100%" cellpadding="0" cellspacing="0" border="0">
-        <tr>
-          <td><span class="summary-sig"><a name="frozenset2NS"></a><span class="summary-sig-name">frozenset2NS</span>(<span class="summary-sig-arg">py</span>)</span><br />
-      Create an (immutable) <code>NSSet</code> instance from a Python 
-      frozenset.</td>
-          <td align="right" valign="top">
-            
-            
-          </td>
-        </tr>
-      </table>
-      
-    </td>
-  </tr>
-<tr>
-    <td width="15%" align="right" valign="top" class="summary">
-      <span class="summary-type">&nbsp;</span>
-    </td><td class="summary">
-      <table width="100%" cellpadding="0" cellspacing="0" border="0">
-        <tr>
-          <td><span class="summary-sig"><a name="int2NS"></a><span class="summary-sig-name">int2NS</span>(<span class="summary-sig-arg">py</span>)</span><br />
-      Create an <code>NSNumber</code> instance from a Python int or long.</td>
-          <td align="right" valign="top">
-            
-            
-          </td>
-        </tr>
-      </table>
-      
-    </td>
-  </tr>
-<tr>
-    <td width="15%" align="right" valign="top" class="summary">
-      <span class="summary-type">&nbsp;</span>
-    </td><td class="summary">
-      <table width="100%" cellpadding="0" cellspacing="0" border="0">
-        <tr>
-          <td><span class="summary-sig"><a name="list2NS"></a><span class="summary-sig-name">list2NS</span>(<span class="summary-sig-arg">py</span>)</span><br />
-      Create an <code>NSMutableArray</code> instance from a Python list.</td>
-          <td align="right" valign="top">
-            
-            
-          </td>
-        </tr>
-      </table>
-      
-    </td>
-  </tr>
-<tr>
-    <td width="15%" align="right" valign="top" class="summary">
-      <span class="summary-type">&nbsp;</span>
-    </td><td class="summary">
-      <table width="100%" cellpadding="0" cellspacing="0" border="0">
-        <tr>
-          <td><span class="summary-sig"><a name="None2NS"></a><span class="summary-sig-name">None2NS</span>(<span class="summary-sig-arg">py</span>)</span><br />
-      Create an <code>NSNone</code> from Python's None.</td>
-          <td align="right" valign="top">
-            
-            
-          </td>
-        </tr>
-      </table>
-      
-    </td>
-  </tr>
-<tr>
-    <td width="15%" align="right" valign="top" class="summary">
-      <span class="summary-type">&nbsp;</span>
-    </td><td class="summary">
-      <table width="100%" cellpadding="0" cellspacing="0" border="0">
-        <tr>
-          <td><span class="summary-sig"><a name="set2NS"></a><span class="summary-sig-name">set2NS</span>(<span class="summary-sig-arg">py</span>)</span><br />
-      Create an <code>NSMutableSet</code> instance from a Python set.</td>
-          <td align="right" valign="top">
-            
-            
-          </td>
-        </tr>
-      </table>
-      
-    </td>
-  </tr>
-<tr>
-    <td width="15%" align="right" valign="top" class="summary">
-      <span class="summary-type">&nbsp;</span>
-    </td><td class="summary">
-      <table width="100%" cellpadding="0" cellspacing="0" border="0">
-        <tr>
-          <td><span class="summary-sig"><a name="str2NS"></a><span class="summary-sig-name">str2NS</span>(<span class="summary-sig-arg">py</span>,
-        <span class="summary-sig-arg">auto</span>=<span class="summary-sig-default">True</span>)</span><br />
-      Create an NSStr instance from a Python str.</td>
-          <td align="right" valign="top">
-            
-            
-          </td>
-        </tr>
-      </table>
-      
-    </td>
-  </tr>
-<tr>
-    <td width="15%" align="right" valign="top" class="summary">
-      <span class="summary-type">&nbsp;</span>
-    </td><td class="summary">
-      <table width="100%" cellpadding="0" cellspacing="0" border="0">
-        <tr>
-          <td><span class="summary-sig"><a name="tuple2NS"></a><span class="summary-sig-name">tuple2NS</span>(<span class="summary-sig-arg">py</span>)</span><br />
-      Create an immutable <code>NSArray</code> instance from a Python 
-      tuple.</td>
-          <td align="right" valign="top">
-            
-            
-          </td>
-        </tr>
-      </table>
-      
-    </td>
-  </tr>
-<tr>
-    <td width="15%" align="right" valign="top" class="summary">
-      <span class="summary-type">&nbsp;</span>
-    </td><td class="summary">
-      <table width="100%" cellpadding="0" cellspacing="0" border="0">
-        <tr>
-          <td><span class="summary-sig"><a name="unicode2NS"></a><span class="summary-sig-name">unicode2NS</span>(<span class="summary-sig-arg">py</span>)</span><br />
-      Create an <code>NSStr</code> instance from a Python unicode string.</td>
-          <td align="right" valign="top">
-            
-            
-          </td>
-        </tr>
-      </table>
-      
-    </td>
-  </tr>
-<tr>
-    <td width="15%" align="right" valign="top" class="summary">
-      <span class="summary-type">&nbsp;</span>
-    </td><td class="summary">
-      <table width="100%" cellpadding="0" cellspacing="0" border="0">
-        <tr>
-          <td><span class="summary-sig"><a href="pycocoa.nstypes-module.html#py2NS" class="summary-sig-name">py2NS</a>(<span class="summary-sig-arg">py</span>)</span><br />
-      Convert (an instance of) a Python object into an instance of the 
-      equivalent <code>NS...</code> ObjC class:</td>
-          <td align="right" valign="top">
-            
-            
-          </td>
-        </tr>
-      </table>
-      
-    </td>
-  </tr>
-<tr>
-    <td width="15%" align="right" valign="top" class="summary">
-      <span class="summary-type">&nbsp;</span>
-    </td><td class="summary">
-      <table width="100%" cellpadding="0" cellspacing="0" border="0">
-        <tr>
-          <td><span class="summary-sig"><a name="type2NS"></a><span class="summary-sig-name">type2NS</span>(<span class="summary-sig-arg">py</span>)</span><br />
-      Return the <code>NS/Instance</code> of/for a Python Type instance.</td>
+      corresponding Python Type and value.</td>
           <td align="right" valign="top">
             
             
@@ -989,6 +770,96 @@
     <span class="table-header">Function Details</span></td>
 </tr>
 </table>
+<a name="isNone"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">isNone</span>(<span class="sig-arg">obj</span>)</span>
+  </h3>
+  </td><td align="right" valign="top"
+    >&nbsp;
+    </td>
+  </tr></table>
+  
+  <p>Return True if <i>obj</i> is nil, None, <code>NSNone</code>, etc.</p>
+  <dl class="fields">
+    <dt>Parameters:</dt>
+    <dd><ul class="nomargin-top">
+        <li><strong class="pname"><code>obj</code></strong> - The object (<a href="pycocoa.runtime.ObjCInstance-class.html" 
+          class="link">ObjCInstance</a>).</li>
+    </ul></dd>
+    <dt>Returns:</dt>
+        <dd>True or False (<code>bool</code>).</dd>
+  </dl>
+</td></tr></table>
+</div>
+<a name="nsArray2listuple"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">nsArray2listuple</span>(<span class="sig-arg">ns</span>,
+        <span class="sig-arg">ctype</span>=<span class="sig-default">&lt;class 'ctypes.c_void_p'&gt;</span>)</span>
+  </h3>
+  </td><td align="right" valign="top"
+    >&nbsp;
+    </td>
+  </tr></table>
+  
+  <p>Create a Python <code>list</code> or <code>tuple</code> from an 
+  <code>NS[Mutable]Array</code>.</p>
+  <dl class="fields">
+    <dt>Parameters:</dt>
+    <dd><ul class="nomargin-top">
+        <li><strong class="pname"><code>ns</code></strong> - The <code>NS[Mutable]Array</code> (<a 
+          href="pycocoa.runtime.ObjCInstance-class.html" 
+          class="link">ObjCInstance</a>).</li>
+        <li><strong class="pname"><code>ctype</code></strong> - The array item type (<code>ctypes</code>).</li>
+    </ul></dd>
+    <dt>Returns:</dt>
+        <dd>The array (<code>list</code> or <code>tuple</code>).</dd>
+  </dl>
+</td></tr></table>
+</div>
+<a name="nsBoolean2bool"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">nsBoolean2bool</span>(<span class="sig-arg">ns</span>,
+        <span class="sig-arg">dflt</span>=<span class="sig-default">missing()</span>)</span>
+  </h3>
+  </td><td align="right" valign="top"
+    >&nbsp;
+    </td>
+  </tr></table>
+  
+  <p>Create a Python <code>bool</code> from an 
+  <code>NSBool[ean]</code>.</p>
+  <dl class="fields">
+    <dt>Parameters:</dt>
+    <dd><ul class="nomargin-top">
+        <li><strong class="pname"><code>ns</code></strong> - The <code>NSBool[ean]</code> (<a 
+          href="pycocoa.runtime.ObjCInstance-class.html" 
+          class="link">ObjCInstance</a>).</li>
+        <li><strong class="pname"><code>dflt</code></strong> - Default for missing, unobtainable value (<code>missing</code>).</li>
+    </ul></dd>
+    <dt>Returns:</dt>
+        <dd>The bool (<code>bool</code>) of <i>dlft</i>.</dd>
+    <dt>Raises:</dt>
+    <dd><ul class="nomargin-top">
+        <li><code><strong class='fraise'>TypeError</strong></code> - Unexpected <code>NumberType</code>.</li>
+    </ul></dd>
+  </dl>
+</td></tr></table>
+</div>
 <a name="nsBundleRename"></a>
 <div>
 <table class="details" border="1" cellpadding="3"
@@ -1010,16 +881,325 @@
     <dd><ul class="nomargin-top">
         <li><strong class="pname"><code>nsTitle</code></strong> - New bundle title (<a href="pycocoa.nstypes.NSStr-class.html" 
           class="link">NSStr</a>).</li>
-        <li><strong class="pname"><code>match</code></strong> - Optional, previous title to match (string).</li>
+        <li><strong class="pname"><code>match</code></strong> - Optional, previous title to match (str).</li>
     </ul></dd>
     <dt>Returns:</dt>
-        <dd>The previous bundle title (string) or None.</dd>
+        <dd>The previous bundle title (str) or None.</dd>
   </dl>
 <div class="fields">      <p><strong>Note:</strong>
-        Used to mimick <code>NSApplication.setTitle_(nsTitle)</code>, the 
-        name of the app shown in the menu bar.
+        Useful to mimick <code>NSApplication.setTitle_(nsTitle)</code>, the
+        name of an <a href="pycocoa.apps.App-class.html" 
+        class="link">App</a> shown in the menu bar.
       </p>
 </div></td></tr></table>
+</div>
+<a name="nsData2bytes"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">nsData2bytes</span>(<span class="sig-arg">ns</span>,
+        <span class="sig-arg">dflt</span>=<span class="sig-default"><code class="variable-quote">'</code><code class="variable-string"></code><code class="variable-quote">'</code></span>)</span>
+  </h3>
+  </td><td align="right" valign="top"
+    >&nbsp;
+    </td>
+  </tr></table>
+  
+  <p>Create Python <code>bytes</code> from <code>NSData</code>.</p>
+  <dl class="fields">
+    <dt>Parameters:</dt>
+    <dd><ul class="nomargin-top">
+        <li><strong class="pname"><code>ns</code></strong> - The <code>NSData</code> (<a 
+          href="pycocoa.runtime.ObjCInstance-class.html" 
+          class="link">ObjCInstance</a>).</li>
+        <li><strong class="pname"><code>dflt</code></strong> - Default for empty <code>NSData</code> (<code>bytes</code>).</li>
+    </ul></dd>
+    <dt>Returns:</dt>
+        <dd>The bytes (<code>bytes</code>) or <i>dflt</i>.</dd>
+  </dl>
+</td></tr></table>
+</div>
+<a name="nsDecimal2decimal"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">nsDecimal2decimal</span>(<span class="sig-arg">ns</span>)</span>
+  </h3>
+  </td><td align="right" valign="top"
+    >&nbsp;
+    </td>
+  </tr></table>
+  
+  <p>Create a Python <code>Decimal</code> from an 
+  <code>NSDecimalNumber</code>.</p>
+  <dl class="fields">
+    <dt>Parameters:</dt>
+    <dd><ul class="nomargin-top">
+        <li><strong class="pname"><code>ns</code></strong> - The <code>NSDecimalNumber</code> (<a 
+          href="pycocoa.runtime.ObjCInstance-class.html" 
+          class="link">ObjCInstance</a>).</li>
+    </ul></dd>
+    <dt>Returns:</dt>
+        <dd>The decimal (<code>Decimal</code>).</dd>
+    <dt>Raises:</dt>
+    <dd><ul class="nomargin-top">
+        <li><code><strong class='fraise'>ValueError</strong></code> - If <i>ns</i> not an <code>NSNumber</code>.</li>
+    </ul></dd>
+  </dl>
+</td></tr></table>
+</div>
+<a name="nsDictionary2dict"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">nsDictionary2dict</span>(<span class="sig-arg">ns</span>,
+        <span class="sig-arg">ctype_keys</span>=<span class="sig-default">&lt;class 'ctypes.c_void_p'&gt;</span>,
+        <span class="sig-arg">ctype_vals</span>=<span class="sig-default">&lt;class 'ctypes.c_void_p'&gt;</span>)</span>
+  </h3>
+  </td><td align="right" valign="top"
+    >&nbsp;
+    </td>
+  </tr></table>
+  
+  <p>Create a Python <code>dict</code> from an 
+  <code>NS[Mutable]Dictionary</code>.</p>
+  <dl class="fields">
+    <dt>Parameters:</dt>
+    <dd><ul class="nomargin-top">
+        <li><strong class="pname"><code>ns</code></strong> - The <code>NSDictionary</code> (<a 
+          href="pycocoa.runtime.ObjCInstance-class.html" 
+          class="link">ObjCInstance</a>).</li>
+        <li><strong class="pname"><code>ctype_keys</code></strong> - The dictionay keys type (<code>ctypes</code>).</li>
+        <li><strong class="pname"><code>ctype_vals</code></strong> - The dictionay values type (<code>ctypes</code>).</li>
+    </ul></dd>
+    <dt>Returns:</dt>
+        <dd>The dict (<code>dict</code>).</dd>
+  </dl>
+</td></tr></table>
+</div>
+<a name="nsIter2"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">nsIter2</span>(<span class="sig-arg">ns</span>,
+        <span class="sig-arg">reverse</span>=<span class="sig-default">False</span>)</span>
+  </h3>
+  </td><td align="right" valign="top"
+    >&nbsp;
+    </td>
+  </tr></table>
+  
+  <p>Iterate over an <code>NS..</code> objects's (reverse) enumerator.</p>
+  <dl class="fields">
+    <dt>Parameters:</dt>
+    <dd><ul class="nomargin-top">
+        <li><strong class="pname"><code>ns</code></strong> - The <code>NS..</code> object to iterate over (<a 
+          href="pycocoa.runtime.ObjCInstance-class.html" 
+          class="link">ObjCInstance</a>).</li>
+        <li><strong class="pname"><code>reverse</code></strong> - Reverse or forward order (bool).</li>
+    </ul></dd>
+    <dt>Returns:</dt>
+        <dd>For each iteration, yield 2-Tuple (<i>value, raw</i>) where 
+          <i>value</i> is the value -a Python Type instance- and <i>raw</i>
+          object.</dd>
+  </dl>
+</td></tr></table>
+</div>
+<a name="nsLog"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">nsLog</span>(<span class="sig-arg">fmt</span>,
+        <span class="sig-arg">*args</span>)</span>
+  </h3>
+  </td><td align="right" valign="top"
+    >&nbsp;
+    </td>
+  </tr></table>
+  
+  <p>Formatted write to the console.</p>
+  <dl class="fields">
+    <dt>Parameters:</dt>
+    <dd><ul class="nomargin-top">
+        <li><strong class="pname"><code>fmt</code></strong> - The printf-like format string (str).</li>
+        <li><strong class="pname"><code>args</code></strong> - Optional arguments to format (<code>all positional</code>).</li>
+    </ul></dd>
+  </dl>
+</td></tr></table>
+</div>
+<a name="nsNull2none"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">nsNull2none</span>(<span class="sig-arg">ns</span>)</span>
+  </h3>
+  </td><td align="right" valign="top"
+    >&nbsp;
+    </td>
+  </tr></table>
+  
+  <p>Return Python <code>None</code> for an <code>NS/CFNull</code> or 
+  <code>nil</code>.</p>
+  <dl class="fields">
+    <dt>Parameters:</dt>
+    <dd><ul class="nomargin-top">
+        <li><strong class="pname"><code>ns</code></strong> - The <code>NS...</code> (<a 
+          href="pycocoa.runtime.ObjCInstance-class.html" 
+          class="link">ObjCInstance</a>).</li>
+    </ul></dd>
+    <dt>Returns:</dt>
+        <dd>The singleton (<code>None</code>).</dd>
+    <dt>Raises:</dt>
+    <dd><ul class="nomargin-top">
+        <li><code><strong class='fraise'>ValueError</strong></code> - If <i>ns</i> not <code>isNone</code>.</li>
+    </ul></dd>
+  </dl>
+</td></tr></table>
+</div>
+<a name="nsNumber2num"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">nsNumber2num</span>(<span class="sig-arg">ns</span>,
+        <span class="sig-arg">dflt</span>=<span class="sig-default">missing()</span>)</span>
+  </h3>
+  </td><td align="right" valign="top"
+    >&nbsp;
+    </td>
+  </tr></table>
+  
+  <p>Create a Python <code>Decimal</code>, <code>int</code> or 
+  <code>float</code> from an <code>NSNumber</code>.</p>
+  <dl class="fields">
+    <dt>Parameters:</dt>
+    <dd><ul class="nomargin-top">
+        <li><strong class="pname"><code>ns</code></strong> - The <code>NSNumber</code> (<a 
+          href="pycocoa.runtime.ObjCInstance-class.html" 
+          class="link">ObjCInstance</a>).</li>
+        <li><strong class="pname"><code>dflt</code></strong> - Default for missing, unobtainable value (<code>missing</code>).</li>
+    </ul></dd>
+    <dt>Returns:</dt>
+        <dd>The number (<code>Decimal</code>, <code>int</code> or 
+          <code>float</code>).</dd>
+    <dt>Raises:</dt>
+    <dd><ul class="nomargin-top">
+        <li><code><strong class='fraise'>TypeError</strong></code> - Unexpected <code>NumberType</code>.</li>
+        <li><code><strong class='fraise'>ValueError</strong></code> - If <i>ns</i> not an <code>NSNumber</code>.</li>
+    </ul></dd>
+  </dl>
+</td></tr></table>
+</div>
+<a name="nsOf"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">nsOf</span>(<span class="sig-arg">inst</span>)</span>
+  </h3>
+  </td><td align="right" valign="top"
+    >&nbsp;
+    </td>
+  </tr></table>
+  
+  <p>Return the <code>.NS</code> object of a Python wrapper or Type 
+  instance.</p>
+  <dl class="fields">
+    <dt>Parameters:</dt>
+    <dd><ul class="nomargin-top">
+        <li><strong class="pname"><code>inst</code></strong> - The wrapper (<a href="pycocoa.runtime.ObjCInstance-class.html" 
+          class="link">ObjCInstance</a> or <code>Python Type</code>).</li>
+    </ul></dd>
+    <dt>Returns:</dt>
+        <dd>The <code>.NS</code> object (<code>NS...</code>).</dd>
+    <dt>Raises:</dt>
+    <dd><ul class="nomargin-top">
+        <li><code><strong class='fraise'>TypeError</strong></code> - No <code>.NS</code> for this <i>inst</i>.</li>
+    </ul></dd>
+  </dl>
+</td></tr></table>
+</div>
+<a name="nsSet2set"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">nsSet2set</span>(<span class="sig-arg">ns</span>,
+        <span class="sig-arg">ctype</span>=<span class="sig-default">&lt;class 'ctypes.c_void_p'&gt;</span>)</span>
+  </h3>
+  </td><td align="right" valign="top"
+    >&nbsp;
+    </td>
+  </tr></table>
+  
+  <p>Create a Python <code>set</code> or <code>frozenset</code> from an 
+  <code>NS[Mutable]Set</code>.</p>
+  <dl class="fields">
+    <dt>Parameters:</dt>
+    <dd><ul class="nomargin-top">
+        <li><strong class="pname"><code>ns</code></strong> - The <code>NS[Mutable]Set</code> (<a 
+          href="pycocoa.runtime.ObjCInstance-class.html" 
+          class="link">ObjCInstance</a>).</li>
+        <li><strong class="pname"><code>ctype</code></strong> - The set item type (<code>ctypes</code>).</li>
+    </ul></dd>
+    <dt>Returns:</dt>
+        <dd>The set (<code>set</code> or <code>frozenset</code>).</dd>
+  </dl>
+</td></tr></table>
+</div>
+<a name="nsString2str"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">nsString2str</span>(<span class="sig-arg">ns</span>,
+        <span class="sig-arg">dflt</span>=<span class="sig-default">None</span>)</span>
+  </h3>
+  </td><td align="right" valign="top"
+    >&nbsp;
+    </td>
+  </tr></table>
+  
+  <p>Create a Python <code>str</code> or <code>unicode</code> from an 
+  <code>NS[Mutable]Str[ing]</code>.</p>
+  <dl class="fields">
+    <dt>Parameters:</dt>
+    <dd><ul class="nomargin-top">
+        <li><strong class="pname"><code>ns</code></strong> - The <code>NS[Mutable]Str[ing]</code> (<a 
+          href="pycocoa.runtime.ObjCInstance-class.html" 
+          class="link">ObjCInstance</a>).</li>
+    </ul></dd>
+    <dt>Returns:</dt>
+        <dd>The string (<code>str</code> or <code>unicode</code>) or 
+          <i>dflt</i>.</dd>
+  </dl>
+</td></tr></table>
 </div>
 <a name="ns2py"></a>
 <div>
@@ -1037,113 +1217,94 @@
   </tr></table>
   
   <p>Convert (an instance of) an ObjC class to an instance of the 
-  equivalent Python type and value or Python wrapper.</p>
-  <ul>
-    <li>
-      NSArray         -&gt; tuple
-    </li>
-    <li>
-      NSBoolean       -&gt; bool
-    </li>
-    <li>
-      NSData          -&gt; bytes
-    </li>
-    <li>
-      NSDecimalNumber -&gt; Decimal
-    </li>
-    <li>
-      NSDictionary    -&gt; dict
-    </li>
-    <li>
-      NSMutableArray  -&gt; list
-    </li>
-    <li>
-      NSMutableSet    -&gt; set
-    </li>
-    <li>
-      NSMutableString -&gt; str
-    </li>
-    <li>
-      NSNumber        -&gt; int or float
-    </li>
-    <li>
-      NSNull          -&gt; None
-    </li>
-    <li>
-      NSSet           -&gt; frozenset
-    </li>
-    <li>
-      NSString        -&gt; str
-    </li>
-    <li>
-      NSStr/CFStr     -&gt; str
-    </li>
-  </ul>
+  equivalent Python standard type or wrapper and value.</p>
   <dl class="fields">
+    <dt>Parameters:</dt>
+    <dd><ul class="nomargin-top">
+        <li><strong class="pname"><code>ns</code></strong> - The <code>NS...</code> (<a 
+          href="pycocoa.runtime.ObjCInstance-class.html" 
+          class="link">ObjCInstance</a>).</li>
+        <li><strong class="pname"><code>dflt</code></strong> - Default for unhandled, unexpected <code>NS...</code>s 
+          (<code>None</code>).</li>
+    </ul></dd>
+    <dt>Returns:</dt>
+        <dd>The value (<code>Python type</code>) or <i>dflt</i>.</dd>
+    <dt>Raises:</dt>
+    <dd><ul class="nomargin-top">
+        <li><code><strong class='fraise'>TypeError</strong></code> - Unhandled, unexpected <code>TypeID</code>.</li>
+    </ul></dd>
   </dl>
-</td></tr></table>
+<div class="fields">      <p><strong>Note:</strong>
+        Conversion map:
+        <ul>
+          <li>
+            NSArray         -&gt; tuple
+          </li>
+          <li>
+            NSBoolean       -&gt; bool
+          </li>
+          <li>
+            NSData          -&gt; bytes
+          </li>
+          <li>
+            NSDecimalNumber -&gt; Decimal
+          </li>
+          <li>
+            NSDictionary    -&gt; dict
+          </li>
+          <li>
+            NSMutableArray  -&gt; list
+          </li>
+          <li>
+            NSMutableSet    -&gt; set
+          </li>
+          <li>
+            NSMutableString -&gt; str
+          </li>
+          <li>
+            NSNumber        -&gt; int or float
+          </li>
+          <li>
+            NSNull          -&gt; None
+          </li>
+          <li>
+            NSSet           -&gt; frozenset
+          </li>
+          <li>
+            NSString        -&gt; str
+          </li>
+          <li>
+            NSStr/CFStr     -&gt; str
+          </li>
+        </ul>
+      </p>
+</div></td></tr></table>
 </div>
-<a name="py2NS"></a>
+<a name="ns2Type"></a>
 <div>
 <table class="details" border="1" cellpadding="3"
        cellspacing="0" width="100%" bgcolor="white">
 <tr><td>
   <table width="100%" cellpadding="0" cellspacing="0" border="0">
   <tr valign="top"><td>
-  <h3 class="epydoc"><span class="sig"><span class="sig-name">py2NS</span>(<span class="sig-arg">py</span>)</span>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">ns2Type</span>(<span class="sig-arg">ns</span>)</span>
   </h3>
   </td><td align="right" valign="top"
     >&nbsp;
     </td>
   </tr></table>
   
-  <p>Convert (an instance of) a Python object into an instance of the 
-  equivalent <code>NS...</code> ObjC class:</p>
-  <ul>
-    <li>
-      bool      -&gt; NSBoolean/NSNumber
-    </li>
-    <li>
-      bytes     -&gt; NSData
-    </li>
-    <li>
-      bytearray -&gt; NSData
-    </li>
-    <li>
-      Decimal   -&gt; NSDecimal
-    </li>
-    <li>
-      dict      -&gt; NSMutableDictionary
-    </li>
-    <li>
-      float     -&gt; NSNumber
-    </li>
-    <li>
-      frozenset -&gt; NSSet, immutable
-    </li>
-    <li>
-      int       -&gt; NSNumber
-    </li>
-    <li>
-      list      -&gt; NSMutableArray
-    </li>
-    <li>
-      None      -&gt; NSNull
-    </li>
-    <li>
-      set       -&gt; NSMutableSet
-    </li>
-    <li>
-      str       -&gt; NSStr, immutable
-    </li>
-    <li>
-      tuple     -&gt; NSArray, immutable
-    </li>
-    <li>
-      unicode   -&gt; NSStr, immutable
-    </li>
-  </ul>
+  <p>Convert an <code>NS/Instance</code> object to an instance of the 
+  corresponding Python Type and value.</p>
   <dl class="fields">
+    <dt>Parameters:</dt>
+    <dd><ul class="nomargin-top">
+        <li><strong class="pname"><code>ns</code></strong> - The <code>NS...</code> (<a 
+          href="pycocoa.runtime.ObjCInstance-class.html" 
+          class="link">ObjCInstance</a>).</li>
+    </ul></dd>
+    <dt>Returns:</dt>
+        <dd>The value (<code>Python Type</code>).</dd>
   </dl>
 </td></tr></table>
 </div>
@@ -1179,7 +1340,7 @@
 <table border="0" cellpadding="0" cellspacing="0" width="100%%">
   <tr>
     <td align="left" class="footer">
-    Generated by Epydoc 3.0.1 on Sun Apr 22 21:13:09 2018
+    Generated by Epydoc 3.0.1 on Tue Apr 24 20:38:10 2018
     </td>
     <td align="right" class="footer">
       <a target="mainFrame" href="http://epydoc.sourceforge.net"

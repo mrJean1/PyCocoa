@@ -64,7 +64,7 @@
 
 <hr />
 <div class="fields">      <p><strong>Version:</strong>
-        18.04.19
+        18.04.24
       </p>
 </div><!-- ==================== CLASSES ==================== -->
 <a name="section-Classes"></a>
@@ -128,7 +128,7 @@
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
         <a href="pycocoa.runtime.ObjCMethod-class.html" class="summary-name">ObjCMethod</a><br />
-      This represents an unbound ObjC method (really an <a 
+      Represent an unbound ObjC class or instance method (really an <a 
         href="pycocoa.octypes.IMP_t-class.html" class="link">IMP_t</a>).
     </td>
   </tr>
@@ -137,7 +137,7 @@
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
         <a href="pycocoa.runtime.ObjCClassMethod-class.html" class="summary-name">ObjCClassMethod</a><br />
-      Only to distinguish class from instance methods.
+      Only to distinguish class methods from instance methods.
     </td>
   </tr>
 <tr>
@@ -145,7 +145,8 @@
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
         <a href="pycocoa.runtime.ObjCSubclass-class.html" class="summary-name">ObjCSubclass</a><br />
-      Use this to create a sub-class of an existing ObjC class.
+      Python class to create an ObjC sub-class of an existing ObjC 
+        (super-)class.
     </td>
   </tr>
 </table>
@@ -166,8 +167,7 @@
           <td><span class="summary-sig"><a href="pycocoa.runtime-module.html#add_ivar" class="summary-sig-name">add_ivar</a>(<span class="summary-sig-arg">clas</span>,
         <span class="summary-sig-arg">name</span>,
         <span class="summary-sig-arg">ctype</span>)</span><br />
-      Add an instance variable to an ObjC class, see also 
-      <code>_DeallocObserver</code> below.</td>
+      Add an instance variable to an ObjC class,</td>
           <td align="right" valign="top">
             
             
@@ -241,7 +241,7 @@
       <table width="100%" cellpadding="0" cellspacing="0" border="0">
         <tr>
           <td><span class="summary-sig"><a href="pycocoa.runtime-module.html#isClass" class="summary-sig-name">isClass</a>(<span class="summary-sig-arg">obj</span>)</span><br />
-      Check whether an object is an ObjC class.</td>
+      Check whether an object is an ObjC clas.</td>
           <td align="right" valign="top">
             
             
@@ -390,8 +390,8 @@
     </td><td class="summary">
       <table width="100%" cellpadding="0" cellspacing="0" border="0">
         <tr>
-          <td><span class="summary-sig"><a href="pycocoa.runtime-module.html#deallocObserver" class="summary-sig-name">deallocObserver</a>(<span class="summary-sig-arg">obj</span>)</span><br />
-      Deallocation observer for an ObjC instance/object.</td>
+          <td><span class="summary-sig"><a href="pycocoa.runtime-module.html#nsDeallocObserver" class="summary-sig-name">nsDeallocObserver</a>(<span class="summary-sig-arg">obj</span>)</span><br />
+      Create a de-allocation observer for an ObjC instance.</td>
           <td align="right" valign="top">
             
             
@@ -414,7 +414,7 @@
     <td width="15%" align="right" valign="top" class="summary">
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
-        <a href="pycocoa.runtime-module.html#libobjc" class="summary-name">libobjc</a> = <code title="&lt;CDLL '/usr/lib/libobjc.dylib', handle 1011e8680 at 1030a9790&gt;">&lt;CDLL '/usr/lib/libobjc.dylib', handle 1011e8680 at <code class="variable-ellipsis">...</code></code>
+        <a href="pycocoa.runtime-module.html#libobjc" class="summary-name">libobjc</a> = <code title="&lt;CDLL '/usr/lib/libobjc.dylib', handle 103d4a680 at 102f651d0&gt;">&lt;CDLL '/usr/lib/libobjc.dylib', handle 103d4a680 at <code class="variable-ellipsis">...</code></code>
     </td>
   </tr>
 <tr>
@@ -471,19 +471,28 @@
     </td>
   </tr></table>
   
-  <p>Add an instance variable to an ObjC class, see also 
-  <code>_DeallocObserver</code> below.</p>
+  <p>Add an instance variable to an ObjC class,</p>
   <dl class="fields">
     <dt>Parameters:</dt>
     <dd><ul class="nomargin-top">
         <li><strong class="pname"><code>clas</code></strong> - Class to add the ivar to (<code>ObjCClass/Subclass</code>).</li>
-        <li><strong class="pname"><code>name</code></strong> - Name of the iver (string).</li>
-        <li><strong class="pname"><code>ctype</code></strong> - The ivar type (<code>ctypes</code> or <code>encoding</code>).</li>
+        <li><strong class="pname"><code>name</code></strong> - Name of the iver (str).</li>
+        <li><strong class="pname"><code>ctype</code></strong> - The ivar type code (<code>ctypes</code> or 
+          <code>encoding</code>).</li>
+    </ul></dd>
+    <dt>Returns:</dt>
+        <dd>True if the ivar was added, False otherwise.</dd>
+    <dt>Raises:</dt>
+    <dd><ul class="nomargin-top">
+        <li><code><strong class='fraise'><a href="pycocoa.octypes.TypeCodeError-class.html">TypeCodeError</a></strong></code> - Invalid <i>ctype</i>.</li>
     </ul></dd>
   </dl>
 <div class="fields">      <p><strong>Note:</strong>
         The <i>ctype</i> must be a <code>ctypes</code> type or a valid ObjC
         type encoding.
+      </p>
+      <p><strong>See Also:</strong>
+        The <code>_NSDeallocObserver</code> below.
       </p>
 </div></td></tr></table>
 </div>
@@ -509,11 +518,17 @@
     <dt>Parameters:</dt>
     <dd><ul class="nomargin-top">
         <li><strong class="pname"><code>clas</code></strong> - Class to add the method to (<code>ObjCClass/Subclass</code>).</li>
-        <li><strong class="pname"><code>name_</code></strong> - Selector name (string).</li>
+        <li><strong class="pname"><code>name_</code></strong> - Selector name (str).</li>
+        <li><strong class="pname"><code>method</code></strong> - Decorated class or instance method (<code>callable</code>).</li>
         <li><strong class="pname"><code>encoding</code></strong> - Method signature (<code>encoding</code>).</li>
     </ul></dd>
     <dt>Returns:</dt>
-        <dd>The method (<code>cfunctype</code>).</dd>
+        <dd>The method (<a href="pycocoa.octypes.IMP_t-class.html" 
+          class="link">IMP_t</a>) if added, <code>None</code> otherwise.</dd>
+    <dt>Raises:</dt>
+    <dd><ul class="nomargin-top">
+        <li><code><strong class='fraise'>TypeError</strong></code> - If <i>method</i> is not a Python callable.</li>
+    </ul></dd>
   </dl>
 </td></tr></table>
 </div>
@@ -541,6 +556,10 @@
           href="pycocoa.octypes.Protocol_t-class.html" 
           class="link">Protocol_t</a> instance).</li>
     </ul></dd>
+    <dt>Returns:</dt>
+        <dd>The protocol (<a href="pycocoa.octypes.Protocol_t-class.html" 
+          class="link">Protocol_t</a>) if added, <code>None</code> 
+          otherwise.</dd>
   </dl>
 </td></tr></table>
 </div>
@@ -565,11 +584,12 @@
     <dt>Parameters:</dt>
     <dd><ul class="nomargin-top">
         <li><strong class="pname"><code>superclas</code></strong> - The parent class (string or <code>NS...</code>).</li>
-        <li><strong class="pname"><code>name</code></strong> - The name of the sub-class (string).</li>
+        <li><strong class="pname"><code>name</code></strong> - The name of the sub-class (str).</li>
         <li><strong class="pname"><code>register</code></strong> - Optionally, register the new sub-class (bool).</li>
     </ul></dd>
     <dt>Returns:</dt>
-        <dd>The new sub-class (<code>Class</code>).</dd>
+        <dd>The sub-class (<code>Class_t</code>) if added, <code>None</code> 
+          otherwise.</dd>
   </dl>
 <div class="fields">      <p><strong>Note:</strong>
         After calling <code>add_subclass</code>, you <i>MUST</i> register 
@@ -596,14 +616,14 @@
     </td>
   </tr></table>
   
-  <p>Check whether an object is an ObjC class.</p>
+  <p>Check whether an object is an ObjC clas.</p>
   <dl class="fields">
     <dt>Parameters:</dt>
     <dd><ul class="nomargin-top">
         <li><strong class="pname"><code>obj</code></strong> - Object to check (<code>Object</code> or <code>Class</code>).</li>
     </ul></dd>
     <dt>Returns:</dt>
-        <dd>True if the <i>obj</i> is a class, False otherwise.</dd>
+        <dd>True if the <i>obj</i> is a clas, False otherwise.</dd>
   </dl>
 </td></tr></table>
 </div>
@@ -633,7 +653,7 @@
           class="link">ObjCInstance</a>).</li>
         <li><strong class="pname"><code>mutableClass</code></strong> - The mutable ObjC classes (<code>NSMutable...</code>).</li>
         <li><strong class="pname"><code>immutableClass</code></strong> - The immutable ObjC classes (<code>NS...</code>).</li>
-        <li><strong class="pname"><code>name</code></strong> - The name of the instance (string).</li>
+        <li><strong class="pname"><code>name</code></strong> - The name of the instance (str).</li>
     </ul></dd>
     <dt>Returns:</dt>
         <dd>True if <i>obj</i> is an <i>immutableClass</i> instance, False 
@@ -670,7 +690,7 @@
           href="pycocoa.runtime.ObjCInstance-class.html" 
           class="link">ObjCInstance</a> or <code>c_void_p</code>).</li>
         <li><strong class="pname"><code>Classes</code></strong> - One or several ObjC classes (<code>NS...</code>).</li>
-        <li><strong class="pname"><code>name</code></strong> - The name of the instance (string).</li>
+        <li><strong class="pname"><code>name</code></strong> - The name of the instance (str).</li>
     </ul></dd>
     <dt>Returns:</dt>
         <dd>The matching <i>Class</i> from <i>Classes</i>, None otherwise.</dd>
@@ -736,7 +756,8 @@
     </ul></dd>
   </dl>
 <div class="fields">      <p><strong>See Also:</strong>
-        _DeallocObserver below.
+        <a href="pycocoa.runtime-module.html#nsDeallocObserver" 
+        class="link">nsDeallocObserver</a> below.
       </p>
 </div></td></tr></table>
 </div>
@@ -762,12 +783,19 @@
     <dt>Parameters:</dt>
     <dd><ul class="nomargin-top">
         <li><strong class="pname"><code>receiver</code></strong> - The recipient (<i>Object</i>).</li>
-        <li><strong class="pname"><code>name_</code></strong> - Message selector (string).</li>
+        <li><strong class="pname"><code>name_</code></strong> - Message selector (str).</li>
         <li><strong class="pname"><code>args</code></strong> - Message arguments (<i>all positional</i>).</li>
         <li><strong class="pname"><code>resargtypes</code></strong> - Optional, result and argument types (<code>ctypes</code>).</li>
     </ul></dd>
     <dt>Returns:</dt>
         <dd>Message result (<i>restype</i>).</dd>
+    <dt>Raises:</dt>
+    <dd><ul class="nomargin-top">
+        <li><code><strong class='fraise'>ArgumentError</strong></code> - Invalid <i>receiver</i>, <i>name</i>, <i>args</i> or 
+        <i>resargtypes</i>.</li>
+        <li><code><strong class='fraise'>TypeError</strong></code> - Invalid <i>receiver</i>, <i>name</i>, <i>args</i> or 
+        <i>resargtypes</i> type.</li>
+    </ul></dd>
   </dl>
 <div class="fields">      <p><strong>Note:</strong>
         By default, the result and all arguments are <code>c_void_p</code> 
@@ -802,12 +830,19 @@
     <dt>Parameters:</dt>
     <dd><ul class="nomargin-top">
         <li><strong class="pname"><code>receiver</code></strong> - The recipient (<i>Object</i>).</li>
-        <li><strong class="pname"><code>name_</code></strong> - Message selector (string).</li>
+        <li><strong class="pname"><code>name_</code></strong> - Message selector (str).</li>
         <li><strong class="pname"><code>args</code></strong> - Message arguments (<i>all positional</i>).</li>
         <li><strong class="pname"><code>resargtypes</code></strong> - Optional, result and argument types (<code>ctypes</code>).</li>
     </ul></dd>
     <dt>Returns:</dt>
         <dd>Message result (<i>restype</i>).</dd>
+    <dt>Raises:</dt>
+    <dd><ul class="nomargin-top">
+        <li><code><strong class='fraise'>ArgumentError</strong></code> - Invalid <i>receiver</i>, <i>name</i>, <i>args</i> or 
+        <i>resargtypes</i>.</li>
+        <li><code><strong class='fraise'>TypeError</strong></code> - Invalid <i>receiver</i>, <i>name</i>, <i>args</i> or 
+        <i>resargtypes</i> type.</li>
+    </ul></dd>
   </dl>
 <div class="fields">      <p><strong>Note:</strong>
         By default, the result and all arguments are <code>c_void_p</code> 
@@ -842,39 +877,53 @@
     <dt>Parameters:</dt>
     <dd><ul class="nomargin-top">
         <li><strong class="pname"><code>obj</code></strong> - The instance (<i>Object</i>).</li>
-        <li><strong class="pname"><code>name</code></strong> - Name if the ivar (string).</li>
-        <li><strong class="pname"><code>value</code></strong> - New value (any).</li>
+        <li><strong class="pname"><code>name</code></strong> - Name of the ivar (str).</li>
+        <li><strong class="pname"><code>value</code></strong> - New value for the ivar (<code>any</code>).</li>
         <li><strong class="pname"><code>ctype</code></strong> - Optional, the ivar type (<code>ctypes</code>).</li>
+    </ul></dd>
+    <dt>Returns:</dt>
+        <dd>The ivar (<a href="pycocoa.octypes.Ivar_t-class.html" 
+          class="link">Ivar_t</a>).</dd>
+    <dt>Raises:</dt>
+    <dd><ul class="nomargin-top">
+        <li><code><strong class='fraise'>ArgumentError</strong></code> - Invalid <i>name</i>, <i>value</i> or <i>ctype</i>.</li>
+        <li><code><strong class='fraise'>TypeError</strong></code> - Invalid <i>name</i>, <i>value</i> or <i>ctype</i> type.</li>
     </ul></dd>
   </dl>
 </td></tr></table>
 </div>
-<a name="deallocObserver"></a>
+<a name="nsDeallocObserver"></a>
 <div>
 <table class="details" border="1" cellpadding="3"
        cellspacing="0" width="100%" bgcolor="white">
 <tr><td>
   <table width="100%" cellpadding="0" cellspacing="0" border="0">
   <tr valign="top"><td>
-  <h3 class="epydoc"><span class="sig"><span class="sig-name">deallocObserver</span>(<span class="sig-arg">obj</span>)</span>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">nsDeallocObserver</span>(<span class="sig-arg">obj</span>)</span>
   </h3>
   </td><td align="right" valign="top"
     >&nbsp;
     </td>
   </tr></table>
   
-  <p>Deallocation observer for an ObjC instance/object.</p>
+  <p>Create a de-allocation observer for an ObjC instance.</p>
   <dl class="fields">
     <dt>Parameters:</dt>
     <dd><ul class="nomargin-top">
-        <li><strong class="pname"><code>obj</code></strong> - The object to be observed (<code>Object</code>).</li>
+        <li><strong class="pname"><code>obj</code></strong> - The object to be observed (<a 
+          href="pycocoa.runtime.ObjCInstance-class.html" 
+          class="link">ObjCInstance</a>).</li>
     </ul></dd>
+    <dt>Returns:</dt>
+        <dd>The observer (<code>_NSDeallocObserver</code>).</dd>
   </dl>
 <div class="fields">      <p><strong>Note:</strong>
         When the observed ObjC object is de-allocated, the 
-        <code>_DeallocObserver</code> removes the corresponding <a 
+        <code>_NSDeallocObserver</code> removes the corresponding <a 
         href="pycocoa.runtime.ObjCInstance-class.html" 
-        class="link">ObjCInstance</a> from the cached objects dictionary, 
+        class="link">ObjCInstance</a> from the dictionary of cached objects
+        <a href="pycocoa.runtime.ObjCInstance-class.html" 
+        class="link">ObjCInstance</a><code>._objc_cache_</code>, 
         effectively destroying the <a 
         href="pycocoa.runtime.ObjCInstance-class.html" 
         class="link">ObjCInstance</a>.
@@ -903,7 +952,7 @@
   <dl class="fields">
     <dt>Value:</dt>
       <dd><table><tr><td><pre class="variable">
-&lt;CDLL '/usr/lib/libobjc.dylib', handle 1011e8680 at 1030a9790&gt;
+&lt;CDLL '/usr/lib/libobjc.dylib', handle 103d4a680 at 102f651d0&gt;
 </pre></td></tr></table>
 </dd>
   </dl>
@@ -941,7 +990,7 @@
 <table border="0" cellpadding="0" cellspacing="0" width="100%%">
   <tr>
     <td align="left" class="footer">
-    Generated by Epydoc 3.0.1 on Sun Apr 22 21:13:09 2018
+    Generated by Epydoc 3.0.1 on Tue Apr 24 20:38:10 2018
     </td>
     <td align="right" class="footer">
       <a target="mainFrame" href="http://epydoc.sourceforge.net"

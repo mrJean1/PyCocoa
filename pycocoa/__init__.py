@@ -25,7 +25,8 @@ and the corresponding U{Python-VLC<http://PyPI.Python.org/pypi/python-vlc>} bind
 
 The tests and examples have only been run with 64-bit Python 2.7.14 and
 3.6.5 (with U{VLC<http://PyPI.Python.org/pypi/python-vlc>} 2.2.6 and 3.0.1)
-and only on macOS 10.13.4 High Sierra.
+and only on macOS 10.13.4 High Sierra.  PyCocoa has I{not} been tested on
+iOS nor with 32-bit Python.
 
 All PyCocoa source code has been statically
 U{checked<http://GitHub.com/ActiveState/code/tree/master/recipes/Python/546532_PyChecker_postprocessor>}
@@ -112,7 +113,7 @@ OTHER DEALINGS IN THE SOFTWARE.}
 from os.path import abspath, dirname
 import sys
 
-__version__ = '18.04.21'
+__version__ = '18.04.24'
 
 p = sys.platform
 if not p.startswith('darwin'):
@@ -126,8 +127,9 @@ if d not in sys.path:
 del d, abspath, dirname, sys
 
 from nstypes import *  # PYCHOK expected
-from oclibs  import *  # PYCHOK expected
 from octypes import *  # PYCHOK expected
+from oslibs  import *  # PYCHOK expected
+from pytypes import *  # PYCHOK expected
 from runtime import *  # PYCHOK expected
 
 # Python Type wrappers
@@ -155,6 +157,7 @@ from windows  import *  # PYCHOK expected
 # cftype_to_value               = cfType2py                  # PYCHOK expected
 # create_subclass               = add_subclass               # PYCHOK expected
 # DeallocObserver               = deallocObserver            # PYCHOK expected
+# get_cfunctype                 = get_c_func_t               # PYCHOK expected
 # get_instance_variable         = get_ivar                   # PYCHOK expected
 # get_NSString                  = NSStr                      # PYCHOK expected
 # get_object_class              = get_classof                # PYCHOK expected
@@ -187,7 +190,7 @@ from windows  import *  # PYCHOK expected
 
 # filter locals() for .__init__.py
 from utils import _exports  # PYCHOK expected
-__all__ = _exports(locals(), not_starts=('_', 'CFUNCTION', 'c_', 'kC', 'lib'))
+__all__ = _exports(locals(), not_starts=('_', 'CFUNCTION', 'c_', 'kC'))
 
 if __name__ == '__main__':
 

@@ -11,9 +11,9 @@ from pycocoa import NSApplication, NSBackingStoreBuffered, \
                     NSStr, NSWindow, NSWindowStyleMaskUsual, \
                     PyObjectEncoding, ObjCClass, ObjCInstance, \
                     ObjCSubclass, send_super
-from pycocoa.oclibs import libAppKit
+from pycocoa.oslibs import libAppKit
 
-__version__ = '18.04.06'
+__version__ = '18.04.23'
 
 NSRectFill = libAppKit.NSRectFill
 

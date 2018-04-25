@@ -3,7 +3,7 @@
           "DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
 <head>
-  <title>pycocoa.oclibs</title>
+  <title>pycocoa.oslibs</title>
   <link rel="stylesheet" href="epydoc.css" type="text/css" />
   <script type="text/javascript" src="epydoc.js"></script>
 </head>
@@ -43,7 +43,7 @@
     <td width="100%">
       <span class="breadcrumbs">
         <a href="pycocoa-module.html">Package&nbsp;pycocoa</a> ::
-        Module&nbsp;oclibs
+        Module&nbsp;oslibs
       </span>
     </td>
     <td>
@@ -51,19 +51,19 @@
         <!-- hide/show private -->
         <tr><td align="right"><span class="options"
             >[<a href="frames.html" target="_top">frames</a
-            >]&nbsp;|&nbsp;<a href="pycocoa.oclibs-module.html"
+            >]&nbsp;|&nbsp;<a href="pycocoa.oslibs-module.html"
             target="_top">no&nbsp;frames</a>]</span></td></tr>
       </table>
     </td>
   </tr>
 </table>
 <!-- ==================== MODULE DESCRIPTION ==================== -->
-<h1 class="epydoc">Module oclibs</h1><p class="nomargin-top"></p>
-<p>Various ObjC libraries, signatures, constants, etc.</p>
+<h1 class="epydoc">Module oslibs</h1><p class="nomargin-top"></p>
+<p>Various ObjC and macOS libraries, signatures, constants, etc.</p>
 
 <hr />
 <div class="fields">      <p><strong>Version:</strong>
-        18.04.19
+        18.04.24
       </p>
 </div><!-- ==================== CLASSES ==================== -->
 <a name="section-Classes"></a>
@@ -73,6 +73,22 @@
   <td align="left" colspan="2" class="table-header">
     <span class="table-header">Classes</span></td>
 </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="ctypes.c_long-class.html" class="summary-name">CFIndex_t</a>
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="pycocoa.octypes.CFRange_t-class.html" class="summary-name">CFRange_t</a><br />
+      ObjC <code>struct</code> with fields <code>loc[ation]</code> and 
+        <code>len[gth]</code> (both <code>CFIndex_t</code>).
+    </td>
+  </tr>
 <tr>
     <td width="15%" align="right" valign="top" class="summary">
       <span class="summary-type">&nbsp;</span>
@@ -112,25 +128,9 @@
     <td width="15%" align="right" valign="top" class="summary">
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
-        <a href="ctypes.c_long-class.html" class="summary-name">CGIndex_t</a>
-    </td>
-  </tr>
-<tr>
-    <td width="15%" align="right" valign="top" class="summary">
-      <span class="summary-type">&nbsp;</span>
-    </td><td class="summary">
         <a href="pycocoa.octypes.NSPoint_t-class.html" class="summary-name">CGPoint_t</a><br />
-      ObjC <code>struct</code> with <code>.x</code> and <code>.y.</code> 
-        (both <code>CGFloat</code>)
-    </td>
-  </tr>
-<tr>
-    <td width="15%" align="right" valign="top" class="summary">
-      <span class="summary-type">&nbsp;</span>
-    </td><td class="summary">
-        <a href="pycocoa.octypes.CGRange_t-class.html" class="summary-name">CGRange_t</a><br />
-      ObjC <code>struct</code> with <i>.location</i> and <i>.length</i> 
-        (CF/Index-s).
+      ObjC <code>struct</code> with fields <code>x</code> and 
+        <code>y</code> (both <code>CGFloat_t</code>).
     </td>
   </tr>
 <tr>
@@ -138,8 +138,11 @@
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
         <a href="pycocoa.octypes.NSRect_t-class.html" class="summary-name">CGRect_t</a><br />
-      ObjC <code>struct</code> with <code>.origin</code> and 
-        <code>.size</code>.
+      ObjC <code>struct</code> with fields <code>origin</code> and 
+        <code>size</code> (<a href="pycocoa.octypes.NSPoint_t-class.html" 
+        class="link">NSPoint_t</a>, <a 
+        href="pycocoa.octypes.NSSize_t-class.html" 
+        class="link">NSSize_t</a>).
     </td>
   </tr>
 <tr>
@@ -147,8 +150,8 @@
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
         <a href="pycocoa.octypes.NSSize_t-class.html" class="summary-name">CGSize_t</a><br />
-      ObjC <code>struct</code> with <code>.width</code> and 
-        <code>.height</code>.
+      ObjC <code>struct</code> with fields <code>width</code> and 
+        <code>height</code> (both <code>CGFloat_t</code>).
     </td>
   </tr>
 <tr>
@@ -177,8 +180,11 @@
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
         <a href="pycocoa.octypes.NSRect_t-class.html" class="summary-name">NSRect_t</a><br />
-      ObjC <code>struct</code> with <code>.origin</code> and 
-        <code>.size</code>.
+      ObjC <code>struct</code> with fields <code>origin</code> and 
+        <code>size</code> (<a href="pycocoa.octypes.NSPoint_t-class.html" 
+        class="link">NSPoint_t</a>, <a 
+        href="pycocoa.octypes.NSSize_t-class.html" 
+        class="link">NSSize_t</a>).
     </td>
   </tr>
 <tr>
@@ -203,8 +209,8 @@
     </td><td class="summary">
       <table width="100%" cellpadding="0" cellspacing="0" border="0">
         <tr>
-          <td><span class="summary-sig"><a name="get_lib"></a><span class="summary-sig-name">get_lib</span>(<span class="summary-sig-arg">name</span>)</span><br />
-      Find and load the <code>.dylib</code> library.</td>
+          <td><span class="summary-sig"><a href="pycocoa.oslibs-module.html#get_lib" class="summary-sig-name">get_lib</a>(<span class="summary-sig-arg">name</span>)</span><br />
+      Find and load a <code>.dylib</code> library.</td>
           <td align="right" valign="top">
             
             
@@ -220,9 +226,8 @@
     </td><td class="summary">
       <table width="100%" cellpadding="0" cellspacing="0" border="0">
         <tr>
-          <td><span class="summary-sig"><a name="leaked2"></a><span class="summary-sig-name">leaked2</span>()</span><br />
-      Return the number of memory leaks and the total number of bytes 
-      leaked.</td>
+          <td><span class="summary-sig"><a href="pycocoa.oslibs-module.html#leaked2" class="summary-sig-name">leaked2</a>()</span><br />
+      Return the number of memory leaks.</td>
           <td align="right" valign="top">
             
             
@@ -253,6 +258,14 @@
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
         <a name="YES"></a><span class="summary-name">YES</span> = <code title="True">True</code>
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="pycocoa.oslibs-module.html#libCF" class="summary-name">libCF</a> = <code title="&lt;CDLL '/System/Library/Frameworks/CoreFoundation.framework/CoreFoundat\
+ion', handle 103d48800 at 102ef78d0&gt;">&lt;CDLL '/System/Library/Frameworks/CoreFoundation.frame<code class="variable-ellipsis">...</code></code>
     </td>
   </tr>
 <tr>
@@ -483,6 +496,14 @@
     <td width="15%" align="right" valign="top" class="summary">
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
+        <a href="pycocoa.oslibs-module.html#libAppKit" class="summary-name">libAppKit</a> = <code title="&lt;CDLL '/System/Library/Frameworks/AppKit.framework/AppKit', handle 100\
+762110 at 102f4dcd0&gt;">&lt;CDLL '/System/Library/Frameworks/AppKit.framework<code class="variable-ellipsis">...</code></code>
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
         <a name="NSApplicationDidHideNotification"></a><span class="summary-name">NSApplicationDidHideNotification</span> = <code title="c_void_p(140735595495360)">c_void_p(140735595495360)</code>
     </td>
   </tr>
@@ -505,6 +526,34 @@
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
         <a name="NSEventTrackingRunLoopMode"></a><span class="summary-name">NSEventTrackingRunLoopMode</span> = <code title="c_void_p(140735595490048)">c_void_p(140735595490048)</code>
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a name="NSCancelButton"></a><span class="summary-name">NSCancelButton</span> = <code title="0">0</code>
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a name="NSFileHandlingPanelCancelButton"></a><span class="summary-name">NSFileHandlingPanelCancelButton</span> = <code title="0">0</code>
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a name="NSOKButton"></a><span class="summary-name">NSOKButton</span> = <code title="1">1</code>
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a name="NSFileHandlingPanelOKButton"></a><span class="summary-name">NSFileHandlingPanelOKButton</span> = <code title="1">1</code>
     </td>
   </tr>
 <tr>
@@ -1071,6 +1120,14 @@
     <td width="15%" align="right" valign="top" class="summary">
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
+        <a href="pycocoa.oslibs-module.html#libquartz" class="summary-name">libquartz</a> = <code title="&lt;CDLL '/System/Library/Frameworks/quartz.framework/quartz', handle 100\
+76e880 at 102f4dd50&gt;">&lt;CDLL '/System/Library/Frameworks/quartz.framework<code class="variable-ellipsis">...</code></code>
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
         <a name="kCGImagePropertyGIFDictionary"></a><span class="summary-name">kCGImagePropertyGIFDictionary</span> = <code title="c_void_p(140735611536360)">c_void_p(140735611536360)</code>
     </td>
   </tr>
@@ -1086,6 +1143,14 @@
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
         <a name="kCGRenderingIntentDefault"></a><span class="summary-name">kCGRenderingIntentDefault</span> = <code title="0">0</code>
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="pycocoa.oslibs-module.html#libCT" class="summary-name">libCT</a> = <code title="&lt;CDLL '/System/Library/Frameworks/CoreText.framework/CoreText', handle\
+ 100465770 at 102f5dd10&gt;">&lt;CDLL '/System/Library/Frameworks/CoreText.framework/C<code class="variable-ellipsis">...</code></code>
     </td>
   </tr>
 <tr>
@@ -1137,7 +1202,205 @@
         <a name="kCTFontBoldTrait"></a><span class="summary-name">kCTFontBoldTrait</span> = <code title="2">2</code>
     </td>
   </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="pycocoa.oslibs-module.html#libFoundation" class="summary-name">libFoundation</a> = <code title="&lt;CDLL '/System/Library/Frameworks/Foundation.framework/Foundation', ha\
+ndle 100464e60 at 102f65390&gt;">&lt;CDLL '/System/Library/Frameworks/Foundation.f<code class="variable-ellipsis">...</code></code>
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="pycocoa.oslibs-module.html#libobjc" class="summary-name">libobjc</a> = <code title="&lt;CDLL '/usr/lib/libobjc.dylib', handle 103d4a680 at 102f651d0&gt;">&lt;CDLL '/usr/lib/libobjc.dylib', handle 103d4a680 at <code class="variable-ellipsis">...</code></code>
+    </td>
+  </tr>
 </table>
+<!-- ==================== FUNCTION DETAILS ==================== -->
+<a name="section-FunctionDetails"></a>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr bgcolor="#70b0f0" class="table-header">
+  <td align="left" colspan="2" class="table-header">
+    <span class="table-header">Function Details</span></td>
+</tr>
+</table>
+<a name="get_lib"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">get_lib</span>(<span class="sig-arg">name</span>)</span>
+  </h3>
+  </td><td align="right" valign="top"
+    >&nbsp;
+    </td>
+  </tr></table>
+  
+  <p>Find and load a <code>.dylib</code> library.</p>
+  <dl class="fields">
+    <dt>Parameters:</dt>
+    <dd><ul class="nomargin-top">
+        <li><strong class="pname"><code>name</code></strong> - The library name (str).</li>
+    </ul></dd>
+    <dt>Returns:</dt>
+        <dd>The library (<code>ctypes.CDLL</code>).</dd>
+  </dl>
+<div class="fields">      <p><strong>Note:</strong>
+        Private attribute <code>._name</code> shows the library file name.
+      </p>
+</div></td></tr></table>
+</div>
+<a name="leaked2"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">leaked2</span>()</span>
+  </h3>
+  </td><td align="right" valign="top"
+    >&nbsp;
+    </td>
+  </tr></table>
+  
+  <p>Return the number of memory leaks.</p>
+  <dl class="fields">
+    <dt>Returns:</dt>
+        <dd>2-Tuple (<i>number</i>, <i>size</i>) with the <i>number</i> of 
+          memory leaks and total <i>size</i> leaked, in bytes.</dd>
+  </dl>
+</td></tr></table>
+</div>
+<br />
+<!-- ==================== VARIABLES DETAILS ==================== -->
+<a name="section-VariablesDetails"></a>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr bgcolor="#70b0f0" class="table-header">
+  <td align="left" colspan="2" class="table-header">
+    <span class="table-header">Variables Details</span></td>
+</tr>
+</table>
+<a name="libCF"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <h3 class="epydoc">libCF</h3>
+  
+  <dl class="fields">
+  </dl>
+  <dl class="fields">
+    <dt>Value:</dt>
+      <dd><table><tr><td><pre class="variable">
+&lt;CDLL '/System/Library/Frameworks/CoreFoundation.framework/CoreFoundat<span class="variable-linewrap"><img src="crarr.png" alt="\" /></span>
+ion', handle 103d48800 at 102ef78d0&gt;
+</pre></td></tr></table>
+</dd>
+  </dl>
+</td></tr></table>
+</div>
+<a name="libAppKit"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <h3 class="epydoc">libAppKit</h3>
+  
+  <dl class="fields">
+  </dl>
+  <dl class="fields">
+    <dt>Value:</dt>
+      <dd><table><tr><td><pre class="variable">
+&lt;CDLL '/System/Library/Frameworks/AppKit.framework/AppKit', handle 100<span class="variable-linewrap"><img src="crarr.png" alt="\" /></span>
+762110 at 102f4dcd0&gt;
+</pre></td></tr></table>
+</dd>
+  </dl>
+</td></tr></table>
+</div>
+<a name="libquartz"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <h3 class="epydoc">libquartz</h3>
+  
+  <dl class="fields">
+  </dl>
+  <dl class="fields">
+    <dt>Value:</dt>
+      <dd><table><tr><td><pre class="variable">
+&lt;CDLL '/System/Library/Frameworks/quartz.framework/quartz', handle 100<span class="variable-linewrap"><img src="crarr.png" alt="\" /></span>
+76e880 at 102f4dd50&gt;
+</pre></td></tr></table>
+</dd>
+  </dl>
+</td></tr></table>
+</div>
+<a name="libCT"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <h3 class="epydoc">libCT</h3>
+  
+  <dl class="fields">
+  </dl>
+  <dl class="fields">
+    <dt>Value:</dt>
+      <dd><table><tr><td><pre class="variable">
+&lt;CDLL '/System/Library/Frameworks/CoreText.framework/CoreText', handle<span class="variable-linewrap"><img src="crarr.png" alt="\" /></span>
+ 100465770 at 102f5dd10&gt;
+</pre></td></tr></table>
+</dd>
+  </dl>
+</td></tr></table>
+</div>
+<a name="libFoundation"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <h3 class="epydoc">libFoundation</h3>
+  
+  <dl class="fields">
+  </dl>
+  <dl class="fields">
+    <dt>Value:</dt>
+      <dd><table><tr><td><pre class="variable">
+&lt;CDLL '/System/Library/Frameworks/Foundation.framework/Foundation', ha<span class="variable-linewrap"><img src="crarr.png" alt="\" /></span>
+ndle 100464e60 at 102f65390&gt;
+</pre></td></tr></table>
+</dd>
+  </dl>
+</td></tr></table>
+</div>
+<a name="libobjc"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <h3 class="epydoc">libobjc</h3>
+  
+  <dl class="fields">
+  </dl>
+  <dl class="fields">
+    <dt>Value:</dt>
+      <dd><table><tr><td><pre class="variable">
+&lt;CDLL '/usr/lib/libobjc.dylib', handle 103d4a680 at 102f651d0&gt;
+</pre></td></tr></table>
+</dd>
+  </dl>
+</td></tr></table>
+</div>
+<br />
 <!-- ==================== NAVIGATION BAR ==================== -->
 <table class="navbar" border="0" width="100%" cellpadding="0"
        bgcolor="#a0c0ff" cellspacing="0">
@@ -1169,7 +1432,7 @@
 <table border="0" cellpadding="0" cellspacing="0" width="100%%">
   <tr>
     <td align="left" class="footer">
-    Generated by Epydoc 3.0.1 on Sun Apr 22 21:13:09 2018
+    Generated by Epydoc 3.0.1 on Tue Apr 24 20:38:10 2018
     </td>
     <td align="right" class="footer">
       <a target="mainFrame" href="http://epydoc.sourceforge.net"

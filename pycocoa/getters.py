@@ -61,20 +61,20 @@
 '''
 # all imports listed explicitly to help PyChecker
 from ctypes  import byref, c_uint, cast, CFUNCTYPE
-from oclibs  import libobjc  # get_lib
 from octypes import emcoding2ctype, encoding2ctype, \
                     Class_t, Id_t, IMP_t, Ivar_t, Protocol_t, SEL_t, \
                     split_encoding
+from oslibs  import libobjc  # get_lib
 from utils   import bytes2str, _exports, instanceof, missing, \
                     name2objc, str2bytes
 
-__version__ = '18.04.21'
+__version__ = '18.04.24'
 
-_cfunctype_cache = {}
+_c_func_t_cache = {}
 
 
 def _ivar_ctype(obj, name):
-    '''Find the ctype of an ObjC instance variable.
+    '''(INTERNAL) Find the ctype of an ObjC instance variable.
     '''
     for ivar, _, ctype, _ in get_ivars(obj, name):
         if ivar == name:
@@ -82,40 +82,49 @@ def _ivar_ctype(obj, name):
     raise ValueError('no %r ivar of %r' % (name, obj))
 
 
-def get_cfunctype(encoding, codes=None):
-    '''Get the C{ctypes} function type for a given signature type encoding.
+def get_c_func_t(encoding, codes=None):
+    '''Get the C{ctypes} function type for a given function signature.
 
-    Limited to basic type encodings and pointers to basic type encodings
-    and does not handle arrays, bitfiels, arbitrary structs and unions.
+       @param encoding: Type encoding of the signature (C{str} or C{bytes}).
+       @keyword codes: The individual type codes (C{type encoding}[])
 
-    The I{signature} is a C{bytes} object and not unicode and I{codes}
-    is a list of the individual type encodings.  If I{codes} is not
-    supplied, it will be created by L{split_encoding} the signature
-    (not L{split_emcoding2}).
+       @note: The signature I{encoding} is a C{str} or C{bytes}, not unicode
+              and I{codes} is a list of the individual type encodings, limited
+              to basic type encodings and pointers to basic type encodings.
+              Does not handle C{array}s, C{bitfield}s, arbitrary C{struct}s
+              and C{union}s.  If keyword I{codes} is not supplied, it will be
+              created from the I{signature} by L{split_encoding}, not
+              L{split_emcoding2}.
     '''
     encoding = str2bytes(encoding)
     try:
-        cfunctype = _cfunctype_cache[encoding]
+        c_func_t = _c_func_t_cache[encoding]
     except KeyError:  # create new CFUNCTYPE for the encoding
-        cfunctype = CFUNCTYPE(*map(encoding2ctype, codes or split_encoding(encoding)))
+        c_func_t = CFUNCTYPE(*map(encoding2ctype, codes or split_encoding(encoding)))
         # XXX cache new CFUNCTYPE (to prevent it to be gc'd?)
-        _cfunctype_cache[encoding] = cfunctype
-    return cfunctype
+        _c_func_t_cache[encoding] = c_func_t
+    return c_func_t
 
 
 def get_class(name):
     '''Get a registered ObjC class by name.
+
+       @param name: The class name (str).
+
+       @return: The class (L{Class_t}) if found, None otherwise.
     '''
     return libobjc.objc_getClass(str2bytes(name)) or None
 
 
 def get_classes(*prefixes):
     '''Yield all loaded ObjC classes with a name
-    starting with one of the given prefixes.
+       starting with one of the given prefixes.
 
-    For each class yield a 2-tuple (I{name, class}) where
-    I{name} is the class name and I{class} is the ObjC
-    class object.
+       @param prefixes: No, one or more class names to match (str-s).
+
+       @return: For each class yield a 2-tuple (I{name, class})
+                where I{name} is the class name and I{class} is
+                the ObjC L{Class_t} object.
     '''
     n = libobjc.objc_getClassList(None, 0)
     clases = (Class_t * n)()
@@ -129,6 +138,12 @@ def get_classes(*prefixes):
 
 def get_classname(clas, dflt=missing):
     '''Get the name of an ObjC class.
+
+       @param clas: The class (L{Class_t}).
+
+       @return: The class name (str).
+
+       @raise ValueError: Invalid I{clas}, iff no I{dflt} provided.
     '''
     if clas:
         return bytes2str(libobjc.class_getName(clas))
@@ -139,18 +154,34 @@ def get_classname(clas, dflt=missing):
 
 def get_classnameof(obj, dflt=missing):
     '''Get the name of the ObjC class of an object.
+
+       @param obj: The object (C{Object} or L{Id_t}).
+
+       @return: The object's class name (str).
+
+       @raise ValueError: Invalid I{obj}, iff no I{dflt} provided.
     '''
     return get_classname(get_classof(obj), dflt=dflt)
 
 
 def get_classof(obj):
     '''Get the ObjC class of an object.
+
+       @param obj: The object (C{Object} or L{Id_t}).
+
+       @return: The object's class (L{Class_t}) if found, None otherwise.
     '''
-    return libobjc.object_getClass(cast(obj, Id_t))
+    return libobjc.object_getClass(cast(obj, Id_t)) or None
 
 
 def get_ivar(obj, name, ctype=None):
-    '''Get the value of an instance variable.
+    '''Get the value of an instance variable (ivar).
+
+       @param obj: The object (C{Object} or L{Id_t}).
+       @param name: The instance variable name (str).
+       @keyword ctype: The instance variable type (C{ctypes}),
+
+       @return: The ivar value (C{any}) if found, None otherwise.
     '''
     if ctype is None:  # lookup ivar by name
         ctype = _ivar_ctype(obj, name)
@@ -166,16 +197,16 @@ def get_ivar(obj, name, ctype=None):
 
 
 def get_ivars(clas, *prefixes):
-    '''Yield all instance variables of an ObjC class with
-    a name starting with one of the given prefixes.
+    '''Yield all instance variables (ivar) of an ObjC class with
+       a name starting with one of the given prefixes.
 
-    @param clas: Th class (C{Class}).
-    @param prefixes: No, one or more I{ivar} names to match (string).
+       @param clas: The class (L{Class_t}).
+       @param prefixes: No, one or more ivar names to match (str-s).
 
-    @return: The I{ivar}s, each yielded as a 4-tuple (I{name, encoding,
-             ctype, ivar}) where I{name} is the ivar name, I{encoding}
-             is the ivar's type encoding, I{ctype} is the ivar's
-             C{ctypes} type and I{ivar} the I{Ivar} object.
+       @return: For each ivar yield a 4-tuple (I{name, encoding, ctype,
+                ivar}) where I{name} is the ivar name, I{encoding} is
+                the ivar's type encoding, I{ctype} is the ivar's
+                C{ctypes} type and I{ivar} the L{Ivar_t} object.
     '''
     n = c_uint()
     for ivar in libobjc.class_copyIvarList(clas, byref(n)):
@@ -190,9 +221,9 @@ def get_ivars(clas, *prefixes):
 def get_inheritance(clas):
     '''Yield the inheritance of an ObjC class.
 
-    @param clas: Class (C{Class}).
+       @param clas: Class (L{Class_t}).
 
-    @return: The parent I{class}es, yielded in bottom-up order.
+       @return: The parent classes (L{Class_t}), in bottom-up order.
     '''
     while clas:
         yield clas
@@ -203,9 +234,9 @@ def get_inheritance(clas):
 def get_metaclass(name):
     '''Get a registered ObjC metaclass by name.
 
-    @param name: Metaclass (string).
+       @param name: The metaclass (str).
 
-    @return: The C{MetaClass} if found, None otherwise.
+       @return: The metaclass (L{Class_t}) if found, None otherwise.
     '''
     return libobjc.objc_getMetaClass(str2bytes(name)) or None
 
@@ -213,10 +244,10 @@ def get_metaclass(name):
 def get_method(clas, name):
     '''Get a method of an ObjC class by name.
 
-    @param clas: Class (C{Class}).
-    @param name: Method name (string).
+       @param clas: Class (L{Class_t}).
+       @param name: Method name (str).
 
-    @return: The C{Method} if found, None otherwise.
+       @return: The method (L{Method_t}) if found, None otherwise.
     '''
     n = c_uint()
     for method in libobjc.class_copyMethodList(clas, byref(n)):
@@ -228,15 +259,19 @@ def get_method(clas, name):
 
 def get_methods(clas, *prefixes):
     '''Yield all methods of an ObjC class with a name
-    starting with one of the given prefixes.
+       starting with one of the given prefixes.
 
-    For each method yield a 4-tuple (I{name, encoding, rargtypes,
-    method}), where I{name} is the method name, I{encoding} is the
-    type encoding of the method signature including the return type,
-    I{rargtypes} the C{ctypes} signature, the argtypes list** preceeded
-    by the restype and I{method} the I{Method} object.
+       @param clas: The class (L{Class_t}).
+       @param prefixes: No, one or more method names to match (str-s).
 
-    **) In Python 3+ I{rargtypes} is a C{map} object, not a list.
+       @return: For each method yield a 4-tuple (I{name, encoding,
+                rargtypes, method}), where I{name} is the method name,
+                I{encoding} is the type encoding of the method signature
+                including the return type, I{rargtypes} the C{ctypes}
+                signature, the argtypes C{list}** preceeded by the
+                restype and I{method} the L{Method_t} object.
+
+       @note: In Python 3+ I{rargtypes} is a C{map} object, not a C{list}.
     '''
     def _ctype(code):
         return emcoding2ctype(code, dflt=IMP_t)  # c_void_p
@@ -263,43 +298,47 @@ _PropertyAttributes = {'C': 'copy',      'D': '@dynamic',
                        'W': '__weak',    '&': 'retain'}
 
 
-def get_properties(cls_or_proto, *prefixes):
+def get_properties(clas_or_proto, *prefixes):
     '''Yield all properties of an ObjC class or protocol
-    with a name starting with one of the given prefixes.
+       with a name starting with one of the given prefixes.
 
-    For each property, yield a 3-tuple (I{name}, I{attributes},
-    I{setter}, I{property}) where I{attributes} is a comma-separated
-    list of the property attibutes, I{setter} is the name of the
-    property setter method, provided the property is writable and
-    I{property} is the Property object.  The I{setter} is an empty
-    name '' for read-only properties.
+       @param clas_or_proto: The class or protocol (L{Class_t} or L{Protocol_t}).
+       @param prefixes: No, one or more property names to match (str-s).
 
-    ObjC Property Attributes:
+       @return: For each property, yield a 3-tuple (I{name}, I{attributes},
+                I{setter}, I{property}) where I{attributes} is a comma-separated
+                list of the property attibutes, I{setter} is the name of the
+                property setter method, provided the property is writable and
+                I{property} is the C{Property} object.  For read-only properties,
+                the I{setter} is an empty name "".
 
-        - T<type>"name" = Type
-        - & = Retain last value (retain)
-        - C = Copy
-        - D = Dynamic (@dynamic)
-        - G<name> = Getter selector name
-        - N = Non-atomic (nonatomic)
-        - P = To be garbage collected
-        - R = Read-only (readonly)
-        - S<name> = Setter selector name
-        - t<encoding> = Old-dtyle type encoding
-        - W = Weak reference (__weak)
+       @note: ObjC Property Attributes:
 
-    See U{Property Attributes<http://Developer.Apple.com/library/content/documentation/
-    Cocoa/Conceptual/ObjCRuntimeGuide/Articles/ocrtPropertyIntrospection.html>}.
+           - T<type>"name" = Type
+           - & = Retain last value (retain)
+           - C = Copy
+           - D = Dynamic (@dynamic)
+           - G<name> = Getter selector name
+           - N = Non-atomic (nonatomic)
+           - P = To be garbage collected
+           - R = Read-only (readonly)
+           - S<name> = Setter selector name
+           - t<encoding> = Old-style type encoding
+           - W = Weak reference (__weak)
+
+       @see: U{Property Attributes<http://Developer.Apple.com/library/content/documentation/
+             Cocoa/Conceptual/ObjCRuntimeGuide/Articles/ocrtPropertyIntrospection.html>}.
     '''
     n = c_uint()
-    if isinstance(cls_or_proto, Class_t):
-        props = libobjc.class_copyPropertyList(cls_or_proto, byref(n))
-        setters = set(_[0] for _ in get_methods(cls_or_proto, 'set'))
-    elif isinstance(cls_or_proto, Protocol_t):
-        props = libobjc.protocol_copyPropertyList(cls_or_proto, byref(n))
+    if isinstance(clas_or_proto, Class_t):
+        props = libobjc.class_copyPropertyList(clas_or_proto, byref(n))
+        setters = set(_[0] for _ in get_methods(clas_or_proto, 'set'))
+    elif isinstance(clas_or_proto, Protocol_t):
+        props = libobjc.protocol_copyPropertyList(clas_or_proto, byref(n))
         setters = []
     else:
-        raise TypeError('no %s nor %s: %r' ('class', 'protocol', cls_or_proto))
+        raise TypeError('%s not a %s nor %s: %r' % ('clas_or_proto',
+                        Class_t.__name__, Protocol_t.__name__, clas_or_proto))
 
     for prop in props:
         name = bytes2str(libobjc.property_getName(prop))
@@ -320,19 +359,23 @@ def get_properties(cls_or_proto, *prefixes):
 def get_protocol(name):
     '''Get a registered ObjC protocol by name.
 
-    @param name: Protocol (string).
+       @param name: The protocol name (str).
 
-    @return: The C{Protocol} if found, None otherwise.
+       @return: The protocol (L{Protocol_t}) if found, None otherwise.
     '''
     return libobjc.objc_getProtocol(str2bytes(name)) or None
 
 
 def get_protocols(clas, *prefixes):
     '''Yield all protocols of an ObjC class with a name
-    starting with one of the given prefixes.
+       starting with one of the given prefixes.
 
-    For each protocol, yield a 2-tuple (I{name}, I{protocol}) where
-    I{name} is the protocol name and I{protocol} the Protocol object.
+       @param clas: The class (L{Class_t}).
+       @param prefixes: No, one or more protocol names to match (str-s).
+
+       @return: For each protocol, yield a 2-tuple (I{name}, I{protocol})
+                where I{name} is the protocol name and I{protocol} the
+                L{Protocol_t} object.
     '''
     n = c_uint()
     for proto in libobjc.class_copyProtocolList(clas, byref(n)):
@@ -345,9 +388,9 @@ def get_protocols(clas, *prefixes):
 def get_selector(name_):
     '''Get an ObjC selector by name.
 
-    @param name_: Selector (string).
+       @param name_: The selector name (str).
 
-    @return: The C{SEL} if found, None otherwise.
+       @return: The selector (L{SEL_t}) if found, None otherwise.
     '''
     sel = name2objc(name_)
 #   if not sel.endswith(b':'):
@@ -358,9 +401,9 @@ def get_selector(name_):
 def get_selectornameof(sel):
     '''Get the name of an ObjC selector.
 
-    @param sel: Selector (C{SEL}).
+       @param sel: The selector (L{SEL_t}).
 
-    @return: The name (string) if found, '' otherwise.
+       @return: The selector name (str) if found, "" otherwise.
     '''
     instanceof(sel, SEL_t, name='sel')
     return bytes2str(libobjc.sel_getName(sel)) or ''
@@ -369,9 +412,9 @@ def get_selectornameof(sel):
 def get_superclass(clas):
     '''Get the ObjC super-class of an ObjC class.
 
-    @param clas: Class (C{Class}).
+       @param clas: The class (L{Class_t}).
 
-    @return: C{Superclass}, None otherwise.
+       @return: The super-class (L{Class_t}), None otherwise.
     '''
     return libobjc.class_getSuperclass(clas) or None
 
@@ -379,11 +422,26 @@ def get_superclass(clas):
 def get_superclassof(obj):
     '''Get the ObjC super-class of an object.
 
-    @param obj: Object to check (I{Object}).
+       @param obj: The object (C{Object} or L{Id_t}).
 
-    @return: C{Superclass}, None otherwise.
+       @return: The super-class (L{Class_t}), None otherwise.
     '''
-    return libobjc.class_getSuperclass(get_classof(obj)) or None
+    clas = get_classof(obj)
+    if clas:
+        clas = get_superclass(clas)
+    return clas
+
+
+def get_superclassnameof(obj, dflt=missing):
+    '''Get the name of the ObjC super-class of an object.
+
+       @param obj: The object (C{Object} or L{Id_t}).
+
+       @return: The object'ssuper-class name (str).
+
+       @raise ValueError: Invalid I{obj}, iff no I{dflt} provided.
+    '''
+    return get_classname(get_superclassof(obj), dflt=dflt)
 
 
 # filter locals() for .__init__.py

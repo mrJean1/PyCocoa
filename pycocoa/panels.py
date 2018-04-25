@@ -28,9 +28,12 @@
 # all imports listed explicitly to help PyChecker
 from bases   import _Type2
 from nstypes import NSOpenPanel, nsString2str
+from pytypes import py2NS
+from oslibs  import NSCancelButton
+from utils   import _Types
 
 __all__ = ('OpenPanel',)
-__version__ = '18.04.18'
+__version__ = '18.04.24'
 
 
 class OpenPanel(_Type2):
@@ -44,21 +47,28 @@ class OpenPanel(_Type2):
         '''
         self.NS = NSOpenPanel.openPanel()
         self.title = title
+#       self.NS.setTitleHidden_(bool(True))
 
     def pick(self, filetypes, aliases =False,
                               dirs    =False,
                               files   =True,
                               hidden  =False,
+                              hidexts =False,
                               multiple=False,
+                              packages=False,
+                              otherOK =False,
                               dflt    =None):
         '''Select a file from the panel.
 
-          @param filetypes: The selectable file types (tuple of str).
+          @param filetypes: The selectable file types (tuple of str-s).
           @keyword aliases: Allow selection of aliases (bool).
           @keyword dirs: Allow selection of directories (bool).
           @keyword hidden: Allow selection of hidden files (bool).
+          @keyword hidexts: Hide file extensions (bool).
           @keyword multiple: Allow selection of multiple files (bool).
-          @keyword dflt: Return value if nothing is selected (None).
+          @keyword packages: Treat file packages as directories (bool).
+          @keyword otherOK: Allow selection of other file types (bool).
+          @keyword dflt: Return value, cancelled, nothing selected (None).
 
           @return: The selected file name (str) or I{dflt}.
         '''
@@ -70,19 +80,28 @@ class OpenPanel(_Type2):
         ns.setCanChooseDirectories_(bool(dirs))
         ns.setCanChooseFiles_(bool(files))
         ns.setShowsHiddenFiles_(bool(hidden))
-#       ns.allowedFileTypes(NSStrings(*filetypes))
+        ns.setExtensionHidden_(bool(hidexts))
+        # ns.setRequiredFileType_(NSStr)
+        # an NSArray of file extension NSStr[ing]s without the '.'
+        ns.setAllowedFileTypes_(py2NS(t.lstrip('.') for t in filetypes))
+        ns.setAllowsOtherFileTypes_(bool(otherOK))
+        ns.setTreatsFilePackagesAsDirectories_(bool(packages))
 
         while True:
             ns.orderFrontRegardless()  # only flashes
-            if not ns.runModal():
-                return dflt  # Cancel, nothing selected
+            # <http://developer.apple.com/documentation/
+            #       appkit/nssavepanel/1525357-runmodal>
+            if ns.runModal() == NSCancelButton:
+                return dflt  # nothing selected
 #           paths = ns.filenames()  # returns an NSArray
 #           urls = ns.URLs()  # returns an NSArray
             path = nsString2str(ns.URL().path())
-            # mimick NSOpenPanel.allowedFileTypes_
+            # mimick NSOpenPanel.setAllowedFileTypes_
             if path.lower().endswith(filetypes):
                 return path
 
+
+NSOpenPanel._Type = _Types.OpenPanel = OpenPanel
 
 if __name__ == '__main__':
 

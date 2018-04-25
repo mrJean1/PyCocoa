@@ -60,7 +60,7 @@
 '''(INTERNAL) Utility functions, constants, etc.
 '''
 # all imports listed explicitly to help PyChecker
-__version__ = '18.04.21'
+__version__ = '18.04.24'
 
 try:
     from math import gcd  # Python 3+
@@ -74,6 +74,15 @@ except ImportError:
             return a
 
 
+class _Constants(object):
+    '''Only constant, readable attributes.
+    '''
+    def __init__(self, *unused):
+        raise AssertionError('%s is constant' % (self.__class__.__name__,))
+
+    __setattr__ = __init__
+
+
 class _Globals(object):  # some PyCocoa-internal globals
     App     = None  # XXX single instance only
     argv0   = 'PyCocoa'  # set by .nstypes.nsBundleRename
@@ -81,6 +90,33 @@ class _Globals(object):  # some PyCocoa-internal globals
     raiser  = False
     Tables  = []
     Windows = {}
+
+
+class _Types(_Constants):
+    '''Holder of the Python Types, to avoid circular imports.
+    '''
+    Dict        = None  # set by .dicts.py
+    FrozenDict  = None  # set by .dicts.py
+    FrozenSet   = None  # set by .sets.py
+    Item        = None  # set by .menus.py
+    List        = None  # set by .lists.py
+    MediaWindow = None  # set by .windows.py
+    Menu        = None  # set by .menus.py
+    MenuBar     = None  # set by .menus.py
+    OpenPanel   = None  # set be .panels.py
+    Set         = None  # set by .sets.py
+    Separator   = None  # set by .menus.py
+    Str         = None  # set by .strs.py
+    Table       = None  # set by .tables.py
+    TableWindow = None  # set by .tables.py
+    Tuple       = None  # set by .tuples.py
+    Window      = None  # set by .windows.py
+
+    @staticmethod
+    def listypes():
+        for a, v in sorted(_Types.__dict__.items()):
+            if not a.startswith('_'):
+                print('_Types.%-11s %r' % (a + ':', v))
 
 
 class missing(object):  # singleton class, lost on purpose
@@ -434,8 +470,8 @@ def z1000str(size, sep='_'):
 
        @param size: Value to convert (float or int).
 
-       @return: "-" if I{size} is negative, otheriwse
-                "<1or2digits><sep><3digits>..." (str).
+       @return: "<1or2digits><sep><3digits>..." or "-" if I{size}
+                is negative (str).
    '''
     z = int(size)
     if z < 0:

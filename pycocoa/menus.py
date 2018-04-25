@@ -28,19 +28,20 @@
 # all imports listed explicitly to help PyChecker
 from bases   import _Type1, _Type2
 from getters import get_selector, get_selectornameof
-from nstypes import int2NS, NSMenu, NSMenuItem, nsOf, NSStr
-from oclibs  import NSAlternateKeyMask, NSCommandKeyMask, \
-                    NSControlKeyMask, NSShiftKeyMask  # PYCHOK expected
+from nstypes import NSMenu, NSMenuItem, nsOf, NSStr
+from pytypes import int2NS
 from octypes import SEL_t
+from oslibs  import NSAlternateKeyMask, NSCommandKeyMask, \
+                    NSControlKeyMask, NSShiftKeyMask  # PYCHOK expected
 from runtime import isInstanceOf
-from utils   import _Globals, instanceof, name2pymethod
+from utils   import _Globals, instanceof, name2pymethod, _Types
 
 __all__ = ('Item',
            'Menu', 'MenuBar',
            'Separator',
            'ns2Item',
            'title2action')
-__version__ = '18.04.21'
+__version__ = '18.04.24'
 
 _menuItemHandler_name = 'menuItemHandler_'
 
@@ -60,10 +61,10 @@ class Item(_Type2):
                                          shift=False):
         '''New menu L{Item}.
 
-           @param title: Item title (string).
-           @keyword action: Callback, the method to be called (string
+           @param title: Item title (str).
+           @keyword action: Callback, the method to be called (str
                             ending with ':' or _', C{SEL_t} or C{None}).
-           @keyword key: The shortcut key, if any (string).
+           @keyword key: The shortcut key, if any (str).
            @keyword alt: Hold C{option} or C{alt} with I{key} (bool).
            @keyword cmd: Hold C{command} with I{key} (bool).
            @keyword cntl: Hold C{control} with I{key} (bool).
@@ -196,9 +197,9 @@ class Menu(_Type2):
     def item(self, title, action=None, **kwds):
         '''New menu item with action and optional shortcut key.
 
-           @param title: Item title (string).
-           @keyword action: See L{Item}.__init__.
-           @keyword kwds: See L{Item}.__init__.
+           @param title: Item title (str).
+           @keyword action: See L{Item}C{.__init__}.
+           @keyword kwds: See L{Item}C{.__init__}.
 
            @return: New item (L{Item}).
         '''
@@ -218,7 +219,7 @@ class Menu(_Type2):
                     yield item
 
     def separator(self):
-        '''New menu item separator.
+        '''New menu separator.
 
            @return: New item (L{Separator}).
         '''
@@ -239,7 +240,7 @@ class MenuBar(_Type2):
 
            @raise TypeError: If I{app} not an L{App}.
 
-           @see: Also method L{MenuBar}.main.
+           @see: Method L{MenuBar}C{.main}.
         '''
         self._menus = []
         self.NS = NSMenu.alloc().init()
@@ -296,7 +297,7 @@ class MenuBar(_Type2):
 
 
 class Separator(_Type1):
-    '''Menu items separator Python Type, wrapping ObjC C{NSMenuItem}.
+    '''Menu separator Python Type, wrapping ObjC C{NSMenuItem.separatorItem}.
     '''
     def __init__(self):
         '''New L{Separator}.
@@ -320,17 +321,22 @@ def ns2Item(ns):
 
 
 def title2action(title):
-    '''Convert an item title to the action callback method.
+    '''Convert a menu item title to a valid callback method name.
 
        @param title: The item's title (str).
 
-       @return: Item callback method (str).
+       @return: Name for the callback method (str).
 
-       @raise ValueError: Invalid I{title}.
+       @raise ValueError: Invalid method name for this I{title}.
     '''
     t = title.strip().rstrip('.')
     return name2pymethod('menu' + ''.join(t.split()) + '_')
 
+
+_Types.Item      = Item
+_Types.Menu      = Menu
+_Types.MenuBar   = MenuBar
+_Types.Separator = Separator
 
 if __name__ == '__main__':
 

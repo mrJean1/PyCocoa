@@ -37,10 +37,11 @@ from utils   import _Globals, bytes2str, instanceof
 from threading import Thread
 from time import sleep
 
-__all__ = ('App',  'AppDelegate',
+__all__ = ('App',
+           'NSApplicationDelegate',
            'Tile',
            'ns2App')
-__version__ = '18.04.21'
+__version__ = '18.04.24'
 
 
 class App(_Type2):
@@ -56,7 +57,7 @@ class App(_Type2):
     def __init__(self, title='PyCocao', **kwds):
         '''New L{App}.
 
-           @keyword title: App name or title (string).
+           @keyword title: App name or title (str).
            @keyword kwds: Optional, additional keyword arguments.
         '''
         if _Globals.App:
@@ -72,7 +73,7 @@ class App(_Type2):
         if kwds:  # optional, additional attributes
             super(App, self).__init__(**kwds)
 
-        self.delegate = AppDelegate.alloc().init(self)
+        self.NSdelegate = NSApplicationDelegate.alloc().init(self)
 
     def append(self, menu):
         '''Add a menu to this app's menu bar.
@@ -214,7 +215,6 @@ class App(_Type2):
 
     # Callback methods for Window instances,
     # menus, etc. to be overloaded as needed
-
     def appLaunched_(self, app):  # PYCHOK expected
         '''Callback, the app launched and is up.
         '''
@@ -278,6 +278,11 @@ class App(_Type2):
         '''
         self._mainWindow = window or None
 
+    def windowPrint_(self, window):  # PYCHOK expected
+        '''Print I{window} callback.
+        '''
+        pass
+
     def windowResize_(self, window):  # PYCHOK expected
         '''Resizing I{window} callback.
         '''
@@ -301,17 +306,17 @@ class App(_Type2):
 #       CocoaTipsAndTricks/Listings/ExceptionReporting_MyApplication_m.html>
 
 
-class _AppDelegate(object):
-    '''An ObjC-callable I{Delegate} class to handle C{NSApplication},
+class _NSApplicationDelegate(object):
+    '''An ObjC-callable I{NSDelegate} class to handle C{NSApplication},
        C{NSMenu} and C{NSWindow} events as L{App}.app..._, L{App}.menu..._
        respectively L{App}.window..._ callback calls.
     '''
     # Cobbled together from the pycocoa.ObjCSubClass.__doc__,
-    # pycocoa.runtime._DeallocObserver and PyObjC examples:
+    # pycocoa.runtime._NSDeallocObserver and PyObjC examples:
     # <http://TaoOfMac.com/space/blog/2007/04/22/1745> and
     # <http://StackOverflow.com/questions/24024723/swift-using-
     #       nsstatusbar-statusitemwithlength-and-nsvariablestatusitemlength>
-    _ObjC = ObjCSubclass('NSObject', '_AppDelegate')
+    _ObjC = ObjCSubclass('NSObject', '_NSApplicationDelegate')
 
     # The _ObjC.method(signature) decorator specifies the signature
     # of a Python method in Objective-C type encoding to make the
@@ -323,7 +328,7 @@ class _AppDelegate(object):
 
     @_ObjC.method('@P')
     def init(self, app):
-        '''Initialize the allocated I{Delegate}.
+        '''Initialize the allocated C{NSApplicationDelegate}.
 
            @note: I{MUST} be called as C{.alloc().init(...)}.
         '''
@@ -342,7 +347,7 @@ class _AppDelegate(object):
 
     @_ObjC.method('v@')
     def menuItemHandler_(self, ns_item):
-        '''ObjC callback to handle C{NSMenuItem} events.
+        '''ObjC callback to handle and dispatch C{NSMenuItem} events.
         '''
         item = ns2Item(ns_item)
         act = item._action
@@ -360,8 +365,8 @@ class _AppDelegate(object):
                         raise
 
 
-assert(_AppDelegate.menuItemHandler_.name == _menuItemHandler_name)
-AppDelegate = ObjCClass('_AppDelegate')
+assert(_NSApplicationDelegate.menuItemHandler_.name == _menuItemHandler_name)
+NSApplicationDelegate = ObjCClass('_NSApplicationDelegate')
 
 
 class Tile(_Type2):

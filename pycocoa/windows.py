@@ -30,25 +30,27 @@ from bases    import _Type2
 from geometry import Rect
 from nstypes  import isNone, NSConcreteNotification, NSFalse, NSNone, \
                      NSNotification, NSScreen, NSScrollView, NSTrue, \
-                     NSView, NSWindow, _Constants
-from oclibs   import NO, NSBackingStoreBuffered, \
+                     NSView, NSWindow
+from octypes  import NSPoint_t, NSSize_t
+from oslibs   import NO, NSBackingStoreBuffered, \
                      NSWindowStyleMaskClosable, \
                      NSWindowStyleMaskMiniaturizable, \
                      NSWindowStyleMaskResizable, \
                      NSWindowStyleMaskTitled, \
                      NSWindowStyleMaskUsual, \
                      NSWindowStyleMaskUtilityWindow, YES
-from octypes  import NSPoint_t, NSSize_t
 from runtime  import isInstanceOf, ObjCClass, ObjCInstance, \
                      ObjCSubclass, send_super
-from utils    import aspect_ratio, _Globals, bytes2str, instanceof
+from utils    import aspect_ratio, _Constants, _Globals, \
+                     bytes2str, instanceof, _Types
 # from enum   import Enum
 
 __all__ = ('MediaWindow',
+           'NSWindowDelegate',
            'Screen', 'Style',
-           'Window', 'WindowDelegate',
+           'Window',
            'ns2Window')
-__version__ = '18.04.21'
+__version__ = '18.04.24'
 
 _Cascade = NSPoint_t(25, 25)  # PYCHOK false
 _Screen  = NSScreen.alloc().init().mainScreen()
@@ -134,7 +136,7 @@ class Window(_Type2):
 
         if auto:
             self.NS.setReleasedWhenClosed_(NSTrue)
-        self.delegate = WindowDelegate.alloc().init(self)
+        self.NSdelegate = NSWindowDelegate.alloc().init(self)
 
     def close(self):
         '''Close this window (by a click of the close button).
@@ -286,7 +288,7 @@ class Window(_Type2):
             # <http://developer.apple.com/documentation/appkit/nswindow/1419513-zoom>
             self.NS.performZoom_(self.NS)  # XXX self.delegate
 
-    # Callback methods for WindowDelegate, to be overloaded as needed.
+    # Callback methods from NSWindowDelegate, to be overloaded as needed.
     def windowClose_(self):
         '''Closing I{window} callback.
         '''
@@ -320,6 +322,12 @@ class Window(_Type2):
         self._isMain = bool(main)
         if self.app:
             self.app.windowMain_(self if main else None)
+
+    def windowPrint_(self):
+        '''Print I{window} callback.
+        '''
+        if self.app:
+            self.app.windowPrint_(self)
 
     def windowResize_(self):
         '''Resizing I{window} callback.
@@ -358,17 +366,17 @@ class MediaWindow(Window):
         self.NSview = NSView.alloc().initWithFrame_(self.frame.NS)
 
 
-class _WindowDelegate(object):
-    '''An ObjC-callable I{Delegate} class to handle C{NSWindow} events
+class _NSWindowDelegate(object):
+    '''An ObjC-callable C{NSDelegate} class to handle C{NSWindow} events
        as L{Window}.window..._ and L{App}.window..._ callback calls.
 
-       @see: The C{_AppDelegate} for more I{Delegate} details.
+       @see: The C{_NSApplicationDelegate} for more C{NSDelegate} details.
     '''
-    _ObjC = ObjCSubclass('NSObject', '_WindowDelegate')
+    _ObjC = ObjCSubclass('NSObject', '_NSWindowDelegate')
 
     @_ObjC.method('@P')
     def init(self, window):
-        '''Initialize the allocated I{Delegate}.
+        '''Initialize the allocated C{NSWindowDelegate}.
 
            @note: I{MUST} be called as C{.alloc().init(...)}.
         '''
@@ -434,6 +442,14 @@ class _WindowDelegate(object):
         self._ns2w(ns_notification)
         self.window.windowResize_()
 
+    @_ObjC.method('v@')
+    def windowPrint_(self, ns_notification):
+        '''ObjC callback to handle C{NSWindow} events.
+        '''
+        self._ns2w(ns_notification)
+        self.window.windowPrint_()
+        # self.window.NS.printWindow_(?) ?
+
     @_ObjC.method('B@')
     def windowShouldClose_(self, ns_notification):
         '''ObjC callback to handle C{NSWindow} events.
@@ -474,7 +490,7 @@ class _WindowDelegate(object):
 #       return NSNone
 
 
-WindowDelegate = ObjCClass('_WindowDelegate')
+NSWindowDelegate = ObjCClass('_NSWindowDelegate')
 
 
 def ns2Window(ns):
@@ -486,6 +502,8 @@ def ns2Window(ns):
        @return: The window instance (L{Window}).
 
        @raise AssertionError: Mismatched instances.
+
+       @raise AttributeError: Unexpected I{ns} type.
 
        @raise TypeError: Invalid I{ns} type.
     '''
@@ -502,6 +520,9 @@ def ns2Window(ns):
         t = None
     raise AssertionError('%s %s %r vs %s' % (ns, '.uniqueID', u, t))
 
+
+_Types.Window = NSWindow._Type = Window
+_Types.MediaWindow             = MediaWindow
 
 if __name__ == '__main__':
 

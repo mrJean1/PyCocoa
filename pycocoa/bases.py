@@ -32,7 +32,7 @@ from runtime import ObjCInstance
 from utils   import bytes2str, instanceof, type2strepr
 
 __all__ = ()
-__version__ = '18.04.21'
+__version__ = '18.04.23'
 
 
 class _Type0(object):
@@ -95,13 +95,13 @@ class _Type1(_Type0):
         self._app = app
 
     @property
-    def delegate(self):
+    def NSdelegate(self):
         '''Get the class' delegate.
         '''
         return self.NS.delegate()
 
-    @delegate.setter  # PYCHOK property.setter
-    def delegate(self, delegate):
+    @NSdelegate.setter  # PYCHOK property.setter
+    def NSdelegate(self, delegate):
         '''Set the class' delegate.
         '''
         if not isNone(delegate):

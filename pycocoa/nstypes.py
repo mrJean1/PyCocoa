@@ -67,14 +67,14 @@ from decimal import Decimal as _Decimal
 from ctypes  import ArgumentError, byref, cast, c_buffer, c_byte, \
                     CFUNCTYPE, c_void_p
 from getters import get_selector
-from oclibs  import cfNumber2bool, cfNumber2num, kCFStringEncodingUTF8, \
-                    libCF, libFoundation, libobjc
 from octypes import Array_t, Class_t, c_struct_t, Id_t, ObjC_t, SEL_t, Set_t
+from oslibs  import cfNumber2bool, cfNumber2num, kCFStringEncodingUTF8, \
+                    libCF, libFoundation, libobjc
 from runtime import isInstanceOf, ObjCClass, ObjCInstance, _Xargs
-from utils   import bytes2str, clip, DEFAULT_UNICODE, _exports, \
-                    _Globals, instanceof, iterbytes, missing, str2bytes
+from utils   import bytes2str, clip, _exports, _Globals, instanceof, \
+                    iterbytes, missing, str2bytes, _Types
 
-__version__ = '18.04.21'
+__version__ = '18.04.24'
 
 
 def _lambda(arg):
@@ -89,48 +89,23 @@ def _ns2ctype2py(ns, ctype):
     return ns2py(ns)
 
 
-class _Constants(object):
-    '''Only constant, readable attributes.
-    '''
-    def __init__(self, *unused):
-        raise AssertionError('%s is constant' % (self.__class__.__name__,))
-
-    __setattr__ = __init__
-
-
-class _Types(_Constants):
-    '''Holder of the Python Types, to avoid circular imports.
-    '''
-    Dict       = None  # set by .dicts.py
-    Item       = None
-    FrozenDict = None  # set by .dicts.py
-    FrozenSet  = None  # set by .sets.py
-    List       = None  # set by .listuples.py
-    Menu       = None
-    OpenPanel  = None
-    Set        = None  # set by .sets.py
-    Str        = None  # set by .strs.py
-    Table      = None
-    Tuple      = None  # set by .listuples.py
-    Window     = None
-
-    @staticmethod
-    def listypes():
-        for a, v in sorted(_Types.__dict__.items()):
-            if not a.startswith('_'):
-                print('_Types.%-11s %r' % (a + ':', v))
-
-
 class CFStr(ObjCInstance):
     '''Python wrapper for the ObjC C{CFString} class,
-    creating I{retained} instances, by default.
+       creating I{retained} instances, by default.
     '''
     _str = None
 
     def __new__(cls, ustr):
+        '''New L{CFStr}.
+
+           @param ustr: The string value (str, bytes).
+
+           @return: The string (L{CFStr}).
+        '''
         ustr = str(ustr)
-        ns = libCF.CFStringCreateWithCString(None, str2bytes(ustr), kCFStringEncodingUTF8)
-        # the ObjC class is ._objc_class or __NSCFConstantString
+        ns = libCF.CFStringCreateWithCString(None, str2bytes(ustr),
+                                                   kCFStringEncodingUTF8)
+        # ObjC class is ._objc_class or __NSCFConstantString
         self = super(CFStr, cls).__new__(cls, ns)  # Id_t
         self._str = ustr
         return self
@@ -144,7 +119,7 @@ class CFStr(ObjCInstance):
 
     @property
     def value(self):
-        '''Return the C{CFStr} value as str.
+        '''Get the C{CFStr} value as Python C{str}.
         '''
         if self._str is None:
             self._str = nsString2str(self)
@@ -227,6 +202,12 @@ class NSDecimal(ObjCInstance):
     _SEL   = None
 
     def __new__(cls, py):
+        '''New L{NSDecimal}.
+
+           @param py: The decimal value (C{Decimal} or L{NSDecimal}).
+
+           @return: New L{NSDecimal} (L{ObjCInstance}).
+        '''
         if isinstance(py, NSDecimal):
             py = py.Decimal
         else:
@@ -249,7 +230,7 @@ class NSDecimal(ObjCInstance):
 
     @property
     def double(self):
-        '''Return this C{NSDecimal} as float.
+        '''Get this L{NSDecimal} as a Python C{float}.
         '''
         return self.doubleValue()  # PYCHOK expected
 
@@ -259,7 +240,7 @@ class NSDecimal(ObjCInstance):
 
     @property
     def value(self):
-        '''Return this C{NSDecimal} as Python C{Decimal}.
+        '''Get this L{NSDecimal} as a Python C{Decimal}.
         '''
         d = self.doubleValue()  # PYCHOK expected
         if d.is_integer():
@@ -271,9 +252,16 @@ class NSDecimal(ObjCInstance):
 
 class NSStr(CFStr):
     '''Python wrapper for the ObjC L{NSString} class,
-    creating I{auto-released} instances, by default.
+       creating I{auto-released} instances, by default.
     '''
     def __new__(cls, ustr, auto=True):
+        '''New L{NSStr}.
+
+           @param ustr: The string value (str, bytes).
+           @keyword auto: Retain or auto-release (bool).
+
+           @return: The string (L{NSStr}).
+        '''
         # the ObjC class is .objc_class or __NSCFString
         self = super(NSStr, cls).__new__(cls, ustr)
         if auto:
@@ -282,7 +270,7 @@ class NSStr(CFStr):
 
 
 class at(NSStr):
-    '''Acronym for the L{NSStr} wrapper.
+    '''Acronym for the Python wrapper of L{NSStr}.
     '''
     # XXX Other possible names for this method: at, ampersat, arobe,
     # apenstaartje (little monkey tail), strudel, klammeraffe (spider
@@ -293,12 +281,21 @@ class at(NSStr):
 
 def isNone(obj):
     '''Return True if I{obj} is nil, None, C{NSNone}, etc.
+
+       @param obj: The object (L{ObjCInstance}).
+
+       @return: True or False (C{bool}).
     '''
     return obj in (None, NSnil, NSNone)
 
 
 def nsArray2listuple(ns, ctype=Array_t):  # XXX an NS*Array method?
-    '''Create a Python list or tuple from an C{NSArray}.
+    '''Create a Python C{list} or C{tuple} from an C{NS[Mutable]Array}.
+
+       @param ns: The C{NS[Mutable]Array} (L{ObjCInstance}).
+       @keyword ctype: The array item type (C{ctypes}).
+
+       @return: The array (C{list} or C{tuple}).
     '''
     # XXX order is critial, NSMutableArray before NSArray
     if isInstanceOf(ns, NSMutableArray, NSArray, name='ns') is NSMutableArray:
@@ -311,7 +308,14 @@ def nsArray2listuple(ns, ctype=Array_t):  # XXX an NS*Array method?
 
 
 def nsBoolean2bool(ns, dflt=missing):  # XXX an NSBoolean method?
-    '''Create a Python bool from an C{NSBool[ean]}.
+    '''Create a Python C{bool} from an C{NSBool[ean]}.
+
+       @param ns: The C{NSBool[ean]} (L{ObjCInstance}).
+       @keyword dflt: Default for missing, unobtainable value (C{missing}).
+
+       @return: The bool (C{bool}) of I{dlft}.
+
+       @raise TypeError: Unexpected C{NumberType}.
     '''
     # XXX need allow c_void_p for nested booleans in lists, sets, etc.?
     isInstanceOf(ns, NSNumber, c_void_p, name='ns')
@@ -322,13 +326,13 @@ def nsBoolean2bool(ns, dflt=missing):  # XXX an NSBoolean method?
 def nsBundleRename(nsTitle, match='Python'):
     '''Change the bundle title if the current title matches.
 
-    @param nsTitle: New bundle title (L{NSStr}).
-    @keyword match: Optional, previous title to match (string).
+       @param nsTitle: New bundle title (L{NSStr}).
+       @keyword match: Optional, previous title to match (str).
 
-    @return: The previous bundle title (string) or None.
+       @return: The previous bundle title (str) or None.
 
-    @note: Used to mimick C{NSApplication.setTitle_(nsTitle)},
-           the name of the app shown in the menu bar.
+       @note: Useful to mimick C{NSApplication.setTitle_(nsTitle)},
+              the name of an L{App} shown in the menu bar.
     '''
     t = nsTitle and ns2py(nsTitle)
     if t:
@@ -347,7 +351,12 @@ def nsBundleRename(nsTitle, match='Python'):
 
 
 def nsData2bytes(ns, dflt=b''):  # XXX an NSData method?
-    '''Create Python bytes from C{NSData}.
+    '''Create Python C{bytes} from C{NSData}.
+
+       @param ns: The C{NSData} (L{ObjCInstance}).
+       @keyword dflt: Default for empty C{NSData} (C{bytes}).
+
+       @return: The bytes (C{bytes}) or I{dflt}.
     '''
     isInstanceOf(ns, NSData, name='ns')
     n = ns.length()
@@ -358,15 +367,28 @@ def nsData2bytes(ns, dflt=b''):  # XXX an NSData method?
     return dflt
 
 
-def nsDecimalNumber2decimal(ns):
-    '''Create a Python Decimal from an C{NSDecimalNumber}.
+def nsDecimal2decimal(ns):
+    '''Create a Python C{Decimal} from an C{NSDecimalNumber}.
+
+       @param ns: The C{NSDecimalNumber} (L{ObjCInstance}).
+
+       @return: The decimal (C{Decimal}).
+
+       @raise ValueError: If I{ns} not an C{NSNumber}.
     '''
-    instanceof(ns, NSDecimal, name='ns')
-    return ns.Decimal
+    if isinstance(ns, NSDecimal):
+        return ns.Decimal
+    return ValueError('%s not %s: %r' % ('ns', 'NSDecimal', ns))
 
 
 def nsDictionary2dict(ns, ctype_keys=c_void_p, ctype_vals=c_void_p):  # XXX an NS*Dictionary method?
-    '''Create a Python dict from an C{NSDictionary}.
+    '''Create a Python C{dict} from an C{NS[Mutable]Dictionary}.
+
+       @param ns: The C{NSDictionary} (L{ObjCInstance}).
+       @keyword ctype_keys: The dictionay keys type (C{ctypes}).
+       @keyword ctype_vals: The dictionay values type (C{ctypes}).
+
+       @return: The dict (C{dict}).
     '''
     # <http://Developer.Apple.com/documentation/corefoundation/cfdictionary-rum>
     n = libCF.CFDictionaryGetCount(ns)
@@ -378,7 +400,14 @@ def nsDictionary2dict(ns, ctype_keys=c_void_p, ctype_vals=c_void_p):  # XXX an N
 
 
 def nsIter2(ns, reverse=False):
-    '''Iterate over an C{NS...}'s enumerator.
+    '''Iterate over an C{NS..} objects's (reverse) enumerator.
+
+       @param ns: The C{NS..} object to iterate over (L{ObjCInstance}).
+       @keyword reverse: Reverse or forward order (bool).
+
+       @return: For each iteration, yield 2-Tuple (I{value, raw})
+                where I{value} is the value -a Python Type instance-
+                and I{raw} object.
     '''
     if reverse:
         ns = ns.reverseObjectEnumerator()
@@ -386,13 +415,16 @@ def nsIter2(ns, reverse=False):
         ns = ns.objectEnumerator()
     while True:
         o = ns.nextObject()  # nil for end
-        if o in (NSnil, None):
+        if isNone(o):
             break
         yield ns2Type(o), o
 
 
 def nsLog(fmt, *args):
     '''Formatted write to the console.
+
+       @param fmt: The printf-like format string (str).
+       @param args: Optional arguments to format (C{all positional}).
     '''
     if args:
         fmt %= args
@@ -401,38 +433,65 @@ def nsLog(fmt, *args):
 
 
 def nsNull2none(ns):
-    '''Creat Python None from an C{NS/CFNull}.
+    '''Return Python C{None} for an C{NS/CFNull} or C{nil}.
+
+       @param ns: The C{NS...} (L{ObjCInstance}).
+
+       @return: The singleton (C{None}).
+
+       @raise ValueError: If I{ns} not C{isNone}.
     '''
-    isInstanceOf(ns, NSNull, c_void_p, name='ns')
-    return None
+    if isInstanceOf(ns, NSNull, c_void_p, name='ns') or isNone(ns):
+        return None
+    return ValueError('%s not %s: %r' % ('ns', 'isNone', ns))
 
 
 def nsNumber2num(ns, dflt=missing):  # XXX an NSNumber method?
-    '''Create a Python decimal, int or float from an C{NSNumber}.
+    '''Create a Python C{Decimal}, C{int} or C{float} from an C{NSNumber}.
+
+       @param ns: The C{NSNumber} (L{ObjCInstance}).
+       @keyword dflt: Default for missing, unobtainable value (C{missing}).
+
+       @return: The number (C{Decimal}, C{int} or C{float}).
+
+       @raise TypeError: Unexpected C{NumberType}.
+
+       @raise ValueError: If I{ns} not an C{NSNumber}.
     '''
     # special case for NSDecimal, would become a float
     # since cfType of NSDecimal is kCFNumberDoubleType
     if isinstance(ns, NSDecimal):
-        return nsDecimalNumber2decimal(ns)
+        return ns.Decimal
     # XXX need c_void_p for nested numbers in lists, sets, etc.?
-    isInstanceOf(ns, NSNumber, c_void_p, name='ns')
-
-    return cfNumber2num(ns, dflt=dflt)
+    if isInstanceOf(ns, NSNumber, c_void_p, name='ns'):
+        return cfNumber2num(ns, dflt=dflt)
+    return ValueError('%s not %s: %r' % ('ns', 'NSNumber', ns))
 
 
 def nsOf(inst):
-    '''Return the C{.NS} object of a Python Type instance.
+    '''Return the C{.NS} object of a Python wrapper or Type instance.
+
+       @param inst: The wrapper (L{ObjCInstance} or C{Python Type}).
+
+       @return: The C{.NS} object (C{NS...}).
+
+       @raise TypeError: No C{.NS} for this I{inst}.
     '''
     try:
         return inst.NS
     except AttributeError:  # see also .bases.NS.setter
         if isinstance(inst, (ObjCInstance, c_struct_t, ObjC_t)):
             return inst  # XXXX ????
-    raise TypeError('%s is non-NS: %r' % ('inst', inst))
+    raise TypeError('%s without .NS: %r' % ('inst', inst))
 
 
 def nsSet2set(ns, ctype=Set_t):  # XXX NS*Set method?
-    '''Create a Python set or frozenset from an C{NSSet}.
+    '''Create a Python C{set} or C{frozenset} from an C{NS[Mutable]Set}.
+
+       @param ns: The C{NS[Mutable]Set} (L{ObjCInstance}).
+       @keyword ctype: The set item type (C{ctypes}).
+
+       @return: The set (C{set} or C{frozenset}).
     '''
     if isInstanceOf(ns, NSMutableSet, NSSet, name='ns') is NSSet:
         s = frozenset
@@ -446,7 +505,11 @@ def nsSet2set(ns, ctype=Set_t):  # XXX NS*Set method?
 
 
 def nsString2str(ns, dflt=None):  # XXX an NS*String method
-    '''Create a Python string or unicode from an L{NSStr}.
+    '''Create a Python C{str} or C{unicode} from an C{NS[Mutable]Str[ing]}.
+
+       @param ns: The C{NS[Mutable]Str[ing]} (L{ObjCInstance}).
+
+       @return: The string (C{str} or C{unicode}) or I{dflt}.
     '''
     # XXX need c_void_p for nested strings in lists, sets, etc.?
     if not instanceof(ns, CFStr, NSStr, c_void_p):
@@ -479,22 +542,31 @@ def _CFTypeID2py_items():
 
 
 def ns2py(ns, dflt=None):  # XXX an NSObject method?
-    '''Convert (an instance of) an ObjC class to an instance
-    of the equivalent Python type and value or Python wrapper.
+    '''Convert (an instance of) an ObjC class to an instance of
+       the equivalent Python standard type or wrapper and value.
 
-     - NSArray         -> tuple
-     - NSBoolean       -> bool
-     - NSData          -> bytes
-     - NSDecimalNumber -> Decimal
-     - NSDictionary    -> dict
-     - NSMutableArray  -> list
-     - NSMutableSet    -> set
-     - NSMutableString -> str
-     - NSNumber        -> int or float
-     - NSNull          -> None
-     - NSSet           -> frozenset
-     - NSString        -> str
-     - NSStr/CFStr     -> str
+       @param ns: The C{NS...} (L{ObjCInstance}).
+       @keyword dflt: Default for unhandled, unexpected C{NS...}s (C{None}).
+
+       @return: The value (C{Python type}) or I{dflt}.
+
+       @raise TypeError: Unhandled, unexpected C{TypeID}.
+
+       @note: Conversion map:
+
+        - NSArray         -> tuple
+        - NSBoolean       -> bool
+        - NSData          -> bytes
+        - NSDecimalNumber -> Decimal
+        - NSDictionary    -> dict
+        - NSMutableArray  -> list
+        - NSMutableSet    -> set
+        - NSMutableString -> str
+        - NSNumber        -> int or float
+        - NSNull          -> None
+        - NSSet           -> frozenset
+        - NSString        -> str
+        - NSStr/CFStr     -> str
     '''
     if isinstance(ns, (CFStr, NSStr)):
         return ns.str
@@ -527,7 +599,11 @@ def ns2py(ns, dflt=None):  # XXX an NSObject method?
 
 def ns2Type(ns):
     '''Convert an C{NS/Instance} object to an instance of
-    the corresponding Python Type.
+       the corresponding Python Type and value.
+
+       @param ns: The C{NS...} (L{ObjCInstance}).
+
+       @return: The value (C{Python Type}).
     '''
     try:
         return ns.Type(ns)
@@ -563,175 +639,6 @@ def ns2Type(ns):
     # to expedite future conversions of such class instances
     ns.objc_class._Type = _Type
     return _Type(ns)
-
-
-_NSFalse = NSBool(False)  # singleton
-_NSTrue  = NSBool(True)   # singleton
-
-
-def bool2NS(py):
-    '''Create an C{NSBool} instance from a Python bool.
-    '''
-    return _NSTrue if py else _NSFalse
-
-
-def bytes2NS(py):
-    '''Create an C{NSData} instance from Python bytes.
-    '''
-    def _NSData_length(ns):  # XXX lambda ns: ns.length()
-        return ns.length()
-
-    return _len2NS(py, NSData.dataWithBytes_length_(py, len(py)),
-                      _NSData_length)
-
-
-def dict2NS(py):
-    '''Create an C{NSMutableDictionary} instance from a Python dict.
-    '''
-    # http://Developer.Apple.com/library/content/documentation/Cocoa/
-    #        Conceptual/Collections/Articles/Dictionaries.html
-    ns = NSMutableDictionary.dictionary()
-    for k, v in py.get('iteritems', py.items)():
-        ns.setObject_forKey_(py2NS(v), py2NS(k))
-    return _len2NS(py, ns, libCF.CFDictionaryGetCount)
-
-
-def frozenset2NS(py):
-    '''Create an (immutable) C{NSSet} instance from a Python frozenset.
-    '''
-    return _len2NS(py, NSSet.alloc().initWithSet_(set2NS(py)),
-                       libCF.CFSetGetCount)
-
-
-def int2NS(py):
-    '''Create an C{NSNumber} instance from a Python int or long.
-    '''
-    if abs(py) < 1 << 31:
-        return NSInt(py)
-    elif abs(py) < 1 << 63:
-        return NSLong(py)
-    else:
-        return NSLongLong(py)
-
-
-def _iter2NS(ns, py, getCount):
-    # create NS objects for each Python list, frozen/set, tuple item
-    for ns_obj in map(py2NS, py):
-        ns.addObject_(ns_obj)
-    return _len2NS(py, ns, getCount)
-
-
-def _len2NS(py, ns, getCount):
-    # check the Python len and NS instance count
-    n, m = len(py), getCount(ns)
-    if m != n:
-        t = (ns.objc_classname, m, clip(repr(py)), n)
-        raise AssertionError('%s[%s] vs %s[%s]' % t)
-    return ns
-
-
-def list2NS(py):
-    '''Create an C{NSMutableArray} instance from a Python list.
-    '''
-    return _iter2NS(NSMutableArray.array(), py, libCF.CFArrayGetCount)
-
-
-def None2NS(py):
-    '''Create an C{NSNone} from Python's None.
-    '''
-    if py is None:
-        return NSNone
-    raise TypeError('not %s: %r' % ('None', py))
-
-
-def set2NS(py):
-    '''Create an C{NSMutableSet} instance from a Python set.
-    '''
-    return _iter2NS(NSMutableSet.set(), py, libCF.CFSetGetCount)
-
-
-def str2NS(py, auto=True):
-    '''Create an NSStr instance from a Python str.
-    '''
-    return NSStr(py, auto=auto)
-
-
-def tuple2NS(py):
-    '''Create an immutable C{NSArray} instance from a Python tuple.
-    '''
-    return _len2NS(py, NSArray.alloc().initWithArray_(list2NS(py)),
-                       libCF.CFArrayGetCount)
-
-
-def unicode2NS(py):
-    '''Create an C{NSStr} instance from a Python unicode string.
-    '''
-    return NSStr(py.encode(DEFAULT_UNICODE))  # .stringWithUTF8String_
-
-
-_py2NS = {bool:       bool2NS,
-         _Decimal:    NSDecimal,
-          dict:       dict2NS,
-          float:      NSDouble,
-          frozenset:  frozenset2NS,
-          int:        int2NS,
-          list:       list2NS,
-          set:        set2NS,
-          str:        str2NS,
-          tuple:      tuple2NS,
-          type(None): None2NS}
-try:
-    _py2NS.update({bytearray: bytes2NS,
-                   long:      int2NS,
-                   unicode:   unicode2NS})
-except NameError:  # Python 3+
-    _py2NS.update({bytes: bytes2NS})
-
-
-def py2NS(py):
-    '''Convert (an instance of) a Python object into an
-    instance of the equivalent C{NS...} ObjC class:
-
-     - bool      -> NSBoolean/NSNumber
-     - bytes     -> NSData
-     - bytearray -> NSData
-     - Decimal   -> NSDecimal
-     - dict      -> NSMutableDictionary
-     - float     -> NSNumber
-     - frozenset -> NSSet, immutable
-     - int       -> NSNumber
-     - list      -> NSMutableArray
-     - None      -> NSNull
-     - set       -> NSMutableSet
-     - str       -> NSStr, immutable
-     - tuple     -> NSArray, immutable
-     - unicode   -> NSStr, immutable
-    '''
-    if isinstance(py, ObjCInstance):
-        return py
-    elif isinstance(py, c_void_p):
-        return ObjCInstance(py)
-
-    ns = _py2NS.get(type(py), None)
-    if not ns:
-        # handle Set, other (mutable) Types,
-        # by extending the _py2NS table
-        for ty, ns in _py2NS.items():
-            if isinstance(py, ty):
-                break
-        else:
-            raise TypeError('unhandled %s(%s): %r' % ('type', 'py', py))
-        _py2NS[type(py)] = ns
-    return ns(py)
-
-
-def type2NS(py):
-    '''Return the C{NS/Instance} of/for a Python Type instance.
-    '''
-    try:
-        return py.NS
-    except AttributeError:
-        return py2NS(py)
 
 
 # moved to the end, to let CFStr settle

@@ -28,10 +28,11 @@
 '''Type L{List}, wrapping ObjC C{NSMutableArray}.
 '''
 # all imports listed explicitly to help PyChecker
-from nstypes import list2NS, NSMutableArray, py2NS, _Types
+from nstypes import NSMutableArray
+from pytypes import list2NS, py2NS
 from runtime import isInstanceOf
 from tuples  import _at, Tuple
-from utils   import missing
+from utils   import missing, _Types
 
 try:
     from itertools import zip_longest
@@ -39,7 +40,7 @@ except ImportError:  # Python 2-
     from itertools import izip_longest as zip_longest
 
 __all__ = ('List',)
-__version__ = '18.04.21'
+__version__ = '18.04.24'
 
 
 class List(Tuple):

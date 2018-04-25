@@ -29,14 +29,14 @@
 '''
 # all imports listed explicitly to help PyChecker
 from bases   import _Type0
-from nstypes import NSDictionary, nsIter2, NSMutableDictionary, \
-                    NSnil, ns2Type, py2NS, type2NS, _Types
+from nstypes import NSDictionary, nsIter2, NSMutableDictionary, NSnil, ns2Type
+from pytypes import py2NS, type2NS
 from runtime import isImmutable, isInstanceOf, ObjCClass, ObjCInstance
-from utils   import instanceof, missing
+from utils   import instanceof, missing, _Types
 
 __all__ = ('Dict',
            'FrozenDict')
-__version__ = '18.04.21'
+__version__ = '18.04.24'
 
 
 def _dict_cmp(dict1, dict2):

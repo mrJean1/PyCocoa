@@ -114,8 +114,8 @@
         instances, by default.</em>
     <ul>
     <li> <strong class="uidlink"><a href="pycocoa.nstypes.at-class.html">pycocoa.nstypes.at</a></strong>:
-      <em class="summary">Acronym for the <a href="pycocoa.nstypes.NSStr-class.html" 
-        class="link">NSStr</a> wrapper.</em>
+      <em class="summary">Acronym for the Python wrapper of <a 
+        href="pycocoa.nstypes.NSStr-class.html" class="link">NSStr</a>.</em>
     </li>
     </ul>
     </li>
@@ -127,16 +127,17 @@
     </ul>
     </li>
     <li> <strong class="uidlink"><a href="pycocoa.runtime.ObjCMethod-class.html">pycocoa.runtime.ObjCMethod</a></strong>:
-      <em class="summary">This represents an unbound ObjC method (really an <a 
+      <em class="summary">Represent an unbound ObjC class or instance method (really an <a 
         href="pycocoa.octypes.IMP_t-class.html" class="link">IMP_t</a>).</em>
     <ul>
     <li> <strong class="uidlink"><a href="pycocoa.runtime.ObjCClassMethod-class.html">pycocoa.runtime.ObjCClassMethod</a></strong>:
-      <em class="summary">Only to distinguish class from instance methods.</em>
+      <em class="summary">Only to distinguish class methods from instance methods.</em>
     </li>
     </ul>
     </li>
     <li> <strong class="uidlink"><a href="pycocoa.runtime.ObjCSubclass-class.html">pycocoa.runtime.ObjCSubclass</a></strong>:
-      <em class="summary">Use this to create a sub-class of an existing ObjC class.</em>
+      <em class="summary">Python class to create an ObjC sub-class of an existing ObjC 
+        (super-)class.</em>
     </li>
     </ul>
     </li>
@@ -149,21 +150,24 @@
     <li> <strong class="uidlink"><a href="pycocoa.octypes.c_struct_t-class.html">pycocoa.octypes.c_struct_t</a></strong>:
       <em class="summary">Base type to pretty-print <i>ctypes</i> <code>Structures</code>.</em>
     <ul>
-    <li> <strong class="uidlink"><a href="pycocoa.octypes.CGRange_t-class.html">pycocoa.octypes.CGRange_t</a></strong>:
-      <em class="summary">ObjC <code>struct</code> with <i>.location</i> and <i>.length</i> 
-        (CF/Index-s).</em>
+    <li> <strong class="uidlink"><a href="pycocoa.octypes.CFRange_t-class.html">pycocoa.octypes.CFRange_t</a></strong>:
+      <em class="summary">ObjC <code>struct</code> with fields <code>loc[ation]</code> and 
+        <code>len[gth]</code> (both <code>CFIndex_t</code>).</em>
     </li>
     <li> <strong class="uidlink"><a href="pycocoa.octypes.NSPoint_t-class.html">pycocoa.octypes.NSPoint_t</a></strong>:
-      <em class="summary">ObjC <code>struct</code> with <code>.x</code> and <code>.y.</code> 
-        (both <code>CGFloat</code>)</em>
+      <em class="summary">ObjC <code>struct</code> with fields <code>x</code> and 
+        <code>y</code> (both <code>CGFloat_t</code>).</em>
     </li>
     <li> <strong class="uidlink"><a href="pycocoa.octypes.NSRange_t-class.html">pycocoa.octypes.NSRange_t</a></strong>:
-      <em class="summary">ObjC <code>struct</code> with <code>.loc[ation]</code> and 
-        <code>.len[gth]</code> (both <code>NSUInteger</code>).</em>
+      <em class="summary">ObjC <code>struct</code> with fields <code>loc[ation]</code> and 
+        <code>len[gth]</code> (both <code>NSUInteger_t</code>).</em>
     </li>
     <li> <strong class="uidlink"><a href="pycocoa.octypes.NSRect_t-class.html">pycocoa.octypes.NSRect_t</a></strong>:
-      <em class="summary">ObjC <code>struct</code> with <code>.origin</code> and 
-        <code>.size</code>.</em>
+      <em class="summary">ObjC <code>struct</code> with fields <code>origin</code> and 
+        <code>size</code> (<a href="pycocoa.octypes.NSPoint_t-class.html" 
+        class="link">NSPoint_t</a>, <a 
+        href="pycocoa.octypes.NSSize_t-class.html" 
+        class="link">NSSize_t</a>).</em>
     <ul>
     <li> <strong class="uidlink"><a href="pycocoa.octypes.NSRect4_t-class.html">pycocoa.octypes.NSRect4_t</a></strong>:
       <em class="summary">ObjC <code>struct</code>, like <a 
@@ -173,20 +177,20 @@
     </ul>
     </li>
     <li> <strong class="uidlink"><a href="pycocoa.octypes.NSSize_t-class.html">pycocoa.octypes.NSSize_t</a></strong>:
-      <em class="summary">ObjC <code>struct</code> with <code>.width</code> and 
-        <code>.height</code>.</em>
+      <em class="summary">ObjC <code>struct</code> with fields <code>width</code> and 
+        <code>height</code> (both <code>CGFloat_t</code>).</em>
     </li>
     <li> <strong class="uidlink"><a href="pycocoa.octypes.objc_method_description_t-class.html">pycocoa.octypes.objc_method_description_t</a></strong>:
-      <em class="summary">ObjC <code>struct</code> with <code>.name</code> and 
-        <code>.types</code> (<code>SEL_t</code>, <code>c_char_p</code>).</em>
+      <em class="summary">ObjC <code>struct</code> with fields <code>name</code> and 
+        <code>types</code> (<code>SEL_t</code>, <code>c_char_p</code>).</em>
     </li>
     <li> <strong class="uidlink"><a href="pycocoa.octypes.objc_property_attribute_t-class.html">pycocoa.octypes.objc_property_attribute_t</a></strong>:
-      <em class="summary">ObjC <code>struct</code> with <code>.name</code> and 
-        <code>.value</code> (both <code>c_char_p</code>).</em>
+      <em class="summary">ObjC <code>struct</code> with fields <code>name</code> and 
+        <code>value</code> (both <code>c_char_p</code>).</em>
     </li>
     <li> <strong class="uidlink"><a href="pycocoa.octypes.objc_super_t-class.html">pycocoa.octypes.objc_super_t</a></strong>:
-      <em class="summary">ObjC <code>struct</code> with <code>.receiver</code> and 
-        <code>.class</code> (<code>Id_t</code>, <code>Class_t</code>).</em>
+      <em class="summary">ObjC <code>struct</code> with fields <code>receiver</code> and 
+        <code>class</code> (<code>Id_t</code>, <code>Class_t</code>).</em>
     </li>
     </ul>
     </li>
@@ -195,19 +199,19 @@
     <li> <strong class="uidlink">_ctypes._SimpleCData</strong>:
       <em class="summary">XXX to be provided</em>
     <ul>
-    <li> <strong class="uidlink"><a href="ctypes.c_uint.__ctype_be__-class.html">ctypes.c_uint.__ctype_be__</a></strong>
-    </li>
-    <li> <strong class="uidlink"><a href="ctypes.c_double.__ctype_be__-class.html">ctypes.c_double.__ctype_be__</a></strong>
-    </li>
-    <li> <strong class="uidlink"><a href="ctypes.c_ulong.__ctype_be__-class.html">ctypes.c_ulong.__ctype_be__</a></strong>
-    </li>
     <li> <strong class="uidlink"><a href="ctypes.c_ushort.__ctype_be__-class.html">ctypes.c_ushort.__ctype_be__</a></strong>
     </li>
-    <li> <strong class="uidlink"><a href="ctypes.c_float.__ctype_be__-class.html">ctypes.c_float.__ctype_be__</a></strong>
+    <li> <strong class="uidlink"><a href="ctypes.c_uint.__ctype_be__-class.html">ctypes.c_uint.__ctype_be__</a></strong>
+    </li>
+    <li> <strong class="uidlink"><a href="ctypes.c_int.__ctype_be__-class.html">ctypes.c_int.__ctype_be__</a></strong>
     </li>
     <li> <strong class="uidlink"><a href="ctypes.c_long.__ctype_be__-class.html">ctypes.c_long.__ctype_be__</a></strong>
     </li>
-    <li> <strong class="uidlink"><a href="ctypes.c_int.__ctype_be__-class.html">ctypes.c_int.__ctype_be__</a></strong>
+    <li> <strong class="uidlink"><a href="ctypes.c_ulong.__ctype_be__-class.html">ctypes.c_ulong.__ctype_be__</a></strong>
+    </li>
+    <li> <strong class="uidlink"><a href="ctypes.c_float.__ctype_be__-class.html">ctypes.c_float.__ctype_be__</a></strong>
+    </li>
+    <li> <strong class="uidlink"><a href="ctypes.c_double.__ctype_be__-class.html">ctypes.c_double.__ctype_be__</a></strong>
     </li>
     <li> <strong class="uidlink">ctypes.c_bool</strong>
     <ul>
@@ -236,7 +240,7 @@
       <em class="summary">Base type to pretty-print <i>ctypes</i> <code>c_void_p</code>.</em>
     <ul>
     <li> <strong class="uidlink"><a href="pycocoa.octypes.Allocator_t-class.html">pycocoa.octypes.Allocator_t</a></strong>:
-      <em class="summary">ObjC allocator type.</em>
+      <em class="summary">ObjC <code>CFAllocatorRef</code> type.</em>
     </li>
     <li> <strong class="uidlink"><a href="pycocoa.octypes.Block_t-class.html">pycocoa.octypes.Block_t</a></strong>:
       <em class="summary">ObjC <code>block</code> type.</em>
@@ -248,10 +252,13 @@
       <em class="summary">ObjC <code>Id/self</code> type, encoding b'@'.</em>
     <ul>
     <li> <strong class="uidlink"><a href="pycocoa.octypes.Class_t-class.html">pycocoa.octypes.Class_t</a></strong>:
-      <em class="summary">ObjC <code>class</code> type, encoding b'#'.</em>
+      <em class="summary">ObjC <code>Class</code> type, encoding b'#'.</em>
     </li>
     <li> <strong class="uidlink"><a href="pycocoa.octypes.Protocol_t-class.html">pycocoa.octypes.Protocol_t</a></strong>:
       <em class="summary">ObjC <code>protocol</code> type.</em>
+    </li>
+    <li> <strong class="uidlink"><a href="pycocoa.octypes.RunLoop_t-class.html">pycocoa.octypes.RunLoop_t</a></strong>:
+      <em class="summary">ObjC <code>CFRunLoopRef</code> type.</em>
     </li>
     <li> <strong class="uidlink"><a href="pycocoa.octypes.Union_t-class.html">pycocoa.octypes.Union_t</a></strong>:
       <em class="summary">ObjC <code>union</code> type.</em>
@@ -296,7 +303,7 @@
     </li>
     </ul>
     </li>
-    <li> <strong class="uidlink">pycocoa.nstypes._Constants</strong>:
+    <li> <strong class="uidlink">pycocoa.utils._Constants</strong>:
       <em class="summary">Only constant, readable attributes.</em>
     <ul>
     <li> <strong class="uidlink"><a href="pycocoa.windows.Style-class.html">pycocoa.windows.Style</a></strong>:
@@ -373,8 +380,8 @@
       <em class="summary">Basic Type with app and delegate.</em>
     <ul>
     <li> <strong class="uidlink"><a href="pycocoa.menus.Separator-class.html">pycocoa.menus.Separator</a></strong>:
-      <em class="summary">Menu items separator Python Type, wrapping ObjC 
-        <code>NSMenuItem</code>.</em>
+      <em class="summary">Menu separator Python Type, wrapping ObjC 
+        <code>NSMenuItem.separatorItem</code>.</em>
     </li>
     <li> <strong class="uidlink">pycocoa.bases._Type2</strong>:
       <em class="summary">Basic Type with app, delegate, tag and title.</em>
@@ -491,7 +498,7 @@
 <table border="0" cellpadding="0" cellspacing="0" width="100%%">
   <tr>
     <td align="left" class="footer">
-    Generated by Epydoc 3.0.1 on Sun Apr 22 21:13:09 2018
+    Generated by Epydoc 3.0.1 on Tue Apr 24 20:38:09 2018
     </td>
     <td align="right" class="footer">
       <a target="mainFrame" href="http://epydoc.sourceforge.net"

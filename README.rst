@@ -19,6 +19,7 @@ the `VLC App`_ and the corresponding `Python-VLC`_ binding.
 
 The tests and examples have only been run with 64-bit Python 2.7.14 and
 3.6.5 (with VLC_ 2.2.6 and 3.0.1) and only on macOS 10.13.4 High Sierra.
+PyCocoa has *not* been tested on iOS nor with 32-bit Python.
 
 All PyCocoa source code has been statically checked_ with PyChecker_,
 PyFlakes_, PyCodeStyle_ (formerly Pep8) and McCabe_ using 64-bit Python
@@ -34,7 +35,7 @@ Two alternatives to PyCocoa are (a) PyObjC_, the most comprehensive
 Python to Objective-C bridge and (b) `Rubicon-ObjC`_ for Python 3.5+,
 taking advantage of Python's new typing_ annotations.
 
-*Last updated: Apr 21, 2018.*
+*Last updated: Apr 24, 2018.*
 
 .. _checked: http://GitHub.com/ActiveState/code/tree/master/recipes/Python/546532_PyChecker_postprocessor
 .. _cocoa-python: http://GitHub.com/phillip-nguyen/cocoa-python

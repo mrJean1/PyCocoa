@@ -64,7 +64,7 @@
 
 <hr />
 <div class="fields">      <p><strong>Version:</strong>
-        18.04.21
+        18.04.24
       </p>
 </div><!-- ==================== FUNCTIONS ==================== -->
 <a name="section-Functions"></a>
@@ -80,10 +80,10 @@
     </td><td class="summary">
       <table width="100%" cellpadding="0" cellspacing="0" border="0">
         <tr>
-          <td><span class="summary-sig"><a href="pycocoa.getters-module.html#get_cfunctype" class="summary-sig-name">get_cfunctype</a>(<span class="summary-sig-arg">encoding</span>,
+          <td><span class="summary-sig"><a href="pycocoa.getters-module.html#get_c_func_t" class="summary-sig-name">get_c_func_t</a>(<span class="summary-sig-arg">encoding</span>,
         <span class="summary-sig-arg">codes</span>=<span class="summary-sig-default">None</span>)</span><br />
-      Get the <code>ctypes</code> function type for a given signature type 
-      encoding.</td>
+      Get the <code>ctypes</code> function type for a given function 
+      signature.</td>
           <td align="right" valign="top">
             
             
@@ -99,7 +99,7 @@
     </td><td class="summary">
       <table width="100%" cellpadding="0" cellspacing="0" border="0">
         <tr>
-          <td><span class="summary-sig"><a name="get_class"></a><span class="summary-sig-name">get_class</span>(<span class="summary-sig-arg">name</span>)</span><br />
+          <td><span class="summary-sig"><a href="pycocoa.getters-module.html#get_class" class="summary-sig-name">get_class</a>(<span class="summary-sig-arg">name</span>)</span><br />
       Get a registered ObjC class by name.</td>
           <td align="right" valign="top">
             
@@ -134,7 +134,7 @@
     </td><td class="summary">
       <table width="100%" cellpadding="0" cellspacing="0" border="0">
         <tr>
-          <td><span class="summary-sig"><a name="get_classname"></a><span class="summary-sig-name">get_classname</span>(<span class="summary-sig-arg">clas</span>,
+          <td><span class="summary-sig"><a href="pycocoa.getters-module.html#get_classname" class="summary-sig-name">get_classname</a>(<span class="summary-sig-arg">clas</span>,
         <span class="summary-sig-arg">dflt</span>=<span class="summary-sig-default">missing()</span>)</span><br />
       Get the name of an ObjC class.</td>
           <td align="right" valign="top">
@@ -152,7 +152,7 @@
     </td><td class="summary">
       <table width="100%" cellpadding="0" cellspacing="0" border="0">
         <tr>
-          <td><span class="summary-sig"><a name="get_classnameof"></a><span class="summary-sig-name">get_classnameof</span>(<span class="summary-sig-arg">obj</span>,
+          <td><span class="summary-sig"><a href="pycocoa.getters-module.html#get_classnameof" class="summary-sig-name">get_classnameof</a>(<span class="summary-sig-arg">obj</span>,
         <span class="summary-sig-arg">dflt</span>=<span class="summary-sig-default">missing()</span>)</span><br />
       Get the name of the ObjC class of an object.</td>
           <td align="right" valign="top">
@@ -170,7 +170,7 @@
     </td><td class="summary">
       <table width="100%" cellpadding="0" cellspacing="0" border="0">
         <tr>
-          <td><span class="summary-sig"><a name="get_classof"></a><span class="summary-sig-name">get_classof</span>(<span class="summary-sig-arg">obj</span>)</span><br />
+          <td><span class="summary-sig"><a href="pycocoa.getters-module.html#get_classof" class="summary-sig-name">get_classof</a>(<span class="summary-sig-arg">obj</span>)</span><br />
       Get the ObjC class of an object.</td>
           <td align="right" valign="top">
             
@@ -187,10 +187,10 @@
     </td><td class="summary">
       <table width="100%" cellpadding="0" cellspacing="0" border="0">
         <tr>
-          <td><span class="summary-sig"><a name="get_ivar"></a><span class="summary-sig-name">get_ivar</span>(<span class="summary-sig-arg">obj</span>,
+          <td><span class="summary-sig"><a href="pycocoa.getters-module.html#get_ivar" class="summary-sig-name">get_ivar</a>(<span class="summary-sig-arg">obj</span>,
         <span class="summary-sig-arg">name</span>,
         <span class="summary-sig-arg">ctype</span>=<span class="summary-sig-default">None</span>)</span><br />
-      Get the value of an instance variable.</td>
+      Get the value of an instance variable (ivar).</td>
           <td align="right" valign="top">
             
             
@@ -208,8 +208,8 @@
         <tr>
           <td><span class="summary-sig"><a href="pycocoa.getters-module.html#get_ivars" class="summary-sig-name">get_ivars</a>(<span class="summary-sig-arg">clas</span>,
         <span class="summary-sig-arg">*prefixes</span>)</span><br />
-      Yield all instance variables of an ObjC class with a name starting 
-      with one of the given prefixes.</td>
+      Yield all instance variables (ivar) of an ObjC class with a name 
+      starting with one of the given prefixes.</td>
           <td align="right" valign="top">
             
             
@@ -296,7 +296,7 @@
     </td><td class="summary">
       <table width="100%" cellpadding="0" cellspacing="0" border="0">
         <tr>
-          <td><span class="summary-sig"><a href="pycocoa.getters-module.html#get_properties" class="summary-sig-name">get_properties</a>(<span class="summary-sig-arg">cls_or_proto</span>,
+          <td><span class="summary-sig"><a href="pycocoa.getters-module.html#get_properties" class="summary-sig-name">get_properties</a>(<span class="summary-sig-arg">clas_or_proto</span>,
         <span class="summary-sig-arg">*prefixes</span>)</span><br />
       Yield all properties of an ObjC class or protocol with a name 
       starting with one of the given prefixes.</td>
@@ -413,6 +413,24 @@
       
     </td>
   </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a href="pycocoa.getters-module.html#get_superclassnameof" class="summary-sig-name">get_superclassnameof</a>(<span class="summary-sig-arg">obj</span>,
+        <span class="summary-sig-arg">dflt</span>=<span class="summary-sig-default">missing()</span>)</span><br />
+      Get the name of the ObjC super-class of an object.</td>
+          <td align="right" valign="top">
+            
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
 </table>
 <!-- ==================== FUNCTION DETAILS ==================== -->
 <a name="section-FunctionDetails"></a>
@@ -423,14 +441,14 @@
     <span class="table-header">Function Details</span></td>
 </tr>
 </table>
-<a name="get_cfunctype"></a>
+<a name="get_c_func_t"></a>
 <div>
 <table class="details" border="1" cellpadding="3"
        cellspacing="0" width="100%" bgcolor="white">
 <tr><td>
   <table width="100%" cellpadding="0" cellspacing="0" border="0">
   <tr valign="top"><td>
-  <h3 class="epydoc"><span class="sig"><span class="sig-name">get_cfunctype</span>(<span class="sig-arg">encoding</span>,
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">get_c_func_t</span>(<span class="sig-arg">encoding</span>,
         <span class="sig-arg">codes</span>=<span class="sig-default">None</span>)</span>
   </h3>
   </td><td align="right" valign="top"
@@ -438,18 +456,55 @@
     </td>
   </tr></table>
   
-  <p>Get the <code>ctypes</code> function type for a given signature type 
-  encoding.</p>
-  <p>Limited to basic type encodings and pointers to basic type encodings 
-  and does not handle arrays, bitfiels, arbitrary structs and unions.</p>
-  <p>The <i>signature</i> is a <code>bytes</code> object and not unicode 
-  and <i>codes</i> is a list of the individual type encodings.  If 
-  <i>codes</i> is not supplied, it will be created by <a 
-  href="pycocoa.octypes-module.html#split_encoding" 
-  class="link">split_encoding</a> the signature (not <a 
-  href="pycocoa.octypes-module.html#split_emcoding2" 
-  class="link">split_emcoding2</a>).</p>
+  <p>Get the <code>ctypes</code> function type for a given function 
+  signature.</p>
   <dl class="fields">
+    <dt>Parameters:</dt>
+    <dd><ul class="nomargin-top">
+        <li><strong class="pname"><code>encoding</code></strong> - Type encoding of the signature (<code>str</code> or 
+          <code>bytes</code>).</li>
+        <li><strong class="pname"><code>codes</code></strong> - The individual type codes (<code>type encoding</code>[])</li>
+    </ul></dd>
+  </dl>
+<div class="fields">      <p><strong>Note:</strong>
+        The signature <i>encoding</i> is a <code>str</code> or 
+        <code>bytes</code>, not unicode and <i>codes</i> is a list of the 
+        individual type encodings, limited to basic type encodings and 
+        pointers to basic type encodings. Does not handle 
+        <code>array</code>s, <code>bitfield</code>s, arbitrary 
+        <code>struct</code>s and <code>union</code>s.  If keyword 
+        <i>codes</i> is not supplied, it will be created from the 
+        <i>signature</i> by <a 
+        href="pycocoa.octypes-module.html#split_encoding" 
+        class="link">split_encoding</a>, not <a 
+        href="pycocoa.octypes-module.html#split_emcoding2" 
+        class="link">split_emcoding2</a>.
+      </p>
+</div></td></tr></table>
+</div>
+<a name="get_class"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">get_class</span>(<span class="sig-arg">name</span>)</span>
+  </h3>
+  </td><td align="right" valign="top"
+    >&nbsp;
+    </td>
+  </tr></table>
+  
+  <p>Get a registered ObjC class by name.</p>
+  <dl class="fields">
+    <dt>Parameters:</dt>
+    <dd><ul class="nomargin-top">
+        <li><strong class="pname"><code>name</code></strong> - The class name (str).</li>
+    </ul></dd>
+    <dt>Returns:</dt>
+        <dd>The class (<a href="pycocoa.octypes.Class_t-class.html" 
+          class="link">Class_t</a>) if found, None otherwise.</dd>
   </dl>
 </td></tr></table>
 </div>
@@ -469,9 +524,135 @@
   
   <p>Yield all loaded ObjC classes with a name starting with one of the 
   given prefixes.</p>
-  <p>For each class yield a 2-tuple (<i>name, class</i>) where <i>name</i> 
-  is the class name and <i>class</i> is the ObjC class object.</p>
   <dl class="fields">
+    <dt>Parameters:</dt>
+    <dd><ul class="nomargin-top">
+        <li><strong class="pname"><code>prefixes</code></strong> - No, one or more class names to match (str-s).</li>
+    </ul></dd>
+    <dt>Returns:</dt>
+        <dd>For each class yield a 2-tuple (<i>name, class</i>) where 
+          <i>name</i> is the class name and <i>class</i> is the ObjC <a 
+          href="pycocoa.octypes.Class_t-class.html" 
+          class="link">Class_t</a> object.</dd>
+  </dl>
+</td></tr></table>
+</div>
+<a name="get_classname"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">get_classname</span>(<span class="sig-arg">clas</span>,
+        <span class="sig-arg">dflt</span>=<span class="sig-default">missing()</span>)</span>
+  </h3>
+  </td><td align="right" valign="top"
+    >&nbsp;
+    </td>
+  </tr></table>
+  
+  <p>Get the name of an ObjC class.</p>
+  <dl class="fields">
+    <dt>Parameters:</dt>
+    <dd><ul class="nomargin-top">
+        <li><strong class="pname"><code>clas</code></strong> - The class (<a href="pycocoa.octypes.Class_t-class.html" 
+          class="link">Class_t</a>).</li>
+    </ul></dd>
+    <dt>Returns:</dt>
+        <dd>The class name (str).</dd>
+    <dt>Raises:</dt>
+    <dd><ul class="nomargin-top">
+        <li><code><strong class='fraise'>ValueError</strong></code> - Invalid <i>clas</i>, iff no <i>dflt</i> provided.</li>
+    </ul></dd>
+  </dl>
+</td></tr></table>
+</div>
+<a name="get_classnameof"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">get_classnameof</span>(<span class="sig-arg">obj</span>,
+        <span class="sig-arg">dflt</span>=<span class="sig-default">missing()</span>)</span>
+  </h3>
+  </td><td align="right" valign="top"
+    >&nbsp;
+    </td>
+  </tr></table>
+  
+  <p>Get the name of the ObjC class of an object.</p>
+  <dl class="fields">
+    <dt>Parameters:</dt>
+    <dd><ul class="nomargin-top">
+        <li><strong class="pname"><code>obj</code></strong> - The object (<code>Object</code> or <a 
+          href="pycocoa.octypes.Id_t-class.html" class="link">Id_t</a>).</li>
+    </ul></dd>
+    <dt>Returns:</dt>
+        <dd>The object's class name (str).</dd>
+    <dt>Raises:</dt>
+    <dd><ul class="nomargin-top">
+        <li><code><strong class='fraise'>ValueError</strong></code> - Invalid <i>obj</i>, iff no <i>dflt</i> provided.</li>
+    </ul></dd>
+  </dl>
+</td></tr></table>
+</div>
+<a name="get_classof"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">get_classof</span>(<span class="sig-arg">obj</span>)</span>
+  </h3>
+  </td><td align="right" valign="top"
+    >&nbsp;
+    </td>
+  </tr></table>
+  
+  <p>Get the ObjC class of an object.</p>
+  <dl class="fields">
+    <dt>Parameters:</dt>
+    <dd><ul class="nomargin-top">
+        <li><strong class="pname"><code>obj</code></strong> - The object (<code>Object</code> or <a 
+          href="pycocoa.octypes.Id_t-class.html" class="link">Id_t</a>).</li>
+    </ul></dd>
+    <dt>Returns:</dt>
+        <dd>The object's class (<a href="pycocoa.octypes.Class_t-class.html" 
+          class="link">Class_t</a>) if found, None otherwise.</dd>
+  </dl>
+</td></tr></table>
+</div>
+<a name="get_ivar"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">get_ivar</span>(<span class="sig-arg">obj</span>,
+        <span class="sig-arg">name</span>,
+        <span class="sig-arg">ctype</span>=<span class="sig-default">None</span>)</span>
+  </h3>
+  </td><td align="right" valign="top"
+    >&nbsp;
+    </td>
+  </tr></table>
+  
+  <p>Get the value of an instance variable (ivar).</p>
+  <dl class="fields">
+    <dt>Parameters:</dt>
+    <dd><ul class="nomargin-top">
+        <li><strong class="pname"><code>obj</code></strong> - The object (<code>Object</code> or <a 
+          href="pycocoa.octypes.Id_t-class.html" class="link">Id_t</a>).</li>
+        <li><strong class="pname"><code>name</code></strong> - The instance variable name (str).</li>
+        <li><strong class="pname"><code>ctype</code></strong> - The instance variable type (<code>ctypes</code>),</li>
+    </ul></dd>
+    <dt>Returns:</dt>
+        <dd>The ivar value (<code>any</code>) if found, None otherwise.</dd>
   </dl>
 </td></tr></table>
 </div>
@@ -490,19 +671,21 @@
     </td>
   </tr></table>
   
-  <p>Yield all instance variables of an ObjC class with a name starting 
-  with one of the given prefixes.</p>
+  <p>Yield all instance variables (ivar) of an ObjC class with a name 
+  starting with one of the given prefixes.</p>
   <dl class="fields">
     <dt>Parameters:</dt>
     <dd><ul class="nomargin-top">
-        <li><strong class="pname"><code>clas</code></strong> - Th class (<code>Class</code>).</li>
-        <li><strong class="pname"><code>prefixes</code></strong> - No, one or more <i>ivar</i> names to match (string).</li>
+        <li><strong class="pname"><code>clas</code></strong> - The class (<a href="pycocoa.octypes.Class_t-class.html" 
+          class="link">Class_t</a>).</li>
+        <li><strong class="pname"><code>prefixes</code></strong> - No, one or more ivar names to match (str-s).</li>
     </ul></dd>
     <dt>Returns:</dt>
-        <dd>The <i>ivar</i>s, each yielded as a 4-tuple (<i>name, encoding, 
-          ctype, ivar</i>) where <i>name</i> is the ivar name, 
-          <i>encoding</i> is the ivar's type encoding, <i>ctype</i> is the 
-          ivar's <code>ctypes</code> type and <i>ivar</i> the <i>Ivar</i> 
+        <dd>For each ivar yield a 4-tuple (<i>name, encoding, ctype, 
+          ivar</i>) where <i>name</i> is the ivar name, <i>encoding</i> is 
+          the ivar's type encoding, <i>ctype</i> is the ivar's 
+          <code>ctypes</code> type and <i>ivar</i> the <a 
+          href="pycocoa.octypes.Ivar_t-class.html" class="link">Ivar_t</a> 
           object.</dd>
   </dl>
 </td></tr></table>
@@ -525,10 +708,12 @@
   <dl class="fields">
     <dt>Parameters:</dt>
     <dd><ul class="nomargin-top">
-        <li><strong class="pname"><code>clas</code></strong> - Class (<code>Class</code>).</li>
+        <li><strong class="pname"><code>clas</code></strong> - Class (<a href="pycocoa.octypes.Class_t-class.html" 
+          class="link">Class_t</a>).</li>
     </ul></dd>
     <dt>Returns:</dt>
-        <dd>The parent <i>class</i>es, yielded in bottom-up order.</dd>
+        <dd>The parent classes (<a href="pycocoa.octypes.Class_t-class.html" 
+          class="link">Class_t</a>), in bottom-up order.</dd>
   </dl>
 </td></tr></table>
 </div>
@@ -550,10 +735,11 @@
   <dl class="fields">
     <dt>Parameters:</dt>
     <dd><ul class="nomargin-top">
-        <li><strong class="pname"><code>name</code></strong> - Metaclass (string).</li>
+        <li><strong class="pname"><code>name</code></strong> - The metaclass (str).</li>
     </ul></dd>
     <dt>Returns:</dt>
-        <dd>The <code>MetaClass</code> if found, None otherwise.</dd>
+        <dd>The metaclass (<a href="pycocoa.octypes.Class_t-class.html" 
+          class="link">Class_t</a>) if found, None otherwise.</dd>
   </dl>
 </td></tr></table>
 </div>
@@ -576,11 +762,13 @@
   <dl class="fields">
     <dt>Parameters:</dt>
     <dd><ul class="nomargin-top">
-        <li><strong class="pname"><code>clas</code></strong> - Class (<code>Class</code>).</li>
-        <li><strong class="pname"><code>name</code></strong> - Method name (string).</li>
+        <li><strong class="pname"><code>clas</code></strong> - Class (<a href="pycocoa.octypes.Class_t-class.html" 
+          class="link">Class_t</a>).</li>
+        <li><strong class="pname"><code>name</code></strong> - Method name (str).</li>
     </ul></dd>
     <dt>Returns:</dt>
-        <dd>The <code>Method</code> if found, None otherwise.</dd>
+        <dd>The method (<a href="pycocoa.octypes.Method_t-class.html" 
+          class="link">Method_t</a>) if found, None otherwise.</dd>
   </dl>
 </td></tr></table>
 </div>
@@ -601,16 +789,28 @@
   
   <p>Yield all methods of an ObjC class with a name starting with one of 
   the given prefixes.</p>
-  <p>For each method yield a 4-tuple (<i>name, encoding, rargtypes, 
-  method</i>), where <i>name</i> is the method name, <i>encoding</i> is the
-  type encoding of the method signature including the return type, 
-  <i>rargtypes</i> the <code>ctypes</code> signature, the argtypes list** 
-  preceeded by the restype and <i>method</i> the <i>Method</i> object.</p>
-  <p>**) In Python 3+ <i>rargtypes</i> is a <code>map</code> object, not a 
-  list.</p>
   <dl class="fields">
+    <dt>Parameters:</dt>
+    <dd><ul class="nomargin-top">
+        <li><strong class="pname"><code>clas</code></strong> - The class (<a href="pycocoa.octypes.Class_t-class.html" 
+          class="link">Class_t</a>).</li>
+        <li><strong class="pname"><code>prefixes</code></strong> - No, one or more method names to match (str-s).</li>
+    </ul></dd>
+    <dt>Returns:</dt>
+        <dd>For each method yield a 4-tuple (<i>name, encoding, rargtypes, 
+          method</i>), where <i>name</i> is the method name, 
+          <i>encoding</i> is the type encoding of the method signature 
+          including the return type, <i>rargtypes</i> the 
+          <code>ctypes</code> signature, the argtypes <code>list</code>** 
+          preceeded by the restype and <i>method</i> the <a 
+          href="pycocoa.octypes.Method_t-class.html" 
+          class="link">Method_t</a> object.</dd>
   </dl>
-</td></tr></table>
+<div class="fields">      <p><strong>Note:</strong>
+        In Python 3+ <i>rargtypes</i> is a <code>map</code> object, not a 
+        <code>list</code>.
+      </p>
+</div></td></tr></table>
 </div>
 <a name="get_properties"></a>
 <div>
@@ -619,7 +819,7 @@
 <tr><td>
   <table width="100%" cellpadding="0" cellspacing="0" border="0">
   <tr valign="top"><td>
-  <h3 class="epydoc"><span class="sig"><span class="sig-name">get_properties</span>(<span class="sig-arg">cls_or_proto</span>,
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">get_properties</span>(<span class="sig-arg">clas_or_proto</span>,
         <span class="sig-arg">*prefixes</span>)</span>
   </h3>
   </td><td align="right" valign="top"
@@ -629,54 +829,69 @@
   
   <p>Yield all properties of an ObjC class or protocol with a name starting
   with one of the given prefixes.</p>
-  <p>For each property, yield a 3-tuple (<i>name</i>, <i>attributes</i>, 
-  <i>setter</i>, <i>property</i>) where <i>attributes</i> is a 
-  comma-separated list of the property attibutes, <i>setter</i> is the name
-  of the property setter method, provided the property is writable and 
-  <i>property</i> is the Property object.  The <i>setter</i> is an empty 
-  name '' for read-only properties.</p>
-  <p>ObjC Property Attributes:</p>
-  <ul>
-    <li>
-      T&lt;type&gt;&quot;name&quot; = Type
-    </li>
-    <li>
-      &amp; = Retain last value (retain)
-    </li>
-    <li>
-      C = Copy
-    </li>
-    <li>
-      D = Dynamic (@dynamic)
-    </li>
-    <li>
-      G&lt;name&gt; = Getter selector name
-    </li>
-    <li>
-      N = Non-atomic (nonatomic)
-    </li>
-    <li>
-      P = To be garbage collected
-    </li>
-    <li>
-      R = Read-only (readonly)
-    </li>
-    <li>
-      S&lt;name&gt; = Setter selector name
-    </li>
-    <li>
-      t&lt;encoding&gt; = Old-dtyle type encoding
-    </li>
-    <li>
-      W = Weak reference (__weak)
-    </li>
-  </ul>
-  <p>See <a 
-  href="http://Developer.Apple.com/library/content/documentation/Cocoa/Conceptual/ObjCRuntimeGuide/Articles/ocrtPropertyIntrospection.html"
-  target="_top">Property Attributes</a>.</p>
   <dl class="fields">
+    <dt>Parameters:</dt>
+    <dd><ul class="nomargin-top">
+        <li><strong class="pname"><code>clas_or_proto</code></strong> - The class or protocol (<a 
+          href="pycocoa.octypes.Class_t-class.html" 
+          class="link">Class_t</a> or <a 
+          href="pycocoa.octypes.Protocol_t-class.html" 
+          class="link">Protocol_t</a>).</li>
+        <li><strong class="pname"><code>prefixes</code></strong> - No, one or more property names to match (str-s).</li>
+    </ul></dd>
+    <dt>Returns:</dt>
+        <dd>For each property, yield a 3-tuple (<i>name</i>, 
+          <i>attributes</i>, <i>setter</i>, <i>property</i>) where 
+          <i>attributes</i> is a comma-separated list of the property 
+          attibutes, <i>setter</i> is the name of the property setter 
+          method, provided the property is writable and <i>property</i> is 
+          the <code>Property</code> object.  For read-only properties, the 
+          <i>setter</i> is an empty name &quot;&quot;.</dd>
   </dl>
-</td></tr></table>
+<div class="fields">      <p><strong>Note:</strong>
+        ObjC Property Attributes:
+        <ul>
+          <li>
+            T&lt;type&gt;&quot;name&quot; = Type
+          </li>
+          <li>
+            &amp; = Retain last value (retain)
+          </li>
+          <li>
+            C = Copy
+          </li>
+          <li>
+            D = Dynamic (@dynamic)
+          </li>
+          <li>
+            G&lt;name&gt; = Getter selector name
+          </li>
+          <li>
+            N = Non-atomic (nonatomic)
+          </li>
+          <li>
+            P = To be garbage collected
+          </li>
+          <li>
+            R = Read-only (readonly)
+          </li>
+          <li>
+            S&lt;name&gt; = Setter selector name
+          </li>
+          <li>
+            t&lt;encoding&gt; = Old-style type encoding
+          </li>
+          <li>
+            W = Weak reference (__weak)
+          </li>
+        </ul>
+      </p>
+      <p><strong>See Also:</strong>
+        <a 
+        href="http://Developer.Apple.com/library/content/documentation/Cocoa/Conceptual/ObjCRuntimeGuide/Articles/ocrtPropertyIntrospection.html"
+        target="_top">Property Attributes</a>.
+      </p>
+</div></td></tr></table>
 </div>
 <a name="get_protocol"></a>
 <div>
@@ -696,10 +911,11 @@
   <dl class="fields">
     <dt>Parameters:</dt>
     <dd><ul class="nomargin-top">
-        <li><strong class="pname"><code>name</code></strong> - Protocol (string).</li>
+        <li><strong class="pname"><code>name</code></strong> - The protocol name (str).</li>
     </ul></dd>
     <dt>Returns:</dt>
-        <dd>The <code>Protocol</code> if found, None otherwise.</dd>
+        <dd>The protocol (<a href="pycocoa.octypes.Protocol_t-class.html" 
+          class="link">Protocol_t</a>) if found, None otherwise.</dd>
   </dl>
 </td></tr></table>
 </div>
@@ -720,10 +936,18 @@
   
   <p>Yield all protocols of an ObjC class with a name starting with one of 
   the given prefixes.</p>
-  <p>For each protocol, yield a 2-tuple (<i>name</i>, <i>protocol</i>) 
-  where <i>name</i> is the protocol name and <i>protocol</i> the Protocol 
-  object.</p>
   <dl class="fields">
+    <dt>Parameters:</dt>
+    <dd><ul class="nomargin-top">
+        <li><strong class="pname"><code>clas</code></strong> - The class (<a href="pycocoa.octypes.Class_t-class.html" 
+          class="link">Class_t</a>).</li>
+        <li><strong class="pname"><code>prefixes</code></strong> - No, one or more protocol names to match (str-s).</li>
+    </ul></dd>
+    <dt>Returns:</dt>
+        <dd>For each protocol, yield a 2-tuple (<i>name</i>, <i>protocol</i>)
+          where <i>name</i> is the protocol name and <i>protocol</i> the <a
+          href="pycocoa.octypes.Protocol_t-class.html" 
+          class="link">Protocol_t</a> object.</dd>
   </dl>
 </td></tr></table>
 </div>
@@ -745,10 +969,11 @@
   <dl class="fields">
     <dt>Parameters:</dt>
     <dd><ul class="nomargin-top">
-        <li><strong class="pname"><code>name_</code></strong> - Selector (string).</li>
+        <li><strong class="pname"><code>name_</code></strong> - The selector name (str).</li>
     </ul></dd>
     <dt>Returns:</dt>
-        <dd>The <code>SEL</code> if found, None otherwise.</dd>
+        <dd>The selector (<a href="pycocoa.octypes.SEL_t-class.html" 
+          class="link">SEL_t</a>) if found, None otherwise.</dd>
   </dl>
 </td></tr></table>
 </div>
@@ -770,10 +995,11 @@
   <dl class="fields">
     <dt>Parameters:</dt>
     <dd><ul class="nomargin-top">
-        <li><strong class="pname"><code>sel</code></strong> - Selector (<code>SEL</code>).</li>
+        <li><strong class="pname"><code>sel</code></strong> - The selector (<a href="pycocoa.octypes.SEL_t-class.html" 
+          class="link">SEL_t</a>).</li>
     </ul></dd>
     <dt>Returns:</dt>
-        <dd>The name (string) if found, '' otherwise.</dd>
+        <dd>The selector name (str) if found, &quot;&quot; otherwise.</dd>
   </dl>
 </td></tr></table>
 </div>
@@ -795,10 +1021,12 @@
   <dl class="fields">
     <dt>Parameters:</dt>
     <dd><ul class="nomargin-top">
-        <li><strong class="pname"><code>clas</code></strong> - Class (<code>Class</code>).</li>
+        <li><strong class="pname"><code>clas</code></strong> - The class (<a href="pycocoa.octypes.Class_t-class.html" 
+          class="link">Class_t</a>).</li>
     </ul></dd>
     <dt>Returns:</dt>
-        <dd><code>Superclass</code>, None otherwise.</dd>
+        <dd>The super-class (<a href="pycocoa.octypes.Class_t-class.html" 
+          class="link">Class_t</a>), None otherwise.</dd>
   </dl>
 </td></tr></table>
 </div>
@@ -820,10 +1048,43 @@
   <dl class="fields">
     <dt>Parameters:</dt>
     <dd><ul class="nomargin-top">
-        <li><strong class="pname"><code>obj</code></strong> - Object to check (<i>Object</i>).</li>
+        <li><strong class="pname"><code>obj</code></strong> - The object (<code>Object</code> or <a 
+          href="pycocoa.octypes.Id_t-class.html" class="link">Id_t</a>).</li>
     </ul></dd>
     <dt>Returns:</dt>
-        <dd><code>Superclass</code>, None otherwise.</dd>
+        <dd>The super-class (<a href="pycocoa.octypes.Class_t-class.html" 
+          class="link">Class_t</a>), None otherwise.</dd>
+  </dl>
+</td></tr></table>
+</div>
+<a name="get_superclassnameof"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">get_superclassnameof</span>(<span class="sig-arg">obj</span>,
+        <span class="sig-arg">dflt</span>=<span class="sig-default">missing()</span>)</span>
+  </h3>
+  </td><td align="right" valign="top"
+    >&nbsp;
+    </td>
+  </tr></table>
+  
+  <p>Get the name of the ObjC super-class of an object.</p>
+  <dl class="fields">
+    <dt>Parameters:</dt>
+    <dd><ul class="nomargin-top">
+        <li><strong class="pname"><code>obj</code></strong> - The object (<code>Object</code> or <a 
+          href="pycocoa.octypes.Id_t-class.html" class="link">Id_t</a>).</li>
+    </ul></dd>
+    <dt>Returns:</dt>
+        <dd>The object'ssuper-class name (str).</dd>
+    <dt>Raises:</dt>
+    <dd><ul class="nomargin-top">
+        <li><code><strong class='fraise'>ValueError</strong></code> - Invalid <i>obj</i>, iff no <i>dflt</i> provided.</li>
+    </ul></dd>
   </dl>
 </td></tr></table>
 </div>
@@ -859,7 +1120,7 @@
 <table border="0" cellpadding="0" cellspacing="0" width="100%%">
   <tr>
     <td align="left" class="footer">
-    Generated by Epydoc 3.0.1 on Sun Apr 22 21:13:09 2018
+    Generated by Epydoc 3.0.1 on Tue Apr 24 20:38:10 2018
     </td>
     <td align="right" class="footer">
       <a target="mainFrame" href="http://epydoc.sourceforge.net"
