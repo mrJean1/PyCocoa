@@ -36,7 +36,7 @@ from utils   import instanceof, missing, _Types
 
 __all__ = ('Dict',
            'FrozenDict')
-__version__ = '18.04.24'
+__version__ = '18.04.26'
 
 
 def _dict_cmp(dict1, dict2):
@@ -111,7 +111,7 @@ class FrozenDict(_Type0):
     def __len__(self):
         '''Return the length, like C{dict.__len__}.
         '''
-        # <http://developer.apple.com/documentation/foundation/
+        # <http://Developer.Apple.com//documentation/foundation/
         #         nsdictionary/1409628-count>
         return self.NS.count()
 

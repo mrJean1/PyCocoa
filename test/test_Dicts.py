@@ -4,7 +4,7 @@
 from pycocoa import Dict, isNone, NSBundle, NSnil, NSStr, \
                     ns2Type, ObjCBase, Str, type2NS
 
-__version__ = '18.04.12'
+__version__ = '18.04.26'
 
 
 def _repr(o):
@@ -26,7 +26,7 @@ if __name__ == '__main__':
 
         print('%s: %s' % ('b', _repr(b)))
 
-        # <http://developer.apple.com/library/content/documentation/MacOSX/
+        # <http://Developer.Apple.com//library/content/documentation/MacOSX/
         #       Conceptual/BPFrameworks/Concepts/FrameworkAnatomy.html>
         # Table 2 Framework configuration keys
         nsD = b.localizedInfoDictionary() or b.infoDictionary()

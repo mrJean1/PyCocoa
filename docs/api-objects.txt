@@ -30,6 +30,7 @@ pycocoa.NSTextAlignmentLeft	pycocoa-module.html#NSTextAlignmentLeft
 pycocoa.NSDockTile	pycocoa-module.html#NSDockTile
 pycocoa.NSCenterTextAlignment	pycocoa-module.html#NSCenterTextAlignment
 pycocoa.tuple2NS	pycocoa-module.html#tuple2NS
+pycocoa.NSPageLayout	pycocoa-module.html#NSPageLayout
 pycocoa.get_protocols	pycocoa-module.html#get_protocols
 pycocoa.NSURL	pycocoa-module.html#NSURL
 pycocoa.CGImageEncoding	pycocoa-module.html#CGImageEncoding
@@ -49,12 +50,14 @@ pycocoa.kCGBitmapByteOrder16Big	pycocoa-module.html#kCGBitmapByteOrder16Big
 pycocoa.NSInt	pycocoa-module.html#NSInt
 pycocoa.get_classname	pycocoa-module.html#get_classname
 pycocoa.CGSizeEncoding	pycocoa-module.html#CGSizeEncoding
+pycocoa.kCGImagePropertyGIFDelayTime	pycocoa-module.html#kCGImagePropertyGIFDelayTime
 pycocoa.kCFStringEncodingUnicode	pycocoa-module.html#kCFStringEncodingUnicode
 pycocoa.gcd	pycocoa-module.html#gcd
 pycocoa.NSWindowStyleMaskClosable	pycocoa-module.html#NSWindowStyleMaskClosable
 pycocoa.get_lib	pycocoa-module.html#get_lib
 pycocoa.type2strepr	pycocoa-module.html#type2strepr
 pycocoa.NSOKButton	pycocoa-module.html#NSOKButton
+pycocoa.NSPrintPanel	pycocoa-module.html#NSPrintPanel
 pycocoa.kCFStringEncodingUTF16BE	pycocoa-module.html#kCFStringEncodingUTF16BE
 pycocoa.register_subclass	pycocoa-module.html#register_subclass
 pycocoa.NSTableView	pycocoa-module.html#NSTableView
@@ -64,7 +67,6 @@ pycocoa.nsNull2none	pycocoa-module.html#nsNull2none
 pycocoa.kCFNumberMaxType	pycocoa-module.html#kCFNumberMaxType
 pycocoa.NSApplicationPresentationDisableProcessSwitching	pycocoa-module.html#NSApplicationPresentationDisableProcessSwitching
 pycocoa.nsDecimal2decimal	pycocoa-module.html#nsDecimal2decimal
-pycocoa.NSEndFunctionKey	pycocoa-module.html#NSEndFunctionKey
 pycocoa.kCFNumberFloat64Type	pycocoa-module.html#kCFNumberFloat64Type
 pycocoa.str2NS	pycocoa-module.html#str2NS
 pycocoa.kCGBitmapAlphaInfoMask	pycocoa-module.html#kCGBitmapAlphaInfoMask
@@ -106,6 +108,7 @@ pycocoa.NSApplicationDidUnhideNotification	pycocoa-module.html#NSApplicationDidU
 pycocoa.NO	pycocoa-module.html#NO
 pycocoa.nsLog	pycocoa-module.html#nsLog
 pycocoa.NSWindowMiniaturizeButton	pycocoa-module.html#NSWindowMiniaturizeButton
+pycocoa.kCGBitmapByteOrder32Little	pycocoa-module.html#kCGBitmapByteOrder32Little
 pycocoa.isInstanceOf	pycocoa-module.html#isInstanceOf
 pycocoa.kCGRenderingIntentDefault	pycocoa-module.html#kCGRenderingIntentDefault
 pycocoa.NSKeyDown	pycocoa-module.html#NSKeyDown
@@ -164,8 +167,9 @@ pycocoa.NSConstantString	pycocoa-module.html#NSConstantString
 pycocoa.NSTableViewDelegate	pycocoa-module.html#NSTableViewDelegate
 pycocoa.kCFStringEncodingUTF32LE	pycocoa-module.html#kCFStringEncodingUTF32LE
 pycocoa.NSNull	pycocoa-module.html#NSNull
+pycocoa.NSPrintInfo	pycocoa-module.html#NSPrintInfo
 pycocoa.NSTrackingCursorUpdate	pycocoa-module.html#NSTrackingCursorUpdate
-pycocoa.iterbytes	pycocoa-module.html#iterbytes
+pycocoa.NSEndFunctionKey	pycocoa-module.html#NSEndFunctionKey
 pycocoa.kCFAllocatorDefault	pycocoa-module.html#kCFAllocatorDefault
 pycocoa.NSDouble	pycocoa-module.html#NSDouble
 pycocoa.NSPointZero	pycocoa-module.html#NSPointZero
@@ -175,7 +179,7 @@ pycocoa.get_superclassnameof	pycocoa-module.html#get_superclassnameof
 pycocoa.libquartz	pycocoa-module.html#libquartz
 pycocoa.NSMenu	pycocoa-module.html#NSMenu
 pycocoa.YES	pycocoa-module.html#YES
-pycocoa.kCGBitmapByteOrder32Little	pycocoa-module.html#kCGBitmapByteOrder32Little
+pycocoa.CFStringEncoding	pycocoa-module.html#CFStringEncoding
 pycocoa.NSVariableStatusItemLength	pycocoa-module.html#NSVariableStatusItemLength
 pycocoa.NSBundle	pycocoa-module.html#NSBundle
 pycocoa.kCFNumberCFIndexType	pycocoa-module.html#kCFNumberCFIndexType
@@ -215,7 +219,7 @@ pycocoa.OBJC_ASSOCIATION_RETAIN	pycocoa-module.html#OBJC_ASSOCIATION_RETAIN
 pycocoa.get_superclass	pycocoa-module.html#get_superclass
 pycocoa.NSApplicationPresentationDisableHideApplication	pycocoa-module.html#NSApplicationPresentationDisableHideApplication
 pycocoa.add_ivar	pycocoa-module.html#add_ivar
-pycocoa.kCGImagePropertyGIFDelayTime	pycocoa-module.html#kCGImagePropertyGIFDelayTime
+pycocoa.NSSavePanel	pycocoa-module.html#NSSavePanel
 pycocoa.NSIntegerMax	pycocoa-module.html#NSIntegerMax
 pycocoa.NSTableViewDashedHorizontalGridLineMask	pycocoa-module.html#NSTableViewDashedHorizontalGridLineMask
 pycocoa.kCGBitmapByteOrderMask	pycocoa-module.html#kCGBitmapByteOrderMask
@@ -229,6 +233,7 @@ pycocoa.get_classnameof	pycocoa-module.html#get_classnameof
 pycocoa.NSWindowStyleMaskMiniaturizable	pycocoa-module.html#NSWindowStyleMaskMiniaturizable
 pycocoa.kCFStringEncodingWindowsLatin1	pycocoa-module.html#kCFStringEncodingWindowsLatin1
 pycocoa.CGPointEncoding	pycocoa-module.html#CGPointEncoding
+pycocoa.url2NS	pycocoa-module.html#url2NS
 pycocoa.kCFNumberSInt32Type	pycocoa-module.html#kCFNumberSInt32Type
 pycocoa.kCGBitmapByteOrderDefault	pycocoa-module.html#kCGBitmapByteOrderDefault
 pycocoa.NSPageUpFunctionKey	pycocoa-module.html#NSPageUpFunctionKey
@@ -241,6 +246,7 @@ pycocoa.send_message	pycocoa-module.html#send_message
 pycocoa.kCTFontAttributeName	pycocoa-module.html#kCTFontAttributeName
 pycocoa.add_protocol	pycocoa-module.html#add_protocol
 pycocoa.str2bytes	pycocoa-module.html#str2bytes
+pycocoa.NSPrintOperation	pycocoa-module.html#NSPrintOperation
 pycocoa.NSData	pycocoa-module.html#NSData
 pycocoa.PyObjectEncoding	pycocoa-module.html#PyObjectEncoding
 pycocoa.NSApplicationActivationPolicyAccessory	pycocoa-module.html#NSApplicationActivationPolicyAccessory
@@ -257,6 +263,7 @@ pycocoa.NSApplicationDelegate	pycocoa-module.html#NSApplicationDelegate
 pycocoa.get_protocol	pycocoa-module.html#get_protocol
 pycocoa.NSObject	pycocoa-module.html#NSObject
 pycocoa.NSThread	pycocoa-module.html#NSThread
+pycocoa.iterbytes	pycocoa-module.html#iterbytes
 pycocoa.NSWindowStyleMaskTitled	pycocoa-module.html#NSWindowStyleMaskTitled
 pycocoa.NSApplicationPresentationHideMenuBar	pycocoa-module.html#NSApplicationPresentationHideMenuBar
 pycocoa.get_properties	pycocoa-module.html#get_properties
@@ -280,6 +287,7 @@ pycocoa.kCFStringEncodingUTF32	pycocoa-module.html#kCFStringEncodingUTF32
 pycocoa.get_ivars	pycocoa-module.html#get_ivars
 pycocoa.libobjc	pycocoa-module.html#libobjc
 pycocoa.DEFAULT_UNICODE	pycocoa-module.html#DEFAULT_UNICODE
+pycocoa.NSPrinter	pycocoa-module.html#NSPrinter
 pycocoa.NSView	pycocoa-module.html#NSView
 pycocoa.NSMutableData	pycocoa-module.html#NSMutableData
 pycocoa._exports	pycocoa.utils-module.html#_exports
@@ -303,6 +311,7 @@ pycocoa.NSApplicationActivationPolicyProhibited	pycocoa-module.html#NSApplicatio
 pycocoa.apps	pycocoa.apps-module.html
 pycocoa.apps.nsOf	pycocoa.nstypes-module.html#nsOf
 pycocoa.apps.NSApplicationDelegate	pycocoa.apps-module.html#NSApplicationDelegate
+pycocoa.apps.printf	pycocoa.utils-module.html#printf
 pycocoa.apps.bytes2str	pycocoa.utils-module.html#bytes2str
 pycocoa.apps.__package__	pycocoa.apps-module.html#__package__
 pycocoa.apps.send_super	pycocoa.runtime-module.html#send_super
@@ -386,20 +395,24 @@ pycocoa.menus.instanceof	pycocoa.utils-module.html#instanceof
 pycocoa.menus.int2NS	pycocoa.pytypes-module.html#int2NS
 pycocoa.menus.isInstanceOf	pycocoa.runtime-module.html#isInstanceOf
 pycocoa.nstypes	pycocoa.nstypes-module.html
-pycocoa.nstypes.NSScrollView	pycocoa.nstypes-module.html#NSScrollView
+pycocoa.nstypes.NSSet	pycocoa.nstypes-module.html#NSSet
 pycocoa.nstypes.libCF	pycocoa.nstypes-module.html#libCF
 pycocoa.nstypes.iterbytes	pycocoa.utils-module.html#iterbytes
 pycocoa.nstypes.NSString	pycocoa.nstypes-module.html#NSString
 pycocoa.nstypes.NSBool	pycocoa.nstypes-module.html#NSBool
 pycocoa.nstypes.NSImage	pycocoa.nstypes-module.html#NSImage
 pycocoa.nstypes.NSnil	pycocoa.nstypes-module.html#NSnil
+pycocoa.nstypes.NSScrollView	pycocoa.nstypes-module.html#NSScrollView
 pycocoa.nstypes.nsArray2listuple	pycocoa.nstypes-module.html#nsArray2listuple
 pycocoa.nstypes.NSConstantString	pycocoa.nstypes-module.html#NSConstantString
 pycocoa.nstypes.str2bytes	pycocoa.utils-module.html#str2bytes
 pycocoa.nstypes._lambda	pycocoa.nstypes-module.html#_lambda
+pycocoa.nstypes.NSPrintOperation	pycocoa.nstypes-module.html#NSPrintOperation
 pycocoa.nstypes.NSData	pycocoa.nstypes-module.html#NSData
+pycocoa.nstypes.get_selector	pycocoa.getters-module.html#get_selector
 pycocoa.nstypes.NSLong	pycocoa.nstypes-module.html#NSLong
 pycocoa.nstypes.NSNull	pycocoa.nstypes-module.html#NSNull
+pycocoa.nstypes.NSPrintInfo	pycocoa.nstypes-module.html#NSPrintInfo
 pycocoa.nstypes.libFoundation	pycocoa.nstypes-module.html#libFoundation
 pycocoa.nstypes.NSDouble	pycocoa.nstypes-module.html#NSDouble
 pycocoa.nstypes.NSStatusBar	pycocoa.nstypes-module.html#NSStatusBar
@@ -410,6 +423,7 @@ pycocoa.nstypes.NSLongLong	pycocoa.nstypes-module.html#NSLongLong
 pycocoa.nstypes.cfNumber2num	pycocoa.oslibs-module.html#cfNumber2num
 pycocoa.nstypes.NSMenu	pycocoa.nstypes-module.html#NSMenu
 pycocoa.nstypes.ns2Type	pycocoa.nstypes-module.html#ns2Type
+pycocoa.nstypes.CFStringEncoding	pycocoa.nstypes-module.html#CFStringEncoding
 pycocoa.nstypes.nsBoolean2bool	pycocoa.nstypes-module.html#nsBoolean2bool
 pycocoa.nstypes.nsOf	pycocoa.nstypes-module.html#nsOf
 pycocoa.nstypes.NSView	pycocoa.nstypes-module.html#NSView
@@ -420,7 +434,7 @@ pycocoa.nstypes.NSApplication	pycocoa.nstypes-module.html#NSApplication
 pycocoa.nstypes._CFTypeID2py_items	pycocoa.nstypes-module.html#_CFTypeID2py_items
 pycocoa.nstypes.nsBundleRename	pycocoa.nstypes-module.html#nsBundleRename
 pycocoa.nstypes._CFBundleName	pycocoa.nstypes-module.html#_CFBundleName
-pycocoa.nstypes.kCFStringEncodingUTF8	pycocoa.nstypes-module.html#kCFStringEncodingUTF8
+pycocoa.nstypes.nsSet2set	pycocoa.nstypes-module.html#nsSet2set
 pycocoa.nstypes.missing	pycocoa.nstypes-module.html#missing
 pycocoa.nstypes.NSMutableSet	pycocoa.nstypes-module.html#NSMutableSet
 pycocoa.nstypes.NSFalse	pycocoa.nstypes-module.html#NSFalse
@@ -428,6 +442,7 @@ pycocoa.nstypes.NSDockTile	pycocoa.nstypes-module.html#NSDockTile
 pycocoa.nstypes.NSAutoreleasePool	pycocoa.nstypes-module.html#NSAutoreleasePool
 pycocoa.nstypes.NSEnumerator	pycocoa.nstypes-module.html#NSEnumerator
 pycocoa.nstypes.nsLog	pycocoa.nstypes-module.html#nsLog
+pycocoa.nstypes.NSPageLayout	pycocoa.nstypes-module.html#NSPageLayout
 pycocoa.nstypes.NSURL	pycocoa.nstypes-module.html#NSURL
 pycocoa.nstypes.NSScreen	pycocoa.nstypes-module.html#NSScreen
 pycocoa.nstypes.NSNumber	pycocoa.nstypes-module.html#NSNumber
@@ -443,8 +458,8 @@ pycocoa.nstypes.NSDecimalNumber	pycocoa.nstypes-module.html#NSDecimalNumber
 pycocoa.nstypes.NSTrue	pycocoa.nstypes-module.html#NSTrue
 pycocoa.nstypes.cfNumber2bool	pycocoa.oslibs-module.html#cfNumber2bool
 pycocoa.nstypes.NSNotification	pycocoa.nstypes-module.html#NSNotification
+pycocoa.nstypes.NSPrinter	pycocoa.nstypes-module.html#NSPrinter
 pycocoa.nstypes.NSMutableData	pycocoa.nstypes-module.html#NSMutableData
-pycocoa.nstypes.NSSet	pycocoa.nstypes-module.html#NSSet
 pycocoa.nstypes.nsString2str	pycocoa.nstypes-module.html#nsString2str
 pycocoa.nstypes.NSOpenPanel	pycocoa.nstypes-module.html#NSOpenPanel
 pycocoa.nstypes._exports	pycocoa.utils-module.html#_exports
@@ -456,14 +471,14 @@ pycocoa.nstypes.libobjc	pycocoa.nstypes-module.html#libobjc
 pycocoa.nstypes._ns2ctype2py	pycocoa.nstypes-module.html#_ns2ctype2py
 pycocoa.nstypes.clip	pycocoa.utils-module.html#clip
 pycocoa.nstypes.isNone	pycocoa.nstypes-module.html#isNone
+pycocoa.nstypes.NSSavePanel	pycocoa.nstypes-module.html#NSSavePanel
 pycocoa.nstypes._Xargs	pycocoa.runtime-module.html#_Xargs
 pycocoa.nstypes.nsNumber2num	pycocoa.nstypes-module.html#nsNumber2num
 pycocoa.nstypes.__package__	pycocoa.nstypes-module.html#__package__
 pycocoa.nstypes.NSFont	pycocoa.nstypes-module.html#NSFont
-pycocoa.nstypes.get_selector	pycocoa.getters-module.html#get_selector
+pycocoa.nstypes.NSPrintPanel	pycocoa.nstypes-module.html#NSPrintPanel
 pycocoa.nstypes.NSMutableArray	pycocoa.nstypes-module.html#NSMutableArray
 pycocoa.nstypes.NSTableView	pycocoa.nstypes-module.html#NSTableView
-pycocoa.nstypes.nsSet2set	pycocoa.nstypes-module.html#nsSet2set
 pycocoa.nstypes.NSColor	pycocoa.nstypes-module.html#NSColor
 pycocoa.nstypes.NSMutableDictionary	pycocoa.nstypes-module.html#NSMutableDictionary
 pycocoa.nstypes.NSMutableString	pycocoa.nstypes-module.html#NSMutableString
@@ -542,6 +557,7 @@ pycocoa.oslibs.NSFunctionKeyMask	pycocoa.oslibs-module.html#NSFunctionKeyMask
 pycocoa.oslibs.NSTrackingCursorUpdate	pycocoa.oslibs-module.html#NSTrackingCursorUpdate
 pycocoa.oslibs.c_void	pycocoa.oslibs-module.html#c_void
 pycocoa.oslibs.libFoundation	pycocoa.oslibs-module.html#libFoundation
+pycocoa.oslibs.NSEndFunctionKey	pycocoa.oslibs-module.html#NSEndFunctionKey
 pycocoa.oslibs.kCFAllocatorDefault	pycocoa.oslibs-module.html#kCFAllocatorDefault
 pycocoa.oslibs.kCTFontSymbolicTrait	pycocoa.oslibs-module.html#kCTFontSymbolicTrait
 pycocoa.oslibs.kCFStringEncodingNonLossyASCII	pycocoa.oslibs-module.html#kCFStringEncodingNonLossyASCII
@@ -555,7 +571,7 @@ pycocoa.oslibs.libquartz	pycocoa.oslibs-module.html#libquartz
 pycocoa.oslibs.kCGImageAlphaOnly	pycocoa.oslibs-module.html#kCGImageAlphaOnly
 pycocoa.oslibs.NSApplicationActivationPolicyRegular	pycocoa.oslibs-module.html#NSApplicationActivationPolicyRegular
 pycocoa.oslibs.YES	pycocoa.oslibs-module.html#YES
-pycocoa.oslibs.kCGBitmapByteOrder32Little	pycocoa.oslibs-module.html#kCGBitmapByteOrder32Little
+pycocoa.oslibs.CFStringEncoding	pycocoa.oslibs-module.html#CFStringEncoding
 pycocoa.oslibs.NSVariableStatusItemLength	pycocoa.oslibs-module.html#NSVariableStatusItemLength
 pycocoa.oslibs.kCTFontItalicTrait	pycocoa.oslibs-module.html#kCTFontItalicTrait
 pycocoa.oslibs.NSShiftKeyMask	pycocoa.oslibs-module.html#NSShiftKeyMask
@@ -592,6 +608,7 @@ pycocoa.oslibs.NSCenterTextAlignment	pycocoa.oslibs-module.html#NSCenterTextAlig
 pycocoa.oslibs.kCFNumberDoubleType	pycocoa.oslibs-module.html#kCFNumberDoubleType
 pycocoa.oslibs.kCTFontTraitsAttribute	pycocoa.oslibs-module.html#kCTFontTraitsAttribute
 pycocoa.oslibs.NSTextAlignmentRight	pycocoa.oslibs-module.html#NSTextAlignmentRight
+pycocoa.oslibs.kCGBitmapByteOrder32Little	pycocoa.oslibs-module.html#kCGBitmapByteOrder32Little
 pycocoa.oslibs._csignature_variadic	pycocoa.oslibs-module.html#_csignature_variadic
 pycocoa.oslibs.NSTextWritingDirectionEmbedding	pycocoa.oslibs-module.html#NSTextWritingDirectionEmbedding
 pycocoa.oslibs.NSDeleteFunctionKey	pycocoa.oslibs-module.html#NSDeleteFunctionKey
@@ -671,7 +688,6 @@ pycocoa.oslibs.NSCancelButton	pycocoa.oslibs-module.html#NSCancelButton
 pycocoa.oslibs.kCFStringEncodingUTF16	pycocoa.oslibs-module.html#kCFStringEncodingUTF16
 pycocoa.oslibs.leaked2	pycocoa.oslibs-module.html#leaked2
 pycocoa.oslibs.NSApplicationActivationPolicyProhibited	pycocoa.oslibs-module.html#NSApplicationActivationPolicyProhibited
-pycocoa.oslibs.NSEndFunctionKey	pycocoa.oslibs-module.html#NSEndFunctionKey
 pycocoa.panels	pycocoa.panels-module.html
 pycocoa.panels.py2NS	pycocoa.pytypes-module.html#py2NS
 pycocoa.panels.__package__	pycocoa.panels-module.html#__package__
@@ -700,6 +716,7 @@ pycocoa.pytypes.generator2NS	pycocoa.pytypes-module.html#generator2NS
 pycocoa.pytypes.map2NS	pycocoa.pytypes-module.html#map2NS
 pycocoa.pytypes.NSMutableSet	pycocoa.pytypes-module.html#NSMutableSet
 pycocoa.pytypes.NSMutableDictionary	pycocoa.pytypes-module.html#NSMutableDictionary
+pycocoa.pytypes.url2NS	pycocoa.pytypes-module.html#url2NS
 pycocoa.pytypes._NSTrue	pycocoa.pytypes-module.html#_NSTrue
 pycocoa.pytypes.type2NS	pycocoa.pytypes-module.html#type2NS
 pycocoa.pytypes.NSSet	pycocoa.pytypes-module.html#NSSet
@@ -712,6 +729,7 @@ pycocoa.pytypes.NSInt	pycocoa.pytypes-module.html#NSInt
 pycocoa.pytypes.NSLongLong	pycocoa.pytypes-module.html#NSLongLong
 pycocoa.pytypes.tuple2NS	pycocoa.pytypes-module.html#tuple2NS
 pycocoa.pytypes._Ints	pycocoa.pytypes-module.html#_Ints
+pycocoa.pytypes.NSURL	pycocoa.pytypes-module.html#NSURL
 pycocoa.pytypes.NSNone	pycocoa.pytypes-module.html#NSNone
 pycocoa.pytypes.range2NS	pycocoa.pytypes-module.html#range2NS
 pycocoa.pytypes.frozenset2NS	pycocoa.pytypes-module.html#frozenset2NS
@@ -1338,6 +1356,9 @@ pycocoa.octypes.objc_super_t.receiver	pycocoa.octypes.objc_super_t-class.html#re
 pycocoa.panels.OpenPanel	pycocoa.panels.OpenPanel-class.html
 pycocoa.panels.OpenPanel.__init__	pycocoa.panels.OpenPanel-class.html#__init__
 pycocoa.panels.OpenPanel.pick	pycocoa.panels.OpenPanel-class.html#pick
+pycocoa.panels.SavePanel	pycocoa.panels.SavePanel-class.html
+pycocoa.panels.SavePanel.__init__	pycocoa.panels.SavePanel-class.html#__init__
+pycocoa.panels.SavePanel.save_as	pycocoa.panels.SavePanel-class.html#save_as
 pycocoa.runtime.ObjCBase	pycocoa.runtime.ObjCBase-class.html
 pycocoa.runtime.ObjCBase.__repr__	pycocoa.runtime.ObjCBase-class.html#__repr__
 pycocoa.runtime.ObjCBoundClassMethod	pycocoa.runtime.ObjCBoundClassMethod-class.html

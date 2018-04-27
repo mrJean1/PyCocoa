@@ -68,13 +68,13 @@ from ctypes  import ArgumentError, byref, cast, c_buffer, c_byte, \
                     CFUNCTYPE, c_void_p
 from getters import get_selector
 from octypes import Array_t, Class_t, c_struct_t, Id_t, ObjC_t, SEL_t, Set_t
-from oslibs  import cfNumber2bool, cfNumber2num, kCFStringEncodingUTF8, \
+from oslibs  import cfNumber2bool, cfNumber2num, CFStringEncoding, \
                     libCF, libFoundation, libobjc
 from runtime import isInstanceOf, ObjCClass, ObjCInstance, _Xargs
 from utils   import bytes2str, clip, _exports, _Globals, instanceof, \
-                    iterbytes, missing, str2bytes, _Types
+                    iterbytes, missing, str2bytes, _Types  # printf
 
-__version__ = '18.04.24'
+__version__ = '18.04.26'
 
 
 def _lambda(arg):
@@ -98,16 +98,15 @@ class CFStr(ObjCInstance):
     def __new__(cls, ustr):
         '''New L{CFStr}.
 
-           @param ustr: The string value (str, bytes).
+           @param ustr: The string value (C{str} or C{bytes}).
 
            @return: The string (L{CFStr}).
         '''
-        ustr = str(ustr)
         ns = libCF.CFStringCreateWithCString(None, str2bytes(ustr),
-                                                   kCFStringEncodingUTF8)
+                                                   CFStringEncoding)
         # ObjC class is ._objc_class or __NSCFConstantString
         self = super(CFStr, cls).__new__(cls, ns)  # Id_t
-        self._str = ustr
+        self._str = bytes2str(ustr)
         return self
 
     def __str__(self):
@@ -119,10 +118,8 @@ class CFStr(ObjCInstance):
 
     @property
     def value(self):
-        '''Get the C{CFStr} value as Python C{str}.
+        '''Get the original C{CFStr} value (C{str}).
         '''
-        if self._str is None:
-            self._str = nsString2str(self)
         return self._str
 
     str = value
@@ -160,9 +157,15 @@ NSNull                 = ObjCClass('NSNull')
 NSNumber               = ObjCClass('NSNumber')
 NSObject               = ObjCClass('NSObject')
 NSOpenPanel            = ObjCClass('NSOpenPanel')
+NSPageLayout           = ObjCClass('NSPageLayout')
 # NSPoint              = ObjCClass('NSPoint')  # doesn't exist, use NSPoint_t
+NSPrinter              = ObjCClass('NSPrinter')
+NSPrintInfo            = ObjCClass('NSPrintInfo')
+NSPrintOperation       = ObjCClass('NSPrintOperation')
+NSPrintPanel           = ObjCClass('NSPrintPanel')
 # NSRect               = ObjCClass('NSRect')  # doesn't exist, use NSRect_t
 # NSRange              = ObjCClass('NSRange')  # doesn't exist, use NSRange_t
+NSSavePanel            = ObjCClass('NSSavePanel')
 NSScreen               = ObjCClass('NSScreen')
 NSScrollView           = ObjCClass('NSScrollView')
 NSSet                  = ObjCClass('NSSet')
@@ -517,9 +520,9 @@ def nsString2str(ns, dflt=None):  # XXX an NS*String method
                          c_void_p, name='ns')
 
     n = libCF.CFStringGetLength(ns)
-    u = libCF.CFStringGetMaximumSizeForEncoding(n, kCFStringEncodingUTF8)
+    u = libCF.CFStringGetMaximumSizeForEncoding(n, CFStringEncoding)
     buf = c_buffer(u + 2)
-    if libCF.CFStringGetCString(ns, buf, len(buf), kCFStringEncodingUTF8):
+    if libCF.CFStringGetCString(ns, buf, len(buf), CFStringEncoding):
         # XXX assert(isinstance(buf.value, _Bytes))
         # bytes to unicode in Python 2, to str in Python 3+
         return bytes2str(buf.value)  # XXX was .decode(DEFAULT_UNICODE)
@@ -632,7 +635,7 @@ def ns2Type(ns):
         _Type = _Types.Str
 
     else:
-        # print('ns2Type(%r) -> %s' % (ns.objc_class, type(ns2py(ns))))
+        # printf('ns2Type(%r) -> %s', ns.objc_class, type(ns2py(ns)))
         _Type = ns2py
 
     # save the Python Type or ns2py convertor at the NS/Class

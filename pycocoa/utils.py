@@ -60,7 +60,7 @@
 '''(INTERNAL) Utility functions, constants, etc.
 '''
 # all imports listed explicitly to help PyChecker
-__version__ = '18.04.24'
+__version__ = '18.04.26'
 
 try:
     from math import gcd  # Python 3+
@@ -104,6 +104,7 @@ class _Types(_Constants):
     Menu        = None  # set by .menus.py
     MenuBar     = None  # set by .menus.py
     OpenPanel   = None  # set be .panels.py
+    SavePanel   = None  # set be .panels.py
     Set         = None  # set by .sets.py
     Separator   = None  # set by .menus.py
     Str         = None  # set by .strs.py
@@ -116,7 +117,7 @@ class _Types(_Constants):
     def listypes():
         for a, v in sorted(_Types.__dict__.items()):
             if not a.startswith('_'):
-                print('_Types.%-11s %r' % (a + ':', v))
+                printf('_Types.%-11s %r', a + ':', v)
 
 
 class missing(object):  # singleton class, lost on purpose
@@ -289,7 +290,7 @@ def _allisting(alls, localls, version, filename):
     import os
 
     m = os.path.basename(os.path.splitext(filename)[0])
-    print('\n%s.%s = %s(' % (m, '__all__', alls.__class__.__name__))
+    printf('%s.%s = %s(', m, '__all__', alls.__class__.__name__, nl=1)
 
     d = i = 0
     p = ''
@@ -306,14 +307,14 @@ def _allisting(alls, localls, version, filename):
             r += ' DUPLICATE'
         else:
             p = n
-        print('  %s.%s is %s,' % (m, n, r))
+        printf('  %s.%s is %s,', m, n, r)
         i += 1
     if d:
         d = ' %s%s%s' % (d, ' DUPLICATE', 's' if d > 1 else '')
     else:
         d = ''
-    print(')[%d]%s' % (i, d))
-    print('%s.%s = %r' % (m, '__version__', version))
+    printf(')[%d]%s', i, d)
+    printf('%s.%s = %r', m, '__version__', version)
 
 
 def clip(bytestr, limit=50):

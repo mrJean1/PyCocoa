@@ -82,7 +82,7 @@ from octypes import Allocator_t, Array_t, BOOL_t, CFIndex_t, \
                     TypeRef_t, UniChar_t
 from utils   import _exports
 
-__version__ = '18.04.24'
+__version__ = '18.04.26'
 
 NO  = False
 YES = True
@@ -215,7 +215,7 @@ kCFStringEncodingMacRoman      = 0
 kCFStringEncodingASCII         = 0x0600
 kCFStringEncodingNonLossyASCII = 0x0BFF
 kCFStringEncodingUnicode       = 0x0100
-kCFStringEncodingUTF8          = 0x08000100  # shared with .runtime.py
+kCFStringEncodingUTF8          = 0x08000100  # shared with .nstypes.py
 kCFStringEncodingUTF16         = 0x0100
 kCFStringEncodingUTF16BE       = 0x10000100
 kCFStringEncodingUTF16LE       = 0x14000100
@@ -224,6 +224,7 @@ kCFStringEncodingUTF32BE       = 0x18000100
 kCFStringEncodingUTF32LE       = 0x1c000100
 kCFStringEncodingWindowsLatin1 = 0x0500
 
+CFStringEncoding = kCFStringEncodingUTF8  # or -UTF16
 CFStringEncoding_t = c_uint32  # a ctype
 
 _csignature(libCF.CFArrayAppendValue, Array_t, c_void_p)
@@ -245,10 +246,10 @@ _csignature(libCF.CFDataGetBytes, c_void, Data_t, CFRange_t, c_void_p)
 _csignature(libCF.CFDataGetLength, CFIndex_t, Data_t)
 _csignature(libCF.CFDataGetTypeID, TypeID_t)
 
-# <http://developer.apple.com/documentation/corefoundation/cfdictionary-rum>
-# <http://developer.apple.com/library/content/documentation/CoreFoundation/
+# <http://Developer.Apple.com//documentation/corefoundation/cfdictionary-rum>
+# <http://Developer.Apple.com//library/content/documentation/CoreFoundation/
 #         Conceptual/CFMemoryMgmt/Concepts/Ownership.html>
-# <http://developer.apple.com/documentation/corefoundation/1516777-cfdictionaryaddvalue>
+# <http://Developer.Apple.com//documentation/corefoundation/1516777-cfdictionaryaddvalue>
 _csignature(libCF.CFDictionaryAddValue, c_void, Dictionary_t, c_void_p, c_void_p)  # (d, key, val)
 _csignature(libCF.CFDictionaryContainsKey, BOOL_t, Dictionary_t, c_void_p)
 _csignature(libCF.CFDictionaryContainsValue, BOOL_t, Dictionary_t, c_void_p)
@@ -384,8 +385,8 @@ NSApplicationDidUnhideNotification = c_void_p.in_dll(libAppKit, 'NSApplicationDi
 NSDefaultRunLoopMode               = c_void_p.in_dll(libAppKit, 'NSDefaultRunLoopMode')
 NSEventTrackingRunLoopMode         = c_void_p.in_dll(libAppKit, 'NSEventTrackingRunLoopMode')
 
-# <http://github.com/gnustep/libs-gui/blob/master/Headers/AppKit/NSPanel.h>
-# <http://github.com/gnustep/libs-gui/blob/master/Headers/AppKit/NSSavePanel.h>
+# <http://GitHub.com/gnustep/libs-gui/blob/master/Headers/AppKit/NSPanel.h>
+# <http://GitHub.com/gnustep/libs-gui/blob/master/Headers/AppKit/NSSavePanel.h>
 NSFileHandlingPanelCancelButton = NSCancelButton = 0
 NSFileHandlingPanelOKButton     = NSOKButton     = 1
 # original enum, assumed values from here down
@@ -423,8 +424,8 @@ NSPageUpFunctionKey   = 0xF72C
 NSPageDownFunctionKey = 0xF72D
 
 # /System/Library/Frameworks/AppKit.framework/Headers/NSWindow.h
-# <http://developer.apple.com/documentation/appkit/nswindowstylemask>
-# <http://developer.apple.com/documentation/appkit/constants>
+# <http://Developer.Apple.com//documentation/appkit/nswindowstylemask>
+# <http://Developer.Apple.com//documentation/appkit/constants>
 # note, Deprecated -Maskd are marked with D? or commented out,
 # previously, NSWindowStyleMaskXyz was named NSXyzWindowMask
 # NSWindowStyleMaskBorderless             = 0  # D?
@@ -434,7 +435,7 @@ NSWindowStyleMaskMiniaturizable           = 1 << 2
 NSWindowStyleMaskResizable                = 1 << 3
 # /System/Library/Frameworks/AppKit.framework/Headers/NSPanel.h
 NSWindowStyleMaskUtilityWindow            = 1 << 4  # D?
-# <http://github.com/gnustep/libs-gui/blob/master/Headers/AppKit/NSWindow.h>
+# <http://GitHub.com/gnustep/libs-gui/blob/master/Headers/AppKit/NSWindow.h>
 # NSWindowStyleMaskDocModalWindow         = 1 << 6  # D?
 # NSWindowStyleMaskNonactivatingPanel     = 1 << 7  # D?
 # NSWindowStyleMaskTexturedBackground     = 1 << 8  # D?
@@ -448,7 +449,7 @@ NSWindowStyleMaskUtilityWindow            = 1 << 4  # D?
 NSWindowStyleMaskUsual = NSWindowStyleMaskClosable  | NSWindowStyleMaskMiniaturizable \
                        | NSWindowStyleMaskResizable | NSWindowStyleMaskTitled
 
-# <http://github.com/gnustep/libs-gui/blob/master/Headers/AppKit/NSWindow.h>
+# <http://GitHub.com/gnustep/libs-gui/blob/master/Headers/AppKit/NSWindow.h>
 NSWindowCloseButton        = 0
 NSWindowMiniaturizeButton  = 1
 NSWindowZoomButton         = 2
@@ -461,14 +462,14 @@ NSBackingStoreRetained    = 0
 NSBackingStoreNonretained = 1
 NSBackingStoreBuffered    = 2
 
-# <http://github.com/gnustep/libs-gui/blob/master/Headers/AppKit/NSTableView.h>
+# <http://GitHub.com/gnustep/libs-gui/blob/master/Headers/AppKit/NSTableView.h>
 NSTableViewGridNone                     = 0
 NSTableViewSolidVerticalGridLineMask    = 1 << 0
 NSTableViewSolidHorizontalGridLineMask  = 1 << 1
 NSTableViewDashedHorizontalGridLineMask = 1 << 3
 # NSTableViewVerticalGridLineMask?
 
-# <http://github.com/gnustep/libs-gui/blob/master/Headers/AppKit/NSText.h>
+# <http://GitHub.com/gnustep/libs-gui/blob/master/Headers/AppKit/NSText.h>
 NSTextAlignmentLeft      = NSLeftTextAlignment      = 0
 NSTextAlignmentRight     = NSRightTextAlignment     = 1
 NSTextAlignmentCenter    = NSCenterTextAlignment    = 2

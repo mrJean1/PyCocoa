@@ -25,8 +25,8 @@
 
 '''Types L{Table} and L{TableWindow}, wrapping ObjC C{NSTableView}, C{NSWindow}.
 '''
-# <http://stackoverflow.com/questions/15519296/pyobjc-crashes-by-using-nstableview>
-# <http://github.com/versluis/Mac-TableViewCode/tree/master/Mac%20TableViewCode>
+# <http://StackOverflow.com/questions/15519296/pyobjc-crashes-by-using-nstableview>
+# <http://GitHub.com/versluis/Mac-TableViewCode/tree/master/Mac%20TableViewCode>
 
 # all imports listed explicitly to help PyChecker
 from bases    import _Type2
@@ -44,7 +44,7 @@ from windows  import Screen, Style, Window
 __all__ = ('NSTableViewDelegate',
            'Table', 'TableWindow',
            'closeTables')
-__version__ = '18.04.24'
+__version__ = '18.04.26'
 
 _EmptyCell = NSStr('-', auto=False)  # PYCHOK false
 _Separator = NSStr('',  auto=False)
@@ -109,13 +109,13 @@ class Table(_Type2):
 
         cols = []
         wide = f.width  # == vuw.frame().size.width
-        # <http://developer.apple.com/documentation/appkit/nstablecolumn>
+        # <http://Developer.Apple.com//documentation/appkit/nstablecolumn>
         for i, h in enumerate(self._headers):
             # note, the identifier MUST be an NSStr (to avoid warnings)
-            c = NSTableColumn.alloc().initWithIdentifier_(NSStr(i))
+            c = NSTableColumn.alloc().initWithIdentifier_(NSStr(str(i)))
             # print(i, h, c.identifier(), c.headerCell(),
             #             c.width(), c.minWidth(), c.maxWidth())
-            # <http://developer.apple.com/documentation/appkit/nscell>
+            # <http://Developer.Apple.com//documentation/appkit/nscell>
             t = h.split(':')  # split column title:width
             if len(t) == 2:
                 h, w = t
@@ -126,7 +126,7 @@ class Table(_Type2):
                 c.setWidth_(w)
             c.setTitle_(NSStr(h))  # == c.headerCell().setStringValue_(NSStr(h))
             # c.sizeToFit()  # fits width of title, headerCell text!
-            # <http://developer.apple.com/documentation/uikit/nstextalignment>
+            # <http://Developer.Apple.com//documentation/uikit/nstextalignment>
             # c.headerCell().setAlignment_(NSTextAlignment.wraps) .left, etc.
             # c.headerCell().fontBold_()  # c.fontBold_() ?
             vuw.addTableColumn_(c)
@@ -136,7 +136,7 @@ class Table(_Type2):
         if wide > 0:  # stretch last col to frame edge
             c.setWidth_(float(wide + c.width()))
 
-        # <http://developer.apple.com/library/content/documentation/
+        # <http://Developer.Apple.com//library/content/documentation/
         #         Cocoa/Conceptual/TableView/VisualAttributes/VisualAttributes.html>
         vuw.setGridStyleMask_(NSTableViewSolidHorizontalGridLineMask |
                               NSTableViewSolidVerticalGridLineMask)
@@ -163,7 +163,7 @@ class _NSTableViewDelegate(object):
 
        @see: The C{_NSApplicationDelegate} for more I{NSDelegate} details.
     '''
-    # <http://developer.apple.com/documentation/appkit/nstableviewdatasource>
+    # <http://Developer.Apple.com//documentation/appkit/nstableviewdatasource>
     _ObjC = ObjCSubclass('NSObject', '_NSTableViewDelegate')
 
     @_ObjC.method('@PP')
@@ -198,7 +198,7 @@ class _NSTableViewDelegate(object):
             r = self.rows[row]
             if r is _Separator:
                 # XXX reduce the height of row separator?
-                # <http://developer.apple.com/library/content/samplecode/
+                # <http://Developer.Apple.com//library/content/samplecode/
                 #       CocoaTipsAndTricks/Listings/TableViewVariableRowHeights_
                 #       TableViewVariableRowHeightsAppDelegate_m.html>
                 return _Separator
@@ -233,7 +233,7 @@ class TableWindow(Window):
         tbl = getattr(table, 'NS', None)
         isInstanceOf(tbl, NSTableView, name='table')
 
-        # <http://developer.apple.com/documentation/appkit/nswindow>
+        # <http://Developer.Apple.com//documentation/appkit/nswindow>
         n = tbl.dataSource().numberOfRowsInTableView_(tbl)
         # approximate height of the table content, also to
         # .setContentMaxSize_ of the window further below

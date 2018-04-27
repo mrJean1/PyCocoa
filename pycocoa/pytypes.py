@@ -68,13 +68,13 @@ from ctypes  import c_void_p
 from nstypes import NSArray, NSBool, NSData, NSDecimal, NSDouble, \
                     NSInt, NSLong, NSLongLong, NSMutableArray, \
                     NSMutableDictionary, NSMutableSet, NSNone, \
-                    NSSet, NSStr
+                    NSSet, NSStr, NSURL
 from oslibs  import libCF
 from runtime import ObjCInstance
 from types   import GeneratorType as _generator
 from utils   import clip, DEFAULT_UNICODE, _exports, _Ints
 
-__version__ = '18.04.24'
+__version__ = '18.04.26'
 
 
 def _iter2NS(ns, py, getCount):
@@ -283,6 +283,24 @@ def unicode2NS(py, auto=True):
        @return: The ObjC instance (C{NSStr[ing]}).
     '''
     return NSStr(py.encode(DEFAULT_UNICODE), auto=auto)  # .stringWithUTF8String_
+
+
+def url2NS(py, url2=None):
+    '''Create an C{NSURL} instance from a Python string.
+
+       @param py: The URL (C{str} or C{unicode}).
+       @keyword url2: Optionally, relative to this URL (C{str} or C{unicode}).
+
+       @return: The ObjC instance (C{NSURL}).
+
+       @see: U{URL<http://Developer.Apple.com//documentation/foundation/url>}
+             for parsing an C{NSURL}.
+    '''
+    ns = NSStr(py)
+    if url2:
+        return NSURL.alloc().initWithString_relativeToURL_(ns, url2NS(url2))
+    else:
+        return NSURL.alloc().initWithString_(ns)
 
 
 _py2NS = {bool:       bool2NS,

@@ -26,4 +26,4 @@ if __name__ == '__main__':
             i += 1
             print('%4d: %-40s: %s : %r' % (i, k, s, r))
 
-    sys.exit(int(i != 158))
+    sys.exit(int(i != 164))

@@ -6,7 +6,7 @@
 # all imports listed explicitly to help PyChecker
 from pycocoa import App, Table
 
-__version__ = '18.04.18'
+__version__ = '18.04.26'
 
 
 def main(timeout=None):
@@ -17,7 +17,7 @@ def main(timeout=None):
     tbl.append('Abc', 12345)
     tbl.separator()
     tbl.append('Xyz', 67890)
-    tbl.display('Table - Close window to Quit', width=400)
+    tbl.display('Table - Select Quit from Dock menu', width=400)
 
     app.run(timeout)
 

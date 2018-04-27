@@ -22,7 +22,7 @@
 from setuptools import setup
 
 __all__ = ()
-__version__ = '18.03.10'
+__version__ = '18.04.26'
 
 
 def _c2(*names):
@@ -45,9 +45,10 @@ def _long_description():
         return t
 
 
-_KeyWords=('Cocoa', 'ctypes',
-           'macOS', 'macVLC',
+_KeyWords=('Cocoa', 'cocoavlc', 'ctypes',
+           'macOS',
            'Objective-C',
+           'PyCocosa', 'python-vlc',
            'VLC', 'VLCplayer')
 
 setup(

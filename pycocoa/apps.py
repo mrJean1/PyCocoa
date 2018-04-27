@@ -32,7 +32,7 @@ from nstypes import NSApplication, nsBundleRename, \
                     NSConcreteNotification, NSNotification, nsOf, NSStr
 from runtime import isInstanceOf, ObjCClass, ObjCInstance, \
                     _ObjC_log_totals, ObjCSubclass, send_super
-from utils   import _Globals, bytes2str, instanceof
+from utils   import _Globals, bytes2str, instanceof, printf
 
 from threading import Thread
 from time import sleep
@@ -41,7 +41,7 @@ __all__ = ('App',
            'NSApplicationDelegate',
            'Tile',
            'ns2App')
-__version__ = '18.04.24'
+__version__ = '18.04.26'
 
 
 class App(_Type2):
@@ -54,7 +54,7 @@ class App(_Type2):
     _menubar    = None
     _timeout    = None
 
-    def __init__(self, title='PyCocao', **kwds):
+    def __init__(self, title='PyCocao', raiser=False, **kwds):
         '''New L{App}.
 
            @keyword title: App name or title (str).
@@ -63,6 +63,8 @@ class App(_Type2):
         if _Globals.App:
             raise RuntimeError('%s already exists' % (_Globals.App,))
         _Globals.App = self
+        if raiser:
+            _Globals.raiser = raiser
 
         self.NS = NSApplication.sharedApplication()
         # add a method to set the app's title
@@ -298,11 +300,11 @@ class App(_Type2):
         return True
 
 
-# <http://developer.apple.com/library/content/samplecode/
+# <http://Developer.Apple.com//library/content/samplecode/
 #       CocoaTipsAndTricks/Listings/ExceptionReporting_ExceptionReportingAppDelegate_m.html>
-# <http://developer.apple.com/library/content/samplecode/
+# <http://Developer.Apple.com//library/content/samplecode/
 #       CocoaTipsAndTricks/Listings/ExceptionReporting_main_m.html>
-# <http://developer.apple.com/library/content/samplecode/
+# <http://Developer.Apple.com//library/content/samplecode/
 #       CocoaTipsAndTricks/Listings/ExceptionReporting_MyApplication_m.html>
 
 
@@ -347,7 +349,14 @@ class _NSApplicationDelegate(object):
 
     @_ObjC.method('v@')
     def menuItemHandler_(self, ns_item):
-        '''ObjC callback to handle and dispatch C{NSMenuItem} events.
+        '''ObjC callback to handle and dispatch C{NSMenuItem}
+           clicks and shortcuts.
+
+           All clicks and shortcuts are dispatched to the I{action}
+           method of this I{NSDelegate}'s L{App} instance.
+
+           Unhandled clicks, shortcuts and dispatch errors are
+           silently ignored, unless I{_Global.raiser} is C{True}.
         '''
         item = ns2Item(ns_item)
         act = item._action
@@ -360,9 +369,12 @@ class _NSApplicationDelegate(object):
                     break
                 except Exception:
                     if _Globals.raiser:
-                        print('%s(%r): %r method %s ...' % (
-                              _menuItemHandler_name, i, t, act))
+                        printf('%s(%r): %r method %s ...',
+                               _menuItemHandler_name, i, t, act)
                         raise
+        else:
+            if _Globals.raiser:
+                raise RuntimeError('%s(%r): %s' % ('unhandled', item, act))
 
 
 assert(_NSApplicationDelegate.menuItemHandler_.name == _menuItemHandler_name)

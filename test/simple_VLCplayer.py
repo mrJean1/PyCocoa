@@ -44,7 +44,7 @@ from pycocoa import get_selector, NSAlternateKeyMask, NSApplication, \
                     __version__ as __PyCocoa__  # PYCHOK false
 
 __all__  = ('appVLC',)
-__version__ = '18.04.06'
+__version__ = '18.04.26'
 
 _macOS  = platform.mac_ver()[0:3:2]  # PYCHOK false
 _Python = sys.version.split()[0], platform.architecture()[0]  # PYCHOK false
@@ -268,7 +268,7 @@ _Delegate = ObjCClass('_Delegate')  # the actual class
 def _MenuItem(label, action=None, key='', alt=False, cmd=True, ctrl=False, shift=False):
     '''New menu item with action and optional shortcut key.
     '''
-    # <http://developer.apple.com/documentation/appkit/nsmenuitem/1514858-initwithtitle>
+    # <http://Developer.Apple.com//documentation/appkit/nsmenuitem/1514858-initwithtitle>
     item = NSMenuItem.alloc().initWithTitle_action_keyEquivalent_(
            NSStr(label), get_selector(action), NSStr(key))
     if key:

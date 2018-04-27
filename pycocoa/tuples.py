@@ -37,7 +37,7 @@ from runtime import isImmutable
 from utils   import instanceof, _Ints, _Types
 
 __all__ = ('Tuple',)
-__version__ = '18.04.24'
+__version__ = '18.04.26'
 
 
 def _at(inst, index):
@@ -114,7 +114,7 @@ class Tuple(_Type0):  # note, List subclasses Tuple
     def __len__(self):
         '''Return the number of items.
         '''
-        # can't use self.NS.count()  <http://developer.apple.com/
+        # can't use self.NS.count()  <http://Developer.Apple.com//
         # documentation/foundation/nsarray/1409982-count>
         return libCF.CFArrayGetCount(self.NS)
 

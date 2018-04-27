@@ -50,7 +50,7 @@ __all__ = ('MediaWindow',
            'Screen', 'Style',
            'Window',
            'ns2Window')
-__version__ = '18.04.24'
+__version__ = '18.04.26'
 
 _Cascade = NSPoint_t(25, 25)  # PYCHOK false
 _Screen  = NSScreen.alloc().init().mainScreen()
@@ -285,7 +285,7 @@ class Window(_Type2):
         if zoom is None or (zoom and not self.isZoomed) \
                         or (self.isZoomed and not zoom):
             # click the "zoom box", toggles the zoom state
-            # <http://developer.apple.com/documentation/appkit/nswindow/1419513-zoom>
+            # <http://Developer.Apple.com//documentation/appkit/nswindow/1419513-zoom>
             self.NS.performZoom_(self.NS)  # XXX self.delegate
 
     # Callback methods from NSWindowDelegate, to be overloaded as needed.
@@ -462,7 +462,7 @@ class _NSWindowDelegate(object):
     def windowShouldZoom_toFrame_(self, ns_frame):
         '''ObjC callback to handle C{NSWindow} events.
         '''
-        # <http://developer.apple.com/documentation/appkit/
+        # <http://Developer.Apple.com//documentation/appkit/
         #       nswindowdelegate/1419533-windowshouldzoom>
         ok = self.window.windowZoomOK_(Rect(ns_frame))
         return YES if ok else NO
@@ -479,7 +479,7 @@ class _NSWindowDelegate(object):
 
 #   @_ObjC.method('@@@')
 #   def windowWillResize_toSize_(self, ns_window, ns_size):
-        # <http://developer.apple.com/documentation/appkit/
+        # <http://Developer.Apple.com//documentation/appkit/
         #       nswindowdelegate/1419292-windowwillresize>
 #       self._ns2w(ns_window)
 #       return ns_size

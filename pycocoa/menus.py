@@ -41,7 +41,7 @@ __all__ = ('Item',
            'Separator',
            'ns2Item',
            'title2action')
-__version__ = '18.04.24'
+__version__ = '18.04.26'
 
 _menuItemHandler_name = 'menuItemHandler_'
 
@@ -90,7 +90,7 @@ class Item(_Type2):
             # self._SEL_ = get_selector(a)
         self._action = a
 
-        # <http://developer.apple.com/documentation/appkit/
+        # <http://Developer.Apple.com//documentation/appkit/
         #       nsmenuitem/1514858-initwithtitle>
         self.NS = NSMenuItem.alloc().initWithTitle_action_keyEquivalent_(
                                      NSStr(self.title), self._SEL_, NSStr(key))
@@ -226,7 +226,7 @@ class Menu(_Type2):
         return Separator()
 
 
-# <http://developer.apple.com/library/content/qa/qa1420/_index.html
+# <http://Developer.Apple.com//library/content/qa/qa1420/_index.html
 #      #//apple_ref/doc/uid/DTS10004127>
 class MenuBar(_Type2):
     '''Menu bar Python Type, wrapping ObjC C{NSMenu}.

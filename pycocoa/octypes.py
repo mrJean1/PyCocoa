@@ -79,7 +79,7 @@ from platform import machine  # as machine
 from utils import bytes2str, _exports, inst2strepr, iterbytes, \
                   missing, str2bytes
 
-__version__ = '18.04.23'
+__version__ = '18.04.26'
 
 z = sizeof(c_void_p)
 if z == 4:
@@ -839,26 +839,26 @@ __all__ = _exports(locals(), 'PyObjectEncoding', 'TypeCodeError', 'c_void',
 
 if __name__ == '__main__':
 
-    from utils import _allisting, bytes2repr
+    from utils import _allisting, bytes2repr, printf
 
     def _c(ctype):
         return 'c_void' if ctype is c_void else ctype.__name__
 
-    print('\n%s ...' % ('ctype2encoding',))
+    printf('\n%s ...', 'ctype2encoding')
     i = 0
     for c, e in sorted((_c(c), e) for c, e in _ctype2encoding.items()):
         i += 1
-        print(' %2s: %-9s -> %s' % (i, c, bytes2repr(e)))
+        printf(' %2s: %-9s -> %s', i, c, bytes2repr(e))
 
-    print('\n%s ...' % ('encoding2ctype',))
+    printf('%s ...', 'encoding2ctype', nl=1)
     e = _encoding2ctype.copy()
     e.update(_emcoding2ctype)
     i = 0
     for e, c in sorted(e.items()):
         i += 1
-        print(' %2s: %-5s -> %s' % (i, bytes2repr(e), _c(c)))
+        printf(' %2s: %-5s -> %s', i, bytes2repr(e), _c(c))
 
-    print('\n%s ...' % ('check NS...Encoding',))
+    printf('%s ...', 'check NS...Encoding', nl=1)
     for t, e in ((NSPoint_t, NSPointEncoding),
                  (NSRange_t, NSRangeEncoding),
                  (NSRect_t,  NSRectEncoding),
@@ -866,6 +866,6 @@ if __name__ == '__main__':
         c = _join(ctype2encoding(c) for _, c in t._fields_)
         c = b'=%s}' % (c,)
         if not e.endswith(c):
-            print('  %s: %r != %r' % (t.__name__, c, e))
+            printf('  %s: %r != %r', t.__name__, c, e)
 
     _allisting(__all__, locals(), __version__, __file__)
