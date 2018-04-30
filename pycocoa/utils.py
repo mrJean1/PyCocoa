@@ -60,7 +60,7 @@
 '''(INTERNAL) Utility functions, constants, etc.
 '''
 # all imports listed explicitly to help PyChecker
-__version__ = '18.04.26'
+__version__ = '18.04.27'
 
 try:
     from math import gcd  # Python 3+
@@ -434,17 +434,20 @@ def name2pymethod(name):
     return m
 
 
-def printf(fmt, *args, **kwds):  # nl=0, nt=0
-    '''Formatted print I{fmt % args} with optional keywords I{nl=o} and
-       I{nt=0} for leading, respectively trailing blank lines.
+def printf(fmt, *args, **kwds):  # argv0='', nl=0, nt=0
+    '''Formatted print I{fmt % args} with optional keywords.
 
        @param fmt: Print-like format (str).
        @param args: Optional arguments to include (I{all positional}).
+       @keyword argv0: Optional prefix (str).
+       @keyword nl: Number of leading blank lines (int).
+       @keyword nt: Number of trailing blank lines (int).
     '''
+    a = kwds.get('argv0', _Globals.argv0)
     t = (fmt % args) if args else fmt
     nl = '\n' * kwds.get('nl', 0)
     nt = '\n' * kwds.get('nt', 0)
-    print('%s%s %s%s' % (nl, _Globals.argv0, t, nt))
+    print('%s%s %s%s' % (nl, a, t, nt))
 
 
 def type2strepr(inst, strepr=str):

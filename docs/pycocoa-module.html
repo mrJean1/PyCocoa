@@ -64,10 +64,11 @@
   Objective-C Cocoa runtime and several other <i>macOS</i> libraries.</p>
   <p>This is the <a href="http://GitHub.com/phillip-nguyen/cocoa-python" 
   target="_top">cocoa-python</a> package by <i>Phillip Nguyen (C) 2011</i>,
-  modified, extended, tested, documented and published under the original 
-  <a href="http://OpenSource.org/licenses/BSD-3-Clause" target="_top">New 
-  BSD License</a> and the <a href="http://OpenSource.org/licenses/MIT" 
-  target="_top">MIT License</a>.</p>
+  modified, extended, tested, documented and published under both the 
+  original <a href="http://OpenSource.org/licenses/BSD-3-Clause" 
+  target="_top">New BSD License</a> and the <a 
+  href="http://OpenSource.org/licenses/MIT" target="_top">MIT 
+  License</a>.</p>
   <p>In addition to the <a href="http://PyPI.Python.org/pypi/PyCocoa" 
   target="_top">pycocoa</a> package, the distribution files contain several
   tests, examples and <a href="http://mrJean1.GitHub.io/PyCocoa" 
@@ -111,7 +112,7 @@
   installation.</p>
   <p>Some alternatives to PyCocoa are (a) <a 
   href="http://PyPI.Python.org/pypi/pyobjc/" target="_top">PyObjC</a>, the 
-  most comprehensive Python to Objective-C bridge and (b) <a 
+  most comprehensive Python to Objective-C bridge, (b) <a 
   href="http://PyPI.Python.org/pypi/rubicon-objc/" 
   target="_top">Rubicon-ObjC</a> for Python 3.5+, taking advantage of 
   Python's new <a href="http://Docs.Python.org/3/library/typing.html" 
@@ -170,7 +171,7 @@
 
 <hr />
 <div class="fields">      <p><strong>Version:</strong>
-        18.04.26
+        18.04.28
       </p>
 </div><!-- ==================== SUBMODULES ==================== -->
 <a name="section-Submodules"></a>
@@ -1179,6 +1180,23 @@
         <span class="summary-sig-arg">name</span>,
         <span class="summary-sig-arg">register</span>=<span class="summary-sig-default">False</span>)</span><br />
       Create a new sub-class of the given super-class.</td>
+          <td align="right" valign="top">
+            
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a href="pycocoa-module.html#app_title" class="summary-sig-name">app_title</a>(<span class="summary-sig-arg">title</span>)</span><br />
+      Get/set the app title.</td>
           <td align="right" valign="top">
             
             
@@ -2333,8 +2351,7 @@
           <td><span class="summary-sig"><a href="pycocoa-module.html#printf" class="summary-sig-name">printf</a>(<span class="summary-sig-arg">fmt</span>,
         <span class="summary-sig-arg">*args</span>,
         <span class="summary-sig-arg">**kwds</span>)</span><br />
-      Formatted print <i>fmt % args</i> with optional keywords <i>nl=o</i> 
-      and <i>nt=0</i> for leading, respectively trailing blank lines.</td>
+      Formatted print <i>fmt % args</i> with optional keywords.</td>
           <td align="right" valign="top">
             
             
@@ -3545,6 +3562,13 @@
     <td width="15%" align="right" valign="top" class="summary">
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
+        <a name="NSTextField"></a><span class="summary-name">NSTextField</span> = <code title="ObjCClass('NSTextField')">ObjCClass('NSTextField')</code>
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
         <a name="NSTextWritingDirectionEmbedding"></a><span class="summary-name">NSTextWritingDirectionEmbedding</span> = <code title="0">0</code>
     </td>
   </tr>
@@ -3777,8 +3801,8 @@
     <td width="15%" align="right" valign="top" class="summary">
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
-        <a href="pycocoa-module.html#libAppKit" class="summary-name">libAppKit</a> = <code title="&lt;CDLL '/System/Library/Frameworks/AppKit.framework/AppKit', handle 100\
-65c380 at 102f4ad50&gt;">&lt;CDLL '/System/Library/Frameworks/AppKit.framework<code class="variable-ellipsis">...</code></code>
+        <a href="pycocoa-module.html#libAppKit" class="summary-name">libAppKit</a> = <code title="&lt;CDLL '/System/Library/Frameworks/AppKit.framework/AppKit', handle 102\
+8047f0 at 102f4fd50&gt;">&lt;CDLL '/System/Library/Frameworks/AppKit.framework<code class="variable-ellipsis">...</code></code>
     </td>
   </tr>
 <tr>
@@ -3786,7 +3810,7 @@
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
         <a href="pycocoa-module.html#libCF" class="summary-name">libCF</a> = <code title="&lt;CDLL '/System/Library/Frameworks/CoreFoundation.framework/CoreFoundat\
-ion', handle 10b29e800 at 102ef7890&gt;">&lt;CDLL '/System/Library/Frameworks/CoreFoundation.frame<code class="variable-ellipsis">...</code></code>
+ion', handle 10a507800 at 102efc890&gt;">&lt;CDLL '/System/Library/Frameworks/CoreFoundation.frame<code class="variable-ellipsis">...</code></code>
     </td>
   </tr>
 <tr>
@@ -3794,7 +3818,7 @@ ion', handle 10b29e800 at 102ef7890&gt;">&lt;CDLL '/System/Library/Frameworks/Co
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
         <a href="pycocoa-module.html#libCT" class="summary-name">libCT</a> = <code title="&lt;CDLL '/System/Library/Frameworks/CoreText.framework/CoreText', handle\
- 10066a870 at 102f5ad90&gt;">&lt;CDLL '/System/Library/Frameworks/CoreText.framework/C<code class="variable-ellipsis">...</code></code>
+ 10068a8e0 at 102f60d90&gt;">&lt;CDLL '/System/Library/Frameworks/CoreText.framework/C<code class="variable-ellipsis">...</code></code>
     </td>
   </tr>
 <tr>
@@ -3802,14 +3826,14 @@ ion', handle 10b29e800 at 102ef7890&gt;">&lt;CDLL '/System/Library/Frameworks/Co
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
         <a href="pycocoa-module.html#libFoundation" class="summary-name">libFoundation</a> = <code title="&lt;CDLL '/System/Library/Frameworks/Foundation.framework/Foundation', ha\
-ndle 100669730 at 102f67410&gt;">&lt;CDLL '/System/Library/Frameworks/Foundation.f<code class="variable-ellipsis">...</code></code>
+ndle 10050dc20 at 102f6c410&gt;">&lt;CDLL '/System/Library/Frameworks/Foundation.f<code class="variable-ellipsis">...</code></code>
     </td>
   </tr>
 <tr>
     <td width="15%" align="right" valign="top" class="summary">
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
-        <a href="pycocoa-module.html#libobjc" class="summary-name">libobjc</a> = <code title="&lt;CDLL '/usr/lib/libobjc.dylib', handle 10b2a0680 at 102f67250&gt;">&lt;CDLL '/usr/lib/libobjc.dylib', handle 10b2a0680 at <code class="variable-ellipsis">...</code></code><br />
+        <a href="pycocoa-module.html#libobjc" class="summary-name">libobjc</a> = <code title="&lt;CDLL '/usr/lib/libobjc.dylib', handle 10a509680 at 102f6c250&gt;">&lt;CDLL '/usr/lib/libobjc.dylib', handle 10a509680 at <code class="variable-ellipsis">...</code></code><br />
       The macOS <code>objc</code> library (<code>ctypes.CDLL</code>)
     </td>
   </tr>
@@ -3818,7 +3842,7 @@ ndle 100669730 at 102f67410&gt;">&lt;CDLL '/System/Library/Frameworks/Foundation
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
         <a href="pycocoa-module.html#libquartz" class="summary-name">libquartz</a> = <code title="&lt;CDLL '/System/Library/Frameworks/quartz.framework/quartz', handle 100\
-66d360 at 102f4add0&gt;">&lt;CDLL '/System/Library/Frameworks/quartz.framework<code class="variable-ellipsis">...</code></code>
+54a260 at 102f4fdd0&gt;">&lt;CDLL '/System/Library/Frameworks/quartz.framework<code class="variable-ellipsis">...</code></code>
     </td>
   </tr>
 <tr>
@@ -4014,6 +4038,31 @@ ndle 100669730 at 102f67410&gt;">&lt;CDLL '/System/Library/Frameworks/Foundation
         <i>BEFORE</i> the class is registrated.
       </p>
 </div></td></tr></table>
+</div>
+<a name="app_title"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">app_title</span>(<span class="sig-arg">title</span>)</span>
+  </h3>
+  </td><td align="right" valign="top"
+    >&nbsp;
+    </td>
+  </tr></table>
+  
+  <p>Get/set the app title.</p>
+  <dl class="fields">
+    <dt>Parameters:</dt>
+    <dd><ul class="nomargin-top">
+        <li><strong class="pname"><code>title</code></strong> - New title (str).</li>
+    </ul></dd>
+    <dt>Returns:</dt>
+        <dd>Previous title (str).</dd>
+  </dl>
+</td></tr></table>
 </div>
 <a name="aspect_ratio"></a>
 <div>
@@ -5998,13 +6047,15 @@ ndle 100669730 at 102f67410&gt;">&lt;CDLL '/System/Library/Frameworks/Foundation
     </td>
   </tr></table>
   
-  <p>Formatted print <i>fmt % args</i> with optional keywords <i>nl=o</i> 
-  and <i>nt=0</i> for leading, respectively trailing blank lines.</p>
+  <p>Formatted print <i>fmt % args</i> with optional keywords.</p>
   <dl class="fields">
     <dt>Parameters:</dt>
     <dd><ul class="nomargin-top">
         <li><strong class="pname"><code>fmt</code></strong> - Print-like format (str).</li>
         <li><strong class="pname"><code>args</code></strong> - Optional arguments to include (<i>all positional</i>).</li>
+        <li><strong class="pname"><code>argv0</code></strong> - Optional prefix (str).</li>
+        <li><strong class="pname"><code>nl</code></strong> - Number of leading blank lines (int).</li>
+        <li><strong class="pname"><code>nt</code></strong> - Number of trailing blank lines (int).</li>
     </ul></dd>
   </dl>
 </td></tr></table>
@@ -6851,8 +6902,8 @@ ObjCClass('_NSTableViewDelegate', 'NSTableViewDataSource')
   <dl class="fields">
     <dt>Value:</dt>
       <dd><table><tr><td><pre class="variable">
-&lt;CDLL '/System/Library/Frameworks/AppKit.framework/AppKit', handle 100<span class="variable-linewrap"><img src="crarr.png" alt="\" /></span>
-65c380 at 102f4ad50&gt;
+&lt;CDLL '/System/Library/Frameworks/AppKit.framework/AppKit', handle 102<span class="variable-linewrap"><img src="crarr.png" alt="\" /></span>
+8047f0 at 102f4fd50&gt;
 </pre></td></tr></table>
 </dd>
   </dl>
@@ -6871,7 +6922,7 @@ ObjCClass('_NSTableViewDelegate', 'NSTableViewDataSource')
     <dt>Value:</dt>
       <dd><table><tr><td><pre class="variable">
 &lt;CDLL '/System/Library/Frameworks/CoreFoundation.framework/CoreFoundat<span class="variable-linewrap"><img src="crarr.png" alt="\" /></span>
-ion', handle 10b29e800 at 102ef7890&gt;
+ion', handle 10a507800 at 102efc890&gt;
 </pre></td></tr></table>
 </dd>
   </dl>
@@ -6890,7 +6941,7 @@ ion', handle 10b29e800 at 102ef7890&gt;
     <dt>Value:</dt>
       <dd><table><tr><td><pre class="variable">
 &lt;CDLL '/System/Library/Frameworks/CoreText.framework/CoreText', handle<span class="variable-linewrap"><img src="crarr.png" alt="\" /></span>
- 10066a870 at 102f5ad90&gt;
+ 10068a8e0 at 102f60d90&gt;
 </pre></td></tr></table>
 </dd>
   </dl>
@@ -6909,7 +6960,7 @@ ion', handle 10b29e800 at 102ef7890&gt;
     <dt>Value:</dt>
       <dd><table><tr><td><pre class="variable">
 &lt;CDLL '/System/Library/Frameworks/Foundation.framework/Foundation', ha<span class="variable-linewrap"><img src="crarr.png" alt="\" /></span>
-ndle 100669730 at 102f67410&gt;
+ndle 10050dc20 at 102f6c410&gt;
 </pre></td></tr></table>
 </dd>
   </dl>
@@ -6927,7 +6978,7 @@ ndle 100669730 at 102f67410&gt;
   <dl class="fields">
     <dt>Value:</dt>
       <dd><table><tr><td><pre class="variable">
-&lt;CDLL '/usr/lib/libobjc.dylib', handle 10b2a0680 at 102f67250&gt;
+&lt;CDLL '/usr/lib/libobjc.dylib', handle 10a509680 at 102f6c250&gt;
 </pre></td></tr></table>
 </dd>
   </dl>
@@ -6946,7 +6997,7 @@ ndle 100669730 at 102f67410&gt;
     <dt>Value:</dt>
       <dd><table><tr><td><pre class="variable">
 &lt;CDLL '/System/Library/Frameworks/quartz.framework/quartz', handle 100<span class="variable-linewrap"><img src="crarr.png" alt="\" /></span>
-66d360 at 102f4add0&gt;
+54a260 at 102f4fdd0&gt;
 </pre></td></tr></table>
 </dd>
   </dl>
@@ -6984,7 +7035,7 @@ ndle 100669730 at 102f67410&gt;
 <table border="0" cellpadding="0" cellspacing="0" width="100%%">
   <tr>
     <td align="left" class="footer">
-    Generated by Epydoc 3.0.1 on Thu Apr 26 20:07:10 2018
+    Generated by Epydoc 3.0.1 on Mon Apr 30 13:31:30 2018
     </td>
     <td align="right" class="footer">
       <a target="mainFrame" href="http://epydoc.sourceforge.net"

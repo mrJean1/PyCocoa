@@ -30,6 +30,7 @@ from bases   import _Type2
 from menus   import _menuItemHandler_name, Menu, MenuBar, ns2Item
 from nstypes import NSApplication, nsBundleRename, \
                     NSConcreteNotification, NSNotification, nsOf, NSStr
+# from oslibs  import YES
 from runtime import isInstanceOf, ObjCClass, ObjCInstance, \
                     _ObjC_log_totals, ObjCSubclass, send_super
 from utils   import _Globals, bytes2str, instanceof, printf
@@ -40,8 +41,9 @@ from time import sleep
 __all__ = ('App',
            'NSApplicationDelegate',
            'Tile',
+           'app_title',
            'ns2App')
-__version__ = '18.04.26'
+__version__ = '18.04.28'
 
 
 class App(_Type2):
@@ -58,6 +60,7 @@ class App(_Type2):
         '''New L{App}.
 
            @keyword title: App name or title (str).
+           @keyword raiser: Throw exceptions for silent errors (bool).
            @keyword kwds: Optional, additional keyword arguments.
         '''
         if _Globals.App:
@@ -212,7 +215,7 @@ class App(_Type2):
         '''
         _ObjC_log_totals()
         # <http://Developer.Apple.com/documentation/
-        #  appkit/nsapplication/1428417-terminate>
+        #       appkit/nsapplication/1428417-terminate>
         self.NS.terminate_(self.NS)
 
     # Callback methods for Window instances,
@@ -225,7 +228,7 @@ class App(_Type2):
 #   def appStop_(self, sender=None):
         # Stop this app's event loop.
         # <http://Developer.Apple.com/documentation/
-        #  appkit/nsapplication/1428473-stop>
+        #       appkit/nsapplication/1428473-stop>
 #       self.NS.stop_(nsOf(sender or self))
 
     def menuFullScreen_(self, item):  # PYCHOK expected
@@ -340,12 +343,82 @@ class _NSApplicationDelegate(object):
         self.app = app
         return self
 
+    # <http://GitHub.com/thesecretlab/LearningCocoa4thEd/tree/master/
+    #       AwesomeGrid/AwesomeGrid>,
+    # <http://GitHub.com/thesecretlab/LearningCocoa4thEd/tree/master/
+    #       HelloCocoa/HelloCocoa>, etc.
+
+#   @_ObjC.method('v@')
+#   def applicationDidBecomeActive_(self, ui_application):
+#       '''Restart any tasks that were paused (or not yet started) while the
+#          application was inactive. If the application was previously in the
+#          background, optionally refresh the user interface.
+#       '''
+#       pass
+
+    # <http://GitHub.com/thesecretlab/LearningCocoa4thEd/tree/master/
+    #       AppNapping/AppNapping>
+#   @_ObjC.method('v@')
+#   def applicationDidChangeOcclusionState_(self, ns_notification):
+#       if ([NSApp occlusionState] & NSApplicationOcclusionStateVisible)
+#           NSLog(@"You are in the foreground, go nuts");
+#       else
+#           NSLog(@"You are in the background, slow down");
+
+#   @_ObjC.method('v@')
+#   def applicationDidEnterBackground_(self, ui_application):
+#      '''Use this method to release shared resources, save user data,
+#         invalidate timers, and store enough application state information
+#         to restore your application to its current state in case it is
+#         terminated later.
+#
+#         If your application supports background execution, this method
+#         is called instead of C{applicationWillTerminate_} when the user
+#         quits.
+#       '''
+#       pass
+
     @_ObjC.method('v@')
     def applicationDidFinishLaunching_(self, ns_notification):
         '''ObjC callback to handle C{NSApplication} event.
         '''
         self.app._isUp = True
         self.app.appLaunched_(ns2App(ns_notification))
+
+#   @_ObjC.method('Bv@')
+#   def applicationDidFinishLaunchingWithOptions_(self, ns_dictionary):
+#       '''ObjC callback to handle C{UIApplication} event.
+#       '''
+#       return YES
+
+#   @_ObjC.method('v@')
+#   def applicationWillEnterForeground_(self, ui_application):
+#       '''Called as part of the transition from the background to the
+#          inactive state; here you can undo many of the changes made
+#          on entering the background.
+#       '''
+#       pass
+
+#   @_ObjC.method('v@')
+#   def applicationWillResignActive_(self, ui_application):
+#       '''Sent when the application is about to move from active to
+#          inactive state.  This can occur for certain types of temporary
+#          interruptions (such as an incoming phone call or SMS message)
+#          or when the user quits the application and it begins the
+#          transition to the background state.
+#
+# 	       Use this method to pause ongoing tasks, disable timers, and
+# 	       throttle down OpenGL ES frame rates. Games should use this
+# 	       method to pause the game.
+#       '''
+#       pass
+
+#   @_ObjC.method('v@')
+#   def applicationWillTerminate_(self, ui_application):
+#       '''App is about to terminate.  Save data if appropriate.
+#          @see: C{applicationDidEnterBackground_}.
+#       '''
+#       pass
 
     @_ObjC.method('v@')
     def menuItemHandler_(self, ns_item):
@@ -407,6 +480,16 @@ class Tile(_Type2):
         self._label = bytes2str(label)
         self.NS.setBadgeLabel_(NSStr(self._label))
         self.NS.display()
+
+
+def app_title(title):
+    '''Get/set the app title.
+
+       @param title: New title (str).
+
+       @return: Previous title (str).
+    '''
+    return nsBundleRename(NSStr(title))
 
 
 def ns2App(ns):

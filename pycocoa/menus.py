@@ -41,7 +41,7 @@ __all__ = ('Item',
            'Separator',
            'ns2Item',
            'title2action')
-__version__ = '18.04.26'
+__version__ = '18.04.28'
 
 _menuItemHandler_name = 'menuItemHandler_'
 
@@ -246,6 +246,7 @@ class MenuBar(_Type2):
         self.NS = NSMenu.alloc().init()
         if app:
             self.app = app
+            self._title = app.title
             # self.main(app)  # trashes menu bar
 
     def __len__(self):
@@ -285,6 +286,7 @@ class MenuBar(_Type2):
         '''
         if app:
             self.app = app
+            self._title = app.title
         if not self.app:
             raise ValueError('%s invalid: %s' % ('app', 'missing'))
         self.app.NS.setMainMenu_(self.NS)

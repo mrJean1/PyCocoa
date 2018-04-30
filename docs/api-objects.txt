@@ -124,6 +124,7 @@ pycocoa.NSSizeEncoding	pycocoa-module.html#NSSizeEncoding
 pycocoa.NSNotification	pycocoa-module.html#NSNotification
 pycocoa.NSBeginFunctionKey	pycocoa-module.html#NSBeginFunctionKey
 pycocoa.NSApplicationPresentationDefault	pycocoa-module.html#NSApplicationPresentationDefault
+pycocoa.NSTextField	pycocoa-module.html#NSTextField
 pycocoa.add_method	pycocoa-module.html#add_method
 pycocoa.NSSet	pycocoa-module.html#NSSet
 pycocoa.NSOpenPanel	pycocoa-module.html#NSOpenPanel
@@ -202,6 +203,7 @@ pycocoa.libAppKit	pycocoa-module.html#libAppKit
 pycocoa.None2NS	pycocoa-module.html#None2NS
 pycocoa.NSTextAlignmentCenter	pycocoa-module.html#NSTextAlignmentCenter
 pycocoa.NSTrue	pycocoa-module.html#NSTrue
+pycocoa.app_title	pycocoa-module.html#app_title
 pycocoa.kCFStringEncodingUTF16LE	pycocoa-module.html#kCFStringEncodingUTF16LE
 pycocoa.NSWindowDocumentIconButton	pycocoa-module.html#NSWindowDocumentIconButton
 pycocoa.generator2NS	pycocoa-module.html#generator2NS
@@ -317,6 +319,7 @@ pycocoa.apps.__package__	pycocoa.apps-module.html#__package__
 pycocoa.apps.send_super	pycocoa.runtime-module.html#send_super
 pycocoa.apps.ns2Item	pycocoa.menus-module.html#ns2Item
 pycocoa.apps.nsBundleRename	pycocoa.nstypes-module.html#nsBundleRename
+pycocoa.apps.app_title	pycocoa.apps-module.html#app_title
 pycocoa.apps.ns2App	pycocoa.apps-module.html#ns2App
 pycocoa.apps._ObjC_log_totals	pycocoa.runtime-module.html#_ObjC_log_totals
 pycocoa.apps.instanceof	pycocoa.utils-module.html#instanceof
@@ -459,6 +462,7 @@ pycocoa.nstypes.NSTrue	pycocoa.nstypes-module.html#NSTrue
 pycocoa.nstypes.cfNumber2bool	pycocoa.oslibs-module.html#cfNumber2bool
 pycocoa.nstypes.NSNotification	pycocoa.nstypes-module.html#NSNotification
 pycocoa.nstypes.NSPrinter	pycocoa.nstypes-module.html#NSPrinter
+pycocoa.nstypes.NSTextField	pycocoa.nstypes-module.html#NSTextField
 pycocoa.nstypes.NSMutableData	pycocoa.nstypes-module.html#NSMutableData
 pycocoa.nstypes.nsString2str	pycocoa.nstypes-module.html#nsString2str
 pycocoa.nstypes.NSOpenPanel	pycocoa.nstypes-module.html#NSOpenPanel

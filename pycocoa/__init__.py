@@ -9,7 +9,7 @@ the I{macOS} Objective-C Cocoa runtime and several other I{macOS} libraries.
 
 This is the U{cocoa-python<http://GitHub.com/phillip-nguyen/cocoa-python>}
 package by I{Phillip Nguyen (C) 2011}, modified, extended, tested,
-documented and published under the original
+documented and published under both the original
 U{New BSD License<http://OpenSource.org/licenses/BSD-3-Clause>} and the
 U{MIT License<http://OpenSource.org/licenses/MIT>}.
 
@@ -45,7 +45,7 @@ C{cd} to directory C{PyCocoa-} and type C{python setup.py install}.  To
 run the PyCocoa tests, type C{python setup.py test} before installation.
 
 Some alternatives to PyCocoa are (a) U{PyObjC<http://PyPI.Python.org/pypi/pyobjc/>},
-the most comprehensive Python to Objective-C bridge and (b)
+the most comprehensive Python to Objective-C bridge, (b)
 U{Rubicon-ObjC<http://PyPI.Python.org/pypi/rubicon-objc/>} for Python 3.5+,
 taking advantage of Python's new
 U{typing<http://Docs.Python.org/3/library/typing.html>} annotations and (c)
@@ -115,7 +115,7 @@ OTHER DEALINGS IN THE SOFTWARE.}
 from os.path import abspath, dirname
 import sys
 
-__version__ = '18.04.26'
+__version__ = '18.04.28'
 
 p = sys.platform
 if not p.startswith('darwin'):

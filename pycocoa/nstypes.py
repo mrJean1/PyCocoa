@@ -174,6 +174,7 @@ NSStatusBar            = ObjCClass('NSStatusBar')
 NSString               = ObjCClass('NSString')  # ** use NSStr or 'at'
 NSTableColumn          = ObjCClass('NSTableColumn')
 NSTableView            = ObjCClass('NSTableView')
+NSTextField            = ObjCClass('NSTextField')
 NSThread               = ObjCClass('NSThread')
 NSURL                  = ObjCClass('NSURL')
 NSView                 = ObjCClass('NSView')
