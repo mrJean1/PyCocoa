@@ -64,7 +64,7 @@
 
 <hr />
 <div class="fields">      <p><strong>Version:</strong>
-        18.04.24
+        18.05.03
       </p>
 </div><!-- ==================== FUNCTIONS ==================== -->
 <a name="section-Functions"></a>
@@ -500,7 +500,7 @@
   <dl class="fields">
     <dt>Parameters:</dt>
     <dd><ul class="nomargin-top">
-        <li><strong class="pname"><code>name</code></strong> - The class name (str).</li>
+        <li><strong class="pname"><code>name</code></strong> - The class name (<code>str</code>).</li>
     </ul></dd>
     <dt>Returns:</dt>
         <dd>The class (<a href="pycocoa.octypes.Class_t-class.html" 
@@ -527,7 +527,7 @@
   <dl class="fields">
     <dt>Parameters:</dt>
     <dd><ul class="nomargin-top">
-        <li><strong class="pname"><code>prefixes</code></strong> - No, one or more class names to match (str-s).</li>
+        <li><strong class="pname"><code>prefixes</code></strong> - No, one or more class names to match (<code>str</code>-s).</li>
     </ul></dd>
     <dt>Returns:</dt>
         <dd>For each class yield a 2-tuple (<i>name, class</i>) where 
@@ -560,7 +560,7 @@
           class="link">Class_t</a>).</li>
     </ul></dd>
     <dt>Returns:</dt>
-        <dd>The class name (str).</dd>
+        <dd>The class name (<code>str</code>).</dd>
     <dt>Raises:</dt>
     <dd><ul class="nomargin-top">
         <li><code><strong class='fraise'>ValueError</strong></code> - Invalid <i>clas</i>, iff no <i>dflt</i> provided.</li>
@@ -591,7 +591,7 @@
           href="pycocoa.octypes.Id_t-class.html" class="link">Id_t</a>).</li>
     </ul></dd>
     <dt>Returns:</dt>
-        <dd>The object's class name (str).</dd>
+        <dd>The object's class name (<code>str</code>).</dd>
     <dt>Raises:</dt>
     <dd><ul class="nomargin-top">
         <li><code><strong class='fraise'>ValueError</strong></code> - Invalid <i>obj</i>, iff no <i>dflt</i> provided.</li>
@@ -648,7 +648,7 @@
     <dd><ul class="nomargin-top">
         <li><strong class="pname"><code>obj</code></strong> - The object (<code>Object</code> or <a 
           href="pycocoa.octypes.Id_t-class.html" class="link">Id_t</a>).</li>
-        <li><strong class="pname"><code>name</code></strong> - The instance variable name (str).</li>
+        <li><strong class="pname"><code>name</code></strong> - The instance variable name (<code>str</code>).</li>
         <li><strong class="pname"><code>ctype</code></strong> - The instance variable type (<code>ctypes</code>),</li>
     </ul></dd>
     <dt>Returns:</dt>
@@ -678,7 +678,7 @@
     <dd><ul class="nomargin-top">
         <li><strong class="pname"><code>clas</code></strong> - The class (<a href="pycocoa.octypes.Class_t-class.html" 
           class="link">Class_t</a>).</li>
-        <li><strong class="pname"><code>prefixes</code></strong> - No, one or more ivar names to match (str-s).</li>
+        <li><strong class="pname"><code>prefixes</code></strong> - No, one or more ivar names to match (<code>str</code>-s).</li>
     </ul></dd>
     <dt>Returns:</dt>
         <dd>For each ivar yield a 4-tuple (<i>name, encoding, ctype, 
@@ -735,7 +735,7 @@
   <dl class="fields">
     <dt>Parameters:</dt>
     <dd><ul class="nomargin-top">
-        <li><strong class="pname"><code>name</code></strong> - The metaclass (str).</li>
+        <li><strong class="pname"><code>name</code></strong> - The metaclass (<code>str</code>).</li>
     </ul></dd>
     <dt>Returns:</dt>
         <dd>The metaclass (<a href="pycocoa.octypes.Class_t-class.html" 
@@ -764,7 +764,7 @@
     <dd><ul class="nomargin-top">
         <li><strong class="pname"><code>clas</code></strong> - Class (<a href="pycocoa.octypes.Class_t-class.html" 
           class="link">Class_t</a>).</li>
-        <li><strong class="pname"><code>name</code></strong> - Method name (str).</li>
+        <li><strong class="pname"><code>name</code></strong> - Method name (<code>str</code>).</li>
     </ul></dd>
     <dt>Returns:</dt>
         <dd>The method (<a href="pycocoa.octypes.Method_t-class.html" 
@@ -794,7 +794,7 @@
     <dd><ul class="nomargin-top">
         <li><strong class="pname"><code>clas</code></strong> - The class (<a href="pycocoa.octypes.Class_t-class.html" 
           class="link">Class_t</a>).</li>
-        <li><strong class="pname"><code>prefixes</code></strong> - No, one or more method names to match (str-s).</li>
+        <li><strong class="pname"><code>prefixes</code></strong> - No, one or more method names to match (<code>str</code>-s).</li>
     </ul></dd>
     <dt>Returns:</dt>
         <dd>For each method yield a 4-tuple (<i>name, encoding, rargtypes, 
@@ -837,7 +837,7 @@
           class="link">Class_t</a> or <a 
           href="pycocoa.octypes.Protocol_t-class.html" 
           class="link">Protocol_t</a>).</li>
-        <li><strong class="pname"><code>prefixes</code></strong> - No, one or more property names to match (str-s).</li>
+        <li><strong class="pname"><code>prefixes</code></strong> - No, one or more property names to match (<code>str</code>-s).</li>
     </ul></dd>
     <dt>Returns:</dt>
         <dd>For each property, yield a 3-tuple (<i>name</i>, 
@@ -911,7 +911,7 @@
   <dl class="fields">
     <dt>Parameters:</dt>
     <dd><ul class="nomargin-top">
-        <li><strong class="pname"><code>name</code></strong> - The protocol name (str).</li>
+        <li><strong class="pname"><code>name</code></strong> - The protocol name (<code>str</code>).</li>
     </ul></dd>
     <dt>Returns:</dt>
         <dd>The protocol (<a href="pycocoa.octypes.Protocol_t-class.html" 
@@ -941,7 +941,7 @@
     <dd><ul class="nomargin-top">
         <li><strong class="pname"><code>clas</code></strong> - The class (<a href="pycocoa.octypes.Class_t-class.html" 
           class="link">Class_t</a>).</li>
-        <li><strong class="pname"><code>prefixes</code></strong> - No, one or more protocol names to match (str-s).</li>
+        <li><strong class="pname"><code>prefixes</code></strong> - No, one or more protocol names to match (<code>str</code>-s).</li>
     </ul></dd>
     <dt>Returns:</dt>
         <dd>For each protocol, yield a 2-tuple (<i>name</i>, <i>protocol</i>)
@@ -969,7 +969,7 @@
   <dl class="fields">
     <dt>Parameters:</dt>
     <dd><ul class="nomargin-top">
-        <li><strong class="pname"><code>name_</code></strong> - The selector name (str).</li>
+        <li><strong class="pname"><code>name_</code></strong> - The selector name (<code>str</code>).</li>
     </ul></dd>
     <dt>Returns:</dt>
         <dd>The selector (<a href="pycocoa.octypes.SEL_t-class.html" 
@@ -999,7 +999,8 @@
           class="link">SEL_t</a>).</li>
     </ul></dd>
     <dt>Returns:</dt>
-        <dd>The selector name (str) if found, &quot;&quot; otherwise.</dd>
+        <dd>The selector name (<code>str</code>) if found, &quot;&quot; 
+          otherwise.</dd>
   </dl>
 </td></tr></table>
 </div>
@@ -1080,7 +1081,7 @@
           href="pycocoa.octypes.Id_t-class.html" class="link">Id_t</a>).</li>
     </ul></dd>
     <dt>Returns:</dt>
-        <dd>The object'ssuper-class name (str).</dd>
+        <dd>The object'ssuper-class name (<code>str</code>).</dd>
     <dt>Raises:</dt>
     <dd><ul class="nomargin-top">
         <li><code><strong class='fraise'>ValueError</strong></code> - Invalid <i>obj</i>, iff no <i>dflt</i> provided.</li>
@@ -1120,7 +1121,7 @@
 <table border="0" cellpadding="0" cellspacing="0" width="100%%">
   <tr>
     <td align="left" class="footer">
-    Generated by Epydoc 3.0.1 on Mon Apr 30 13:31:30 2018
+    Generated by Epydoc 3.0.1 on Thu May 10 14:22:54 2018
     </td>
     <td align="right" class="footer">
       <a target="mainFrame" href="http://epydoc.sourceforge.net"

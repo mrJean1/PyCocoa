@@ -1,11 +1,11 @@
 
 # -*- coding: utf-8 -*-
 
-# List the protocols of an Objective-C class.
+# List all ObjC NS... types.
 
 import pycocoa
 
-__version__ = '18.04.28'
+__version__ = '18.05.04'
 
 if __name__ == '__main__':
 
@@ -26,4 +26,4 @@ if __name__ == '__main__':
             i += 1
             print('%4d: %-40s: %s : %r' % (i, k, s, r))
 
-    sys.exit(int(i != 165))
+    sys.exit(int(i != 197))

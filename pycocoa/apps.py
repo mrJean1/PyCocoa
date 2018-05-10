@@ -43,7 +43,7 @@ __all__ = ('App',
            'Tile',
            'app_title',
            'ns2App')
-__version__ = '18.04.28'
+__version__ = '18.05.03'
 
 
 class App(_Type2):
@@ -391,6 +391,10 @@ class _NSApplicationDelegate(object):
 #       '''
 #       return YES
 
+#   @_ObjC.method('Bv@')
+#   def applicationShouldTerminateAfterLastWindowClosed_(self, ns_application):
+#       return YES
+
 #   @_ObjC.method('v@')
 #   def applicationWillEnterForeground_(self, ui_application):
 #       '''Called as part of the transition from the background to the
@@ -450,7 +454,7 @@ class _NSApplicationDelegate(object):
                 raise RuntimeError('%s(%r): %s' % ('unhandled', item, act))
 
 
-assert(_NSApplicationDelegate.menuItemHandler_.name == _menuItemHandler_name)
+assert (_NSApplicationDelegate.menuItemHandler_.name == _menuItemHandler_name), _menuItemHandler_name
 NSApplicationDelegate = ObjCClass('_NSApplicationDelegate')
 
 

@@ -23,7 +23,7 @@
 # ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
 # OTHER DEALINGS IN THE SOFTWARE.
 
-'''Types L{Window}, L{MediaWindow}, L{Screen}, L{Style}, wrapping ObjC C{NSWindow}, etc.
+'''Types L{Window}, L{MediaWindow}, L{Screen}, L{WindowStyle}, wrapping ObjC C{NSWindow}, etc.
 '''
 # all imports listed explicitly to help PyChecker
 from bases    import _Type2
@@ -41,16 +41,11 @@ from oslibs   import NO, NSBackingStoreBuffered, \
                      NSWindowStyleMaskUtilityWindow, YES
 from runtime  import isInstanceOf, ObjCClass, ObjCInstance, \
                      ObjCSubclass, send_super
-from utils    import aspect_ratio, _Constants, _Globals, \
+from utils    import aspect_ratio, _Constants, _exports, _Globals, \
                      bytes2str, instanceof, _Types
 # from enum   import Enum
 
-__all__ = ('MediaWindow',
-           'NSWindowDelegate',
-           'Screen', 'Style',
-           'Window',
-           'ns2Window')
-__version__ = '18.04.26'
+__version__ = '18.05.04'
 
 _Cascade = NSPoint_t(25, 25)  # PYCHOK false
 _Screen  = NSScreen.alloc().init().mainScreen()
@@ -80,18 +75,6 @@ class Screen(Rect):
         self.rect = f
 
 
-class Style(_Constants):  # Enum?
-    '''Window style mask constants.
-    '''
-    Closable       = NSWindowStyleMaskClosable
-    Miniaturizable = NSWindowStyleMaskMiniaturizable  # aka Hidable
-#   Movable        = ?
-    Resizable      = NSWindowStyleMaskResizable
-    Titled         = NSWindowStyleMaskTitled
-    Typical        = NSWindowStyleMaskUsual  # all of the above
-    Utility        = NSWindowStyleMaskUtilityWindow
-
-
 class Window(_Type2):
     '''Basic, base window Python Type, wrapping ObjC C{NSWindow}.
     '''
@@ -105,18 +88,20 @@ class Window(_Type2):
     def __init__(self, title='Main', frame=None, excl=0, auto=False, **kwds):
         '''Create a new L{Window}.
 
-        @keyword title: Window title (str).
-        @keyword frame: Window frame (L{Rect}, L{NSRect_t}, L{NSRect4_t}, or None).
-        @keyword excl: Window styles to exclude (L{Style}C{.attribute}).
-        @keyword auto: Release window resource when closed (bool).
-        @keyword kwds: Optional, additional keyword arguments.
+           @keyword title: Window title (str).
+           @keyword frame: Window frame (L{Rect}, L{NSRect_t}, L{NSRect4_t}, or None).
+           @keyword excl: Window styles to exclude (L{WindowStyle}C{.attribute}).
+           @keyword auto: Release window resource when closed (bool).
+           @keyword kwds: Optional, additional keyword arguments.
+
+           @raise WindowError: Unique C{Id} exists.
         '''
         self._frame = Screen(0.5) if frame is None else Rect(frame)
         self._ratio = self._frame.width, self._frame.height
 
         self.NS = NSWindow.alloc().initWithContentRect_styleMask_backing_defer_(
                                    self.frame.NS,
-                                   Style.Typical ^ excl,  # PYCHOK expected
+                                   WindowStyle.Typical ^ excl,  # PYCHOK expected
                                    NSBackingStoreBuffered,
                                    NSFalse)  # or False or 0
         self.title = bytes2str(title)
@@ -128,7 +113,7 @@ class Window(_Type2):
         # XXX self.NS.setIdentifier_(int2NS(id(self)))
         self._ns_uniqID = u = self.NS.uniqueID()
         if u in _Globals.Windows:
-            raise KeyError('%s %r exists: %r' % ('.uniqueID', u,  _Globals.Windows[u]))
+            raise WindowError('%s %r exists: %r' % ('.uniqueID', u,  _Globals.Windows[u]))
         _Globals.Windows[u] = self
 
         if _Globals.App and not self.app:
@@ -260,6 +245,8 @@ class Window(_Type2):
         '''Set this window's aspect ratio.
 
            @param ratio: New ratio (L{Size}, 2-tuple (width, height), str("w:h") or C{NSSize_t}).
+
+           @raise WindowError: Invalid I{ratio}.
         '''
         try:
             r = bytes2str(ratio, dflt=None)
@@ -270,7 +257,7 @@ class Window(_Type2):
             else:  # NSSize_t
                 r = ratio.width, ratio.height
         except (AttributeError, ValueError):
-            raise ValueError('%s invalid: %r' % ('ratio', ratio))
+            raise WindowError('%s invalid: %r' % ('ratio', ratio))
 
         r = aspect_ratio(*r)
         if r:
@@ -346,6 +333,48 @@ class Window(_Type2):
             return self.app.windowZoomOK_(self, frame)
         else:
             return True
+
+
+class WindowError(ValueError):
+    '''Window error.
+    '''
+    pass
+
+
+class WindowStyleError(WindowError):
+    '''Window style error.
+    '''
+    pass
+
+
+class WindowStyle(_Constants):  # Enum?
+    '''Window style constants (C{mask}).
+    '''
+    Closable       = NSWindowStyleMaskClosable
+    Miniaturizable = NSWindowStyleMaskMiniaturizable  # aka Hidable
+#   Movable        = ?
+    Resizable      = NSWindowStyleMaskResizable
+    Titled         = NSWindowStyleMaskTitled
+    Typical        = NSWindowStyleMaskUsual  # all of the above
+    Utility        = NSWindowStyleMaskUtilityWindow
+
+
+WindowStyle = WindowStyle()  #: Window style constants (C{mask}).
+
+
+def windowStyles(*styles):
+    '''Return a combination of window styles, specified by name.
+
+       @param styles: Style names (I{all positional}), case-insensitive.
+
+       @return: Combined window styles (L{WindowStyle}C{s mask}).
+
+       @raise WindowStyleError: One or more I{styles} are invalid.
+    '''
+    c, e = WindowStyle._masks(*styles)
+    if e is None:
+        return c
+    raise WindowStyleError('invalid %s: %s' % ('styles', e))
 
 
 class MediaWindow(Window):
@@ -523,6 +552,11 @@ def ns2Window(ns):
 
 _Types.Window = NSWindow._Type = Window
 _Types.MediaWindow             = MediaWindow
+
+# filter locals() for .__init__.py
+__all__ = _exports(locals(), 'MediaWindow', 'NSWindowDelegate',
+                             'Screen', 'ns2Window',
+                   starts=('Window', 'window'))
 
 if __name__ == '__main__':
 

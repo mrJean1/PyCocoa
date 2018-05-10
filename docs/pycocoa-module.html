@@ -64,11 +64,11 @@
   Objective-C Cocoa runtime and several other <i>macOS</i> libraries.</p>
   <p>This is the <a href="http://GitHub.com/phillip-nguyen/cocoa-python" 
   target="_top">cocoa-python</a> package by <i>Phillip Nguyen (C) 2011</i>,
-  modified, extended, tested, documented and published under both the 
-  original <a href="http://OpenSource.org/licenses/BSD-3-Clause" 
-  target="_top">New BSD License</a> and the <a 
-  href="http://OpenSource.org/licenses/MIT" target="_top">MIT 
-  License</a>.</p>
+  modified, extended, tested, documented and published with permission 
+  under both the original <a 
+  href="http://OpenSource.org/licenses/BSD-3-Clause" target="_top">New BSD 
+  License</a> and the <a href="http://OpenSource.org/licenses/MIT" 
+  target="_top">MIT License</a>.</p>
   <p>In addition to the <a href="http://PyPI.Python.org/pypi/PyCocoa" 
   target="_top">pycocoa</a> package, the distribution files contain several
   tests, examples and <a href="http://mrJean1.GitHub.io/PyCocoa" 
@@ -171,7 +171,7 @@
 
 <hr />
 <div class="fields">      <p><strong>Version:</strong>
-        18.04.28
+        18.05.08
       </p>
 </div><!-- ==================== SUBMODULES ==================== -->
 <a name="section-Submodules"></a>
@@ -192,6 +192,8 @@
         class="link">FrozenDict</a> and <a 
         href="pycocoa.dicts.Dict-class.html" class="link">Dict</a>, 
         wrapping ObjC <code>NS[Mutable]Dictionary</code>.</em>    </li>
+    <li> <strong class="uidlink"><a href="pycocoa.fonts-module.html">pycocoa.fonts</a></strong>: <em class="summary">Type <a href="pycocoa.fonts.Font-class.html" class="link">Font</a>,
+        etc., wrapping ObjC <code>NSFont</code>.</em>    </li>
     <li> <strong class="uidlink"><a href="pycocoa.geometry-module.html">pycocoa.geometry</a></strong>: <em class="summary">Types <a href="pycocoa.geometry.Point-class.html" 
         class="link">Point</a>, <a href="pycocoa.geometry.Rect-class.html" 
         class="link">Rect</a> and <a 
@@ -239,8 +241,9 @@
         href="pycocoa.windows.MediaWindow-class.html" 
         class="link">MediaWindow</a>, <a 
         href="pycocoa.windows.Screen-class.html" class="link">Screen</a>, 
-        <a href="pycocoa.windows.Style-class.html" class="link">Style</a>, 
-        wrapping ObjC <code>NSWindow</code>, etc.</em>    </li>
+        <a href="pycocoa.windows-module.html#WindowStyle" 
+        class="link">WindowStyle</a>, wrapping ObjC <code>NSWindow</code>, 
+        etc.</em>    </li>
   </ul></td></tr>
 </table>
 
@@ -433,6 +436,30 @@
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
         <a href="ctypes.c_void_p-class.html" class="summary-name">Dictionary_t</a>
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="pycocoa.fonts.Font-class.html" class="summary-name">Font</a><br />
+      Python <code>Font</code> Type, wrapping ObjC <code>NSFont</code>.
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="pycocoa.fonts.FontError-class.html" class="summary-name">FontError</a><br />
+      Font selection error.
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="pycocoa.fonts.FontTraitError-class.html" class="summary-name">FontTraitError</a><br />
+      Font traits error.
     </td>
   </tr>
 <tr>
@@ -916,14 +943,6 @@
     <td width="15%" align="right" valign="top" class="summary">
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
-        <a href="pycocoa.windows.Style-class.html" class="summary-name">Style</a><br />
-      Window style mask constants.
-    </td>
-  </tr>
-<tr>
-    <td width="15%" align="right" valign="top" class="summary">
-      <span class="summary-type">&nbsp;</span>
-    </td><td class="summary">
         <a href="pycocoa.tables.Table-class.html" class="summary-name">Table</a><br />
       Python Type table of rows and columns, wrapping an ObjC 
         <code>NSTableView</code>.
@@ -1033,6 +1052,22 @@
         <a href="pycocoa.windows.Window-class.html" class="summary-name">Window</a><br />
       Basic, base window Python Type, wrapping ObjC 
         <code>NSWindow</code>.
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="pycocoa.windows.WindowError-class.html" class="summary-name">WindowError</a><br />
+      Window error.
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="pycocoa.windows.WindowStyleError-class.html" class="summary-name">WindowStyleError</a><br />
+      Window style error.
     </td>
   </tr>
 <tr>
@@ -1339,6 +1374,127 @@
           <td><span class="summary-sig"><a href="pycocoa-module.html#dict2NS" class="summary-sig-name">dict2NS</a>(<span class="summary-sig-arg">py</span>)</span><br />
       Create an <code>NSMutableDictionary</code> instance from a Python 
       <code>dict</code>.</td>
+          <td align="right" valign="top">
+            
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a name="flint"></a><span class="summary-sig-name">flint</span>(<span class="summary-sig-arg">f</span>)</span><br />
+      Return <code>int</code> for integer <code>float</code>.</td>
+          <td align="right" valign="top">
+            
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a href="pycocoa-module.html#fontTraits" class="summary-sig-name">fontTraits</a>(<span class="summary-sig-arg">*traits</span>)</span><br />
+      Return a font traits mask for the named traits.</td>
+          <td align="right" valign="top">
+            
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a href="pycocoa-module.html#fontTraitstrs" class="summary-sig-name">fontTraitstrs</a>(<span class="summary-sig-arg">traits</span>)</span><br />
+      Return font traits as names.</td>
+          <td align="right" valign="top">
+            
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a href="pycocoa-module.html#fontfamilies" class="summary-sig-name">fontfamilies</a>(<span class="summary-sig-arg">*prefixes</span>)</span><br />
+      Yield the installed font families.</td>
+          <td align="right" valign="top">
+            
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a href="pycocoa-module.html#fontnamesof" class="summary-sig-name">fontnamesof</a>(<span class="summary-sig-arg">family</span>)</span><br />
+      Yield the available font names of a family.</td>
+          <td align="right" valign="top">
+            
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a href="pycocoa-module.html#fontsof" class="summary-sig-name">fontsof</a>(<span class="summary-sig-arg">family</span>,
+        <span class="summary-sig-arg">size</span>=<span class="summary-sig-default">0</span>,
+        <span class="summary-sig-arg">weight</span>=<span class="summary-sig-default">None</span>)</span><br />
+      Yield the available fonts of a family.</td>
+          <td align="right" valign="top">
+            
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a href="pycocoa-module.html#fontsof4" class="summary-sig-name">fontsof4</a>(<span class="summary-sig-arg">family</span>)</span><br />
+      Yield the available fonts of a family.</td>
           <td align="right" valign="top">
             
             
@@ -2219,6 +2375,24 @@
     </td><td class="summary">
       <table width="100%" cellpadding="0" cellspacing="0" border="0">
         <tr>
+          <td><span class="summary-sig"><a href="pycocoa-module.html#nsIter" class="summary-sig-name">nsIter</a>(<span class="summary-sig-arg">ns</span>,
+        <span class="summary-sig-arg">reverse</span>=<span class="summary-sig-default">False</span>)</span><br />
+      Iterate over an <code>NS..</code> objects's (reverse) enumerator.</td>
+          <td align="right" valign="top">
+            
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
           <td><span class="summary-sig"><a href="pycocoa-module.html#nsIter2" class="summary-sig-name">nsIter2</a>(<span class="summary-sig-arg">ns</span>,
         <span class="summary-sig-arg">reverse</span>=<span class="summary-sig-default">False</span>)</span><br />
       Iterate over an <code>NS..</code> objects's (reverse) enumerator.</td>
@@ -2679,6 +2853,23 @@
     </td><td class="summary">
       <table width="100%" cellpadding="0" cellspacing="0" border="0">
         <tr>
+          <td><span class="summary-sig"><a href="pycocoa-module.html#windowStyles" class="summary-sig-name">windowStyles</a>(<span class="summary-sig-arg">*styles</span>)</span><br />
+      Return a combination of window styles, specified by name.</td>
+          <td align="right" valign="top">
+            
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
           <td><span class="summary-sig"><a href="pycocoa-module.html#z1000str" class="summary-sig-name">z1000str</a>(<span class="summary-sig-arg">size</span>,
         <span class="summary-sig-arg">sep</span>=<span class="summary-sig-default"><code class="variable-quote">'</code><code class="variable-string">_</code><code class="variable-quote">'</code></span>)</span><br />
       Convert a size value to string with 1_000's seperator.</td>
@@ -2764,6 +2955,30 @@
     <td width="15%" align="right" valign="top" class="summary">
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
+        <a href="pycocoa-module.html#FontTrait" class="summary-name">FontTrait</a> = <code title="FontTrait.Bold=2, .Compressed=1&lt;&lt;9, .Condensed=1&lt;&lt;6, .Expanded=1&lt;&lt;5, .\
+Italic=1, .MonoSpace=1&lt;&lt;10, .Narrow=1&lt;&lt;4, .Poster=1&lt;&lt;8, .SansSerif=1&lt;&lt;\
+31, .SmallCaps=1&lt;&lt;7, .UnBold=1&lt;&lt;2, .UnItalic=1&lt;&lt;24">FontTrait.Bold=2, .Compressed=1&lt;&lt;9, .Condensed=1&lt;&lt;<code class="variable-ellipsis">...</code></code>
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="pycocoa-module.html#Fonts" class="summary-name">Fonts</a> = <code title="Fonts.App=Font(name='Helvetica', family='Helvetica', size=12, weight=5\
+), .Bold=Font(name='.SFNSText-Bold', family='.SF NS Text', size=13, tr\
+aits='Bold', weight=9), .Label=Font(name='.AppleSystemUIFont', family=\
+'.AppleSystemUIFont', size=10, weight=5), .Menu=Font(name='.AppleSyste\
+mUIFont', family='.AppleSystemUIFont', size=13, weight=5), .MenuBar=Fo\
+nt(name='.AppleSystemUIFont', family='.AppleSystemUIFont', size=14, we\
+ight=5), .Message=Font(name='.AppleSystemUIFont', family='.AppleSystem\
+UIFont', size=13, weight=5), .MonoSpace=Font(name='Monaco', family='Mo\
+...">Fonts.App=Font(name='Helvetica', family='Helvetica', s<code class="variable-ellipsis">...</code></code>
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
         <a name="NO"></a><span class="summary-name">NO</span> = <code title="False">False</code>
     </td>
   </tr>
@@ -2834,14 +3049,14 @@
     <td width="15%" align="right" valign="top" class="summary">
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
-        <a name="NSApplicationDidHideNotification"></a><span class="summary-name">NSApplicationDidHideNotification</span> = <code title="c_void_p(140735542464448)">c_void_p(140735542464448)</code>
+        <a name="NSApplicationDidHideNotification"></a><span class="summary-name">NSApplicationDidHideNotification</span> = <code title="c_void_p(140735405854656)">c_void_p(140735405854656)</code>
     </td>
   </tr>
 <tr>
     <td width="15%" align="right" valign="top" class="summary">
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
-        <a name="NSApplicationDidUnhideNotification"></a><span class="summary-name">NSApplicationDidUnhideNotification</span> = <code title="c_void_p(140735542464544)">c_void_p(140735542464544)</code>
+        <a name="NSApplicationDidUnhideNotification"></a><span class="summary-name">NSApplicationDidUnhideNotification</span> = <code title="c_void_p(140735405854752)">c_void_p(140735405854752)</code>
     </td>
   </tr>
 <tr>
@@ -3009,7 +3224,7 @@
     <td width="15%" align="right" valign="top" class="summary">
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
-        <a name="NSDefaultRunLoopMode"></a><span class="summary-name">NSDefaultRunLoopMode</span> = <code title="c_void_p(140735551644024)">c_void_p(140735551644024)</code>
+        <a name="NSDefaultRunLoopMode"></a><span class="summary-name">NSDefaultRunLoopMode</span> = <code title="c_void_p(140735415034232)">c_void_p(140735415034232)</code>
     </td>
   </tr>
 <tr>
@@ -3058,7 +3273,7 @@
     <td width="15%" align="right" valign="top" class="summary">
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
-        <a name="NSEventTrackingRunLoopMode"></a><span class="summary-name">NSEventTrackingRunLoopMode</span> = <code title="c_void_p(140735542459136)">c_void_p(140735542459136)</code>
+        <a name="NSEventTrackingRunLoopMode"></a><span class="summary-name">NSEventTrackingRunLoopMode</span> = <code title="c_void_p(140735405849344)">c_void_p(140735405849344)</code>
     </td>
   </tr>
 <tr>
@@ -3108,6 +3323,223 @@
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
         <a name="NSFont"></a><span class="summary-name">NSFont</span> = <code title="ObjCClass('NSFont')">ObjCClass('NSFont')</code>
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a name="NSFontBoldMask"></a><span class="summary-name">NSFontBoldMask</span> = <code title="2">2</code>
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a name="NSFontClarendonSerifsClass"></a><span class="summary-name">NSFontClarendonSerifsClass</span> = <code title="1073741824">1073741824</code>
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a name="NSFontClassMask"></a><span class="summary-name">NSFontClassMask</span> = <code title="4026531840">4026531840</code>
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a name="NSFontColorGlyphsMask"></a><span class="summary-name">NSFontColorGlyphsMask</span> = <code title="8192">8192</code>
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a name="NSFontCompositeMask"></a><span class="summary-name">NSFontCompositeMask</span> = <code title="16384">16384</code>
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a name="NSFontCompressedMask"></a><span class="summary-name">NSFontCompressedMask</span> = <code title="512">512</code>
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a name="NSFontCondensedMask"></a><span class="summary-name">NSFontCondensedMask</span> = <code title="64">64</code>
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a name="NSFontDescriptor"></a><span class="summary-name">NSFontDescriptor</span> = <code title="ObjCClass('NSFontDescriptor')">ObjCClass('NSFontDescriptor')</code>
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a name="NSFontExpandedMask"></a><span class="summary-name">NSFontExpandedMask</span> = <code title="32">32</code>
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a name="NSFontFreeformSerifsClass"></a><span class="summary-name">NSFontFreeformSerifsClass</span> = <code title="1879048192">1879048192</code>
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a name="NSFontItalicMask"></a><span class="summary-name">NSFontItalicMask</span> = <code title="1">1</code>
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a name="NSFontManager"></a><span class="summary-name">NSFontManager</span> = <code title="ObjCClass('NSFontManager')">ObjCClass('NSFontManager')</code>
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a name="NSFontModernSerifsClass"></a><span class="summary-name">NSFontModernSerifsClass</span> = <code title="805306368">805306368</code>
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a name="NSFontMonoSpaceMask"></a><span class="summary-name">NSFontMonoSpaceMask</span> = <code title="1024">1024</code>
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a name="NSFontNarrowMask"></a><span class="summary-name">NSFontNarrowMask</span> = <code title="16">16</code>
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a name="NSFontNonStandardCharacterSetMask"></a><span class="summary-name">NSFontNonStandardCharacterSetMask</span> = <code title="8">8</code>
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a name="NSFontOldStyleSerifsClass"></a><span class="summary-name">NSFontOldStyleSerifsClass</span> = <code title="268435456">268435456</code>
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a name="NSFontOrnamentalsClass"></a><span class="summary-name">NSFontOrnamentalsClass</span> = <code title="2415919104">2415919104</code>
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a name="NSFontPanel"></a><span class="summary-name">NSFontPanel</span> = <code title="ObjCClass('NSFontPanel')">ObjCClass('NSFontPanel')</code>
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a name="NSFontPosterMask"></a><span class="summary-name">NSFontPosterMask</span> = <code title="256">256</code>
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a name="NSFontSansSerifClass"></a><span class="summary-name">NSFontSansSerifClass</span> = <code title="2147483648">2147483648</code>
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a name="NSFontScriptsClass"></a><span class="summary-name">NSFontScriptsClass</span> = <code title="2684354560">2684354560</code>
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a name="NSFontSlabSerifsClass"></a><span class="summary-name">NSFontSlabSerifsClass</span> = <code title="1342177280">1342177280</code>
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a name="NSFontSmallCapsMask"></a><span class="summary-name">NSFontSmallCapsMask</span> = <code title="128">128</code>
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a name="NSFontSymbolicClass"></a><span class="summary-name">NSFontSymbolicClass</span> = <code title="3221225472">3221225472</code>
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a name="NSFontTransitionalSerifsClass"></a><span class="summary-name">NSFontTransitionalSerifsClass</span> = <code title="536870912">536870912</code>
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a name="NSFontUIOptimizedMask"></a><span class="summary-name">NSFontUIOptimizedMask</span> = <code title="4096">4096</code>
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a name="NSFontUnboldMask"></a><span class="summary-name">NSFontUnboldMask</span> = <code title="4">4</code>
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a name="NSFontUnitalicMask"></a><span class="summary-name">NSFontUnitalicMask</span> = <code title="16777216">16777216</code>
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a name="NSFontUnknownClass"></a><span class="summary-name">NSFontUnknownClass</span> = <code title="0">0</code>
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a name="NSFontVerticalMask"></a><span class="summary-name">NSFontVerticalMask</span> = <code title="2048">2048</code>
     </td>
   </tr>
 <tr>
@@ -3185,6 +3617,13 @@
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
         <a name="NSKeyUp"></a><span class="summary-name">NSKeyUp</span> = <code title="11">11</code>
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a name="NSLayoutManager"></a><span class="summary-name">NSLayoutManager</span> = <code title="ObjCClass('NSLayoutManager')">ObjCClass('NSLayoutManager')</code>
     </td>
   </tr>
 <tr>
@@ -3794,6 +4233,14 @@
     <td width="15%" align="right" valign="top" class="summary">
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
+        <a href="pycocoa-module.html#WindowStyle" class="summary-name">WindowStyle</a> = <code title="WindowStyle.Closable=2, .Miniaturizable=1&lt;&lt;2, .Resizable=1&lt;&lt;3, .Titled\
+=1, .Typical=15, .Utility=1&lt;&lt;4">WindowStyle.Closable=2, .Miniaturizable=1&lt;&lt;2, .R<code class="variable-ellipsis">...</code></code>
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
         <a name="YES"></a><span class="summary-name">YES</span> = <code title="True">True</code>
     </td>
   </tr>
@@ -3801,8 +4248,8 @@
     <td width="15%" align="right" valign="top" class="summary">
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
-        <a href="pycocoa-module.html#libAppKit" class="summary-name">libAppKit</a> = <code title="&lt;CDLL '/System/Library/Frameworks/AppKit.framework/AppKit', handle 102\
-8047f0 at 102f4fd50&gt;">&lt;CDLL '/System/Library/Frameworks/AppKit.framework<code class="variable-ellipsis">...</code></code>
+        <a href="pycocoa-module.html#libAppKit" class="summary-name">libAppKit</a> = <code title="&lt;CDLL '/System/Library/Frameworks/AppKit.framework/AppKit', handle 100\
+325f20 at 102f57910&gt;">&lt;CDLL '/System/Library/Frameworks/AppKit.framework<code class="variable-ellipsis">...</code></code>
     </td>
   </tr>
 <tr>
@@ -3810,7 +4257,7 @@
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
         <a href="pycocoa-module.html#libCF" class="summary-name">libCF</a> = <code title="&lt;CDLL '/System/Library/Frameworks/CoreFoundation.framework/CoreFoundat\
-ion', handle 10a507800 at 102efc890&gt;">&lt;CDLL '/System/Library/Frameworks/CoreFoundation.frame<code class="variable-ellipsis">...</code></code>
+ion', handle 10d61f800 at 102ef4d50&gt;">&lt;CDLL '/System/Library/Frameworks/CoreFoundation.frame<code class="variable-ellipsis">...</code></code>
     </td>
   </tr>
 <tr>
@@ -3818,7 +4265,7 @@ ion', handle 10a507800 at 102efc890&gt;">&lt;CDLL '/System/Library/Frameworks/Co
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
         <a href="pycocoa-module.html#libCT" class="summary-name">libCT</a> = <code title="&lt;CDLL '/System/Library/Frameworks/CoreText.framework/CoreText', handle\
- 10068a8e0 at 102f60d90&gt;">&lt;CDLL '/System/Library/Frameworks/CoreText.framework/C<code class="variable-ellipsis">...</code></code>
+ 100327fa0 at 102f6a950&gt;">&lt;CDLL '/System/Library/Frameworks/CoreText.framework/C<code class="variable-ellipsis">...</code></code>
     </td>
   </tr>
 <tr>
@@ -3826,14 +4273,14 @@ ion', handle 10a507800 at 102efc890&gt;">&lt;CDLL '/System/Library/Frameworks/Co
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
         <a href="pycocoa-module.html#libFoundation" class="summary-name">libFoundation</a> = <code title="&lt;CDLL '/System/Library/Frameworks/Foundation.framework/Foundation', ha\
-ndle 10050dc20 at 102f6c410&gt;">&lt;CDLL '/System/Library/Frameworks/Foundation.f<code class="variable-ellipsis">...</code></code>
+ndle 100326e80 at 102f6af90&gt;">&lt;CDLL '/System/Library/Frameworks/Foundation.f<code class="variable-ellipsis">...</code></code>
     </td>
   </tr>
 <tr>
     <td width="15%" align="right" valign="top" class="summary">
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
-        <a href="pycocoa-module.html#libobjc" class="summary-name">libobjc</a> = <code title="&lt;CDLL '/usr/lib/libobjc.dylib', handle 10a509680 at 102f6c250&gt;">&lt;CDLL '/usr/lib/libobjc.dylib', handle 10a509680 at <code class="variable-ellipsis">...</code></code><br />
+        <a href="pycocoa-module.html#libobjc" class="summary-name">libobjc</a> = <code title="&lt;CDLL '/usr/lib/libobjc.dylib', handle 10d621680 at 102f6add0&gt;">&lt;CDLL '/usr/lib/libobjc.dylib', handle 10d621680 at <code class="variable-ellipsis">...</code></code><br />
       The macOS <code>objc</code> library (<code>ctypes.CDLL</code>)
     </td>
   </tr>
@@ -3842,7 +4289,7 @@ ndle 10050dc20 at 102f6c410&gt;">&lt;CDLL '/System/Library/Frameworks/Foundation
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
         <a href="pycocoa-module.html#libquartz" class="summary-name">libquartz</a> = <code title="&lt;CDLL '/System/Library/Frameworks/quartz.framework/quartz', handle 100\
-54a260 at 102f4fdd0&gt;">&lt;CDLL '/System/Library/Frameworks/quartz.framework<code class="variable-ellipsis">...</code></code>
+57ba40 at 102f57990&gt;">&lt;CDLL '/System/Library/Frameworks/quartz.framework<code class="variable-ellipsis">...</code></code>
     </td>
   </tr>
 <tr>
@@ -4266,6 +4713,174 @@ ndle 10050dc20 at 102f6c410&gt;">&lt;CDLL '/System/Library/Frameworks/Foundation
   </dl>
 </td></tr></table>
 </div>
+<a name="fontTraits"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">fontTraits</span>(<span class="sig-arg">*traits</span>)</span>
+  </h3>
+  </td><td align="right" valign="top"
+    >&nbsp;
+    </td>
+  </tr></table>
+  
+  <p>Return a font traits mask for the named traits.</p>
+  <dl class="fields">
+    <dt>Parameters:</dt>
+    <dd><ul class="nomargin-top">
+        <li><strong class="pname"><code>traits</code></strong> - Trait names (<code>str</code>s), case-insensitive.</li>
+    </ul></dd>
+    <dt>Returns:</dt>
+        <dd>Combined traits (<code>FontTrait</code><code>s mask</code>).</dd>
+    <dt>Raises:</dt>
+    <dd><ul class="nomargin-top">
+        <li><code><strong class='fraise'><a href="pycocoa.fonts.FontTraitError-class.html">FontTraitError</a></strong></code> - One or more <i>traits</i> are invalid.</li>
+    </ul></dd>
+  </dl>
+</td></tr></table>
+</div>
+<a name="fontTraitstrs"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">fontTraitstrs</span>(<span class="sig-arg">traits</span>)</span>
+  </h3>
+  </td><td align="right" valign="top"
+    >&nbsp;
+    </td>
+  </tr></table>
+  
+  <p>Return font traits as names.</p>
+  <dl class="fields">
+    <dt>Parameters:</dt>
+    <dd><ul class="nomargin-top">
+        <li><strong class="pname"><code>traits</code></strong> - Traits (<code>FontTrait</code><code>s mask</code>).</li>
+    </ul></dd>
+    <dt>Returns:</dt>
+        <dd>Tuple of trait names (<code>str</code>s).</dd>
+  </dl>
+</td></tr></table>
+</div>
+<a name="fontfamilies"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">fontfamilies</span>(<span class="sig-arg">*prefixes</span>)</span>
+  </h3>
+  </td><td align="right" valign="top"
+    >&nbsp;
+    </td>
+  </tr></table>
+  
+  <p>Yield the installed font families.</p>
+  <dl class="fields">
+    <dt>Parameters:</dt>
+    <dd><ul class="nomargin-top">
+        <li><strong class="pname"><code>prefixes</code></strong> - No, one or more font family names to match (<code>str</code>-s).</li>
+    </ul></dd>
+    <dt>Returns:</dt>
+        <dd>Each font family name (<code>str</code>).</dd>
+  </dl>
+</td></tr></table>
+</div>
+<a name="fontnamesof"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">fontnamesof</span>(<span class="sig-arg">family</span>)</span>
+  </h3>
+  </td><td align="right" valign="top"
+    >&nbsp;
+    </td>
+  </tr></table>
+  
+  <p>Yield the available font names of a family.</p>
+  <dl class="fields">
+    <dt>Parameters:</dt>
+    <dd><ul class="nomargin-top">
+        <li><strong class="pname"><code>family</code></strong> - Generic font name (<code>str</code>), like &quot;Times&quot; or 
+          &quot;Helvetica&quot;.</li>
+    </ul></dd>
+    <dt>Returns:</dt>
+        <dd>Each font name (<code>str</code>).</dd>
+  </dl>
+</td></tr></table>
+</div>
+<a name="fontsof"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">fontsof</span>(<span class="sig-arg">family</span>,
+        <span class="sig-arg">size</span>=<span class="sig-default">0</span>,
+        <span class="sig-arg">weight</span>=<span class="sig-default">None</span>)</span>
+  </h3>
+  </td><td align="right" valign="top"
+    >&nbsp;
+    </td>
+  </tr></table>
+  
+  <p>Yield the available fonts of a family.</p>
+  <dl class="fields">
+    <dt>Parameters:</dt>
+    <dd><ul class="nomargin-top">
+        <li><strong class="pname"><code>family</code></strong> - Generic font name (<code>str</code>), like &quot;Times&quot; or 
+          &quot;Helvetica&quot;.</li>
+        <li><strong class="pname"><code>size</code></strong> - The point size (<code>int</code>), zero for any.</li>
+        <li><strong class="pname"><code>weight</code></strong> - The book weight (<code>int</code>), None for any.</li>
+    </ul></dd>
+    <dt>Returns:</dt>
+        <dd>Each font (<a href="pycocoa.fonts.Font-class.html" 
+          class="link">Font</a>).</dd>
+    <dt>Raises:</dt>
+    <dd><ul class="nomargin-top">
+        <li><code><strong class='fraise'>ValueError</strong></code> - Invalid <i>weight</i>.</li>
+    </ul></dd>
+  </dl>
+</td></tr></table>
+</div>
+<a name="fontsof4"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">fontsof4</span>(<span class="sig-arg">family</span>)</span>
+  </h3>
+  </td><td align="right" valign="top"
+    >&nbsp;
+    </td>
+  </tr></table>
+  
+  <p>Yield the available fonts of a family.</p>
+  <dl class="fields">
+    <dt>Parameters:</dt>
+    <dd><ul class="nomargin-top">
+        <li><strong class="pname"><code>family</code></strong> - Generic font name (<code>str</code>), like &quot;Times&quot; or 
+          &quot;Helvetica&quot;.</li>
+    </ul></dd>
+    <dt>Returns:</dt>
+        <dd>4-Tuple (name, attributes, weight, traits) of (<code>str</code>, 
+          <code>str</code>, <code>int</code>, <code>int</code>) for each 
+          font.</dd>
+  </dl>
+</td></tr></table>
+</div>
 <a name="frozenset2NS"></a>
 <div>
 <table class="details" border="1" cellpadding="3"
@@ -4407,7 +5022,7 @@ ndle 10050dc20 at 102f6c410&gt;">&lt;CDLL '/System/Library/Frameworks/Foundation
   <dl class="fields">
     <dt>Parameters:</dt>
     <dd><ul class="nomargin-top">
-        <li><strong class="pname"><code>name</code></strong> - The class name (str).</li>
+        <li><strong class="pname"><code>name</code></strong> - The class name (<code>str</code>).</li>
     </ul></dd>
     <dt>Returns:</dt>
         <dd>The class (<a href="pycocoa.octypes.Class_t-class.html" 
@@ -4434,7 +5049,7 @@ ndle 10050dc20 at 102f6c410&gt;">&lt;CDLL '/System/Library/Frameworks/Foundation
   <dl class="fields">
     <dt>Parameters:</dt>
     <dd><ul class="nomargin-top">
-        <li><strong class="pname"><code>prefixes</code></strong> - No, one or more class names to match (str-s).</li>
+        <li><strong class="pname"><code>prefixes</code></strong> - No, one or more class names to match (<code>str</code>-s).</li>
     </ul></dd>
     <dt>Returns:</dt>
         <dd>For each class yield a 2-tuple (<i>name, class</i>) where 
@@ -4467,7 +5082,7 @@ ndle 10050dc20 at 102f6c410&gt;">&lt;CDLL '/System/Library/Frameworks/Foundation
           class="link">Class_t</a>).</li>
     </ul></dd>
     <dt>Returns:</dt>
-        <dd>The class name (str).</dd>
+        <dd>The class name (<code>str</code>).</dd>
     <dt>Raises:</dt>
     <dd><ul class="nomargin-top">
         <li><code><strong class='fraise'>ValueError</strong></code> - Invalid <i>clas</i>, iff no <i>dflt</i> provided.</li>
@@ -4498,7 +5113,7 @@ ndle 10050dc20 at 102f6c410&gt;">&lt;CDLL '/System/Library/Frameworks/Foundation
           href="pycocoa.octypes.Id_t-class.html" class="link">Id_t</a>).</li>
     </ul></dd>
     <dt>Returns:</dt>
-        <dd>The object's class name (str).</dd>
+        <dd>The object's class name (<code>str</code>).</dd>
     <dt>Raises:</dt>
     <dd><ul class="nomargin-top">
         <li><code><strong class='fraise'>ValueError</strong></code> - Invalid <i>obj</i>, iff no <i>dflt</i> provided.</li>
@@ -4582,7 +5197,7 @@ ndle 10050dc20 at 102f6c410&gt;">&lt;CDLL '/System/Library/Frameworks/Foundation
     <dd><ul class="nomargin-top">
         <li><strong class="pname"><code>obj</code></strong> - The object (<code>Object</code> or <a 
           href="pycocoa.octypes.Id_t-class.html" class="link">Id_t</a>).</li>
-        <li><strong class="pname"><code>name</code></strong> - The instance variable name (str).</li>
+        <li><strong class="pname"><code>name</code></strong> - The instance variable name (<code>str</code>).</li>
         <li><strong class="pname"><code>ctype</code></strong> - The instance variable type (<code>ctypes</code>),</li>
     </ul></dd>
     <dt>Returns:</dt>
@@ -4612,7 +5227,7 @@ ndle 10050dc20 at 102f6c410&gt;">&lt;CDLL '/System/Library/Frameworks/Foundation
     <dd><ul class="nomargin-top">
         <li><strong class="pname"><code>clas</code></strong> - The class (<a href="pycocoa.octypes.Class_t-class.html" 
           class="link">Class_t</a>).</li>
-        <li><strong class="pname"><code>prefixes</code></strong> - No, one or more ivar names to match (str-s).</li>
+        <li><strong class="pname"><code>prefixes</code></strong> - No, one or more ivar names to match (<code>str</code>-s).</li>
     </ul></dd>
     <dt>Returns:</dt>
         <dd>For each ivar yield a 4-tuple (<i>name, encoding, ctype, 
@@ -4642,7 +5257,7 @@ ndle 10050dc20 at 102f6c410&gt;">&lt;CDLL '/System/Library/Frameworks/Foundation
   <dl class="fields">
     <dt>Parameters:</dt>
     <dd><ul class="nomargin-top">
-        <li><strong class="pname"><code>name</code></strong> - The library name (str).</li>
+        <li><strong class="pname"><code>name</code></strong> - The library base name (str).</li>
     </ul></dd>
     <dt>Returns:</dt>
         <dd>The library (<code>ctypes.CDLL</code>).</dd>
@@ -4670,7 +5285,7 @@ ndle 10050dc20 at 102f6c410&gt;">&lt;CDLL '/System/Library/Frameworks/Foundation
   <dl class="fields">
     <dt>Parameters:</dt>
     <dd><ul class="nomargin-top">
-        <li><strong class="pname"><code>name</code></strong> - The metaclass (str).</li>
+        <li><strong class="pname"><code>name</code></strong> - The metaclass (<code>str</code>).</li>
     </ul></dd>
     <dt>Returns:</dt>
         <dd>The metaclass (<a href="pycocoa.octypes.Class_t-class.html" 
@@ -4699,7 +5314,7 @@ ndle 10050dc20 at 102f6c410&gt;">&lt;CDLL '/System/Library/Frameworks/Foundation
     <dd><ul class="nomargin-top">
         <li><strong class="pname"><code>clas</code></strong> - Class (<a href="pycocoa.octypes.Class_t-class.html" 
           class="link">Class_t</a>).</li>
-        <li><strong class="pname"><code>name</code></strong> - Method name (str).</li>
+        <li><strong class="pname"><code>name</code></strong> - Method name (<code>str</code>).</li>
     </ul></dd>
     <dt>Returns:</dt>
         <dd>The method (<a href="pycocoa.octypes.Method_t-class.html" 
@@ -4729,7 +5344,7 @@ ndle 10050dc20 at 102f6c410&gt;">&lt;CDLL '/System/Library/Frameworks/Foundation
     <dd><ul class="nomargin-top">
         <li><strong class="pname"><code>clas</code></strong> - The class (<a href="pycocoa.octypes.Class_t-class.html" 
           class="link">Class_t</a>).</li>
-        <li><strong class="pname"><code>prefixes</code></strong> - No, one or more method names to match (str-s).</li>
+        <li><strong class="pname"><code>prefixes</code></strong> - No, one or more method names to match (<code>str</code>-s).</li>
     </ul></dd>
     <dt>Returns:</dt>
         <dd>For each method yield a 4-tuple (<i>name, encoding, rargtypes, 
@@ -4772,7 +5387,7 @@ ndle 10050dc20 at 102f6c410&gt;">&lt;CDLL '/System/Library/Frameworks/Foundation
           class="link">Class_t</a> or <a 
           href="pycocoa.octypes.Protocol_t-class.html" 
           class="link">Protocol_t</a>).</li>
-        <li><strong class="pname"><code>prefixes</code></strong> - No, one or more property names to match (str-s).</li>
+        <li><strong class="pname"><code>prefixes</code></strong> - No, one or more property names to match (<code>str</code>-s).</li>
     </ul></dd>
     <dt>Returns:</dt>
         <dd>For each property, yield a 3-tuple (<i>name</i>, 
@@ -4846,7 +5461,7 @@ ndle 10050dc20 at 102f6c410&gt;">&lt;CDLL '/System/Library/Frameworks/Foundation
   <dl class="fields">
     <dt>Parameters:</dt>
     <dd><ul class="nomargin-top">
-        <li><strong class="pname"><code>name</code></strong> - The protocol name (str).</li>
+        <li><strong class="pname"><code>name</code></strong> - The protocol name (<code>str</code>).</li>
     </ul></dd>
     <dt>Returns:</dt>
         <dd>The protocol (<a href="pycocoa.octypes.Protocol_t-class.html" 
@@ -4876,7 +5491,7 @@ ndle 10050dc20 at 102f6c410&gt;">&lt;CDLL '/System/Library/Frameworks/Foundation
     <dd><ul class="nomargin-top">
         <li><strong class="pname"><code>clas</code></strong> - The class (<a href="pycocoa.octypes.Class_t-class.html" 
           class="link">Class_t</a>).</li>
-        <li><strong class="pname"><code>prefixes</code></strong> - No, one or more protocol names to match (str-s).</li>
+        <li><strong class="pname"><code>prefixes</code></strong> - No, one or more protocol names to match (<code>str</code>-s).</li>
     </ul></dd>
     <dt>Returns:</dt>
         <dd>For each protocol, yield a 2-tuple (<i>name</i>, <i>protocol</i>)
@@ -4904,7 +5519,7 @@ ndle 10050dc20 at 102f6c410&gt;">&lt;CDLL '/System/Library/Frameworks/Foundation
   <dl class="fields">
     <dt>Parameters:</dt>
     <dd><ul class="nomargin-top">
-        <li><strong class="pname"><code>name_</code></strong> - The selector name (str).</li>
+        <li><strong class="pname"><code>name_</code></strong> - The selector name (<code>str</code>).</li>
     </ul></dd>
     <dt>Returns:</dt>
         <dd>The selector (<a href="pycocoa.octypes.SEL_t-class.html" 
@@ -4934,7 +5549,8 @@ ndle 10050dc20 at 102f6c410&gt;">&lt;CDLL '/System/Library/Frameworks/Foundation
           class="link">SEL_t</a>).</li>
     </ul></dd>
     <dt>Returns:</dt>
-        <dd>The selector name (str) if found, &quot;&quot; otherwise.</dd>
+        <dd>The selector name (<code>str</code>) if found, &quot;&quot; 
+          otherwise.</dd>
   </dl>
 </td></tr></table>
 </div>
@@ -4988,7 +5604,7 @@ ndle 10050dc20 at 102f6c410&gt;">&lt;CDLL '/System/Library/Frameworks/Foundation
           href="pycocoa.octypes.Id_t-class.html" class="link">Id_t</a>).</li>
     </ul></dd>
     <dt>Returns:</dt>
-        <dd>The object'ssuper-class name (str).</dd>
+        <dd>The object'ssuper-class name (<code>str</code>).</dd>
     <dt>Raises:</dt>
     <dd><ul class="nomargin-top">
         <li><code><strong class='fraise'>ValueError</strong></code> - Invalid <i>obj</i>, iff no <i>dflt</i> provided.</li>
@@ -5816,6 +6432,35 @@ ndle 10050dc20 at 102f6c410&gt;">&lt;CDLL '/System/Library/Frameworks/Foundation
   </dl>
 </td></tr></table>
 </div>
+<a name="nsIter"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">nsIter</span>(<span class="sig-arg">ns</span>,
+        <span class="sig-arg">reverse</span>=<span class="sig-default">False</span>)</span>
+  </h3>
+  </td><td align="right" valign="top"
+    >&nbsp;
+    </td>
+  </tr></table>
+  
+  <p>Iterate over an <code>NS..</code> objects's (reverse) enumerator.</p>
+  <dl class="fields">
+    <dt>Parameters:</dt>
+    <dd><ul class="nomargin-top">
+        <li><strong class="pname"><code>ns</code></strong> - The <code>NS..</code> object to iterate over (<a 
+          href="pycocoa.runtime.ObjCInstance-class.html" 
+          class="link">ObjCInstance</a>).</li>
+        <li><strong class="pname"><code>reverse</code></strong> - Reverse or forward order (bool).</li>
+    </ul></dd>
+    <dt>Returns:</dt>
+        <dd>Each object (<code>NS...</code>).</dd>
+  </dl>
+</td></tr></table>
+</div>
 <a name="nsIter2"></a>
 <div>
 <table class="details" border="1" cellpadding="3"
@@ -5841,9 +6486,9 @@ ndle 10050dc20 at 102f6c410&gt;">&lt;CDLL '/System/Library/Frameworks/Foundation
         <li><strong class="pname"><code>reverse</code></strong> - Reverse or forward order (bool).</li>
     </ul></dd>
     <dt>Returns:</dt>
-        <dd>For each iteration, yield 2-Tuple (<i>value, raw</i>) where 
-          <i>value</i> is the value -a Python Type instance- and <i>raw</i>
-          object.</dd>
+        <dd>Each object as 2-Tuple (<i>py, ns</i>) where <i>py</i> is a 
+          Python <code>Type</code> instance and <i>ns</i> the ObjC object 
+          <code>NS...</code>.</dd>
   </dl>
 </td></tr></table>
 </div>
@@ -6809,6 +7454,37 @@ ndle 10050dc20 at 102f6c410&gt;">&lt;CDLL '/System/Library/Frameworks/Foundation
       </p>
 </div></td></tr></table>
 </div>
+<a name="windowStyles"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">windowStyles</span>(<span class="sig-arg">*styles</span>)</span>
+  </h3>
+  </td><td align="right" valign="top"
+    >&nbsp;
+    </td>
+  </tr></table>
+  
+  <p>Return a combination of window styles, specified by name.</p>
+  <dl class="fields">
+    <dt>Parameters:</dt>
+    <dd><ul class="nomargin-top">
+        <li><strong class="pname"><code>styles</code></strong> - Style names (<i>all positional</i>), case-insensitive.</li>
+    </ul></dd>
+    <dt>Returns:</dt>
+        <dd>Combined window styles (<a 
+          href="pycocoa.windows-module.html#WindowStyle" 
+          class="link">WindowStyle</a><code>s mask</code>).</dd>
+    <dt>Raises:</dt>
+    <dd><ul class="nomargin-top">
+        <li><code><strong class='fraise'><a href="pycocoa.windows.WindowStyleError-class.html">WindowStyleError</a></strong></code> - One or more <i>styles</i> are invalid.</li>
+    </ul></dd>
+  </dl>
+</td></tr></table>
+</div>
 <a name="z1000str"></a>
 <div>
 <table class="details" border="1" cellpadding="3"
@@ -6872,6 +7548,52 @@ ndle 10050dc20 at 102f6c410&gt;">&lt;CDLL '/System/Library/Frameworks/Foundation
     <span class="table-header">Variables Details</span></td>
 </tr>
 </table>
+<a name="FontTrait"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <h3 class="epydoc">FontTrait</h3>
+  
+  <dl class="fields">
+  </dl>
+  <dl class="fields">
+    <dt>Value:</dt>
+      <dd><table><tr><td><pre class="variable">
+FontTrait.Bold=2, .Compressed=1&lt;&lt;9, .Condensed=1&lt;&lt;6, .Expanded=1&lt;&lt;5, .<span class="variable-linewrap"><img src="crarr.png" alt="\" /></span>
+Italic=1, .MonoSpace=1&lt;&lt;10, .Narrow=1&lt;&lt;4, .Poster=1&lt;&lt;8, .SansSerif=1&lt;&lt;<span class="variable-linewrap"><img src="crarr.png" alt="\" /></span>
+31, .SmallCaps=1&lt;&lt;7, .UnBold=1&lt;&lt;2, .UnItalic=1&lt;&lt;24
+</pre></td></tr></table>
+</dd>
+  </dl>
+</td></tr></table>
+</div>
+<a name="Fonts"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <h3 class="epydoc">Fonts</h3>
+  
+  <dl class="fields">
+  </dl>
+  <dl class="fields">
+    <dt>Value:</dt>
+      <dd><table><tr><td><pre class="variable">
+Fonts.App=Font(name='Helvetica', family='Helvetica', size=12, weight=5<span class="variable-linewrap"><img src="crarr.png" alt="\" /></span>
+), .Bold=Font(name='.SFNSText-Bold', family='.SF NS Text', size=13, tr<span class="variable-linewrap"><img src="crarr.png" alt="\" /></span>
+aits='Bold', weight=9), .Label=Font(name='.AppleSystemUIFont', family=<span class="variable-linewrap"><img src="crarr.png" alt="\" /></span>
+'.AppleSystemUIFont', size=10, weight=5), .Menu=Font(name='.AppleSyste<span class="variable-linewrap"><img src="crarr.png" alt="\" /></span>
+mUIFont', family='.AppleSystemUIFont', size=13, weight=5), .MenuBar=Fo<span class="variable-linewrap"><img src="crarr.png" alt="\" /></span>
+nt(name='.AppleSystemUIFont', family='.AppleSystemUIFont', size=14, we<span class="variable-linewrap"><img src="crarr.png" alt="\" /></span>
+ight=5), .Message=Font(name='.AppleSystemUIFont', family='.AppleSystem<span class="variable-linewrap"><img src="crarr.png" alt="\" /></span>
+UIFont', size=13, weight=5), .MonoSpace=Font(name='Monaco', family='Mo<span class="variable-linewrap"><img src="crarr.png" alt="\" /></span>
+<code class="variable-ellipsis">...</code>
+</pre></td></tr></table>
+</dd>
+  </dl>
+</td></tr></table>
+</div>
 <a name="NSTableViewDelegate"></a>
 <div>
 <table class="details" border="1" cellpadding="3"
@@ -6890,6 +7612,25 @@ ObjCClass('_NSTableViewDelegate', 'NSTableViewDataSource')
   </dl>
 </td></tr></table>
 </div>
+<a name="WindowStyle"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <h3 class="epydoc">WindowStyle</h3>
+  
+  <dl class="fields">
+  </dl>
+  <dl class="fields">
+    <dt>Value:</dt>
+      <dd><table><tr><td><pre class="variable">
+WindowStyle.Closable=2, .Miniaturizable=1&lt;&lt;2, .Resizable=1&lt;&lt;3, .Titled<span class="variable-linewrap"><img src="crarr.png" alt="\" /></span>
+=1, .Typical=15, .Utility=1&lt;&lt;4
+</pre></td></tr></table>
+</dd>
+  </dl>
+</td></tr></table>
+</div>
 <a name="libAppKit"></a>
 <div>
 <table class="details" border="1" cellpadding="3"
@@ -6902,8 +7643,8 @@ ObjCClass('_NSTableViewDelegate', 'NSTableViewDataSource')
   <dl class="fields">
     <dt>Value:</dt>
       <dd><table><tr><td><pre class="variable">
-&lt;CDLL '/System/Library/Frameworks/AppKit.framework/AppKit', handle 102<span class="variable-linewrap"><img src="crarr.png" alt="\" /></span>
-8047f0 at 102f4fd50&gt;
+&lt;CDLL '/System/Library/Frameworks/AppKit.framework/AppKit', handle 100<span class="variable-linewrap"><img src="crarr.png" alt="\" /></span>
+325f20 at 102f57910&gt;
 </pre></td></tr></table>
 </dd>
   </dl>
@@ -6922,7 +7663,7 @@ ObjCClass('_NSTableViewDelegate', 'NSTableViewDataSource')
     <dt>Value:</dt>
       <dd><table><tr><td><pre class="variable">
 &lt;CDLL '/System/Library/Frameworks/CoreFoundation.framework/CoreFoundat<span class="variable-linewrap"><img src="crarr.png" alt="\" /></span>
-ion', handle 10a507800 at 102efc890&gt;
+ion', handle 10d61f800 at 102ef4d50&gt;
 </pre></td></tr></table>
 </dd>
   </dl>
@@ -6941,7 +7682,7 @@ ion', handle 10a507800 at 102efc890&gt;
     <dt>Value:</dt>
       <dd><table><tr><td><pre class="variable">
 &lt;CDLL '/System/Library/Frameworks/CoreText.framework/CoreText', handle<span class="variable-linewrap"><img src="crarr.png" alt="\" /></span>
- 10068a8e0 at 102f60d90&gt;
+ 100327fa0 at 102f6a950&gt;
 </pre></td></tr></table>
 </dd>
   </dl>
@@ -6960,7 +7701,7 @@ ion', handle 10a507800 at 102efc890&gt;
     <dt>Value:</dt>
       <dd><table><tr><td><pre class="variable">
 &lt;CDLL '/System/Library/Frameworks/Foundation.framework/Foundation', ha<span class="variable-linewrap"><img src="crarr.png" alt="\" /></span>
-ndle 10050dc20 at 102f6c410&gt;
+ndle 100326e80 at 102f6af90&gt;
 </pre></td></tr></table>
 </dd>
   </dl>
@@ -6978,7 +7719,7 @@ ndle 10050dc20 at 102f6c410&gt;
   <dl class="fields">
     <dt>Value:</dt>
       <dd><table><tr><td><pre class="variable">
-&lt;CDLL '/usr/lib/libobjc.dylib', handle 10a509680 at 102f6c250&gt;
+&lt;CDLL '/usr/lib/libobjc.dylib', handle 10d621680 at 102f6add0&gt;
 </pre></td></tr></table>
 </dd>
   </dl>
@@ -6997,7 +7738,7 @@ ndle 10050dc20 at 102f6c410&gt;
     <dt>Value:</dt>
       <dd><table><tr><td><pre class="variable">
 &lt;CDLL '/System/Library/Frameworks/quartz.framework/quartz', handle 100<span class="variable-linewrap"><img src="crarr.png" alt="\" /></span>
-54a260 at 102f4fdd0&gt;
+57ba40 at 102f57990&gt;
 </pre></td></tr></table>
 </dd>
   </dl>
@@ -7035,7 +7776,7 @@ ndle 10050dc20 at 102f6c410&gt;
 <table border="0" cellpadding="0" cellspacing="0" width="100%%">
   <tr>
     <td align="left" class="footer">
-    Generated by Epydoc 3.0.1 on Mon Apr 30 13:31:30 2018
+    Generated by Epydoc 3.0.1 on Thu May 10 14:22:54 2018
     </td>
     <td align="right" class="footer">
       <a target="mainFrame" href="http://epydoc.sourceforge.net"

@@ -82,7 +82,7 @@ from octypes import Allocator_t, Array_t, BOOL_t, CFIndex_t, \
                     TypeRef_t, UniChar_t
 from utils   import _exports
 
-__version__ = '18.04.26'
+__version__ = '18.05.03'
 
 NO  = False
 YES = True
@@ -98,7 +98,7 @@ def _csignature(libfunc, restype, *argtypes):
 def _csignature_list(libfunc, restype, *argtypes):
     # set the list result and argument ctypes and
     # install a handler to duplicate the result and
-    # and leak the memory of the original list
+    # avoid leaking the memory of the original list
     libfunc.restype = restype
     if argtypes:
         libfunc.argtypes = argtypes
@@ -111,9 +111,9 @@ def _csignature_list(libfunc, restype, *argtypes):
 
 
 def _csignature_str(libfunc, restype, *argtypes):
-    # set the String result and argument ctypes and
+    # set the string result and argument ctypes and
     # install a handler to duplicate the result and
-    # and leak the memory of the original string
+    # avoid leaking the memory of the original string
     libfunc.restype = restype
     if argtypes:
         libfunc.argtypes = argtypes
@@ -129,8 +129,8 @@ def _csignature_variadic(libfunc, restype, *unused):
 
 
 def _dup(result, ctype):
-    # duplicate a NULL- or nul-terminated array of
-    # pointers or string of bytes, leak the original
+    # duplicate a NULL- or nul-terminated array of pointers
+    # or string of bytes, leaking the original temporarily
     n = 0
     while result[n]:
         n += 1
@@ -151,7 +151,7 @@ def _dup(result, ctype):
 def get_lib(name):
     '''Find and load a C{.dylib} library.
 
-       @param name: The library name (str).
+       @param name: The library base name (str).
 
        @return: The library (C{ctypes.CDLL}).
 
@@ -385,6 +385,18 @@ NSApplicationDidUnhideNotification = c_void_p.in_dll(libAppKit, 'NSApplicationDi
 NSDefaultRunLoopMode               = c_void_p.in_dll(libAppKit, 'NSDefaultRunLoopMode')
 NSEventTrackingRunLoopMode         = c_void_p.in_dll(libAppKit, 'NSEventTrackingRunLoopMode')
 
+# NSApplication.h
+NSApplicationPresentationDefault                 = 0
+NSApplicationPresentationHideDock                = 1 << 1
+NSApplicationPresentationHideMenuBar             = 1 << 3
+NSApplicationPresentationDisableProcessSwitching = 1 << 5
+NSApplicationPresentationDisableHideApplication  = 1 << 8
+
+# NSRunningApplication.h
+NSApplicationActivationPolicyRegular    = 0
+NSApplicationActivationPolicyAccessory  = 1
+NSApplicationActivationPolicyProhibited = 2
+
 # <http://GitHub.com/gnustep/libs-gui/blob/master/Headers/AppKit/NSPanel.h>
 # <http://GitHub.com/gnustep/libs-gui/blob/master/Headers/AppKit/NSSavePanel.h>
 NSFileHandlingPanelCancelButton = NSCancelButton = 0
@@ -423,40 +435,6 @@ NSEndFunctionKey      = 0xF72B
 NSPageUpFunctionKey   = 0xF72C
 NSPageDownFunctionKey = 0xF72D
 
-# /System/Library/Frameworks/AppKit.framework/Headers/NSWindow.h
-# <http://Developer.Apple.com//documentation/appkit/nswindowstylemask>
-# <http://Developer.Apple.com//documentation/appkit/constants>
-# note, Deprecated -Maskd are marked with D? or commented out,
-# previously, NSWindowStyleMaskXyz was named NSXyzWindowMask
-# NSWindowStyleMaskBorderless             = 0  # D?
-NSWindowStyleMaskTitled                   = 1 << 0  # D?
-NSWindowStyleMaskClosable                 = 1 << 1
-NSWindowStyleMaskMiniaturizable           = 1 << 2
-NSWindowStyleMaskResizable                = 1 << 3
-# /System/Library/Frameworks/AppKit.framework/Headers/NSPanel.h
-NSWindowStyleMaskUtilityWindow            = 1 << 4  # D?
-# <http://GitHub.com/gnustep/libs-gui/blob/master/Headers/AppKit/NSWindow.h>
-# NSWindowStyleMaskDocModalWindow         = 1 << 6  # D?
-# NSWindowStyleMaskNonactivatingPanel     = 1 << 7  # D?
-# NSWindowStyleMaskTexturedBackground     = 1 << 8  # D?
-# NSWindowStyleMaskUnscaled?              = 1 << 11  # D?
-# NSWindowStyleMaskUnifiedTitleAndToolbar = 1 << 12  # D?
-# NSWindowStyleMaskHUDWindow              = 1 << 13  # D?
-# NSWindowStyleMaskFullScreen             = 1 << 14  # D?
-# NSWindowStyleMaskFullSizeContentView    = 1 << 15  # D?
-
-# the typical WindowStyleMask for NS-/Window
-NSWindowStyleMaskUsual = NSWindowStyleMaskClosable  | NSWindowStyleMaskMiniaturizable \
-                       | NSWindowStyleMaskResizable | NSWindowStyleMaskTitled
-
-# <http://GitHub.com/gnustep/libs-gui/blob/master/Headers/AppKit/NSWindow.h>
-NSWindowCloseButton        = 0
-NSWindowMiniaturizeButton  = 1
-NSWindowZoomButton         = 2
-NSWindowToolbarButton      = 3
-NSWindowDocumentIconButton = 4
-# typedef NSUInteger NSWindowButton
-
 # /System/Library/Frameworks/AppKit.framework/Headers/NSGraphics.h
 NSBackingStoreRetained    = 0
 NSBackingStoreNonretained = 1
@@ -475,6 +453,7 @@ NSTextAlignmentRight     = NSRightTextAlignment     = 1
 NSTextAlignmentCenter    = NSCenterTextAlignment    = 2
 NSTextAlignmentJustified = NSJustifiedTextAlignment = 3
 NSTextAlignmentNatural   = NSNaturalTextAlignment   = 4
+
 NSTextWritingDirectionEmbedding = 0
 NSTextWritingDirectionOverride  = 2  # 1 << 1
 
@@ -525,8 +504,53 @@ NSTrackingActiveInActiveApp     = 0x40
 #
 # NSOpenGLCPSwapInterval           = 222
 
+# <http://StackOverflow.com/questions/24024723/swift-using-
+#  nsstatusbar-statusitemwithlength-and-nsvariablestatusitemlength>
+NSSquareStatusItemLength   = -2
+NSVariableStatusItemLength = -1
+
+# /System/Library/Frameworks/AppKit.framework/Headers/NSWindow.h
+# <http://Developer.Apple.com//documentation/appkit/nswindowstylemask>
+# <http://Developer.Apple.com//documentation/appkit/constants>
+# note, Deprecated -Mask's are marked with D? or commented out
+# note, Previously, NSWindowStyleMaskXyz was named NSXyzWindowMask
+# NSWindowStyleMaskBorderless             = 0  # D?
+NSWindowStyleMaskTitled                   = 1 << 0  # D?
+NSWindowStyleMaskClosable                 = 1 << 1
+NSWindowStyleMaskMiniaturizable           = 1 << 2
+NSWindowStyleMaskResizable                = 1 << 3
+# /System/Library/Frameworks/AppKit.framework/Headers/NSPanel.h
+NSWindowStyleMaskUtilityWindow            = 1 << 4  # D?
+# <http://GitHub.com/gnustep/libs-gui/blob/master/Headers/AppKit/NSWindow.h>
+# NSWindowStyleMaskDocModalWindow         = 1 << 6  # D?
+# NSWindowStyleMaskNonactivatingPanel     = 1 << 7  # D?
+# NSWindowStyleMaskTexturedBackground     = 1 << 8  # D?
+# NSWindowStyleMaskUnscaled?              = 1 << 11  # D?
+# NSWindowStyleMaskUnifiedTitleAndToolbar = 1 << 12  # D?
+# NSWindowStyleMaskHUDWindow              = 1 << 13  # D?
+# NSWindowStyleMaskFullScreen             = 1 << 14  # D?
+# NSWindowStyleMaskFullSizeContentView    = 1 << 15  # D?
+
+# the typical WindowStyleMask for NS-/Window
+NSWindowStyleMaskUsual = NSWindowStyleMaskClosable  | NSWindowStyleMaskMiniaturizable \
+                       | NSWindowStyleMaskResizable | NSWindowStyleMaskTitled
+
+# <http://GitHub.com/gnustep/libs-gui/blob/master/Headers/AppKit/NSWindow.h>
+NSWindowCloseButton        = 0
+NSWindowMiniaturizeButton  = 1
+NSWindowZoomButton         = 2
+NSWindowToolbarButton      = 3
+NSWindowDocumentIconButton = 4
+# typedef NSUInteger NSWindowButton
+
+# <http://Developer.Apple.com/documentation/appkit/1473652-nsrectfill>
+_csignature(libAppKit.NSRectFill, c_void, POINTER(NSRect_t))
+
+# QUARTZ / COREGRAPHICS
+libquartz = get_lib('quartz')
+
 # /System/Library/Frameworks/ApplicationServices.framework/Frameworks/...
-#     CoreGraphics.framework/Headers/CGImage.h
+#  CoreGraphics.framework/Headers/CGImage.h
 kCGImageAlphaNone               = 0
 kCGImageAlphaPremultipliedLast  = 1
 kCGImageAlphaPremultipliedFirst = 2
@@ -547,29 +571,6 @@ kCGBitmapByteOrder32Little = 2 << 12
 kCGBitmapByteOrder16Big    = 3 << 12
 kCGBitmapByteOrder32Big    = 4 << 12
 kCGBitmapByteOrderMask     = 7 << 12
-
-# NSApplication.h
-NSApplicationPresentationDefault                 = 0
-NSApplicationPresentationHideDock                = 1 << 1
-NSApplicationPresentationHideMenuBar             = 1 << 3
-NSApplicationPresentationDisableProcessSwitching = 1 << 5
-NSApplicationPresentationDisableHideApplication  = 1 << 8
-
-# NSRunningApplication.h
-NSApplicationActivationPolicyRegular    = 0
-NSApplicationActivationPolicyAccessory  = 1
-NSApplicationActivationPolicyProhibited = 2
-
-# <http://StackOverflow.com/questions/24024723/swift-using-
-#  nsstatusbar-statusitemwithlength-and-nsvariablestatusitemlength>
-NSSquareStatusItemLength   = -2
-NSVariableStatusItemLength = -1
-
-# <http://Developer.Apple.com/documentation/appkit/1473652-nsrectfill>
-_csignature(libAppKit.NSRectFill, c_void, POINTER(NSRect_t))
-
-# QUARTZ / COREGRAPHICS
-libquartz = get_lib('quartz')
 
 # /System/Library/Frameworks/ApplicationServices.framework/Frameworks/...
 #  ImageIO.framework/Headers/CGImageProperties.h
@@ -631,13 +632,60 @@ libCT = get_lib('CoreText')
 # CoreText constants
 kCTFontAttributeName       = c_void_p.in_dll(libCT, 'kCTFontAttributeName')
 kCTFontFamilyNameAttribute = c_void_p.in_dll(libCT, 'kCTFontFamilyNameAttribute')
-kCTFontSymbolicTrait       = c_void_p.in_dll(libCT, 'kCTFontSymbolicTrait')
-kCTFontWeightTrait         = c_void_p.in_dll(libCT, 'kCTFontWeightTrait')
 kCTFontTraitsAttribute     = c_void_p.in_dll(libCT, 'kCTFontTraitsAttribute')
 
+kCTFontSlantTrait          = c_void_p.in_dll(libCT, 'kCTFontSlantTrait')  # traits dict key -> -1.0..+1.0
+kCTFontSymbolicTrait       = c_void_p.in_dll(libCT, 'kCTFontSymbolicTrait')  # traits dict key -> 0
+kCTFontWeightTrait         = c_void_p.in_dll(libCT, 'kCTFontWeightTrait')  # traits dict key -> -1.0..+1.0
+kCTFontWidthTrait          = c_void_p.in_dll(libCT, 'kCTFontWidthTrait')  # traits dict key -> -1.0..+1.0
+
 # constants from CTFontTraits.h
-kCTFontItalicTrait = (1 << 0)
-kCTFontBoldTrait   = (1 << 1)
+kCTFontClassMaskShift   = 28
+
+# CTFontSymbolicTraits symbolically describes stylistic aspects of a font.
+# The top 4 bits is used to describe appearance of the font while the lower
+# 28 bits for typeface.  The font appearance information represented by the
+# upper 4 bits can be used for stylistic font matching.
+# <http://Developer.Apple.com/documentation/appkit/nsfontmanager/font_traits>
+# <http://Developer.Apple.com/documentation/appkit/nsfonttraitmask>
+# <http://GitHub.com/tijme/reverse-engineering/blob/master/Billy%20Ellis%20ARM%20Explotation/
+#  iPhoneOS9.3.sdk/System/Library/Frameworks/CoreText.framework/Headers/CTFontTraits.h>
+NSFontItalicMask      = kCTFontTraitItalic      = 1 << 0
+NSFontBoldMask        = kCTFontTraitBold        = 1 << 1
+NSFontUnboldMask                                = 1 << 2   # 0x00000004
+NSFontNonStandardCharacterSetMask               = 1 << 3   # 0x00000008
+NSFontNarrowMask                                = 1 << 4   # 0x00000010
+NSFontExpandedMask    = kCTFontTraitExpanded    = 1 << 5   # Expanded and Condensed traits are mutually exclusive
+NSFontCondensedMask   = kCTFontTraitCondensed   = 1 << 6   # Additional detail available via kCTFontWidthTrait
+NSFontSmallCapsMask                             = 1 << 7   # 0x00000080
+NSFontPosterMask                                = 1 << 8   # 0x00000100
+NSFontCompressedMask                            = 1 << 9   # 0x00000200
+NSFontMonoSpaceMask   = kCTFontTraitMonoSpace   = 1 << 10  # Use fixed-pitch glyphs if available
+NSFontVerticalMask    = kCTFontTraitVertical    = 1 << 11  # Use vertical glyph variants and metrics
+NSFontUIOptimizedMask = kCTFontTraitUIOptimized = 1 << 12  # Synthesize appropriate attributes for UI rendering such as control titles if necessary
+NSFontColorGlyphsMask = kCTFontTraitColorGlyphs = 1 << 13  # Color bitmap glyphs are available
+NSFontCompositeMask   = kCTFontTraitComposite   = 1 << 14  # The font is a CFR (Composite font reference)
+NSFontUnitalicMask                              = 1 << 24  # 0x01000000
+
+# CTFontStylisticClass classifies certain stylistic qualities of the
+# font.  These values correspond closely to the font class values in
+# the OpenType 'OS/2' table.  The class values are bundled in the upper
+# 4 bits of the CTFontSymbolicTraits and can be obtained via the
+# kCTFontClassMaskTrait.
+# <http://Developer.Apple.com/documentation/appkit/nsfontfamilyclass>
+kCTFontClassUnknown             = NSFontUnknownClass            =  0 << kCTFontClassMaskShift
+kCTFontClassOldStyleSerifs      = NSFontOldStyleSerifsClass     =  1 << kCTFontClassMaskShift
+kCTFontClassTransitionalSerifs  = NSFontTransitionalSerifsClass =  2 << kCTFontClassMaskShift
+kCTFontClassModernSerifs        = NSFontModernSerifsClass       =  3 << kCTFontClassMaskShift
+kCTFontClassClarendonSerifs     = NSFontClarendonSerifsClass    =  4 << kCTFontClassMaskShift
+kCTFontClassSlabSerifs          = NSFontSlabSerifsClass         =  5 << kCTFontClassMaskShift
+kCTFontClassFreeformSerifs      = NSFontFreeformSerifsClass     =  7 << kCTFontClassMaskShift
+kCTFontClassSansSerif           = NSFontSansSerifClass          =  8 << kCTFontClassMaskShift
+kCTFontClassOrnamentals         = NSFontOrnamentalsClass        =  9 << kCTFontClassMaskShift
+kCTFontClassScripts             = NSFontScriptsClass            = 10 << kCTFontClassMaskShift
+kCTFontClassSymbolic            = NSFontSymbolicClass           = 12 << kCTFontClassMaskShift
+kCTFontClassMaskTrait           = NSFontClassMask               = 15 << kCTFontClassMaskShift
+
 
 _csignature(libCT.CTFontCreateWithGraphicsFont, c_void_p, c_void_p, CGFloat_t, c_void_p, c_void_p)
 _csignature(libCT.CTFontCopyFamilyName, c_void_p, c_void_p)

@@ -32,12 +32,13 @@ from runtime import ObjCInstance
 from utils   import bytes2str, instanceof, type2strepr
 
 __all__ = ()
-__version__ = '18.04.23'
+__version__ = '18.05.05'
 
 
 class _Type0(object):
     '''The base Type.
     '''
+    _NS  = None  # NSNone
 
     def __repr__(self):
         return '%s at %#x' % (self, id(self))
@@ -69,7 +70,6 @@ class _Type1(_Type0):
     '''Basic Type with app and delegate.
     '''
     _app = None
-    _NS  = NSNone
 
     def __init__(self, *args, **kwds):
         # ignore __init__ from __new__, like Item

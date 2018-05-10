@@ -9,7 +9,7 @@ the I{macOS} Objective-C Cocoa runtime and several other I{macOS} libraries.
 
 This is the U{cocoa-python<http://GitHub.com/phillip-nguyen/cocoa-python>}
 package by I{Phillip Nguyen (C) 2011}, modified, extended, tested,
-documented and published under both the original
+documented and published with permission under both the original
 U{New BSD License<http://OpenSource.org/licenses/BSD-3-Clause>} and the
 U{MIT License<http://OpenSource.org/licenses/MIT>}.
 
@@ -115,7 +115,7 @@ OTHER DEALINGS IN THE SOFTWARE.}
 from os.path import abspath, dirname
 import sys
 
-__version__ = '18.04.28'
+__version__ = '18.05.08'
 
 p = sys.platform
 if not p.startswith('darwin'):
@@ -138,6 +138,7 @@ from runtime import *  # PYCHOK expected
 from apps     import *  # PYCHOK expected
 from bases    import *  # PYCHOK expected
 from dicts    import *  # PYCHOK expected
+from fonts    import *  # PYCHOK expected
 from getters  import *  # PYCHOK expected
 from geometry import *  # PYCHOK expected
 from lists    import *  # PYCHOK expected

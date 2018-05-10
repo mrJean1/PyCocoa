@@ -68,7 +68,7 @@ from oslibs  import libobjc  # get_lib
 from utils   import bytes2str, _exports, instanceof, missing, \
                     name2objc, str2bytes
 
-__version__ = '18.04.24'
+__version__ = '18.05.03'
 
 _c_func_t_cache = {}
 
@@ -109,7 +109,7 @@ def get_c_func_t(encoding, codes=None):
 def get_class(name):
     '''Get a registered ObjC class by name.
 
-       @param name: The class name (str).
+       @param name: The class name (C{str}).
 
        @return: The class (L{Class_t}) if found, None otherwise.
     '''
@@ -120,7 +120,7 @@ def get_classes(*prefixes):
     '''Yield all loaded ObjC classes with a name
        starting with one of the given prefixes.
 
-       @param prefixes: No, one or more class names to match (str-s).
+       @param prefixes: No, one or more class names to match (C{str}-s).
 
        @return: For each class yield a 2-tuple (I{name, class})
                 where I{name} is the class name and I{class} is
@@ -141,7 +141,7 @@ def get_classname(clas, dflt=missing):
 
        @param clas: The class (L{Class_t}).
 
-       @return: The class name (str).
+       @return: The class name (C{str}).
 
        @raise ValueError: Invalid I{clas}, iff no I{dflt} provided.
     '''
@@ -157,7 +157,7 @@ def get_classnameof(obj, dflt=missing):
 
        @param obj: The object (C{Object} or L{Id_t}).
 
-       @return: The object's class name (str).
+       @return: The object's class name (C{str}).
 
        @raise ValueError: Invalid I{obj}, iff no I{dflt} provided.
     '''
@@ -178,7 +178,7 @@ def get_ivar(obj, name, ctype=None):
     '''Get the value of an instance variable (ivar).
 
        @param obj: The object (C{Object} or L{Id_t}).
-       @param name: The instance variable name (str).
+       @param name: The instance variable name (C{str}).
        @keyword ctype: The instance variable type (C{ctypes}),
 
        @return: The ivar value (C{any}) if found, None otherwise.
@@ -201,7 +201,7 @@ def get_ivars(clas, *prefixes):
        a name starting with one of the given prefixes.
 
        @param clas: The class (L{Class_t}).
-       @param prefixes: No, one or more ivar names to match (str-s).
+       @param prefixes: No, one or more ivar names to match (C{str}-s).
 
        @return: For each ivar yield a 4-tuple (I{name, encoding, ctype,
                 ivar}) where I{name} is the ivar name, I{encoding} is
@@ -234,7 +234,7 @@ def get_inheritance(clas):
 def get_metaclass(name):
     '''Get a registered ObjC metaclass by name.
 
-       @param name: The metaclass (str).
+       @param name: The metaclass (C{str}).
 
        @return: The metaclass (L{Class_t}) if found, None otherwise.
     '''
@@ -245,7 +245,7 @@ def get_method(clas, name):
     '''Get a method of an ObjC class by name.
 
        @param clas: Class (L{Class_t}).
-       @param name: Method name (str).
+       @param name: Method name (C{str}).
 
        @return: The method (L{Method_t}) if found, None otherwise.
     '''
@@ -262,7 +262,7 @@ def get_methods(clas, *prefixes):
        starting with one of the given prefixes.
 
        @param clas: The class (L{Class_t}).
-       @param prefixes: No, one or more method names to match (str-s).
+       @param prefixes: No, one or more method names to match (C{str}-s).
 
        @return: For each method yield a 4-tuple (I{name, encoding,
                 rargtypes, method}), where I{name} is the method name,
@@ -303,7 +303,7 @@ def get_properties(clas_or_proto, *prefixes):
        with a name starting with one of the given prefixes.
 
        @param clas_or_proto: The class or protocol (L{Class_t} or L{Protocol_t}).
-       @param prefixes: No, one or more property names to match (str-s).
+       @param prefixes: No, one or more property names to match (C{str}-s).
 
        @return: For each property, yield a 3-tuple (I{name}, I{attributes},
                 I{setter}, I{property}) where I{attributes} is a comma-separated
@@ -359,7 +359,7 @@ def get_properties(clas_or_proto, *prefixes):
 def get_protocol(name):
     '''Get a registered ObjC protocol by name.
 
-       @param name: The protocol name (str).
+       @param name: The protocol name (C{str}).
 
        @return: The protocol (L{Protocol_t}) if found, None otherwise.
     '''
@@ -371,7 +371,7 @@ def get_protocols(clas, *prefixes):
        starting with one of the given prefixes.
 
        @param clas: The class (L{Class_t}).
-       @param prefixes: No, one or more protocol names to match (str-s).
+       @param prefixes: No, one or more protocol names to match (C{str}-s).
 
        @return: For each protocol, yield a 2-tuple (I{name}, I{protocol})
                 where I{name} is the protocol name and I{protocol} the
@@ -388,7 +388,7 @@ def get_protocols(clas, *prefixes):
 def get_selector(name_):
     '''Get an ObjC selector by name.
 
-       @param name_: The selector name (str).
+       @param name_: The selector name (C{str}).
 
        @return: The selector (L{SEL_t}) if found, None otherwise.
     '''
@@ -403,7 +403,7 @@ def get_selectornameof(sel):
 
        @param sel: The selector (L{SEL_t}).
 
-       @return: The selector name (str) if found, "" otherwise.
+       @return: The selector name (C{str}) if found, "" otherwise.
     '''
     instanceof(sel, SEL_t, name='sel')
     return bytes2str(libobjc.sel_getName(sel)) or ''
@@ -437,7 +437,7 @@ def get_superclassnameof(obj, dflt=missing):
 
        @param obj: The object (C{Object} or L{Id_t}).
 
-       @return: The object'ssuper-class name (str).
+       @return: The object'ssuper-class name (C{str}).
 
        @raise ValueError: Invalid I{obj}, iff no I{dflt} provided.
     '''

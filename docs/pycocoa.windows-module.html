@@ -62,12 +62,14 @@
 <p>Types <a href="pycocoa.windows.Window-class.html" 
   class="link">Window</a>, <a href="pycocoa.windows.MediaWindow-class.html"
   class="link">MediaWindow</a>, <a href="pycocoa.windows.Screen-class.html"
-  class="link">Screen</a>, <a href="pycocoa.windows.Style-class.html" 
-  class="link">Style</a>, wrapping ObjC <code>NSWindow</code>, etc.</p>
+  class="link">Screen</a>, <a 
+  href="pycocoa.windows-module.html#WindowStyle" 
+  class="link">WindowStyle</a>, wrapping ObjC <code>NSWindow</code>, 
+  etc.</p>
 
 <hr />
 <div class="fields">      <p><strong>Version:</strong>
-        18.04.26
+        18.05.04
       </p>
 </div><!-- ==================== CLASSES ==================== -->
 <a name="section-Classes"></a>
@@ -89,17 +91,25 @@
     <td width="15%" align="right" valign="top" class="summary">
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
-        <a href="pycocoa.windows.Style-class.html" class="summary-name">Style</a><br />
-      Window style mask constants.
+        <a href="pycocoa.windows.Window-class.html" class="summary-name">Window</a><br />
+      Basic, base window Python Type, wrapping ObjC 
+        <code>NSWindow</code>.
     </td>
   </tr>
 <tr>
     <td width="15%" align="right" valign="top" class="summary">
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
-        <a href="pycocoa.windows.Window-class.html" class="summary-name">Window</a><br />
-      Basic, base window Python Type, wrapping ObjC 
-        <code>NSWindow</code>.
+        <a href="pycocoa.windows.WindowError-class.html" class="summary-name">WindowError</a><br />
+      Window error.
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="pycocoa.windows.WindowStyleError-class.html" class="summary-name">WindowStyleError</a><br />
+      Window style error.
     </td>
   </tr>
 <tr>
@@ -120,6 +130,23 @@
   <td align="left" colspan="2" class="table-header">
     <span class="table-header">Functions</span></td>
 </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a href="pycocoa.windows-module.html#windowStyles" class="summary-sig-name">windowStyles</a>(<span class="summary-sig-arg">*styles</span>)</span><br />
+      Return a combination of window styles, specified by name.</td>
+          <td align="right" valign="top">
+            
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
 <tr>
     <td width="15%" align="right" valign="top" class="summary">
       <span class="summary-type">&nbsp;</span>
@@ -152,6 +179,15 @@
     <td width="15%" align="right" valign="top" class="summary">
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
+        <a href="pycocoa.windows-module.html#WindowStyle" class="summary-name">WindowStyle</a> = <code title="WindowStyle.Closable=2, .Miniaturizable=1&lt;&lt;2, .Resizable=1&lt;&lt;3, .Titled\
+=1, .Typical=15, .Utility=1&lt;&lt;4">WindowStyle.Closable=2, .Miniaturizable=1&lt;&lt;2, .R<code class="variable-ellipsis">...</code></code><br />
+      Window style constants (<code>mask</code>).
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
         <a name="NSWindowDelegate"></a><span class="summary-name">NSWindowDelegate</span> = <code title="ObjCClass('_NSWindowDelegate')">ObjCClass('_NSWindowDelegate')</code>
     </td>
   </tr>
@@ -165,6 +201,37 @@
     <span class="table-header">Function Details</span></td>
 </tr>
 </table>
+<a name="windowStyles"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">windowStyles</span>(<span class="sig-arg">*styles</span>)</span>
+  </h3>
+  </td><td align="right" valign="top"
+    >&nbsp;
+    </td>
+  </tr></table>
+  
+  <p>Return a combination of window styles, specified by name.</p>
+  <dl class="fields">
+    <dt>Parameters:</dt>
+    <dd><ul class="nomargin-top">
+        <li><strong class="pname"><code>styles</code></strong> - Style names (<i>all positional</i>), case-insensitive.</li>
+    </ul></dd>
+    <dt>Returns:</dt>
+        <dd>Combined window styles (<a 
+          href="pycocoa.windows-module.html#WindowStyle" 
+          class="link">WindowStyle</a><code>s mask</code>).</dd>
+    <dt>Raises:</dt>
+    <dd><ul class="nomargin-top">
+        <li><code><strong class='fraise'><a href="pycocoa.windows.WindowStyleError-class.html">WindowStyleError</a></strong></code> - One or more <i>styles</i> are invalid.</li>
+    </ul></dd>
+  </dl>
+</td></tr></table>
+</div>
 <a name="ns2Window"></a>
 <div>
 <table class="details" border="1" cellpadding="3"
@@ -200,6 +267,35 @@
 </td></tr></table>
 </div>
 <br />
+<!-- ==================== VARIABLES DETAILS ==================== -->
+<a name="section-VariablesDetails"></a>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr bgcolor="#70b0f0" class="table-header">
+  <td align="left" colspan="2" class="table-header">
+    <span class="table-header">Variables Details</span></td>
+</tr>
+</table>
+<a name="WindowStyle"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <h3 class="epydoc">WindowStyle</h3>
+  <p>Window style constants (<code>mask</code>).</p>
+  <dl class="fields">
+  </dl>
+  <dl class="fields">
+    <dt>Value:</dt>
+      <dd><table><tr><td><pre class="variable">
+WindowStyle.Closable=2, .Miniaturizable=1&lt;&lt;2, .Resizable=1&lt;&lt;3, .Titled<span class="variable-linewrap"><img src="crarr.png" alt="\" /></span>
+=1, .Typical=15, .Utility=1&lt;&lt;4
+</pre></td></tr></table>
+</dd>
+  </dl>
+</td></tr></table>
+</div>
+<br />
 <!-- ==================== NAVIGATION BAR ==================== -->
 <table class="navbar" border="0" width="100%" cellpadding="0"
        bgcolor="#a0c0ff" cellspacing="0">
@@ -231,7 +327,7 @@
 <table border="0" cellpadding="0" cellspacing="0" width="100%%">
   <tr>
     <td align="left" class="footer">
-    Generated by Epydoc 3.0.1 on Mon Apr 30 13:31:30 2018
+    Generated by Epydoc 3.0.1 on Thu May 10 14:22:54 2018
     </td>
     <td align="right" class="footer">
       <a target="mainFrame" href="http://epydoc.sourceforge.net"

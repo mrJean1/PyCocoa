@@ -74,7 +74,7 @@ from runtime import isInstanceOf, ObjCClass, ObjCInstance, _Xargs
 from utils   import bytes2str, clip, _exports, _Globals, instanceof, \
                     iterbytes, missing, str2bytes, _Types  # printf
 
-__version__ = '18.04.26'
+__version__ = '18.05.04'
 
 
 def _lambda(arg):
@@ -143,7 +143,11 @@ NSDictionary           = ObjCClass('NSDictionary')  # immutable
 NSDockTile             = ObjCClass('NSDockTile')
 NSEnumerator           = ObjCClass('NSEnumerator')
 NSFont                 = ObjCClass('NSFont')
+NSFontDescriptor       = ObjCClass('NSFontDescriptor')
+NSFontManager          = ObjCClass('NSFontManager')
+NSFontPanel            = ObjCClass('NSFontPanel')
 NSImage                = ObjCClass('NSImage')
+NSLayoutManager        = ObjCClass('NSLayoutManager')
 NSMenu                 = ObjCClass('NSMenu')
 NSMenuItem             = ObjCClass('NSMenuItem')
 NSMutableArray         = ObjCClass('NSMutableArray')
@@ -403,25 +407,41 @@ def nsDictionary2dict(ns, ctype_keys=c_void_p, ctype_vals=c_void_p):  # XXX an N
                  _ns2ctype2py(vals[i], ctype_vals)) for i in range(n))
 
 
+def nsIter(ns, reverse=False):
+    '''Iterate over an C{NS..} objects's (reverse) enumerator.
+
+       @param ns: The C{NS..} object to iterate over (L{ObjCInstance}).
+       @keyword reverse: Reverse or forward order (bool).
+
+       @return: Each object (C{NS...}).
+    '''
+    if not isNone(ns):
+        try:
+            if reverse:
+                it = ns.reverseObjectEnumerator()
+            else:
+                it = ns.objectEnumerator()
+        except AttributeError:
+            raise TypeError('non-iterable: %r' % (ns,))
+
+        while True:
+            ns = it.nextObject()  # nil for end
+            if isNone(ns):
+                break
+            yield ns
+
+
 def nsIter2(ns, reverse=False):
     '''Iterate over an C{NS..} objects's (reverse) enumerator.
 
        @param ns: The C{NS..} object to iterate over (L{ObjCInstance}).
        @keyword reverse: Reverse or forward order (bool).
 
-       @return: For each iteration, yield 2-Tuple (I{value, raw})
-                where I{value} is the value -a Python Type instance-
-                and I{raw} object.
+       @return: Each object as 2-Tuple (I{py, ns}) where I{py} is a
+                Python C{Type} instance and I{ns} the ObjC object C{NS...}.
     '''
-    if reverse:
-        ns = ns.reverseObjectEnumerator()
-    else:
-        ns = ns.objectEnumerator()
-    while True:
-        o = ns.nextObject()  # nil for end
-        if isNone(o):
-            break
-        yield ns2Type(o), o
+    for ns in nsIter(ns, reverse=reverse):
+        yield ns2Type(ns), ns
 
 
 def nsLog(fmt, *args):
@@ -524,7 +544,7 @@ def nsString2str(ns, dflt=None):  # XXX an NS*String method
     u = libCF.CFStringGetMaximumSizeForEncoding(n, CFStringEncoding)
     buf = c_buffer(u + 2)
     if libCF.CFStringGetCString(ns, buf, len(buf), CFStringEncoding):
-        # XXX assert(isinstance(buf.value, _Bytes))
+        # XXX assert isinstance(buf.value, _Bytes), 'bytes expected'
         # bytes to unicode in Python 2, to str in Python 3+
         return bytes2str(buf.value)  # XXX was .decode(DEFAULT_UNICODE)
     return dflt

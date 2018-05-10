@@ -460,7 +460,7 @@ class ObjCInstance(ObjCBase):
             return ObjCBoundClassMethod(method, self._objc_class.ptr)
 
         # Otherwise raise an exception.
-        raise AttributeError('no %s [class]method: %r' % (self, name))
+        raise AttributeError('no %r [class]method: %s' % (name, self))
 
 #   def __repr__(self):
 #       return '<%s %#x: %s>' % (ObjCInstance.__name__, id(self), self)

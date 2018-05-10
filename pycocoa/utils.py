@@ -60,7 +60,7 @@
 '''(INTERNAL) Utility functions, constants, etc.
 '''
 # all imports listed explicitly to help PyChecker
-__version__ = '18.04.27'
+__version__ = '18.05.04'
 
 try:
     from math import gcd  # Python 3+
@@ -74,28 +74,82 @@ except ImportError:
             return a
 
 
-class _Constants(object):
-    '''Only constant, readable attributes.
+class _MutableConstants(object):
+    '''Enum-like, mutable "constants".
     '''
-    def __init__(self, *unused):
-        raise AssertionError('%s is constant' % (self.__class__.__name__,))
+    def __setattr__(self, name, value):
+        if not hasattr(self, name):
+            raise NameError('no such %s.%s' % (self.__class__.__name__, name))
+        super(_MutableConstants, self).__setattr__(name, value)
 
-    __setattr__ = __init__
+    def _strepr(self, fmt):
+        t = ', .'.join(fmt(*t) for t in sorted(self.items()))
+        return '%s.%s' % (self.__class__.__name__, t)
+
+    def __repr__(self):
+        def _fmt(n, v):
+            b, s = _int2(v)
+            if s > 1:
+                v = '%s<<%s' % (b, s)
+            return '%s=%s' % (n, v)
+        return self._strepr(_fmt)
+
+    def __str__(self):
+        def _fmt(n, unused):
+            return n
+        return self._strepr(_fmt)
+
+    def items(self):
+        '''Yield 2-tuple (name, value) for each constant.
+        '''
+        for n in dir(self):
+            if n[:1].isupper():
+                yield n, getattr(self, n)
+
+
+class _Constants(_MutableConstants):
+    '''Enum-like, read-only constants.
+    '''
+    def __setattr__(self, name, unused):
+        raise AssertionError('immutable %s.%s' % (self.__class__.__name__, name))
+
+    def _masks(self, *names):
+        ns = []
+        for n in names:
+            ns.extend(n.strip().lower().split())
+
+        ns, c = set(ns), 0
+        for n, m in self.items():
+            n = n.lower()
+            if n in ns:
+                c |= m
+                ns.remove(n)
+
+        if ns:  # some invalid names
+            return c, ' '.join(map(repr, ns))
+        else:
+            return c, None
+
+    def astrs(self, mask):
+        '''Return constants mask as names (C{str}s).
+        '''
+        return ' '.join(n for n, m in self.items() if mask & m)
 
 
 class _Globals(object):  # some PyCocoa-internal globals
     App     = None  # XXX single instance only
-    argv0   = 'PyCocoa'  # set by .nstypes.nsBundleRename
+    argv0   = 'PyCocoa'  # set by .nstypes.nsBundleRename and _allisting
     Items   = {}
     raiser  = False
     Tables  = []
     Windows = {}
 
 
-class _Types(_Constants):
+class _Types(_MutableConstants):
     '''Holder of the Python Types, to avoid circular imports.
     '''
     Dict        = None  # set by .dicts.py
+    Font        = None  # sef by .fonts.py
     FrozenDict  = None  # set by .dicts.py
     FrozenSet   = None  # set by .sets.py
     Item        = None  # set by .menus.py
@@ -113,11 +167,8 @@ class _Types(_Constants):
     Tuple       = None  # set by .tuples.py
     Window      = None  # set by .windows.py
 
-    @staticmethod
-    def listypes():
-        for a, v in sorted(_Types.__dict__.items()):
-            if not a.startswith('_'):
-                printf('_Types.%-11s %r', a + ':', v)
+
+_Types = _Types()  # freeze
 
 
 class missing(object):  # singleton class, lost on purpose
@@ -168,12 +219,12 @@ def aspect_ratio(width, height):
         return None
 
 
-try:  # MCCABE 22
+try:  # MCCABE 23
 
     # in Python 2- bytes *is* str and bytes.__name__ == 'str'
     _Bytes = unicode, bytearray
     _Ints  = int, long  # PYCHOK for export
-    _Strs  = basestring
+    _Strs  = basestring,
 
     def bytes2repr(bytestr):
         '''Represent bytes like C{repr(bytestr)}.
@@ -226,8 +277,8 @@ try:  # MCCABE 22
 
 except NameError:  # Python 3+
     _Bytes = bytes, bytearray
-    _Ints  = int
-    _Strs  = str
+    _Ints  = int,
+    _Strs  = str,
 
     bytes2repr = repr  # always b'...'
 
@@ -259,7 +310,7 @@ except NameError:  # Python 3+
 
     # double check iterbytes
     for b in iterbytes(b'a0'):
-        assert(isinstance(b, bytes))
+        assert isinstance(b, bytes), 'iterbytes failed'
     del b
 
     def str2bytes(bytestr, dflt=missing):  # PYCHOK expected
@@ -281,13 +332,15 @@ except NameError:  # Python 3+
             raise TypeError('%s: %r' % ('str2bytes', bytestr))
         return dflt
 
-_ByteStrs = _Bytes + (_Strs,)  # bytes and/or str types
+_ByteStrs = _Bytes + _Strs  # bytes and/or str types
 
 
-def _allisting(alls, localls, version, filename):
+def _allisting(alls, localls, version, filename, argv0=''):
     '''(INTERNAL) Print sorted __all__ names and values.
     '''
     import os
+
+    _Globals.argv0 = argv0
 
     m = os.path.basename(os.path.splitext(filename)[0])
     printf('%s.%s = %s(', m, '__all__', alls.__class__.__name__, nl=1)
@@ -297,7 +350,12 @@ def _allisting(alls, localls, version, filename):
     for n in sorted(alls, key=str.lower):
         v = localls[n]
         r = repr(v)
-        if r.startswith('<class '):
+        if isinstance(v, _Ints):
+            r = '%s or 0x%X' % (r, v)
+            v, s = _int2(v)
+            if s > 2:
+                r = '%s or %d << %s' % (r, v, s)
+        elif r.startswith('<class '):
             r = r.replace("'", '')
         elif r.startswith('<function '):
             r = r[:10] + v.__module__ + '.' + r[10:]
@@ -358,6 +416,17 @@ def _exports(localls, *names, **starts_ends):  # starts=(), ends=(), not_starts=
     return t + names
 
 
+def flint(f):
+    '''Return C{int} for integer C{float}.
+    '''
+    try:
+        if f.is_integer():
+            return int(f)
+    except AttributeError:
+        pass
+    return f
+
+
 def inst2strepr(inst, strepr, *attrs):
     '''Convert an instance's attributes, maintaining the order.
 
@@ -397,6 +466,23 @@ def instanceof(inst, *classes, **name_missing):
 
     t = ', '.join(getattr(c, '__name__', str(c)) for c in classes)
     raise TypeError('%s not %s: %r' % (name, t, inst))
+
+
+def _int2(i):
+    '''Split an C{int} into 2-tuple (int, shift).
+    '''
+    s = 0
+    if isinstance(i, _Ints) and i > 0:
+        while not (i & 255):
+            i >>= 8
+            s += 8
+        while not (i & 15):
+            i >>= 4
+            s += 4
+        while not (i & 1):
+            i >>= 1
+            s += 1
+    return i, s
 
 
 def name2objc(name):
@@ -518,8 +604,8 @@ def zSIstr(size, B='B'):
 
 
 __all__ = _exports(locals(), 'aspect_ratio', 'clip', 'DEFAULT_UNICODE',
-                             'gcd', 'iterbytes', 'missing', 'printf',
-                             'type2strepr',
+                             'flint', 'gcd', 'iterbytes', 'missing',
+                             'printf', 'type2strepr',
                    starts=('bytes', 'inst', 'str', 'z'))
 
 
