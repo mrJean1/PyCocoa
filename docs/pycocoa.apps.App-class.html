@@ -73,7 +73,7 @@ bases._Type0 --+
 </pre>
 
 <hr />
-<p>Application Python Type, wrapping an ObjC 
+<p>Python <code>App</code> Type, wrapping an ObjC 
   <code>NSApplication</code>.</p>
 
 <!-- ==================== INSTANCE METHODS ==================== -->
@@ -492,7 +492,7 @@ bases._Type0 --+
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
         <a href="pycocoa.apps.App-class.html#isHidden" class="summary-name">isHidden</a><br />
-      Get this app's hidden state (bool).
+      Get this app's hidden state (<code>bool</code>).
     </td>
   </tr>
 <tr>
@@ -500,7 +500,7 @@ bases._Type0 --+
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
         <a href="pycocoa.apps.App-class.html#isRunning" class="summary-name">isRunning</a><br />
-      Get this app's running state (bool).
+      Get this app's running state (<code>bool</code>).
     </td>
   </tr>
 <tr>
@@ -508,7 +508,7 @@ bases._Type0 --+
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
         <a href="pycocoa.apps.App-class.html#isUp" class="summary-name">isUp</a><br />
-      Get this app's launched state (bool).
+      Get this app's launched state (<code>bool</code>).
     </td>
   </tr>
 <tr>
@@ -536,6 +536,14 @@ bases._Type0 --+
         <a href="pycocoa.apps.App-class.html#menubar" class="summary-name">menubar</a><br />
       Get this app's menu bar (<a href="pycocoa.menus.MenuBar-class.html" 
       class="link">MenuBar</a>).
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="pycocoa.apps.App-class.html#raiser" class="summary-name">raiser</a><br />
+      Get raise errors option (<code>bool</code>).
     </td>
   </tr>
   <tr>
@@ -588,9 +596,14 @@ bases._Type0 --+
   <dl class="fields">
     <dt>Parameters:</dt>
     <dd><ul class="nomargin-top">
-        <li><strong class="pname"><code>title</code></strong> - App name or title (str).</li>
-        <li><strong class="pname"><code>raiser</code></strong> - Throw exceptions for silent errors (bool).</li>
+        <li><strong class="pname"><code>title</code></strong> - App name or title ((<code>str</code>)).</li>
+        <li><strong class="pname"><code>raiser</code></strong> - Throw exceptions for silent errors (<code>bool</code>).</li>
         <li><strong class="pname"><code>kwds</code></strong> - Optional, additional keyword arguments.</li>
+    </ul></dd>
+    <dt>Raises:</dt>
+    <dd><ul class="nomargin-top">
+        <li><code><strong class='fraise'>RuntimeError</strong></code> - Duplicate <a href="pycocoa.apps.App-class.html" 
+        class="link">App</a>s.</li>
     </ul></dd>
     <dt>Overrides:
         object.__init__
@@ -645,7 +658,7 @@ bases._Type0 --+
   <dl class="fields">
     <dt>Parameters:</dt>
     <dd><ul class="nomargin-top">
-        <li><strong class="pname"><code>full</code></strong> - Enter or exit (bool).</li>
+        <li><strong class="pname"><code>full</code></strong> - Enter or exit (<code>bool</code>).</li>
     </ul></dd>
   </dl>
 </td></tr></table>
@@ -669,7 +682,7 @@ bases._Type0 --+
   <dl class="fields">
     <dt>Parameters:</dt>
     <dd><ul class="nomargin-top">
-        <li><strong class="pname"><code>hide</code></strong> - Hide or show (bool).</li>
+        <li><strong class="pname"><code>hide</code></strong> - Hide or show (<code>bool</code>).</li>
     </ul></dd>
   </dl>
 </td></tr></table>
@@ -693,7 +706,7 @@ bases._Type0 --+
   <dl class="fields">
     <dt>Parameters:</dt>
     <dd><ul class="nomargin-top">
-        <li><strong class="pname"><code>hide</code></strong> - Hide or show (bool).</li>
+        <li><strong class="pname"><code>hide</code></strong> - Hide or show (<code>bool</code>).</li>
     </ul></dd>
   </dl>
 </td></tr></table>
@@ -722,7 +735,7 @@ bases._Type0 --+
   </dl>
 <div class="fields">      <p><strong>Note:</strong>
         Although <i>run</i> never returns, any Python threads started 
-        earlier remain running, concurrently.
+        earlier continue to run concurrently.
       </p>
 </div></td></tr></table>
 </div>
@@ -809,11 +822,11 @@ class="link">Tile</a>).
        cellspacing="0" width="100%" bgcolor="white">
 <tr><td>
   <h3 class="epydoc">isHidden</h3>
-  <p>Get this app's hidden state (bool).</p>
+  <p>Get this app's hidden state (<code>bool</code>).</p>
   <dl class="fields">
     <dt>Get Method:</dt>
     <dd class="value"><span class="summary-sig">isHidden(<span class="summary-sig-arg">self</span>)</span>
-        - Get this app's hidden state (bool).
+        - Get this app's hidden state (<code>bool</code>).
     </dd>
   </dl>
 </td></tr></table>
@@ -824,11 +837,11 @@ class="link">Tile</a>).
        cellspacing="0" width="100%" bgcolor="white">
 <tr><td>
   <h3 class="epydoc">isRunning</h3>
-  <p>Get this app's running state (bool).</p>
+  <p>Get this app's running state (<code>bool</code>).</p>
   <dl class="fields">
     <dt>Get Method:</dt>
     <dd class="value"><span class="summary-sig">isRunning(<span class="summary-sig-arg">self</span>)</span>
-        - Get this app's running state (bool).
+        - Get this app's running state (<code>bool</code>).
     </dd>
   </dl>
 </td></tr></table>
@@ -839,11 +852,11 @@ class="link">Tile</a>).
        cellspacing="0" width="100%" bgcolor="white">
 <tr><td>
   <h3 class="epydoc">isUp</h3>
-  <p>Get this app's launched state (bool).</p>
+  <p>Get this app's launched state (<code>bool</code>).</p>
   <dl class="fields">
     <dt>Get Method:</dt>
     <dd class="value"><span class="summary-sig">isUp(<span class="summary-sig-arg">self</span>)</span>
-        - Get this app's launched state (bool).
+        - Get this app's launched state (<code>bool</code>).
     </dd>
   </dl>
 </td></tr></table>
@@ -899,6 +912,26 @@ class="link">MenuBar</a>).
   </dl>
 </td></tr></table>
 </div>
+<a name="raiser"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <h3 class="epydoc">raiser</h3>
+  <p>Get raise errors option (<code>bool</code>).</p>
+  <dl class="fields">
+    <dt>Get Method:</dt>
+    <dd class="value"><span class="summary-sig">raiser(<span class="summary-sig-arg">self</span>)</span>
+        - Get raise errors option (<code>bool</code>).
+    </dd>
+    <dt>Set Method:</dt>
+    <dd class="value"><span class="summary-sig">raiser(<span class="summary-sig-arg">self</span>,
+        <span class="summary-sig-arg">raiser</span>)</span>
+        - Set the raise errors option (<code>bool</code>).
+    </dd>
+  </dl>
+</td></tr></table>
+</div>
 <br />
 <!-- ==================== NAVIGATION BAR ==================== -->
 <table class="navbar" border="0" width="100%" cellpadding="0"
@@ -931,7 +964,7 @@ class="link">MenuBar</a>).
 <table border="0" cellpadding="0" cellspacing="0" width="100%%">
   <tr>
     <td align="left" class="footer">
-    Generated by Epydoc 3.0.1 on Thu May 10 14:22:55 2018
+    Generated by Epydoc 3.0.1 on Tue May 15 14:18:51 2018
     </td>
     <td align="right" class="footer">
       <a target="mainFrame" href="http://epydoc.sourceforge.net"

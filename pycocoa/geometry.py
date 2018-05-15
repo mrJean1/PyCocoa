@@ -33,7 +33,7 @@ from utils   import instanceof
 __all__ = ('Point', 'Point2',
            'Rect', 'Rect4',
            'Size', 'Size2')
-__version__ = '18.04.21'
+__version__ = '18.05.15'
 
 
 class Point(_Type0):
@@ -46,7 +46,7 @@ class Point(_Type0):
 
     @property
     def point(self):
-        '''Get the x and y coordinate (2-tuple).
+        '''Get the x and y coordinate (2-tuple) of (C{float} or C{int}).
         '''
         return self.x, self.y
 
@@ -63,7 +63,7 @@ class Point(_Type0):
 
     @property
     def x(self):
-        '''Get the x coordinate (float).
+        '''Get the x coordinate (C{float} or C{int}).
         '''
         return self.NS.x
 
@@ -73,7 +73,7 @@ class Point(_Type0):
 
     @property
     def y(self):
-        '''Get the y coordinate (float).
+        '''Get the y coordinate (C{float} or C{int}).
         '''
         return self.NS.y
 
@@ -123,7 +123,7 @@ class Rect(_Type0):
 
     @property
     def bottom(self):
-        '''Get the lower y coordinate (float).
+        '''Get the lower y coordinate (C{float} or C{int}).
         '''
         return self.y
 
@@ -144,7 +144,7 @@ class Rect(_Type0):
 
     @property
     def left(self):
-        '''Get the lower x coordinate (float).
+        '''Get the lower x coordinate (C{float} or C{int}).
         '''
         return self.x
 
@@ -163,7 +163,7 @@ class Rect(_Type0):
 
     @property
     def right(self):
-        '''Get the upper x coordinate (float).
+        '''Get the upper x coordinate (C{float} or C{int}).
         '''
         return self.x + self.width
 
@@ -182,19 +182,19 @@ class Rect(_Type0):
 
     @property
     def top(self):
-        '''Get the upper y coordinate (float).
+        '''Get the upper y coordinate (C{float} or C{int}).
         '''
         return self.y + self.height
 
     @property
     def width(self):
-        '''Get the width (float).
+        '''Get the width (C{float} or C{int}).
         '''
         return self.NS.size.width
 
     @width.setter  # PYCHOK property.setter
     def width(self, width):
-        '''Set the width (float).
+        '''Set the width (C{float} or C{int}).
         '''
         if width < 0:
             width = -width
@@ -203,25 +203,25 @@ class Rect(_Type0):
 
     @property
     def x(self):
-        '''Get the x coordinate (float).
+        '''Get the x coordinate (C{float} or C{int}).
         '''
         return self.NS.origin.x
 
     @x.setter  # PYCHOK property.setter
     def x(self, x):
-        '''Set the x coordinate (float).
+        '''Set the x coordinate (C{float} or C{int}).
         '''
         self.NS.origin.x = x
 
     @property
     def y(self):
-        '''Get the y coordinate (float).
+        '''Get the y coordinate (C{float} or C{int}).
         '''
         return self.NS.origin.y
 
     @y.setter  # PYCHOK property.setter
     def y(self, y):
-        '''Set the y coordinate (float).
+        '''Set the y coordinate (C{float} or C{int}).
         '''
         self.NS.origin.y = y
 
@@ -245,7 +245,7 @@ class Size(_Type0):
 
     @property
     def size(self):
-        '''Get the width, height (2-tuple).
+        '''Get the width, height (2-tuple) of (C{float} or C{int}).
         '''
         return self.width, self.height
 
@@ -264,25 +264,25 @@ class Size(_Type0):
 
     @property
     def height(self):
-        '''Get the height (float).
+        '''Get the height (C{float} or C{int}).
         '''
         return self.NS.height
 
     @height.setter  # PYCHOK property.setter
     def height(self, height):
-        '''Set the height (float).
+        '''Set the height (C{float} or C{int}).
         '''
         self.NS.height = height
 
     @property
     def width(self):
-        '''Get the width (float).
+        '''Get the width (C{float} or C{int}).
         '''
         return self.NS.width
 
     @width.setter  # PYCHOK property.setter
     def width(self, width):
-        '''Set the width (float).
+        '''Set the width (C{float} or C{int}).
         '''
         self.NS.width = width
 

@@ -22,7 +22,7 @@
 from setuptools import setup
 
 __all__ = ()
-__version__ = '18.04.26'
+__version__ = '18.05.10'
 
 
 def _c2(*names):
@@ -33,7 +33,7 @@ def _version():
     with open('pycocoa/__init__.py') as f:
         for t in f.readlines():
             if t.startswith('__version__'):
-                v = t.split('=')[-1].strip().strip("'").strip('"')
+                v = t.split('=')[-1].strip().strip('\'"')
                 return '.'.join(map(str, map(int, v.split('.'))))
 
 
@@ -48,7 +48,7 @@ def _long_description():
 _KeyWords=('Cocoa', 'cocoavlc', 'ctypes',
            'macOS',
            'Objective-C',
-           'PyCocosa', 'python-vlc',
+           'PyCocoa', 'python-vlc',
            'VLC', 'VLCplayer')
 
 setup(

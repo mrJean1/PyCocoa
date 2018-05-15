@@ -60,7 +60,7 @@
 # Several Objective-C/C header files are also available at
 # <http://GitHub.com/gnustep/libs-gui/tree/master/Headers>
 
-'''ObjC classes C{NS...} and conversions from C{NS...} to Python and vice versa.
+'''ObjC classes C{NS...} and conversions from C{NS...} to Python.
 '''
 # all imports listed explicitly to help PyChecker
 from decimal import Decimal as _Decimal
@@ -74,7 +74,7 @@ from runtime import isInstanceOf, ObjCClass, ObjCInstance, _Xargs
 from utils   import bytes2str, clip, _exports, _Globals, instanceof, \
                     iterbytes, missing, str2bytes, _Types  # printf
 
-__version__ = '18.05.04'
+__version__ = '18.05.15'
 
 
 def _lambda(arg):

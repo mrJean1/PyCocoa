@@ -49,7 +49,7 @@ from windows  import Screen, Window, WindowStyle
 __all__ = ('NSTableViewDelegate',
            'Table', 'TableWindow',
            'closeTables')
-__version__ = '18.05.08'
+__version__ = '18.05.15'
 
 _Alignment = dict(center=NSTextAlignmentCenter,
                justified=NSTextAlignmentJustified,
@@ -67,17 +67,17 @@ def _format(header, col):
         try:
             f = t.pop(1)
             if f.islower():
-                c = col.dataCell
+                c = col.dataCell()
             else:
-                c = col.headerCell
+                c = col.headerCell()
                 f = f.lower()
             ns = _Alignment.get(f, None)
             if ns:
-                c().setAlignment_(ns)
+                c.setAlignment_(ns)
             elif f in ('bold', 'italic'):
-                ns = c().font()
+                ns = c.font()
                 ns = Font(ns).traitsup(f).NS
-                c().setFont_(ns)
+                c.setFont_(ns)
             else:
                 # col.sizeToFit()  # fits width of headerCell text!
                 col.setWidth_(float(f))
@@ -152,7 +152,7 @@ class Table(_Type2):
         self.NS = vuw = NSTableView.alloc().initWithFrame_(f.NS)
 
         cols = []
-        lead = 0
+        high = 0
         id2i = {}
         wide = f.width  # == vuw.frame().size.width
         # <http://Developer.Apple.com//documentation/appkit/nstablecolumn>
@@ -170,13 +170,13 @@ class Table(_Type2):
             c.setTitle_(NSStr(h))  # == c.headerCell().setStringValue_(NSStr(h))
             # <http://Developer.Apple.com//documentation/uikit/nstextalignment>
             vuw.addTableColumn_(c)
-            lead = max(lead, Font(c.dataCell().font()).height)
+            high = max(high, Font(c.dataCell().font()).height)
             wide -= c.width()
 
         if wide > 0:  # stretch last col to frame edge
             c.setWidth_(float(wide + c.width()))
-        if lead > vuw.rowHeight():  # adjust the row height
-            vuw.setRowHeight_(lead + 1)
+        if high > vuw.rowHeight():  # adjust the row height
+            vuw.setRowHeight_(high + 1)
 
         # <http://Developer.Apple.com//library/content/documentation/
         #         Cocoa/Conceptual/TableView/VisualAttributes/VisualAttributes.html>

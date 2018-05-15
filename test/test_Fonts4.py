@@ -5,7 +5,7 @@
 
 from pycocoa import fontfamilies, fontsof4, fontTraitstrs
 
-__version__ = '18.05.05'
+__version__ = '18.05.10'
 
 if __name__ == '__main__':
 

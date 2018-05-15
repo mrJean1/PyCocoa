@@ -41,13 +41,13 @@ __all__ = ('Item',
            'Separator',
            'ns2Item',
            'title2action')
-__version__ = '18.04.28'
+__version__ = '18.05.15'
 
 _menuItemHandler_name = 'menuItemHandler_'
 
 
 class Item(_Type2):
-    '''Menu item Python Type, wrapping ObjC C{NSMenuItem}.
+    '''Python menu C{Item} Type, wrapping ObjC C{NSMenuItem}.
     '''
     _action = _menuItemHandler_name
     _key    = ''
@@ -229,7 +229,7 @@ class Menu(_Type2):
 # <http://Developer.Apple.com//library/content/qa/qa1420/_index.html
 #      #//apple_ref/doc/uid/DTS10004127>
 class MenuBar(_Type2):
-    '''Menu bar Python Type, wrapping ObjC C{NSMenu}.
+    '''Python C{MenuBar} Type, wrapping ObjC C{NSMenu}.
     '''
     _menus = []
 
@@ -299,7 +299,7 @@ class MenuBar(_Type2):
 
 
 class Separator(_Type1):
-    '''Menu separator Python Type, wrapping ObjC C{NSMenuItem.separatorItem}.
+    '''Python menu C{Separator} Type, wrapping ObjC C{NSMenuItem.separatorItem}.
     '''
     def __init__(self):
         '''New L{Separator}.

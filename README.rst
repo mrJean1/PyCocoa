@@ -18,8 +18,8 @@ Examples `cocoavlc.py`_ and *simple_VLCplayer.py* require installation of
 the `VLC App`_ and the corresponding `Python-VLC`_ binding.
 
 The tests and examples have only been run with 64-bit Python 2.7.14 and
-3.6.5 (with VLC_ 2.2.6 and 3.0.1) and only on macOS 10.13.4 High Sierra.
-PyCocoa has *not* been tested on iOS nor with 32-bit Python.
+3.6.5 using `Python-VLC`_ 3.0.1 and 3.0.2, but only on macOS 10.13.4 High
+Sierra.  PyCocoa has *not been tested* on iOS nor with 32-bit Python.
 
 All PyCocoa source code has been statically checked_ with PyChecker_,
 PyFlakes_, PyCodeStyle_ (formerly Pep8) and McCabe_ using 64-bit Python
@@ -35,7 +35,7 @@ Some alternatives to PyCocoa are (a) PyObjC_, the most comprehensive Python
 to Objective-C bridge, (b) `Rubicon-ObjC`_ for Python 3.5+, taking advantage
 of Python's new typing_ annotations and (c) PyGUI_ for macOS_.
 
-*Last updated: May 08, 2018.*
+*Last updated: May 15, 2018.*
 
 .. _checked: http://GitHub.com/ActiveState/code/tree/master/recipes/Python/546532_PyChecker_postprocessor
 .. _cocoa-python: http://GitHub.com/phillip-nguyen/cocoa-python
@@ -53,13 +53,12 @@ of Python's new typing_ annotations and (c) PyGUI_ for macOS_.
 .. _pycocoa: http://PyPI.Python.org/pypi/PyCocoa
 .. _PyCodeStyle: http://PyPI.Python.org/pypi/pycodestyle
 .. _PyFlakes: http://PyPI.Python.org/pypi/pyflakes
-.. _PyGUI: http://www.cosc.canterbury.ac.nz/greg.ewing/python_gui
+.. _PyGUI: http://CoSC.Canterbury.AC.NZ/greg.ewing/python_gui
 .. _PyObjC: http://PyPI.Python.org/pypi/pyobjc
 .. _PyPI: http://PyPI.Python.org/pypi/PyCocoa
 .. _Rubicon-ObjC: http://PyPI.Python.org/pypi/rubicon-objc
 .. _typing: http://Docs.Python.org/3/library/typing.html
 .. _Python-VLC: http://PyPI.Python.org/pypi/python-vlc
-.. _VLC: http://www.VideoLan.org/index.html
 .. _VLC App: http://www.VideoLan.org/vlc/download-macosx.html
 
 

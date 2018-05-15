@@ -43,11 +43,11 @@ __all__ = ('App',
            'Tile',
            'app_title',
            'ns2App')
-__version__ = '18.05.03'
+__version__ = '18.05.15'
 
 
 class App(_Type2):
-    '''Application Python Type, wrapping an ObjC C{NSApplication}.
+    '''Python C{App} Type, wrapping an ObjC C{NSApplication}.
     '''
     _badge      = None
     _isUp       = None
@@ -59,9 +59,11 @@ class App(_Type2):
     def __init__(self, title='PyCocao', raiser=False, **kwds):
         '''New L{App}.
 
-           @keyword title: App name or title (str).
-           @keyword raiser: Throw exceptions for silent errors (bool).
+           @keyword title: App name or title ((C{str})).
+           @keyword raiser: Throw exceptions for silent errors (C{bool}).
            @keyword kwds: Optional, additional keyword arguments.
+
+           @raise RuntimeError: Duplicate L{App}s.
         '''
         if _Globals.App:
             raise RuntimeError('%s already exists' % (_Globals.App,))
@@ -121,7 +123,7 @@ class App(_Type2):
     def full(self, full):
         '''Enter or exit full screen mode for this app.
 
-           @param full: Enter or exit (bool).
+           @param full: Enter or exit (C{bool}).
         '''
         if full:
             self.NS.enterFullScreenMode_(self.NS)
@@ -131,7 +133,7 @@ class App(_Type2):
     def hide(self, hide):
         '''Hide or show this app's main window.
 
-           @param hide: Hide or show (bool).
+           @param hide: Hide or show (C{bool}).
         '''
         if hide:
             self.NS.hide_(self.NS)
@@ -141,7 +143,7 @@ class App(_Type2):
     def hideOther(self, hide):
         '''Hide other or show all apps's windows.
 
-           @param hide: Hide or show (bool).
+           @param hide: Hide or show (C{bool}).
         '''
         if hide:
             self.NS.hideOtherApplications_(self.NS)
@@ -150,19 +152,19 @@ class App(_Type2):
 
     @property
     def isHidden(self):
-        '''Get this app's hidden state (bool).
+        '''Get this app's hidden state (C{bool}).
         '''
         return True if self.NS.isHidden() else False
 
     @property
     def isRunning(self):
-        '''Get this app's running state (bool).
+        '''Get this app's running state (C{bool}).
         '''
         return True if self.NS.isRunning() else False
 
     @property
     def isUp(self):
-        '''Get this app's launched state (bool).
+        '''Get this app's launched state (C{bool}).
         '''
         return self._isUp
 
@@ -184,13 +186,25 @@ class App(_Type2):
         '''
         return self._menubar
 
+    @property
+    def raiser(self):
+        '''Get raise errors option (C{bool}).
+        '''
+        return _Globals.raiser
+
+    @raiser.setter  # PYCHOK property.setter
+    def raiser(self, raiser):
+        '''Set the raise errors option (C{bool}).
+        '''
+        _Globals.raiser = bool(raiser)
+
     def run(self, timeout=None):
         '''Run this app (never returns).
 
            @keyword timeout: Run time limit in seconds (float).
 
            @note: Although I{run} never returns, any Python threads
-           started earlier remain running, concurrently.
+           started earlier continue to run concurrently.
         '''
         if timeout is not None:
             try:
@@ -313,8 +327,8 @@ class App(_Type2):
 
 class _NSApplicationDelegate(object):
     '''An ObjC-callable I{NSDelegate} class to handle C{NSApplication},
-       C{NSMenu} and C{NSWindow} events as L{App}.app..._, L{App}.menu..._
-       respectively L{App}.window..._ callback calls.
+       C{NSMenu} and C{NSWindow} events as L{App}C{.app..._}, L{App}C{.menu..._}
+       respectively L{App}C{.window..._} callback calls.
     '''
     # Cobbled together from the pycocoa.ObjCSubClass.__doc__,
     # pycocoa.runtime._NSDeallocObserver and PyObjC examples:
@@ -433,7 +447,8 @@ class _NSApplicationDelegate(object):
            method of this I{NSDelegate}'s L{App} instance.
 
            Unhandled clicks, shortcuts and dispatch errors are
-           silently ignored, unless I{_Global.raiser} is C{True}.
+           silently ignored, unless L{App} C{raiser} keyword
+           argument was C{True}.
         '''
         item = ns2Item(ns_item)
         act = item._action
@@ -459,12 +474,12 @@ NSApplicationDelegate = ObjCClass('_NSApplicationDelegate')
 
 
 class Tile(_Type2):
-    '''The dock tile for an L{App}, wrapping an ObjC C{NSDockTile}.
+    '''Dock tile for an L{App}, wrapping an ObjC C{NSDockTile}.
     '''
     _label = ''
 
     def __init__(self, app):
-        '''New dock tile.
+        '''New dock L{Tile}.
 
            @param app: The app (L{App}).
         '''
@@ -473,13 +488,13 @@ class Tile(_Type2):
 
     @property
     def label(self):
-        '''Get the badge text of the app's dock tile (str).
+        '''Get the badge text of the app's dock tile (C{str}).
         '''
         return self._label
 
     @label.setter  # PYCHOK property.setter
     def label(self, label):
-        '''Set the badge text of the app's dock tile (str).
+        '''Set the badge text of the app's dock tile (C{str}).
         '''
         self._label = bytes2str(label)
         self.NS.setBadgeLabel_(NSStr(self._label))
@@ -489,9 +504,9 @@ class Tile(_Type2):
 def app_title(title):
     '''Get/set the app title.
 
-       @param title: New title (str).
+       @param title: New title (C{str}).
 
-       @return: Previous title (str).
+       @return: Previous title (C{str}).
     '''
     return nsBundleRename(NSStr(title))
 
@@ -504,7 +519,7 @@ def ns2App(ns):
 
        @return: The app instance (L{App}).
 
-       @raise AssertionError: Mismatched instances.
+       @raise RuntimeError: L{App} mismatch.
     '''
     if isInstanceOf(ns, NSApplication):
         pass
@@ -512,7 +527,7 @@ def ns2App(ns):
         ns = ns.object()
     if ns == _Globals.App.NS:
         return _Globals.App
-    raise AssertionError('%r vs %r' % (ns, _Globals.App.NS))
+    raise RuntimeError('%r vs %r' % (ns, _Globals.App.NS))
 
 
 if __name__ == '__main__':

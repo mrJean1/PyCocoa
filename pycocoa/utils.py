@@ -60,7 +60,7 @@
 '''(INTERNAL) Utility functions, constants, etc.
 '''
 # all imports listed explicitly to help PyChecker
-__version__ = '18.05.04'
+__version__ = '18.05.09'
 
 try:
     from math import gcd  # Python 3+
@@ -335,7 +335,7 @@ except NameError:  # Python 3+
 _ByteStrs = _Bytes + _Strs  # bytes and/or str types
 
 
-def _allisting(alls, localls, version, filename, argv0=''):
+def _allisting(alls, localls, version, filename, argv0='', itemf=None):
     '''(INTERNAL) Print sorted __all__ names and values.
     '''
     import os
@@ -365,7 +365,10 @@ def _allisting(alls, localls, version, filename, argv0=''):
             r += ' DUPLICATE'
         else:
             p = n
-        printf('  %s.%s is %s,', m, n, r)
+        if itemf:
+            printf(itemf('  %s.%s is %s,', m, n, r))
+        else:
+            printf('  %s.%s is %s,', m, n, r)
         i += 1
     if d:
         d = ' %s%s%s' % (d, ' DUPLICATE', 's' if d > 1 else '')

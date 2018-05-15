@@ -423,9 +423,11 @@ pycocoa.fonts._traitex	pycocoa.fonts-module.html#_traitex
 pycocoa.fonts.fontTraitstrs	pycocoa.fonts-module.html#fontTraitstrs
 pycocoa.fonts.NSFontCondensedMask	pycocoa.fonts-module.html#NSFontCondensedMask
 pycocoa.fonts.fontsof4	pycocoa.fonts-module.html#fontsof4
+pycocoa.fonts.NSTableColumn	pycocoa.fonts-module.html#NSTableColumn
 pycocoa.fonts.NSFontCompressedMask	pycocoa.fonts-module.html#NSFontCompressedMask
 pycocoa.fonts.__package__	pycocoa.fonts-module.html#__package__
 pycocoa.fonts.NSFont	pycocoa.fonts-module.html#NSFont
+pycocoa.fonts._NSTC	pycocoa.fonts-module.html#_NSTC
 pycocoa.fonts.NSFontSansSerifClass	pycocoa.fonts-module.html#NSFontSansSerifClass
 pycocoa.fonts._Types	pycocoa.fonts-module.html#_Types
 pycocoa.fonts._exports	pycocoa.utils-module.html#_exports
@@ -1129,6 +1131,7 @@ pycocoa.apps.App._keyWindow	pycocoa.apps.App-class.html#_keyWindow
 pycocoa.apps.App.windowClose_	pycocoa.apps.App-class.html#windowClose_
 pycocoa.apps.App._menubar	pycocoa.apps.App-class.html#_menubar
 pycocoa.apps.App.terminate	pycocoa.apps.App-class.html#terminate
+pycocoa.apps.App.raiser	pycocoa.apps.App-class.html#raiser
 pycocoa.apps.App.__init__	pycocoa.apps.App-class.html#__init__
 pycocoa.apps.App._mainWindow	pycocoa.apps.App-class.html#_mainWindow
 pycocoa.apps.App.hide	pycocoa.apps.App-class.html#hide
@@ -1186,6 +1189,7 @@ pycocoa.dicts.Dict.__setitem__	pycocoa.dicts.Dict-class.html#__setitem__
 pycocoa.dicts.FrozenDict.values	pycocoa.dicts.FrozenDict-class.html#values
 pycocoa.dicts.FrozenDict	pycocoa.dicts.FrozenDict-class.html
 pycocoa.dicts.FrozenDict._NS_copy	pycocoa.dicts.FrozenDict-class.html#_NS_copy
+pycocoa.dicts.FrozenDict.pop	pycocoa.dicts.FrozenDict-class.html#pop
 pycocoa.dicts.FrozenDict._NS_get3	pycocoa.dicts.FrozenDict-class.html#_NS_get3
 pycocoa.dicts.FrozenDict._NS_Dictionary	pycocoa.dicts.FrozenDict-class.html#_NS_Dictionary
 pycocoa.dicts.FrozenDict._NS_KeyError	pycocoa.dicts.FrozenDict-class.html#_NS_KeyError
@@ -1196,10 +1200,13 @@ pycocoa.dicts.FrozenDict.__ne__	pycocoa.dicts.FrozenDict-class.html#__ne__
 pycocoa.dicts.FrozenDict.__getitem__	pycocoa.dicts.FrozenDict-class.html#__getitem__
 pycocoa.dicts.FrozenDict.get	pycocoa.dicts.FrozenDict-class.html#get
 pycocoa.dicts.FrozenDict.keys	pycocoa.dicts.FrozenDict-class.html#keys
-pycocoa.dicts.FrozenDict.__iter__	pycocoa.dicts.FrozenDict-class.html#__iter__
+pycocoa.dicts.FrozenDict.__setitem__	pycocoa.dicts.FrozenDict-class.html#__setitem__
 pycocoa.dicts.FrozenDict.copy	pycocoa.dicts.FrozenDict-class.html#copy
 pycocoa.dicts.FrozenDict.__eq__	pycocoa.dicts.FrozenDict-class.html#__eq__
+pycocoa.dicts.FrozenDict.__delitem__	pycocoa.dicts.FrozenDict-class.html#__delitem__
 pycocoa.dicts.FrozenDict.items	pycocoa.dicts.FrozenDict-class.html#items
+pycocoa.dicts.FrozenDict.clear	pycocoa.dicts.FrozenDict-class.html#clear
+pycocoa.dicts.FrozenDict.__iter__	pycocoa.dicts.FrozenDict-class.html#__iter__
 pycocoa.dicts.FrozenDict.values	pycocoa.dicts.FrozenDict-class.html#values
 pycocoa.fonts.Font	pycocoa.fonts.Font-class.html
 pycocoa.fonts.Font.isItalic	pycocoa.fonts.Font-class.html#isItalic

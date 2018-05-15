@@ -36,7 +36,7 @@ from utils   import instanceof, missing, _Types
 
 __all__ = ('Dict',
            'FrozenDict')
-__version__ = '18.04.26'
+__version__ = '18.05.15'
 
 
 def _dict_cmp(dict1, dict2):
@@ -66,7 +66,7 @@ def _dict_kwds(args, kwds, name):
 
 
 class FrozenDict(_Type0):
-    '''Python C{dit} Type, wrapping an (immutable) ObjC C{NSDictionary}.
+    '''Python immutable C{dict} Type, wrapping an (immutable) ObjC C{NSDictionary}.
     '''
     def __init__(self, *ns_dict, **kwds):
         '''New immutable L{FrozenDict}, like C{dict.__init__}.
@@ -102,6 +102,9 @@ class FrozenDict(_Type0):
             return len(self) == len(other) and _dict_cmp(self, other) \
                                            and _dict_cmp(other, self)
 
+    def __delitem__(self, key):
+        raise TypeError('%s %s[%r]' % ('del', self.__class__.__name__, key))
+
     def __getitem__(self, key):
         k, _, value = self._NS_get3(key)
         if value is missing:
@@ -117,6 +120,15 @@ class FrozenDict(_Type0):
 
     def __ne__(self, other):
         return not self.__eq__(other)
+
+    def pop(self, key, **unused):
+        raise TypeError('%s.%s(%r)' % (self.__class__.__name__, 'pop', key))
+
+    def __setitem__(self, key, value):
+        raise TypeError('%s[%r] = %r' % (self.__class__.__name__, key, value))
+
+    def clear(self):
+        raise TypeError('%s.%s()' % (self.__class__.__name__, 'clear'))
 
     def copy(self):
         '''Make a shallow copy.
@@ -240,7 +252,8 @@ class Dict(FrozenDict):
 #       raise NotImplementedError('%s.%s' % (self, 'popitem'))
 
     def setdefault(self, key, default=missing):  # XXX default=None
-        '''Get/set an item, like C{dict.setdefault}, except the I{default} is required.
+        '''Get/set an item, like C{dict.setdefault}, except
+           the I{default} keyword argument is required.
 
            @raise ValueError: No I{default} provided for new I{key}.
         '''

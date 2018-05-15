@@ -25,9 +25,9 @@ and I{simple_VLCplayer.py} require installation of the U{VLC App
 U{Python-VLC<http://PyPI.Python.org/pypi/python-vlc>} binding.
 
 The tests and examples have only been run with 64-bit Python 2.7.14 and
-3.6.5 (with U{VLC<http://PyPI.Python.org/pypi/python-vlc>} 2.2.6 and 3.0.1)
-and only on macOS 10.13.4 High Sierra.  PyCocoa has I{not} been tested on
-iOS nor with 32-bit Python.
+3.6.5 using U{Python-VLC<http://PyPI.Python.org/pypi/python-vlc>} 3.0.1
+and 3.0.2, but only on macOS 10.13.4 High Sierra.  PyCocoa has I{not been
+tested} on iOS nor with 32-bit Python.
 
 All PyCocoa source code has been statically
 U{checked<http://GitHub.com/ActiveState/code/tree/master/recipes/Python/546532_PyChecker_postprocessor>}
@@ -49,7 +49,7 @@ the most comprehensive Python to Objective-C bridge, (b)
 U{Rubicon-ObjC<http://PyPI.Python.org/pypi/rubicon-objc/>} for Python 3.5+,
 taking advantage of Python's new
 U{typing<http://Docs.Python.org/3/library/typing.html>} annotations and (c)
-U{PyGUI<http://www.cosc.canterbury.ac.nz/greg.ewing/python_gui>} for I{macOS}.
+U{PyGUI<http://CoSC.Canterbury.AC.NZ/greg.ewing/python_gui>} for I{macOS}.
 
 __
 
@@ -115,7 +115,7 @@ OTHER DEALINGS IN THE SOFTWARE.}
 from os.path import abspath, dirname
 import sys
 
-__version__ = '18.05.08'
+__version__ = '18.05.15'
 
 p = sys.platform
 if not p.startswith('darwin'):

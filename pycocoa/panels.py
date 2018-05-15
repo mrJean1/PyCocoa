@@ -23,7 +23,7 @@
 # ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
 # OTHER DEALINGS IN THE SOFTWARE.
 
-'''Type L{OpenPanel}, wrapping ObjC C{NSOpenPanel}.
+'''Types L{OpenPanel} and L{SavePanel}, wrapping ObjC C{NSOpenPanel} and C{NSSavePanel}.
 '''
 # all imports listed explicitly to help PyChecker
 from bases   import _Type2
@@ -34,7 +34,7 @@ from utils   import _Types
 
 __all__ = ('OpenPanel',
            'SavePanel')
-__version__ = '18.04.26'
+__version__ = '18.05.15'
 
 
 class OpenPanel(_Type2):

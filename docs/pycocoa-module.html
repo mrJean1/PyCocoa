@@ -85,9 +85,9 @@
   href="http://PyPI.Python.org/pypi/python-vlc" 
   target="_top">Python-VLC</a> binding.</p>
   <p>The tests and examples have only been run with 64-bit Python 2.7.14 
-  and 3.6.5 (with <a href="http://PyPI.Python.org/pypi/python-vlc" 
-  target="_top">VLC</a> 2.2.6 and 3.0.1) and only on macOS 10.13.4 High 
-  Sierra.  PyCocoa has <i>not</i> been tested on iOS nor with 32-bit 
+  and 3.6.5 using <a href="http://PyPI.Python.org/pypi/python-vlc" 
+  target="_top">Python-VLC</a> 3.0.1 and 3.0.2, but only on macOS 10.13.4 
+  High Sierra.  PyCocoa has <i>not been tested</i> on iOS nor with 32-bit 
   Python.</p>
   <p>All PyCocoa source code has been statically <a 
   href="http://GitHub.com/ActiveState/code/tree/master/recipes/Python/546532_PyChecker_postprocessor"
@@ -117,7 +117,7 @@
   target="_top">Rubicon-ObjC</a> for Python 3.5+, taking advantage of 
   Python's new <a href="http://Docs.Python.org/3/library/typing.html" 
   target="_top">typing</a> annotations and (c) <a 
-  href="http://www.cosc.canterbury.ac.nz/greg.ewing/python_gui" 
+  href="http://CoSC.Canterbury.AC.NZ/greg.ewing/python_gui" 
   target="_top">PyGUI</a> for <i>macOS</i>.</p>
   <p>__</p>
   <p><a href="http://OpenSource.org/licenses/BSD-3-Clause" 
@@ -171,7 +171,7 @@
 
 <hr />
 <div class="fields">      <p><strong>Version:</strong>
-        18.05.08
+        18.05.15
       </p>
 </div><!-- ==================== SUBMODULES ==================== -->
 <a name="section-Submodules"></a>
@@ -212,12 +212,15 @@
         class="link">Separator</a>, wrapping ObjC <code>NSMenuItem</code> 
         and <code>Menu</code>.</em>    </li>
     <li> <strong class="uidlink"><a href="pycocoa.nstypes-module.html">pycocoa.nstypes</a></strong>: <em class="summary">ObjC classes <code>NS...</code> and conversions from 
-        <code>NS...</code> to Python and vice versa.</em>    </li>
+        <code>NS...</code> to Python.</em>    </li>
     <li> <strong class="uidlink"><a href="pycocoa.octypes-module.html">pycocoa.octypes</a></strong>: <em class="summary">ObjC <code>..._t</code> type definitions and some additional 
         <code>ctypes</code>.</em>    </li>
     <li> <strong class="uidlink"><a href="pycocoa.oslibs-module.html">pycocoa.oslibs</a></strong>: <em class="summary">Various ObjC and macOS libraries, signatures, constants, etc.</em>    </li>
-    <li> <strong class="uidlink"><a href="pycocoa.panels-module.html">pycocoa.panels</a></strong>: <em class="summary">Type <a href="pycocoa.panels.OpenPanel-class.html" 
-        class="link">OpenPanel</a>, wrapping ObjC <code>NSOpenPanel</code>.</em>    </li>
+    <li> <strong class="uidlink"><a href="pycocoa.panels-module.html">pycocoa.panels</a></strong>: <em class="summary">Types <a href="pycocoa.panels.OpenPanel-class.html" 
+        class="link">OpenPanel</a> and <a 
+        href="pycocoa.panels.SavePanel-class.html" 
+        class="link">SavePanel</a>, wrapping ObjC <code>NSOpenPanel</code> 
+        and <code>NSSavePanel</code>.</em>    </li>
     <li> <strong class="uidlink"><a href="pycocoa.pytypes-module.html">pycocoa.pytypes</a></strong>: <em class="summary">Conversions from ObjC <code>NS...</code> instances to Python.</em>    </li>
     <li> <strong class="uidlink"><a href="pycocoa.runtime-module.html">pycocoa.runtime</a></strong>: <em class="summary">Classes <code>ObjCClass</code>, <code>ObjCInstance</code>, 
         <code>ObjCMethod</code>, <code>ObjCSubclass</code>, etc.</em>    </li>
@@ -269,7 +272,7 @@
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
         <a href="pycocoa.apps.App-class.html" class="summary-name">App</a><br />
-      Application Python Type, wrapping an ObjC 
+      Python <code>App</code> Type, wrapping an ObjC 
         <code>NSApplication</code>.
     </td>
   </tr>
@@ -467,8 +470,8 @@
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
         <a href="pycocoa.dicts.FrozenDict-class.html" class="summary-name">FrozenDict</a><br />
-      Python <code>dit</code> Type, wrapping an (immutable) ObjC 
-        <code>NSDictionary</code>.
+      Python immutable <code>dict</code> Type, wrapping an (immutable) 
+        ObjC <code>NSDictionary</code>.
     </td>
   </tr>
 <tr>
@@ -501,7 +504,8 @@
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
         <a href="pycocoa.menus.Item-class.html" class="summary-name">Item</a><br />
-      Menu item Python Type, wrapping ObjC <code>NSMenuItem</code>.
+      Python menu <code>Item</code> Type, wrapping ObjC 
+        <code>NSMenuItem</code>.
     </td>
   </tr>
 <tr>
@@ -543,7 +547,8 @@
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
         <a href="pycocoa.menus.MenuBar-class.html" class="summary-name">MenuBar</a><br />
-      Menu bar Python Type, wrapping ObjC <code>NSMenu</code>.
+      Python <code>MenuBar</code> Type, wrapping ObjC 
+        <code>NSMenu</code>.
     </td>
   </tr>
 <tr>
@@ -879,7 +884,7 @@
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
         <a href="pycocoa.menus.Separator-class.html" class="summary-name">Separator</a><br />
-      Menu separator Python Type, wrapping ObjC 
+      Python menu <code>Separator</code> Type, wrapping ObjC 
         <code>NSMenuItem.separatorItem</code>.
     </td>
   </tr>
@@ -962,7 +967,7 @@
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
         <a href="pycocoa.apps.Tile-class.html" class="summary-name">Tile</a><br />
-      The dock tile for an <a href="pycocoa.apps.App-class.html" 
+      Dock tile for an <a href="pycocoa.apps.App-class.html" 
         class="link">App</a>, wrapping an ObjC <code>NSDockTile</code>.
     </td>
   </tr>
@@ -2966,12 +2971,12 @@ Italic=1, .MonoSpace=1&lt;&lt;10, .Narrow=1&lt;&lt;4, .Poster=1&lt;&lt;8, .SansS
     </td><td class="summary">
         <a href="pycocoa-module.html#Fonts" class="summary-name">Fonts</a> = <code title="Fonts.App=Font(name='Helvetica', family='Helvetica', size=12, weight=5\
 ), .Bold=Font(name='.SFNSText-Bold', family='.SF NS Text', size=13, tr\
-aits='Bold', weight=9), .Label=Font(name='.AppleSystemUIFont', family=\
-'.AppleSystemUIFont', size=10, weight=5), .Menu=Font(name='.AppleSyste\
-mUIFont', family='.AppleSystemUIFont', size=13, weight=5), .MenuBar=Fo\
-nt(name='.AppleSystemUIFont', family='.AppleSystemUIFont', size=14, we\
-ight=5), .Message=Font(name='.AppleSystemUIFont', family='.AppleSystem\
-UIFont', size=13, weight=5), .MonoSpace=Font(name='Monaco', family='Mo\
+aits='Bold', weight=9), .BoldItalic=Font(name='.SFNSText-BoldItalic', \
+family='.SF NS Text', size=13, traits='Bold Italic', weight=9), .Itali\
+c=Font(name='.SFNSText-Italic', family='.SF NS Text', size=13, traits=\
+'Italic', weight=5), .Label=Font(name='.AppleSystemUIFont', family='.A\
+ppleSystemUIFont', size=10, weight=5), .Menu=Font(name='.AppleSystemUI\
+Font', family='.AppleSystemUIFont', size=13, weight=5), .MenuBar=Font(\
 ...">Fonts.App=Font(name='Helvetica', family='Helvetica', s<code class="variable-ellipsis">...</code></code>
     </td>
   </tr>
@@ -4249,7 +4254,7 @@ UIFont', size=13, weight=5), .MonoSpace=Font(name='Monaco', family='Mo\
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
         <a href="pycocoa-module.html#libAppKit" class="summary-name">libAppKit</a> = <code title="&lt;CDLL '/System/Library/Frameworks/AppKit.framework/AppKit', handle 100\
-325f20 at 102f57910&gt;">&lt;CDLL '/System/Library/Frameworks/AppKit.framework<code class="variable-ellipsis">...</code></code>
+3879d0 at 102f578d0&gt;">&lt;CDLL '/System/Library/Frameworks/AppKit.framework<code class="variable-ellipsis">...</code></code>
     </td>
   </tr>
 <tr>
@@ -4257,7 +4262,7 @@ UIFont', size=13, weight=5), .MonoSpace=Font(name='Monaco', family='Mo\
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
         <a href="pycocoa-module.html#libCF" class="summary-name">libCF</a> = <code title="&lt;CDLL '/System/Library/Frameworks/CoreFoundation.framework/CoreFoundat\
-ion', handle 10d61f800 at 102ef4d50&gt;">&lt;CDLL '/System/Library/Frameworks/CoreFoundation.frame<code class="variable-ellipsis">...</code></code>
+ion', handle 1079e5800 at 102ef4d10&gt;">&lt;CDLL '/System/Library/Frameworks/CoreFoundation.frame<code class="variable-ellipsis">...</code></code>
     </td>
   </tr>
 <tr>
@@ -4265,7 +4270,7 @@ ion', handle 10d61f800 at 102ef4d50&gt;">&lt;CDLL '/System/Library/Frameworks/Co
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
         <a href="pycocoa-module.html#libCT" class="summary-name">libCT</a> = <code title="&lt;CDLL '/System/Library/Frameworks/CoreText.framework/CoreText', handle\
- 100327fa0 at 102f6a950&gt;">&lt;CDLL '/System/Library/Frameworks/CoreText.framework/C<code class="variable-ellipsis">...</code></code>
+ 10060faa0 at 102f62910&gt;">&lt;CDLL '/System/Library/Frameworks/CoreText.framework/C<code class="variable-ellipsis">...</code></code>
     </td>
   </tr>
 <tr>
@@ -4273,14 +4278,14 @@ ion', handle 10d61f800 at 102ef4d50&gt;">&lt;CDLL '/System/Library/Frameworks/Co
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
         <a href="pycocoa-module.html#libFoundation" class="summary-name">libFoundation</a> = <code title="&lt;CDLL '/System/Library/Frameworks/Foundation.framework/Foundation', ha\
-ndle 100326e80 at 102f6af90&gt;">&lt;CDLL '/System/Library/Frameworks/Foundation.f<code class="variable-ellipsis">...</code></code>
+ndle 10060d300 at 102f62f50&gt;">&lt;CDLL '/System/Library/Frameworks/Foundation.f<code class="variable-ellipsis">...</code></code>
     </td>
   </tr>
 <tr>
     <td width="15%" align="right" valign="top" class="summary">
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
-        <a href="pycocoa-module.html#libobjc" class="summary-name">libobjc</a> = <code title="&lt;CDLL '/usr/lib/libobjc.dylib', handle 10d621680 at 102f6add0&gt;">&lt;CDLL '/usr/lib/libobjc.dylib', handle 10d621680 at <code class="variable-ellipsis">...</code></code><br />
+        <a href="pycocoa-module.html#libobjc" class="summary-name">libobjc</a> = <code title="&lt;CDLL '/usr/lib/libobjc.dylib', handle 1079e7680 at 102f62d90&gt;">&lt;CDLL '/usr/lib/libobjc.dylib', handle 1079e7680 at <code class="variable-ellipsis">...</code></code><br />
       The macOS <code>objc</code> library (<code>ctypes.CDLL</code>)
     </td>
   </tr>
@@ -4289,7 +4294,7 @@ ndle 100326e80 at 102f6af90&gt;">&lt;CDLL '/System/Library/Frameworks/Foundation
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
         <a href="pycocoa-module.html#libquartz" class="summary-name">libquartz</a> = <code title="&lt;CDLL '/System/Library/Frameworks/quartz.framework/quartz', handle 100\
-57ba40 at 102f57990&gt;">&lt;CDLL '/System/Library/Frameworks/quartz.framework<code class="variable-ellipsis">...</code></code>
+61e7b0 at 102f57950&gt;">&lt;CDLL '/System/Library/Frameworks/quartz.framework<code class="variable-ellipsis">...</code></code>
     </td>
   </tr>
 <tr>
@@ -4504,10 +4509,10 @@ ndle 100326e80 at 102f6af90&gt;">&lt;CDLL '/System/Library/Frameworks/Foundation
   <dl class="fields">
     <dt>Parameters:</dt>
     <dd><ul class="nomargin-top">
-        <li><strong class="pname"><code>title</code></strong> - New title (str).</li>
+        <li><strong class="pname"><code>title</code></strong> - New title (<code>str</code>).</li>
     </ul></dd>
     <dt>Returns:</dt>
-        <dd>Previous title (str).</dd>
+        <dd>Previous title (<code>str</code>).</dd>
   </dl>
 </td></tr></table>
 </div>
@@ -4814,7 +4819,7 @@ ndle 100326e80 at 102f6af90&gt;">&lt;CDLL '/System/Library/Frameworks/Foundation
           &quot;Helvetica&quot;.</li>
     </ul></dd>
     <dt>Returns:</dt>
-        <dd>Each font name (<code>str</code>).</dd>
+        <dd>The name (<code>str</code>) of each font.</dd>
   </dl>
 </td></tr></table>
 </div>
@@ -4844,8 +4849,8 @@ ndle 100326e80 at 102f6af90&gt;">&lt;CDLL '/System/Library/Frameworks/Foundation
         <li><strong class="pname"><code>weight</code></strong> - The book weight (<code>int</code>), None for any.</li>
     </ul></dd>
     <dt>Returns:</dt>
-        <dd>Each font (<a href="pycocoa.fonts.Font-class.html" 
-          class="link">Font</a>).</dd>
+        <dd>A (<a href="pycocoa.fonts.Font-class.html" class="link">Font</a>)
+          instance for each font.</dd>
     <dt>Raises:</dt>
     <dd><ul class="nomargin-top">
         <li><code><strong class='fraise'>ValueError</strong></code> - Invalid <i>weight</i>.</li>
@@ -6027,7 +6032,8 @@ ndle 100326e80 at 102f6af90&gt;">&lt;CDLL '/System/Library/Frameworks/Foundation
           class="link">App</a>).</dd>
     <dt>Raises:</dt>
     <dd><ul class="nomargin-top">
-        <li><code><strong class='fraise'>AssertionError</strong></code> - Mismatched instances.</li>
+        <li><code><strong class='fraise'>RuntimeError</strong></code> - <a href="pycocoa.apps.App-class.html" class="link">App</a> 
+        mismatch.</li>
     </ul></dd>
   </dl>
 </td></tr></table>
@@ -7582,12 +7588,12 @@ Italic=1, .MonoSpace=1&lt;&lt;10, .Narrow=1&lt;&lt;4, .Poster=1&lt;&lt;8, .SansS
       <dd><table><tr><td><pre class="variable">
 Fonts.App=Font(name='Helvetica', family='Helvetica', size=12, weight=5<span class="variable-linewrap"><img src="crarr.png" alt="\" /></span>
 ), .Bold=Font(name='.SFNSText-Bold', family='.SF NS Text', size=13, tr<span class="variable-linewrap"><img src="crarr.png" alt="\" /></span>
-aits='Bold', weight=9), .Label=Font(name='.AppleSystemUIFont', family=<span class="variable-linewrap"><img src="crarr.png" alt="\" /></span>
-'.AppleSystemUIFont', size=10, weight=5), .Menu=Font(name='.AppleSyste<span class="variable-linewrap"><img src="crarr.png" alt="\" /></span>
-mUIFont', family='.AppleSystemUIFont', size=13, weight=5), .MenuBar=Fo<span class="variable-linewrap"><img src="crarr.png" alt="\" /></span>
-nt(name='.AppleSystemUIFont', family='.AppleSystemUIFont', size=14, we<span class="variable-linewrap"><img src="crarr.png" alt="\" /></span>
-ight=5), .Message=Font(name='.AppleSystemUIFont', family='.AppleSystem<span class="variable-linewrap"><img src="crarr.png" alt="\" /></span>
-UIFont', size=13, weight=5), .MonoSpace=Font(name='Monaco', family='Mo<span class="variable-linewrap"><img src="crarr.png" alt="\" /></span>
+aits='Bold', weight=9), .BoldItalic=Font(name='.SFNSText-BoldItalic', <span class="variable-linewrap"><img src="crarr.png" alt="\" /></span>
+family='.SF NS Text', size=13, traits='Bold Italic', weight=9), .Itali<span class="variable-linewrap"><img src="crarr.png" alt="\" /></span>
+c=Font(name='.SFNSText-Italic', family='.SF NS Text', size=13, traits=<span class="variable-linewrap"><img src="crarr.png" alt="\" /></span>
+'Italic', weight=5), .Label=Font(name='.AppleSystemUIFont', family='.A<span class="variable-linewrap"><img src="crarr.png" alt="\" /></span>
+ppleSystemUIFont', size=10, weight=5), .Menu=Font(name='.AppleSystemUI<span class="variable-linewrap"><img src="crarr.png" alt="\" /></span>
+Font', family='.AppleSystemUIFont', size=13, weight=5), .MenuBar=Font(<span class="variable-linewrap"><img src="crarr.png" alt="\" /></span>
 <code class="variable-ellipsis">...</code>
 </pre></td></tr></table>
 </dd>
@@ -7644,7 +7650,7 @@ WindowStyle.Closable=2, .Miniaturizable=1&lt;&lt;2, .Resizable=1&lt;&lt;3, .Titl
     <dt>Value:</dt>
       <dd><table><tr><td><pre class="variable">
 &lt;CDLL '/System/Library/Frameworks/AppKit.framework/AppKit', handle 100<span class="variable-linewrap"><img src="crarr.png" alt="\" /></span>
-325f20 at 102f57910&gt;
+3879d0 at 102f578d0&gt;
 </pre></td></tr></table>
 </dd>
   </dl>
@@ -7663,7 +7669,7 @@ WindowStyle.Closable=2, .Miniaturizable=1&lt;&lt;2, .Resizable=1&lt;&lt;3, .Titl
     <dt>Value:</dt>
       <dd><table><tr><td><pre class="variable">
 &lt;CDLL '/System/Library/Frameworks/CoreFoundation.framework/CoreFoundat<span class="variable-linewrap"><img src="crarr.png" alt="\" /></span>
-ion', handle 10d61f800 at 102ef4d50&gt;
+ion', handle 1079e5800 at 102ef4d10&gt;
 </pre></td></tr></table>
 </dd>
   </dl>
@@ -7682,7 +7688,7 @@ ion', handle 10d61f800 at 102ef4d50&gt;
     <dt>Value:</dt>
       <dd><table><tr><td><pre class="variable">
 &lt;CDLL '/System/Library/Frameworks/CoreText.framework/CoreText', handle<span class="variable-linewrap"><img src="crarr.png" alt="\" /></span>
- 100327fa0 at 102f6a950&gt;
+ 10060faa0 at 102f62910&gt;
 </pre></td></tr></table>
 </dd>
   </dl>
@@ -7701,7 +7707,7 @@ ion', handle 10d61f800 at 102ef4d50&gt;
     <dt>Value:</dt>
       <dd><table><tr><td><pre class="variable">
 &lt;CDLL '/System/Library/Frameworks/Foundation.framework/Foundation', ha<span class="variable-linewrap"><img src="crarr.png" alt="\" /></span>
-ndle 100326e80 at 102f6af90&gt;
+ndle 10060d300 at 102f62f50&gt;
 </pre></td></tr></table>
 </dd>
   </dl>
@@ -7719,7 +7725,7 @@ ndle 100326e80 at 102f6af90&gt;
   <dl class="fields">
     <dt>Value:</dt>
       <dd><table><tr><td><pre class="variable">
-&lt;CDLL '/usr/lib/libobjc.dylib', handle 10d621680 at 102f6add0&gt;
+&lt;CDLL '/usr/lib/libobjc.dylib', handle 1079e7680 at 102f62d90&gt;
 </pre></td></tr></table>
 </dd>
   </dl>
@@ -7738,7 +7744,7 @@ ndle 100326e80 at 102f6af90&gt;
     <dt>Value:</dt>
       <dd><table><tr><td><pre class="variable">
 &lt;CDLL '/System/Library/Frameworks/quartz.framework/quartz', handle 100<span class="variable-linewrap"><img src="crarr.png" alt="\" /></span>
-57ba40 at 102f57990&gt;
+61e7b0 at 102f57950&gt;
 </pre></td></tr></table>
 </dd>
   </dl>
@@ -7776,7 +7782,7 @@ ndle 100326e80 at 102f6af90&gt;
 <table border="0" cellpadding="0" cellspacing="0" width="100%%">
   <tr>
     <td align="left" class="footer">
-    Generated by Epydoc 3.0.1 on Thu May 10 14:22:54 2018
+    Generated by Epydoc 3.0.1 on Tue May 15 14:18:51 2018
     </td>
     <td align="right" class="footer">
       <a target="mainFrame" href="http://epydoc.sourceforge.net"
