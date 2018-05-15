@@ -39,7 +39,7 @@ from strs    import Str
 from utils   import bytes2str, _ByteStrs, _Constants, _exports, \
                     flint, instanceof, _Ints, _Types
 
-__version__ = '18.05.15'
+__version__ = '18.05.16'
 
 _NSFM = NSFontManager.sharedFontManager()
 _NSLM = NSLayoutManager.alloc().init()
@@ -183,8 +183,8 @@ class Font(_Type0):
            @raise ValueError: Invalid I{weight}.
 
            @note: The new L{Font} may not exhibit the desired I{traits}
-                  and I{weight} and I{weight} is ignored if I{traits}
-                  includes C{WindowStyle.Bold}.
+                  and I{weight}.  The I{weight} is ignored if I{traits}
+                  includes C{FontTrait.Bold}.
 
            @see: Function L{fontsof} to obtain all available fonts of
                  a particular font family.

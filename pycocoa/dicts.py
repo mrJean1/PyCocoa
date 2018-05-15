@@ -36,7 +36,7 @@ from utils   import instanceof, missing, _Types
 
 __all__ = ('Dict',
            'FrozenDict')
-__version__ = '18.05.15'
+__version__ = '18.05.16'
 
 
 def _dict_cmp(dict1, dict2):
@@ -235,7 +235,7 @@ class Dict(FrozenDict):
         '''
         return self.__class__(self._NS_copy(True))
 
-    def pop(self, key, default=missing):
+    def pop(self, key, default=missing):  # PYCHOK expected
         '''Remove an item, like C{dict.pop}.
 
            @raise KeyError: No such I{key} and no I{default} provided.

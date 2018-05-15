@@ -115,7 +115,7 @@ OTHER DEALINGS IN THE SOFTWARE.}
 from os.path import abspath, dirname
 import sys
 
-__version__ = '18.05.15'
+__version__ = '18.05.16'
 
 p = sys.platform
 if not p.startswith('darwin'):
