@@ -37,7 +37,7 @@
 
 # MIT License <http://opensource.org/licenses/MIT>
 #
-# Copyright (C) 2017-2018 mrJean1 at Gmail dot com
+# Copyright (C) 2017-2018 -- mrJean1 at Gmail dot com
 #
 # Permission is hereby granted, free of charge, to any person obtaining
 # a copy of this software and associated documentation files (the "Software"),
@@ -79,7 +79,7 @@ from platform import machine  # as machine
 from utils import bytes2str, _exports, inst2strepr, iterbytes, \
                   missing, str2bytes
 
-__version__ = '18.04.26'
+__version__ = '18.05.28'
 
 z = sizeof(c_void_p)
 if z == 4:
@@ -166,6 +166,8 @@ else:
     CGSizeEncoding  = NSSizeEncoding.replace( b'_NS', b'CG')
 
 
+# NSFloatMax = GCGFloat.greatestFiniteMagnitude()
+# NSFloatMin = GCGFloat.leastNonzeroMagnitude()
 CFIndex_t = NSInteger_t  # == Int, no CGIndex_t?
 # Special case so that NSImage.initWithCGImage_size_() will work.
 CGImageEncoding  = b'{CGImage=}'
@@ -544,7 +546,7 @@ _encoding2ctype = {b'c': c_char,     b'C': c_ubyte,
 for c_, code in _ctype2encoding.items():
     f_ = _encoding2ctype.get(code, 'missing')
     if c_ != f_ and code not in (b'@',):
-        raise AssertionError('code %r ctype %r vs %r' % (code, c_, f_))
+        raise RuntimeError('code %r ctype %r vs %r' % (code, c_, f_))
 del c_, code, f_
 
 # map 'c' to c_byte rather than c_char, because
@@ -839,16 +841,18 @@ __all__ = _exports(locals(), 'PyObjectEncoding', 'TypeCodeError', 'c_void',
 
 if __name__ == '__main__':
 
-    from utils import _allisting, bytes2repr, printf
+    from utils import _allisting, bytes2repr, _Globals, printf
+
+    _Globals.argv0 = ''
 
     def _c(ctype):
         return 'c_void' if ctype is c_void else ctype.__name__
 
-    printf('\n%s ...', 'ctype2encoding')
+    printf('%s ...', 'ctype2encoding', nl=1)
     i = 0
     for c, e in sorted((_c(c), e) for c, e in _ctype2encoding.items()):
         i += 1
-        printf(' %2s: %-9s -> %s', i, c, bytes2repr(e))
+        printf('%4s: %-9s -> %s', i, c, bytes2repr(e))
 
     printf('%s ...', 'encoding2ctype', nl=1)
     e = _encoding2ctype.copy()
@@ -856,9 +860,9 @@ if __name__ == '__main__':
     i = 0
     for e, c in sorted(e.items()):
         i += 1
-        printf(' %2s: %-5s -> %s', i, bytes2repr(e), _c(c))
+        printf('%4s: %-5s -> %s', i, bytes2repr(e), _c(c))
 
-    printf('%s ...', 'check NS...Encoding', nl=1)
+    printf('%s ...', 'checking NS...Encoding', nl=1)
     for t, e in ((NSPoint_t, NSPointEncoding),
                  (NSRange_t, NSRangeEncoding),
                  (NSRect_t,  NSRectEncoding),
@@ -869,3 +873,82 @@ if __name__ == '__main__':
             printf('  %s: %r != %r', t.__name__, c, e)
 
     _allisting(__all__, locals(), __version__, __file__)
+
+_ = '''
+
+ ctype2encoding ...
+    1: Class_t   -> b'#'
+    2: Id_t      -> b'@'
+    3: NSPoint_t -> b'{CGPoint=dd}'
+    4: NSRange_t -> b'{_NSRange=QQ}'
+    5: NSRect_t  -> b'{CGRect={CGPoint=dd}{CGSize=dd}}'
+    6: NSSize_t  -> b'{CGSize=dd}'
+    7: SEL_t     -> b':'
+    8: c_bool    -> b'B'
+    9: c_char    -> b'c'
+   10: c_char_p  -> b'*'
+   11: c_double  -> b'd'
+   12: c_float   -> b'f'
+   13: c_int     -> b'i'
+   14: c_long    -> b'l'
+   15: c_short   -> b's'
+   16: c_ubyte   -> b'C'
+   17: c_uint    -> b'I'
+   18: c_ulong   -> b'L'
+   19: c_ushort  -> b'S'
+   20: c_void_p  -> b'@'
+   21: py_object -> b'{PyObject=@}'
+
+ encoding2ctype ...
+    1: b'#'  -> Class_t
+    2: b'()' -> Union_t
+    3: b'*'  -> c_char_p
+    4: b':'  -> SEL_t
+    5: b'<>' -> Block_t
+    6: b'?'  -> Unknown_t
+    7: b'@'  -> Id_t
+    8: b'B'  -> c_bool
+    9: b'C'  -> c_ubyte
+   10: b'I'  -> c_uint
+   11: b'L'  -> c_ulong
+   12: b'P'  -> py_object
+   13: b'Q'  -> c_ulong
+   14: b'S'  -> c_ushort
+   15: b'Vv' -> c_void
+   16: b'[]' -> c_void_p
+   17: b'^?' -> UnknownPtr_t
+   18: b'^v' -> VoidPtr_t
+   19: b'^{CGImage=}' -> c_void_p
+   20: b'^{_NSZone=}' -> c_void_p
+   21: b'c'  -> c_byte
+   22: b'd'  -> c_double
+   23: b'f'  -> c_float
+   24: b'i'  -> c_int
+   25: b'l'  -> c_long
+   26: b'q'  -> c_long
+   27: b's'  -> c_short
+   28: b'v'  -> c_void
+   29: b'{CGPoint=dd}' -> NSPoint_t
+   30: b'{CGRect={CGPoint=dd}{CGSize=dd}}' -> NSRect_t
+   31: b'{CGSize=dd}' -> NSSize_t
+   32: b'{PyObject=@}' -> py_object
+   33: b'{_NSRange=QQ}' -> NSRange_t
+   34: b'{}' -> Struct_t
+
+ checking NS...Encoding ...
+   NSRange_t: '=LL}' != '{_NSRange=QQ}'
+
+ octypes.__all__ = tuple(
+   octypes.Allocator_t is <class .Allocator_t>,
+   octypes.Array_t is <class ctypes.c_void_p>,
+   octypes.Block_t is <class .Block_t>,
+   octypes.BOOL_t is <class .BOOL_t>,
+...
+   octypes.Union_t is <class .Union_t>,
+   octypes.Unknown_t is <class .Unknown_t>,
+   octypes.UnknownPtr_t is <class .UnknownPtr_t>,
+   octypes.VoidPtr_t is <class .VoidPtr_t>,
+ )[82]
+ octypes.__version__ = '18.05.17'
+'''
+del _

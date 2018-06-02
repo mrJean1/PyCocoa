@@ -8,7 +8,7 @@ import sys
 import unittest
 
 __all__ = ('TestSuite',)
-__version__ = '18.05.05'
+__version__ = '18.05.28'
 
 _python_exe = sys.executable
 
@@ -87,6 +87,9 @@ class TestSuite(unittest.TestCase):
 
     def test_NStypes(self):
         self._run('test_NStypes')
+
+    def test_Panels(self):
+        self._run('test_Panels 2')
 
     def test_Types(self):
         self._run('test_Types')

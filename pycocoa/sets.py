@@ -5,7 +5,7 @@
 
 # MIT License <http://opensource.org/licenses/MIT>
 #
-# Copyright (C) 2017-2018 mrJean1 at Gmail dot com
+# Copyright (C) 2017-2018 -- mrJean1 at Gmail dot com
 #
 # Permission is hereby granted, free of charge, to any person obtaining
 # a copy of this software and associated documentation files (the "Software"),
@@ -36,7 +36,7 @@ from utils   import _Types
 
 __all__ = ('FrozenSet',
            'Set')
-__version__ = '18.04.24'
+__version__ = '18.05.17'
 
 
 if True:  # MCCABE 69

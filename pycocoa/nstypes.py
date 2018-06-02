@@ -37,7 +37,7 @@
 
 # MIT License <http://opensource.org/licenses/MIT>
 #
-# Copyright (C) 2017-2018 mrJean1 at Gmail dot com
+# Copyright (C) 2017-2018 -- mrJean1 at Gmail dot com
 #
 # Permission is hereby granted, free of charge, to any person obtaining
 # a copy of this software and associated documentation files (the "Software"),
@@ -60,21 +60,23 @@
 # Several Objective-C/C header files are also available at
 # <http://GitHub.com/gnustep/libs-gui/tree/master/Headers>
 
-'''ObjC classes C{NS...} and conversions from C{NS...} to Python.
+'''ObjC classes C{NS...} and conversions from ObjC C{NS...} to Python.
 '''
 # all imports listed explicitly to help PyChecker
 from decimal import Decimal as _Decimal
-from ctypes  import ArgumentError, byref, cast, c_buffer, c_byte, \
-                    CFUNCTYPE, c_void_p
+from ctypes  import ArgumentError, byref, cast, c_byte, CFUNCTYPE, c_void_p
 from getters import get_selector
-from octypes import Array_t, Class_t, c_struct_t, Id_t, ObjC_t, SEL_t, Set_t
+from octypes import Array_t, Class_t, c_struct_t, Id_t, NSRect4_t, \
+                    ObjC_t, SEL_t, Set_t
 from oslibs  import cfNumber2bool, cfNumber2num, CFStringEncoding, \
-                    libCF, libFoundation, libobjc
+                    cfString2str, libCF, libFoundation, libobjc, NO, YES
 from runtime import isInstanceOf, ObjCClass, ObjCInstance, _Xargs
 from utils   import bytes2str, clip, _exports, _Globals, instanceof, \
                     iterbytes, missing, str2bytes, _Types  # printf
 
-__version__ = '18.05.15'
+from os import linesep
+
+__version__ = '18.05.30'
 
 
 def _lambda(arg):
@@ -130,12 +132,15 @@ class CFStr(ObjCInstance):
 
 # NS... classes marked ** have Python versions, like NSStr, for
 # for use by runtime.isInstanceOf repectively octypes.instanceof
+NSAlert                = ObjCClass('NSAlert')
 NSApplication          = ObjCClass('NSApplication')
 NSArray                = ObjCClass('NSArray')  # immutable
+NSAttributedString     = ObjCClass('NSAttributedString')
 NSAutoreleasePool      = ObjCClass('NSAutoreleasePool')
 NSBezierPath           = ObjCClass('NSBezierPath')
 NSBundle               = ObjCClass('NSBundle')
 NSColor                = ObjCClass('NSColor')
+NSConcreteNotification = ObjCClass('NSConcreteNotification')
 NSConstantString       = ObjCClass('NSConstantString')  # use NSStr
 NSData                 = ObjCClass('NSData')
 NSDecimalNumber        = ObjCClass('NSDecimalNumber')  # ** use NSDecimal
@@ -155,8 +160,8 @@ NSMutableData          = ObjCClass('NSMutableData')
 NSMutableDictionary    = ObjCClass('NSMutableDictionary')
 NSMutableSet           = ObjCClass('NSMutableSet')
 NSMutableString        = ObjCClass('NSMutableString')
-NSConcreteNotification = ObjCClass('NSConcreteNotification')
 NSNotification         = ObjCClass('NSNotification')
+NSNotificationCenter   = ObjCClass('NSNotificationCenter')
 NSNull                 = ObjCClass('NSNull')
 NSNumber               = ObjCClass('NSNumber')
 NSObject               = ObjCClass('NSObject')
@@ -179,12 +184,13 @@ NSString               = ObjCClass('NSString')  # ** use NSStr or 'at'
 NSTableColumn          = ObjCClass('NSTableColumn')
 NSTableView            = ObjCClass('NSTableView')
 NSTextField            = ObjCClass('NSTextField')
+NSTextView             = ObjCClass('NSTextView')
 NSThread               = ObjCClass('NSThread')
 NSURL                  = ObjCClass('NSURL')
 NSView                 = ObjCClass('NSView')
 NSWindow               = ObjCClass('NSWindow')
 
-# some NS... types and /singletons
+# some other NS... types
 NSBool     = NSNumber.numberWithBool_
 NSDouble   = NSNumber.numberWithDouble_
 NSFalse    = False  # NSBool(False)  # c_byte
@@ -195,6 +201,14 @@ NSLongLong = NSNumber.numberWithLongLong_
 NSnil      = None  # nil return value
 NSNone     = NSNull.alloc().init()  # singleton
 NSTrue     = True  # NSBool(True)  # c_byte
+
+# some NS... singletons
+NSApplicationMain   = NSApplication.sharedApplication()
+NSFontManagerMain   = NSFontManager.sharedFontManager()
+NSLayoutManagerMain = NSLayoutManager.alloc().init()
+NSScreenMainFrame   = NSScreen.alloc().init().mainScreen().frame()
+NSScreenMainSize    = NSScreenMainFrame.size
+NSTableColumnMain   = NSTableColumn.alloc().init()
 
 
 # We need to be able to create raw NSDecimalNumber objects.  If we use
@@ -265,8 +279,8 @@ class NSStr(CFStr):
     def __new__(cls, ustr, auto=True):
         '''New L{NSStr}.
 
-           @param ustr: The string value (str, bytes).
-           @keyword auto: Retain or auto-release (bool).
+           @param ustr: The string value (C{str} or C{bytes}).
+           @keyword auto: Retain or auto-release (C{bool}).
 
            @return: The string (L{NSStr}).
         '''
@@ -319,7 +333,7 @@ def nsBoolean2bool(ns, dflt=missing):  # XXX an NSBoolean method?
     '''Create a Python C{bool} from an C{NSBool[ean]}.
 
        @param ns: The C{NSBool[ean]} (L{ObjCInstance}).
-       @keyword dflt: Default for missing, unobtainable value (C{missing}).
+       @keyword dflt: Default for a missing, unobtainable value (C{missing}).
 
        @return: The bool (C{bool}) of I{dlft}.
 
@@ -335,17 +349,20 @@ def nsBundleRename(nsTitle, match='Python'):
     '''Change the bundle title if the current title matches.
 
        @param nsTitle: New bundle title (L{NSStr}).
-       @keyword match: Optional, previous title to match (str).
+       @keyword match: Optional, previous title to match (C{str}).
 
-       @return: The previous bundle title (str) or None.
+       @return: The previous bundle title (C{str}) or None.
 
-       @note: Useful to mimick C{NSApplication.setTitle_(nsTitle)},
+       @note: Used to mimick C{NSApplication.setTitle_(nsTitle)},
               the name of an L{App} shown in the menu bar.
     '''
     t = nsTitle and ns2py(nsTitle)
     if t:
         _Globals.argv0 = bytes2str(t)
 
+    # <http://Developer.Apple.com/documentation/
+    #       foundation/nsbundle/1495012-bundlewithpath>
+    # ns = NSBundle.bundleWithPath_(os.path.abspath(match))
     p, ns = None, NSBundle.mainBundle()
     if ns:
         ns = ns.localizedInfoDictionary() or ns.infoDictionary()
@@ -411,7 +428,7 @@ def nsIter(ns, reverse=False):
     '''Iterate over an C{NS..} objects's (reverse) enumerator.
 
        @param ns: The C{NS..} object to iterate over (L{ObjCInstance}).
-       @keyword reverse: Reverse or forward order (bool).
+       @keyword reverse: Iterate in reverse order (C{bool}), forward otherwise.
 
        @return: Each object (C{NS...}).
     '''
@@ -435,7 +452,7 @@ def nsIter2(ns, reverse=False):
     '''Iterate over an C{NS..} objects's (reverse) enumerator.
 
        @param ns: The C{NS..} object to iterate over (L{ObjCInstance}).
-       @keyword reverse: Reverse or forward order (bool).
+       @keyword reverse: Iterate in reverse order (C{bool}), foward otherwise.
 
        @return: Each object as 2-Tuple (I{py, ns}) where I{py} is a
                 Python C{Type} instance and I{ns} the ObjC object C{NS...}.
@@ -447,7 +464,7 @@ def nsIter2(ns, reverse=False):
 def nsLog(fmt, *args):
     '''Formatted write to the console.
 
-       @param fmt: The printf-like format string (str).
+       @param fmt: The printf-like format string (C{str}).
        @param args: Optional arguments to format (C{all positional}).
     '''
     if args:
@@ -540,14 +557,66 @@ def nsString2str(ns, dflt=None):  # XXX an NS*String method
         isInstanceOf(ns, NSConstantString, NSMutableString, NSString,
                          c_void_p, name='ns')
 
-    n = libCF.CFStringGetLength(ns)
-    u = libCF.CFStringGetMaximumSizeForEncoding(n, CFStringEncoding)
-    buf = c_buffer(u + 2)
-    if libCF.CFStringGetCString(ns, buf, len(buf), CFStringEncoding):
-        # XXX assert isinstance(buf.value, _Bytes), 'bytes expected'
-        # bytes to unicode in Python 2, to str in Python 3+
-        return bytes2str(buf.value)  # XXX was .decode(DEFAULT_UNICODE)
-    return dflt
+    return cfString2str(ns, dflt=dflt)
+
+
+def nsTextSize3(text, ns_font=None):
+    '''Return the size of a multi-line text.
+
+       @param text: The text (C{str}), including C{linesep}arators.
+       @keyword ns_font: The text font (C{NSFont}) or C{None}.
+
+       @return: 3-Tuple (width, height, lines) in (pixels, pixels) or
+                in (characters, lines, lines) if I{ns_font} is C{None}.
+    '''
+    w = ''
+    for t in text.split(linesep):
+        if len(t) > len(w):
+            w = t
+
+    h = n = text.count(linesep) + 1
+    if ns_font:
+        h *= NSLayoutManagerMain.defaultLineHeightForFont_(ns_font)
+        w = ns_font.widthOfString_(NSStr(w))
+    else:
+        w = len(w)
+    return w, h, n
+
+
+def nsTextView(text, ns_font):
+    '''Return an C{NSTextView} for the given text string.
+    '''
+    # <http://Developer.Apple.com/documentation/appkit/
+    #       nsalert/1530575-accessoryview>
+    w, h, n = nsTextSize3(text, ns_font=ns_font)
+    if n > 50:
+        r = NSRect4_t(0, 0, max(300, w), min(800, h))
+    else:  # make sure the frame is tall enough to avoid overwritten text
+        r = NSRect4_t(0, 0, 300, max(20, min(800, h)))
+
+    # XXX key NSFontAttributeName has a NSString value, no longer a Font?
+    # d = NSDictionary.dictionaryWithObject_forKey_(ns_font, NSStr('NSFontAttributeName'))
+    # t = NSAttributedString.alloc().initWithString_attributes_(NSStr(text), d)
+    ns = NSTextView.alloc().initWithFrame_(r)
+    ns.setFont_(ns_font)  # XXX set font BEFORE text
+    ns.insertText_(NSStr(text))
+    ns.setEditable_(NO)
+    ns.setDrawsBackground_(NO)
+    if n > 50:  # force scroll view
+        ns.setVerticallyResizable_(YES)
+        ns.setHorizontallyResizable_(YES)
+
+        r.size.width = min(600, r.size.width)
+        sv = NSScrollView.alloc().initWithFrame_(r)
+        sv.setHasVerticalScroller_(YES)
+        sv.setHasHorizontalScroller_(YES)
+        sv.setAutohidesScrollers_(YES)
+        sv.setBorderType_(2)  # Border.Bezel or NSBezelBorder
+        sv.setDocumentView_(ns)
+        ns = sv
+    else:
+        ns.sizeToFit()
+    return ns
 
 
 _CFTypeID2py = {libCF.CFArrayGetTypeID():      nsArray2listuple,

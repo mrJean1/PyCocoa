@@ -3,7 +3,7 @@
 
 # MIT License <http://opensource.org/licenses/MIT>
 #
-# Copyright (C) 2017-2018 mrJean1 at Gmail dot com
+# Copyright (C) 2017-2018 -- mrJean1 at Gmail dot com
 #
 # Permission is hereby granted, free of charge, to any person obtaining
 # a copy of this software and associated documentation files (the "Software"),
@@ -27,11 +27,13 @@
 '''
 # all imports listed explicitly to help PyChecker
 from bases   import _Type0
-from nstypes import isNone, NSFont, NSFontManager, nsIter, nsIter2, \
-                    NSLayoutManager, NSStr, nsString2str, NSTableColumn
-from oslibs  import NSFontBoldMask, NSFontItalicMask, NSFontCompressedMask, \
-                    NSFontCondensedMask, NSFontExpandedMask, \
-                    NSFontMonoSpaceMask, NSFontNarrowMask, NSFontPosterMask, \
+from nstypes import isNone, NSFont, NSFontManagerMain, nsIter, nsIter2, \
+                    NSLayoutManagerMain, NSStr, nsString2str, \
+                    NSTableColumnMain
+from oslibs  import NSFontBoldMask, NSFontItalicMask, \
+                    NSFontCompressedMask, NSFontCondensedMask, \
+                    NSFontExpandedMask, NSFontMonoSpaceMask, \
+                    NSFontNarrowMask, NSFontPosterMask, \
                     NSFontSmallCapsMask, NSFontSansSerifClass, \
                     NSFontUnboldMask, NSFontUnitalicMask
 from runtime import isInstanceOf
@@ -39,11 +41,7 @@ from strs    import Str
 from utils   import bytes2str, _ByteStrs, _Constants, _exports, \
                     flint, instanceof, _Ints, _Types
 
-__version__ = '18.05.16'
-
-_NSFM = NSFontManager.sharedFontManager()
-_NSLM = NSLayoutManager.alloc().init()
-_NSTC = NSTableColumn.alloc().init()  # PYCHOK false
+__version__ = '18.05.30'
 
 # <http://Developer.Apple.com/documentation/appkit/nsfont.weight>
 # _NSFontWeigthHeavy      = 13 ?
@@ -55,6 +53,10 @@ _NSTC = NSTableColumn.alloc().init()  # PYCHOK false
 # _NSFontWeigthThin       =  3 ?
 # _NSFontWeigthLight      =  2 ?
 # _NSFontWeigthUltraLight =  1 ?
+
+
+def _nsFontsOf(family):
+    return NSFontManagerMain.availableMembersOfFontFamily_(NSStr(family))
 
 
 # XXX dict _familyTraits and class FontTrait
@@ -81,34 +83,34 @@ FontTrait = FontTrait()  #: Font trait constants (C{mask}).
 # dict for Font.traitsup() to update traits with family traits
 _familyTraits = dict((n.lower(), m) for n, m in FontTrait.items()
                                      if not n.startswith('Un'))
-_familyTraits.update(dict(black=NSFontBoldMask,
+_familyTraits.update(dict(black=FontTrait.Bold,
                   #        book=0,
                   #    chancery=0,
                   #        demi=0,
-                     extrablack=NSFontBoldMask,
-                      extrabold=NSFontBoldMask,
+                     extrablack=FontTrait.Bold,
+                      extrabold=FontTrait.Bold,
                   #  extralight=0,
-                          heavy=NSFontBoldMask,
+                          heavy=FontTrait.Bold,
                   #    inclined=0,
                   #      inline=0,
                   #       light=0,
                   #      medium=0,
-                           mono=NSFontMonoSpaceMask,
-                        oblique=NSFontItalicMask,
+                           mono=FontTrait.MonoSpace,
+                        oblique=FontTrait.Italic,
                   #     outline=0,  # Braille
                   #    pinpoint=0,  # Braille
                   #       plain=0,
                   #     regular=0,
                   #       roman=0,
-                           sans=NSFontSansSerifClass,  # exception
+                           sans=FontTrait.SansSerif,  # exception
                   #        semi=0,
-                       semibold=NSFontBoldMask,
+                       semibold=FontTrait.Bold,
                   #       solid=0,
                   #        text=0,
                   #        thin=0,
                   #       ultra=0,
                   #  ultralight=0,
-                      ultrabold=NSFontBoldMask))
+                      ultrabold=FontTrait.Bold))
 # all valid traits
 _maskTraits = 0
 for _, m in FontTrait.items():
@@ -137,9 +139,9 @@ def _traitsin(traits, raiser=True):
     else:
         raise FontTraitError('invalid %s: %r' % ('traits', traits))
     # check for mutually exclusive traits
-    if _traitex(ts, NSFontCondensedMask | NSFontExpandedMask) or \
-       _traitex(ts, NSFontItalicMask    | NSFontUnitalicMask) or \
-       _traitex(ts, NSFontBoldMask      | NSFontUnboldMask):
+    if _traitex(ts, FontTrait.Condensed | FontTrait.Expanded) or \
+       _traitex(ts, FontTrait.Italic    | FontTrait.UnItalic) or \
+       _traitex(ts, FontTrait.Bold      | FontTrait.UnBold):
         raise FontTraitError('incompatible %s: %r' % ('traits', traits))
     return ts
 
@@ -164,47 +166,51 @@ class Font(_Type0):
     _traits = 0
     _weight = None
 
-    def __init__(self, family, size=0, traits=0, weight=5):
+    def __init__(self, family_or_font, size=0, traits=0, weight=5):
         '''New L{Font}.
 
-           @param family: Generic font name (C{str}, L{Str}, C{NSStr},
-                          L{Font} or C{NSFont}), like "Times" or "Helvetica".
+           @param family_or_font: Generic font name (C{str}, L{Str}, C{NSStr})
+                                  like "Times" or "Helvetica" or a L{Font},
+                                  C{NSFont} or C{NSFontDescriptor} instance.
            @keyword size: Desired point size (C{int}), zero for any.
            @keyword traits: Desired font traits (C{str} or C{FontTrait}C{s mask}).
            @keyword weigth: Desired book weight (C{int}) in range 0..15, where
                             0=light, 5=regular, 9=bold and 15=heavy.
 
-           @raise FontError: No such I{family} or font.
+           @raise FontError: No such I{family_or_font}.
 
            @raise FontTraitError: Mutually exclusive I{traits}.
 
-           @raise TypeError: Invalid I{family}.
+           @raise TypeError: Invalid I{family_or_font}.
 
            @raise ValueError: Invalid I{weight}.
 
            @note: The new L{Font} may not exhibit the desired I{traits}
                   and I{weight}.  The I{weight} is ignored if I{traits}
-                  includes C{FontTrait.Bold}.
+                  include C{FontTrait.Bold}, both I{traits} and I{weight}
+                  are ignored if I{family_or_font} is C{NSFontDescriptor}.
 
            @see: Function L{fontsof} to obtain all available fonts of
                  a particular font family.
         '''
-        if isinstance(family, Str):
-            ns, py = family.NS, str(family)
-        elif isinstance(family, _ByteStrs):
-            ns, py = NSStr(family), bytes2str(family)
-        elif isinstance(family, NSStr):
-            ns, py = family, nsString2str(family)
-#       elif isInstanceOf(family, NSFontDescriptor):
-#           ns, py = ..., ...
-        elif isInstanceOf(family, NSFont, name='family'):
-            ns, py = family, None
+        if isinstance(family_or_font, Str):
+            ns, py = family_or_font.NS, str(family_or_font)
+        elif isinstance(family_or_font, _ByteStrs):
+            ns, py = NSStr(family_or_font), bytes2str(family_or_font)
+        elif isinstance(family_or_font, NSStr):
+            ns, py = family_or_font, nsString2str(family_or_font)
+#       elif isInstanceOf(family_or_font, NSFontDescriptor):
+            # <http://Developer.Apple.com/documentation/appkit/nsfont/1525386-init>
+            # ignore traits and weight
+#           ns, py = NSFont.alloc().init_(family_or_font, size), None
+        elif isInstanceOf(family_or_font, NSFont, name='family_or_font'):
+            ns, py = family_or_font, None
             if size == 0:
                 size = ns.pointSize()
             if traits == 0:
-                traits = _NSFM.traitsOfFont_(ns)
+                traits = NSFontManagerMain.traitsOfFont_(ns)
             if not (size == ns.pointSize() and
-                    traits == _NSFM.traitsOfFont_(ns)):
+                    traits == NSFontManagerMain.traitsOfFont_(ns)):
                 ns = ns.familyName()
                 py = nsString2str(ns)
 
@@ -213,9 +219,8 @@ class Font(_Type0):
             #       nsfontmanager/1462332-fontwithfamily>
             self._traits = _traitsin(traits)
             self._weight = _weightin(weight)
-            ns = _NSFM.fontWithFamily_traits_weight_size_(ns,
-                                                    self._traits,
-                                                    self._weight, size)
+            ns = NSFontManagerMain.fontWithFamily_traits_weight_size_(
+                                ns, self._traits, self._weight, size)
             if isNone(ns):
                 self._family = py
                 self._size   = flint(size)
@@ -225,16 +230,16 @@ class Font(_Type0):
         # <http://Developer.Apple.com/library/content/documentation/
         #  TextFonts/Conceptual/CocoaTextArchitecture/FontHandling/FontHandling.html>
         self._family = nsString2str(ns.familyName())
-        self._height = flint(_NSLM.defaultLineHeightForFont_(ns) + 1)
+        self._height = flint(NSLayoutManagerMain.defaultLineHeightForFont_(ns) + 1)
         self._name   = nsString2str(ns.fontName())
         self._size   = flint(ns.pointSize())
         # traits not always reflect actual traits
-        self._traits = _NSFM.traitsOfFont_(ns) or 0
+        self._traits = NSFontManagerMain.traitsOfFont_(ns) or 0
         # update with the family traits, if any
         self._traits |= _traitsin(self._family, raiser=False)
         if ns.isFixedPitch() and not self.isMonoSpace:
-            self._traits |= NSFontMonoSpaceMask
-        self._weight = _NSFM.weightOfFont_(ns)
+            self._traits |= FontTrait.MonoSpace
+        self._weight = NSFontManagerMain.weightOfFont_(ns)
 
     def __str__(self):
         return '%s(%s)' % (self.__class__.__name__,
@@ -273,8 +278,13 @@ class Font(_Type0):
     @property
     def height(self):
         '''Get the C{line} height (C{float} or C{int}).
+
+           @note: The C{height} is the sum of the tallest
+                  ascender, tallest descender and leading.
         '''
-        return flint(self._height)
+        # <http://Developer.Apple.com/library/content/documentation/
+        #       Cocoa/Conceptual/TextLayout/Tasks/StringHeight.html>
+        return self._height
 
     @property
     def heightAscender(self):
@@ -402,6 +412,10 @@ class Font(_Type0):
         '''
         self._name = bytes2str(name)
 
+#   @property
+#   def NSfontDescriptor(self):
+#       return self.NS.fontDescriptor()
+
     def resize(self, size):
         '''Get this font in an other point size.
 
@@ -528,8 +542,8 @@ class Fonts(_Constants):
     MonoSpace   = Font(NSFont.userFixedPitchFontOfSize_(0))
     Palette     = Font(NSFont.paletteFontOfSize_(0))
     System      = Font(NSFont.systemFontOfSize_(0))
-    TableData   = Font(_NSTC.dataCell().font())
-    TableHeader = Font(_NSTC.headerCell().font())
+    TableData   = Font(NSTableColumnMain.dataCell().font())
+    TableHeader = Font(NSTableColumnMain.headerCell().font())
     Title       = Font(NSFont.titleBarFontOfSize_(0))
 
 
@@ -545,7 +559,7 @@ def fontfamilies(*prefixes):
     '''
     # <http://Developer.Apple.com/documentation/appkit/
     #       nsfontmanager/1462323-availablefontfamilies>
-    for ns in nsIter(_NSFM.availableFontFamilies()):
+    for ns in nsIter(NSFontManagerMain.availableFontFamilies()):
         f = nsString2str(ns)
         if f.startswith(prefixes or f):
             yield f
@@ -560,7 +574,7 @@ def fontnamesof(family):
     '''
     # <http://Developer.Apple.com/documentation/appkit/
     #       nsfontmanager/1462316-availablemembers>
-    for ns in nsIter(_NSFM.availableMembersOfFontFamily_(NSStr(family))):
+    for ns in nsIter(_nsFontsOf(family)):
         yield nsString2str(ns.objectAtIndex_(0))
 
 
@@ -581,7 +595,7 @@ def fontsof(family, size=0, weight=None):
         lw = hw = _weightin(weight)
     # <http://Developer.Apple.com/documentation/appkit/
     #       nsfontmanager/1462316-availablemembers>
-    for (n, m, w, t), _ in nsIter2(_NSFM.availableMembersOfFontFamily_(NSStr(family))):
+    for (n, m, w, t), _ in nsIter2(_nsFontsOf(family)):
         # each item is [name, trait-like attributes, weight, traits]
         if lw <= w <= hw:
             try:
@@ -603,7 +617,7 @@ def fontsof4(family):
     '''
     # <http://Developer.Apple.com/documentation/appkit/
     #       nsfontmanager/1462316-availablemembers>
-    for t4, _ in nsIter2(_NSFM.availableMembersOfFontFamily_(NSStr(family))):
+    for t4, _ in nsIter2(_nsFontsOf(family)):
         # each item is [name, trait-like attributes, weight, traits]
         yield tuple(t4)
 

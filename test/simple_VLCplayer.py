@@ -31,7 +31,7 @@ try:
     import vlc
 except ImportError:
     raise ImportError('no %s module (%s)' % ('vlc.py',
-                      '<http://PyPI.Python.org/pypi/python-vlc>'))
+                      '<http://PyPI.org/project/python-vlc>'))
 
 # the imports listed explicitly to help PyChecker
 from pycocoa import get_selector, NSAlternateKeyMask, NSApplication, \
@@ -44,7 +44,7 @@ from pycocoa import get_selector, NSAlternateKeyMask, NSApplication, \
                     __version__ as __PyCocoa__  # PYCHOK false
 
 __all__  = ('appVLC',)
-__version__ = '18.04.26'
+__version__ = '18.06.01'
 
 _macOS  = platform.mac_ver()[0:3:2]  # PYCHOK false
 _Python = sys.version.split()[0], platform.architecture()[0]  # PYCHOK false

@@ -28,12 +28,12 @@
 # all imports listed explicitly to help PyChecker
 from bases   import _Type2
 from menus   import _menuItemHandler_name, Menu, MenuBar, ns2Item
-from nstypes import NSApplication, nsBundleRename, \
+from nstypes import NSApplication, NSApplicationMain, nsBundleRename, \
                     NSConcreteNotification, NSNotification, nsOf, NSStr
 # from oslibs  import YES
 from runtime import isInstanceOf, ObjCClass, ObjCInstance, \
                     _ObjC_log_totals, ObjCSubclass, send_super
-from utils   import _Globals, bytes2str, instanceof, printf
+from utils   import _Globals, bytes2str, instanceof, printf, _Types
 
 from threading import Thread
 from time import sleep
@@ -43,7 +43,7 @@ __all__ = ('App',
            'Tile',
            'app_title',
            'ns2App')
-__version__ = '18.05.15'
+__version__ = '18.05.30'
 
 
 class App(_Type2):
@@ -71,7 +71,7 @@ class App(_Type2):
         if raiser:
             _Globals.raiser = raiser
 
-        self.NS = NSApplication.sharedApplication()
+        self.NS = NSApplicationMain
         # add a method to set the app's title
         self.NS.setTitle_ = nsBundleRename
 #       pool = NSAutoreleasePool.alloc().init()  # created by NSApplication
@@ -520,6 +520,8 @@ def ns2App(ns):
        @return: The app instance (L{App}).
 
        @raise RuntimeError: L{App} mismatch.
+
+       @raise TypeError: Invalid I{ns} type.
     '''
     if isInstanceOf(ns, NSApplication):
         pass
@@ -529,6 +531,8 @@ def ns2App(ns):
         return _Globals.App
     raise RuntimeError('%r vs %r' % (ns, _Globals.App.NS))
 
+
+NSApplication._Type = _Types.App = App
 
 if __name__ == '__main__':
 

@@ -37,7 +37,7 @@
 
 # MIT License <http://opensource.org/licenses/MIT>
 #
-# Copyright (C) 2017-2018 mrJean1 at Gmail dot com
+# Copyright (C) 2017-2018 -- mrJean1 at Gmail dot com
 #
 # Permission is hereby granted, free of charge, to any person obtaining
 # a copy of this software and associated documentation files (the "Software"),
@@ -63,7 +63,7 @@
 '''Various ObjC and macOS libraries, signatures, constants, etc.
 '''
 # all imports listed explicitly to help PyChecker
-from ctypes  import byref, cdll, c_byte, c_char, c_char_p, \
+from ctypes  import byref, cdll, c_buffer, c_byte, c_char, c_char_p, \
                     c_double, c_float, \
                     c_int, c_int8, c_int16, c_int32, c_int64, \
                     c_long, c_longlong, c_short, c_size_t, \
@@ -80,9 +80,9 @@ from octypes import Allocator_t, Array_t, BOOL_t, CFIndex_t, \
                     objc_property_t, objc_property_attribute_t, \
                     Protocol_t, SEL_t, Set_t, String_t, \
                     TypeRef_t, UniChar_t
-from utils   import _exports
+from utils   import bytes2str, _exports
 
-__version__ = '18.05.03'
+__version__ = '18.05.22'
 
 NO  = False
 YES = True
@@ -352,6 +352,23 @@ def cfNumber2num(ns, dflt=None):
             return dflt
     except KeyError:
         raise TypeError('unhandled %s(%r): %r' % ('NumberType', ns, numType))
+
+
+def cfString2str(ns, dflt=None):  # XXX an NS*String method
+    '''Create a Python C{str} or C{unicode} from an C{NS[Mutable]Str[ing]}.
+
+       @param ns: The C{NS[Mutable]Str[ing]} (L{ObjCInstance}).
+
+       @return: The string (C{str} or C{unicode}) or I{dflt}.
+    '''
+    n = libCF.CFStringGetLength(ns)
+    u = libCF.CFStringGetMaximumSizeForEncoding(n, CFStringEncoding)
+    buf = c_buffer(u + 2)
+    if libCF.CFStringGetCString(ns, buf, len(buf), CFStringEncoding):
+        # XXX assert isinstance(buf.value, _Bytes), 'bytes expected'
+        # bytes to unicode in Python 2, to str in Python 3+
+        return bytes2str(buf.value)  # XXX was .decode(DEFAULT_UNICODE)
+    return dflt
 
 
 _csignature(libCF.CFRelease, c_void, TypeRef_t)

@@ -28,10 +28,10 @@
 # all imports listed explicitly to help PyChecker
 from bases    import _Type2
 from geometry import Rect
-from nstypes  import isNone, NSConcreteNotification, NSFalse, NSNone, \
-                     NSNotification, NSScreen, NSScrollView, NSTrue, \
-                     NSView, NSWindow
-from octypes  import NSPoint_t, NSSize_t
+from nstypes  import isNone, NSConcreteNotification, NSFont, NSNone, \
+                     NSNotification, NSScreenMainFrame, NSScrollView, \
+                     NSStr, nsTextSize3, NSTextView, NSView, NSWindow
+from octypes  import NSIntegerMax, NSPoint_t, NSSize_t
 from oslibs   import NO, NSBackingStoreBuffered, \
                      NSWindowStyleMaskClosable, \
                      NSWindowStyleMaskMiniaturizable, \
@@ -41,14 +41,86 @@ from oslibs   import NO, NSBackingStoreBuffered, \
                      NSWindowStyleMaskUtilityWindow, YES
 from runtime  import isInstanceOf, ObjCClass, ObjCInstance, \
                      ObjCSubclass, send_super
-from utils    import aspect_ratio, _Constants, _exports, _Globals, \
-                     bytes2str, instanceof, _Types
+from utils    import aspect_ratio, bytes2str, _Constants, _exports, \
+                     _Globals, instanceof, _text_title, _Types
 # from enum   import Enum
 
-__version__ = '18.05.04'
+__version__ = '18.05.30'
 
 _Cascade = NSPoint_t(25, 25)  # PYCHOK false
-_Screen  = NSScreen.alloc().init().mainScreen()
+
+
+class AutoResizeError(ValueError):
+    '''AutoResize option error.
+    '''
+    pass
+
+
+# <http://Developer.Apple.com/documentation/appkit/nsautoresizingmaskoptions>
+class AutoResize(_Constants):  # Enum?
+    '''AutoResize options (C{mask}, wrapping C{NSAutoresizingMaskOptions}).
+    '''
+    HeightSizable = 16  # NSViewHeightSizable
+    MaxXMargin    =  4  # NSViewMaxXMargin
+    MaxYMargin    = 32  # NSViewMaxYMargin
+    MinXMargin    =  1  # NSViewMinXMargin
+    MinYMargin    =  8  # NSViewMinYMargin
+    NotSizable    =  0  # NSViewNotSizable
+    Sizable       = 18  # NSViewHeightSizable | NSViewWidthSizable
+    WidthSizable  =  2  # NSViewWidthSizable
+
+
+AutoResize = AutoResize()  #: AutoResize options (C{mask}).
+
+
+def autoResizes(*options):
+    '''Return a combination of auto resize options, specified by name.
+
+       @param options: Option names (I{all positional}), case-insensitive.
+
+       @return: Combined options (L{AutoResize}s C{mask}).
+
+       @raise AutoResizeError: One or more I{options} are invalid.
+    '''
+    c, e = AutoResize._masks(*options)
+    if e is None:
+        return c
+    raise AutoResizeError('invalid %s: %s' % ('option', e))
+
+
+# <http://Developer.Apple.com/documentation/appkit/nsbezelstyle>
+class BezelStyle(_Constants):  # Enum?
+    '''Bezel style constants (C{int}).
+    '''
+    NCircular         =  7  # NSCircularBezelStyle
+    Disclosure        =  5  # NSDisclosureBezelStyle
+    HelpButton        =  9  # NSHelpButtonBezelStyle
+    Inline            = 15  # NSInlineBezelStyle
+    Recessed          = 13  # NSRecessedBezelStyle
+    RegularSquare     =  2  # NSRegularSquareBezelStyle
+    Rounded           =  1  # NSRoundedBezelStyle
+    RoundedDisclosure = 14  # NSBezelStyleRoundedDisclosure
+    RoundRect         = 12  # NSRoundRect
+    ShadowlessSquare  =  6  # NSShadowlessSquareBezelStyle
+    SmallSquare       = 10  # NSSmallSquareBezelStyle
+    TexturedRounded   = 11  # NSBezelStyleTexturedRounded
+    TexturedSquare    =  8  # NSTexturedSquareBezelStyle
+
+
+BezelStyle = BezelStyle()  #: Bezel style constants (C{int}).
+
+
+# <http://Developer.Apple.com/documentation/appkit/nsbordertype>
+class Border(_Constants):  # Enum?
+    '''Border type constants (C{int}).
+    '''
+    Bezel  = 2  # NSBezelBorder
+    Groove = 3  # NSGrooveBorder
+    Line   = 1  # NSLineBorder
+    No     = 0  # NSNoBorder
+
+
+Border = Border()  #: Border type constants (C{int}).
 
 
 class Screen(Rect):
@@ -57,12 +129,12 @@ class Screen(Rect):
     def __init__(self, fraction=0.5, cascade=10):
         '''New, partial screen L{Rect}.
 
-           @keyword fraction: Size of the screen (float).
-           @keyword cascade: Shift from lower left corner (float or int).
+           @keyword fraction: Size of the screen (C{float}).
+           @keyword cascade: Shift from lower left corner (C{float} or C{int}).
 
            @raise ValueError: Invalid I{fraction} value.
         '''
-        f = _Screen.frame()
+        f = NSScreenMainFrame
         if 0.1 < fraction < 1.0:
             # use the lower left side of the screen
             w = int(f.size.width * fraction + 0.5)
@@ -88,10 +160,10 @@ class Window(_Type2):
     def __init__(self, title='Main', frame=None, excl=0, auto=False, **kwds):
         '''Create a new L{Window}.
 
-           @keyword title: Window title (str).
+           @keyword title: Window title (C{str}).
            @keyword frame: Window frame (L{Rect}, L{NSRect_t}, L{NSRect4_t}, or None).
            @keyword excl: Window styles to exclude (L{WindowStyle}C{.attribute}).
-           @keyword auto: Release window resource when closed (bool).
+           @keyword auto: Release window resource when closed (C{bool}).
            @keyword kwds: Optional, additional keyword arguments.
 
            @raise WindowError: Unique C{Id} exists.
@@ -103,7 +175,7 @@ class Window(_Type2):
                                    self.frame.NS,
                                    WindowStyle.Typical ^ excl,  # PYCHOK expected
                                    NSBackingStoreBuffered,
-                                   NSFalse)  # or False or 0
+                                   NO)
         self.title = bytes2str(title)
         self.front(True)
 
@@ -120,7 +192,7 @@ class Window(_Type2):
             self.app = _Globals.App
 
         if auto:
-            self.NS.setReleasedWhenClosed_(NSTrue)
+            self.NS.setReleasedWhenClosed_(YES)
         self.NSdelegate = NSWindowDelegate.alloc().init(self)
 
     def close(self):
@@ -146,7 +218,7 @@ class Window(_Type2):
     def front(self, focus=False):
         '''Order this window to the front.
 
-           @keyword focus: Make this window C{Key} (bool).
+           @keyword focus: Make this window C{Key} (C{bool}).
         '''
         if focus:
             self.NS.makeKeyAndOrderFront_(None)
@@ -158,7 +230,7 @@ class Window(_Type2):
     def full(self, full):
         '''Enter or exit full screen mode for this window.
 
-           @param full: Enter or exit (bool).
+           @param full: Enter or exit (C{bool}).
         '''
         if full:
             self.NS.enterFullScreenMode_(self.NS.screen())
@@ -168,7 +240,7 @@ class Window(_Type2):
     def hide(self, hide):
         '''Hide or unhide this window.
 
-           @param hide: Hide or show (bool).
+           @param hide: Hide or show (C{bool}).
         '''
         if hide:  # click the hide/miniaturize button
             self.NS.performMiniaturize_(self.NS)  # XXX self.delegate
@@ -177,45 +249,45 @@ class Window(_Type2):
 
     @property
     def isFull(self):
-        '''Get this window's full screen state (bool).
+        '''Get this window's full screen state (C{bool}).
         '''
         return True if self.NS.isInFullScreenMode() else False
 
     @property
     def isHidden(self):
-        '''Get this window's hidden state (bool).
+        '''Get this window's hidden state (C{bool}).
         '''
         return True if self.NS.isMiniaturized() else False
 
     @property
     def isKey(self):
-        '''Get this window's C{Key} state (bool).
+        '''Get this window's C{Key} state (C{bool}).
         '''
         return self._isKey  # self.NS.isKeyWindow()
 
     @property
     def isMain(self):
-        '''Get this window's C{Main} state (bool).
+        '''Get this window's C{Main} state (C{bool}).
         '''
         return self._isMain  # self.NS.isMainWindow()
 
     @property
     def isVisible(self):
-        '''Get this window's visible state (bool).
+        '''Get this window's visible state (C{bool}).
         '''
         return True if self.NS.isVisible() else False
 
     @property
     def isZoomed(self):
-        '''Get this window's zoomed state (bool).
+        '''Get this window's zoomed state (C{bool}).
         '''
         return True if self.NS.isZoomed() else False
 
     def limit(self, width=3840, height=4160):
         '''Limit this window's content size.
 
-           @keyword width: Width limit (float or int).
-           @keyword height: Height limit (float or int).
+           @keyword width: Width limit (C{float} or C{int}).
+           @keyword height: Height limit (C{float} or C{int}).
         '''
         self.NS.setContentMaxSize_(NSSize_t(width, height))
 
@@ -267,7 +339,7 @@ class Window(_Type2):
     def zoom(self, zoom):
         '''Toggle, zoom or un-zoom this window.
 
-           @param zoom: Zoom or un-zoom (bool) or C{None} to toggle.
+           @param zoom: Zoom or un-zoom (C{bool}) or C{None} to toggle.
         '''
         if zoom is None or (zoom and not self.isZoomed) \
                         or (self.isZoomed and not zoom):
@@ -295,7 +367,7 @@ class Window(_Type2):
     def windowKey_(self, key):
         '''Callback I{window} becomes/resigns C{Key}.
 
-           @param key: Make or un-make C{Key} (bool).
+           @param key: Make or un-make C{Key} (C{bool}).
         '''
         self._isKey = bool(key)
         if self.app:
@@ -304,7 +376,7 @@ class Window(_Type2):
     def windowMain_(self, main):
         '''Callback I{window} becomes/resigns C{Main}.
 
-           @param main: Make or un-make C{Main} (bool).
+           @param main: Make or un-make C{Main} (C{bool}).
         '''
         self._isMain = bool(main)
         if self.app:
@@ -367,7 +439,7 @@ def windowStyles(*styles):
 
        @param styles: Style names (I{all positional}), case-insensitive.
 
-       @return: Combined window styles (L{WindowStyle}C{s mask}).
+       @return: Combined styles (L{WindowStyle}s C{mask}).
 
        @raise WindowStyleError: One or more I{styles} are invalid.
     '''
@@ -384,7 +456,7 @@ class MediaWindow(Window):
         '''Create a L{MediaWindow}.
 
            @keyword title: Window name or title (string).
-           @keyword fraction: Window size as fraction of the screen (float).
+           @keyword fraction: Window size as fraction of the screen (C{float}).
            @keyword kwds: Optional, additional keyword arguments, see L{Window}.
         '''
         super(MediaWindow, self).__init__(title=title, frame=Screen(fraction), **kwds)
@@ -393,6 +465,70 @@ class MediaWindow(Window):
         # <http://StackOverflow.com/questions/11562587/create-nsview-directly-from-code>
         # <http://GitHub.com/ariabuckles/pyobjc-framework-Cocoa/blob/master/Examples/AppKit/DotView/DotView.py>
         self.NSview = NSView.alloc().initWithFrame_(self.frame.NS)
+
+
+class TextWindow(Window):
+    '''Scrollable text window Python Type, wrapping ObjC C{NSWindow/NSView}.
+    '''
+    def __init__(self, text_or_file, font=None, title='Text', fraction=0.5, **kwds):
+        '''Create a L{TextWindow}.
+
+           @param text_or_file: The contents (C{str} or C{file}).
+           @keyword font: Optional font (L{Font}), default C{Fonts.MonoSpace}.
+           @keyword title: Window name or title (C{str}).
+           @keyword fraction: Window size as fraction of the screen (C{float}).
+           @keyword kwds: Optional, additional keyword arguments, see L{Window}.
+        '''
+        text, t = _text_title(text_or_file, title)
+        super(TextWindow, self).__init__(title=t, frame=Screen(fraction), **kwds)
+
+        if font is None:
+            f = NSFont.userFixedPitchFontOfSize_(12)
+        else:
+            f = font.NS
+        w, _, _ = nsTextSize3(text, f)
+        # <http://Developer.Apple.com/library/content/documentation/
+        #       Cocoa/Conceptual/TextUILayer/Tasks/CreateTextViewProg.html>
+        # <http://Developer.Apple.com/library/content/documentation/
+        #       Cocoa/Conceptual/TextUILayer/Tasks/TextInScrollView.html>
+        ns = self.NS
+        cr = ns.contentView().frame()
+        hs = w > cr.size.width
+
+        sv = NSScrollView.alloc().initWithFrame_(cr)
+        sv.setBorderType_(Border.No)
+        if hs:
+            sv.setHasHorizontalScroller_(YES)
+            sv.setAutoresizingMask_(AutoResize.Sizable)
+        else:
+            sv.setHasHorizontalScroller_(NO)
+            sv.setAutoresizingMask_(AutoResize.WidthSizable)
+        sv.setHasVerticalScroller_(YES)
+
+        tv = NSTextView.alloc().initWithFrame_(cr)
+        tv.setMaxSize_(NSSize_t(NSIntegerMax, NSIntegerMax))
+        tv.setMinSize_(NSSize_t(16, cr.size.height))
+        tc = tv.textContainer()
+        if hs:
+            tv.setHorizontallyResizable_(YES)
+            tv.setAutoresizingMask_(AutoResize.Sizable)
+            tc.setContainerSize_(NSSize_t(NSIntegerMax, NSIntegerMax))  # FLT_MAX
+            tc.setWidthTracksTextView_(NO)  # YES?
+        else:
+            tv.setHorizontallyResizable_(NO)
+            tv.setAutoresizingMask_(AutoResize.WidthSizable)
+            tc.setContainerSize_(NSSize_t(cr.size.width, NSIntegerMax))  # FLT_MAX
+            tc.setWidthTracksTextView_(YES)  # NO?
+        tv.setVerticallyResizable_(YES)
+
+        tv.setFont_(f)  # XXX set font BEFORE text
+        tv.insertText_(NSStr(text))
+        tv.setEditable_(NO)
+        tv.setDrawsBackground_(NO)
+
+        self.NSView = sv  # == ns.setContentView_(sv)
+        ns.makeKeyAndOrderFront_(None)
+        ns.makeFirstResponder_(tv)
 
 
 class _NSWindowDelegate(object):
@@ -430,7 +566,7 @@ class _NSWindowDelegate(object):
     def _ns2w(self, ns):
         w = ns2Window(ns)
         if self.window != w:
-            raise AssertionError('%r vs %r' % (self.window, w))
+            raise RuntimeError('%r vs %r' % (self.window, w))
 
     @_ObjC.method('v@')
     def windowDidBecomeKey_(self, ns_notification):
@@ -530,9 +666,9 @@ def ns2Window(ns):
 
        @return: The window instance (L{Window}).
 
-       @raise AssertionError: Mismatched instances.
-
        @raise AttributeError: Unexpected I{ns} type.
+
+       @raise RuntimeError: L{Window} mismatch.
 
        @raise TypeError: Invalid I{ns} type.
     '''
@@ -547,16 +683,18 @@ def ns2Window(ns):
         t = '%r of %r' % (w._ns_uniqID, w)
     except KeyError:
         t = None
-    raise AssertionError('%s %s %r vs %s' % (ns, '.uniqueID', u, t))
+    raise RuntimeError('%s %s %r vs %s' % (ns, '.uniqueID', u, t))
 
 
 _Types.Window = NSWindow._Type = Window
 _Types.MediaWindow             = MediaWindow
+_Types.TextWindow              = TextWindow
 
 # filter locals() for .__init__.py
-__all__ = _exports(locals(), 'MediaWindow', 'NSWindowDelegate',
-                             'Screen', 'ns2Window',
-                   starts=('Window', 'window'))
+__all__ = _exports(locals(), 'BezelStyle', 'Border', 'MediaWindow',
+                             'ns2Window', 'NSWindowDelegate',
+                             'Screen', 'TextWindow',
+                   starts=('AutoResize', 'autoResizes', 'Window', 'window'))
 
 if __name__ == '__main__':
 

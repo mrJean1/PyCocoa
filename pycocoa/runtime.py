@@ -37,7 +37,7 @@
 
 # MIT License <http://opensource.org/licenses/MIT>
 #
-# Copyright (C) 2017-2018 mrJean1 at Gmail dot com
+# Copyright (C) 2017-2018 -- mrJean1 at Gmail dot com
 #
 # Permission is hereby granted, free of charge, to any person obtaining
 # a copy of this software and associated documentation files (the "Software"),
@@ -81,10 +81,10 @@ from octypes import __i386__, __LP64__, c_struct_t, c_void, \
                     ctype2encoding, emcoding2ctype, encoding2ctype, \
                     Class_t, Id_t, IMP_t, Ivar_t, objc_super_t, \
                     ObjC_t, SEL_t, split_emcoding2, TypeCodeError
-from oslibs  import libobjc
+from oslibs  import cfString2str, libobjc
 from utils   import bytes2str, _exports, missing, name2py, printf, str2bytes
 
-__version__ = '18.04.24'
+__version__ = '18.05.25'
 
 # <http://Developer.Apple.com/documentation/objectivec/
 #         objc_associationpolicy?language=objc>
@@ -92,6 +92,16 @@ OBJC_ASSOCIATION_COPY             = 0x303  # 01403
 OBJC_ASSOCIATION_COPY_NONATOMIC   = 3
 OBJC_ASSOCIATION_RETAIN           = 0x301  # 01401
 OBJC_ASSOCIATION_RETAIN_NONATOMIC = 1
+
+_objc_msgSend            = 'objc_msgSend'
+_objc_msgSend_fpret      = 'objc_msgSend_fpret'
+_objc_msgSend_stret      = 'objc_msgSend_stret'
+_objc_msgSendSuper       = 'objc_msgSendSuper'
+_objc_msgSendSuper_stret = 'objc_msgSendSuper_stret'
+
+# <http://Developer.Apple.com/documentation/objectivec/
+#         1441499-object_getinstancevariable>
+_object_setInstanceVariable = 'object_setInstanceVariable'
 
 import os
 _OBJC_ENV = 'PYCOCOA_OBJC_LOG'
@@ -253,8 +263,10 @@ class ObjCClass(ObjCBase):
         '''Create a new ObjCClass instance or return a previously
            created instance for the given ObjC class.
 
-           The argument is either the name of the class to retrieve
-           or a pointer to the class.
+           @param name_or_ptr: Either the name of or a pointer to the
+                               class to retrieve (C{str} or L{Class_t}).
+           @param protocols: None, one or more protocol to add (C{str}s
+                             or L{Protocol_t} instances).
         '''
         # Determine name and ptr values from passed in argument.
         ptr, name = _obj_and_name(name_or_ptr, get_class)
@@ -316,7 +328,7 @@ class ObjCClass(ObjCBase):
         raise AttributeError('no %r [class]method: %s ' % (name, self))
 
     def __str__(self):
-        return '%s of %#x' % (bytes2str(self.name), self.ptr.value)
+        return '%s of %#x' % (self.name, self.ptr.value)
 
     def _cache_method(self, name, Class, cache, getter):
         # get and cache a class or instance method
@@ -354,7 +366,7 @@ class ObjCClass(ObjCBase):
     def get_classmethod(self, name):
         '''Find a class method.
 
-           @param name: Name of the method (str).
+           @param name: Name of the method (C{str}).
 
            @return: The class method wrapper (L{ObjCClassMethod}) or None.
         '''
@@ -367,7 +379,7 @@ class ObjCClass(ObjCBase):
     def get_method(self, name):
         '''Find an instance method.
 
-           @param name: Name of the method (str).
+           @param name: Name of the method (C{str}).
 
            @return: The instance method wrapper (L{ObjCMethod}) or None.
         '''
@@ -379,13 +391,23 @@ class ObjCClass(ObjCBase):
 
     @property
     def name(self):
+        '''Get the ObjC class name (C{str}).
+        '''
         return bytes2str(self._name)
 
     @property
     def ptr(self):
+        '''Get this class' ObjC class (L{Class_t}).
+        '''
         return self._ptr
 
     NS = ptr
+
+    @property
+    def Type(self):
+        '''Get the Python Type for this ObjC class (C{class} or C{None}).
+        '''
+        return self._Type
 
 
 class ObjCInstance(ObjCBase):
@@ -459,14 +481,23 @@ class ObjCInstance(ObjCBase):
         if method:
             return ObjCBoundClassMethod(method, self._objc_class.ptr)
 
-        # Otherwise raise an exception.
+        # try this class' property, ...
+        try:
+            attr = getattr(self.__class__, bytes2str(name))
+            if isinstance(attr, property):
+                attr = attr.fget
+            if callable(attr):
+                return attr(self)
+        except (AttributeError, TypeError, ValueError):
+            pass
+        # ... otherwise raise error
         raise AttributeError('no %r [class]method: %s' % (name, self))
 
 #   def __repr__(self):
 #       return '<%s %#x: %s>' % (ObjCInstance.__name__, id(self), self)
 
     def __str__(self):
-        return '%s(%s) of %#x' % (self.objc_classname, self.ptr, self.ptr.value)
+        return '%s(%r) of %#x' % (self.objc_classname, self.ptr, self.ptr.value)
 
     @property
     def objc_class(self):
@@ -476,17 +507,25 @@ class ObjCInstance(ObjCBase):
 
     @property
     def objc_classname(self):
-        '''Get the name of this instance' ObjC class (str).
+        '''Get the name of this instance' ObjC class (C{str}).
         '''
         return self._objc_class.name.replace('__NSCF', 'NS')  # .lstrip('_')
 
     @property
-    def ptr(self):  # == .NS
+    def objc_description(self):
+        '''Get this instance' ObjC description (C{str}).
+        '''
+        d = _libobjcall(_objc_msgSend, Id_t, (Id_t, SEL_t),
+                         self._objc_ptr, get_selector('description'))
+        s = cfString2str(d, dflt='N/A')
+        # d.release()
+        return s
+
+    @property
+    def ptr(self):
         '''Get this instance' equivalent ObjC instance (L{Id_t}).
         '''
         return self._objc_ptr
-
-    NS = ptr  # XXX
 
     def release(self):
         '''Garbage collect this instance.
@@ -495,7 +534,7 @@ class ObjCInstance(ObjCBase):
                   segfaults.  Run with python3 -X faulthandler ...
                   the get the Python traceback.
         '''
-        # _libobjcall('objc_msgSend', c_void, (Id_t, SEL_t),
+        # _libobjcall(_objc_msgSend, c_void, (Id_t, SEL_t),
         #              self.ptr, get_selector('autorelease'))
         self.autorelease()  # PYCHOK expected
 #   __del__ = release  # XXX test.simple_application crashes
@@ -503,7 +542,7 @@ class ObjCInstance(ObjCBase):
     def set_ivar(self, name, value, ctype=None):
         '''Set an instance variable (ivar) to the given value.
 
-           @param name: Name of the ivar (str).
+           @param name: Name of the ivar (C{str}).
            @param value: Value for the ivar (C{any}).
            @keyword ctype: The type code of the ivar (C{ctypes}).
 
@@ -519,13 +558,10 @@ class ObjCInstance(ObjCBase):
     def Type(self):
         '''Get the Python Type for this instance' ObjC class (C{class}).
         '''
-        try:
-            ty = self._objc_class._Type
-            if ty and callable(ty):
-                return ty
-        except AttributeError:
-            ty = missing
-        raise AttributeError('Type(%r): %r' % (self, ty))
+        ty = self._objc_class.Type
+        if ty and callable(ty):
+            return ty
+        raise AttributeError('Type(%r): %r' % (self, ty or missing))
 
 
 class ObjCMethod(ObjCBase):
@@ -598,7 +634,7 @@ class ObjCMethod(ObjCBase):
 #   def __repr__(self):
 #       return '<%s %s(%s) %s>' % (ObjCMethod.__name__, self.name,
 #                                 _argtypestr(self.argtypes),
-#                                 bytes2str(self.encoding))
+#                                  bytes2str(self.encoding))
 
     def __str__(self):
         return '%s(%s) %s' % (self.name, _argtypestr(self.argtypes),
@@ -622,7 +658,7 @@ class ObjCMethod(ObjCBase):
 
     @property
     def name(self):
-        '''Get the method/SELector/cmd name (str).
+        '''Get the method/SELector/cmd name (C{str}).
         '''
         return name2py(self._name)
 
@@ -726,8 +762,8 @@ class ObjCSubclass(ObjCBase):
     def __init__(self, parent, name, register=True, **ivars):
         '''New sub-class of the given (super-)class.
 
-           @param parent: The super-class (str or C{NS...}).
-           @param name: The sub-class name (str).
+           @param parent: The super-class (C{str} or C{Object}).
+           @param name: The sub-class name (C{str}).
            @keyword register: Optionally, register the new sub-class (bool).
            @keyword ivars: Optionally, specify any number of instance
                            variables to be added I{before} registering
@@ -765,7 +801,7 @@ class ObjCSubclass(ObjCBase):
     def add_ivar(self, name, ctype):
         '''Add an instance variable to the sub-class.
 
-           @param name: Name of the ivar (str).
+           @param name: Name of the ivar (C{str}).
            @param ctype: The ivar type (C{ctypes}).
 
            @raise ValueError: Class is already registered.
@@ -824,7 +860,7 @@ class ObjCSubclass(ObjCBase):
 
     @property
     def name(self):
-        '''Get the name of this ObjC sub-class (str).
+        '''Get the name of this ObjC sub-class (C{str}).
         '''
         return bytes2str(self._name)
 
@@ -873,7 +909,7 @@ def add_ivar(clas, name, ctype):
     '''Add an instance variable to an ObjC class,
 
        @param clas: Class to add the ivar to (C{ObjCClass/Subclass}).
-       @param name: Name of the iver (str).
+       @param name: Name of the ivar (C{str}).
        @param ctype: The ivar type code (C{ctypes} or C{encoding}).
 
        @return: True if the ivar was added, False otherwise.
@@ -900,7 +936,7 @@ def add_method(clas, name_, method, encoding):
     '''Add a method to an ObjC class.
 
        @param clas: Class to add the method to (C{ObjCClass/Subclass}).
-       @param name_: Selector name (str).
+       @param name_: Selector name (C{str}).
        @param method: Decorated class or instance method (C{callable}).
        @param encoding: Method signature (C{encoding}).
 
@@ -926,7 +962,7 @@ def add_protocol(clas, protocol):
     '''Add a protocol to an ObjC class.
 
        @param clas: Class to add the protocol to (C{ObjCClass/Subclass}).
-       @param protocol: The C{protocol} to add (string or L{Protocol_t} instance).
+       @param protocol: The C{protocol} to add (C{str} or L{Protocol_t} instance).
 
        @return: The protocol (L{Protocol_t}) if added, C{None} otherwise.
     '''
@@ -937,8 +973,8 @@ def add_protocol(clas, protocol):
 def add_subclass(superclas, name, register=False):
     '''Create a new sub-class of the given super-class.
 
-       @param superclas: The parent class (string or C{NS...}).
-       @param name: The name of the sub-class (str).
+       @param superclas: The parent class (C{str} or C{Object}).
+       @param name: The name of the sub-class (C{str}).
        @keyword register: Optionally, register the new sub-class (bool).
 
        @return: The sub-class (C{Class_t}) if added, C{None} otherwise.
@@ -972,8 +1008,8 @@ def isImmutable(obj, mutableClass, immutableClass, name='ns'):
 
        @param obj: The instance to check (L{ObjCInstance}).
        @param mutableClass: The mutable ObjC classes (C{NSMutable...}).
-       @param immutableClass: The immutable ObjC classes (C{NS...}).
-       @keyword name: The name of the instance (str).
+       @param immutableClass: The immutable ObjC classes (C{Object}).
+       @keyword name: The name of the instance (C{str}).
 
        @return: True if I{obj} is an I{immutableClass} instance, False otherwise.
 
@@ -991,8 +1027,8 @@ def isInstanceOf(obj, *Classes, **name_missing):
     '''Check whether an ObjC object is an instance of some ObjC class.
 
        @param obj: The instance to check (L{ObjCInstance} or C{c_void_p}).
-       @param Classes: One or several ObjC classes (C{NS...}).
-       @keyword name: The name of the instance (str).
+       @param Classes: One or several ObjC classes (C{Object}).
+       @keyword name: The name of the instance (C{str}).
 
        @return: The matching I{Class} from I{Classes}, None otherwise.
 
@@ -1056,8 +1092,32 @@ def register_subclass(subclas):
     libobjc.objc_registerClassPair(subclas)
 
 
+def _receiver(receiver):
+    # from PyBee/Rubicon-Objc <http://GitHub.com/pybee/rubicon-objc>
+    receiver = getattr(receiver, '_as_parameter', receiver)
+    if isinstance(receiver, Id_t):
+        return receiver
+    elif type(receiver) in (c_void_p, ObjCInstance):
+        return cast(receiver, Id_t)
+#   elif isinstance(receiver, _Strs):
+#       return cast(get_class(receiver), Id_t)
+    raise TypeError('%s invalid: %r' % ('receiver', receiver))
+
+
+# <http://www.SealieSoftware.com/blog/archive/2008/11/16/objc_explain_objc_msgSend_fpret.html>
+# def x86_should_use_fpret(restype):
+#     '''Determine if objc_msgSend_fpret is required to return a floating point type.
+#     '''
+#     if not __i386__:   # Unneeded on non-intel processors
+#         return False
+#     if __LP64__ and restype == c_longdouble:
+#         return True  # Use only for long double on x86_64
+#     if not __LP64__ and restype in (c_float, c_double, c_longdouble):
+#         return True
+#     return False
+
 # <http://www.SealieSoftware.com/blog/archive/2008/10/30/objc_explain_objc_msgSend_stret.html>
-# <xxxx://www.x86-64.org/documentation/abi-0.99.pdf> (pp.17-23) executive summary, lost?
+# <XXXX://www.x86-64.org/documentation/abi-0.99.pdf> (pp.17-23) executive summary, lost?
 # <http://StackOverflow.com/questions/18133812/where-is-the-x86-64-system-v-abi-documented>
 # def x86_should_use_stret(restype):
 #     '''Try to figure out when a return type will be passed on stack.
@@ -1069,40 +1129,38 @@ def register_subclass(subclas):
 #     if __LP64__ and sizeof(restype) <= 16:  # maybe? I don't know?
 #         return False
 #     return True
-#
-#
-# <http://www.SealieSoftware.com/blog/archive/2008/11/16/objc_explain_objc_msgSend_fpret.html>
-# def should_use_fpret(restype):
-#     '''Determine if objc_msgSend_fpret is required to return a floating point type.
-#     '''
-#     if not __i386__:   # Unneeded on non-intel processors
-#         return False
-#     if __LP64__ and restype == c_longdouble:
-#         return True  # Use only for long double on x86_64
-#     if not __LP64__ and restype in (c_float, c_double, c_longdouble):
-#         return True
-#     return False
 
-if __LP64__:
+if not __i386__:
+    _FLOATS_ = ()
+
+    def _stret(unused):
+        return False
+
+elif __LP64__:
     _FLOATS_ = c_longdouble,
-    _RESIZE_ = 16
+
+    def _stret(restype):  # PYCHOK expected
+        return type(restype) == type(c_struct_t) and sizeof(restype) > 16
+
 else:
     _FLOATS_ = c_longdouble, c_float, c_double
-    _RESIZE_ = 8
+
+    def _stret(restype):  # PYCHOK expected
+        return type(restype) == type(c_struct_t) and sizeof(restype) not in (1, 2, 4, 8)  # XXX > 8
 
 
 def send_message(receiver, name_, *args, **resargtypes):
     '''Send message to an ObjC object.
 
-       @param receiver: The recipient (I{Object}).
-       @param name_: Message selector (str).
+       @param receiver: The recipient (C{Object}).
+       @param name_: Message selector (C{str}).
        @param args: Message arguments (I{all positional}).
        @keyword resargtypes: Optional, result and argument types (C{ctypes}).
 
        @return: Message result (I{restype}).
 
-       @raise ArgumentError: Invalid I{receiver}, I{name}, I{args}
-                             or I{resargtypes}.
+       @raise ArgumentError: Invalid I{receiver}, I{name}, I{args} or
+                             I{resargtypes}.
 
        @raise TypeError: Invalid I{receiver}, I{name}, I{args} or
                          I{resargtypes} type.
@@ -1117,23 +1175,22 @@ def send_message(receiver, name_, *args, **resargtypes):
     '''
     receiver, _ = _obj_and_name(receiver, get_class)
     _ObjC_logf('send_message(%r, %s, %r) %r', receiver, name_, args, resargtypes)
+    receiver = _receiver(receiver)
+
     restype, argtypes, sel = _resargtypesel3(args, resargtypes, name_)
     if argtypes:
         argtypes = [type(receiver), SEL_t] + argtypes
 
-    # Choose the correct version of objc_msgSend based on return type.
-    if __i386__ and restype in _FLOATS_:  # should_use_fpret(restype):
-        result = _libobjcall('objc_msgSend_fpret', restype, argtypes,
+    if restype in _FLOATS_:  # x86_should_use_fpret(restype):
+        result = _libobjcall(_objc_msgSend_fpret, restype, argtypes,
                               receiver, sel, *args)
-
-    elif type(restype) == type(c_struct_t) and sizeof(restype) > _RESIZE_:  # x86_should_use_stret(restype):
-        result = restype()
+    elif _stret(restype):  # x86_should_use_stret(restype):
         argtypes = [POINTER(restype)] + argtypes
-        _libobjcall('objc_msgSend_stret', c_void, argtypes,
+        result = restype()
+        _libobjcall(_objc_msgSend_stret, c_void, argtypes,
                      byref(result), receiver, sel, *args)
-
     else:
-        result = _libobjcall('objc_msgSend', restype, argtypes,
+        result = _libobjcall(_objc_msgSend, restype, argtypes,
                               receiver, sel, *args)
     return result
 
@@ -1145,15 +1202,15 @@ objc_super_t_ptr = POINTER(objc_super_t)  # XXX backward compatibility
 def send_super(receiver, name_, *args, **resargtypes):
     '''Send message to the super-class of an ObjC object.
 
-       @param receiver: The recipient (I{Object}).
-       @param name_: Message selector (str).
+       @param receiver: The recipient (C{Object}).
+       @param name_: Message selector (C{str}).
        @param args: Message arguments (I{all positional}).
        @keyword resargtypes: Optional, result and argument types (C{ctypes}).
 
        @return: Message result (I{restype}).
 
-       @raise ArgumentError: Invalid I{receiver}, I{name}, I{args}
-                             or I{resargtypes}.
+       @raise ArgumentError: Invalid I{receiver}, I{name}, I{args} or
+                             I{resargtypes}.
 
        @raise TypeError: Invalid I{receiver}, I{name}, I{args} or
                          I{resargtypes} type.
@@ -1167,7 +1224,8 @@ def send_super(receiver, name_, *args, **resargtypes):
               arguments).
     '''
     _ObjC_logf('send_super(%r, %s, %r)', receiver, name_, args)
-    receiver = getattr(receiver, '_as_parameter_', receiver)
+
+    receiver = _receiver(receiver)
     supercls = get_superclassof(receiver)
     superobj = objc_super_t(receiver, supercls)
 
@@ -1176,15 +1234,20 @@ def send_super(receiver, name_, *args, **resargtypes):
         argtypes = [objc_super_t_ptr, SEL_t] + argtypes
 #   else:
 #       argtypes = None  # []
-    return _libobjcall('objc_msgSendSuper', restype, argtypes,
-                        byref(superobj), sel, *args)
+
+    if _stret(restype):  # x86_should_use_stret(restype):
+        return _libobjcall(_objc_msgSendSuper_stret, restype, argtypes,
+                            byref(superobj), sel, *args)
+    else:
+        return _libobjcall(_objc_msgSendSuper, restype, argtypes,
+                            byref(superobj), sel, *args)
 
 
 def set_ivar(obj, name, value, ctype=None):
     '''Set an instance variable of an ObjC object.
 
-       @param obj: The instance (I{Object}).
-       @param name: Name of the ivar (str).
+       @param obj: The instance (C{Object}).
+       @param name: Name of the ivar (C{str}).
        @param value: New value for the ivar (C{any}).
        @keyword ctype: Optional, the ivar type (C{ctypes}).
 
@@ -1198,7 +1261,7 @@ def set_ivar(obj, name, value, ctype=None):
         ctype = _ivar_ctype(obj, name)
 
     argtypes = [Ivar_t, c_char_p, ctype]
-    return _libobjcall('object_setInstanceVariable', c_void, argtypes,
+    return _libobjcall(_object_setInstanceVariable, c_void, argtypes,
                         obj, str2bytes(name), value)
 
 

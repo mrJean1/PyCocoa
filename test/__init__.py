@@ -73,7 +73,7 @@ from time import sleep
 from testsuite import TestSuite  # PYCHOK for setup.py
 
 __all__ = ('terminating',)
-__version__ = '18.05.04'
+__version__ = '18.06.01'
 
 
 def terminating(app, timeout):

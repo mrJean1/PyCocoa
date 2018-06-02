@@ -18,7 +18,7 @@ from pycocoa import get_selector, NSApplication, NSAutoreleasePool, \
                     PyObjectEncoding, ObjCClass, ObjCInstance, \
                     ObjCSubclass, send_super
 
-__version__ = '18.04.06'
+__version__ = '18.05.25'
 
 # <http://StackOverflow.com/questions/24024723/swift-using-
 #  nsstatusbar-statusitemwithlength-and-nsvariablestatusitemlength>
@@ -57,9 +57,9 @@ class TheDelegate_Implementation(object):  # NSObject):
 
     @TheDelegate.method('@')
     def init(self):
+        # self = ObjCInstance(send_message('NSObject', 'alloc'))
         self = ObjCInstance(send_super(self, 'init'))
-#       self = ObjCInstance(send_message('NSObject', 'alloc'))
-#       print(self)  # <ObjCInstance 0x...: TheDelegate at ...>
+        # print(self)  # <ObjCInstance 0x...: TheDelegate at ...>
         return self
 
     app = None

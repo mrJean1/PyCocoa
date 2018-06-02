@@ -37,7 +37,7 @@
 
 # MIT License <http://opensource.org/licenses/MIT>
 #
-# Copyright (C) 2017-2018 mrJean1 at Gmail dot com
+# Copyright (C) 2017-2018 -- mrJean1 at Gmail dot com
 #
 # Permission is hereby granted, free of charge, to any person obtaining
 # a copy of this software and associated documentation files (the "Software"),
@@ -65,16 +65,16 @@
 # all imports listed explicitly to help PyChecker
 from decimal import Decimal as _Decimal
 from ctypes  import c_void_p
-from nstypes import NSArray, NSBool, NSData, NSDecimal, NSDouble, \
-                    NSInt, NSLong, NSLongLong, NSMutableArray, \
-                    NSMutableDictionary, NSMutableSet, NSNone, \
-                    NSSet, NSStr, NSURL
+from nstypes import NSArray, NSBool, NSData, NSDecimal, NSDictionary, \
+                    NSDouble, NSInt, NSLong, NSLongLong, NSMutableArray, \
+                    NSMutableDictionary, NSMutableSet, NSNone, NSSet, \
+                    NSStr, NSURL
 from oslibs  import libCF
 from runtime import ObjCInstance
 from types   import GeneratorType as _generator
-from utils   import clip, DEFAULT_UNICODE, _exports, _Ints
+from utils   import bytes2str, clip, DEFAULT_UNICODE, _exports, _Ints
 
-__version__ = '18.04.26'
+__version__ = '18.05.25'
 
 
 def _iter2NS(ns, py, getCount):
@@ -93,7 +93,7 @@ def _len2NS(py, ns, getCount):
     n, m = len(py), getCount(ns)
     if m != n:
         t = (ns.objc_classname, m, clip(repr(py)), n)
-        raise AssertionError('%s[%s] vs %s[%s]' % t)
+        raise RuntimeError('%s[%s] vs %s[%s]' % t)
     return ns
 
 
@@ -118,7 +118,7 @@ def bytes2NS(py):
 
        @return: The ObjC instance (C{NSData}).
 
-       @raise AssertionError: If C{len} vs C{count} assertion failed.
+       @raise RuntimeError: If C{len} vs C{count} assertion failed.
     '''
     def _NSData_length(ns):  # XXX lambda ns: ns.length()
         return ns.length()
@@ -127,21 +127,25 @@ def bytes2NS(py):
                       _NSData_length)
 
 
-def dict2NS(py):
+def dict2NS(py, frozen=False):
     '''Create an C{NSMutableDictionary} instance from a Python C{dict}.
 
        @param py: The value (C{dict}).
+       @keyword frozen: Immutable (C{bool}), mutable otherwise.
 
        @return: The ObjC instance (C{NSMutableDictionary}).
 
-       @raise AssertionError: If C{len} vs C{count} assertion failed.
+       @raise RuntimeError: If C{len} vs C{count} assertion failed.
     '''
     # http://Developer.Apple.com/library/content/documentation/Cocoa/
     #        Conceptual/Collections/Articles/Dictionaries.html
     ns = NSMutableDictionary.dictionary()
     for k, v in py.get('iteritems', py.items)():
         ns.setObject_forKey_(py2NS(v), py2NS(k))
-    return _len2NS(py, ns, libCF.CFDictionaryGetCount)
+    ns = _len2NS(py, ns, libCF.CFDictionaryGetCount)
+    if frozen:
+        ns = NSDictionary.alloc().initWithDictionary_(ns)
+    return ns
 
 
 def frozenset2NS(py):
@@ -151,7 +155,7 @@ def frozenset2NS(py):
 
        @return: The ObjC instance (C{NSSet}).
 
-       @raise AssertionError: If C{len} vs C{count} assertion failed.
+       @raise RuntimeError: If C{len} vs C{count} assertion failed.
     '''
     return _len2NS(py, NSSet.alloc().initWithSet_(set2NS(py)),
                        libCF.CFSetGetCount)
@@ -164,7 +168,7 @@ def generator2NS(py):
 
        @return: The ObjC instance (C{NSArray}).
 
-       @raise AssertionError: If C{len} vs C{count} assertion failed.
+       @raise RuntimeError: If C{len} vs C{count} assertion failed.
     '''
     return tuple2NS(tuple(py))
 
@@ -195,7 +199,7 @@ def list2NS(py):
 
        @return: The ObjC instance (C{NSMutableArray}).
 
-       @raise AssertionError: If C{len} vs C{count} assertion failed.
+       @raise RuntimeError: If C{len} vs C{count} assertion failed.
     '''
     return _iter2NS(NSMutableArray.array(), py, libCF.CFArrayGetCount)
 
@@ -207,7 +211,7 @@ def map2NS(py):
 
        @return: The ObjC instance (C{NSArray}).
 
-       @raise AssertionError: If C{len} vs C{count} assertion failed.
+       @raise RuntimeError: If C{len} vs C{count} assertion failed.
     '''
     return tuple2NS(tuple(py))
 
@@ -233,7 +237,7 @@ def range2NS(py):
 
        @return: The ObjC instance (C{NSArray}).
 
-       @raise AssertionError: If C{len} vs C{count} assertion failed.
+       @raise RuntimeError: If C{len} vs C{count} assertion failed.
     '''
     return tuple2NS(tuple(py))
 
@@ -245,7 +249,7 @@ def set2NS(py):
 
        @return: The ObjC instance (C{NSMutableSet}).
 
-       @raise AssertionError: If C{len} vs C{count} assertion failed.
+       @raise RuntimeError: If C{len} vs C{count} assertion failed.
     '''
     return _iter2NS(NSMutableSet.set(), py, libCF.CFSetGetCount)
 
@@ -268,7 +272,7 @@ def tuple2NS(py):
 
        @return: The ObjC instance (C{NSArray}).
 
-       @raise AssertionError: If C{len} vs C{count} assertion failed.
+       @raise RuntimeError: If C{len} vs C{count} assertion failed.
     '''
     return _len2NS(py, NSArray.alloc().initWithArray_(list2NS(py)),
                        libCF.CFArrayGetCount)
@@ -297,10 +301,15 @@ def url2NS(py, url2=None):
              for parsing an C{NSURL}.
     '''
     ns = NSStr(py)
-    if url2:
-        return NSURL.alloc().initWithString_relativeToURL_(ns, url2NS(url2))
+    if ':' in bytes2str(py):
+        if url2:
+            return NSURL.alloc().initWithString_relativeToURL_(ns, url2NS(url2))
+        else:
+            return NSURL.alloc().initWithString_(ns)
+    elif url2:
+        return NSURL.alloc().initFileURLWithPath_relativeToURL_(ns, url2NS(url2))
     else:
-        return NSURL.alloc().initWithString_(ns)
+        return NSURL.alloc().initFileURLWithPath_(ns)
 
 
 _py2NS = {bool:       bool2NS,
@@ -354,6 +363,11 @@ def py2NS(py):
         - tuple     -> NSArray, immutable
         - unicode   -> NSStr, immutable
     '''
+    try:
+        return py.NS
+    except AttributeError:
+        pass
+
     if isinstance(py, ObjCInstance):
         return py
     elif isinstance(py, c_void_p):

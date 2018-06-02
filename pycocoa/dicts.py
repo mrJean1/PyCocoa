@@ -5,7 +5,7 @@
 
 # MIT License <http://opensource.org/licenses/MIT>
 #
-# Copyright (C) 2017-2018 mrJean1 at Gmail dot com
+# Copyright (C) 2017-2018 -- mrJean1 at Gmail dot com
 #
 # Permission is hereby granted, free of charge, to any person obtaining
 # a copy of this software and associated documentation files (the "Software"),
@@ -36,7 +36,7 @@ from utils   import instanceof, missing, _Types
 
 __all__ = ('Dict',
            'FrozenDict')
-__version__ = '18.05.16'
+__version__ = '18.05.17'
 
 
 def _dict_cmp(dict1, dict2):
@@ -103,7 +103,7 @@ class FrozenDict(_Type0):
                                            and _dict_cmp(other, self)
 
     def __delitem__(self, key):
-        raise TypeError('%s %s[%r]' % ('del', self.__class__.__name__, key))
+        raise TypeError('%s %s[%r]' % ('del', self, key))
 
     def __getitem__(self, key):
         k, _, value = self._NS_get3(key)
@@ -121,14 +121,11 @@ class FrozenDict(_Type0):
     def __ne__(self, other):
         return not self.__eq__(other)
 
-    def pop(self, key, **unused):
-        raise TypeError('%s.%s(%r)' % (self.__class__.__name__, 'pop', key))
-
     def __setitem__(self, key, value):
-        raise TypeError('%s[%r] = %r' % (self.__class__.__name__, key, value))
+        raise TypeError('%s[%r] = %r' % (self, key, value))
 
     def clear(self):
-        raise TypeError('%s.%s()' % (self.__class__.__name__, 'clear'))
+        raise TypeError('%s.%s()' % (self, 'clear'))
 
     def copy(self):
         '''Make a shallow copy.
@@ -161,6 +158,9 @@ class FrozenDict(_Type0):
         for key, _ in nsIter2(self.NS.allKeys()):
             yield key
     __iter__ = keys
+
+    def pop(self, key, **unused):
+        raise TypeError('%s.%s(%r)' % (self, 'pop', key))
 
     def values(self):
         '''Yield the values, like C{dict.values}.

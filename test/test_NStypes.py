@@ -5,7 +5,7 @@
 
 import pycocoa
 
-__version__ = '18.05.04'
+__version__ = '18.05.25'
 
 if __name__ == '__main__':
 
@@ -26,4 +26,4 @@ if __name__ == '__main__':
             i += 1
             print('%4d: %-40s: %s : %r' % (i, k, s, r))
 
-    sys.exit(int(i != 197))
+    sys.exit(int(i < 200))

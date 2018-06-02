@@ -74,6 +74,9 @@
     <li> <strong class="uidlink">exceptions.ValueError</strong>:
       <em class="summary">Inappropriate argument value (of correct type).</em>
     <ul>
+    <li> <strong class="uidlink"><a href="pycocoa.windows.AutoResizeError-class.html">pycocoa.windows.AutoResizeError</a></strong>:
+      <em class="summary">AutoResize option error.</em>
+    </li>
     <li> <strong class="uidlink"><a href="pycocoa.fonts.FontError-class.html">pycocoa.fonts.FontError</a></strong>:
       <em class="summary">Font selection error.</em>
     <ul>
@@ -215,19 +218,19 @@
     <li> <strong class="uidlink">_ctypes._SimpleCData</strong>:
       <em class="summary">XXX to be provided</em>
     <ul>
-    <li> <strong class="uidlink"><a href="ctypes.c_double.__ctype_be__-class.html">ctypes.c_double.__ctype_be__</a></strong>
+    <li> <strong class="uidlink"><a href="ctypes.c_long.__ctype_be__-class.html">ctypes.c_long.__ctype_be__</a></strong>
+    </li>
+    <li> <strong class="uidlink"><a href="ctypes.c_int.__ctype_be__-class.html">ctypes.c_int.__ctype_be__</a></strong>
     </li>
     <li> <strong class="uidlink"><a href="ctypes.c_ulong.__ctype_be__-class.html">ctypes.c_ulong.__ctype_be__</a></strong>
-    </li>
-    <li> <strong class="uidlink"><a href="ctypes.c_float.__ctype_be__-class.html">ctypes.c_float.__ctype_be__</a></strong>
     </li>
     <li> <strong class="uidlink"><a href="ctypes.c_ushort.__ctype_be__-class.html">ctypes.c_ushort.__ctype_be__</a></strong>
     </li>
     <li> <strong class="uidlink"><a href="ctypes.c_uint.__ctype_be__-class.html">ctypes.c_uint.__ctype_be__</a></strong>
     </li>
-    <li> <strong class="uidlink"><a href="ctypes.c_long.__ctype_be__-class.html">ctypes.c_long.__ctype_be__</a></strong>
+    <li> <strong class="uidlink"><a href="ctypes.c_float.__ctype_be__-class.html">ctypes.c_float.__ctype_be__</a></strong>
     </li>
-    <li> <strong class="uidlink"><a href="ctypes.c_int.__ctype_be__-class.html">ctypes.c_int.__ctype_be__</a></strong>
+    <li> <strong class="uidlink"><a href="ctypes.c_double.__ctype_be__-class.html">ctypes.c_double.__ctype_be__</a></strong>
     </li>
     <li> <strong class="uidlink">ctypes.c_bool</strong>
     <ul>
@@ -376,6 +379,16 @@
     <li> <strong class="uidlink"><a href="pycocoa.strs.Str-class.html">pycocoa.strs.Str</a></strong>:
       <em class="summary">Python <code>str</code> Type, wrapping (immutable) ObjC 
         <code>NSStr[ing]</code>.</em>
+    <ul>
+    <li> <strong class="uidlink"><a href="pycocoa.strs.StrAttd-class.html">pycocoa.strs.StrAttd</a></strong>:
+      <em class="summary">Python <code>str</code> Type, wrapping (immutable) ObjC 
+        <code>NSAttributedString</code>.</em>
+    </li>
+    </ul>
+    </li>
+    <li> <strong class="uidlink"><a href="pycocoa.strs.StrAttd-class.html">pycocoa.strs.StrAttd</a></strong>:
+      <em class="summary">Python <code>str</code> Type, wrapping (immutable) ObjC 
+        <code>NSAttributedString</code>.</em>
     </li>
     <li> <strong class="uidlink"><a href="pycocoa.tuples.Tuple-class.html">pycocoa.tuples.Tuple</a></strong>:
       <em class="summary">Python <code>tuple</code> Type, wrapping an immutable ObjC 
@@ -397,9 +410,21 @@
     <li> <strong class="uidlink">pycocoa.bases._Type2</strong>:
       <em class="summary">Basic Type with app, delegate, tag and title.</em>
     <ul>
+    <li> <strong class="uidlink"><a href="pycocoa.panels.AlertPanel-class.html">pycocoa.panels.AlertPanel</a></strong>:
+      <em class="summary">Python Type to show an alert, wrapping ObjC <code>NSAlert</code>.</em>
+    <ul>
+    <li> <strong class="uidlink"><a href="pycocoa.panels.TextPanel-class.html">pycocoa.panels.TextPanel</a></strong>:
+      <em class="summary">Scrollable text panel Python Type, wrapping ObjC 
+        <code>NSAlert</code>.</em>
+    </li>
+    </ul>
+    </li>
     <li> <strong class="uidlink"><a href="pycocoa.apps.App-class.html">pycocoa.apps.App</a></strong>:
       <em class="summary">Python <code>App</code> Type, wrapping an ObjC 
         <code>NSApplication</code>.</em>
+    </li>
+    <li> <strong class="uidlink"><a href="pycocoa.panels.BrowserPanel-class.html">pycocoa.panels.BrowserPanel</a></strong>:
+      <em class="summary">Python Type to show a URL or file.</em>
     </li>
     <li> <strong class="uidlink"><a href="pycocoa.menus.Item-class.html">pycocoa.menus.Item</a></strong>:
       <em class="summary">Python menu <code>Item</code> Type, wrapping ObjC 
@@ -439,6 +464,10 @@
       <em class="summary">Python Type for a vertically scrollable window, wrapping ObjC 
         <code>NSWindow/NSScrollView</code>.</em>
     </li>
+    <li> <strong class="uidlink"><a href="pycocoa.windows.TextWindow-class.html">pycocoa.windows.TextWindow</a></strong>:
+      <em class="summary">Scrollable text window Python Type, wrapping ObjC 
+        <code>NSWindow/NSView</code>.</em>
+    </li>
     </ul>
     </li>
     </ul>
@@ -457,6 +486,12 @@
     <li> <strong class="uidlink"><a href="pycocoa.strs.Str-class.html">pycocoa.strs.Str</a></strong>:
       <em class="summary">Python <code>str</code> Type, wrapping (immutable) ObjC 
         <code>NSStr[ing]</code>.</em>
+    <ul>
+    <li> <strong class="uidlink"><a href="pycocoa.strs.StrAttd-class.html">pycocoa.strs.StrAttd</a></strong>:
+      <em class="summary">Python <code>str</code> Type, wrapping (immutable) ObjC 
+        <code>NSAttributedString</code>.</em>
+    </li>
+    </ul>
     </li>
     </ul>
     </li>
@@ -514,7 +549,7 @@
 <table border="0" cellpadding="0" cellspacing="0" width="100%%">
   <tr>
     <td align="left" class="footer">
-    Generated by Epydoc 3.0.1 on Tue May 15 14:50:17 2018
+    Generated by Epydoc 3.0.1 on Sat Jun  2 14:08:31 2018
     </td>
     <td align="right" class="footer">
       <a target="mainFrame" href="http://epydoc.sourceforge.net"

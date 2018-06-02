@@ -49,7 +49,7 @@ from windows  import Screen, Window, WindowStyle
 __all__ = ('NSTableViewDelegate',
            'Table', 'TableWindow',
            'closeTables')
-__version__ = '18.05.15'
+__version__ = '18.05.30'
 
 _Alignment = dict(center=NSTextAlignmentCenter,
                justified=NSTextAlignmentJustified,
@@ -61,16 +61,18 @@ _Separator = NSStr('',  auto=False)
 
 
 def _format(header, col):
-    # format a table column
-    t = header.split(':')
+    # format a table column from the header string
+    # "title:<col_width>:left|center|right|justified:bold|italic"
+    t = header.rstrip().split(':')
     while len(t) > 1:
         try:
             f = t.pop(1)
             if f.islower():
                 c = col.dataCell()
-            else:
+            else:  # cap means title row
                 c = col.headerCell()
                 f = f.lower()
+
             ns = _Alignment.get(f, None)
             if ns:
                 c.setAlignment_(ns)
@@ -149,12 +151,12 @@ class Table(_Type2):
                               ":trait" or text ":alignment".
         '''
         f = Rect4(0, 0, width, height)
-        self.NS = vuw = NSTableView.alloc().initWithFrame_(f.NS)
+        v = NSTableView.alloc().initWithFrame_(f.NS)
 
         cols = []
         high = 0
         id2i = {}
-        wide = f.width  # == vuw.frame().size.width
+        wide = f.width  # == v.frame().size.width
         # <http://Developer.Apple.com//documentation/appkit/nstablecolumn>
         for i, h in enumerate(self._headers):
             # note, the identifier MUST be an NSStr (to avoid warnings)
@@ -169,29 +171,32 @@ class Table(_Type2):
             cols.append(h)
             c.setTitle_(NSStr(h))  # == c.headerCell().setStringValue_(NSStr(h))
             # <http://Developer.Apple.com//documentation/uikit/nstextalignment>
-            vuw.addTableColumn_(c)
+            v.addTableColumn_(c)
             high = max(high, Font(c.dataCell().font()).height)
             wide -= c.width()
 
         if wide > 0:  # stretch last col to frame edge
             c.setWidth_(float(wide + c.width()))
-        if high > vuw.rowHeight():  # adjust the row height
-            vuw.setRowHeight_(high + 1)
+        if high > v.rowHeight():  # adjust the row height
+            v.setRowHeight_(high + 1)
 
         # <http://Developer.Apple.com//library/content/documentation/
         #         Cocoa/Conceptual/TableView/VisualAttributes/VisualAttributes.html>
-        vuw.setGridStyleMask_(NSTableViewSolidHorizontalGridLineMask |
-                              NSTableViewSolidVerticalGridLineMask)
-#       vuw.setDrawsGrid_(NSTrue)  # XXX obsolete, not needed
+        v.setGridStyleMask_(NSTableViewSolidHorizontalGridLineMask |
+                            NSTableViewSolidVerticalGridLineMask)
+#       v.setDrawsGrid_(NSTrue)  # XXX obsolete, not needed
 
-        self.NSdelegate = NSTableViewDelegate.alloc().init(cols, self._rows, id2i)
-        vuw.setDelegate_(self.NSdelegate)
-        vuw.setDataSource_(self.NSdelegate)
-#       vuw.setEditing_(NSFalse)
-        vuw.reloadData()
+        d = NSTableViewDelegate.alloc().init(cols, self._rows, id2i)
+        v.setDelegate_(d)
+        v.setDataSource_(d)
+#       v.setEditing_(NSFalse)  # NO
+        v.reloadData()
+
+        self.NS = v
+        self.NSDelegate = d
 
         self._window = w = TableWindow(title, self)
-        # vuw.setDelegate_(w.delegate)
+        # v.setDelegate_(w.delegate)
         return w
 
     def separator(self):
@@ -279,7 +284,6 @@ class _NSTableViewDelegate(object):
         # <http://Developer.Apple.com/documentation/appkit/nstableviewdelegate/1527449-tableview>
         # <http://Developer.Apple.com/library/content/documentation/Cocoa/Conceptual/TableView/
         #       PopulatingView-TablesProgrammatically/PopulatingView-TablesProgrammatically.html>
-        # <http://StackOverflow.com/questions/36634559/osx-view-based-nstableview-font-change>
 #       r = self.rows[row]
 #       if r is _Separator:
 #           tf = NSnil  # nil means, do not show
@@ -291,6 +295,19 @@ class _NSTableViewDelegate(object):
 #           c = self.id2i[col.identifier()]
 #           tf.setStringValue_(r[c] if 0 <= c < len(r) else _EmptyCell)
 #       return tf
+
+#   def tableView_viewForTableColumn_row_(self, table, col, row):  # perhaps from this Swift code?
+        # <http://StackOverflow.com/questions/36634559/osx-view-based-nstableview-font-change>
+#   func tableView(tableView: NSTableView, viewForTableColumn tableColumn: NSTableColumn?, row: Int) -> NSView? {
+#       let cellView = tableView.makeViewWithIdentifier("myTableViewCell", owner: self) as! NSTableCellView
+#       let textField = cellView.textField!
+#       let fontDescriptor = textField.font!.fontDescriptor
+#       textField.font = NSFont(descriptor: fontDescriptor, size: self.fontSize)
+#       textField.stringValue = self.names[row]
+#       textField.sizeToFit()
+#       textField.setFrameOrigin(NSZeroPoint)
+#       tableView.rowHeight = textField.frame.height + 2
+#       return cellView }
 
 
 NSTableViewDelegate = ObjCClass('_NSTableViewDelegate',  # the actual class
@@ -322,8 +339,8 @@ class TableWindow(Window):
         # <http://Developer.Apple.com//documentation/appkit/nswindow>
         n = tbl.dataSource().numberOfRowsInTableView_(tbl)
         # approximate height of the table content, also to
-        # .setContentMaxSize_ of the window further below
-        h = tbl.rowHeight() * max(1, (n + 1.5) * 1.15)
+        # .setContentMaxSize_ of the window in self.limit
+        h = tbl.rowHeight() * max(1, n * 1.1)
         # adjust frame to include all (or most) table rows
         f = tbl.frame() if frame is None else frame.NS
         if f.size.height < h:
@@ -335,10 +352,10 @@ class TableWindow(Window):
                                           frame=f,
                                           excl=WindowStyle.Miniaturizable,
                                           auto=True)  # XXX False?
-        self.NSview = vuw = NSScrollView.alloc().initWithFrame_(f)
+        self.NSview = sv = NSScrollView.alloc().initWithFrame_(f)
 
-        vuw.setDocumentView_(tbl)
-        vuw.setHasVerticalScroller_(NSTrue)  # XXX or True or 1
+        sv.setDocumentView_(tbl)
+        sv.setHasVerticalScroller_(NSTrue)  # XXX or True or 1
 
         self.cascade()
         self.limit(height=h)
@@ -364,8 +381,8 @@ class TableWindow(Window):
         super(TableWindow, self).windowClose_()
 
 
-_Types.Table       = Table
-_Types.TableWindow = TableWindow
+_Types.Table = NSTableView._Type = Table
+_Types.TableWindow               = TableWindow
 
 if __name__ == '__main__':
 

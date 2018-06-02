@@ -69,7 +69,7 @@
 
 <hr />
 <div class="fields">      <p><strong>Version:</strong>
-        18.05.04
+        18.05.30
       </p>
 </div><!-- ==================== CLASSES ==================== -->
 <a name="section-Classes"></a>
@@ -79,6 +79,14 @@
   <td align="left" colspan="2" class="table-header">
     <span class="table-header">Classes</span></td>
 </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="pycocoa.windows.AutoResizeError-class.html" class="summary-name">AutoResizeError</a><br />
+      AutoResize option error.
+    </td>
+  </tr>
 <tr>
     <td width="15%" align="right" valign="top" class="summary">
       <span class="summary-type">&nbsp;</span>
@@ -121,6 +129,15 @@
         <code>NSWindow/NSView</code>.
     </td>
   </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="pycocoa.windows.TextWindow-class.html" class="summary-name">TextWindow</a><br />
+      Scrollable text window Python Type, wrapping ObjC 
+        <code>NSWindow/NSView</code>.
+    </td>
+  </tr>
 </table>
 <!-- ==================== FUNCTIONS ==================== -->
 <a name="section-Functions"></a>
@@ -130,6 +147,23 @@
   <td align="left" colspan="2" class="table-header">
     <span class="table-header">Functions</span></td>
 </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a href="pycocoa.windows-module.html#autoResizes" class="summary-sig-name">autoResizes</a>(<span class="summary-sig-arg">*options</span>)</span><br />
+      Return a combination of auto resize options, specified by name.</td>
+          <td align="right" valign="top">
+            
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
 <tr>
     <td width="15%" align="right" valign="top" class="summary">
       <span class="summary-type">&nbsp;</span>
@@ -179,6 +213,35 @@
     <td width="15%" align="right" valign="top" class="summary">
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
+        <a href="pycocoa.windows-module.html#AutoResize" class="summary-name">AutoResize</a> = <code title="AutoResize.HeightSizable=1&lt;&lt;4, .MaxXMargin=1&lt;&lt;2, .MaxYMargin=1&lt;&lt;5, .Mi\
+nXMargin=1, .MinYMargin=1&lt;&lt;3, .NotSizable=0, .Sizable=18, .WidthSizabl\
+e=2">AutoResize.HeightSizable=1&lt;&lt;4, .MaxXMargin=1&lt;&lt;2, <code class="variable-ellipsis">...</code></code><br />
+      AutoResize options (<code>mask</code>).
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="pycocoa.windows-module.html#BezelStyle" class="summary-name">BezelStyle</a> = <code title="BezelStyle.Disclosure=5, .HelpButton=9, .Inline=15, .NCircular=7, .Rec\
+essed=13, .RegularSquare=2, .RoundRect=3&lt;&lt;2, .Rounded=1, .RoundedDiscl\
+osure=14, .ShadowlessSquare=6, .SmallSquare=10, .TexturedRounded=11, .\
+TexturedSquare=1&lt;&lt;3">BezelStyle.Disclosure=5, .HelpButton=9, .Inline=1<code class="variable-ellipsis">...</code></code><br />
+      Bezel style constants (<code>int</code>).
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a name="Border"></a><span class="summary-name">Border</span> = <code title="Border.Bezel=2, .Groove=3, .Line=1, .No=0">Border.Bezel=2, .Groove=3, .Line=1, .No=0</code><br />
+      Border type constants (<code>int</code>).
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
         <a href="pycocoa.windows-module.html#WindowStyle" class="summary-name">WindowStyle</a> = <code title="WindowStyle.Closable=2, .Miniaturizable=1&lt;&lt;2, .Resizable=1&lt;&lt;3, .Titled\
 =1, .Typical=15, .Utility=1&lt;&lt;4">WindowStyle.Closable=2, .Miniaturizable=1&lt;&lt;2, .R<code class="variable-ellipsis">...</code></code><br />
       Window style constants (<code>mask</code>).
@@ -201,6 +264,37 @@
     <span class="table-header">Function Details</span></td>
 </tr>
 </table>
+<a name="autoResizes"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">autoResizes</span>(<span class="sig-arg">*options</span>)</span>
+  </h3>
+  </td><td align="right" valign="top"
+    >&nbsp;
+    </td>
+  </tr></table>
+  
+  <p>Return a combination of auto resize options, specified by name.</p>
+  <dl class="fields">
+    <dt>Parameters:</dt>
+    <dd><ul class="nomargin-top">
+        <li><strong class="pname"><code>options</code></strong> - Option names (<i>all positional</i>), case-insensitive.</li>
+    </ul></dd>
+    <dt>Returns:</dt>
+        <dd>Combined options (<a 
+          href="pycocoa.windows-module.html#AutoResize" 
+          class="link">AutoResize</a>s <code>mask</code>).</dd>
+    <dt>Raises:</dt>
+    <dd><ul class="nomargin-top">
+        <li><code><strong class='fraise'><a href="pycocoa.windows.AutoResizeError-class.html">AutoResizeError</a></strong></code> - One or more <i>options</i> are invalid.</li>
+    </ul></dd>
+  </dl>
+</td></tr></table>
+</div>
 <a name="windowStyles"></a>
 <div>
 <table class="details" border="1" cellpadding="3"
@@ -222,9 +316,9 @@
         <li><strong class="pname"><code>styles</code></strong> - Style names (<i>all positional</i>), case-insensitive.</li>
     </ul></dd>
     <dt>Returns:</dt>
-        <dd>Combined window styles (<a 
+        <dd>Combined styles (<a 
           href="pycocoa.windows-module.html#WindowStyle" 
-          class="link">WindowStyle</a><code>s mask</code>).</dd>
+          class="link">WindowStyle</a>s <code>mask</code>).</dd>
     <dt>Raises:</dt>
     <dd><ul class="nomargin-top">
         <li><code><strong class='fraise'><a href="pycocoa.windows.WindowStyleError-class.html">WindowStyleError</a></strong></code> - One or more <i>styles</i> are invalid.</li>
@@ -259,8 +353,9 @@
           class="link">Window</a>).</dd>
     <dt>Raises:</dt>
     <dd><ul class="nomargin-top">
-        <li><code><strong class='fraise'>AssertionError</strong></code> - Mismatched instances.</li>
         <li><code><strong class='fraise'>AttributeError</strong></code> - Unexpected <i>ns</i> type.</li>
+        <li><code><strong class='fraise'>RuntimeError</strong></code> - <a href="pycocoa.windows.Window-class.html" class="link">Window</a>
+        mismatch.</li>
         <li><code><strong class='fraise'>TypeError</strong></code> - Invalid <i>ns</i> type.</li>
     </ul></dd>
   </dl>
@@ -276,6 +371,47 @@
     <span class="table-header">Variables Details</span></td>
 </tr>
 </table>
+<a name="AutoResize"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <h3 class="epydoc">AutoResize</h3>
+  <p>AutoResize options (<code>mask</code>).</p>
+  <dl class="fields">
+  </dl>
+  <dl class="fields">
+    <dt>Value:</dt>
+      <dd><table><tr><td><pre class="variable">
+AutoResize.HeightSizable=1&lt;&lt;4, .MaxXMargin=1&lt;&lt;2, .MaxYMargin=1&lt;&lt;5, .Mi<span class="variable-linewrap"><img src="crarr.png" alt="\" /></span>
+nXMargin=1, .MinYMargin=1&lt;&lt;3, .NotSizable=0, .Sizable=18, .WidthSizabl<span class="variable-linewrap"><img src="crarr.png" alt="\" /></span>
+e=2
+</pre></td></tr></table>
+</dd>
+  </dl>
+</td></tr></table>
+</div>
+<a name="BezelStyle"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <h3 class="epydoc">BezelStyle</h3>
+  <p>Bezel style constants (<code>int</code>).</p>
+  <dl class="fields">
+  </dl>
+  <dl class="fields">
+    <dt>Value:</dt>
+      <dd><table><tr><td><pre class="variable">
+BezelStyle.Disclosure=5, .HelpButton=9, .Inline=15, .NCircular=7, .Rec<span class="variable-linewrap"><img src="crarr.png" alt="\" /></span>
+essed=13, .RegularSquare=2, .RoundRect=3&lt;&lt;2, .Rounded=1, .RoundedDiscl<span class="variable-linewrap"><img src="crarr.png" alt="\" /></span>
+osure=14, .ShadowlessSquare=6, .SmallSquare=10, .TexturedRounded=11, .<span class="variable-linewrap"><img src="crarr.png" alt="\" /></span>
+TexturedSquare=1&lt;&lt;3
+</pre></td></tr></table>
+</dd>
+  </dl>
+</td></tr></table>
+</div>
 <a name="WindowStyle"></a>
 <div>
 <table class="details" border="1" cellpadding="3"
@@ -327,7 +463,7 @@ WindowStyle.Closable=2, .Miniaturizable=1&lt;&lt;2, .Resizable=1&lt;&lt;3, .Titl
 <table border="0" cellpadding="0" cellspacing="0" width="100%%">
   <tr>
     <td align="left" class="footer">
-    Generated by Epydoc 3.0.1 on Tue May 15 14:50:18 2018
+    Generated by Epydoc 3.0.1 on Sat Jun  2 14:08:32 2018
     </td>
     <td align="right" class="footer">
       <a target="mainFrame" href="http://epydoc.sourceforge.net"

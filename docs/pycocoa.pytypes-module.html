@@ -63,7 +63,7 @@
 
 <hr />
 <div class="fields">      <p><strong>Version:</strong>
-        18.04.26
+        18.05.25
       </p>
 </div><!-- ==================== FUNCTIONS ==================== -->
 <a name="section-Functions"></a>
@@ -115,7 +115,8 @@
     </td><td class="summary">
       <table width="100%" cellpadding="0" cellspacing="0" border="0">
         <tr>
-          <td><span class="summary-sig"><a href="pycocoa.pytypes-module.html#dict2NS" class="summary-sig-name">dict2NS</a>(<span class="summary-sig-arg">py</span>)</span><br />
+          <td><span class="summary-sig"><a href="pycocoa.pytypes-module.html#dict2NS" class="summary-sig-name">dict2NS</a>(<span class="summary-sig-arg">py</span>,
+        <span class="summary-sig-arg">frozen</span>=<span class="summary-sig-default">False</span>)</span><br />
       Create an <code>NSMutableDictionary</code> instance from a Python 
       <code>dict</code>.</td>
           <td align="right" valign="top">
@@ -441,7 +442,7 @@
         <dd>The ObjC instance (<code>NSData</code>).</dd>
     <dt>Raises:</dt>
     <dd><ul class="nomargin-top">
-        <li><code><strong class='fraise'>AssertionError</strong></code> - If <code>len</code> vs <code>count</code> assertion failed.</li>
+        <li><code><strong class='fraise'>RuntimeError</strong></code> - If <code>len</code> vs <code>count</code> assertion failed.</li>
     </ul></dd>
   </dl>
 </td></tr></table>
@@ -453,7 +454,8 @@
 <tr><td>
   <table width="100%" cellpadding="0" cellspacing="0" border="0">
   <tr valign="top"><td>
-  <h3 class="epydoc"><span class="sig"><span class="sig-name">dict2NS</span>(<span class="sig-arg">py</span>)</span>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">dict2NS</span>(<span class="sig-arg">py</span>,
+        <span class="sig-arg">frozen</span>=<span class="sig-default">False</span>)</span>
   </h3>
   </td><td align="right" valign="top"
     >&nbsp;
@@ -466,12 +468,13 @@
     <dt>Parameters:</dt>
     <dd><ul class="nomargin-top">
         <li><strong class="pname"><code>py</code></strong> - The value (<code>dict</code>).</li>
+        <li><strong class="pname"><code>frozen</code></strong> - Immutable (<code>bool</code>), mutable otherwise.</li>
     </ul></dd>
     <dt>Returns:</dt>
         <dd>The ObjC instance (<code>NSMutableDictionary</code>).</dd>
     <dt>Raises:</dt>
     <dd><ul class="nomargin-top">
-        <li><code><strong class='fraise'>AssertionError</strong></code> - If <code>len</code> vs <code>count</code> assertion failed.</li>
+        <li><code><strong class='fraise'>RuntimeError</strong></code> - If <code>len</code> vs <code>count</code> assertion failed.</li>
     </ul></dd>
   </dl>
 </td></tr></table>
@@ -501,7 +504,7 @@
         <dd>The ObjC instance (<code>NSSet</code>).</dd>
     <dt>Raises:</dt>
     <dd><ul class="nomargin-top">
-        <li><code><strong class='fraise'>AssertionError</strong></code> - If <code>len</code> vs <code>count</code> assertion failed.</li>
+        <li><code><strong class='fraise'>RuntimeError</strong></code> - If <code>len</code> vs <code>count</code> assertion failed.</li>
     </ul></dd>
   </dl>
 </td></tr></table>
@@ -531,7 +534,7 @@
         <dd>The ObjC instance (<code>NSArray</code>).</dd>
     <dt>Raises:</dt>
     <dd><ul class="nomargin-top">
-        <li><code><strong class='fraise'>AssertionError</strong></code> - If <code>len</code> vs <code>count</code> assertion failed.</li>
+        <li><code><strong class='fraise'>RuntimeError</strong></code> - If <code>len</code> vs <code>count</code> assertion failed.</li>
     </ul></dd>
   </dl>
 </td></tr></table>
@@ -592,7 +595,7 @@
         <dd>The ObjC instance (<code>NSMutableArray</code>).</dd>
     <dt>Raises:</dt>
     <dd><ul class="nomargin-top">
-        <li><code><strong class='fraise'>AssertionError</strong></code> - If <code>len</code> vs <code>count</code> assertion failed.</li>
+        <li><code><strong class='fraise'>RuntimeError</strong></code> - If <code>len</code> vs <code>count</code> assertion failed.</li>
     </ul></dd>
   </dl>
 </td></tr></table>
@@ -622,7 +625,7 @@
         <dd>The ObjC instance (<code>NSArray</code>).</dd>
     <dt>Raises:</dt>
     <dd><ul class="nomargin-top">
-        <li><code><strong class='fraise'>AssertionError</strong></code> - If <code>len</code> vs <code>count</code> assertion failed.</li>
+        <li><code><strong class='fraise'>RuntimeError</strong></code> - If <code>len</code> vs <code>count</code> assertion failed.</li>
     </ul></dd>
   </dl>
 </td></tr></table>
@@ -682,7 +685,7 @@
         <dd>The ObjC instance (<code>NSArray</code>).</dd>
     <dt>Raises:</dt>
     <dd><ul class="nomargin-top">
-        <li><code><strong class='fraise'>AssertionError</strong></code> - If <code>len</code> vs <code>count</code> assertion failed.</li>
+        <li><code><strong class='fraise'>RuntimeError</strong></code> - If <code>len</code> vs <code>count</code> assertion failed.</li>
     </ul></dd>
   </dl>
 </td></tr></table>
@@ -712,7 +715,7 @@
         <dd>The ObjC instance (<code>NSMutableSet</code>).</dd>
     <dt>Raises:</dt>
     <dd><ul class="nomargin-top">
-        <li><code><strong class='fraise'>AssertionError</strong></code> - If <code>len</code> vs <code>count</code> assertion failed.</li>
+        <li><code><strong class='fraise'>RuntimeError</strong></code> - If <code>len</code> vs <code>count</code> assertion failed.</li>
     </ul></dd>
   </dl>
 </td></tr></table>
@@ -770,7 +773,7 @@
         <dd>The ObjC instance (<code>NSArray</code>).</dd>
     <dt>Raises:</dt>
     <dd><ul class="nomargin-top">
-        <li><code><strong class='fraise'>AssertionError</strong></code> - If <code>len</code> vs <code>count</code> assertion failed.</li>
+        <li><code><strong class='fraise'>RuntimeError</strong></code> - If <code>len</code> vs <code>count</code> assertion failed.</li>
     </ul></dd>
   </dl>
 </td></tr></table>
@@ -991,7 +994,7 @@
 <table border="0" cellpadding="0" cellspacing="0" width="100%%">
   <tr>
     <td align="left" class="footer">
-    Generated by Epydoc 3.0.1 on Tue May 15 14:50:18 2018
+    Generated by Epydoc 3.0.1 on Sat Jun  2 14:08:32 2018
     </td>
     <td align="right" class="footer">
       <a target="mainFrame" href="http://epydoc.sourceforge.net"

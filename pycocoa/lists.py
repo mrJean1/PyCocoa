@@ -5,7 +5,7 @@
 
 # MIT License <http://opensource.org/licenses/MIT>
 #
-# Copyright (C) 2017-2018 mrJean1 at Gmail dot com
+# Copyright (C) 2017-2018 -- mrJean1 at Gmail dot com
 #
 # Permission is hereby granted, free of charge, to any person obtaining
 # a copy of this software and associated documentation files (the "Software"),
@@ -40,7 +40,7 @@ except ImportError:  # Python 2-
     from itertools import izip_longest as zip_longest
 
 __all__ = ('List',)
-__version__ = '18.04.24'
+__version__ = '18.05.17'
 
 
 class List(Tuple):

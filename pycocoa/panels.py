@@ -27,14 +27,227 @@
 '''
 # all imports listed explicitly to help PyChecker
 from bases   import _Type2
-from nstypes import NSOpenPanel, NSSavePanel, NSStr, nsString2str
-from pytypes import py2NS
-from oslibs  import NSCancelButton, NSOKButton
-from utils   import _Types
+from nstypes import NSAlert, NSApplicationMain, NSFont, \
+                    NSNotificationCenter, NSOpenPanel, NSSavePanel, \
+                    NSStr, nsString2str, nsTextView
+from pytypes import dict2NS, py2NS, url2NS
+from oslibs  import NSCancelButton, NSOKButton, YES
+# from strs  import StrAttd
+from utils   import _Constants, _Strs, _text_title, _Types
 
-__all__ = ('OpenPanel',
-           'SavePanel')
-__version__ = '18.05.15'
+from os import linesep
+from threading import Thread
+from time import sleep
+try:
+    from urlparse import urlparse as _urlparse  # Python 2-
+except ImportError:
+    from urllib.parse import urlparse as _urlparse  # Python 3+
+try:
+    from webbrowser import get as _Browser, Error as _BrowserError
+except ImportError:
+    _Browser, _BrowserError = None, ImportError
+
+
+__all__ = ('AlertPanel', 'AlertStyle',
+           'BrowserPanel',
+           'OpenPanel',
+           'PanelButton',
+           'SavePanel',
+           'TextPanel')
+__version__ = '18.05.30'
+
+
+class AlertStyle(_Constants):  # Enum?
+    '''Alert style constants (C{int}).
+    '''
+    Critical = 2  # NSAlertStyleCritical
+    Info     = 1  # NSAlertStyleInformational
+    Warning  = 0  # NSAlertStyleWarning
+
+
+AlertStyle = AlertStyle()  #: Alert style constants (C{int}).
+
+_AlertStyleStr = {AlertStyle.Critical: 'Critical ',
+                  AlertStyle.Info:     'Informational ',
+                  AlertStyle.Warning:  'Warning '}
+
+
+class AlertPanel(_Type2):
+    '''Python Type to show an alert, wrapping ObjC C{NSAlert}.
+    '''
+    _style    = None
+    _suppress = None
+
+    def __init__(self, title='', info='', ok='OK', cancel=False, other=False,
+                                 style=AlertStyle.Info, suppressable=False):
+        '''New L{AlertPanel}.
+
+          @keyword title: The panel name and title (C{str}).
+          @keyword info: Optional, informative message (C{str}).
+          @keyword ok: First, OK button text (C{str}), other than 'OK'.
+          @keyword cancel: Include a second, Cancel button (C{bool} or C{str}).
+          @keyword other: Include a third, Other button (C{bool} or C{str}).
+          @keyword style: Kind of alert (C{AlertStyle}), default C{.Info}.
+          @keyword suppressable: Include suppress option (C{bool}).
+
+          @raise ValueError: No browser type I{name}.
+
+          @note: The first, C{OK} button is always shown.  The I{info} string is
+                 limited to about 50 characters and must be without C{linesep}arators.
+
+          @see: U{Browser types<http://Docs.Python.org/3.6/library/webbrowser.html>}.
+        '''
+        # <http://Developer.Apple.com/documentation/appkit/nsalert>
+        self._style = style
+        self.NS = ns = NSAlert.alloc().init()
+
+        ns.setAlertStyle_(style)
+        s = _AlertStyleStr.get(style, '')
+        t = s or 'Alert '
+        if title:
+            t = '%s- %s' % (t, title)
+        self.title = t
+        ns.setMessageText_(NSStr(t))
+
+        if info:
+            if len(info) > 50 and linesep in info:
+                raise ValueError('%s invalid: %r' % ('info', info))
+            # <http://Developer.Apple.com/library/content/documentation/
+            #       Cocoa/Conceptual/Strings/Articles/stringsParagraphBreaks.html>
+            ns.setInformativeText_(NSStr(info))
+
+        ns.addButtonWithTitle_(NSStr(ok or 'OK'))
+        if cancel:
+            t = cancel if isinstance(cancel, _Strs) else 'Cancel'
+            ns.addButtonWithTitle_(NSStr(t))
+            if other:
+                t = other if isinstance(other, _Strs) else 'Other'
+                ns.addButtonWithTitle_(NSStr(t))
+
+        if suppressable:
+            self._suppress = False
+            ns.setShowsSuppressionButton_(YES)
+            s = 'Do not show this %sAlert again' % (s,)
+            ns.suppressionButton().setTitle_(NSStr(s))
+
+        # <http://Developer.Apple.com/library/content/documentation/
+        #       Cocoa/Conceptual/Dialog/Tasks/DisplayAlertHelp.html>
+        # ns.showsHelp_(YES)
+        # ns.helpAnchor_(HTML?)
+
+    def show(self, text='', font=None, timeout=None):
+        '''Show alert message iff not suppressed.
+
+           @keyword text: Optional, accessory text (C{str}).
+           @keyword font: Optional font (L{Font}), default C{Fonts.System}.
+           @keyword timeout: Optional time limit (C{float}).
+
+           @return: The button clicked (C{PanelButton}).  If
+                    C{PanelButton.Suppressed} is returned, the
+                    alert panel was not shown since it was suppressed
+                    due to a previous selection of the corresponding
+                    check box.  C{PanelButton.TimedOut} is returned
+                    if no button was clicked before the I{timeout}
+                    expired.
+        '''
+        ns = self.NS
+        if text:
+            t = nsTextView(text, NSFont.systemFontOfSize_(0)
+                                 if font is None else font.NS)
+            ns.setAccessoryView_(t)
+
+        # <http://Developer.Apple.com/documentation/appkit/
+        #       nsalert/1535196-showssuppressionbutton>
+        if self._suppress is None:
+            r = self._run(timeout)
+        elif self._suppress is False:
+            s = ns.suppressionButton().state()
+            r = self._run(timeout)
+            # XXX value of NSOnState?
+            if ns.suppressionButton().state() != s:
+                self._suppress = True
+        else:
+            r = PanelButton.Suppressed
+        return r
+
+    def _run(self, timeout):
+        r = None
+        try:
+            s = float(timeout or 0)
+        except (TypeError, ValueError):
+            s = 0
+
+        if s > 0:
+            def _stopModal():
+                sleep(s + 0.5)
+                if r is None:
+                    NSApplicationMain.stopModalWithCode_(1003)
+
+            t = Thread(target=_stopModal)
+            t.start()
+        # NSAlert buttons values are 1000, 1001 and 1002
+        # <http://Developer.Apple.com/documentation/appkit/
+        #       nsapplication.modalresponse>
+        r = self.NS.runModal()
+        return {1000: PanelButton.OK,  # alertFirstButtonReturn
+                1001: PanelButton.Cancel,  # alertSecondButtonReturn
+                1002: PanelButton.Other,  # alertThirdButtonReturn
+                1003: PanelButton.TimedOut}.get(r, PanelButton.Error)
+
+
+class BrowserPanel(_Type2):
+    '''Python Type to show a URL or file.
+    '''
+    _browser  = None
+    _OPEN_URL = NSStr('WebBrowserOpenURLNotification')
+
+    def __init__(self, name=None, title=''):
+        '''New L{BrowserPanel}, a browser.
+
+          @keyword name: Browser type (C{str} or C{None} for default).
+          @keyword title: The panel name (C{str}).
+
+          @raise ValueError: No browser type I{name}.
+
+          @see: U{Browser types<http://Docs.Python.org/3.6/library/webbrowser.html>}.
+        '''
+        # <http://Developer.Apple.com/documentation/
+        #       foundation/nsnotificationcenter>
+        if _Browser:
+            try:
+                self._browser = _Browser(name)
+            except _BrowserError:
+                raise ValueError('no %s type %r' % ('browser', name))
+        else:
+            self.NS = NSNotificationCenter.defaultCenter()
+        self.title = title or name or 'default'
+
+    @property
+    def browser(self):
+        '''Get the browser instance (C{browser type}).
+        '''
+        return self._browser
+
+    def open(self, url, tab=False):
+        '''Open a new window or tab in the browser.
+
+           @param url: The URL to open (C{str}).
+           @keyword tab: New tab (C{bool}), new window otherwise.
+
+           @return: Parsed I{url} as C{ParseResult}.
+
+           @raise ValueError: Scheme of I{url} not 'http', 'https' or 'file'.
+        '''
+        ns = url2NS(url)
+        sc = nsString2str(ns.scheme())
+        if sc.lower() not in ('http', 'https', 'file'):
+            raise ValueError('%s scheme %r invalid: %r' % ('url', sc, url))
+        if self._browser:
+            self._browser.open(url, new=2 if tab else 1)
+        elif self.NS:
+            d = dict2NS(dict(URL=ns, reveal=True, newTab=bool(tab)), frozen=True)
+            self.NS.postNotificationName_object_userInfo_(self._OPEN_URL, None, d)
+        return _urlparse(nsString2str(ns.absoluteString()))
 
 
 class OpenPanel(_Type2):
@@ -44,8 +257,7 @@ class OpenPanel(_Type2):
     def __init__(self, title=''):
         '''New L{OpenPanel}, a file selection dialog.
 
-          @keyword title: The panel name (str).
-          @keyword prompt: The text of the button (str), default "Open".
+          @keyword title: The panel name (C{str}).
         '''
         self.NS = NSOpenPanel.openPanel()
         self.title = title
@@ -63,17 +275,17 @@ class OpenPanel(_Type2):
         '''Select a file from the panel.
 
            @param filetypes: The selectable file types (tuple of str-s).
-           @keyword aliases: Allow selection of aliases (bool).
-           @keyword dirs: Allow selection of directories (bool).
-           @keyword hidden: Allow selection of hidden files (bool).
-           @keyword hidexts: Hide file extensions (bool).
-           @keyword multiple: Allow selection of multiple files (bool).
-           @keyword packages: Treat file packages as directories (bool).
-           @keyword prompt: The button label (str), default "Open".
-           @keyword otherOK: Allow selection of other file types (bool).
-           @keyword dflt: Return value, cancelled, nothing selected (C{None}).
+           @keyword aliases: Allow selection of aliases (C{bool}).
+           @keyword dirs: Allow selection of directories (C{bool}).
+           @keyword hidden: Allow selection of hidden files (C{bool}).
+           @keyword hidexts: Hide file extensions (C{bool}).
+           @keyword multiple: Allow selection of multiple files (C{bool}).
+           @keyword packages: Treat file packages as directories (C{bool}).
+           @keyword prompt: The button label (C{str}), default "Open".
+           @keyword otherOK: Allow selection of other file types (C{bool}).
+           @keyword dflt: Return value, if cancelled, nothing selected (C{None}).
 
-           @return: The selected file name path (str) or I{dflt}.
+           @return: The selected file name path (C{str}) or I{dflt}.
         '''
         if multiple:  # setAllowsMultipleSelection_
             raise NotImplementedError('multiple %s' % (multiple,))
@@ -110,6 +322,21 @@ class OpenPanel(_Type2):
                 return path
 
 
+class PanelButton(_Constants):  # Enum?
+    '''Panel button constants (C{int}).
+    '''
+    Error      = -3
+    Suppressed = -2
+    TimedOut   = -1
+    Cancel     = 0  # NSCancelButton
+    Close      = 1  # OK for TextPanel
+    OK         = 1  # NSOKButton
+    Other      = 2
+
+
+PanelButton = PanelButton()  #: Panel button constants (C{int}).
+
+
 # <http://pseudofish.com/p/saving-a-file-using-nssavepanel.html>
 # <http://pseudofish.com/showing-a-nssavepanel-as-a-sheet.html>
 
@@ -119,7 +346,7 @@ class SavePanel(_Type2):
     def __init__(self, title=''):
         '''New L{SavePanel}, a file save dialog.
 
-          @param title: The panel name (str).
+          @param title: The panel name (C{str}).
         '''
         self.NS = NSSavePanel.savePanel()
         self.title = title
@@ -135,18 +362,18 @@ class SavePanel(_Type2):
                                    tags=(), dflt=None):
         '''Specify a file name in the panel.
 
-           @keyword name: A suggested file name (str), default "Untitled".
-           @keyword filetype: The file type (str).
-           @keyword dir: The directory (str).
-           @keyword hidden: Show hidden files (bool).
-           @keyword hidexts: Hide file extensions (bool).
-           @keyword label: The name label (str), default "Save As:".
-           @keyword packages: Treat file packages as directories (bool).
-           @keyword prompt: The button label (str), default "Save".
-           @keyword tags: Suggested tag names (tuple of str-s).
+           @keyword name: A suggested file name (C{str}), default "Untitled".
+           @keyword filetype: The file type (C{str}).
+           @keyword dir: The directory (C{str}).
+           @keyword hidden: Show hidden files (C{bool}).
+           @keyword hidexts: Hide file extensions (C{bool}).
+           @keyword label: The name label (C{str}), default "Save As:".
+           @keyword packages: Treat file packages as directories (C{bool}).
+           @keyword prompt: The button label (C{str}), default "Save".
+           @keyword tags: Suggested tag names (C{tuple} of C{str}-s).
            @keyword dflt: Return value, cancelled (C{None}).
 
-           @return: The specified file name path (str) or I{dflt}.
+           @return: The specified file name path (C{str}) or I{dflt}.
         '''
         ns = self.NS
 
@@ -189,8 +416,50 @@ class SavePanel(_Type2):
                 return dflt
 
 
-NSOpenPanel._Type = _Types.OpenPanel = OpenPanel
-NSSavePanel._Type = _Types.SavePanel = SavePanel
+class TextPanel(AlertPanel):
+    '''Scrollable text panel Python Type, wrapping ObjC C{NSAlert}.
+    '''
+    def __init__(self, title='Text Panel'):
+        '''Create a L{TextPanel}.
+
+           @keyword title: The panel name and title (C{str}).
+        '''
+        ns = NSAlert.alloc().init()
+        ns.setAlertStyle_(AlertStyle.Info)
+        ns.addButtonWithTitle_(NSStr('Close'))
+        self.NS = ns
+        self.title = title
+
+    def show(self, text_or_file='', font=None, timeout=None):
+        '''Show alert message iff not suppressed.
+
+           @param text_or_file: The contents (C{str} or C{file}).
+           @keyword font: Optional font (L{Font}), default C{Fonts.MonoSpace}.
+           @keyword timeout: Optional time limit (C{float}).
+
+           @return: The button clicked (C{PanelButton.Close}) or
+                    C{PanelButton.TimedOut} if the I{timeout} expired.
+
+           @raise ValueError: No I{text_or_file} given.
+        '''
+        ns = self.NS
+        if not text_or_file:
+            raise ValueError('no %s: %r' % ('text_or_file', text_or_file))
+
+        text, t = _text_title(text_or_file, self.title)
+        if t:
+            ns.setMessageText_(NSStr(t))
+
+        t = nsTextView(text, NSFont.userFixedPitchFontOfSize_(0)
+                             if font is None else font.NS)
+        ns.setAccessoryView_(t)
+        return self._run(timeout)
+
+
+_Types.AlertPanel = AlertPanel
+_Types.OpenPanel  = NSOpenPanel._Type = OpenPanel
+_Types.SavePanel  = NSSavePanel._Type = SavePanel
+_Types.TextPanel  = TextPanel
 
 if __name__ == '__main__':
 

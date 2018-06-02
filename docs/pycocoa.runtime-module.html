@@ -64,7 +64,7 @@
 
 <hr />
 <div class="fields">      <p><strong>Version:</strong>
-        18.04.24
+        18.05.25
       </p>
 </div><!-- ==================== CLASSES ==================== -->
 <a name="section-Classes"></a>
@@ -414,7 +414,7 @@
     <td width="15%" align="right" valign="top" class="summary">
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
-        <a href="pycocoa.runtime-module.html#libobjc" class="summary-name">libobjc</a> = <code title="&lt;CDLL '/usr/lib/libobjc.dylib', handle 10e69b680 at 102767d90&gt;">&lt;CDLL '/usr/lib/libobjc.dylib', handle 10e69b680 at <code class="variable-ellipsis">...</code></code>
+        <a href="pycocoa.runtime-module.html#libobjc" class="summary-name">libobjc</a> = <code title="&lt;CDLL '/usr/lib/libobjc.dylib', handle 1096ac680 at 10306b1d0&gt;">&lt;CDLL '/usr/lib/libobjc.dylib', handle 1096ac680 at <code class="variable-ellipsis">...</code></code>
     </td>
   </tr>
 <tr>
@@ -476,7 +476,7 @@
     <dt>Parameters:</dt>
     <dd><ul class="nomargin-top">
         <li><strong class="pname"><code>clas</code></strong> - Class to add the ivar to (<code>ObjCClass/Subclass</code>).</li>
-        <li><strong class="pname"><code>name</code></strong> - Name of the iver (str).</li>
+        <li><strong class="pname"><code>name</code></strong> - Name of the ivar (<code>str</code>).</li>
         <li><strong class="pname"><code>ctype</code></strong> - The ivar type code (<code>ctypes</code> or 
           <code>encoding</code>).</li>
     </ul></dd>
@@ -518,7 +518,7 @@
     <dt>Parameters:</dt>
     <dd><ul class="nomargin-top">
         <li><strong class="pname"><code>clas</code></strong> - Class to add the method to (<code>ObjCClass/Subclass</code>).</li>
-        <li><strong class="pname"><code>name_</code></strong> - Selector name (str).</li>
+        <li><strong class="pname"><code>name_</code></strong> - Selector name (<code>str</code>).</li>
         <li><strong class="pname"><code>method</code></strong> - Decorated class or instance method (<code>callable</code>).</li>
         <li><strong class="pname"><code>encoding</code></strong> - Method signature (<code>encoding</code>).</li>
     </ul></dd>
@@ -552,7 +552,7 @@
     <dt>Parameters:</dt>
     <dd><ul class="nomargin-top">
         <li><strong class="pname"><code>clas</code></strong> - Class to add the protocol to (<code>ObjCClass/Subclass</code>).</li>
-        <li><strong class="pname"><code>protocol</code></strong> - The <code>protocol</code> to add (string or <a 
+        <li><strong class="pname"><code>protocol</code></strong> - The <code>protocol</code> to add (<code>str</code> or <a 
           href="pycocoa.octypes.Protocol_t-class.html" 
           class="link">Protocol_t</a> instance).</li>
     </ul></dd>
@@ -583,8 +583,8 @@
   <dl class="fields">
     <dt>Parameters:</dt>
     <dd><ul class="nomargin-top">
-        <li><strong class="pname"><code>superclas</code></strong> - The parent class (string or <code>NS...</code>).</li>
-        <li><strong class="pname"><code>name</code></strong> - The name of the sub-class (str).</li>
+        <li><strong class="pname"><code>superclas</code></strong> - The parent class (<code>str</code> or <code>Object</code>).</li>
+        <li><strong class="pname"><code>name</code></strong> - The name of the sub-class (<code>str</code>).</li>
         <li><strong class="pname"><code>register</code></strong> - Optionally, register the new sub-class (bool).</li>
     </ul></dd>
     <dt>Returns:</dt>
@@ -652,8 +652,8 @@
           href="pycocoa.runtime.ObjCInstance-class.html" 
           class="link">ObjCInstance</a>).</li>
         <li><strong class="pname"><code>mutableClass</code></strong> - The mutable ObjC classes (<code>NSMutable...</code>).</li>
-        <li><strong class="pname"><code>immutableClass</code></strong> - The immutable ObjC classes (<code>NS...</code>).</li>
-        <li><strong class="pname"><code>name</code></strong> - The name of the instance (str).</li>
+        <li><strong class="pname"><code>immutableClass</code></strong> - The immutable ObjC classes (<code>Object</code>).</li>
+        <li><strong class="pname"><code>name</code></strong> - The name of the instance (<code>str</code>).</li>
     </ul></dd>
     <dt>Returns:</dt>
         <dd>True if <i>obj</i> is an <i>immutableClass</i> instance, False 
@@ -689,8 +689,8 @@
         <li><strong class="pname"><code>obj</code></strong> - The instance to check (<a 
           href="pycocoa.runtime.ObjCInstance-class.html" 
           class="link">ObjCInstance</a> or <code>c_void_p</code>).</li>
-        <li><strong class="pname"><code>Classes</code></strong> - One or several ObjC classes (<code>NS...</code>).</li>
-        <li><strong class="pname"><code>name</code></strong> - The name of the instance (str).</li>
+        <li><strong class="pname"><code>Classes</code></strong> - One or several ObjC classes (<code>Object</code>).</li>
+        <li><strong class="pname"><code>name</code></strong> - The name of the instance (<code>str</code>).</li>
     </ul></dd>
     <dt>Returns:</dt>
         <dd>The matching <i>Class</i> from <i>Classes</i>, None otherwise.</dd>
@@ -782,8 +782,8 @@
   <dl class="fields">
     <dt>Parameters:</dt>
     <dd><ul class="nomargin-top">
-        <li><strong class="pname"><code>receiver</code></strong> - The recipient (<i>Object</i>).</li>
-        <li><strong class="pname"><code>name_</code></strong> - Message selector (str).</li>
+        <li><strong class="pname"><code>receiver</code></strong> - The recipient (<code>Object</code>).</li>
+        <li><strong class="pname"><code>name_</code></strong> - Message selector (<code>str</code>).</li>
         <li><strong class="pname"><code>args</code></strong> - Message arguments (<i>all positional</i>).</li>
         <li><strong class="pname"><code>resargtypes</code></strong> - Optional, result and argument types (<code>ctypes</code>).</li>
     </ul></dd>
@@ -829,8 +829,8 @@
   <dl class="fields">
     <dt>Parameters:</dt>
     <dd><ul class="nomargin-top">
-        <li><strong class="pname"><code>receiver</code></strong> - The recipient (<i>Object</i>).</li>
-        <li><strong class="pname"><code>name_</code></strong> - Message selector (str).</li>
+        <li><strong class="pname"><code>receiver</code></strong> - The recipient (<code>Object</code>).</li>
+        <li><strong class="pname"><code>name_</code></strong> - Message selector (<code>str</code>).</li>
         <li><strong class="pname"><code>args</code></strong> - Message arguments (<i>all positional</i>).</li>
         <li><strong class="pname"><code>resargtypes</code></strong> - Optional, result and argument types (<code>ctypes</code>).</li>
     </ul></dd>
@@ -876,8 +876,8 @@
   <dl class="fields">
     <dt>Parameters:</dt>
     <dd><ul class="nomargin-top">
-        <li><strong class="pname"><code>obj</code></strong> - The instance (<i>Object</i>).</li>
-        <li><strong class="pname"><code>name</code></strong> - Name of the ivar (str).</li>
+        <li><strong class="pname"><code>obj</code></strong> - The instance (<code>Object</code>).</li>
+        <li><strong class="pname"><code>name</code></strong> - Name of the ivar (<code>str</code>).</li>
         <li><strong class="pname"><code>value</code></strong> - New value for the ivar (<code>any</code>).</li>
         <li><strong class="pname"><code>ctype</code></strong> - Optional, the ivar type (<code>ctypes</code>).</li>
     </ul></dd>
@@ -952,7 +952,7 @@
   <dl class="fields">
     <dt>Value:</dt>
       <dd><table><tr><td><pre class="variable">
-&lt;CDLL '/usr/lib/libobjc.dylib', handle 10e69b680 at 102767d90&gt;
+&lt;CDLL '/usr/lib/libobjc.dylib', handle 1096ac680 at 10306b1d0&gt;
 </pre></td></tr></table>
 </dd>
   </dl>
@@ -990,7 +990,7 @@
 <table border="0" cellpadding="0" cellspacing="0" width="100%%">
   <tr>
     <td align="left" class="footer">
-    Generated by Epydoc 3.0.1 on Tue May 15 14:50:18 2018
+    Generated by Epydoc 3.0.1 on Sat Jun  2 14:08:32 2018
     </td>
     <td align="right" class="footer">
       <a target="mainFrame" href="http://epydoc.sourceforge.net"

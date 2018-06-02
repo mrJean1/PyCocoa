@@ -229,21 +229,35 @@ object --+
     <td width="15%" align="right" valign="top" class="summary">
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
-        <a href="pycocoa.runtime.ObjCClass-class.html#name" class="summary-name">name</a>
+        <a href="pycocoa.runtime.ObjCClass-class.html#name" class="summary-name">name</a><br />
+      Get the ObjC class name (<code>str</code>).
     </td>
   </tr>
 <tr>
     <td width="15%" align="right" valign="top" class="summary">
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
-        <a href="pycocoa.runtime.ObjCClass-class.html#ptr" class="summary-name">ptr</a>
+        <a href="pycocoa.runtime.ObjCClass-class.html#ptr" class="summary-name">ptr</a><br />
+      Get this class' ObjC class (<a 
+      href="pycocoa.octypes.Class_t-class.html" class="link">Class_t</a>).
     </td>
   </tr>
 <tr>
     <td width="15%" align="right" valign="top" class="summary">
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
-        <a href="pycocoa.runtime.ObjCClass-class.html#NS" class="summary-name">NS</a>
+        <a href="pycocoa.runtime.ObjCClass-class.html#NS" class="summary-name">NS</a><br />
+      Get this class' ObjC class (<a 
+      href="pycocoa.octypes.Class_t-class.html" class="link">Class_t</a>).
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="pycocoa.runtime.ObjCClass-class.html#Type" class="summary-name">Type</a><br />
+      Get the Python Type for this ObjC class (<code>class</code> or 
+      <code>None</code>).
     </td>
   </tr>
   <tr>
@@ -282,9 +296,16 @@ object --+
   
   <p>Create a new ObjCClass instance or return a previously created 
   instance for the given ObjC class.</p>
-  <p>The argument is either the name of the class to retrieve or a pointer 
-  to the class.</p>
   <dl class="fields">
+    <dt>Parameters:</dt>
+    <dd><ul class="nomargin-top">
+        <li><strong class="pname"><code>name_or_ptr</code></strong> - Either the name of or a pointer to the class to retrieve 
+          (<code>str</code> or <a href="pycocoa.octypes.Class_t-class.html"
+          class="link">Class_t</a>).</li>
+        <li><strong class="pname"><code>protocols</code></strong> - None, one or more protocol to add (<code>str</code>s or <a 
+          href="pycocoa.octypes.Protocol_t-class.html" 
+          class="link">Protocol_t</a> instances).</li>
+    </ul></dd>
     <dt>Returns: a new object with type S, a subtype of T</dt>
     <dt>Overrides:
         object.__new__
@@ -363,7 +384,7 @@ object --+
   <dl class="fields">
     <dt>Parameters:</dt>
     <dd><ul class="nomargin-top">
-        <li><strong class="pname"><code>name</code></strong> - Name of the method (str).</li>
+        <li><strong class="pname"><code>name</code></strong> - Name of the method (<code>str</code>).</li>
     </ul></dd>
     <dt>Returns:</dt>
         <dd>The class method wrapper (<a 
@@ -391,7 +412,7 @@ object --+
   <dl class="fields">
     <dt>Parameters:</dt>
     <dd><ul class="nomargin-top">
-        <li><strong class="pname"><code>name</code></strong> - Name of the method (str).</li>
+        <li><strong class="pname"><code>name</code></strong> - Name of the method (<code>str</code>).</li>
     </ul></dd>
     <dt>Returns:</dt>
         <dd>The instance method wrapper (<a 
@@ -416,10 +437,11 @@ object --+
        cellspacing="0" width="100%" bgcolor="white">
 <tr><td>
   <h3 class="epydoc">name</h3>
-  
+  <p>Get the ObjC class name (<code>str</code>).</p>
   <dl class="fields">
     <dt>Get Method:</dt>
     <dd class="value"><span class="summary-sig">name(<span class="summary-sig-arg">self</span>)</span>
+        - Get the ObjC class name (<code>str</code>).
     </dd>
   </dl>
 </td></tr></table>
@@ -430,10 +452,13 @@ object --+
        cellspacing="0" width="100%" bgcolor="white">
 <tr><td>
   <h3 class="epydoc">ptr</h3>
-  
+  <p>Get this class' ObjC class (<a 
+  href="pycocoa.octypes.Class_t-class.html" class="link">Class_t</a>).</p>
   <dl class="fields">
     <dt>Get Method:</dt>
     <dd class="value"><span class="summary-sig">ptr(<span class="summary-sig-arg">self</span>)</span>
+        - Get this class' ObjC class (<a href="pycocoa.octypes.Class_t-class.html" 
+class="link">Class_t</a>).
     </dd>
   </dl>
 </td></tr></table>
@@ -444,10 +469,30 @@ object --+
        cellspacing="0" width="100%" bgcolor="white">
 <tr><td>
   <h3 class="epydoc">NS</h3>
-  
+  <p>Get this class' ObjC class (<a 
+  href="pycocoa.octypes.Class_t-class.html" class="link">Class_t</a>).</p>
   <dl class="fields">
     <dt>Get Method:</dt>
     <dd class="value"><span class="summary-sig">ptr(<span class="summary-sig-arg">self</span>)</span>
+        - Get this class' ObjC class (<a href="pycocoa.octypes.Class_t-class.html" 
+class="link">Class_t</a>).
+    </dd>
+  </dl>
+</td></tr></table>
+</div>
+<a name="Type"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <h3 class="epydoc">Type</h3>
+  <p>Get the Python Type for this ObjC class (<code>class</code> or 
+  <code>None</code>).</p>
+  <dl class="fields">
+    <dt>Get Method:</dt>
+    <dd class="value"><span class="summary-sig">Type(<span class="summary-sig-arg">self</span>)</span>
+        - Get the Python Type for this ObjC class (<code>class</code> or 
+<code>None</code>).
     </dd>
   </dl>
 </td></tr></table>
@@ -484,7 +529,7 @@ object --+
 <table border="0" cellpadding="0" cellspacing="0" width="100%%">
   <tr>
     <td align="left" class="footer">
-    Generated by Epydoc 3.0.1 on Tue May 15 14:50:19 2018
+    Generated by Epydoc 3.0.1 on Sat Jun  2 14:08:33 2018
     </td>
     <td align="right" class="footer">
       <a target="mainFrame" href="http://epydoc.sourceforge.net"

@@ -5,7 +5,7 @@
 
 # MIT License <http://opensource.org/licenses/MIT>
 #
-# Copyright (C) 2017-2018 mrJean1 at Gmail dot com
+# Copyright (C) 2017-2018 -- mrJean1 at Gmail dot com
 #
 # Permission is hereby granted, free of charge, to any person obtaining
 # a copy of this software and associated documentation files (the "Software"),
@@ -37,7 +37,7 @@ from runtime import isImmutable
 from utils   import instanceof, _Ints, _Types
 
 __all__ = ('Tuple',)
-__version__ = '18.04.26'
+__version__ = '18.05.17'
 
 
 def _at(inst, index):
@@ -86,6 +86,9 @@ class Tuple(_Type0):  # note, List subclasses Tuple
     def __contains__(self, value):
         return self.NS.containsObject_(py2NS(value))
 
+    def __delitem__(self, key):
+        raise TypeError('%s %s[%r]' % ('del', self, key))
+
     def __eq__(self, other):
         instanceof(other, _Types.List, Tuple, list, tuple, name='other')
         if len(self) == len(other):
@@ -131,6 +134,15 @@ class Tuple(_Type0):  # note, List subclasses Tuple
 #           i -= 1
 #           yield ns2Type(self.NS.objectAtIndex_(i))
 
+    def __setitem__(self, index, value):
+        raise TypeError('%s[%r] = %r' % (self, index, value))
+
+    def append(self, value):
+        raise TypeError('%s.%s(%r)' % (self, 'append', value))
+
+    def clear(self):
+        raise TypeError('%s.%s()' % (self, 'clear'))
+
     def copy(self, *ranged):
         '''Make a shallow copy of this tuple.
 
@@ -159,6 +171,9 @@ class Tuple(_Type0):  # note, List subclasses Tuple
             c += 1
         return c
 
+    def extend(self, values):
+        raise TypeError('%s.%s(%r)' % (self, 'extend', values))
+
     def index(self, value, identical=False):
         '''Find an item, like C{tuple./list.index}.
 
@@ -171,6 +186,12 @@ class Tuple(_Type0):  # note, List subclasses Tuple
         if i == NSNotFound:
             raise ValueError('%s no such value: %r' % (self, value))
         return i
+
+    def insert(self, index, value):
+        raise TypeError('%s.%s(%r, %r)' % (self, 'insert', index, value))
+
+    def pop(self, index=-1):
+        raise TypeError('%s.%s(%r)' % (self, 'pop', index))
 
     def _NS_copy(self, mutable, *ranged):
         '''(INTERNAL) Copy into an ObjC C{NS[Mutable]Array}.

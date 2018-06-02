@@ -37,7 +37,7 @@
 
 # MIT License <http://opensource.org/licenses/MIT>
 #
-# Copyright (C) 2017-2018 mrJean1 at Gmail dot com
+# Copyright (C) 2017-2018 -- mrJean1 at Gmail dot com
 #
 # Permission is hereby granted, free of charge, to any person obtaining
 # a copy of this software and associated documentation files (the "Software"),
@@ -59,10 +59,9 @@
 
 '''(INTERNAL) Utility functions, constants, etc.
 '''
-# all imports listed explicitly to help PyChecker
-__version__ = '18.05.09'
+__version__ = '18.05.25'
 
-try:
+try:  # all imports listed explicitly to help PyChecker
     from math import gcd  # Python 3+
 except ImportError:
     try:
@@ -110,8 +109,8 @@ class _MutableConstants(object):
 class _Constants(_MutableConstants):
     '''Enum-like, read-only constants.
     '''
-    def __setattr__(self, name, unused):
-        raise AssertionError('immutable %s.%s' % (self.__class__.__name__, name))
+    def __setattr__(self, name, value):
+        raise TypeError('%s.%s = %r' % (self.__class__.__name__, name, value))
 
     def _masks(self, *names):
         ns = []
@@ -148,6 +147,8 @@ class _Globals(object):  # some PyCocoa-internal globals
 class _Types(_MutableConstants):
     '''Holder of the Python Types, to avoid circular imports.
     '''
+    AlertPanel  = None  # set by .panels.py
+    App         = None  # set by .apps.py
     Dict        = None  # set by .dicts.py
     Font        = None  # sef by .fonts.py
     FrozenDict  = None  # set by .dicts.py
@@ -157,13 +158,16 @@ class _Types(_MutableConstants):
     MediaWindow = None  # set by .windows.py
     Menu        = None  # set by .menus.py
     MenuBar     = None  # set by .menus.py
-    OpenPanel   = None  # set be .panels.py
-    SavePanel   = None  # set be .panels.py
+    OpenPanel   = None  # set by .panels.py
+    SavePanel   = None  # set by .panels.py
     Set         = None  # set by .sets.py
     Separator   = None  # set by .menus.py
     Str         = None  # set by .strs.py
+    StrAttd     = None  # set by .strs.py
     Table       = None  # set by .tables.py
     TableWindow = None  # set by .tables.py
+    TextPanel   = None  # set by .panels.py
+    TextWindow  = None  # set by .windows.py
     Tuple       = None  # set by .tuples.py
     Window      = None  # set by .windows.py
 
@@ -237,7 +241,7 @@ try:  # MCCABE 23
     def bytes2str(bytestr, dflt=missing):
         '''Convert bytes/unicode to str if needed.
 
-           @param bytestr: Str or bytes.
+           @param bytestr: Bytes, str or unicode.
            @keyword dflt: Optional, default return value.
 
            @return: Str or I{dflt}.
@@ -250,7 +254,7 @@ try:  # MCCABE 23
         elif isinstance(bytestr, _Bytes):
             return bytestr.decode(DEFAULT_UNICODE)
         elif dflt is missing:
-            raise TypeError('%s: %r' % ('bytes/str', bytestr))
+            raise TypeError('%s: %r' % ('bytes2str', bytestr))
         return dflt
 
     # iter(bytes) yields a 1-char str/byte in Python 2-
@@ -259,7 +263,7 @@ try:  # MCCABE 23
     def str2bytes(bytestr, dflt=missing):
         '''Convert str to bytes/unicode if needed.
 
-           @param bytestr: Bytes or str.
+           @param bytestr: Bytes, str or unicode.
            @keyword dflt: Optional, default return value.
 
            @return: Bytes or I{dflt}.
@@ -272,7 +276,7 @@ try:  # MCCABE 23
         elif isinstance(bytestr, _Bytes):
             return bytestr.encode(DEFAULT_UNICODE)
         elif dflt is missing:
-            raise TypeError('%s: %r' % ('str/bytes', bytestr))
+            raise TypeError('%s: %r' % ('str2bytes', bytestr))
         return dflt
 
 except NameError:  # Python 3+
@@ -539,6 +543,20 @@ def printf(fmt, *args, **kwds):  # argv0='', nl=0, nt=0
     print('%s%s %s%s' % (nl, a, t, nt))
 
 
+def _text_title(text_or_file, title=''):
+    '''Return 2-tuple (title, text).
+    '''
+    if isinstance(text_or_file, _ByteStrs):
+        text, t = text_or_file, title
+    else:
+        try:
+            text = text_or_file.read()
+        except (AttributeError, IOError, OSError) as x:
+            text = str(x)
+        t = 'File %r' % (getattr(text_or_file, 'name', None),)
+    return text, t
+
+
 def type2strepr(inst, strepr=str):
     '''Return a Python Type instance as L{str} or L{repr}.
 
@@ -610,7 +628,6 @@ __all__ = _exports(locals(), 'aspect_ratio', 'clip', 'DEFAULT_UNICODE',
                              'flint', 'gcd', 'iterbytes', 'missing',
                              'printf', 'type2strepr',
                    starts=('bytes', 'inst', 'str', 'z'))
-
 
 if __name__ == '__main__':
 
