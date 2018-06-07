@@ -28,9 +28,9 @@
 # all imports listed explicitly to help PyChecker
 from bases    import _Type2
 from geometry import Rect
-from nstypes  import isNone, NSConcreteNotification, NSFont, NSNone, \
-                     NSNotification, NSScreenMainFrame, NSScrollView, \
-                     NSStr, nsTextSize3, NSTextView, NSView, NSWindow
+from nstypes  import isNone, NSConcreteNotification, NSFont, NSMain, \
+                     NSNone, NSNotification, NSScrollView, NSStr, \
+                     nsTextSize3, NSTextView, NSView, NSWindow
 from octypes  import NSIntegerMax, NSPoint_t, NSSize_t
 from oslibs   import NO, NSBackingStoreBuffered, \
                      NSWindowStyleMaskClosable, \
@@ -45,7 +45,7 @@ from utils    import aspect_ratio, bytes2str, _Constants, _exports, \
                      _Globals, instanceof, _text_title, _Types
 # from enum   import Enum
 
-__version__ = '18.05.30'
+__version__ = '18.06.06'
 
 _Cascade = NSPoint_t(25, 25)  # PYCHOK false
 
@@ -134,7 +134,7 @@ class Screen(Rect):
 
            @raise ValueError: Invalid I{fraction} value.
         '''
-        f = NSScreenMainFrame
+        f = NSMain.ScreenFrame
         if 0.1 < fraction < 1.0:
             # use the lower left side of the screen
             w = int(f.size.width * fraction + 0.5)

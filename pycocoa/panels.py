@@ -27,11 +27,12 @@
 '''
 # all imports listed explicitly to help PyChecker
 from bases   import _Type2
-from nstypes import NSAlert, NSApplicationMain, NSFont, \
+from nstypes import NSAlert, NSError, NSFont, NSMain, \
                     NSNotificationCenter, NSOpenPanel, NSSavePanel, \
                     NSStr, nsString2str, nsTextView
 from pytypes import dict2NS, py2NS, url2NS
 from oslibs  import NSCancelButton, NSOKButton, YES
+from runtime import isInstanceOf
 # from strs  import StrAttd
 from utils   import _Constants, _Strs, _text_title, _Types
 
@@ -50,11 +51,12 @@ except ImportError:
 
 __all__ = ('AlertPanel', 'AlertStyle',
            'BrowserPanel',
+           'ErrorPanel',
            'OpenPanel',
            'PanelButton',
            'SavePanel',
            'TextPanel')
-__version__ = '18.05.30'
+__version__ = '18.06.06'
 
 
 class AlertStyle(_Constants):  # Enum?
@@ -90,12 +92,10 @@ class AlertPanel(_Type2):
           @keyword style: Kind of alert (C{AlertStyle}), default C{.Info}.
           @keyword suppressable: Include suppress option (C{bool}).
 
-          @raise ValueError: No browser type I{name}.
+          @raise ValueError: Multi-line I{info} or too long.
 
           @note: The first, C{OK} button is always shown.  The I{info} string is
                  limited to about 50 characters and must be without C{linesep}arators.
-
-          @see: U{Browser types<http://Docs.Python.org/3.6/library/webbrowser.html>}.
         '''
         # <http://Developer.Apple.com/documentation/appkit/nsalert>
         self._style = style
@@ -181,7 +181,7 @@ class AlertPanel(_Type2):
             def _stopModal():
                 sleep(s + 0.5)
                 if r is None:
-                    NSApplicationMain.stopModalWithCode_(1003)
+                    NSMain.Application.stopModalWithCode_(1003)
 
             t = Thread(target=_stopModal)
             t.start()
@@ -248,6 +248,39 @@ class BrowserPanel(_Type2):
             d = dict2NS(dict(URL=ns, reveal=True, newTab=bool(tab)), frozen=True)
             self.NS.postNotificationName_object_userInfo_(self._OPEN_URL, None, d)
         return _urlparse(nsString2str(ns.absoluteString()))
+
+
+class ErrorPanel(AlertPanel):
+    '''Python Type to show an L{NSError} alert, wrapping ObjC C{NSAlert}.
+    '''
+
+    def __init__(self, title='Error'):
+        '''New L{AlertPanel}.
+
+           @keyword title: The panel name and title (C{str}).
+        '''
+        # <http://Developer.Apple.com/documentation/
+        #       appkit/nsalert/1531823-alertwitherror>
+        # <http://Developer.Apple.com/documentation/foundation/nserror>
+        self.title = title
+
+    def show(self, ns_error, timeout=None):  # PYCHOK expected
+        '''Show the error.
+
+           @param ns_error: Error information (L{NSError}).
+           @keyword timeout: Optional time limit (C{float}).
+
+           @return: TBD.
+
+           @raise TypeError: Invalid I{ns_error}.
+        '''
+        if isInstanceOf(ns_error, NSError, name='ns_error'):
+            ns = NSAlert.alloc().alertWithError_(ns_error)
+            r = self._run(timeout)
+            ns.release()
+        else:
+            r = PanelButton.Error
+        return r
 
 
 class OpenPanel(_Type2):
@@ -337,8 +370,8 @@ class PanelButton(_Constants):  # Enum?
 PanelButton = PanelButton()  #: Panel button constants (C{int}).
 
 
-# <http://pseudofish.com/p/saving-a-file-using-nssavepanel.html>
-# <http://pseudofish.com/showing-a-nssavepanel-as-a-sheet.html>
+# <http://PseudoFish.com/p/saving-a-file-using-nssavepanel.html>
+# <http://PseudoFish.com/showing-a-nssavepanel-as-a-sheet.html>
 
 class SavePanel(_Type2):
     '''Python Type to save a file, wrapping ObjC C{NSSavePanel}.
@@ -457,6 +490,7 @@ class TextPanel(AlertPanel):
 
 
 _Types.AlertPanel = AlertPanel
+_Types.ErrorPanel = ErrorPanel
 _Types.OpenPanel  = NSOpenPanel._Type = OpenPanel
 _Types.SavePanel  = NSSavePanel._Type = SavePanel
 _Types.TextPanel  = TextPanel

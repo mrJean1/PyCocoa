@@ -35,7 +35,7 @@ from pytypes import dict2NS, str2NS
 from utils   import instanceof, _Strs, _Types
 
 __all__ = ('Str', 'StrAttd')
-__version__ = '18.05.25'
+__version__ = '18.06.05'
 
 
 class Str(str, _Type0):  # str, first to maintain str behavior

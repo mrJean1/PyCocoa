@@ -18,8 +18,10 @@ Examples `cocoavlc.py`_ and *simple_VLCplayer.py* require installation of
 the `VLC App`_ and the corresponding `Python-VLC`_ binding.
 
 The tests and examples have only been run with 64-bit Python 2.7.14 and
-3.6.5 using `Python-VLC`_ 3.0.1 and 3.0.2 and only on macOS 10.13.4 High
-Sierra.  PyCocoa has *not been tested on iOS nor with 32-bit Python*.
+3.6.5 using `Python-VLC`_ 2.2.6, 3.0.1, 3.0.2 and 3.0.3 (with compatible
+`VLC App`_s), but only on macOS 10.13.4 High Sierra.  PyCocoa has
+*not been tested* on iOS nor with 32-bit Python and *does not work* using
+PyPy_ nor with `Intel(R) Python`_.
 
 All PyCocoa source code has been statically checked_ with PyChecker_,
 PyFlakes_, PyCodeStyle_ (formerly Pep8) and McCabe_ using 64-bit Python
@@ -35,7 +37,7 @@ Some alternatives to PyCocoa are (a) PyObjC_, the most comprehensive Python
 to Objective-C bridge, (b) `Rubicon-ObjC`_ for Python 3.5+, taking advantage
 of Python's new typing_ annotations and (c) PyGUI_ for macOS_.
 
-*Last updated: June 02, 2018.*
+*Last updated: June 06, 2018.*
 
 .. _checked: http://GitHub.com/ActiveState/code/tree/master/recipes/Python/546532_PyChecker_postprocessor
 .. _cocoa-python: http://GitHub.com/phillip-nguyen/cocoa-python
@@ -45,6 +47,7 @@ of Python's new typing_ annotations and (c) PyGUI_ for macOS_.
 .. _Epydoc: http://PyPI.org/project/epydoc
 .. _Flake8: http://PyPI.org/project/flake8
 .. _GitHub: http://GitHub.com/mrJean1/PyCocoa
+.. _Intel(R) Python: http://Software.Intel.com/en-us/distribution-for-python
 .. _macOS: http://WikipediA.org/wiki/MacOS
 .. _McCabe: http://PyPI.org/project/mccabe
 .. _MIT License: http://OpenSource.org/licenses/MIT
@@ -56,6 +59,7 @@ of Python's new typing_ annotations and (c) PyGUI_ for macOS_.
 .. _PyGUI: http://CoSC.Canterbury.AC.NZ/greg.ewing/python_gui
 .. _PyObjC: http://PyPI.org/project/pyobjc
 .. _PyPI: http://PyPI.org/project/PyCocoa
+.. _PyPy: http://PyPy.org
 .. _Rubicon-ObjC: http://PyPI.org/project/rubicon-objc
 .. _typing: http://Docs.Python.org/3/library/typing.html
 .. _Python-VLC: http://PyPI.org/project/python-vlc

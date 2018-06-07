@@ -36,7 +36,7 @@ from utils   import instanceof, missing, _Types
 
 __all__ = ('Dict',
            'FrozenDict')
-__version__ = '18.05.17'
+__version__ = '18.06.04'
 
 
 def _dict_cmp(dict1, dict2):
@@ -271,7 +271,7 @@ class Dict(FrozenDict):
 
            @raise TypeError: Invalid type of I{other}.
 
-           @see: <http://docs.python.org/3/library/stdtypes.html#dict.update>
+           @see: <http://Docs.Python.org/3/library/stdtypes.html#dict.update>
         '''
         other, kwds = _dict_kwds(other, kwds, 'other')
         if other:

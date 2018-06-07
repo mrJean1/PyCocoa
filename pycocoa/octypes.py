@@ -79,7 +79,7 @@ from platform import machine  # as machine
 from utils import bytes2str, _exports, inst2strepr, iterbytes, \
                   missing, str2bytes
 
-__version__ = '18.05.28'
+__version__ = '18.06.05'
 
 z = sizeof(c_void_p)
 if z == 4:
@@ -310,6 +310,12 @@ class Unknown_t(ObjC_t):
 
 class UnknownPtr_t(ObjC_t):
     '''Unknown pointer.
+    '''
+    pass
+
+
+class URL_t(Id_t):
+    '''ObjC C{URL} type.
     '''
     pass
 

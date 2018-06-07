@@ -63,7 +63,7 @@
 '''Various ObjC and macOS libraries, signatures, constants, etc.
 '''
 # all imports listed explicitly to help PyChecker
-from ctypes  import byref, cdll, c_buffer, c_byte, c_char, c_char_p, \
+from ctypes  import byref, cast, cdll, c_buffer, c_byte, c_char, c_char_p, \
                     c_double, c_float, \
                     c_int, c_int8, c_int16, c_int32, c_int64, \
                     c_long, c_longlong, c_short, c_size_t, \
@@ -79,10 +79,10 @@ from octypes import Allocator_t, Array_t, BOOL_t, CFIndex_t, \
                     NSInteger_t, NSRect_t, objc_method_description_t, \
                     objc_property_t, objc_property_attribute_t, \
                     Protocol_t, SEL_t, Set_t, String_t, \
-                    TypeRef_t, UniChar_t
+                    TypeRef_t, UniChar_t, URL_t
 from utils   import bytes2str, _exports
 
-__version__ = '18.05.22'
+__version__ = '18.06.06'
 
 NO  = False
 YES = True
@@ -205,8 +205,8 @@ def _strdup(result, *unused):  # func, args
 
 libCF = get_lib('CoreFoundation')
 
-kCFAllocatorDefault   = c_void_p.in_dll(libCF, 'kCFAllocatorDefault')  # XXX or NULL
-kCFRunLoopDefaultMode = c_void_p.in_dll(libCF, 'kCFRunLoopDefaultMode')
+kCFAllocatorDefault   = Allocator_t.in_dll(libCF, 'kCFAllocatorDefault')  # XXX or NULL
+kCFRunLoopDefaultMode =    c_void_p.in_dll(libCF, 'kCFRunLoopDefaultMode')
 
 # <http://Developer.Apple.com/documentation/corefoundation/
 #         cfstringbuiltinencodings?language=objc>
@@ -392,7 +392,37 @@ _csignature(libCF.CFStringGetLength, CFIndex_t, String_t)
 _csignature(libCF.CFStringGetMaximumSizeForEncoding, CFIndex_t, CFIndex_t, CFStringEncoding_t)
 _csignature(libCF.CFStringGetTypeID, TypeID_t)
 
-# APPLICATION KIT
+# CFDataRef CFURLCreateBookmarkDataFromFile(CFAllocatorRef allocator, CFURLRef fileURL, CFErrorRef *errorRef)
+_csignature(libCF.CFURLCreateBookmarkDataFromFile, Data_t, Allocator_t, URL_t, c_void_p)
+# <http://Developer.Apple.com/documentation/corefoundation/cfurlbookmarkresolutionoptions>
+kCFURLBookmarkResolutionWithoutMountingMask = 1 <<  9
+kCFURLBookmarkResolutionWithoutUIMask       = 1 <<  8
+kCFURLBookmarkResolutionWithSecurityScope   = 1 << 10
+# CFURLRef CFURLCreateByResolvingBookmarkData(CFAllocatorRef allocator, CFDataRef bookmark,
+#          CFURLBookmarkResolutionOptions options, CFURLRef relativeToURL,
+#          CFArrayRef resourcePropertiesToInclude, Boolean *isStale, CFErrorRef *error)
+_csignature(libCF.CFURLCreateByResolvingBookmarkData, URL_t, Allocator_t, Data_t, c_uint, URL_t, c_void_p, BOOL_t, c_void_p)
+
+
+# <http://GitHub.com/al45tair/mac_alias>
+# <http://StackOverflow.com/questions/21150169/
+#       how-to-use-mac-finder-to-list-all-aliases-in-a-folder/21151368>
+# <http://MichaelLynn.GitHub.io/2015/10/24/apples-bookmarkdata-exposed/>
+def cfURLResolveAlias(alias):
+    '''Resolve a macOS file alias.
+
+       @param alias: The alias file (L{NSURL}).
+
+       @return: The alias' target (L{NSURL}) or C{None}.
+    '''
+    ns = libCF.CFURLCreateBookmarkDataFromFile(kCFAllocatorDefault, cast(alias, URL_t), 0) or None
+    if ns:
+        ns = libCF.CFURLCreateByResolvingBookmarkData(kCFAllocatorDefault, ns,
+                                                      kCFURLBookmarkResolutionWithoutUIMask, 0, 0, NO, 0)
+    return ns
+
+
+# APPLICATION KIc
 # Even though we don't use this directly, it must be loaded so that
 # we can find the NSApplication, NSWindow, and NSView classes.
 libAppKit = get_lib('AppKit')

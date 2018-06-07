@@ -21,13 +21,16 @@ C{epydoc --html --no-private --no-source --name=PyCocoa --url=... -v pycocoa}).
 
 Examples U{cocoavlc.py<http://GitHub.com/oaubert/python-vlc/tree/master/examples>}
 and I{simple_VLCplayer.py} require installation of the U{VLC App
-<http://www.VideoLan.org/vlc/download-macosx.html>} for I{macOS} and the corresponding
-U{Python-VLC<http://PyPI.org/project/python-vlc>} binding.
+<http://www.VideoLan.org/vlc/download-macosx.html>} for I{macOS} and the
+corresponding U{Python-VLC<http://PyPI.org/project/python-vlc>} binding.
 
 The tests and examples have only been run with 64-bit Python 2.7.14 and
-3.6.5 using U{Python-VLC<http://PyPI.org/project/python-vlc>} 3.0.1
-and 3.0.2 and only on macOS 10.13.4 High Sierra.  PyCocoa has I{not been
-tested on iOS nor with 32-bit Python}.
+3.6.5 using U{Python-VLC<http://PyPI.org/project/python-vlc>} 2.2.6, 3.0.1,
+3.0.2 and 3.0.3 (with compatible U{VLC App<http://www.VideoLan.org/vlc>}s),
+but only on macOS 10.13.4 High Sierra.  PyCocoa has I{not been tested} on
+iOS nor with 32-bit Python and I{does not work} using
+U{PyPy<http://PyPy.org>} nor with U{Intel(R) Python
+<http://Software.Intel.com/en-us/distribution-for-python>}.
 
 All PyCocoa source code has been statically
 U{checked<http://GitHub.com/ActiveState/code/tree/master/recipes/Python/546532_PyChecker_postprocessor>}
@@ -39,7 +42,7 @@ U{Flake8<http://PyPI.org/project/flake8>} using 64-bit Python 3.6.5.
 
 To install PyCocoa, type C{pip install PyCocoa} or C{easy_install PyCocoa}
 in a terminal window.  Alternatively, download C{PyCocoa-X.Y.Z} from
-U{PyPI<http://PyPI.org/project/PyCocoa/>} or
+U{PyPI<http://PyPI.org/project/PyCocoa>} or
 U{GitHub<http://GitHub.com/mrJean1/PyCocoa>}, C{unzip} the downloaded file,
 C{cd} to directory C{PyCocoa-} and type C{python setup.py install}.  To
 run the PyCocoa tests, type C{python setup.py test} before installation.
@@ -115,7 +118,7 @@ OTHER DEALINGS IN THE SOFTWARE.}
 from os.path import abspath, dirname
 import sys
 
-__version__ = '18.06.02'
+__version__ = '18.06.06'
 
 p = sys.platform
 if not p.startswith('darwin'):

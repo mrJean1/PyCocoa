@@ -3,7 +3,7 @@
           "DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
 <head>
-  <title>pycocoa.octypes.objc_method_description_t</title>
+  <title>pycocoa.octypes.URL_t</title>
   <link rel="stylesheet" href="epydoc.css" type="text/css" />
   <script type="text/javascript" src="epydoc.js"></script>
 </head>
@@ -44,7 +44,7 @@
       <span class="breadcrumbs">
         <a href="pycocoa-module.html">Package&nbsp;pycocoa</a> ::
         <a href="pycocoa.octypes-module.html">Module&nbsp;octypes</a> ::
-        Class&nbsp;objc_method_description_t
+        Class&nbsp;URL_t
       </span>
     </td>
     <td>
@@ -52,29 +52,32 @@
         <!-- hide/show private -->
         <tr><td align="right"><span class="options"
             >[<a href="frames.html" target="_top">frames</a
-            >]&nbsp;|&nbsp;<a href="pycocoa.octypes.objc_method_description_t-class.html"
+            >]&nbsp;|&nbsp;<a href="pycocoa.octypes.URL_t-class.html"
             target="_top">no&nbsp;frames</a>]</span></td></tr>
       </table>
     </td>
   </tr>
 </table>
 <!-- ==================== CLASS DESCRIPTION ==================== -->
-<h1 class="epydoc">Class objc_method_description_t</h1><p class="nomargin-top"></p>
+<h1 class="epydoc">Class URL_t</h1><p class="nomargin-top"></p>
 <pre class="base-tree">
-   object --+            
-            |            
-    ??._CData --+        
-                |        
-_ctypes.Structure --+    
-                    |    
-           <a href="pycocoa.octypes.c_struct_t-class.html">c_struct_t</a> --+
-                        |
-                       <strong class="uidshort">objc_method_description_t</strong>
+      object --+                    
+               |                    
+       ??._CData --+                
+                   |                
+_ctypes._SimpleCData --+            
+                       |            
+         <a href="ctypes.c_void_p-class.html">ctypes.c_void_p</a> --+        
+                           |        
+                      <a href="pycocoa.octypes.ObjC_t-class.html">ObjC_t</a> --+    
+                               |    
+                            <a href="pycocoa.octypes.Id_t-class.html">Id_t</a> --+
+                                   |
+                                  <strong class="uidshort">URL_t</strong>
 </pre>
 
 <hr />
-<p>ObjC <code>struct</code> with fields <code>name</code> and 
-  <code>types</code> (<code>SEL_t</code>, <code>c_char_p</code>).</p>
+<p>ObjC <code>URL</code> type.</p>
 
 <!-- ==================== INSTANCE METHODS ==================== -->
 <a name="section-InstanceMethods"></a>
@@ -86,16 +89,20 @@ _ctypes.Structure --+
 </tr>
   <tr>
     <td colspan="2" class="summary">
-    <p class="indent-wrapped-lines"><b>Inherited from <code><a href="pycocoa.octypes.c_struct_t-class.html">c_struct_t</a></code></b>:
-      <code><a href="pycocoa.octypes.c_struct_t-class.html#__repr__">__repr__</a></code>,
-      <code><a href="pycocoa.octypes.c_struct_t-class.html#__str__">__str__</a></code>
+    <p class="indent-wrapped-lines"><b>Inherited from <code><a href="pycocoa.octypes.ObjC_t-class.html">ObjC_t</a></code></b>:
+      <code><a href="pycocoa.octypes.ObjC_t-class.html#__repr__">__repr__</a></code>,
+      <code><a href="pycocoa.octypes.ObjC_t-class.html#__str__">__str__</a></code>
       </p>
-    <p class="indent-wrapped-lines"><b>Inherited from <code>_ctypes.Structure</code></b>:
+    <p class="indent-wrapped-lines"><b>Inherited from <code><a href="ctypes.c_void_p-class.html">ctypes.c_void_p</a></code></b>:
+      <code><a href="ctypes.c_void_p-class.html#from_param">from_param</a></code>
+      </p>
+    <p class="indent-wrapped-lines"><b>Inherited from <code>_ctypes._SimpleCData</code></b>:
+      <code>__ctypes_from_outparam__</code>,
       <code>__init__</code>,
-      <code>__new__</code>
+      <code>__new__</code>,
+      <code>__nonzero__</code>
       </p>
     <p class="indent-wrapped-lines"><b>Inherited from <code>_CData</code></b>:
-      <code>__ctypes_from_outparam__</code>,
       <code>__hash__</code>,
       <code>__reduce__</code>,
       <code>__setstate__</code>
@@ -120,26 +127,11 @@ _ctypes.Structure --+
   <td align="left" colspan="2" class="table-header">
     <span class="table-header">Class Variables</span></td>
 </tr>
-<tr>
-    <td width="15%" align="right" valign="top" class="summary">
-      <span class="summary-type">&nbsp;</span>
-    </td><td class="summary">
-        <a href="pycocoa.octypes.objc_method_description_t-class.html#_fields_" class="summary-name">_fields_</a> = <code title="(('name', &lt;class 'pycocoa.octypes.SEL_t'&gt;),
- ('types', &lt;class 'ctypes.c_char_p'&gt;))"><code class="variable-group">(</code><code class="variable-group">(</code><code class="variable-quote">'</code><code class="variable-string">name</code><code class="variable-quote">'</code><code class="variable-op">, </code>&lt;class 'pycocoa.octypes.SEL_t'&gt;<code class="variable-group">)</code><code class="variable-op">, </code><code class="variable-group">(</code><code class="variable-quote">'</code><code class="variable-string">types</code><code class="variable-ellipsis">...</code></code>
-    </td>
-  </tr>
-<tr>
-    <td width="15%" align="right" valign="top" class="summary">
-      <span class="summary-type">&nbsp;</span>
-    </td><td class="summary">
-        <a name="name"></a><span class="summary-name">name</span> = <code title="&lt;Field type=SEL_t, ofs=0, size=8&gt;">&lt;Field type=SEL_t, ofs=0, size=8&gt;</code>
-    </td>
-  </tr>
-<tr>
-    <td width="15%" align="right" valign="top" class="summary">
-      <span class="summary-type">&nbsp;</span>
-    </td><td class="summary">
-        <a name="types"></a><span class="summary-name">types</span> = <code title="&lt;Field type=c_char_p, ofs=8, size=8&gt;">&lt;Field type=c_char_p, ofs=8, size=8&gt;</code>
+  <tr>
+    <td colspan="2" class="summary">
+    <p class="indent-wrapped-lines"><b>Inherited from <code><a href="ctypes.c_void_p-class.html">ctypes.c_void_p</a></code></b>:
+      <code><a href="ctypes.c_void_p-class.html#_type_">_type_</a></code>
+      </p>
     </td>
   </tr>
 </table>
@@ -153,6 +145,9 @@ _ctypes.Structure --+
 </tr>
   <tr>
     <td colspan="2" class="summary">
+    <p class="indent-wrapped-lines"><b>Inherited from <code>_ctypes._SimpleCData</code></b>:
+      <code>value</code>
+      </p>
     <p class="indent-wrapped-lines"><b>Inherited from <code>_CData</code></b>:
       <code>_b_base_</code>,
       <code>_b_needsfree_</code>
@@ -163,35 +158,6 @@ _ctypes.Structure --+
     </td>
   </tr>
 </table>
-<!-- ==================== CLASS VARIABLE DETAILS ==================== -->
-<a name="section-ClassVariableDetails"></a>
-<table class="details" border="1" cellpadding="3"
-       cellspacing="0" width="100%" bgcolor="white">
-<tr bgcolor="#70b0f0" class="table-header">
-  <td align="left" colspan="2" class="table-header">
-    <span class="table-header">Class Variable Details</span></td>
-</tr>
-</table>
-<a name="_fields_"></a>
-<div>
-<table class="details" border="1" cellpadding="3"
-       cellspacing="0" width="100%" bgcolor="white">
-<tr><td>
-  <h3 class="epydoc">_fields_</h3>
-  
-  <dl class="fields">
-  </dl>
-  <dl class="fields">
-    <dt>Value:</dt>
-      <dd><table><tr><td><pre class="variable">
-<code class="variable-group">(</code><code class="variable-group">(</code><code class="variable-quote">'</code><code class="variable-string">name</code><code class="variable-quote">'</code><code class="variable-op">, </code>&lt;class 'pycocoa.octypes.SEL_t'&gt;<code class="variable-group">)</code><code class="variable-op">,</code>
- <code class="variable-group">(</code><code class="variable-quote">'</code><code class="variable-string">types</code><code class="variable-quote">'</code><code class="variable-op">, </code>&lt;class 'ctypes.c_char_p'&gt;<code class="variable-group">)</code><code class="variable-group">)</code>
-</pre></td></tr></table>
-</dd>
-  </dl>
-</td></tr></table>
-</div>
-<br />
 <!-- ==================== NAVIGATION BAR ==================== -->
 <table class="navbar" border="0" width="100%" cellpadding="0"
        bgcolor="#a0c0ff" cellspacing="0">

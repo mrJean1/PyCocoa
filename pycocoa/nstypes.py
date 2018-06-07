@@ -69,14 +69,15 @@ from getters import get_selector
 from octypes import Array_t, Class_t, c_struct_t, Id_t, NSRect4_t, \
                     ObjC_t, SEL_t, Set_t
 from oslibs  import cfNumber2bool, cfNumber2num, CFStringEncoding, \
-                    cfString2str, libCF, libFoundation, libobjc, NO, YES
+                    cfString2str, cfURLResolveAlias, libCF, \
+                    libFoundation, libobjc, NO, YES
 from runtime import isInstanceOf, ObjCClass, ObjCInstance, _Xargs
-from utils   import bytes2str, clip, _exports, _Globals, instanceof, \
-                    iterbytes, missing, str2bytes, _Types  # printf
+from utils   import bytes2str, _ByteStrs, clip, _exports, _Globals, \
+                    instanceof, iterbytes, missing, str2bytes, _Types  # printf
 
-from os import linesep
+from os import linesep, path as os_path
 
-__version__ = '18.05.30'
+__version__ = '18.06.06'
 
 
 def _lambda(arg):
@@ -128,7 +129,7 @@ class CFStr(ObjCInstance):
 
 
 # some commonly used Foundation and Cocoa classes, described here
-# <http://omz-software.com/pythonista/docs/ios/objc_util.html>
+# <http://OMZ-Software.com/pythonista/docs/ios/objc_util.html>
 
 # NS... classes marked ** have Python versions, like NSStr, for
 # for use by runtime.isInstanceOf repectively octypes.instanceof
@@ -147,6 +148,7 @@ NSDecimalNumber        = ObjCClass('NSDecimalNumber')  # ** use NSDecimal
 NSDictionary           = ObjCClass('NSDictionary')  # immutable
 NSDockTile             = ObjCClass('NSDockTile')
 NSEnumerator           = ObjCClass('NSEnumerator')
+NSError                = ObjCClass('NSError')
 NSFont                 = ObjCClass('NSFont')
 NSFontDescriptor       = ObjCClass('NSFontDescriptor')
 NSFontManager          = ObjCClass('NSFontManager')
@@ -201,14 +203,6 @@ NSLongLong = NSNumber.numberWithLongLong_
 NSnil      = None  # nil return value
 NSNone     = NSNull.alloc().init()  # singleton
 NSTrue     = True  # NSBool(True)  # c_byte
-
-# some NS... singletons
-NSApplicationMain   = NSApplication.sharedApplication()
-NSFontManagerMain   = NSFontManager.sharedFontManager()
-NSLayoutManagerMain = NSLayoutManager.alloc().init()
-NSScreenMainFrame   = NSScreen.alloc().init().mainScreen().frame()
-NSScreenMainSize    = NSScreenMainFrame.size
-NSTableColumnMain   = NSTableColumn.alloc().init()
 
 
 # We need to be able to create raw NSDecimalNumber objects.  If we use
@@ -272,6 +266,77 @@ class NSDecimal(ObjCInstance):
     Decimal = value
 
 
+class _NSMain(object):
+    '''Main, global C{NS...} singletons.
+    '''
+    _Application   = None
+    _FontManager   = None
+    _LayoutManager = None
+    _Screen        = None
+    _ScreenFrame   = None
+    _ScreenSize    = None
+    _TableColumn   = None
+
+    @property
+    def Application(self):
+        '''Get the C{NSApplication.sharedApplication}.
+        '''
+        if self._Application is None:
+            _NSMain._Application = NSApplication.sharedApplication()
+        return self._Application
+
+    @property
+    def FontManager(self):
+        '''Get the C{NSFontManager.sharedFontManager}.
+        '''
+        if self._FontManager is None:
+            _NSMain._FontManager = NSFontManager.sharedFontManager()
+        return self._FontManager
+
+    @property
+    def LayoutManager(self):
+        '''Get the C{NSLayoutManager}.
+        '''
+        if self._LayoutManager is None:
+            _NSMain._LayoutManager = NSLayoutManager.alloc().init()
+        return self._LayoutManager
+
+    @property
+    def Screen(self):
+        '''Get the C{NSScreen.mainScreen}.
+        '''
+        if self._Screen is None:
+            _NSMain._Screen = NSScreen.alloc().init().mainScreen()
+        return self._Screen
+
+    @property
+    def ScreenFrame(self):
+        '''Get the C{NSScreen.mainScreen.frame}.
+        '''
+        if self._ScreenFrame is None:
+            _NSMain._ScreenFrame = self.Screen.frame()
+        return self._ScreenFrame
+
+    @property
+    def ScreenSize(self):
+        '''Get the C{NSScreen.mainScreen.frame.size}.
+        '''
+        if self._ScreenSize is None:
+            _NSMain._ScreenSize = self.ScreenFrame.size
+        return self._ScreenSize
+
+    @property
+    def TableColumn(self):
+        '''Get a blank C{NSTableColumn}.
+        '''
+        if self._TableColumn is None:
+            _NSMain._TableColumn = NSTableColumn.alloc().init()
+        return self._TableColumn
+
+
+NSMain = _NSMain()  #: main, global C{NS...} singletons
+
+
 class NSStr(CFStr):
     '''Python wrapper for the ObjC L{NSString} class,
        creating I{auto-released} instances, by default.
@@ -299,6 +364,48 @@ class at(NSStr):
     # monkey), little_mouse, arroba, sobachka (doggie), malpa (monkey),
     # snabel (trunk), papaki (small duck), afna (monkey), kukac (caterpillar).
     pass
+
+
+def isAlias(path):
+    '''Resolve a macOS file or folder alias.
+
+       @param path: The alias name (C{str}, L{NSStr} or L{CFStr}).
+
+       @return: The alias' target (C{str}) or C{None} if I{path}
+                isn't a macOS alias.
+
+       @see: U{mac-alias<http://GitHub.com/al45tair/mac_alias>} and
+             U{here<http://StackOverflow.com/questions/21150169/>}.
+    '''
+    if isinstance(path, _ByteStrs):
+        path = NSStr(path)
+    elif instanceof(path, NSStr, CFStr, name='path'):
+        pass
+
+    u = NSURL.alloc().initFileURLWithPath_(path)
+    r = cfURLResolveAlias(u)  # URL_t
+    u.release()
+    if r:
+        u = ObjCInstance(r)  # URL_t to NSURL
+        r = cfString2str(u.path())
+        u.release()
+    return r
+
+
+def isLink(path):
+    '''Resolve a file or folder link or alias.
+
+       @param path: The link or alias name (C{str}).
+
+       @return: The link's or alias' target (C{str}) or
+                C{None} if I{path} isn't a link or alias.
+    '''
+    r = os_path.islink(path)
+    if r:
+        r = os_path.realpath(path)
+    else:
+        r = isAlias(path)
+    return r
 
 
 def isNone(obj):
@@ -576,7 +683,7 @@ def nsTextSize3(text, ns_font=None):
 
     h = n = text.count(linesep) + 1
     if ns_font:
-        h *= NSLayoutManagerMain.defaultLineHeightForFont_(ns_font)
+        h *= NSMain.LayoutManager.defaultLineHeightForFont_(ns_font)
         w = ns_font.widthOfString_(NSStr(w))
     else:
         w = len(w)
@@ -738,7 +845,7 @@ def ns2Type(ns):
 _CFBundleName = CFStr('CFBundleName')
 
 # filter locals() for .__init__.py
-__all__ = _exports(locals(), 'at', 'CFStr', 'isNone',
+__all__ = _exports(locals(), 'at', 'CFStr', 'isAlias', 'isLink', 'isNone',
                    starts=('NS', 'ns'),
                    ends='2NS')
 

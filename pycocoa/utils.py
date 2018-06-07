@@ -59,7 +59,7 @@
 
 '''(INTERNAL) Utility functions, constants, etc.
 '''
-__version__ = '18.05.25'
+__version__ = '18.06.06'
 
 try:  # all imports listed explicitly to help PyChecker
     from math import gcd  # Python 3+
@@ -150,6 +150,7 @@ class _Types(_MutableConstants):
     AlertPanel  = None  # set by .panels.py
     App         = None  # set by .apps.py
     Dict        = None  # set by .dicts.py
+    ErrorPanel  = None  # set by .panels.py
     Font        = None  # sef by .fonts.py
     FrozenDict  = None  # set by .dicts.py
     FrozenSet   = None  # set by .sets.py

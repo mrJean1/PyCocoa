@@ -11,18 +11,18 @@
 # python setup.py test
 # python setup.py install
 
-# <http://packaging.python.org/key_projects/#setuptools>
-# <http://packaging.python.org/distributing/>
+# <http://Packaging.Python.org/key_projects/#setuptools>
+# <http://Packaging.Python.org/distributing/>
 # <http://Docs.Python.org/2/distutils/sourcedist.html>
 # <http://Docs.Python.org/3.6/distutils/sourcedist.html>
-# <http://setuptools.readthedocs.io/en/latest/setuptools.html#developer-s-guide>
-# <http://setuptools.readthedocs.io/en/latest/setuptools.html#test-build-package-and-run-a-unittest-suite>
-# <http://zetcode.com/articles/packageinpython/>
+# <http://SetupTools.ReadTheDocs.io/en/latest/setuptools.html#developer-s-guide>
+# <http://SetupTools.ReadTheDocs.io/en/latest/setuptools.html#test-build-package-and-run-a-unittest-suite>
+# <http://ZetCode.com/articles/packageinpython/>
 
 from setuptools import setup
 
 __all__ = ()
-__version__ = '18.05.10'
+__version__ = '18.06.04'
 
 
 def _c2(*names):

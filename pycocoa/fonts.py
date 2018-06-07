@@ -27,9 +27,8 @@
 '''
 # all imports listed explicitly to help PyChecker
 from bases   import _Type0
-from nstypes import isNone, NSFont, NSFontManagerMain, nsIter, nsIter2, \
-                    NSLayoutManagerMain, NSStr, nsString2str, \
-                    NSTableColumnMain
+from nstypes import isNone, NSFont, nsIter, nsIter2, NSMain, \
+                    NSStr, nsString2str
 from oslibs  import NSFontBoldMask, NSFontItalicMask, \
                     NSFontCompressedMask, NSFontCondensedMask, \
                     NSFontExpandedMask, NSFontMonoSpaceMask, \
@@ -41,7 +40,7 @@ from strs    import Str
 from utils   import bytes2str, _ByteStrs, _Constants, _exports, \
                     flint, instanceof, _Ints, _Types
 
-__version__ = '18.05.30'
+__version__ = '18.06.06'
 
 # <http://Developer.Apple.com/documentation/appkit/nsfont.weight>
 # _NSFontWeigthHeavy      = 13 ?
@@ -56,7 +55,7 @@ __version__ = '18.05.30'
 
 
 def _nsFontsOf(family):
-    return NSFontManagerMain.availableMembersOfFontFamily_(NSStr(family))
+    return NSMain.FontManager.availableMembersOfFontFamily_(NSStr(family))
 
 
 # XXX dict _familyTraits and class FontTrait
@@ -208,9 +207,9 @@ class Font(_Type0):
             if size == 0:
                 size = ns.pointSize()
             if traits == 0:
-                traits = NSFontManagerMain.traitsOfFont_(ns)
+                traits = NSMain.FontManager.traitsOfFont_(ns)
             if not (size == ns.pointSize() and
-                    traits == NSFontManagerMain.traitsOfFont_(ns)):
+                    traits == NSMain.FontManager.traitsOfFont_(ns)):
                 ns = ns.familyName()
                 py = nsString2str(ns)
 
@@ -219,8 +218,8 @@ class Font(_Type0):
             #       nsfontmanager/1462332-fontwithfamily>
             self._traits = _traitsin(traits)
             self._weight = _weightin(weight)
-            ns = NSFontManagerMain.fontWithFamily_traits_weight_size_(
-                                ns, self._traits, self._weight, size)
+            ns = NSMain.FontManager.fontWithFamily_traits_weight_size_(
+                                 ns, self._traits, self._weight, size)
             if isNone(ns):
                 self._family = py
                 self._size   = flint(size)
@@ -230,16 +229,16 @@ class Font(_Type0):
         # <http://Developer.Apple.com/library/content/documentation/
         #  TextFonts/Conceptual/CocoaTextArchitecture/FontHandling/FontHandling.html>
         self._family = nsString2str(ns.familyName())
-        self._height = flint(NSLayoutManagerMain.defaultLineHeightForFont_(ns) + 1)
+        self._height = flint(NSMain.LayoutManager.defaultLineHeightForFont_(ns) + 1)
         self._name   = nsString2str(ns.fontName())
         self._size   = flint(ns.pointSize())
         # traits not always reflect actual traits
-        self._traits = NSFontManagerMain.traitsOfFont_(ns) or 0
+        self._traits = NSMain.FontManager.traitsOfFont_(ns) or 0
         # update with the family traits, if any
         self._traits |= _traitsin(self._family, raiser=False)
         if ns.isFixedPitch() and not self.isMonoSpace:
             self._traits |= FontTrait.MonoSpace
-        self._weight = NSFontManagerMain.weightOfFont_(ns)
+        self._weight = NSMain.FontManager.weightOfFont_(ns)
 
     def __str__(self):
         return '%s(%s)' % (self.__class__.__name__,
@@ -542,8 +541,8 @@ class Fonts(_Constants):
     MonoSpace   = Font(NSFont.userFixedPitchFontOfSize_(0))
     Palette     = Font(NSFont.paletteFontOfSize_(0))
     System      = Font(NSFont.systemFontOfSize_(0))
-    TableData   = Font(NSTableColumnMain.dataCell().font())
-    TableHeader = Font(NSTableColumnMain.headerCell().font())
+    TableData   = Font(NSMain.TableColumn.dataCell().font())
+    TableHeader = Font(NSMain.TableColumn.headerCell().font())
     Title       = Font(NSFont.titleBarFontOfSize_(0))
 
 
@@ -559,7 +558,7 @@ def fontfamilies(*prefixes):
     '''
     # <http://Developer.Apple.com/documentation/appkit/
     #       nsfontmanager/1462323-availablefontfamilies>
-    for ns in nsIter(NSFontManagerMain.availableFontFamilies()):
+    for ns in nsIter(NSMain.FontManager.availableFontFamilies()):
         f = nsString2str(ns)
         if f.startswith(prefixes or f):
             yield f

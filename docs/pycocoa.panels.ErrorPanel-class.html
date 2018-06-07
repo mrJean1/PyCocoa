@@ -3,7 +3,7 @@
           "DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
 <head>
-  <title>pycocoa.apps</title>
+  <title>pycocoa.panels.ErrorPanel</title>
   <link rel="stylesheet" href="epydoc.css" type="text/css" />
   <script type="text/javascript" src="epydoc.js"></script>
 </head>
@@ -43,7 +43,8 @@
     <td width="100%">
       <span class="breadcrumbs">
         <a href="pycocoa-module.html">Package&nbsp;pycocoa</a> ::
-        Module&nbsp;apps
+        <a href="pycocoa.panels-module.html">Module&nbsp;panels</a> ::
+        Class&nbsp;ErrorPanel
       </span>
     </td>
     <td>
@@ -51,175 +52,203 @@
         <!-- hide/show private -->
         <tr><td align="right"><span class="options"
             >[<a href="frames.html" target="_top">frames</a
-            >]&nbsp;|&nbsp;<a href="pycocoa.apps-module.html"
+            >]&nbsp;|&nbsp;<a href="pycocoa.panels.ErrorPanel-class.html"
             target="_top">no&nbsp;frames</a>]</span></td></tr>
       </table>
     </td>
   </tr>
 </table>
-<!-- ==================== MODULE DESCRIPTION ==================== -->
-<h1 class="epydoc">Module apps</h1><p class="nomargin-top"></p>
-<p>Types <a href="pycocoa.apps.App-class.html" class="link">App</a> and 
-  <a href="pycocoa.apps.Tile-class.html" class="link">Tile</a>, wrapping 
-  ObjC <code>NSApplication</code> and <code>NSDocktile</code>.</p>
+<!-- ==================== CLASS DESCRIPTION ==================== -->
+<h1 class="epydoc">Class ErrorPanel</h1><p class="nomargin-top"></p>
+<pre class="base-tree">
+  object --+                
+           |                
+bases._Type0 --+            
+               |            
+    bases._Type1 --+        
+                   |        
+        bases._Type2 --+    
+                       |    
+              <a href="pycocoa.panels.AlertPanel-class.html">AlertPanel</a> --+
+                           |
+                          <strong class="uidshort">ErrorPanel</strong>
+</pre>
 
 <hr />
-<div class="fields">      <p><strong>Version:</strong>
-        18.06.06
+<p>Python Type to show an NSError alert, wrapping ObjC 
+  <code>NSAlert</code>.</p>
+
+<!-- ==================== INSTANCE METHODS ==================== -->
+<a name="section-InstanceMethods"></a>
+<table class="summary" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr bgcolor="#70b0f0" class="table-header">
+  <td align="left" colspan="2" class="table-header">
+    <span class="table-header">Instance Methods</span></td>
+</tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a href="pycocoa.panels.ErrorPanel-class.html#__init__" class="summary-sig-name">__init__</a>(<span class="summary-sig-arg">self</span>,
+        <span class="summary-sig-arg">title</span>=<span class="summary-sig-default"><code class="variable-quote">'</code><code class="variable-string">Error</code><code class="variable-quote">'</code></span>)</span><br />
+      New <a href="pycocoa.panels.AlertPanel-class.html" 
+      class="link">AlertPanel</a>.</td>
+          <td align="right" valign="top">
+            
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a href="pycocoa.panels.ErrorPanel-class.html#show" class="summary-sig-name">show</a>(<span class="summary-sig-arg">self</span>,
+        <span class="summary-sig-arg">ns_error</span>,
+        <span class="summary-sig-arg">timeout</span>=<span class="summary-sig-default">None</span>)</span><br />
+      Show the error.</td>
+          <td align="right" valign="top">
+            
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+  <tr>
+    <td colspan="2" class="summary">
+    <p class="indent-wrapped-lines"><b>Inherited from <code>bases._Type2</code></b>:
+      <code>__str__</code>
       </p>
-</div><!-- ==================== CLASSES ==================== -->
-<a name="section-Classes"></a>
+    <p class="indent-wrapped-lines"><b>Inherited from <code>bases._Type0</code></b>:
+      <code>__repr__</code>,
+      <code>type2strepr</code>
+      </p>
+    <p class="indent-wrapped-lines"><b>Inherited from <code>object</code></b>:
+      <code>__delattr__</code>,
+      <code>__format__</code>,
+      <code>__getattribute__</code>,
+      <code>__hash__</code>,
+      <code>__new__</code>,
+      <code>__reduce__</code>,
+      <code>__reduce_ex__</code>,
+      <code>__setattr__</code>,
+      <code>__sizeof__</code>,
+      <code>__subclasshook__</code>
+      </p>
+    </td>
+  </tr>
+</table>
+<!-- ==================== PROPERTIES ==================== -->
+<a name="section-Properties"></a>
 <table class="summary" border="1" cellpadding="3"
        cellspacing="0" width="100%" bgcolor="white">
 <tr bgcolor="#70b0f0" class="table-header">
   <td align="left" colspan="2" class="table-header">
-    <span class="table-header">Classes</span></td>
+    <span class="table-header">Properties</span></td>
 </tr>
-<tr>
-    <td width="15%" align="right" valign="top" class="summary">
-      <span class="summary-type">&nbsp;</span>
-    </td><td class="summary">
-        <a href="pycocoa.apps.App-class.html" class="summary-name">App</a><br />
-      Python <code>App</code> Type, wrapping an ObjC 
-        <code>NSApplication</code>.
-    </td>
-  </tr>
-<tr>
-    <td width="15%" align="right" valign="top" class="summary">
-      <span class="summary-type">&nbsp;</span>
-    </td><td class="summary">
-        <a href="pycocoa.apps.Tile-class.html" class="summary-name">Tile</a><br />
-      Dock tile for an <a href="pycocoa.apps.App-class.html" 
-        class="link">App</a>, wrapping an ObjC <code>NSDockTile</code>.
+  <tr>
+    <td colspan="2" class="summary">
+    <p class="indent-wrapped-lines"><b>Inherited from <code>bases._Type2</code></b>:
+      <code>tag</code>,
+      <code>title</code>
+      </p>
+    <p class="indent-wrapped-lines"><b>Inherited from <code>bases._Type1</code></b>:
+      <code>NSdelegate</code>,
+      <code>app</code>
+      </p>
+    <p class="indent-wrapped-lines"><b>Inherited from <code>bases._Type0</code></b>:
+      <code>NS</code>
+      </p>
+    <p class="indent-wrapped-lines"><b>Inherited from <code>object</code></b>:
+      <code>__class__</code>
+      </p>
     </td>
   </tr>
 </table>
-<!-- ==================== FUNCTIONS ==================== -->
-<a name="section-Functions"></a>
-<table class="summary" border="1" cellpadding="3"
-       cellspacing="0" width="100%" bgcolor="white">
-<tr bgcolor="#70b0f0" class="table-header">
-  <td align="left" colspan="2" class="table-header">
-    <span class="table-header">Functions</span></td>
-</tr>
-<tr>
-    <td width="15%" align="right" valign="top" class="summary">
-      <span class="summary-type">&nbsp;</span>
-    </td><td class="summary">
-      <table width="100%" cellpadding="0" cellspacing="0" border="0">
-        <tr>
-          <td><span class="summary-sig"><a href="pycocoa.apps-module.html#app_title" class="summary-sig-name">app_title</a>(<span class="summary-sig-arg">title</span>)</span><br />
-      Get/set the app title.</td>
-          <td align="right" valign="top">
-            
-            
-          </td>
-        </tr>
-      </table>
-      
-    </td>
-  </tr>
-<tr>
-    <td width="15%" align="right" valign="top" class="summary">
-      <span class="summary-type">&nbsp;</span>
-    </td><td class="summary">
-      <table width="100%" cellpadding="0" cellspacing="0" border="0">
-        <tr>
-          <td><span class="summary-sig"><a href="pycocoa.apps-module.html#ns2App" class="summary-sig-name">ns2App</a>(<span class="summary-sig-arg">ns</span>)</span><br />
-      Get the <a href="pycocoa.apps.App-class.html" class="link">App</a> 
-      instance from an <code>NSApplication</code> or an 
-      <code>NSNotification</code> instance.</td>
-          <td align="right" valign="top">
-            
-            
-          </td>
-        </tr>
-      </table>
-      
-    </td>
-  </tr>
-</table>
-<!-- ==================== VARIABLES ==================== -->
-<a name="section-Variables"></a>
-<table class="summary" border="1" cellpadding="3"
-       cellspacing="0" width="100%" bgcolor="white">
-<tr bgcolor="#70b0f0" class="table-header">
-  <td align="left" colspan="2" class="table-header">
-    <span class="table-header">Variables</span></td>
-</tr>
-<tr>
-    <td width="15%" align="right" valign="top" class="summary">
-      <span class="summary-type">&nbsp;</span>
-    </td><td class="summary">
-        <a name="NSApplicationDelegate"></a><span class="summary-name">NSApplicationDelegate</span> = <code title="ObjCClass('_NSApplicationDelegate')">ObjCClass('_NSApplicationDelegate')</code>
-    </td>
-  </tr>
-</table>
-<!-- ==================== FUNCTION DETAILS ==================== -->
-<a name="section-FunctionDetails"></a>
+<!-- ==================== METHOD DETAILS ==================== -->
+<a name="section-MethodDetails"></a>
 <table class="details" border="1" cellpadding="3"
        cellspacing="0" width="100%" bgcolor="white">
 <tr bgcolor="#70b0f0" class="table-header">
   <td align="left" colspan="2" class="table-header">
-    <span class="table-header">Function Details</span></td>
+    <span class="table-header">Method Details</span></td>
 </tr>
 </table>
-<a name="app_title"></a>
+<a name="__init__"></a>
 <div>
 <table class="details" border="1" cellpadding="3"
        cellspacing="0" width="100%" bgcolor="white">
 <tr><td>
   <table width="100%" cellpadding="0" cellspacing="0" border="0">
   <tr valign="top"><td>
-  <h3 class="epydoc"><span class="sig"><span class="sig-name">app_title</span>(<span class="sig-arg">title</span>)</span>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">__init__</span>(<span class="sig-arg">self</span>,
+        <span class="sig-arg">title</span>=<span class="sig-default"><code class="variable-quote">'</code><code class="variable-string">Error</code><code class="variable-quote">'</code></span>)</span>
+    <br /><em class="fname">(Constructor)</em>
   </h3>
   </td><td align="right" valign="top"
     >&nbsp;
     </td>
   </tr></table>
   
-  <p>Get/set the app title.</p>
+  <p>New <a href="pycocoa.panels.AlertPanel-class.html" 
+  class="link">AlertPanel</a>.</p>
   <dl class="fields">
     <dt>Parameters:</dt>
     <dd><ul class="nomargin-top">
-        <li><strong class="pname"><code>title</code></strong> - New title (<code>str</code>).</li>
+        <li><strong class="pname"><code>title</code></strong> - The panel name and title (<code>str</code>).</li>
     </ul></dd>
-    <dt>Returns:</dt>
-        <dd>Previous title (<code>str</code>).</dd>
+    <dt>Raises:</dt>
+    <dd><ul class="nomargin-top">
+        <li><code><strong class='fraise'>ValueError</strong></code> - Multi-line <i>info</i> or too long.</li>
+    </ul></dd>
+    <dt>Overrides:
+        object.__init__
+    </dt>
   </dl>
 </td></tr></table>
 </div>
-<a name="ns2App"></a>
+<a name="show"></a>
 <div>
 <table class="details" border="1" cellpadding="3"
        cellspacing="0" width="100%" bgcolor="white">
 <tr><td>
   <table width="100%" cellpadding="0" cellspacing="0" border="0">
   <tr valign="top"><td>
-  <h3 class="epydoc"><span class="sig"><span class="sig-name">ns2App</span>(<span class="sig-arg">ns</span>)</span>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">show</span>(<span class="sig-arg">self</span>,
+        <span class="sig-arg">ns_error</span>,
+        <span class="sig-arg">timeout</span>=<span class="sig-default">None</span>)</span>
   </h3>
   </td><td align="right" valign="top"
     >&nbsp;
     </td>
   </tr></table>
   
-  <p>Get the <a href="pycocoa.apps.App-class.html" class="link">App</a> 
-  instance from an <code>NSApplication</code> or an 
-  <code>NSNotification</code> instance.</p>
+  <p>Show the error.</p>
   <dl class="fields">
     <dt>Parameters:</dt>
     <dd><ul class="nomargin-top">
-        <li><strong class="pname"><code>ns</code></strong> - The ObjC instance (<code>NS...</code>).</li>
+        <li><strong class="pname"><code>ns_error</code></strong> - Error information (NSError).</li>
+        <li><strong class="pname"><code>timeout</code></strong> - Optional time limit (<code>float</code>).</li>
     </ul></dd>
     <dt>Returns:</dt>
-        <dd>The app instance (<a href="pycocoa.apps.App-class.html" 
-          class="link">App</a>).</dd>
+        <dd>TBD.</dd>
     <dt>Raises:</dt>
     <dd><ul class="nomargin-top">
-        <li><code><strong class='fraise'>RuntimeError</strong></code> - <a href="pycocoa.apps.App-class.html" class="link">App</a> 
-        mismatch.</li>
-        <li><code><strong class='fraise'>TypeError</strong></code> - Invalid <i>ns</i> type.</li>
+        <li><code><strong class='fraise'>TypeError</strong></code> - Invalid <i>ns_error</i>.</li>
     </ul></dd>
+    <dt>Overrides:
+        <a href="pycocoa.panels.AlertPanel-class.html#show">AlertPanel.show</a>
+    </dt>
   </dl>
 </td></tr></table>
 </div>
@@ -255,7 +284,7 @@
 <table border="0" cellpadding="0" cellspacing="0" width="100%%">
   <tr>
     <td align="left" class="footer">
-    Generated by Epydoc 3.0.1 on Thu Jun  7 12:45:43 2018
+    Generated by Epydoc 3.0.1 on Thu Jun  7 12:45:45 2018
     </td>
     <td align="right" class="footer">
       <a target="mainFrame" href="http://epydoc.sourceforge.net"

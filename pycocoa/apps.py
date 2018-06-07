@@ -28,8 +28,9 @@
 # all imports listed explicitly to help PyChecker
 from bases   import _Type2
 from menus   import _menuItemHandler_name, Menu, MenuBar, ns2Item
-from nstypes import NSApplication, NSApplicationMain, nsBundleRename, \
-                    NSConcreteNotification, NSNotification, nsOf, NSStr
+from nstypes import NSApplication, nsBundleRename, \
+                    NSConcreteNotification, NSMain, NSNotification, \
+                    nsOf, NSStr
 # from oslibs  import YES
 from runtime import isInstanceOf, ObjCClass, ObjCInstance, \
                     _ObjC_log_totals, ObjCSubclass, send_super
@@ -43,7 +44,7 @@ __all__ = ('App',
            'Tile',
            'app_title',
            'ns2App')
-__version__ = '18.05.30'
+__version__ = '18.06.06'
 
 
 class App(_Type2):
@@ -71,7 +72,7 @@ class App(_Type2):
         if raiser:
             _Globals.raiser = raiser
 
-        self.NS = NSApplicationMain
+        self.NS = NSMain.Application
         # add a method to set the app's title
         self.NS.setTitle_ = nsBundleRename
 #       pool = NSAutoreleasePool.alloc().init()  # created by NSApplication

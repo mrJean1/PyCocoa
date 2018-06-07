@@ -64,7 +64,7 @@
 
 <hr />
 <div class="fields">      <p><strong>Version:</strong>
-        18.05.30
+        18.06.06
       </p>
 </div><!-- ==================== CLASSES ==================== -->
 <a name="section-Classes"></a>
@@ -130,6 +130,40 @@
   <td align="left" colspan="2" class="table-header">
     <span class="table-header">Functions</span></td>
 </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a href="pycocoa.nstypes-module.html#isAlias" class="summary-sig-name">isAlias</a>(<span class="summary-sig-arg">path</span>)</span><br />
+      Resolve a macOS file or folder alias.</td>
+          <td align="right" valign="top">
+            
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a href="pycocoa.nstypes-module.html#isLink" class="summary-sig-name">isLink</a>(<span class="summary-sig-arg">path</span>)</span><br />
+      Resolve a file or folder link or alias.</td>
+          <td align="right" valign="top">
+            
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
 <tr>
     <td width="15%" align="right" valign="top" class="summary">
       <span class="summary-type">&nbsp;</span>
@@ -596,6 +630,13 @@
     <td width="15%" align="right" valign="top" class="summary">
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
+        <a name="NSError"></a><span class="summary-name">NSError</span> = <code title="ObjCClass('NSError')">ObjCClass('NSError')</code>
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
         <a name="NSFont"></a><span class="summary-name">NSFont</span> = <code title="ObjCClass('NSFont')">ObjCClass('NSFont')</code>
     </td>
   </tr>
@@ -933,42 +974,8 @@
     <td width="15%" align="right" valign="top" class="summary">
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
-        <a name="NSApplicationMain"></a><span class="summary-name">NSApplicationMain</span> = <code title="NSApplication.sharedApplication()">NSApplication.sharedApplication()</code>
-    </td>
-  </tr>
-<tr>
-    <td width="15%" align="right" valign="top" class="summary">
-      <span class="summary-type">&nbsp;</span>
-    </td><td class="summary">
-        <a name="NSFontManagerMain"></a><span class="summary-name">NSFontManagerMain</span> = <code title="NSFontManager.sharedFontManager()">NSFontManager.sharedFontManager()</code>
-    </td>
-  </tr>
-<tr>
-    <td width="15%" align="right" valign="top" class="summary">
-      <span class="summary-type">&nbsp;</span>
-    </td><td class="summary">
-        <a name="NSLayoutManagerMain"></a><span class="summary-name">NSLayoutManagerMain</span> = <code title="NSLayoutManager.alloc().init()">NSLayoutManager.alloc().init()</code>
-    </td>
-  </tr>
-<tr>
-    <td width="15%" align="right" valign="top" class="summary">
-      <span class="summary-type">&nbsp;</span>
-    </td><td class="summary">
-        <a name="NSScreenMainFrame"></a><span class="summary-name">NSScreenMainFrame</span> = <code title="NSScreen.alloc().init().mainScreen().frame()">NSScreen.alloc().init().mainScreen().frame()</code>
-    </td>
-  </tr>
-<tr>
-    <td width="15%" align="right" valign="top" class="summary">
-      <span class="summary-type">&nbsp;</span>
-    </td><td class="summary">
-        <a name="NSScreenMainSize"></a><span class="summary-name">NSScreenMainSize</span> = <code title="NSScreenMainFrame.size">NSScreenMainFrame.size</code>
-    </td>
-  </tr>
-<tr>
-    <td width="15%" align="right" valign="top" class="summary">
-      <span class="summary-type">&nbsp;</span>
-    </td><td class="summary">
-        <a name="NSTableColumnMain"></a><span class="summary-name">NSTableColumnMain</span> = <code title="NSTableColumn.alloc().init()">NSTableColumn.alloc().init()</code>
+        <a name="NSMain"></a><span class="summary-name">NSMain</span> = <code title="_NSMain()">_NSMain()</code><br />
+      main, global <code>NS...</code> singletons
     </td>
   </tr>
 </table>
@@ -981,6 +988,67 @@
     <span class="table-header">Function Details</span></td>
 </tr>
 </table>
+<a name="isAlias"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">isAlias</span>(<span class="sig-arg">path</span>)</span>
+  </h3>
+  </td><td align="right" valign="top"
+    >&nbsp;
+    </td>
+  </tr></table>
+  
+  <p>Resolve a macOS file or folder alias.</p>
+  <dl class="fields">
+    <dt>Parameters:</dt>
+    <dd><ul class="nomargin-top">
+        <li><strong class="pname"><code>path</code></strong> - The alias name (<code>str</code>, <a 
+          href="pycocoa.nstypes.NSStr-class.html" class="link">NSStr</a> or
+          <a href="pycocoa.nstypes.CFStr-class.html" 
+          class="link">CFStr</a>).</li>
+    </ul></dd>
+    <dt>Returns:</dt>
+        <dd>The alias' target (<code>str</code>) or <code>None</code> if 
+          <i>path</i> isn't a macOS alias.</dd>
+  </dl>
+<div class="fields">      <p><strong>See Also:</strong>
+        <a href="http://GitHub.com/al45tair/mac_alias" 
+        target="_top">mac-alias</a> and <a 
+        href="http://StackOverflow.com/questions/21150169/" 
+        target="_top">here</a>.
+      </p>
+</div></td></tr></table>
+</div>
+<a name="isLink"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">isLink</span>(<span class="sig-arg">path</span>)</span>
+  </h3>
+  </td><td align="right" valign="top"
+    >&nbsp;
+    </td>
+  </tr></table>
+  
+  <p>Resolve a file or folder link or alias.</p>
+  <dl class="fields">
+    <dt>Parameters:</dt>
+    <dd><ul class="nomargin-top">
+        <li><strong class="pname"><code>path</code></strong> - The link or alias name (<code>str</code>).</li>
+    </ul></dd>
+    <dt>Returns:</dt>
+        <dd>The link's or alias' target (<code>str</code>) or 
+          <code>None</code> if <i>path</i> isn't a link or alias.</dd>
+  </dl>
+</td></tr></table>
+</div>
 <a name="isNone"></a>
 <div>
 <table class="details" border="1" cellpadding="3"
@@ -1610,7 +1678,7 @@
 <table border="0" cellpadding="0" cellspacing="0" width="100%%">
   <tr>
     <td align="left" class="footer">
-    Generated by Epydoc 3.0.1 on Sat Jun  2 14:08:31 2018
+    Generated by Epydoc 3.0.1 on Thu Jun  7 12:45:43 2018
     </td>
     <td align="right" class="footer">
       <a target="mainFrame" href="http://epydoc.sourceforge.net"
