@@ -1,10 +1,10 @@
 
 # -*- coding: utf-8 -*-
 
-from pycocoa import Dict, isNone, NSBundle, NSnil, NSStr, \
+from pycocoa import Dict, isNone, NSMain, NSStr, \
                     ns2Type, ObjCBase, Str, type2NS
 
-__version__ = '18.04.26'
+__version__ = '18.06.08'
 
 
 def _repr(o):
@@ -21,7 +21,7 @@ if __name__ == '__main__':
 
     try:
         # see pycocoa.nstypes.nsBundleRename
-        b = NSBundle.mainBundle()
+        b = NSMain.Bundle
         assert(not isNone(b))
 
         print('%s: %s' % ('b', _repr(b)))
@@ -45,7 +45,7 @@ if __name__ == '__main__':
         k = type2NS('missing')
         v = D.NS.objectForKey_(k)  # returns nil -> None
         print('%s: %s, %r' % ('[missing] key', _repr(k), _repr(v)))
-        assert(v is NSnil)
+        assert(v is NSMain.nil)
         assert(v is None)
 
         print('D: %s[%s]' % (_repr(D), len(D)))

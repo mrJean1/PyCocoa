@@ -36,16 +36,16 @@ from utils   import _Types
 
 __all__ = ('FrozenSet',
            'Set')
-__version__ = '18.05.17'
+__version__ = '18.06.10'
 
 
 if True:  # MCCABE 69
 
     class FrozenSet(frozenset, _Type0):  # frozenset, first to maintain frozenset behavior
-        '''Python C{frozenset} Type, wrapping an immutable ObjC C{NSSet}.
+        '''Python C{frozenset} Type, wrapping an immutable ObjC L{NSSet}.
         '''
         def __new__(cls, ns_frozenset=()):
-            '''New L{FrozenSet} from a C{frozenset}, C{tuple}, L{FrozenSet} or C{NSSet}.
+            '''New L{FrozenSet} from a C{frozenset}, C{tuple}, L{FrozenSet} or L{NSSet}.
             '''
             if isinstance(ns_frozenset, FrozenSet):
                 return ns_frozenset
@@ -72,10 +72,10 @@ if True:  # MCCABE 69
             return self.__class__(self)
 
     class Set(set, _Type0):  # set, first to maintain set behavior
-        '''Python c{Set} Type, wrapping an ObjC C{NSMutableSet}.
+        '''Python c{Set} Type, wrapping an ObjC L{NSMutableSet}.
         '''
         def __new__(cls, ns_set=[]):
-            '''New L{Set} from a C{set}, C{list}, L{Set} or C{NSMutableSet}.
+            '''New L{Set} from a C{set}, C{list}, L{Set} or L{NSMutableSet}.
             '''
             if isinstance(ns_set, Set):
                 ns, py = ns_set.NS, ns_set
@@ -108,13 +108,13 @@ if True:  # MCCABE 69
 else:  # XXX far too much duplication
 
     class FrozenSet(_Type0):  # PYCHOK expected
-        '''Python C{frozenset} Type, wrapping an immutable ObjC C{NSSet}.
+        '''Python C{frozenset} Type, wrapping an immutable ObjC L{NSSet}.
         '''
         _set  = frozenset()  # or set(), empty to start
         _type = frozenset
 
         def __init__(self, ns_set=()):
-            '''New L{FrozenSet} from a C{frozenset}, C{tuple}, L{FrozenSet} or C{NSSet}.
+            '''New L{FrozenSet} from a C{frozenset}, C{tuple}, L{FrozenSet} or L{NSSet}.
             '''
             if isinstance(ns_set, frozenset):
                 self._set = ns_set
@@ -244,12 +244,12 @@ else:  # XXX far too much duplication
             return self.__class__(self._set.union(*others))
 
     class Set(FrozenSet):  # PYCHOK expected
-        '''Python C{Set} Type, wrapping an ObjC C{NSMutableSet}.
+        '''Python C{Set} Type, wrapping an ObjC L{NSMutableSet}.
         '''
         _type = set
 
         def __init__(self, ns_set=[]):
-            '''New L{Set} from a C{set}, C{list}, L{FrozenSet}, L{Set} or C{NSMutableSet}.
+            '''New L{Set} from a C{set}, C{list}, L{FrozenSet}, L{Set} or L{NSMutableSet}.
             '''
             if isinstance(ns_set, set):
                 self._set = ns_set

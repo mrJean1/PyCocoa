@@ -65,10 +65,10 @@ from octypes import emcoding2ctype, encoding2ctype, \
                     Class_t, Id_t, IMP_t, Ivar_t, Protocol_t, SEL_t, \
                     split_encoding
 from oslibs  import libobjc  # get_lib
-from utils   import bytes2str, _exports, instanceof, missing, \
+from utils   import bytes2str, _exports, isinstanceOf, missing, \
                     name2objc, str2bytes
 
-__version__ = '18.05.03'
+__version__ = '18.06.08'
 
 _c_func_t_cache = {}
 
@@ -405,7 +405,7 @@ def get_selectornameof(sel):
 
        @return: The selector name (C{str}) if found, "" otherwise.
     '''
-    instanceof(sel, SEL_t, name='sel')
+    isinstanceOf(sel, SEL_t, name='sel')
     return bytes2str(libobjc.sel_getName(sel)) or ''
 
 

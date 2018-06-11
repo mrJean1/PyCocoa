@@ -32,10 +32,10 @@ from bases   import _Type0
 from nstypes import NSAttributedString, NSConstantString, \
                     NSStr, NSString, nsString2str
 from pytypes import dict2NS, str2NS
-from utils   import instanceof, _Strs, _Types
+from utils   import isinstanceOf, _Strs, _Types
 
 __all__ = ('Str', 'StrAttd')
-__version__ = '18.06.05'
+__version__ = '18.06.10'
 
 
 class Str(str, _Type0):  # str, first to maintain str behavior
@@ -49,7 +49,7 @@ class Str(str, _Type0):  # str, first to maintain str behavior
             return ns_str
         elif isinstance(ns_str, _Strs):
             ns, py = str2NS(ns_str), ns_str
-        elif instanceof(ns_str, NSStr, name='ns_str'):
+        elif isinstanceOf(ns_str, NSStr, name='ns_str'):
             ns, py = ns_str, nsString2str(ns_str)
 
         self = super(Str, cls).__new__(cls, py)
@@ -71,7 +71,7 @@ class Str(str, _Type0):  # str, first to maintain str behavior
 
 
 class StrAttd(Str, _Type0):
-    '''Python C{str} Type, wrapping (immutable) ObjC C{NSAttributedString}.
+    '''Python C{str} Type, wrapping (immutable) ObjC L{NSAttributedString}.
     '''
     _attachment      = None
     _backgroundColor = None

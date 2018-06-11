@@ -23,14 +23,19 @@
 # ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
 # OTHER DEALINGS IN THE SOFTWARE.
 
-'''Types L{Window}, L{MediaWindow}, L{Screen}, L{WindowStyle}, wrapping ObjC C{NSWindow}, etc.
+'''Types L{Window}, L{MediaWindow}, L{Screen}, L{WindowStyle}, wrapping ObjC L{NSWindow}, etc.
+
+@var AutoResize:  Window resize options (C{mask}).
+@var BezelStyle:  Bezel kinds (C{enum}).
+@var Border:      Border kinds (C{enum}).
+@var WindowStyle: Window styles (C{mask}).
 '''
 # all imports listed explicitly to help PyChecker
 from bases    import _Type2
 from geometry import Rect
 from nstypes  import isNone, NSConcreteNotification, NSFont, NSMain, \
-                     NSNone, NSNotification, NSScrollView, NSStr, \
-                     nsTextSize3, NSTextView, NSView, NSWindow
+                     NSNotification, NSScrollView, NSStr, nsTextSize3, \
+                     NSTextView, NSView, NSWindow
 from octypes  import NSIntegerMax, NSPoint_t, NSSize_t
 from oslibs   import NO, NSBackingStoreBuffered, \
                      NSWindowStyleMaskClosable, \
@@ -42,10 +47,10 @@ from oslibs   import NO, NSBackingStoreBuffered, \
 from runtime  import isInstanceOf, ObjCClass, ObjCInstance, \
                      ObjCSubclass, send_super
 from utils    import aspect_ratio, bytes2str, _Constants, _exports, \
-                     _Globals, instanceof, _text_title, _Types
+                     _Globals, isinstanceOf, _text_title, _Types
 # from enum   import Enum
 
-__version__ = '18.06.06'
+__version__ = '18.06.10'
 
 _Cascade = NSPoint_t(25, 25)  # PYCHOK false
 
@@ -70,7 +75,7 @@ class AutoResize(_Constants):  # Enum?
     WidthSizable  =  2  # NSViewWidthSizable
 
 
-AutoResize = AutoResize()  #: AutoResize options (C{mask}).
+AutoResize = AutoResize()  # AutoResize options
 
 
 def autoResizes(*options):
@@ -107,7 +112,7 @@ class BezelStyle(_Constants):  # Enum?
     TexturedSquare    =  8  # NSTexturedSquareBezelStyle
 
 
-BezelStyle = BezelStyle()  #: Bezel style constants (C{int}).
+BezelStyle = BezelStyle()  # bezel style constants
 
 
 # <http://Developer.Apple.com/documentation/appkit/nsbordertype>
@@ -120,11 +125,11 @@ class Border(_Constants):  # Enum?
     No     = 0  # NSNoBorder
 
 
-Border = Border()  #: Border type constants (C{int}).
+Border = Border()  # border type constants
 
 
 class Screen(Rect):
-    '''Screen Python Type, wrapping ObjC C{NSRect_t}.
+    '''Screen Python Type, wrapping ObjC L{NSRect_t}.
     '''
     def __init__(self, fraction=0.5, cascade=10):
         '''New, partial screen L{Rect}.
@@ -148,13 +153,13 @@ class Screen(Rect):
 
 
 class Window(_Type2):
-    '''Basic, base window Python Type, wrapping ObjC C{NSWindow}.
+    '''Basic window Python Type, wrapping ObjC L{NSWindow}.
     '''
     _frame     = None
     _isKey     = None
     _isMain    = None
     _ns_uniqID = 0
-    _ns_view   = NSNone
+    _ns_view   = None
     _ratio     = ()
 
     def __init__(self, title='Main', frame=None, excl=0, auto=False, **kwds):
@@ -295,7 +300,7 @@ class Window(_Type2):
     def NSview(self):
         '''Get this window's C{NS} view (C{NSView...}).
         '''
-        return self._ns_view
+        return self._ns_view or NSMain.Null
 
     @NSview.setter  # PYCHOK property.setter
     def NSview(self, ns_view):
@@ -431,7 +436,7 @@ class WindowStyle(_Constants):  # Enum?
     Utility        = NSWindowStyleMaskUtilityWindow
 
 
-WindowStyle = WindowStyle()  #: Window style constants (C{mask}).
+WindowStyle = WindowStyle()  # window style constants
 
 
 def windowStyles(*styles):
@@ -532,7 +537,7 @@ class TextWindow(Window):
 
 
 class _NSWindowDelegate(object):
-    '''An ObjC-callable C{NSDelegate} class to handle C{NSWindow} events
+    '''An ObjC-callable C{NSDelegate} class to handle L{NSWindow} events
        as L{Window}.window..._ and L{App}.window..._ callback calls.
 
        @see: The C{_NSApplicationDelegate} for more C{NSDelegate} details.
@@ -545,7 +550,7 @@ class _NSWindowDelegate(object):
 
            @note: I{MUST} be called as C{.alloc().init(...)}.
         '''
-        instanceof(window, Window, name='window')
+        isinstanceOf(window, Window, name='window')
 #       self = ObjCInstance(send_message('NSObject', 'alloc'))
         self = ObjCInstance(send_super(self, 'init'))
         self.window = window
@@ -570,14 +575,14 @@ class _NSWindowDelegate(object):
 
     @_ObjC.method('v@')
     def windowDidBecomeKey_(self, ns_notification):
-        '''ObjC callback to handle C{NSWindow} events.
+        '''ObjC callback to handle L{NSWindow} events.
         '''
         self._ns2w(ns_notification)
         self.window.windowKey_(True)
 
     @_ObjC.method('v@')
     def windowDidBecomeMain_(self, ns_notification):
-        '''ObjC callback to handle C{NSWindow} events.
+        '''ObjC callback to handle L{NSWindow} events.
         '''
         self._ns2w(ns_notification)
         self.window.windowMain_(True)
@@ -586,14 +591,14 @@ class _NSWindowDelegate(object):
 
     @_ObjC.method('v@')
     def windowDidResignKey_(self, ns_notification):
-        '''ObjC callback to handle C{NSWindow} events.
+        '''ObjC callback to handle L{NSWindow} events.
         '''
         self._ns2w(ns_notification)
         self.window.windowKey_(False)
 
     @_ObjC.method('v@')
     def windowDidResignMain_(self, ns_notification):
-        '''ObjC callback to handle C{NSWindow} events.
+        '''ObjC callback to handle L{NSWindow} events.
         '''
         self._ns2w(ns_notification)
         self.window.windowMain_(False)
@@ -602,14 +607,14 @@ class _NSWindowDelegate(object):
 
     @_ObjC.method('v@')
     def windowDidResize_(self, ns_notification):
-        '''ObjC callback to handle C{NSWindow} events.
+        '''ObjC callback to handle L{NSWindow} events.
         '''
         self._ns2w(ns_notification)
         self.window.windowResize_()
 
     @_ObjC.method('v@')
     def windowPrint_(self, ns_notification):
-        '''ObjC callback to handle C{NSWindow} events.
+        '''ObjC callback to handle L{NSWindow} events.
         '''
         self._ns2w(ns_notification)
         self.window.windowPrint_()
@@ -617,7 +622,7 @@ class _NSWindowDelegate(object):
 
     @_ObjC.method('B@')
     def windowShouldClose_(self, ns_notification):
-        '''ObjC callback to handle C{NSWindow} events.
+        '''ObjC callback to handle L{NSWindow} events.
         '''
         self._ns2w(ns_notification)
         ok = self.window.windowCloseOK_()
@@ -625,7 +630,7 @@ class _NSWindowDelegate(object):
 
     @_ObjC.method('B@')
     def windowShouldZoom_toFrame_(self, ns_frame):
-        '''ObjC callback to handle C{NSWindow} events.
+        '''ObjC callback to handle L{NSWindow} events.
         '''
         # <http://Developer.Apple.com//documentation/appkit/
         #       nswindowdelegate/1419533-windowshouldzoom>
@@ -634,7 +639,7 @@ class _NSWindowDelegate(object):
 
     @_ObjC.method('v@')
     def windowWillClose_(self, ns_notification):
-        '''ObjC callback to handle C{NSWindow} events.
+        '''ObjC callback to handle L{NSWindow} events.
         '''
         # set the window's delegate to the app's to
         # make method .windowWillClose_ work, see
@@ -652,15 +657,15 @@ class _NSWindowDelegate(object):
 #   @_ObjC.method('@@@')
 #   def windowWillReturnFieldEditor_toObject_(self, ns_window, ns_obj):
 #       self._ns2w(ns_window)
-#       return NSNone
+#       return NSMain.Null
 
 
 NSWindowDelegate = ObjCClass('_NSWindowDelegate')
 
 
 def ns2Window(ns):
-    '''Get the L{Window} instance for an ObjC C{NSWindow} or
-       C{NSNotification} instance.
+    '''Get the L{Window} instance for an ObjC L{NSWindow} or
+       L{NSNotification} instance.
 
        @param ns: The ObjC instance (C{NS...}).
 

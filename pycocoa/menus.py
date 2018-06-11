@@ -23,7 +23,7 @@
 # ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
 # OTHER DEALINGS IN THE SOFTWARE.
 
-'''Types L{Item}, L{Menu}, L{MenuBar} and L{Separator}, wrapping ObjC C{NSMenuItem} and C{Menu}.
+'''Types L{Item}, L{Menu}, L{MenuBar} and L{Separator}, wrapping ObjC L{NSMenuItem} and L{NSMenu}.
 '''
 # all imports listed explicitly to help PyChecker
 from bases   import _Type1, _Type2
@@ -34,20 +34,20 @@ from octypes import SEL_t
 from oslibs  import NSAlternateKeyMask, NSCommandKeyMask, \
                     NSControlKeyMask, NSShiftKeyMask  # PYCHOK expected
 from runtime import isInstanceOf
-from utils   import _Globals, instanceof, name2pymethod, _Types
+from utils   import _Globals, isinstanceOf, name2pymethod, _Types
 
 __all__ = ('Item',
            'Menu', 'MenuBar',
            'Separator',
            'ns2Item',
            'title2action')
-__version__ = '18.05.15'
+__version__ = '18.06.10'
 
 _menuItemHandler_name = 'menuItemHandler_'
 
 
 class Item(_Type2):
-    '''Python menu C{Item} Type, wrapping ObjC C{NSMenuItem}.
+    '''Python menu C{Item} Type, wrapping ObjC L{NSMenuItem}.
     '''
     _action = _menuItemHandler_name
     _key    = ''
@@ -80,7 +80,7 @@ class Item(_Type2):
         if action is None:
             a = title2action(self.title)
             # self._SEL_ = get_selector(a)
-        elif instanceof(action, SEL_t):  # or isInstanceOf(sel, NSSelector)
+        elif isinstanceOf(action, SEL_t):  # or isInstanceOf(sel, NSSelector)
             self._SEL_ = action
             a = name2pymethod(get_selectornameof(action))
         else:
@@ -161,12 +161,11 @@ class Item(_Type2):
 
     @property
     def shift(self):
-
         return bool(self._mask & NSShiftKeyMask)
 
 
 class Menu(_Type2):
-    '''Menu Python Type, wrapping ObjC C{NSMenu}.
+    '''Menu Python Type, wrapping ObjC L{NSMenu}.
     '''
     _items = []
 
@@ -188,7 +187,7 @@ class Menu(_Type2):
            @param items: The items to add (L{Item} or L{Separator}).
         '''
         for item in items:
-            instanceof(item, Item, Separator, name='item')
+            isinstanceOf(item, Item, Separator, name='item')
             self.NS.addItem_(nsOf(item))
 
 #   def click(self):
@@ -229,7 +228,7 @@ class Menu(_Type2):
 # <http://Developer.Apple.com//library/content/qa/qa1420/_index.html
 #      #//apple_ref/doc/uid/DTS10004127>
 class MenuBar(_Type2):
-    '''Python C{MenuBar} Type, wrapping ObjC C{NSMenu}.
+    '''Python C{MenuBar} Type, wrapping ObjC L{NSMenu}.
     '''
     _menus = []
 
@@ -260,7 +259,7 @@ class MenuBar(_Type2):
            @param menus: The menus to add (L{Menu}).
         '''
         for menu in menus:
-            instanceof(menu, Menu, name='menu')
+            isinstanceOf(menu, Menu, name='menu')
             self._menus.append(menu)
 
             # ns = NSMenuItem.alloc().init(); ns.setTitle(NSStr(menu.title))
@@ -306,13 +305,13 @@ class Separator(_Type1):
 
            @keyword kws: Optional, additional keyword arguments.
         '''
-        self.NS = NSMenuItem.separatorItem()  # can't be singleton
+        self.NS = NSMenuItem.separatorItem()  # XXX can't be singleton
 
 
 def ns2Item(ns):
-    '''Get the L{Item} instance for an C{NSMenuItem}.
+    '''Get the L{Item} instance for an L{NSMenuItem}.
 
-       @param ns: The ObjC instance (C{NSMenuItem}).
+       @param ns: The ObjC instance (L{NSMenuItem}).
 
        @return: The item instance (L{Item}).
 

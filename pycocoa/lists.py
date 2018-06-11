@@ -25,7 +25,7 @@
 # ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
 # OTHER DEALINGS IN THE SOFTWARE.
 
-'''Type L{List}, wrapping ObjC C{NSMutableArray}.
+'''Type L{List}, wrapping ObjC L{NSMutableArray}.
 '''
 # all imports listed explicitly to help PyChecker
 from nstypes import NSMutableArray
@@ -40,16 +40,16 @@ except ImportError:  # Python 2-
     from itertools import izip_longest as zip_longest
 
 __all__ = ('List',)
-__version__ = '18.05.17'
+__version__ = '18.06.10'
 
 
 class List(Tuple):
-    '''Python C{list} Type, wrapping an ObjC C{NSMutableArray}.
+    '''Python C{list} Type, wrapping an ObjC L{NSMutableArray}.
     '''
     _type = list
 
     def __init__(self, ns_list=[]):
-        '''New L{List} from a C{list}, L{List}, L{Tuple} or C{NSMutableArry}.
+        '''New L{List} from a C{list}, L{List}, L{Tuple} or L{NSMutableArray}.
         '''
         if isinstance(ns_list, list):
             self.NS = list2NS(ns_list)

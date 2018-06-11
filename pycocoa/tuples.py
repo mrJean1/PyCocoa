@@ -25,7 +25,7 @@
 # ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
 # OTHER DEALINGS IN THE SOFTWARE.
 
-'''Type L{Tuple}, wrapping (immutable) ObjC C{NSArray}.
+'''Type L{Tuple}, wrapping (immutable) ObjC L{NSArray}.
 '''
 # all imports listed explicitly to help PyChecker
 from bases   import _Type0
@@ -34,10 +34,10 @@ from oslibs  import libCF
 from nstypes import ns2Type, NSArray, nsIter2, NSMutableArray
 from pytypes import py2NS, tuple2NS
 from runtime import isImmutable
-from utils   import instanceof, _Ints, _Types
+from utils   import isinstanceOf, _Ints, _Types
 
 __all__ = ('Tuple',)
-__version__ = '18.05.17'
+__version__ = '18.06.10'
 
 
 def _at(inst, index):
@@ -52,7 +52,7 @@ def _at(inst, index):
 
 
 class Tuple(_Type0):  # note, List subclasses Tuple
-    '''Python C{tuple} Type, wrapping an immutable ObjC C{NSArray}.
+    '''Python C{tuple} Type, wrapping an immutable ObjC L{NSArray}.
     '''
     _type = tuple
 
@@ -90,7 +90,7 @@ class Tuple(_Type0):  # note, List subclasses Tuple
         raise TypeError('%s %s[%r]' % ('del', self, key))
 
     def __eq__(self, other):
-        instanceof(other, _Types.List, Tuple, list, tuple, name='other')
+        isinstanceOf(other, _Types.List, Tuple, list, tuple, name='other')
         if len(self) == len(other):
             for s, o in zip(self, other):
                 if o != s:

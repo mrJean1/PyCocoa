@@ -64,12 +64,13 @@
   class="link">MediaWindow</a>, <a href="pycocoa.windows.Screen-class.html"
   class="link">Screen</a>, <a 
   href="pycocoa.windows-module.html#WindowStyle" 
-  class="link">WindowStyle</a>, wrapping ObjC <code>NSWindow</code>, 
-  etc.</p>
+  class="link">WindowStyle</a>, wrapping ObjC <a 
+  href="pycocoa.windows-module.html#NSWindow" class="link" 
+  onclick="show_private();">NSWindow</a>, etc.</p>
 
 <hr />
 <div class="fields">      <p><strong>Version:</strong>
-        18.06.06
+        18.06.10
       </p>
 </div><!-- ==================== CLASSES ==================== -->
 <a name="section-Classes"></a>
@@ -92,7 +93,9 @@
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
         <a href="pycocoa.windows.Screen-class.html" class="summary-name">Screen</a><br />
-      Screen Python Type, wrapping ObjC <code>NSRect_t</code>.
+      Screen Python Type, wrapping ObjC <a 
+        href="pycocoa.octypes.NSRect_t-class.html" 
+        class="link">NSRect_t</a>.
     </td>
   </tr>
 <tr>
@@ -100,8 +103,9 @@
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
         <a href="pycocoa.windows.Window-class.html" class="summary-name">Window</a><br />
-      Basic, base window Python Type, wrapping ObjC 
-        <code>NSWindow</code>.
+      Basic window Python Type, wrapping ObjC <a 
+        href="pycocoa.windows-module.html#NSWindow" class="link" 
+        onclick="show_private();">NSWindow</a>.
     </td>
   </tr>
 <tr>
@@ -189,8 +193,11 @@
         <tr>
           <td><span class="summary-sig"><a href="pycocoa.windows-module.html#ns2Window" class="summary-sig-name">ns2Window</a>(<span class="summary-sig-arg">ns</span>)</span><br />
       Get the <a href="pycocoa.windows.Window-class.html" 
-      class="link">Window</a> instance for an ObjC <code>NSWindow</code> or
-      <code>NSNotification</code> instance.</td>
+      class="link">Window</a> instance for an ObjC <a 
+      href="pycocoa.windows-module.html#NSWindow" class="link" 
+      onclick="show_private();">NSWindow</a> or <a 
+      href="pycocoa.windows-module.html#NSNotification" class="link" 
+      onclick="show_private();">NSNotification</a> instance.</td>
           <td align="right" valign="top">
             
             
@@ -213,38 +220,55 @@
     <td width="15%" align="right" valign="top" class="summary">
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
-        <a href="pycocoa.windows-module.html#AutoResize" class="summary-name">AutoResize</a> = <code title="AutoResize.HeightSizable=1&lt;&lt;4, .MaxXMargin=1&lt;&lt;2, .MaxYMargin=1&lt;&lt;5, .Mi\
-nXMargin=1, .MinYMargin=1&lt;&lt;3, .NotSizable=0, .Sizable=18, .WidthSizabl\
-e=2">AutoResize.HeightSizable=1&lt;&lt;4, .MaxXMargin=1&lt;&lt;2, <code class="variable-ellipsis">...</code></code><br />
-      AutoResize options (<code>mask</code>).
+        <a href="pycocoa.windows-module.html#AutoResize" class="summary-name">AutoResize</a> = <code title="AutoResize.HeightSizable=1&lt;&lt;4,
+          .MaxXMargin=1&lt;&lt;2,
+          .MaxYMargin=1&lt;&lt;5,
+          .MinXMargin=1,
+          .MinYMargin=1&lt;&lt;3,
+          .NotSizable=0,
+          .Sizable=18,
+          .WidthSizable=2">AutoResize.HeightSizable=1&lt;<code class="variable-ellipsis">...</code></code><br />
+      Window resize options (<code>mask</code>).
     </td>
   </tr>
 <tr>
     <td width="15%" align="right" valign="top" class="summary">
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
-        <a href="pycocoa.windows-module.html#BezelStyle" class="summary-name">BezelStyle</a> = <code title="BezelStyle.Disclosure=5, .HelpButton=9, .Inline=15, .NCircular=7, .Rec\
-essed=13, .RegularSquare=2, .RoundRect=3&lt;&lt;2, .Rounded=1, .RoundedDiscl\
-osure=14, .ShadowlessSquare=6, .SmallSquare=10, .TexturedRounded=11, .\
-TexturedSquare=1&lt;&lt;3">BezelStyle.Disclosure=5, .HelpButton=9, .Inline=1<code class="variable-ellipsis">...</code></code><br />
-      Bezel style constants (<code>int</code>).
+        <a href="pycocoa.windows-module.html#BezelStyle" class="summary-name">BezelStyle</a> = <code title="BezelStyle.Disclosure=5,
+          .HelpButton=9,
+          .Inline=15,
+          .NCircular=7,
+          .Recessed=13,
+          .RegularSquare=2,
+          .RoundRect=3&lt;&lt;2,
+          .Rounded=1,
+...">BezelStyle.Disclosure<code class="variable-ellipsis">...</code></code><br />
+      Bezel kinds (<code>enum</code>).
     </td>
   </tr>
 <tr>
     <td width="15%" align="right" valign="top" class="summary">
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
-        <a name="Border"></a><span class="summary-name">Border</span> = <code title="Border.Bezel=2, .Groove=3, .Line=1, .No=0">Border.Bezel=2, .Groove=3, .Line=1, .No=0</code><br />
-      Border type constants (<code>int</code>).
+        <a href="pycocoa.windows-module.html#Border" class="summary-name">Border</a> = <code title="Border.Bezel=2,
+      .Groove=3,
+      .Line=1,
+      .No=0">Border.Bezel<code class="variable-ellipsis">...</code></code><br />
+      Border kinds (<code>enum</code>).
     </td>
   </tr>
 <tr>
     <td width="15%" align="right" valign="top" class="summary">
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
-        <a href="pycocoa.windows-module.html#WindowStyle" class="summary-name">WindowStyle</a> = <code title="WindowStyle.Closable=2, .Miniaturizable=1&lt;&lt;2, .Resizable=1&lt;&lt;3, .Titled\
-=1, .Typical=15, .Utility=1&lt;&lt;4">WindowStyle.Closable=2, .Miniaturizable=1&lt;&lt;2, .R<code class="variable-ellipsis">...</code></code><br />
-      Window style constants (<code>mask</code>).
+        <a href="pycocoa.windows-module.html#WindowStyle" class="summary-name">WindowStyle</a> = <code title="WindowStyle.Closable=2,
+           .Miniaturizable=1&lt;&lt;2,
+           .Resizable=1&lt;&lt;3,
+           .Titled=1,
+           .Typical=15,
+           .Utility=1&lt;&lt;4">WindowStyle.Closable<code class="variable-ellipsis">...</code></code><br />
+      Window styles (<code>mask</code>).
     </td>
   </tr>
 <tr>
@@ -341,8 +365,11 @@ TexturedSquare=1&lt;&lt;3">BezelStyle.Disclosure=5, .HelpButton=9, .Inline=1<cod
   </tr></table>
   
   <p>Get the <a href="pycocoa.windows.Window-class.html" 
-  class="link">Window</a> instance for an ObjC <code>NSWindow</code> or 
-  <code>NSNotification</code> instance.</p>
+  class="link">Window</a> instance for an ObjC <a 
+  href="pycocoa.windows-module.html#NSWindow" class="link" 
+  onclick="show_private();">NSWindow</a> or <a 
+  href="pycocoa.windows-module.html#NSNotification" class="link" 
+  onclick="show_private();">NSNotification</a> instance.</p>
   <dl class="fields">
     <dt>Parameters:</dt>
     <dd><ul class="nomargin-top">
@@ -377,15 +404,20 @@ TexturedSquare=1&lt;&lt;3">BezelStyle.Disclosure=5, .HelpButton=9, .Inline=1<cod
        cellspacing="0" width="100%" bgcolor="white">
 <tr><td>
   <h3 class="epydoc">AutoResize</h3>
-  <p>AutoResize options (<code>mask</code>).</p>
+  Window resize options (<code>mask</code>).
   <dl class="fields">
   </dl>
   <dl class="fields">
     <dt>Value:</dt>
       <dd><table><tr><td><pre class="variable">
-AutoResize.HeightSizable=1&lt;&lt;4, .MaxXMargin=1&lt;&lt;2, .MaxYMargin=1&lt;&lt;5, .Mi<span class="variable-linewrap"><img src="crarr.png" alt="\" /></span>
-nXMargin=1, .MinYMargin=1&lt;&lt;3, .NotSizable=0, .Sizable=18, .WidthSizabl<span class="variable-linewrap"><img src="crarr.png" alt="\" /></span>
-e=2
+AutoResize.HeightSizable=1&lt;&lt;4,
+          .MaxXMargin=1&lt;&lt;2,
+          .MaxYMargin=1&lt;&lt;5,
+          .MinXMargin=1,
+          .MinYMargin=1&lt;&lt;3,
+          .NotSizable=0,
+          .Sizable=18,
+          .WidthSizable=2
 </pre></td></tr></table>
 </dd>
   </dl>
@@ -397,16 +429,42 @@ e=2
        cellspacing="0" width="100%" bgcolor="white">
 <tr><td>
   <h3 class="epydoc">BezelStyle</h3>
-  <p>Bezel style constants (<code>int</code>).</p>
+  Bezel kinds (<code>enum</code>).
   <dl class="fields">
   </dl>
   <dl class="fields">
     <dt>Value:</dt>
       <dd><table><tr><td><pre class="variable">
-BezelStyle.Disclosure=5, .HelpButton=9, .Inline=15, .NCircular=7, .Rec<span class="variable-linewrap"><img src="crarr.png" alt="\" /></span>
-essed=13, .RegularSquare=2, .RoundRect=3&lt;&lt;2, .Rounded=1, .RoundedDiscl<span class="variable-linewrap"><img src="crarr.png" alt="\" /></span>
-osure=14, .ShadowlessSquare=6, .SmallSquare=10, .TexturedRounded=11, .<span class="variable-linewrap"><img src="crarr.png" alt="\" /></span>
-TexturedSquare=1&lt;&lt;3
+BezelStyle.Disclosure=5,
+          .HelpButton=9,
+          .Inline=15,
+          .NCircular=7,
+          .Recessed=13,
+          .RegularSquare=2,
+          .RoundRect=3&lt;&lt;2,
+          .Rounded=1,
+<code class="variable-ellipsis">...</code>
+</pre></td></tr></table>
+</dd>
+  </dl>
+</td></tr></table>
+</div>
+<a name="Border"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <h3 class="epydoc">Border</h3>
+  Border kinds (<code>enum</code>).
+  <dl class="fields">
+  </dl>
+  <dl class="fields">
+    <dt>Value:</dt>
+      <dd><table><tr><td><pre class="variable">
+Border.Bezel=2,
+      .Groove=3,
+      .Line=1,
+      .No=0
 </pre></td></tr></table>
 </dd>
   </dl>
@@ -418,14 +476,18 @@ TexturedSquare=1&lt;&lt;3
        cellspacing="0" width="100%" bgcolor="white">
 <tr><td>
   <h3 class="epydoc">WindowStyle</h3>
-  <p>Window style constants (<code>mask</code>).</p>
+  Window styles (<code>mask</code>).
   <dl class="fields">
   </dl>
   <dl class="fields">
     <dt>Value:</dt>
       <dd><table><tr><td><pre class="variable">
-WindowStyle.Closable=2, .Miniaturizable=1&lt;&lt;2, .Resizable=1&lt;&lt;3, .Titled<span class="variable-linewrap"><img src="crarr.png" alt="\" /></span>
-=1, .Typical=15, .Utility=1&lt;&lt;4
+WindowStyle.Closable=2,
+           .Miniaturizable=1&lt;&lt;2,
+           .Resizable=1&lt;&lt;3,
+           .Titled=1,
+           .Typical=15,
+           .Utility=1&lt;&lt;4
 </pre></td></tr></table>
 </dd>
   </dl>
@@ -463,7 +525,7 @@ WindowStyle.Closable=2, .Miniaturizable=1&lt;&lt;2, .Resizable=1&lt;&lt;3, .Titl
 <table border="0" cellpadding="0" cellspacing="0" width="100%%">
   <tr>
     <td align="left" class="footer">
-    Generated by Epydoc 3.0.1 on Thu Jun  7 12:45:43 2018
+    Generated by Epydoc 3.0.1 on Mon Jun 11 15:48:45 2018
     </td>
     <td align="right" class="footer">
       <a target="mainFrame" href="http://epydoc.sourceforge.net"

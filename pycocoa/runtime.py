@@ -72,8 +72,8 @@
 '''
 # all imports listed explicitly to help PyChecker
 from ctypes  import alignment, ArgumentError, byref, cast, c_buffer, \
-                    c_char_p, c_double, c_float, c_longdouble, c_uint, \
-                    CFUNCTYPE, c_void_p, POINTER, sizeof
+                    c_char_p, c_double, c_float, CFUNCTYPE, c_longdouble, \
+                    c_uint, c_void_p, POINTER, sizeof
 from getters import _ivar_ctype, get_c_func_t, get_class, get_classname, \
                     get_classof, get_ivar, get_metaclass, get_protocol, \
                     get_selector, get_superclassof
@@ -82,9 +82,10 @@ from octypes import __i386__, __LP64__, c_struct_t, c_void, \
                     Class_t, Id_t, IMP_t, Ivar_t, objc_super_t, \
                     ObjC_t, SEL_t, split_emcoding2, TypeCodeError
 from oslibs  import cfString2str, libobjc
-from utils   import bytes2str, _exports, missing, name2py, printf, str2bytes
+from utils   import bytes2str, _Constants, _exports, missing, name2py, \
+                    printf, str2bytes
 
-__version__ = '18.05.25'
+__version__ = '18.06.08'
 
 # <http://Developer.Apple.com/documentation/objectivec/
 #         objc_associationpolicy?language=objc>
@@ -120,9 +121,9 @@ def _libobjcall(name, restype, argtypes, *args):
 
        @return: The result (C{any}).
 
-       @raise ArgumentError: Decorated by _Xargs.
+       @raise ArgumentError: Decorated by C{_Xargs}.
 
-       @raise TypeError: Decorated by _Xargs.
+       @raise TypeError: Decorated by C{_Xargs}.
     '''
     objc_func = libobjc[name]  # XXX thread-specific?
     objc_func.restype  = restype
@@ -130,8 +131,7 @@ def _libobjcall(name, restype, argtypes, *args):
     try:
         result = objc_func(*args)
     except (ArgumentError, TypeError) as x:
-        _Xargs(x, objc_func.__name__, argtypes, restype)
-        raise
+        raise _Xargs(x, objc_func.__name__, argtypes, restype)
 
     if restype in (c_void_p, ObjC_t):  # XXX ... is ...
         result = restype(result)
@@ -201,10 +201,11 @@ def _Xargs(x, name, argtypes, restype='void'):
     restypestr = getattr(restype, '__name__', str(restype))
     x.args = ('%s: %s(%s) %s' % (', '.join(map(str, x.args)), name,
                                 _argtypestr(argtypes), restypestr),)
+    return x
 
 
 class ObjCBase(object):
-    '''Base class for ObjC... classes'
+    '''Base class for Python C{runtime.ObjC...} classes.
     '''
     def __repr__(self):
         return '<%s(%s) at %#x>' % (self.__class__.__name__, self, id(self))
@@ -237,7 +238,7 @@ class ObjCBoundMethod(ObjCBase):
 
 
 class ObjCBoundClassMethod(ObjCBoundMethod):
-    '''Only to distinguish bound class from bound instance methods.
+    '''Only to distinguish bound class- from bound instance-methods.
     '''
     pass
 
@@ -490,6 +491,12 @@ class ObjCInstance(ObjCBase):
                 return attr(self)
         except (AttributeError, TypeError, ValueError):
             pass
+
+        # ... handle substitutes for method name
+        # conflicts with Python reserved words
+#       if name in ('throw',):  # and self.isKindOf(NSException):
+#           return self.__getattr__('raise')
+
         # ... otherwise raise error
         raise AttributeError('no %r [class]method: %s' % (name, self))
 
@@ -565,7 +572,8 @@ class ObjCInstance(ObjCBase):
 
 
 class ObjCMethod(ObjCBase):
-    '''Represent an unbound ObjC class or instance method (really an L{IMP_t}).
+    '''Python class representing an unbound ObjC class- or
+       instance-method (actually an L{IMP_t}).
     '''
     _callable = None
     _IMP      = None
@@ -627,9 +635,12 @@ class ObjCMethod(ObjCBase):
             r = self.callable(objc_id, self._SEL, *args)
             return self._pyresult(r)
         except (ArgumentError, TypeError) as x:
-            n = '%s.%s' % (objc_id.objc_classname, self.name)
-            _Xargs(x, n, self.argtypes, self.restype)
-            raise
+            try:
+                n = ObjCInstance(objc_id).objc_classname
+            except AttributeError:
+                n = 'objc_id'
+            n = '%s.%s' % (n, self.name)
+            raise _Xargs(x, n, self.argtypes, self.restype)
 
 #   def __repr__(self):
 #       return '<%s %s(%s) %s>' % (ObjCMethod.__name__, self.name,
@@ -695,11 +706,11 @@ def _pyresult(result):
 
 
 class ObjCSubclass(ObjCBase):
-    '''Python class to create an ObjC sub-class of an existing ObjC (super-)class.
+    '''Python class creating an ObjC sub-class of an existing ObjC (super-)class.
 
        This class is used only to *define* the interface and implementation
-       of an ObjC sub-class from Python.  It should not be used in
-       any other way.  If you want a Python representation of the resulting
+       of an ObjC sub-class from Python.  It should not be used in any
+       other way.  If you want a Python representation of the resulting
        class, create it with ObjCClass.
 
        It consists primarily of function decorators which you use to add
@@ -708,8 +719,8 @@ class ObjCSubclass(ObjCBase):
        ObjCSubclass is used to define an ObjC sub-class of an existing
        class registered with the runtime.  When you create an instance of
        ObjCSubclass, it registers the new sub-class with the ObjC
-       runtime and creates a set of function decorators that you can use to
-       add instance methods or class methods to the sub-class.
+       runtime and creates a set of function decorators that you can use
+       to add instance methods or class methods to the sub-class.
 
        Typical usage would be to first create and register the sub-class:
 
@@ -1036,7 +1047,7 @@ def isInstanceOf(obj, *Classes, **name_missing):
                          or if I{obj} does not match any of the I{Classes}
                          and only if keyword I{name='...'} is provided.
 
-       @see: Function L{instanceof} for checking Python instances.
+       @see: Function L{isinstanceOf} for checking Python instances.
     '''
     if isinstance(obj, ObjCInstance):
         try:
@@ -1265,13 +1276,15 @@ def set_ivar(obj, name, value, ctype=None):
                         obj, str2bytes(name), value)
 
 
-_ObservedObjName = '_ObservedObj'
+class _Observed(_Constants):
+    name = '_ObservedObjC'
+    c_t  = Id_t
 
 
 def _objc_cache_pop(inst, cmd):
     '''(INTERNAL) Remove an C{ObjCInstance} from the objects cache.
     '''
-    obj = get_ivar(inst, _ObservedObjName, ctype=Id_t)
+    obj = get_ivar(inst, _Observed.name, ctype=_Observed.c_t)
     ObjCInstance._objc_cache.pop(obj, None)
     send_super(inst, cmd)
 
@@ -1294,18 +1307,17 @@ class _NSDeallocObserver(object):
        The I{unused} argument in all decorated methods below represents
        the C{SEL/cmd}, see L{ObjCSubclass.rawmethod}.
     '''
-
-    _ObjC = ObjCSubclass('NSObject', '_NSDeallocObserver',
-                                       observed_obj=Id_t)  # ivar
+    _ObjC = ObjCSubclass('NSObject', '_NSDeallocObserver',  # .__name__
+                                    *{_Observed.name: _Observed.c_t})  # ivar
 #   ... instead of, previously:
-#   _ObjC = ObjCSubclass('NSObject', '_NSDeallocObserver', register=False)
-#   _ObjC.add_ivar('observed_obj', c_void_p)
+#   _ObjC = ObjCSubclass('NSObject', __name__, register=False)
+#   _ObjC.add_ivar(_Observed.name, ctype=_Observed.c_t)
 #   _ObjC.register()
 
     @_ObjC.rawmethod('@@')
-    def initWithObject_(self, unused, obj):
+    def initWithObject_(self, unused, objc):
         self = send_super(self, 'init').value
-        set_ivar(self, _ObservedObjName, obj, Id_t)
+        set_ivar(self, _Observed.name, objc, ctype=_Observed.c_t)
         return self
 
     @_ObjC.rawmethod('@')
@@ -1321,10 +1333,10 @@ class _NSDeallocObserver(object):
         _objc_cache_pop(self, 'finalize')
 
 
-def nsDeallocObserver(obj):
+def nsDeallocObserver(objc):
     '''Create a de-allocation observer for an ObjC instance.
 
-       @param obj: The object to be observed (L{ObjCInstance}).
+       @param objc: The object to be observed (L{ObjCInstance}).
 
        @return: The observer (C{_NSDeallocObserver}).
 
@@ -1334,12 +1346,12 @@ def nsDeallocObserver(obj):
               L{ObjCInstance}C{._objc_cache_}, effectively destroying
               the L{ObjCInstance}.
     '''
-    alloc = send_message('_NSDeallocObserver', 'alloc',
-                           restype=Id_t, argtypes=[])
-    observer = send_message(alloc, 'initWithObject:', obj,
-                            restype=Id_t, argtypes=[Id_t])
+    observer = send_message(_NSDeallocObserver.__name__, 'alloc',
+                            restype=Id_t, argtypes=[])
+    observer = send_message(observer, 'initWithObject:', objc,
+                            restype=Id_t, argtypes=[_Observed.c_t])
     # The observer is retained by the object we associate it to.
-    libobjc.objc_setAssociatedObject(obj, observer, observer,
+    libobjc.objc_setAssociatedObject(objc, observer, observer,
                                      OBJC_ASSOCIATION_RETAIN)
     # Release the observer now so that it will be de-allocated
     # when the associated object is de-allocated.

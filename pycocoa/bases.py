@@ -26,19 +26,19 @@
 '''(INTERNAL) Base classes for Python C{Types}.
 '''
 # all imports listed explicitly to help PyChecker
-from nstypes import isNone, NSNone, NSStr
+from nstypes import isNone, NSMain, NSStr
 from octypes import c_struct_t, ObjC_t
 from runtime import ObjCInstance
-from utils   import bytes2str, instanceof, type2strepr
+from utils   import bytes2str, isinstanceOf, type2strepr
 
 __all__ = ()
-__version__ = '18.05.05'
+__version__ = '18.06.08'
 
 
 class _Type0(object):
     '''The base Type.
     '''
-    _NS  = None  # NSNone
+    _NS  = None  # NSMain.Null
 
     def __repr__(self):
         return '%s at %#x' % (self, id(self))
@@ -59,7 +59,7 @@ class _Type0(object):
         '''Set the C{NS...} instance.
         '''
         if not isNone(ns):  # see also .nstypes.nsOf
-            instanceof(ns, ObjCInstance, c_struct_t, ObjC_t, name='ns')
+            isinstanceOf(ns, ObjCInstance, c_struct_t, ObjC_t, name='ns')
         elif not isNone(self.NS):
             # self.NS.release()
             pass
@@ -91,7 +91,7 @@ class _Type1(_Type0):
         '''
         if app not in (None,):
             from apps import App
-            instanceof(app, App, name='app')
+            isinstanceOf(app, App, name='app')
         self._app = app
 
     @property
@@ -105,7 +105,7 @@ class _Type1(_Type0):
         '''Set the class' delegate.
         '''
         if not isNone(delegate):
-            instanceof(delegate, ObjCInstance, name='delegate')  # XXXX ????
+            isinstanceOf(delegate, ObjCInstance, name='delegate')  # XXXX ????
             self.NS.setDelegate_(delegate)
 
 
@@ -131,7 +131,7 @@ class _Type2(_Type1):
     def tag(self, tag):
         '''Set the (L{Item}, ...) tag (int).
         '''
-        if tag not in (None, NSNone):
+        if tag not in (None, NSMain.Null):
             try:
                 self.NS.setTag_(int(tag))
                 self._tag = tag

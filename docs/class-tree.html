@@ -105,14 +105,14 @@
     </ul>
     </li>
     <li> <strong class="uidlink"><a href="pycocoa.runtime.ObjCBase-class.html">pycocoa.runtime.ObjCBase</a></strong>:
-      <em class="summary">Base class for ObjC...</em>
+      <em class="summary">Base class for Python <code>runtime.ObjC...</code> classes.</em>
     <ul>
     <li> <strong class="uidlink"><a href="pycocoa.runtime.ObjCBoundMethod-class.html">pycocoa.runtime.ObjCBoundMethod</a></strong>:
       <em class="summary">Python wrapper for an ObjC class or instance method, an <a 
         href="pycocoa.octypes.IMP_t-class.html" class="link">IMP_t</a>.</em>
     <ul>
     <li> <strong class="uidlink"><a href="pycocoa.runtime.ObjCBoundClassMethod-class.html">pycocoa.runtime.ObjCBoundClassMethod</a></strong>:
-      <em class="summary">Only to distinguish bound class from bound instance methods.</em>
+      <em class="summary">Only to distinguish bound class- from bound instance-methods.</em>
     </li>
     </ul>
     </li>
@@ -133,21 +133,24 @@
         instances, by default.</em>
     <ul>
     <li> <strong class="uidlink"><a href="pycocoa.nstypes.at-class.html">pycocoa.nstypes.at</a></strong>:
-      <em class="summary">Acronym for the Python wrapper of <a 
-        href="pycocoa.nstypes.NSStr-class.html" class="link">NSStr</a>.</em>
+      <em class="summary">Acronym <a href="pycocoa.nstypes.NSStr-class.html" 
+        class="link">NSStr</a>.</em>
     </li>
     </ul>
     </li>
     </ul>
     </li>
     <li> <strong class="uidlink"><a href="pycocoa.nstypes.NSDecimal-class.html">pycocoa.nstypes.NSDecimal</a></strong>:
-      <em class="summary">Optimized <code>NSDecimalNumber</code> class.</em>
+      <em class="summary">Optimized, Python <a 
+        href="pycocoa.nstypes-module.html#NSDecimalNumber" 
+        class="link">NSDecimalNumber</a> class.</em>
     </li>
     </ul>
     </li>
     <li> <strong class="uidlink"><a href="pycocoa.runtime.ObjCMethod-class.html">pycocoa.runtime.ObjCMethod</a></strong>:
-      <em class="summary">Represent an unbound ObjC class or instance method (really an <a 
-        href="pycocoa.octypes.IMP_t-class.html" class="link">IMP_t</a>).</em>
+      <em class="summary">Python class representing an unbound ObjC class- or instance-method
+        (actually an <a href="pycocoa.octypes.IMP_t-class.html" 
+        class="link">IMP_t</a>).</em>
     <ul>
     <li> <strong class="uidlink"><a href="pycocoa.runtime.ObjCClassMethod-class.html">pycocoa.runtime.ObjCClassMethod</a></strong>:
       <em class="summary">Only to distinguish class methods from instance methods.</em>
@@ -155,7 +158,7 @@
     </ul>
     </li>
     <li> <strong class="uidlink"><a href="pycocoa.runtime.ObjCSubclass-class.html">pycocoa.runtime.ObjCSubclass</a></strong>:
-      <em class="summary">Python class to create an ObjC sub-class of an existing ObjC 
+      <em class="summary">Python class creating an ObjC sub-class of an existing ObjC 
         (super-)class.</em>
     </li>
     </ul>
@@ -163,6 +166,13 @@
     <li> <strong class="uidlink">_CData</strong>:
       <em class="summary">XXX to be provided</em>
     <ul>
+    <li> <strong class="uidlink">PyCFuncPtr</strong>:
+      <em class="summary">Function Pointer</em>
+    <ul>
+    <li> <strong class="uidlink"><a href="pycocoa.nstypes.NSExceptionHandler_t-class.html">pycocoa.nstypes.NSExceptionHandler_t</a></strong>
+    </li>
+    </ul>
+    </li>
     <li> <strong class="uidlink">_ctypes.Structure</strong>:
       <em class="summary">Structure base class</em>
     <ul>
@@ -179,14 +189,12 @@
     </li>
     <li> <strong class="uidlink"><a href="pycocoa.octypes.NSRange_t-class.html">pycocoa.octypes.NSRange_t</a></strong>:
       <em class="summary">ObjC <code>struct</code> with fields <code>loc[ation]</code> and 
-        <code>len[gth]</code> (both <code>NSUInteger_t</code>).</em>
+        <code>len[gth]</code> (both <a href="ctypes.c_ulong-class.html" 
+        class="link">NSUInteger_t</a>).</em>
     </li>
     <li> <strong class="uidlink"><a href="pycocoa.octypes.NSRect_t-class.html">pycocoa.octypes.NSRect_t</a></strong>:
       <em class="summary">ObjC <code>struct</code> with fields <code>origin</code> and 
-        <code>size</code> (<a href="pycocoa.octypes.NSPoint_t-class.html" 
-        class="link">NSPoint_t</a>, <a 
-        href="pycocoa.octypes.NSSize_t-class.html" 
-        class="link">NSSize_t</a>).</em>
+        <code>size</code> (<code>NSPoint_t</code>, <code>NSSize_t</code>).</em>
     <ul>
     <li> <strong class="uidlink"><a href="pycocoa.octypes.NSRect4_t-class.html">pycocoa.octypes.NSRect4_t</a></strong>:
       <em class="summary">ObjC <code>struct</code>, like <a 
@@ -218,19 +226,19 @@
     <li> <strong class="uidlink">_ctypes._SimpleCData</strong>:
       <em class="summary">XXX to be provided</em>
     <ul>
-    <li> <strong class="uidlink"><a href="ctypes.c_double.__ctype_be__-class.html">ctypes.c_double.__ctype_be__</a></strong>
-    </li>
     <li> <strong class="uidlink"><a href="ctypes.c_ulong.__ctype_be__-class.html">ctypes.c_ulong.__ctype_be__</a></strong>
     </li>
-    <li> <strong class="uidlink"><a href="ctypes.c_ushort.__ctype_be__-class.html">ctypes.c_ushort.__ctype_be__</a></strong>
-    </li>
-    <li> <strong class="uidlink"><a href="ctypes.c_long.__ctype_be__-class.html">ctypes.c_long.__ctype_be__</a></strong>
-    </li>
-    <li> <strong class="uidlink"><a href="ctypes.c_float.__ctype_be__-class.html">ctypes.c_float.__ctype_be__</a></strong>
+    <li> <strong class="uidlink"><a href="ctypes.c_int.__ctype_be__-class.html">ctypes.c_int.__ctype_be__</a></strong>
     </li>
     <li> <strong class="uidlink"><a href="ctypes.c_uint.__ctype_be__-class.html">ctypes.c_uint.__ctype_be__</a></strong>
     </li>
-    <li> <strong class="uidlink"><a href="ctypes.c_int.__ctype_be__-class.html">ctypes.c_int.__ctype_be__</a></strong>
+    <li> <strong class="uidlink"><a href="ctypes.c_double.__ctype_be__-class.html">ctypes.c_double.__ctype_be__</a></strong>
+    </li>
+    <li> <strong class="uidlink"><a href="ctypes.c_long.__ctype_be__-class.html">ctypes.c_long.__ctype_be__</a></strong>
+    </li>
+    <li> <strong class="uidlink"><a href="ctypes.c_ushort.__ctype_be__-class.html">ctypes.c_ushort.__ctype_be__</a></strong>
+    </li>
+    <li> <strong class="uidlink"><a href="ctypes.c_float.__ctype_be__-class.html">ctypes.c_float.__ctype_be__</a></strong>
     </li>
     <li> <strong class="uidlink">ctypes.c_bool</strong>
     <ul>
@@ -329,21 +337,23 @@
       <em class="summary">The base Type.</em>
     <ul>
     <li> <strong class="uidlink"><a href="pycocoa.fonts.Font-class.html">pycocoa.fonts.Font</a></strong>:
-      <em class="summary">Python <code>Font</code> Type, wrapping ObjC <code>NSFont</code>.</em>
+      <em class="summary">Python <code>Font</code> Type, wrapping ObjC <a 
+        href="pycocoa.fonts-module.html#NSFont" class="link" 
+        onclick="show_private();">NSFont</a>.</em>
     </li>
     <li> <strong class="uidlink"><a href="pycocoa.dicts.FrozenDict-class.html">pycocoa.dicts.FrozenDict</a></strong>:
       <em class="summary">Python immutable <code>dict</code> Type, wrapping an (immutable) 
-        ObjC <code>NSDictionary</code>.</em>
+        ObjC NSDictionary.</em>
     <ul>
     <li> <strong class="uidlink"><a href="pycocoa.dicts.Dict-class.html">pycocoa.dicts.Dict</a></strong>:
       <em class="summary">Python <code>dict</code> Type, wrapping an ObjC 
-        <code>NSMutableDictionary</code>.</em>
+        NSMutableDictionary.</em>
     </li>
     </ul>
     </li>
     <li> <strong class="uidlink"><a href="pycocoa.sets.FrozenSet-class.html">pycocoa.sets.FrozenSet</a></strong>:
       <em class="summary">Python <code>frozenset</code> Type, wrapping an immutable ObjC 
-        <code>NSSet</code>.</em>
+        NSSet.</em>
     </li>
     <li> <strong class="uidlink"><a href="pycocoa.geometry.Point-class.html">pycocoa.geometry.Point</a></strong>:
       <em class="summary">Python Type, wrapping an ObjC <code>NSPoint_t</code>.</em>
@@ -355,20 +365,25 @@
     </ul>
     </li>
     <li> <strong class="uidlink"><a href="pycocoa.geometry.Rect-class.html">pycocoa.geometry.Rect</a></strong>:
-      <em class="summary">Python Type, wrapping an ObjC <code>NSRect_t</code>.</em>
+      <em class="summary">Python Type, wrapping an ObjC <a 
+        href="pycocoa.octypes.NSRect_t-class.html" 
+        class="link">NSRect_t</a>.</em>
     <ul>
     <li> <strong class="uidlink"><a href="pycocoa.geometry.Rect4-class.html">pycocoa.geometry.Rect4</a></strong>:
       <em class="summary">Python Type, like <a href="pycocoa.geometry.Rect-class.html" 
-        class="link">Rect</a>, but signature as ObjC 
-        <code>NSRect4_t</code>.</em>
+        class="link">Rect</a>, but signature as ObjC <a 
+        href="pycocoa.octypes.NSRect4_t-class.html" 
+        class="link">NSRect4_t</a>.</em>
     </li>
     <li> <strong class="uidlink"><a href="pycocoa.windows.Screen-class.html">pycocoa.windows.Screen</a></strong>:
-      <em class="summary">Screen Python Type, wrapping ObjC <code>NSRect_t</code>.</em>
+      <em class="summary">Screen Python Type, wrapping ObjC <a 
+        href="pycocoa.octypes.NSRect_t-class.html" 
+        class="link">NSRect_t</a>.</em>
     </li>
     </ul>
     </li>
     <li> <strong class="uidlink"><a href="pycocoa.sets.Set-class.html">pycocoa.sets.Set</a></strong>:
-      <em class="summary">Python c{Set} Type, wrapping an ObjC <code>NSMutableSet</code>.</em>
+      <em class="summary">Python c{Set} Type, wrapping an ObjC NSMutableSet.</em>
     </li>
     <li> <strong class="uidlink"><a href="pycocoa.geometry.Size-class.html">pycocoa.geometry.Size</a></strong>:
       <em class="summary">Python Type, wrapping an ObjC <code>NSSize_t</code>.</em>
@@ -385,21 +400,19 @@
     <ul>
     <li> <strong class="uidlink"><a href="pycocoa.strs.StrAttd-class.html">pycocoa.strs.StrAttd</a></strong>:
       <em class="summary">Python <code>str</code> Type, wrapping (immutable) ObjC 
-        <code>NSAttributedString</code>.</em>
+        NSAttributedString.</em>
     </li>
     </ul>
     </li>
     <li> <strong class="uidlink"><a href="pycocoa.strs.StrAttd-class.html">pycocoa.strs.StrAttd</a></strong>:
       <em class="summary">Python <code>str</code> Type, wrapping (immutable) ObjC 
-        <code>NSAttributedString</code>.</em>
+        NSAttributedString.</em>
     </li>
     <li> <strong class="uidlink"><a href="pycocoa.tuples.Tuple-class.html">pycocoa.tuples.Tuple</a></strong>:
-      <em class="summary">Python <code>tuple</code> Type, wrapping an immutable ObjC 
-        <code>NSArray</code>.</em>
+      <em class="summary">Python <code>tuple</code> Type, wrapping an immutable ObjC NSArray.</em>
     <ul>
     <li> <strong class="uidlink"><a href="pycocoa.lists.List-class.html">pycocoa.lists.List</a></strong>:
-      <em class="summary">Python <code>list</code> Type, wrapping an ObjC 
-        <code>NSMutableArray</code>.</em>
+      <em class="summary">Python <code>list</code> Type, wrapping an ObjC NSMutableArray.</em>
     </li>
     </ul>
     </li>
@@ -414,15 +427,13 @@
       <em class="summary">Basic Type with app, delegate, tag and title.</em>
     <ul>
     <li> <strong class="uidlink"><a href="pycocoa.panels.AlertPanel-class.html">pycocoa.panels.AlertPanel</a></strong>:
-      <em class="summary">Python Type to show an alert, wrapping ObjC <code>NSAlert</code>.</em>
+      <em class="summary">Python Type to show an alert, wrapping ObjC NSAlert.</em>
     <ul>
     <li> <strong class="uidlink"><a href="pycocoa.panels.ErrorPanel-class.html">pycocoa.panels.ErrorPanel</a></strong>:
-      <em class="summary">Python Type to show an NSError alert, wrapping ObjC 
-        <code>NSAlert</code>.</em>
+      <em class="summary">Python Type to show an NSError alert, wrapping ObjC NSAlert.</em>
     </li>
     <li> <strong class="uidlink"><a href="pycocoa.panels.TextPanel-class.html">pycocoa.panels.TextPanel</a></strong>:
-      <em class="summary">Scrollable text panel Python Type, wrapping ObjC 
-        <code>NSAlert</code>.</em>
+      <em class="summary">Scrollable text panel Python Type, wrapping ObjC NSAlert.</em>
     </li>
     </ul>
     </li>
@@ -434,34 +445,33 @@
       <em class="summary">Python Type to show a URL or file.</em>
     </li>
     <li> <strong class="uidlink"><a href="pycocoa.menus.Item-class.html">pycocoa.menus.Item</a></strong>:
-      <em class="summary">Python menu <code>Item</code> Type, wrapping ObjC 
-        <code>NSMenuItem</code>.</em>
+      <em class="summary">Python menu <code>Item</code> Type, wrapping ObjC NSMenuItem.</em>
     </li>
     <li> <strong class="uidlink"><a href="pycocoa.menus.Menu-class.html">pycocoa.menus.Menu</a></strong>:
-      <em class="summary">Menu Python Type, wrapping ObjC <code>NSMenu</code>.</em>
+      <em class="summary">Menu Python Type, wrapping ObjC NSMenu.</em>
     </li>
     <li> <strong class="uidlink"><a href="pycocoa.menus.MenuBar-class.html">pycocoa.menus.MenuBar</a></strong>:
-      <em class="summary">Python <code>MenuBar</code> Type, wrapping ObjC 
-        <code>NSMenu</code>.</em>
+      <em class="summary">Python <code>MenuBar</code> Type, wrapping ObjC NSMenu.</em>
     </li>
     <li> <strong class="uidlink"><a href="pycocoa.panels.OpenPanel-class.html">pycocoa.panels.OpenPanel</a></strong>:
-      <em class="summary">Python Type to select a file, wrapping ObjC 
-        <code>NSOpenPanel</code>.</em>
+      <em class="summary">Python Type to select a file, wrapping ObjC NSOpenPanel.</em>
     </li>
     <li> <strong class="uidlink"><a href="pycocoa.panels.SavePanel-class.html">pycocoa.panels.SavePanel</a></strong>:
-      <em class="summary">Python Type to save a file, wrapping ObjC <code>NSSavePanel</code>.</em>
+      <em class="summary">Python Type to save a file, wrapping ObjC NSSavePanel.</em>
     </li>
     <li> <strong class="uidlink"><a href="pycocoa.tables.Table-class.html">pycocoa.tables.Table</a></strong>:
       <em class="summary">Python Type table of rows and columns, wrapping an ObjC 
-        <code>NSTableView</code>.</em>
+        NSTableView.</em>
     </li>
     <li> <strong class="uidlink"><a href="pycocoa.apps.Tile-class.html">pycocoa.apps.Tile</a></strong>:
       <em class="summary">Dock tile for an <a href="pycocoa.apps.App-class.html" 
-        class="link">App</a>, wrapping an ObjC <code>NSDockTile</code>.</em>
+        class="link">App</a>, wrapping an ObjC <a 
+        href="pycocoa-module.html#NSDockTile" class="link">NSDockTile</a>.</em>
     </li>
     <li> <strong class="uidlink"><a href="pycocoa.windows.Window-class.html">pycocoa.windows.Window</a></strong>:
-      <em class="summary">Basic, base window Python Type, wrapping ObjC 
-        <code>NSWindow</code>.</em>
+      <em class="summary">Basic window Python Type, wrapping ObjC <a 
+        href="pycocoa.windows-module.html#NSWindow" class="link" 
+        onclick="show_private();">NSWindow</a>.</em>
     <ul>
     <li> <strong class="uidlink"><a href="pycocoa.windows.MediaWindow-class.html">pycocoa.windows.MediaWindow</a></strong>:
       <em class="summary">Media window Python Type, wrapping ObjC 
@@ -496,7 +506,7 @@
     <ul>
     <li> <strong class="uidlink"><a href="pycocoa.strs.StrAttd-class.html">pycocoa.strs.StrAttd</a></strong>:
       <em class="summary">Python <code>str</code> Type, wrapping (immutable) ObjC 
-        <code>NSAttributedString</code>.</em>
+        NSAttributedString.</em>
     </li>
     </ul>
     </li>
@@ -510,7 +520,7 @@
     <ul>
     <li> <strong class="uidlink"><a href="pycocoa.sets.FrozenSet-class.html">pycocoa.sets.FrozenSet</a></strong>:
       <em class="summary">Python <code>frozenset</code> Type, wrapping an immutable ObjC 
-        <code>NSSet</code>.</em>
+        NSSet.</em>
     </li>
     </ul>
     </li>
@@ -518,7 +528,7 @@
       <em class="summary">set() -&gt; new empty set object set(iterable) -&gt; new set object</em>
     <ul>
     <li> <strong class="uidlink"><a href="pycocoa.sets.Set-class.html">pycocoa.sets.Set</a></strong>:
-      <em class="summary">Python c{Set} Type, wrapping an ObjC <code>NSMutableSet</code>.</em>
+      <em class="summary">Python c{Set} Type, wrapping an ObjC NSMutableSet.</em>
     </li>
     </ul>
     </li>
@@ -556,7 +566,7 @@
 <table border="0" cellpadding="0" cellspacing="0" width="100%%">
   <tr>
     <td align="left" class="footer">
-    Generated by Epydoc 3.0.1 on Thu Jun  7 12:45:42 2018
+    Generated by Epydoc 3.0.1 on Mon Jun 11 15:48:45 2018
     </td>
     <td align="right" class="footer">
       <a target="mainFrame" href="http://epydoc.sourceforge.net"

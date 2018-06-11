@@ -59,8 +59,36 @@
 
 '''ObjC C{..._t} type definitions and some additional C{ctypes}.
 
-   Names starting with C{c_} are C{ctypes}, names ending with C{_t}
-   are ObjC types defined in terms of a C{ctypes} C{c_} type.
+Names starting with C{c_} are C{ctypes}, names ending with C{_t}
+are ObjC types defined in terms of a C{ctypes} C{c_} type.
+
+@var Array_t:                ObjC L{NSArray} ctype.
+@var CFIndex_t:              ObjC C{CFIndex} ctype.
+@var CFStringEncoding_t:     ObjC C{CFStringEncoding} ctype.
+@var CGBitmapInfo_t:         ObjC C{CGBitmapInfo} ctype.
+@var CGDirectDisplayID_t:    ObjC C{CGDirectDisplayID} ctype.
+@var CGError_t:              ObjC C{CGError} ctype.
+@var CGFloat_t:              ObjC C{CGFloat} ctype.
+@var CTFontOrientation_t :   Objc C{CTFontOrientation} ctype.
+@var CTFontSymbolicTraits_t: Objc C{CTFontSymbolicTraits} ctype.
+@var CGGlyph_t:              ObjC C{CGGlyph} ctype.
+@var Data_t:                 ObjC C{CFDataRef} ctype.
+@var Dictionary_t:           ObjC L{NSDictionary} ctype.
+@var NSDoubl_t:              ObjC C{CFDataRef} ctype.
+@var NSExceptionHandler_t:   ObjC C{NSExceptionHandler} ctype.
+@var NSFloat_t:              ObjC L{NSFloat} ctype.
+@var NSInteger_t:            ObjC C{NSInteger} ctype.
+@var NSTimeInterval_t:       ObjC C{NSTimeInterval} ctype.
+@var NSUInteger_t:           ObjC C{NSUInteger} ctype.
+@var NumberType_t:           ObjC C{NSNumberType} ctype.
+@var Number_t:               ObjC L{NSNumber} ctype.
+@var OptionFlags_t:          ObjC C{CFOptionFlags} ctype.
+@var Set_t:                  ObjC L{NSSet} ctype.
+@var String_t:               ObjC C{CFStringRef} ctype.
+@var TimeInterval_t:         ObjC C{CFTimeInterval} ctype.
+@var TypeID_t:               ObjC C{CFTypeID} ctype.
+@var UniChar_t:              Unicode C{unsigned short} ctype.
+@var unichar_t:              Unicode C{wchar} ctype.
 '''
 # all imports listed explicitly to help PyChecker
 from ctypes import c_bool, c_byte, c_char, c_char_p, c_double, \
@@ -79,7 +107,7 @@ from platform import machine  # as machine
 from utils import bytes2str, _exports, inst2strepr, iterbytes, \
                   missing, str2bytes
 
-__version__ = '18.06.05'
+__version__ = '18.06.10'
 
 z = sizeof(c_void_p)
 if z == 4:
@@ -183,7 +211,7 @@ class Allocator_t(ObjC_t):  # Id_t
     pass
 
 
-Array_t = c_void_p  # ObjC array type.
+Array_t = c_void_p  # ObjC L{NSArray} ctype
 
 
 class Block_t(ObjC_t):
@@ -198,8 +226,8 @@ class BOOL_t(c_bool):
     pass
 
 
-Data_t       = c_void_p  # ObjC CFDataRef type
-Dictionary_t = c_void_p
+Data_t       = c_void_p  # ObjC C{CFDataRef} ctype
+Dictionary_t = c_void_p  # ObjC L{NSDictionary} ctype
 
 
 class Id_t(ObjC_t):
@@ -234,9 +262,9 @@ class Method_t(ObjC_t):
     pass
 
 
-Number_t      = c_void_p
-NumberType_t  = c_ulong  # c_uint32
-OptionFlags_t = c_ulong  # ObjC CFOptionFlags type
+Number_t      = c_void_p  # ObjC L{NSNumber} ctype
+NumberType_t  = c_ulong   # c_uint32
+OptionFlags_t = c_ulong   # ObjC C{CFOptionFlags} ctype
 
 
 class Protocol_t(Id_t):
@@ -275,8 +303,8 @@ class SEL_t(ObjC_t):
         return self._name
 
 
-Set_t    = c_void_p  # ObjC set type
-String_t = c_void_p  # ObjC CFStringRef type
+Set_t    = c_void_p  # ObjC L{NSset} ctype
+String_t = c_void_p  # ObjC C{CFStringRef} ctype
 
 
 class Struct_t(ObjC_t):
@@ -286,7 +314,7 @@ class Struct_t(ObjC_t):
 
 
 # unhashable type if class(ObjC_t)
-TimeInterval_t = c_double  # ObjC CFTimeInterval type
+TimeInterval_t = c_double  # ObjC CFTimeInterval type, != NSTimeInterval_t
 TypeID_t       = c_ulong   # ObjC CFTypeID type
 
 
@@ -358,7 +386,7 @@ NSFloat_t  = c_float   # always 32-bit float
 
 # NSRange.h
 class NSRange_t(c_struct_t):
-    '''ObjC C{struct} with fields C{loc[ation]} and C{len[gth]} (both C{NSUInteger_t}).
+    '''ObjC C{struct} with fields C{loc[ation]} and C{len[gth]} (both L{NSUInteger_t}).
     '''
     _fields_ = ('location', NSUInteger_t), ('length', NSUInteger_t)
 
@@ -385,7 +413,7 @@ class NSSize_t(c_struct_t):  # == CGSize_t
 
 
 class NSRect_t(c_struct_t):  # == CGRect_t
-    '''ObjC C{struct} with fields C{origin} and C{size} (L{NSPoint_t}, L{NSSize_t}).
+    '''ObjC C{struct} with fields C{origin} and C{size} (C{NSPoint_t}, C{NSSize_t}).
     '''
     _fields_ = ('origin', NSPoint_t), ('size', NSSize_t)
 
@@ -460,15 +488,15 @@ class NSRect4_t(NSRect_t):
         return self.origin.y
 
 
-CGBitmapInfo_t         = c_uint32  # CGImage.h
-CGDirectDisplayID_t    = c_uint32  # CGDirectDisplay.h
-CGError_t              = c_int32   # CGError.h
-CGGlyph_t              = c_uint16  # c_ushort
+CGBitmapInfo_t         = c_uint32   # CGImage.h
+CGDirectDisplayID_t    = c_uint32   # CGDirectDisplay.h
+CGError_t              = c_int32    # CGError.h
+CGGlyph_t              = c_uint16   # c_ushort
 CGPoint_t              = NSPoint_t  # 32-bit encoding is different
-CGRect_t               = NSRect_t  # 32-bit encoding is different
-CGSize_t               = NSSize_t  # 32-bit encoding is different
-CTFontOrientation_t    = c_uint32  # CTFontDescriptor.h
-CTFontSymbolicTraits_t = c_uint32  # CTFontTraits.h
+CGRect_t               = NSRect_t   # 32-bit encoding is different
+CGSize_t               = NSSize_t   # 32-bit encoding is different
+CTFontOrientation_t    = c_uint32   # CTFontDescriptor.h
+CTFontSymbolicTraits_t = c_uint32   # CTFontTraits.h
 
 # for backward compatibility with cocoa-python:
 NSMakePoint = NSPoint_t
@@ -480,7 +508,7 @@ NSNotFound  = NSIntegerMax
 NSPointZero = NSPoint_t(0, 0)
 
 # NSDate.h
-NSTimeInterval_t = c_double  # a ctype
+NSTimeInterval_t = c_double  # a ctype, != TimeInterval_t
 
 # map ctypes type to ObjC encoding type code
 _ctype2encoding = {c_char:     b'c', c_ubyte:     b'C',

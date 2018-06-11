@@ -23,7 +23,10 @@
 # ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
 # OTHER DEALINGS IN THE SOFTWARE.
 
-'''Type L{Font}, etc., wrapping ObjC C{NSFont}.
+'''Type L{Font}, etc., wrapping ObjC L{NSFont}.
+
+@var Fonts:     Pre-defined system fonts (L{Font}).
+@var FontTrait: Font traits (C{mask}).
 '''
 # all imports listed explicitly to help PyChecker
 from bases   import _Type0
@@ -38,9 +41,9 @@ from oslibs  import NSFontBoldMask, NSFontItalicMask, \
 from runtime import isInstanceOf
 from strs    import Str
 from utils   import bytes2str, _ByteStrs, _Constants, _exports, \
-                    flint, instanceof, _Ints, _Types
+                    flint, _Ints, isinstanceOf, _Singletons, _Types
 
-__version__ = '18.06.06'
+__version__ = '18.06.10'
 
 # <http://Developer.Apple.com/documentation/appkit/nsfont.weight>
 # _NSFontWeigthHeavy      = 13 ?
@@ -77,7 +80,7 @@ class FontTrait(_Constants):
     UnItalic   = NSFontUnitalicMask
 
 
-FontTrait = FontTrait()  #: Font trait constants (C{mask}).
+FontTrait = FontTrait()  # overwrite class on purpose
 
 # dict for Font.traitsup() to update traits with family traits
 _familyTraits = dict((n.lower(), m) for n, m in FontTrait.items()
@@ -119,7 +122,7 @@ _ = n = m = None; del _, n, m  # PYCHOK expected
 
 
 def _traitex(traits, mask):
-    # check exclusivity
+    # check mask exclusivity
     return (traits & mask) == mask
 
 
@@ -156,7 +159,7 @@ def _weightin(weight):
 
 
 class Font(_Type0):
-    '''Python C{Font} Type, wrapping ObjC C{NSFont}.
+    '''Python C{Font} Type, wrapping ObjC L{NSFont}.
     '''
     _family = ''
     _height = 0
@@ -168,9 +171,9 @@ class Font(_Type0):
     def __init__(self, family_or_font, size=0, traits=0, weight=5):
         '''New L{Font}.
 
-           @param family_or_font: Generic font name (C{str}, L{Str}, C{NSStr})
+           @param family_or_font: Generic font name (C{str}, L{Str}, L{NSStr})
                                   like "Times" or "Helvetica" or a L{Font},
-                                  C{NSFont} or C{NSFontDescriptor} instance.
+                                  L{NSFont} or L{NSFontDescriptor} instance.
            @keyword size: Desired point size (C{int}), zero for any.
            @keyword traits: Desired font traits (C{str} or C{FontTrait}C{s mask}).
            @keyword weigth: Desired book weight (C{int}) in range 0..15, where
@@ -187,7 +190,7 @@ class Font(_Type0):
            @note: The new L{Font} may not exhibit the desired I{traits}
                   and I{weight}.  The I{weight} is ignored if I{traits}
                   include C{FontTrait.Bold}, both I{traits} and I{weight}
-                  are ignored if I{family_or_font} is C{NSFontDescriptor}.
+                  are ignored if I{family_or_font} is L{NSFontDescriptor}.
 
            @see: Function L{fontsof} to obtain all available fonts of
                  a particular font family.
@@ -451,7 +454,7 @@ class Font(_Type0):
             ns = bstr.NS
         elif isinstance(bstr, _ByteStrs):
             ns = NSStr(bstr)
-        elif instanceof(bstr, NSStr, name='bstr'):
+        elif isinstanceOf(bstr, NSStr, name='bstr'):
             ns = bstr
         return flint(self.NS.widthOfString_(ns)), self.height
 
@@ -527,26 +530,138 @@ class FontTraitError(FontError):
     pass
 
 
-class Fonts(_Constants):
+class _Fonts(_Singletons):
     '''Some pre-defined fonts.
     '''
-    App         = Font(NSFont.userFontOfSize_(0))
-    Bold        = Font(NSFont.boldSystemFontOfSize_(0))
-    BoldItalic  = Font(NSFont.boldSystemFontOfSize_(0)).traitsup(FontTrait.Italic)
-    Italic      = Font(NSFont.systemFontOfSize_(0)).traitsup(FontTrait.Italic)
-    Label       = Font(NSFont.labelFontOfSize_(0))
-    Menu        = Font(NSFont.menuFontOfSize_(0))
-    MenuBar     = Font(NSFont.menuBarFontOfSize_(0))
-    Message     = Font(NSFont.messageFontOfSize_(0))
-    MonoSpace   = Font(NSFont.userFixedPitchFontOfSize_(0))
-    Palette     = Font(NSFont.paletteFontOfSize_(0))
-    System      = Font(NSFont.systemFontOfSize_(0))
-    TableData   = Font(NSMain.TableColumn.dataCell().font())
-    TableHeader = Font(NSMain.TableColumn.headerCell().font())
-    Title       = Font(NSFont.titleBarFontOfSize_(0))
+    _App         = None
+    _Bold        = None
+    _BoldItalic  = None
+    _Italic      = None
+    _Label       = None
+    _Menu        = None
+    _MenuBar     = None
+    _Message     = None
+    _MonoSpace   = None
+    _Palette     = None
+    _System      = None
+    _TableData   = None
+    _TableHeader = None
+    _Title       = None
+
+    @property
+    def App(self):
+        '''Get the C{UserFont}.
+        '''
+        if self._App is None:
+            _Fonts._App = Font(NSFont.userFontOfSize_(0))
+        return self._App
+
+    @property
+    def Bold(self):
+        '''Get the C{BoldFont}.
+        '''
+        if self._Bold is None:
+            _Fonts._Bold = Font(NSFont.boldSystemFontOfSize_(0))
+        return self._Bold
+
+    @property
+    def BoldItalic(self):
+        '''Get the C{BoldItalicFont}.
+        '''
+        if self._BoldItalic is None:
+            _Fonts._BoldItalic = Font(NSFont.boldSystemFontOfSize_(0)).traitsup(FontTrait.Italic)
+        return self._BoldItalic
+
+    @property
+    def Italic(self):
+        '''Get the C{ItalicFont}.
+        '''
+        if self._Italic is None:
+            _Fonts._Italic = Font(NSFont.systemFontOfSize_(0)).traitsup(FontTrait.Italic)
+        return self._Italic
+
+    @property
+    def Label(self):
+        '''Get the C{LabelFont}.
+        '''
+        if self._Label is None:
+            _Fonts._Label = Font(NSFont.labelFontOfSize_(0))
+        return self._Label
+
+    @property
+    def Menu(self):
+        '''Get the C{MenuFont}.
+        '''
+        if self._Menu is None:
+            _Fonts._Menu = Font(NSFont.menuFontOfSize_(0))
+        return self._Menu
+
+    @property
+    def MenuBar(self):
+        '''Get the C{MenuBarFont}.
+        '''
+        if self._MenuBar is None:
+            _Fonts._MenuBar = Font(NSFont.menuBarFontOfSize_(0))
+        return self._MenuBar
+
+    @property
+    def Message(self):
+        '''Get the C{MessageFont}.
+        '''
+        if self._Message is None:
+            _Fonts._Message = Font(NSFont.messageFontOfSize_(0))
+        return self._Message
+
+    @property
+    def MonoSpace(self):
+        '''Get the C{MonoSpaceFont}.
+        '''
+        if self._MonoSpace is None:
+            _Fonts._MonoSpace = Font(NSFont.userFixedPitchFontOfSize_(0))
+        return self._MonoSpace
+
+    @property
+    def Palette(self):
+        '''Get the C{PaletteFont}.
+        '''
+        if self._Palette is None:
+            _Fonts._Palette = Font(NSFont.paletteFontOfSize_(0))
+        return self._Palette
+
+    @property
+    def System(self):
+        '''Get the C{SystemFont}.
+        '''
+        if self._System is None:
+            _Fonts._System = Font(NSFont.systemFontOfSize_(0))
+        return self._System
+
+    @property
+    def TableData(self):
+        '''Get the C{TableDataFont}.
+        '''
+        if self._TableData is None:
+            _Fonts._TableData = Font(NSMain.TableColumn.dataCell().font())
+        return self._TableData
+
+    @property
+    def TableHeader(self):
+        '''Get the C{TableHeaderFont}.
+        '''
+        if self._TableHeader is None:
+            _Fonts._TableHeader = Font(NSMain.TableColumn.headerCell().font())
+        return self._TableHeader
+
+    @property
+    def Title(self):
+        '''Get the C{TitleFont}.
+        '''
+        if self._Title is None:
+            _Fonts._Title = Font(NSFont.titleBarFontOfSize_(0))
+        return self._Title
 
 
-Fonts = Fonts()  #: Pre-defined system fonts (L{Font}).
+Fonts = _Fonts()  # pre-defined system fonts as L{Font}s
 
 
 def fontfamilies(*prefixes):
@@ -658,10 +773,13 @@ if __name__ == '__main__':
 
     def _itemf(fmt, *args):
         t = fmt % args
-        d = t.find('.App=')
-        if d > 0:
-            d = ' ' * (d + 1)
-            t = t.replace('), .', ')\n' + d + '.')
+        for f in (' is Fonts', ' is FontTrait'):
+            i = t.find(f)
+            if i > 0:
+                t = t[:i] + t[i+len(f):]
+                f = ' ' * (len(f) - 4)
+                i = ' ' * (i + 1)
+                t = t.replace(f, i)
         return t
 
     _allisting(__all__, locals(), __version__, __file__, itemf=_itemf)
@@ -671,29 +789,40 @@ _ = '''
  fonts.__all__ = tuple(
    fonts.Font is <class .Font>,
    fonts.FontError is <class .FontError>,
-   fonts.fontfamilies is <function .fontfamilies at 0x1022c78c0>,
-   fonts.fontnamesof is <function .fontnamesof at 0x1022ccb18>,
-   fonts.Fonts is Fonts.App=Font(name='Helvetica', family='Helvetica', size=12, weight=5)
-                       .Bold=Font(name='.SFNSText-Bold', family='.SF NS Text', size=13, traits='Bold', weight=9)
-                       .BoldItalic=Font(name='.SFNSText-BoldItalic', family='.SF NS Text', size=13, traits='Bold Italic', weight=9)
-                       .Italic=Font(name='.SFNSText-Italic', family='.SF NS Text', size=13, traits='Italic', weight=5)
-                       .Label=Font(name='.AppleSystemUIFont', family='.AppleSystemUIFont', size=10, weight=5)
-                       .Menu=Font(name='.AppleSystemUIFont', family='.AppleSystemUIFont', size=13, weight=5)
-                       .MenuBar=Font(name='.AppleSystemUIFont', family='.AppleSystemUIFont', size=14, weight=5)
-                       .Message=Font(name='.AppleSystemUIFont', family='.AppleSystemUIFont', size=13, weight=5)
-                       .MonoSpace=Font(name='Monaco', family='Monaco', size=10, traits='MonoSpace', weight=5)
-                       .Palette=Font(name='.AppleSystemUIFont', family='.AppleSystemUIFont', size=11, weight=5)
-                       .System=Font(name='.SFNSText', family='.SF NS Text', size=13, weight=5)
-                       .TableData=Font(name='.SFNSText', family='.SF NS Text', size=13, weight=5)
-                       .TableHeader=Font(name='.SFNSText', family='.SF NS Text', size=11, weight=5)
-                       .Title=Font(name='.AppleSystemUIFont', family='.AppleSystemUIFont', size=13, weight=5),
-   fonts.fontsof is <function .fontsof at 0x1022ccb90>,
-   fonts.fontsof4 is <function .fontsof4 at 0x1022ccc08>,
-   fonts.FontTrait is FontTrait.Bold=2, .Compressed=1<<9, .Condensed=1<<6, .Expanded=1<<5, .Italic=1, .MonoSpace=1<<10, .Narrow=1<<4, .Poster=1<<8, .SansSerif=1<<31, .SmallCaps=1<<7, .UnBold=1<<2, .UnItalic=1<<24,
+   fonts.fontfamilies is <function .fontfamilies at 0x103a56840>,
+   fonts.fontnamesof is <function .fontnamesof at 0x103a5c510>,
+   fonts.Fonts.App=Font(name='Helvetica', family='Helvetica', size=12, weight=5),
+              .Bold=Font(name='.AppleSystemUIFontBold', family='.AppleSystemUIFont', size=13, traits='Bold', weight=9),
+              .BoldItalic=Font(name='.AppleSystemUIFontEmphasizedItalic', family='.AppleSystemUIFont', size=13, traits='Bold Italic', weight=9),
+              .Italic=Font(name='.AppleSystemUIFontItalic', family='.AppleSystemUIFont', size=13, traits='Italic', weight=5),
+              .Label=Font(name='.AppleSystemUIFont', family='.AppleSystemUIFont', size=10, weight=5),
+              .Menu=Font(name='.AppleSystemUIFont', family='.AppleSystemUIFont', size=13, weight=5),
+              .MenuBar=Font(name='.AppleSystemUIFont', family='.AppleSystemUIFont', size=14, weight=5),
+              .Message=Font(name='.AppleSystemUIFont', family='.AppleSystemUIFont', size=13, weight=5),
+              .MonoSpace=Font(name='Menlo-Regular', family='Menlo', size=11, traits='MonoSpace', weight=5),
+              .Palette=Font(name='.AppleSystemUIFont', family='.AppleSystemUIFont', size=11, weight=5),
+              .System=Font(name='.AppleSystemUIFont', family='.AppleSystemUIFont', size=13, weight=5),
+              .TableData=Font(name='.AppleSystemUIFont', family='.AppleSystemUIFont', size=13, weight=5),
+              .TableHeader=Font(name='.AppleSystemUIFont', family='.AppleSystemUIFont', size=11, weight=5),
+              .Title=Font(name='.AppleSystemUIFont', family='.AppleSystemUIFont', size=13, weight=5),
+   fonts.fontsof is <function .fontsof at 0x103a5c598>,
+   fonts.fontsof4 is <function .fontsof4 at 0x103a5c620>,
+   fonts.FontTrait.Bold=2,
+                  .Compressed=1<<9,
+                  .Condensed=1<<6,
+                  .Expanded=1<<5,
+                  .Italic=1,
+                  .MonoSpace=1<<10,
+                  .Narrow=1<<4,
+                  .Poster=1<<8,
+                  .SansSerif=1<<31,
+                  .SmallCaps=1<<7,
+                  .UnBold=1<<2,
+                  .UnItalic=1<<24,
    fonts.FontTraitError is <class .FontTraitError>,
-   fonts.fontTraits is <function .fontTraits at 0x1022ccc80>,
-   fonts.fontTraitstrs is <function .fontTraitstrs at 0x1022cccf8>,
+   fonts.fontTraits is <function .fontTraits at 0x103a5c6a8>,
+   fonts.fontTraitstrs is <function .fontTraitstrs at 0x103a5c730>,
  )[11]
- fonts.__version__ = '18.05.15'
+ fonts.__version__ = '18.06.10'
 '''
 del _

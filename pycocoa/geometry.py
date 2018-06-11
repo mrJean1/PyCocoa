@@ -23,17 +23,17 @@
 # ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
 # OTHER DEALINGS IN THE SOFTWARE.
 
-'''Types L{Point}, L{Rect} and L{Size}, wrapping ObjC C{NSPoint_t}, C{NSRect_t}, C{NSSize_t}.
+'''Types L{Point}, L{Rect} and L{Size}, wrapping ObjC C{NSPoint_t}, L{NSRect_t}, C{NSSize_t}.
 '''
 # all imports listed explicitly to help PyChecker
 from bases   import _Type0
 from octypes import NSPoint_t, NSRect_t, NSRect4_t, NSSize_t
-from utils   import instanceof
+from utils   import isinstanceOf
 
 __all__ = ('Point', 'Point2',
            'Rect', 'Rect4',
            'Size', 'Size2')
-__version__ = '18.05.15'
+__version__ = '18.06.10'
 
 
 class Point(_Type0):
@@ -58,7 +58,7 @@ class Point(_Type0):
             self.NS = NSPoint_t(*point)
         elif isinstance(point, Point):
             self.NS = point.NS
-        elif instanceof(point, NSPoint_t, name='point'):
+        elif isinstanceOf(point, NSPoint_t, name='point'):
             self.NS = point
 
     @property
@@ -92,7 +92,7 @@ class Point2(Point):
 
 
 class Rect(_Type0):
-    '''Python Type, wrapping an ObjC C{NSRect_t}.
+    '''Python Type, wrapping an ObjC L{NSRect_t}.
     '''
 
     def __init__(self, rect):
@@ -118,7 +118,7 @@ class Rect(_Type0):
             self.NS = NSRect4_t(*rect)
         elif isinstance(rect, Rect):
             self.NS = rect.NS
-        elif instanceof(rect, NSRect_t, name='rect'):
+        elif isinstanceOf(rect, NSRect_t, name='rect'):
             self.NS = rect
 
     @property
@@ -227,7 +227,7 @@ class Rect(_Type0):
 
 
 class Rect4(Rect):
-    '''Python Type, like L{Rect}, but signature as ObjC C{NSRect4_t}.
+    '''Python Type, like L{Rect}, but signature as ObjC L{NSRect4_t}.
     '''
     def __init__(self, x=0, y=0, width=0, height=0):
         '''New L{Rect4} from keyword arguments.
@@ -259,7 +259,7 @@ class Size(_Type0):
             self.NS = NSSize_t(*size)
         elif isinstance(size, Size):
             self.NS = size.NS
-        elif instanceof(size, NSSize_t, name='size'):
+        elif isinstanceOf(size, NSSize_t, name='size'):
             self.NS = size
 
     @property

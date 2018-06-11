@@ -26,7 +26,7 @@ corresponding U{Python-VLC<http://PyPI.org/project/python-vlc>} binding.
 
 The tests and examples have only been run with 64-bit Python 2.7.14 and
 3.6.5 using U{Python-VLC<http://PyPI.org/project/python-vlc>} 2.2.6, 3.0.1,
-3.0.2 and 3.0.3 (with compatible U{VLC App<http://www.VideoLan.org/vlc>}s),
+3.0.2 and 3.0.3 (with the compatible U{VLC App<http://www.VideoLan.org/vlc>}),
 but only on macOS 10.13.4 High Sierra.  PyCocoa has I{not been tested} on
 iOS nor with 32-bit Python and I{does not work} using
 U{PyPy<http://PyPy.org>} nor with U{Intel(R) Python
@@ -112,13 +112,12 @@ OTHER DEALINGS IN THE SOFTWARE.}
 
 @newfield example: Example, Examples
 
-@var libobjc: The macOS C{objc} library (C{ctypes.CDLL})
 '''
 
 from os.path import abspath, dirname
 import sys
 
-__version__ = '18.06.06'
+__version__ = '18.06.10'
 
 p = sys.platform
 if not p.startswith('darwin'):

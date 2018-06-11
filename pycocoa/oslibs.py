@@ -61,12 +61,23 @@
 # <http://GitHub.com/gnustep/libs-gui/tree/master/Headers>
 
 '''Various ObjC and macOS libraries, signatures, constants, etc.
+
+@var libAppKit:     The macOS C{AppKit} library (C{ctypes.CDLL}).
+@var libCF:         The macOS C{CoreFoundation} library (C{ctypes.CDLL}).
+@var libCT:         The macOS C{CoreText} library (C{ctypes.CDLL}).
+@var libFoundation: The macOS C{Foundation} library (C{ctypes.CDLL}).
+@var libobjc:       The macOS C{objc} library (C{ctypes.CDLL}).
+@var libquartz:     The macOS C{quartz} library (C{ctypes.CDLL}).
+
+@var NO:  ObjC's False (C{const}).
+@var YES: ObjC's True (C{const}).
+
 '''
 # all imports listed explicitly to help PyChecker
 from ctypes  import byref, cast, cdll, c_buffer, c_byte, c_char, c_char_p, \
                     c_double, c_float, \
                     c_int, c_int8, c_int16, c_int32, c_int64, \
-                    c_long, c_longlong, c_short, c_size_t, \
+                    CFUNCTYPE, c_long, c_longlong, c_short, c_size_t, \
                     c_uint, c_uint8, c_uint32, c_void_p, \
                     POINTER, sizeof, util  # c_ubyte, string_at
 from octypes import Allocator_t, Array_t, BOOL_t, CFIndex_t, \
@@ -82,10 +93,10 @@ from octypes import Allocator_t, Array_t, BOOL_t, CFIndex_t, \
                     TypeRef_t, UniChar_t, URL_t
 from utils   import bytes2str, _exports
 
-__version__ = '18.06.06'
+__version__ = '18.06.10'
 
-NO  = False
-YES = True
+NO  = False  # c_byte(0)
+YES = True   # c_byte(1)
 
 
 def _csignature(libfunc, restype, *argtypes):
@@ -444,6 +455,10 @@ NSApplicationActivationPolicyRegular    = 0
 NSApplicationActivationPolicyAccessory  = 1
 NSApplicationActivationPolicyProhibited = 2
 
+# <http://Developer.Apple.com/documentation/exceptionhandling/nsexceptionhandler>
+NSExceptionHandler_t = CFUNCTYPE(None, c_void_p)
+_csignature(libAppKit.NSSetUncaughtExceptionHandler, None, NSExceptionHandler_t)
+
 # <http://GitHub.com/gnustep/libs-gui/blob/master/Headers/AppKit/NSPanel.h>
 # <http://GitHub.com/gnustep/libs-gui/blob/master/Headers/AppKit/NSSavePanel.h>
 NSFileHandlingPanelCancelButton = NSCancelButton = 0
@@ -687,7 +702,7 @@ kCTFontWeightTrait         = c_void_p.in_dll(libCT, 'kCTFontWeightTrait')  # tra
 kCTFontWidthTrait          = c_void_p.in_dll(libCT, 'kCTFontWidthTrait')  # traits dict key -> -1.0..+1.0
 
 # constants from CTFontTraits.h
-kCTFontClassMaskShift   = 28
+kCTFontClassMaskShift = 28
 
 # CTFontSymbolicTraits symbolically describes stylistic aspects of a font.
 # The top 4 bits is used to describe appearance of the font while the lower
@@ -960,8 +975,10 @@ _csignature(libobjc.sel_registerName, SEL_t, c_char_p)
 
 # filter locals() for .__init__.py
 __all__ = _exports(locals(), 'get_lib', 'leaked2', 'NO', 'YES',
-                   starts=('CF', 'CG', 'ct', 'CTF', 'kCF', 'kCG',
-                           'kCTF', 'lib', 'NS'))  # 'lib'
+                   starts=('lib', 'NS',
+                         # 'CF', 'CG', 'ct', 'CTF',
+                         # 'kCF', 'kCG', 'kCTF',
+                          ))  # PYCHOK false
 
 if __name__ == '__main__':
 

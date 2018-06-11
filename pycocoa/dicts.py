@@ -29,14 +29,15 @@
 '''
 # all imports listed explicitly to help PyChecker
 from bases   import _Type0
-from nstypes import NSDictionary, nsIter2, NSMutableDictionary, NSnil, ns2Type
+from nstypes import isNone, NSDictionary, nsIter2, \
+                    NSMutableDictionary, ns2Type
 from pytypes import py2NS, type2NS
 from runtime import isImmutable, isInstanceOf, ObjCClass, ObjCInstance
-from utils   import instanceof, missing, _Types
+from utils   import isinstanceOf, missing, _Types
 
 __all__ = ('Dict',
            'FrozenDict')
-__version__ = '18.06.04'
+__version__ = '18.06.10'
 
 
 def _dict_cmp(dict1, dict2):
@@ -66,7 +67,7 @@ def _dict_kwds(args, kwds, name):
 
 
 class FrozenDict(_Type0):
-    '''Python immutable C{dict} Type, wrapping an (immutable) ObjC C{NSDictionary}.
+    '''Python immutable C{dict} Type, wrapping an (immutable) ObjC L{NSDictionary}.
     '''
     def __init__(self, *ns_dict, **kwds):
         '''New immutable L{FrozenDict}, like C{dict.__init__}.
@@ -98,7 +99,7 @@ class FrozenDict(_Type0):
     def __eq__(self, other):
         if isinstance(other, (FrozenDict, Dict)):
             return True if self.NS.isEqualToDictionary_(other.NS) else False
-        elif instanceof(other, dict, name='other'):
+        elif isinstanceOf(other, dict, name='other'):
             return len(self) == len(other) and _dict_cmp(self, other) \
                                            and _dict_cmp(other, self)
 
@@ -148,7 +149,7 @@ class FrozenDict(_Type0):
         '''
         for key, k in nsIter2(self.NS.allKeys()):
             v = self.NS.objectForKey_(k)
-            if v in (NSnil, None):  # missing key?
+            if isNone(v):  # missing key?
                 self._NS_KeyError(key, k)
             yield key, ns2Type(v)
 
@@ -181,7 +182,7 @@ class FrozenDict(_Type0):
     def _NS_get3(self, key):
         k = type2NS(key)
         v = self.NS.objectForKey_(k)  # nil for missing key
-        return k, v, (missing if v in (NSnil, None) else ns2Type(v))
+        return k, v, (missing if isNone(v) else ns2Type(v))
 
     def _NS_KeyError(self, key, k):
         # XXX KeyError(key) prints repr(key), adding "..."
@@ -189,7 +190,7 @@ class FrozenDict(_Type0):
 
 
 class Dict(FrozenDict):
-    '''Python C{dict} Type, wrapping an ObjC C{NSMutableDictionary}.
+    '''Python C{dict} Type, wrapping an ObjC L{NSMutableDictionary}.
     '''
     __iter__ = FrozenDict.keys
 
@@ -275,11 +276,11 @@ class Dict(FrozenDict):
         '''
         other, kwds = _dict_kwds(other, kwds, 'other')
         if other:
-            if instanceof(other, Dict, FrozenDict):
+            if isinstanceOf(other, Dict, FrozenDict):
                 self.NS.addEntriesFromDictionary_(other.NS)
             elif isInstanceOf(other, NSMutableDictionary, NSDictionary):
                 self.NS.addEntriesFromDictionary_(other)
-            elif instanceof(other, dict, name='other'):
+            elif isinstanceOf(other, dict, name='other'):
                 for k, v in other.items():
                     self[k] = v  # self.__setitem__
         for k, v in kwds.items():

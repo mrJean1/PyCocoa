@@ -62,11 +62,11 @@
 <p>Types <a href="pycocoa.panels.OpenPanel-class.html" 
   class="link">OpenPanel</a> and <a 
   href="pycocoa.panels.SavePanel-class.html" class="link">SavePanel</a>, 
-  wrapping ObjC <code>NSOpenPanel</code> and <code>NSSavePanel</code>.</p>
+  wrapping ObjC NSOpenPanel and NSSavePanel.</p>
 
 <hr />
 <div class="fields">      <p><strong>Version:</strong>
-        18.06.06
+        18.06.10
       </p>
 </div><!-- ==================== CLASSES ==================== -->
 <a name="section-Classes"></a>
@@ -81,7 +81,7 @@
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
         <a href="pycocoa.panels.AlertPanel-class.html" class="summary-name">AlertPanel</a><br />
-      Python Type to show an alert, wrapping ObjC <code>NSAlert</code>.
+      Python Type to show an alert, wrapping ObjC NSAlert.
     </td>
   </tr>
 <tr>
@@ -97,8 +97,7 @@
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
         <a href="pycocoa.panels.ErrorPanel-class.html" class="summary-name">ErrorPanel</a><br />
-      Python Type to show an NSError alert, wrapping ObjC 
-        <code>NSAlert</code>.
+      Python Type to show an NSError alert, wrapping ObjC NSAlert.
     </td>
   </tr>
 <tr>
@@ -106,8 +105,7 @@
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
         <a href="pycocoa.panels.OpenPanel-class.html" class="summary-name">OpenPanel</a><br />
-      Python Type to select a file, wrapping ObjC 
-        <code>NSOpenPanel</code>.
+      Python Type to select a file, wrapping ObjC NSOpenPanel.
     </td>
   </tr>
 <tr>
@@ -115,7 +113,7 @@
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
         <a href="pycocoa.panels.SavePanel-class.html" class="summary-name">SavePanel</a><br />
-      Python Type to save a file, wrapping ObjC <code>NSSavePanel</code>.
+      Python Type to save a file, wrapping ObjC NSSavePanel.
     </td>
   </tr>
 <tr>
@@ -123,8 +121,7 @@
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
         <a href="pycocoa.panels.TextPanel-class.html" class="summary-name">TextPanel</a><br />
-      Scrollable text panel Python Type, wrapping ObjC 
-        <code>NSAlert</code>.
+      Scrollable text panel Python Type, wrapping ObjC NSAlert.
     </td>
   </tr>
 </table>
@@ -140,17 +137,24 @@
     <td width="15%" align="right" valign="top" class="summary">
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
-        <a name="AlertStyle"></a><span class="summary-name">AlertStyle</span> = <code title="AlertStyle.Critical=2, .Info=1, .Warning=0">AlertStyle.Critical=2, .Info=1, .Warning=0</code><br />
-      Alert style constants (<code>int</code>).
+        <a href="pycocoa.panels-module.html#AlertStyle" class="summary-name">AlertStyle</a> = <code title="AlertStyle.Critical=2,
+          .Info=1,
+          .Warning=0">AlertStyle.Critical<code class="variable-ellipsis">...</code></code><br />
+      Alert levels (<code>enum</code>).
     </td>
   </tr>
 <tr>
     <td width="15%" align="right" valign="top" class="summary">
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
-        <a href="pycocoa.panels-module.html#PanelButton" class="summary-name">PanelButton</a> = <code title="PanelButton.Cancel=0, .Close=1, .Error=-3, .OK=1, .Other=2, .Suppresse\
-d=-2, .TimedOut=-1">PanelButton.Cancel=0, .Close=1, .Error=-3, .OK=1<code class="variable-ellipsis">...</code></code><br />
-      Panel button constants (<code>int</code>).
+        <a href="pycocoa.panels-module.html#PanelButton" class="summary-name">PanelButton</a> = <code title="PanelButton.Cancel=0,
+           .Close=1,
+           .Error=-3,
+           .OK=1,
+           .Other=2,
+           .Suppressed=-2,
+           .TimedOut=-1">PanelButton.Cancel<code class="variable-ellipsis">...</code></code><br />
+      Panel button kinds (<code>enum</code>).
     </td>
   </tr>
 </table>
@@ -163,20 +167,45 @@ d=-2, .TimedOut=-1">PanelButton.Cancel=0, .Close=1, .Error=-3, .OK=1<code class=
     <span class="table-header">Variables Details</span></td>
 </tr>
 </table>
+<a name="AlertStyle"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <h3 class="epydoc">AlertStyle</h3>
+  <p>Alert level constants (<code>int</code>).</p>
+  <dl class="fields">
+  </dl>
+  <dl class="fields">
+    <dt>Value:</dt>
+      <dd><table><tr><td><pre class="variable">
+AlertStyle.Critical=2,
+          .Info=1,
+          .Warning=0
+</pre></td></tr></table>
+</dd>
+  </dl>
+</td></tr></table>
+</div>
 <a name="PanelButton"></a>
 <div>
 <table class="details" border="1" cellpadding="3"
        cellspacing="0" width="100%" bgcolor="white">
 <tr><td>
   <h3 class="epydoc">PanelButton</h3>
-  <p>Panel button constants (<code>int</code>).</p>
+  <p>Panel button kinds (<code>int</code>).</p>
   <dl class="fields">
   </dl>
   <dl class="fields">
     <dt>Value:</dt>
       <dd><table><tr><td><pre class="variable">
-PanelButton.Cancel=0, .Close=1, .Error=-3, .OK=1, .Other=2, .Suppresse<span class="variable-linewrap"><img src="crarr.png" alt="\" /></span>
-d=-2, .TimedOut=-1
+PanelButton.Cancel=0,
+           .Close=1,
+           .Error=-3,
+           .OK=1,
+           .Other=2,
+           .Suppressed=-2,
+           .TimedOut=-1
 </pre></td></tr></table>
 </dd>
   </dl>
@@ -214,7 +243,7 @@ d=-2, .TimedOut=-1
 <table border="0" cellpadding="0" cellspacing="0" width="100%%">
   <tr>
     <td align="left" class="footer">
-    Generated by Epydoc 3.0.1 on Thu Jun  7 12:45:43 2018
+    Generated by Epydoc 3.0.1 on Mon Jun 11 15:48:45 2018
     </td>
     <td align="right" class="footer">
       <a target="mainFrame" href="http://epydoc.sourceforge.net"

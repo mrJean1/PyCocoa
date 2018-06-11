@@ -23,7 +23,11 @@
 # ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
 # OTHER DEALINGS IN THE SOFTWARE.
 
-'''Types L{OpenPanel} and L{SavePanel}, wrapping ObjC C{NSOpenPanel} and C{NSSavePanel}.
+'''Types L{OpenPanel} and L{SavePanel}, wrapping ObjC L{NSOpenPanel} and L{NSSavePanel}.
+
+@var AlertStyle:  Alert levels (C{enum}).
+@var PanelButton: Panel button kinds (C{enum}).
+
 '''
 # all imports listed explicitly to help PyChecker
 from bases   import _Type2
@@ -56,18 +60,18 @@ __all__ = ('AlertPanel', 'AlertStyle',
            'PanelButton',
            'SavePanel',
            'TextPanel')
-__version__ = '18.06.06'
+__version__ = '18.06.10'
 
 
 class AlertStyle(_Constants):  # Enum?
-    '''Alert style constants (C{int}).
+    '''Alert level constants (C{int}).
     '''
     Critical = 2  # NSAlertStyleCritical
     Info     = 1  # NSAlertStyleInformational
     Warning  = 0  # NSAlertStyleWarning
 
 
-AlertStyle = AlertStyle()  #: Alert style constants (C{int}).
+AlertStyle = AlertStyle()  #: Alert level constants (C{int}).
 
 _AlertStyleStr = {AlertStyle.Critical: 'Critical ',
                   AlertStyle.Info:     'Informational ',
@@ -75,7 +79,7 @@ _AlertStyleStr = {AlertStyle.Critical: 'Critical ',
 
 
 class AlertPanel(_Type2):
-    '''Python Type to show an alert, wrapping ObjC C{NSAlert}.
+    '''Python Type to show an alert, wrapping ObjC L{NSAlert}.
     '''
     _style    = None
     _suppress = None
@@ -198,8 +202,7 @@ class AlertPanel(_Type2):
 class BrowserPanel(_Type2):
     '''Python Type to show a URL or file.
     '''
-    _browser  = None
-    _OPEN_URL = NSStr('WebBrowserOpenURLNotification')
+    _browser = None
 
     def __init__(self, name=None, title=''):
         '''New L{BrowserPanel}, a browser.
@@ -246,12 +249,13 @@ class BrowserPanel(_Type2):
             self._browser.open(url, new=2 if tab else 1)
         elif self.NS:
             d = dict2NS(dict(URL=ns, reveal=True, newTab=bool(tab)), frozen=True)
-            self.NS.postNotificationName_object_userInfo_(self._OPEN_URL, None, d)
+            u = NSStr('WebBrowserOpenURLNotification')
+            self.NS.postNotificationName_object_userInfo_(u, None, d)
         return _urlparse(nsString2str(ns.absoluteString()))
 
 
 class ErrorPanel(AlertPanel):
-    '''Python Type to show an L{NSError} alert, wrapping ObjC C{NSAlert}.
+    '''Python Type to show an L{NSError} alert, wrapping ObjC L{NSAlert}.
     '''
 
     def __init__(self, title='Error'):
@@ -284,7 +288,7 @@ class ErrorPanel(AlertPanel):
 
 
 class OpenPanel(_Type2):
-    '''Python Type to select a file, wrapping ObjC C{NSOpenPanel}.
+    '''Python Type to select a file, wrapping ObjC L{NSOpenPanel}.
     '''
 
     def __init__(self, title=''):
@@ -356,25 +360,25 @@ class OpenPanel(_Type2):
 
 
 class PanelButton(_Constants):  # Enum?
-    '''Panel button constants (C{int}).
+    '''Panel button kinds (C{int}).
     '''
     Error      = -3
     Suppressed = -2
     TimedOut   = -1
     Cancel     = 0  # NSCancelButton
-    Close      = 1  # OK for TextPanel
+    Close      = 1  # TextPanel, like OK
     OK         = 1  # NSOKButton
     Other      = 2
 
 
-PanelButton = PanelButton()  #: Panel button constants (C{int}).
+PanelButton = PanelButton()  #: Panel button kinds (C{int}).
 
 
 # <http://PseudoFish.com/p/saving-a-file-using-nssavepanel.html>
 # <http://PseudoFish.com/showing-a-nssavepanel-as-a-sheet.html>
 
 class SavePanel(_Type2):
-    '''Python Type to save a file, wrapping ObjC C{NSSavePanel}.
+    '''Python Type to save a file, wrapping ObjC L{NSSavePanel}.
     '''
     def __init__(self, title=''):
         '''New L{SavePanel}, a file save dialog.
@@ -450,7 +454,7 @@ class SavePanel(_Type2):
 
 
 class TextPanel(AlertPanel):
-    '''Scrollable text panel Python Type, wrapping ObjC C{NSAlert}.
+    '''Scrollable text panel Python Type, wrapping ObjC L{NSAlert}.
     '''
     def __init__(self, title='Text Panel'):
         '''Create a L{TextPanel}.

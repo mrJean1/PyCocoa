@@ -5,7 +5,7 @@
 
 import pycocoa
 
-__version__ = '18.05.25'
+__version__ = '18.06.08'
 
 if __name__ == '__main__':
 
@@ -13,7 +13,7 @@ if __name__ == '__main__':
 
     i = 0
     for k in sorted(pycocoa.__all__, key=str.lower):
-        if k.startswith(('ObjC', 'NS')) and k not in ('ObjCBase',):
+        if k.startswith(('ObjC', 'NS')) and k not in ('NSLog', 'ObjCBase',):
             c = getattr(pycocoa, k)
             try:
                 s = r = c.alloc()  # .init()

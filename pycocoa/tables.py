@@ -23,7 +23,7 @@
 # ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
 # OTHER DEALINGS IN THE SOFTWARE.
 
-'''Types L{Table} and L{TableWindow}, wrapping ObjC C{NSTableView}, C{NSWindow}.
+'''Types L{Table} and L{TableWindow}, wrapping ObjC L{NSTableView}, L{NSWindow}.
 '''
 # <http://StackOverflow.com/questions/15519296/pyobjc-crashes-by-using-nstableview>
 # <http://GitHub.com/versluis/Mac-TableViewCode/tree/master/Mac%20TableViewCode>
@@ -32,32 +32,36 @@
 from bases    import _Type2
 from fonts    import Font
 from geometry import Rect4
-from nstypes  import NSNone, NSScrollView, NSStr, NSTableColumn, \
-                     NSTableView, NSTrue
-#                    isNone, NSnil, NSTextField
+from nstypes  import NSMain, NSScrollView, NSStr, NSTableColumn, \
+                     NSTableView  # isNone, NSTextField
 from octypes  import NSSize_t
 from oslibs   import NSTableViewSolidHorizontalGridLineMask, \
                      NSTableViewSolidVerticalGridLineMask, \
                      NSTextAlignmentCenter, NSTextAlignmentJustified, \
                      NSTextAlignmentLeft, NSTextAlignmentNatural, \
-                     NSTextAlignmentRight
+                     NSTextAlignmentRight, YES
 from runtime  import isInstanceOf, ObjCClass, ObjCInstance, \
                      ObjCSubclass, send_super
-from utils    import _Globals, instanceof, _Types
+from utils    import _Globals, isinstanceOf, _Types
 from windows  import Screen, Window, WindowStyle
 
 __all__ = ('NSTableViewDelegate',
            'Table', 'TableWindow',
            'closeTables')
-__version__ = '18.05.30'
+__version__ = '18.06.10'
 
 _Alignment = dict(center=NSTextAlignmentCenter,
                justified=NSTextAlignmentJustified,
                     left=NSTextAlignmentLeft,
                  natural=NSTextAlignmentNatural,
                    right=NSTextAlignmentRight)
-_EmptyCell = NSStr('-', auto=False)  # PYCHOK false
-_Separator = NSStr('',  auto=False)
+
+
+class _NS(object):
+    '''(INTERNAL) Singletons.
+    '''
+    BlankCell = NSStr('',  auto=False)
+    EmptyCell = NSStr('-', auto=False)
 
 
 def _format(header, col):
@@ -98,7 +102,7 @@ def closeTables():
 
 
 class Table(_Type2):
-    '''Python Type table of rows and columns, wrapping an ObjC C{NSTableView}.
+    '''Python Type table of rows and columns, wrapping an ObjC L{NSTableView}.
     '''
     _Fonts   = None
     _headers = ()
@@ -126,7 +130,7 @@ class Table(_Type2):
         '''
         def _nstr(col):
             # NSStr can't be auto-released
-            return NSStr(str(col), auto=False)
+            return NSStr(str(col), auto=False) if col else _NS.BlankCell
 
         self._rows.append(tuple(map(_nstr, cols)))
 
@@ -136,7 +140,7 @@ class Table(_Type2):
         if self._window:
             self._window.close()
             self._window = None
-        self.NS = NSNone
+        self.NS = NSMain.Null
 
     def display(self, title, width=600, height=400):
         '''Show the table in a scrollable window.
@@ -184,12 +188,12 @@ class Table(_Type2):
         #         Cocoa/Conceptual/TableView/VisualAttributes/VisualAttributes.html>
         v.setGridStyleMask_(NSTableViewSolidHorizontalGridLineMask |
                             NSTableViewSolidVerticalGridLineMask)
-#       v.setDrawsGrid_(NSTrue)  # XXX obsolete, not needed
+#       v.setDrawsGrid_(YES)  # XXX obsolete, not needed
 
         d = NSTableViewDelegate.alloc().init(cols, self._rows, id2i)
         v.setDelegate_(d)
         v.setDataSource_(d)
-#       v.setEditing_(NSFalse)  # NO
+#       v.setEditing_(NSMain.NO_false)  # NO
         v.reloadData()
 
         self.NS = v
@@ -202,12 +206,12 @@ class Table(_Type2):
     def separator(self):
         '''Append a row separator, an empty row.
         '''
-        self._rows.append(_Separator)
+        self._rows.append(None)
 
 
 class _NSTableViewDelegate(object):
     '''An ObjC-callable I{NSDelegate} class, providing both ObjC
-       protocols C{NSTableViewDelegate} and C{NSTableViewDataSource}.
+       protocols L{NSTableViewDelegate} and L{NSTableViewDataSource}.
 
        @see: The C{_NSApplicationDelegate} for more I{NSDelegate} details.
     '''
@@ -217,12 +221,12 @@ class _NSTableViewDelegate(object):
 
     @_ObjC.method('@PPP')
     def init(self, cols, rows, id2i):
-        '''Initialize the allocated C{NSTableViewDelegate}.
+        '''Initialize the allocated L{NSTableViewDelegate}.
 
            @note: I{MUST} be called as C{.alloc().init(...)}.
         '''
-        instanceof(cols, list, tuple, name='cols')
-        instanceof(rows, list, tuple, name='rows')
+        isinstanceOf(cols, list, tuple, name='cols')
+        isinstanceOf(rows, list, tuple, name='rows')
 #       self = ObjCInstance(send_message('NSObject', 'alloc'))
         self = ObjCInstance(send_super(self, 'init'))
         self.cols = cols  # column headers/titles
@@ -256,15 +260,15 @@ class _NSTableViewDelegate(object):
         # (and col.identifier must be an NSStr).
         try:
             r = self.rows[row]
-            if r is _Separator:
+            if r in (None, ()):
                 # XXX reduce the height of row separator?
                 # <http://Developer.Apple.com//library/content/samplecode/
                 #       CocoaTipsAndTricks/Listings/TableViewVariableRowHeights_
                 #       TableViewVariableRowHeightsAppDelegate_m.html>
-                return _Separator
+                return _NS.BlankCell
             c = self.id2i[col.identifier()]
             # **) return an NSStr, always
-            return r[c] if 0 <= c < len(r) else _EmptyCell
+            return r[c] if 0 <= c < len(r) else _NS.EmptyCell
         except (IndexError, KeyError):  # TypeError, ValueError
             c = col.identifier()
         return NSStr('[C%r, R%s]' % (c, row))
@@ -275,7 +279,7 @@ class _NSTableViewDelegate(object):
         # table is the NSTableView created in Table.display,
         # return an NSTableRowView to use for the given row
         # <http://Developer.Apple.com/documentation/appkit/nstableviewdelegate/1532417-tableview>
-#       return NSnil  # nil means, use the default NSView
+#       return NSMain.nil  # means, use the default NSView
 
 #   @_ObjC.method('@@@i')
 #   def tableView_viewForTableColumn_row_(self, table, col, row):
@@ -285,15 +289,15 @@ class _NSTableViewDelegate(object):
         # <http://Developer.Apple.com/library/content/documentation/Cocoa/Conceptual/TableView/
         #       PopulatingView-TablesProgrammatically/PopulatingView-TablesProgrammatically.html>
 #       r = self.rows[row]
-#       if r is _Separator:
-#           tf = NSnil  # nil means, do not show
+#       if r is _NS.Separator:
+#           tf = NSMain.nil  # means, do not show
 #       else:
 #           tf = table.makeViewWithIdentifier_owner_(self.id_s, self)
 #           if isNone(tf):
 #               tf = NSTextField.alloc().initWithFrame_(table.frame())
 #               tf.setIdentifier_(self.id_s)
 #           c = self.id2i[col.identifier()]
-#           tf.setStringValue_(r[c] if 0 <= c < len(r) else _EmptyCell)
+#           tf.setStringValue_(r[c] if 0 <= c < len(r) else _NS.EmptyCell)
 #       return tf
 
 #   def tableView_viewForTableColumn_row_(self, table, col, row):  # perhaps from this Swift code?
@@ -311,7 +315,7 @@ class _NSTableViewDelegate(object):
 
 
 NSTableViewDelegate = ObjCClass('_NSTableViewDelegate',  # the actual class
-#                                'NSTableViewDelegate',
+#                                'NSTableViewDelegate',  # protocol, ...
                                  'NSTableViewDataSource')
 # XXX or NSTableViewDelegate.add_protocol('NSTableViewDelegate')
 #   plus NSTableViewDelegate.add_protocol('NSTableViewDataSource')
@@ -330,7 +334,7 @@ class TableWindow(Window):
            @keyword table: Table data (L{Table}).
            @keyword frame: Optional window frame (L{Rect}).
         '''
-        instanceof(table, Table, name='table')
+        isinstanceOf(table, Table, name='table')
         self._table = table
 
         tbl = getattr(table, 'NS', None)
@@ -355,7 +359,7 @@ class TableWindow(Window):
         self.NSview = sv = NSScrollView.alloc().initWithFrame_(f)
 
         sv.setDocumentView_(tbl)
-        sv.setHasVerticalScroller_(NSTrue)  # XXX or True or 1
+        sv.setHasVerticalScroller_(YES)
 
         self.cascade()
         self.limit(height=h)

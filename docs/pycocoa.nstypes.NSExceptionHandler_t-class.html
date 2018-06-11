@@ -3,7 +3,7 @@
           "DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
 <head>
-  <title>pycocoa.windows.WindowError</title>
+  <title>pycocoa.nstypes.NSExceptionHandler_t</title>
   <link rel="stylesheet" href="epydoc.css" type="text/css" />
   <script type="text/javascript" src="epydoc.js"></script>
 </head>
@@ -43,8 +43,8 @@
     <td width="100%">
       <span class="breadcrumbs">
         <a href="pycocoa-module.html">Package&nbsp;pycocoa</a> ::
-        <a href="pycocoa.windows-module.html">Module&nbsp;windows</a> ::
-        Class&nbsp;WindowError
+        <a href="pycocoa.nstypes-module.html">Module&nbsp;nstypes</a> ::
+        Class&nbsp;NSExceptionHandler_t
       </span>
     </td>
     <td>
@@ -52,37 +52,25 @@
         <!-- hide/show private -->
         <tr><td align="right"><span class="options"
             >[<a href="frames.html" target="_top">frames</a
-            >]&nbsp;|&nbsp;<a href="pycocoa.windows.WindowError-class.html"
+            >]&nbsp;|&nbsp;<a href="pycocoa.nstypes.NSExceptionHandler_t-class.html"
             target="_top">no&nbsp;frames</a>]</span></td></tr>
       </table>
     </td>
   </tr>
 </table>
 <!-- ==================== CLASS DESCRIPTION ==================== -->
-<h1 class="epydoc">Class WindowError</h1><p class="nomargin-top"></p>
+<h1 class="epydoc">Class NSExceptionHandler_t</h1><p class="nomargin-top"></p>
 <pre class="base-tree">
-              object --+                
-                       |                
-exceptions.BaseException --+            
-                           |            
-        exceptions.Exception --+        
-                               |        
-        exceptions.StandardError --+    
-                                   |    
-               exceptions.ValueError --+
-                                       |
-                                      <strong class="uidshort">WindowError</strong>
+object --+        
+         |        
+ ??._CData --+    
+             |    
+ ??.PyCFuncPtr --+
+                 |
+                <strong class="uidshort">pycocoa.nstypes.NSExceptionHandler_t</strong>
 </pre>
 
-<dl><dt>Known Subclasses:</dt>
-<dd>
-      <ul class="subclass-list">
-<li><a href="pycocoa.windows.WindowStyleError-class.html">WindowStyleError</a></li>  </ul>
-</dd></dl>
-
 <hr />
-<p>Window error.</p>
-
 <!-- ==================== INSTANCE METHODS ==================== -->
 <a name="section-InstanceMethods"></a>
 <table class="summary" border="1" cellpadding="3"
@@ -93,29 +81,60 @@ exceptions.BaseException --+
 </tr>
   <tr>
     <td colspan="2" class="summary">
-    <p class="indent-wrapped-lines"><b>Inherited from <code>exceptions.ValueError</code></b>:
-      <code>__init__</code>,
-      <code>__new__</code>
+    <p class="indent-wrapped-lines"><b>Inherited from <code>PyCFuncPtr</code></b>:
+      <code>__call__</code>,
+      <code>__new__</code>,
+      <code>__nonzero__</code>,
+      <code>__repr__</code>
       </p>
-    <p class="indent-wrapped-lines"><b>Inherited from <code>exceptions.BaseException</code></b>:
-      <code>__delattr__</code>,
-      <code>__getattribute__</code>,
-      <code>__getitem__</code>,
-      <code>__getslice__</code>,
+    <p class="indent-wrapped-lines"><b>Inherited from <code>_CData</code></b>:
+      <code>__ctypes_from_outparam__</code>,
+      <code>__hash__</code>,
       <code>__reduce__</code>,
-      <code>__repr__</code>,
-      <code>__setattr__</code>,
-      <code>__setstate__</code>,
-      <code>__str__</code>,
-      <code>__unicode__</code>
+      <code>__setstate__</code>
       </p>
     <p class="indent-wrapped-lines"><b>Inherited from <code>object</code></b>:
+      <code>__delattr__</code>,
       <code>__format__</code>,
-      <code>__hash__</code>,
+      <code>__getattribute__</code>,
+      <code>__init__</code>,
       <code>__reduce_ex__</code>,
+      <code>__setattr__</code>,
       <code>__sizeof__</code>,
+      <code>__str__</code>,
       <code>__subclasshook__</code>
       </p>
+    </td>
+  </tr>
+</table>
+<!-- ==================== CLASS VARIABLES ==================== -->
+<a name="section-ClassVariables"></a>
+<table class="summary" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr bgcolor="#70b0f0" class="table-header">
+  <td align="left" colspan="2" class="table-header">
+    <span class="table-header">Class Variables</span></td>
+</tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a name="_argtypes_"></a><span class="summary-name">_argtypes_</span> = <code title="(&lt;class 'ctypes.c_void_p'&gt;)"><code class="variable-group">(</code>&lt;class 'ctypes.c_void_p'&gt;<code class="variable-group">)</code></code>
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a name="_flags_"></a><span class="summary-name">_flags_</span> = <code title="1">1</code>
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a name="_restype_"></a><span class="summary-name">_restype_</span> = <code title="None">None</code><br />
+      hash(x)
     </td>
   </tr>
 </table>
@@ -129,9 +148,14 @@ exceptions.BaseException --+
 </tr>
   <tr>
     <td colspan="2" class="summary">
-    <p class="indent-wrapped-lines"><b>Inherited from <code>exceptions.BaseException</code></b>:
-      <code>args</code>,
-      <code>message</code>
+    <p class="indent-wrapped-lines"><b>Inherited from <code>PyCFuncPtr</code></b>:
+      <code>argtypes</code>,
+      <code>errcheck</code>,
+      <code>restype</code>
+      </p>
+    <p class="indent-wrapped-lines"><b>Inherited from <code>_CData</code></b>:
+      <code>_b_base_</code>,
+      <code>_b_needsfree_</code>
       </p>
     <p class="indent-wrapped-lines"><b>Inherited from <code>object</code></b>:
       <code>__class__</code>
@@ -170,7 +194,7 @@ exceptions.BaseException --+
 <table border="0" cellpadding="0" cellspacing="0" width="100%%">
   <tr>
     <td align="left" class="footer">
-    Generated by Epydoc 3.0.1 on Mon Jun 11 15:48:47 2018
+    Generated by Epydoc 3.0.1 on Mon Jun 11 15:48:46 2018
     </td>
     <td align="right" class="footer">
       <a target="mainFrame" href="http://epydoc.sourceforge.net"

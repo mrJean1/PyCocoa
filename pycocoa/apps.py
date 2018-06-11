@@ -34,7 +34,7 @@ from nstypes import NSApplication, nsBundleRename, \
 # from oslibs  import YES
 from runtime import isInstanceOf, ObjCClass, ObjCInstance, \
                     _ObjC_log_totals, ObjCSubclass, send_super
-from utils   import _Globals, bytes2str, instanceof, printf, _Types
+from utils   import _Globals, bytes2str, isinstanceOf, printf, _Types
 
 from threading import Thread
 from time import sleep
@@ -44,7 +44,7 @@ __all__ = ('App',
            'Tile',
            'app_title',
            'ns2App')
-__version__ = '18.06.06'
+__version__ = '18.06.10'
 
 
 class App(_Type2):
@@ -90,7 +90,7 @@ class App(_Type2):
 
            @note: The first menu item of the bar menu is provided by default.
         '''
-        instanceof(menu, Menu, name='menu')
+        isinstanceOf(menu, Menu, name='menu')
 
         if self._menubar is None:
             # create the menu bar, once
@@ -327,11 +327,11 @@ class App(_Type2):
 
 
 class _NSApplicationDelegate(object):
-    '''An ObjC-callable I{NSDelegate} class to handle C{NSApplication},
-       C{NSMenu} and C{NSWindow} events as L{App}C{.app..._}, L{App}C{.menu..._}
+    '''An ObjC-callable I{NSDelegate} class to handle L{NSApplication},
+       L{NSMenu} and L{NSWindow} events as L{App}C{.app..._}, L{App}C{.menu..._}
        respectively L{App}C{.window..._} callback calls.
     '''
-    # Cobbled together from the pycocoa.ObjCSubClass.__doc__,
+    # Cobbled together from the pycocoa.ObjCSubclass.__doc__,
     # pycocoa.runtime._NSDeallocObserver and PyObjC examples:
     # <http://TaoOfMac.com/space/blog/2007/04/22/1745> and
     # <http://StackOverflow.com/questions/24024723/swift-using-
@@ -348,11 +348,11 @@ class _NSApplicationDelegate(object):
 
     @_ObjC.method('@P')
     def init(self, app):
-        '''Initialize the allocated C{NSApplicationDelegate}.
+        '''Initialize the allocated L{NSApplicationDelegate}.
 
            @note: I{MUST} be called as C{.alloc().init(...)}.
         '''
-        instanceof(app, App, name='app')
+        isinstanceOf(app, App, name='app')
 #       self = ObjCInstance(send_message('NSObject', 'alloc'))
         self = ObjCInstance(send_super(self, 'init'))
         self.app = app
@@ -395,7 +395,7 @@ class _NSApplicationDelegate(object):
 
     @_ObjC.method('v@')
     def applicationDidFinishLaunching_(self, ns_notification):
-        '''ObjC callback to handle C{NSApplication} event.
+        '''ObjC callback to handle L{NSApplication} event.
         '''
         self.app._isUp = True
         self.app.appLaunched_(ns2App(ns_notification))
@@ -441,7 +441,7 @@ class _NSApplicationDelegate(object):
 
     @_ObjC.method('v@')
     def menuItemHandler_(self, ns_item):
-        '''ObjC callback to handle and dispatch C{NSMenuItem}
+        '''ObjC callback to handle and dispatch L{NSMenuItem}
            clicks and shortcuts.
 
            All clicks and shortcuts are dispatched to the I{action}
@@ -475,7 +475,7 @@ NSApplicationDelegate = ObjCClass('_NSApplicationDelegate')
 
 
 class Tile(_Type2):
-    '''Dock tile for an L{App}, wrapping an ObjC C{NSDockTile}.
+    '''Dock tile for an L{App}, wrapping an ObjC L{NSDockTile}.
     '''
     _label = ''
 
@@ -513,8 +513,8 @@ def app_title(title):
 
 
 def ns2App(ns):
-    '''Get the L{App} instance from an C{NSApplication} or an
-       C{NSNotification} instance.
+    '''Get the L{App} instance from an L{NSApplication} or an
+       L{NSNotification} instance.
 
        @param ns: The ObjC instance (C{NS...}).
 

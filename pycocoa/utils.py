@@ -58,8 +58,10 @@
 # OTHER DEALINGS IN THE SOFTWARE.
 
 '''(INTERNAL) Utility functions, constants, etc.
+
+@var missing: Missing keyword argument value.
 '''
-__version__ = '18.06.06'
+__version__ = '18.06.10'
 
 try:  # all imports listed explicitly to help PyChecker
     from math import gcd  # Python 3+
@@ -74,7 +76,7 @@ except ImportError:
 
 
 class _MutableConstants(object):
-    '''Enum-like, mutable "constants".
+    '''Enum-like, settable "constants".
     '''
     def __setattr__(self, name, value):
         if not hasattr(self, name):
@@ -82,8 +84,10 @@ class _MutableConstants(object):
         super(_MutableConstants, self).__setattr__(name, value)
 
     def _strepr(self, fmt):
-        t = ', .'.join(fmt(*t) for t in sorted(self.items()))
-        return '%s.%s' % (self.__class__.__name__, t)
+        c = self.__class__.__name__.lstrip('_')
+        j = ',\n%s.' % (' ' * len(c),)
+        t = j.join(fmt(*t) for t in sorted(self.items()))
+        return '%s.%s' % (c, t)
 
     def __repr__(self):
         def _fmt(n, v):
@@ -135,17 +139,39 @@ class _Constants(_MutableConstants):
         return ' '.join(n for n, m in self.items() if mask & m)
 
 
-class _Globals(object):  # some PyCocoa-internal globals
-    App     = None  # XXX single instance only
-    argv0   = 'PyCocoa'  # set by .nstypes.nsBundleRename and _allisting
-    Items   = {}
-    raiser  = False
-    Tables  = []
-    Windows = {}
+class _Globals(object):
+    '''Some PyCocoa-internal globals
+    '''
+    App      = None  # set by .apps.App.__init__, not an NSApplication!
+    argv0    = 'PyCocoa'  # set by .nstypes.nsBundleRename and _allisting
+    Items    = {}  # set by .menus.Item.__init__, gotten by .menus.ns2Item
+    raiser   = False
+    Tables   = []  # set by .tables.TableWindow.__init__
+    Windows  = {}
+    Xhandler = None  # set by .nstype.nsUncaughtExceptionHandler
+
+
+class _Singletons(_MutableConstants):
+    '''Global, single instances.
+    '''
+    def __repr__(self):
+        def _fmt(n, v):
+            return '%s=%s' % (n, v)
+        return self._strepr(_fmt)
+
+    def items(self):
+        '''Yield 2-tuple (name, value) for each singleton.
+        '''
+        c = self.__class__
+        for n in dir(self):
+            if hasattr(c, '_' + n) and \
+               isinstance(getattr(c, n), property):
+                # XXX resolves all properties
+                yield n, getattr(self, n)
 
 
 class _Types(_MutableConstants):
-    '''Holder of the Python Types, to avoid circular imports.
+    '''Python Types, to avoid circular imports.
     '''
     AlertPanel  = None  # set by .panels.py
     App         = None  # set by .apps.py
@@ -176,13 +202,14 @@ class _Types(_MutableConstants):
 _Types = _Types()  # freeze
 
 
-class missing(object):  # singleton class, lost on purpose
+class missing(object):
+    '''Singleton class (named like instance, to be lost on purpose)
+    '''
+    def __eq__(self, unused):  # avoid '==' comparison
+        raise SyntaxError("use 'is %s'" % (self,))
 
-    def __eq__(self, unused):  # avoid assignment '=='
-        raise SyntaxError("use 'is %s' or 'is not %s'" % (self, self))
-
-    def __ne__(self, other):
-        return not self.__eq__(other)
+    def __ne__(self, unused):  # avoid '!=' comparison
+        raise SyntaxError("use 'is not %s'" % (self,))
 
     def __str__(self):
         return 'missing'
@@ -451,8 +478,25 @@ def inst2strepr(inst, strepr, *attrs):
     return '%s(%s)' % (inst.__class__.__name__, ', '.join(t))
 
 
-def instanceof(inst, *classes, **name_missing):
-    '''Check whether a Python object is an instance of some Python class.
+def _int2(i):
+    '''Split an C{int} into 2-tuple (int, shift).
+    '''
+    s = 0
+    if isinstance(i, _Ints) and i > 0:
+        while not (i & 255):
+            i >>= 8
+            s += 8
+        while not (i & 15):
+            i >>= 4
+            s += 4
+        while not (i & 1):
+            i >>= 1
+            s += 1
+    return i, s
+
+
+def isinstanceOf(inst, *classes, **name_missing):
+    '''Check a Python object's class.
 
        @param inst: The instance to check (I{any}).
        @param classes: One or several classes (I{all positional}).
@@ -474,23 +518,6 @@ def instanceof(inst, *classes, **name_missing):
 
     t = ', '.join(getattr(c, '__name__', str(c)) for c in classes)
     raise TypeError('%s not %s: %r' % (name, t, inst))
-
-
-def _int2(i):
-    '''Split an C{int} into 2-tuple (int, shift).
-    '''
-    s = 0
-    if isinstance(i, _Ints) and i > 0:
-        while not (i & 255):
-            i >>= 8
-            s += 8
-        while not (i & 15):
-            i >>= 4
-            s += 4
-        while not (i & 1):
-            i >>= 1
-            s += 1
-    return i, s
 
 
 def name2objc(name):
@@ -626,8 +653,8 @@ def zSIstr(size, B='B'):
 
 
 __all__ = _exports(locals(), 'aspect_ratio', 'clip', 'DEFAULT_UNICODE',
-                             'flint', 'gcd', 'iterbytes', 'missing',
-                             'printf', 'type2strepr',
+                             'flint', 'isinstanceOf', 'gcd', 'iterbytes',
+                             'missing', 'printf', 'type2strepr',
                    starts=('bytes', 'inst', 'str', 'z'))
 
 if __name__ == '__main__':

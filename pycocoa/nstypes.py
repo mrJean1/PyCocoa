@@ -60,7 +60,9 @@
 # Several Objective-C/C header files are also available at
 # <http://GitHub.com/gnustep/libs-gui/tree/master/Headers>
 
-'''ObjC classes C{NS...} and conversions from ObjC C{NS...} to Python.
+'''ObjC classes C{NS...} and conversions from C{NS...} ObjC to Python instances.
+
+@var NSMain: Global C{NS...} singletons (C{const}).
 '''
 # all imports listed explicitly to help PyChecker
 from decimal import Decimal as _Decimal
@@ -69,15 +71,16 @@ from getters import get_selector
 from octypes import Array_t, Class_t, c_struct_t, Id_t, NSRect4_t, \
                     ObjC_t, SEL_t, Set_t
 from oslibs  import cfNumber2bool, cfNumber2num, CFStringEncoding, \
-                    cfString2str, cfURLResolveAlias, libCF, \
-                    libFoundation, libobjc, NO, YES
-from runtime import isInstanceOf, ObjCClass, ObjCInstance, _Xargs
+                    cfString2str, cfURLResolveAlias, libAppKit, libCF, \
+                    libFoundation, libobjc, NO, NSExceptionHandler_t, YES
+from runtime import isInstanceOf, ObjCClass, ObjCInstance, send_message, _Xargs
 from utils   import bytes2str, _ByteStrs, clip, _exports, _Globals, \
-                    instanceof, iterbytes, missing, str2bytes, _Types  # printf
+                    isinstanceOf, iterbytes, missing, _Singletons, \
+                    str2bytes, _Types  # printf
 
 from os import linesep, path as os_path
 
-__version__ = '18.06.06'
+__version__ = '18.06.10'
 
 
 def _lambda(arg):
@@ -92,49 +95,14 @@ def _ns2ctype2py(ns, ctype):
     return ns2py(ns)
 
 
-class CFStr(ObjCInstance):
-    '''Python wrapper for the ObjC C{CFString} class,
-       creating I{retained} instances, by default.
-    '''
-    _str = None
-
-    def __new__(cls, ustr):
-        '''New L{CFStr}.
-
-           @param ustr: The string value (C{str} or C{bytes}).
-
-           @return: The string (L{CFStr}).
-        '''
-        ns = libCF.CFStringCreateWithCString(None, str2bytes(ustr),
-                                                   CFStringEncoding)
-        # ObjC class is ._objc_class or __NSCFConstantString
-        self = super(CFStr, cls).__new__(cls, ns)  # Id_t
-        self._str = bytes2str(ustr)
-        return self
-
-    def __str__(self):
-        return '%s(%r)' % (self.objc_classname, clip(self.value))
-
-#   @property
-#   def objc_classname(self):
-#       return self.__class__.__name__
-
-    @property
-    def value(self):
-        '''Get the original C{CFStr} value (C{str}).
-        '''
-        return self._str
-
-    str = value
-
-
 # some commonly used Foundation and Cocoa classes, described here
 # <http://OMZ-Software.com/pythonista/docs/ios/objc_util.html>
 
 # NS... classes marked ** have Python versions, like NSStr, for
-# for use by runtime.isInstanceOf repectively octypes.instanceof
+# for use by runtime.isInstanceOf repectively utils.isinstanceOf
 NSAlert                = ObjCClass('NSAlert')
 NSApplication          = ObjCClass('NSApplication')
+# NSApplicationDelegate  = ObjCClass('_NSApplicationDelegate')  # see .apps
 NSArray                = ObjCClass('NSArray')  # immutable
 NSAttributedString     = ObjCClass('NSAttributedString')
 NSAutoreleasePool      = ObjCClass('NSAutoreleasePool')
@@ -149,6 +117,7 @@ NSDictionary           = ObjCClass('NSDictionary')  # immutable
 NSDockTile             = ObjCClass('NSDockTile')
 NSEnumerator           = ObjCClass('NSEnumerator')
 NSError                = ObjCClass('NSError')
+NSException            = ObjCClass('NSException')
 NSFont                 = ObjCClass('NSFont')
 NSFontDescriptor       = ObjCClass('NSFontDescriptor')
 NSFontManager          = ObjCClass('NSFontManager')
@@ -193,16 +162,48 @@ NSView                 = ObjCClass('NSView')
 NSWindow               = ObjCClass('NSWindow')
 
 # some other NS... types
-NSBool     = NSNumber.numberWithBool_
+NSBoolean  = NSNumber.numberWithBool_
 NSDouble   = NSNumber.numberWithDouble_
-NSFalse    = False  # NSBool(False)  # c_byte
 NSFloat    = NSNumber.numberWithDouble_
 NSInt      = NSNumber.numberWithInt_
 NSLong     = NSNumber.numberWithLong_
 NSLongLong = NSNumber.numberWithLongLong_
-NSnil      = None  # nil return value
-NSNone     = NSNull.alloc().init()  # singleton
-NSTrue     = True  # NSBool(True)  # c_byte
+
+
+class CFStr(ObjCInstance):
+    '''Python wrapper for the ObjC C{CFString} class,
+       creating I{retained} instances, by default.
+    '''
+    _str = None
+
+    def __new__(cls, ustr):
+        '''New L{CFStr}.
+
+           @param ustr: The string value (C{str} or C{bytes}).
+
+           @return: The string (L{CFStr}).
+        '''
+        ns = libCF.CFStringCreateWithCString(None, str2bytes(ustr),
+                                                   CFStringEncoding)
+        # ObjC class is ._objc_class or __NSCFConstantString
+        self = super(CFStr, cls).__new__(cls, ns)  # Id_t
+        self._str = bytes2str(ustr)
+        return self
+
+    def __str__(self):
+        return '%s(%r)' % (self.objc_classname, clip(self.value))
+
+#   @property
+#   def objc_classname(self):
+#       return self.__class__.__name__
+
+    @property
+    def value(self):
+        '''Get the original C{CFStr} value (C{str}).
+        '''
+        return self._str
+
+    str = value
 
 
 # We need to be able to create raw NSDecimalNumber objects.  If we use
@@ -211,7 +212,7 @@ NSTrue     = True  # NSBool(True)  # c_byte
 # cache class/selector/method lookups without that overhead every time.
 # Originally, an older rev of .../Rubicon-ObjC/objc/core_foundation.py.
 class NSDecimal(ObjCInstance):
-    '''Optimized C{NSDecimalNumber} class.
+    '''Optimized, Python L{NSDecimalNumber} class.
     '''
     _Class = NSDecimalNumber
     _IMP   = None
@@ -266,16 +267,26 @@ class NSDecimal(ObjCInstance):
     Decimal = value
 
 
-class _NSMain(object):
-    '''Main, global C{NS...} singletons.
+class _NSMain(_Singletons):
+    '''Global C{NS...} singletons.
     '''
-    _Application   = None
+    _Application   = None  # NSApplication, see .utils._Globals.App
+    _BooleanNO     = None
+    _BooleanYES    = None
+    _Bundle        = None
+    _BundleName    = None
     _FontManager   = None
     _LayoutManager = None
+    _nil           = None  # final
+    _NO_false      = NO  # c_byte
+    _Null          = None
     _Screen        = None
     _ScreenFrame   = None
     _ScreenSize    = None
     _TableColumn   = None
+    _YES_true      = YES  # c_byte
+
+    # all globals are properties to delay instantiation
 
     @property
     def Application(self):
@@ -284,6 +295,38 @@ class _NSMain(object):
         if self._Application is None:
             _NSMain._Application = NSApplication.sharedApplication()
         return self._Application
+
+    @property
+    def BooleanNO(self):
+        '''Get C{NSBoolean(NO)}.
+        '''
+        if self._BooleanNO is None:
+            _NSMain._BooleanNO = NSBoolean(NO)
+        return self._BooleanNO
+
+    @property
+    def BooleanYES(self):
+        '''Get C{NSBoolean(YES)}.
+        '''
+        if self._BooleanYES is None:
+            _NSMain._BooleanYES = NSBoolean(YES)
+        return self._BooleanYES
+
+    @property
+    def Bundle(self):
+        '''Get the C{NSBundle.mainBundle}.
+        '''
+        if self._Bundle is None:
+            _NSMain._Bundle = NSBundle.mainBundle()
+        return self._Bundle
+
+    @property
+    def BundleName(self):
+        '''Get the C{NS/CFBundleName}.
+        '''
+        if self._BundleName is None:
+            _NSMain._BundleName = CFStr('CFBundleName')
+        return self._BundleName
 
     @property
     def FontManager(self):
@@ -295,11 +338,31 @@ class _NSMain(object):
 
     @property
     def LayoutManager(self):
-        '''Get the C{NSLayoutManager}.
+        '''Get the L{NSLayoutManager}.
         '''
         if self._LayoutManager is None:
             _NSMain._LayoutManager = NSLayoutManager.alloc().init()
         return self._LayoutManager
+
+    @property
+    def nil(self):
+        '''Get C{NSnil}.
+        '''
+        return self._nil
+
+    @property
+    def NO_false(self):
+        '''Get C{NSfalse/NO}.
+        '''
+        return self._NO_false
+
+    @property
+    def Null(self):
+        '''Get the C{NSNull}.
+        '''
+        if self._Null is None:
+            _NSMain._Null = NSNull.alloc().init()
+        return self._Null
 
     @property
     def Screen(self):
@@ -327,14 +390,20 @@ class _NSMain(object):
 
     @property
     def TableColumn(self):
-        '''Get a blank C{NSTableColumn}.
+        '''Get a blank L{NSTableColumn}.
         '''
         if self._TableColumn is None:
             _NSMain._TableColumn = NSTableColumn.alloc().init()
         return self._TableColumn
 
+    @property
+    def YES_true(self):
+        '''Get C{NStrue/YES}.
+        '''
+        return self._YES_true
 
-NSMain = _NSMain()  #: main, global C{NS...} singletons
+
+NSMain = _NSMain()  # global C{NS...} singletons
 
 
 class NSStr(CFStr):
@@ -357,7 +426,7 @@ class NSStr(CFStr):
 
 
 class at(NSStr):
-    '''Acronym for the Python wrapper of L{NSStr}.
+    '''Acronym L{NSStr}.
     '''
     # XXX Other possible names for this method: at, ampersat, arobe,
     # apenstaartje (little monkey tail), strudel, klammeraffe (spider
@@ -379,7 +448,7 @@ def isAlias(path):
     '''
     if isinstance(path, _ByteStrs):
         path = NSStr(path)
-    elif instanceof(path, NSStr, CFStr, name='path'):
+    elif isinstanceOf(path, NSStr, CFStr, name='path'):
         pass
 
     u = NSURL.alloc().initFileURLWithPath_(path)
@@ -409,13 +478,13 @@ def isLink(path):
 
 
 def isNone(obj):
-    '''Return True if I{obj} is nil, None, C{NSNone}, etc.
+    '''Return True if I{obj} is C{None, NSMain.nil, NSMain.Null}, etc.
 
        @param obj: The object (L{ObjCInstance}).
 
        @return: True or False (C{bool}).
     '''
-    return obj in (None, NSnil, NSNone)
+    return obj in (None, NSMain.nil, NSMain.Null)
 
 
 def nsArray2listuple(ns, ctype=Array_t):  # XXX an NS*Array method?
@@ -437,9 +506,9 @@ def nsArray2listuple(ns, ctype=Array_t):  # XXX an NS*Array method?
 
 
 def nsBoolean2bool(ns, dflt=missing):  # XXX an NSBoolean method?
-    '''Create a Python C{bool} from an C{NSBool[ean]}.
+    '''Create a Python C{bool} from an L{NSBoolean}.
 
-       @param ns: The C{NSBool[ean]} (L{ObjCInstance}).
+       @param ns: The L{NSBoolean} (L{ObjCInstance}).
        @keyword dflt: Default for a missing, unobtainable value (C{missing}).
 
        @return: The bool (C{bool}) of I{dlft}.
@@ -470,23 +539,23 @@ def nsBundleRename(nsTitle, match='Python'):
     # <http://Developer.Apple.com/documentation/
     #       foundation/nsbundle/1495012-bundlewithpath>
     # ns = NSBundle.bundleWithPath_(os.path.abspath(match))
-    p, ns = None, NSBundle.mainBundle()
+    p, ns = None, NSMain.Bundle
     if ns:
         ns = ns.localizedInfoDictionary() or ns.infoDictionary()
         if ns:
-            p = ns.objectForKey_(_CFBundleName) or None
+            p = ns.objectForKey_(NSMain.BundleName) or None
             if p:
                 p = ns2py(p, dflt='') or ''
                 if match in ('', None, p) and t:  # can't be empty
-                    ns.setObject_forKey_(nsTitle, _CFBundleName)
+                    ns.setObject_forKey_(nsTitle, NSMain.BundleName)
     return p
 
 
 def nsData2bytes(ns, dflt=b''):  # XXX an NSData method?
-    '''Create Python C{bytes} from C{NSData}.
+    '''Create Python C{bytes} from L{NSData}.
 
-       @param ns: The C{NSData} (L{ObjCInstance}).
-       @keyword dflt: Default for empty C{NSData} (C{bytes}).
+       @param ns: The L{NSData} (L{ObjCInstance}).
+       @keyword dflt: Default for empty L{NSData} (C{bytes}).
 
        @return: The bytes (C{bytes}) or I{dflt}.
     '''
@@ -500,13 +569,13 @@ def nsData2bytes(ns, dflt=b''):  # XXX an NSData method?
 
 
 def nsDecimal2decimal(ns):
-    '''Create a Python C{Decimal} from an C{NSDecimalNumber}.
+    '''Create a Python C{Decimal} from an L{NSDecimalNumber}.
 
-       @param ns: The C{NSDecimalNumber} (L{ObjCInstance}).
+       @param ns: The L{NSDecimalNumber} (L{ObjCInstance}).
 
        @return: The decimal (C{Decimal}).
 
-       @raise ValueError: If I{ns} not an C{NSNumber}.
+       @raise ValueError: If I{ns} not an L{NSNumber}.
     '''
     if isinstance(ns, NSDecimal):
         return ns.Decimal
@@ -516,9 +585,9 @@ def nsDecimal2decimal(ns):
 def nsDictionary2dict(ns, ctype_keys=c_void_p, ctype_vals=c_void_p):  # XXX an NS*Dictionary method?
     '''Create a Python C{dict} from an C{NS[Mutable]Dictionary}.
 
-       @param ns: The C{NSDictionary} (L{ObjCInstance}).
-       @keyword ctype_keys: The dictionay keys type (C{ctypes}).
-       @keyword ctype_vals: The dictionay values type (C{ctypes}).
+       @param ns: The L{NSDictionary} instance (L{ObjCInstance}).
+       @keyword ctype_keys: The dictionary keys type (C{ctypes}).
+       @keyword ctype_vals: The dictionary values type (C{ctypes}).
 
        @return: The dict (C{dict}).
     '''
@@ -532,7 +601,7 @@ def nsDictionary2dict(ns, ctype_keys=c_void_p, ctype_vals=c_void_p):  # XXX an N
 
 
 def nsIter(ns, reverse=False):
-    '''Iterate over an C{NS..} objects's (reverse) enumerator.
+    '''Iterate over an C{NS..} ObjC objects's (reverse) enumerator.
 
        @param ns: The C{NS..} object to iterate over (L{ObjCInstance}).
        @keyword reverse: Iterate in reverse order (C{bool}), forward otherwise.
@@ -556,7 +625,7 @@ def nsIter(ns, reverse=False):
 
 
 def nsIter2(ns, reverse=False):
-    '''Iterate over an C{NS..} objects's (reverse) enumerator.
+    '''Iterate over an C{NS..} ObjC objects's (reverse) enumerator.
 
        @param ns: The C{NS..} object to iterate over (L{ObjCInstance}).
        @keyword reverse: Iterate in reverse order (C{bool}), foward otherwise.
@@ -568,16 +637,35 @@ def nsIter2(ns, reverse=False):
         yield ns2Type(ns), ns
 
 
-def nsLog(fmt, *args):
+def nsLog(ns_fmt, *ns_args):
+    '''Formatted ObjC write to the console.
+
+       @param ns_fmt: A printf-like format string (L{NSStr}).
+       @param ns_args: Optional arguments to format (C{all positional}).
+
+       @note: The I{ns_fmt} and all I{ns_args} must be C{NS...} ObjC
+              instances.
+    '''
+    if isinstanceOf(ns_fmt, NSStr, CFStr, name='ns_fmt'):
+        for n, ns in enumerate(ns_args):
+            if not isinstance(ns, (ObjCInstance, c_void_p)):
+                n = 'ns_arg[%s]' % (n,)  # raise error
+                if not isinstanceOf(ns, ObjCInstance, name=n):
+                    break
+        else:  # XXX all ns_fmt %-types should be %@?
+            libFoundation.NSLog(ns_fmt, *ns_args)  # variadic, printf-like
+
+
+def nsLogf(fmt, *args):
     '''Formatted write to the console.
 
-       @param fmt: The printf-like format string (C{str}).
+       @param fmt: A printf-like format string (C{str}).
        @param args: Optional arguments to format (C{all positional}).
     '''
-    if args:
-        fmt %= args
-    # NSLog is variadic, printf-like
-    libFoundation.NSLog(NSStr(fmt))
+    if isinstanceOf(fmt, _ByteStrs, name='fmt'):
+        if args:
+            fmt %= args
+        libFoundation.NSLog(NSStr(fmt))  # variadic, printf-like
 
 
 def nsNull2none(ns):
@@ -595,16 +683,16 @@ def nsNull2none(ns):
 
 
 def nsNumber2num(ns, dflt=missing):  # XXX an NSNumber method?
-    '''Create a Python C{Decimal}, C{int} or C{float} from an C{NSNumber}.
+    '''Create a Python C{Decimal}, C{int} or C{float} from an L{NSNumber}.
 
-       @param ns: The C{NSNumber} (L{ObjCInstance}).
+       @param ns: The L{NSNumber} (L{ObjCInstance}).
        @keyword dflt: Default for missing, unobtainable value (C{missing}).
 
        @return: The number (C{Decimal}, C{int} or C{float}).
 
        @raise TypeError: Unexpected C{NumberType}.
 
-       @raise ValueError: If I{ns} not an C{NSNumber}.
+       @raise ValueError: If I{ns} not an L{NSNumber}.
     '''
     # special case for NSDecimal, would become a float
     # since cfType of NSDecimal is kCFNumberDoubleType
@@ -617,7 +705,7 @@ def nsNumber2num(ns, dflt=missing):  # XXX an NSNumber method?
 
 
 def nsOf(inst):
-    '''Return the C{.NS} object of a Python wrapper or Type instance.
+    '''Return the C{.NS} ObjC object of a Python wrapper or Type instance.
 
        @param inst: The wrapper (L{ObjCInstance} or C{Python Type}).
 
@@ -660,7 +748,7 @@ def nsString2str(ns, dflt=None):  # XXX an NS*String method
        @return: The string (C{str} or C{unicode}) or I{dflt}.
     '''
     # XXX need c_void_p for nested strings in lists, sets, etc.?
-    if not instanceof(ns, CFStr, NSStr, c_void_p):
+    if not isinstanceOf(ns, CFStr, NSStr, c_void_p):
         isInstanceOf(ns, NSConstantString, NSMutableString, NSString,
                          c_void_p, name='ns')
 
@@ -671,7 +759,7 @@ def nsTextSize3(text, ns_font=None):
     '''Return the size of a multi-line text.
 
        @param text: The text (C{str}), including C{linesep}arators.
-       @keyword ns_font: The text font (C{NSFont}) or C{None}.
+       @keyword ns_font: The text font (L{NSFont}) or C{None}.
 
        @return: 3-Tuple (width, height, lines) in (pixels, pixels) or
                 in (characters, lines, lines) if I{ns_font} is C{None}.
@@ -691,7 +779,7 @@ def nsTextSize3(text, ns_font=None):
 
 
 def nsTextView(text, ns_font):
-    '''Return an C{NSTextView} for the given text string.
+    '''Return an L{NSTextView} for the given text string.
     '''
     # <http://Developer.Apple.com/documentation/appkit/
     #       nsalert/1530575-accessoryview>
@@ -724,6 +812,37 @@ def nsTextView(text, ns_font):
     else:
         ns.sizeToFit()
     return ns
+
+
+def nsThrow(ns_exception):
+    '''Mimick ObjC's C{@throw NSException} to raise an exception.
+
+       @param ns_exception: The exception to raise (L{NSException}).
+    '''
+    # <http://Developer.Apple.com/library/archive/documentation/
+    #       Cocoa/Conceptual/Exceptions/Tasks/RaisingExceptions.html>
+
+    # can't use ns_exception.raise() since 'raise' is reserved
+    # in Python; see also .runtime.ObjCInstance.__getattr__
+    # substituting method name 'throw' for 'raise'.
+    send_message(ns_exception, 'raise')
+
+
+def nsUncaughtExceptionHandler(handler):
+    '''Install an ObjC L{NSException} handler, the handler signature
+       must match L{NSExceptionHandler_t} C{def handler(ns_exc): ...}.
+
+       @param handler: A callable (L{NSExceptionHandler_t}).
+
+       @return: Previously installed handler (L{NSExceptionHandler_t}).
+
+       @note: Faults like C{SIGILL}, C{SIGSEGV}, etc. do
+              not throw uncaught L{NSException}s and will
+              not invoke this I{handler}.
+    '''
+    libAppKit.NSSetUncaughtExceptionHandler(NSExceptionHandler_t(handler))
+    h, _Globals.Xhandler = _Globals.Xhandler, handler
+    return h
 
 
 _CFTypeID2py = {libCF.CFArrayGetTypeID():      nsArray2listuple,
@@ -798,7 +917,7 @@ def ns2py(ns, dflt=None):  # XXX an NSObject method?
 
 
 def ns2Type(ns):
-    '''Convert an C{NS/Instance} object to an instance of
+    '''Convert an C{NS...} ObjC object to an instance of
        the corresponding Python Type and value.
 
        @param ns: The C{NS...} (L{ObjCInstance}).
@@ -828,7 +947,7 @@ def ns2Type(ns):
     elif isInstanceOf(ns, NSSet) is NSSet:
         _Type = _Types.FrozenSet
 
-    elif instanceof(ns, NSStr):
+    elif isinstanceOf(ns, NSStr):
         _Type = _Types.Str
 
     else:
@@ -840,9 +959,6 @@ def ns2Type(ns):
     ns.objc_class._Type = _Type
     return _Type(ns)
 
-
-# moved to the end, to let CFStr settle
-_CFBundleName = CFStr('CFBundleName')
 
 # filter locals() for .__init__.py
 __all__ = _exports(locals(), 'at', 'CFStr', 'isAlias', 'isLink', 'isNone',
