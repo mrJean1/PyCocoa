@@ -32,7 +32,7 @@ from runtime import ObjCInstance
 from utils   import bytes2str, isinstanceOf, type2strepr
 
 __all__ = ()
-__version__ = '18.06.08'
+__version__ = '18.06.11'
 
 
 class _Type0(object):
@@ -64,6 +64,14 @@ class _Type0(object):
             # self.NS.release()
             pass
         self._NS = ns
+
+    @property
+    def NSDelegate(self):
+        raise AttributeError('use %r not %r' % ('NSdelegate', 'NSD-'))
+
+    @NSDelegate.setter  # PYCHOK property.setter
+    def NSdelegate(self, unused):
+        raise AttributeError('use %r not %r' % ('NSdelegate', 'NSD-'))
 
 
 class _Type1(_Type0):

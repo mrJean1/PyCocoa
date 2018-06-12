@@ -73,14 +73,15 @@ from octypes import Array_t, Class_t, c_struct_t, Id_t, NSRect4_t, \
 from oslibs  import cfNumber2bool, cfNumber2num, CFStringEncoding, \
                     cfString2str, cfURLResolveAlias, libAppKit, libCF, \
                     libFoundation, libobjc, NO, NSExceptionHandler_t, YES
-from runtime import isInstanceOf, ObjCClass, ObjCInstance, send_message, _Xargs
+from runtime import isInstanceOf, ObjCClass, ObjCInstance, retain, \
+                    send_message, _Xargs
 from utils   import bytes2str, _ByteStrs, clip, _exports, _Globals, \
                     isinstanceOf, iterbytes, missing, _Singletons, \
                     str2bytes, _Types  # printf
 
 from os import linesep, path as os_path
 
-__version__ = '18.06.10'
+__version__ = '18.06.11'
 
 
 def _lambda(arg):
@@ -195,6 +196,8 @@ class CFStr(ObjCInstance):
 
 #   @property
 #   def objc_classname(self):
+#       '''Get the ObjC class name (C{str}).
+#       '''
 #       return self.__class__.__name__
 
     @property
@@ -293,7 +296,7 @@ class _NSMain(_Singletons):
         '''Get the C{NSApplication.sharedApplication}.
         '''
         if self._Application is None:
-            _NSMain._Application = NSApplication.sharedApplication()
+            _NSMain._Application = retain(NSApplication.sharedApplication())
         return self._Application
 
     @property
@@ -301,7 +304,7 @@ class _NSMain(_Singletons):
         '''Get C{NSBoolean(NO)}.
         '''
         if self._BooleanNO is None:
-            _NSMain._BooleanNO = NSBoolean(NO)
+            _NSMain._BooleanNO = retain(NSBoolean(NO))
         return self._BooleanNO
 
     @property
@@ -309,7 +312,7 @@ class _NSMain(_Singletons):
         '''Get C{NSBoolean(YES)}.
         '''
         if self._BooleanYES is None:
-            _NSMain._BooleanYES = NSBoolean(YES)
+            _NSMain._BooleanYES = retain(NSBoolean(YES))
         return self._BooleanYES
 
     @property
@@ -317,7 +320,7 @@ class _NSMain(_Singletons):
         '''Get the C{NSBundle.mainBundle}.
         '''
         if self._Bundle is None:
-            _NSMain._Bundle = NSBundle.mainBundle()
+            _NSMain._Bundle = retain(NSBundle.mainBundle())
         return self._Bundle
 
     @property
@@ -333,7 +336,7 @@ class _NSMain(_Singletons):
         '''Get the C{NSFontManager.sharedFontManager}.
         '''
         if self._FontManager is None:
-            _NSMain._FontManager = NSFontManager.sharedFontManager()
+            _NSMain._FontManager = retain(NSFontManager.sharedFontManager())
         return self._FontManager
 
     @property
@@ -341,7 +344,7 @@ class _NSMain(_Singletons):
         '''Get the L{NSLayoutManager}.
         '''
         if self._LayoutManager is None:
-            _NSMain._LayoutManager = NSLayoutManager.alloc().init()
+            _NSMain._LayoutManager = retain(NSLayoutManager.alloc().init())
         return self._LayoutManager
 
     @property
@@ -361,7 +364,7 @@ class _NSMain(_Singletons):
         '''Get the C{NSNull}.
         '''
         if self._Null is None:
-            _NSMain._Null = NSNull.alloc().init()
+            _NSMain._Null = retain(NSNull.alloc().init())
         return self._Null
 
     @property
@@ -369,7 +372,7 @@ class _NSMain(_Singletons):
         '''Get the C{NSScreen.mainScreen}.
         '''
         if self._Screen is None:
-            _NSMain._Screen = NSScreen.alloc().init().mainScreen()
+            _NSMain._Screen = retain(NSScreen.alloc().init().mainScreen())
         return self._Screen
 
     @property
@@ -377,7 +380,7 @@ class _NSMain(_Singletons):
         '''Get the C{NSScreen.mainScreen.frame}.
         '''
         if self._ScreenFrame is None:
-            _NSMain._ScreenFrame = self.Screen.frame()
+            _NSMain._ScreenFrame = self.Screen.frame()  # NSRect_t
         return self._ScreenFrame
 
     @property
@@ -385,7 +388,7 @@ class _NSMain(_Singletons):
         '''Get the C{NSScreen.mainScreen.frame.size}.
         '''
         if self._ScreenSize is None:
-            _NSMain._ScreenSize = self.ScreenFrame.size
+            _NSMain._ScreenSize = self.ScreenFrame.size  # NSSize_t
         return self._ScreenSize
 
     @property
@@ -393,7 +396,7 @@ class _NSMain(_Singletons):
         '''Get a blank L{NSTableColumn}.
         '''
         if self._TableColumn is None:
-            _NSMain._TableColumn = NSTableColumn.alloc().init()
+            _NSMain._TableColumn = retain(NSTableColumn.alloc().init())
         return self._TableColumn
 
     @property

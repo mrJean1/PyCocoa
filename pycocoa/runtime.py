@@ -80,12 +80,13 @@ from getters import _ivar_ctype, get_c_func_t, get_class, get_classname, \
 from octypes import __i386__, __LP64__, c_struct_t, c_void, \
                     ctype2encoding, emcoding2ctype, encoding2ctype, \
                     Class_t, Id_t, IMP_t, Ivar_t, objc_super_t, \
-                    ObjC_t, SEL_t, split_emcoding2, TypeCodeError
+                    objc_super_t_ptr, ObjC_t, SEL_t, split_emcoding2, \
+                    TypeCodeError
 from oslibs  import cfString2str, libobjc
 from utils   import bytes2str, _Constants, _exports, missing, name2py, \
-                    printf, str2bytes
+                    printf, propertyGetter, str2bytes
 
-__version__ = '18.06.08'
+__version__ = '18.06.11'
 
 # <http://Developer.Apple.com/documentation/objectivec/
 #         objc_associationpolicy?language=objc>
@@ -99,6 +100,7 @@ _objc_msgSend_fpret      = 'objc_msgSend_fpret'
 _objc_msgSend_stret      = 'objc_msgSend_stret'
 _objc_msgSendSuper       = 'objc_msgSendSuper'
 _objc_msgSendSuper_stret = 'objc_msgSendSuper_stret'
+
 
 # <http://Developer.Apple.com/documentation/objectivec/
 #         1441499-object_getinstancevariable>
@@ -204,14 +206,14 @@ def _Xargs(x, name, argtypes, restype='void'):
     return x
 
 
-class ObjCBase(object):
+class _ObjCBase(object):
     '''Base class for Python C{runtime.ObjC...} classes.
     '''
     def __repr__(self):
         return '<%s(%s) at %#x>' % (self.__class__.__name__, self, id(self))
 
 
-class ObjCBoundMethod(ObjCBase):
+class ObjCBoundMethod(_ObjCBase):
     '''Python wrapper for an ObjC class or instance method, an L{IMP_t}.
 
        @note: Each ObjC method invocation requires creation of another,
@@ -243,7 +245,7 @@ class ObjCBoundClassMethod(ObjCBoundMethod):
     pass
 
 
-class ObjCClass(ObjCBase):
+class ObjCClass(_ObjCBase):
     '''Python wrapper for an ObjC class.
     '''
     _classmethods = {}  # shut PyChecker up
@@ -335,7 +337,7 @@ class ObjCClass(ObjCBase):
         # get and cache a class or instance method
         method = getter(self._ptr, get_selector(name))
         # XXX add a check that .alloc() is called
-        # before .init() for any _NSDelegate class
+        # before .init() for any I{NSDelegate} class
         # printf('%s.%s', self.name, name)
         if method and method.value:
             method = Class(method)
@@ -411,12 +413,13 @@ class ObjCClass(ObjCBase):
         return self._Type
 
 
-class ObjCInstance(ObjCBase):
+class ObjCInstance(_ObjCBase):
     '''Python wrapper for an ObjC instance.
     '''
     _as_paramater = None  # for ctypes
 
     _objc_cache = {}  # see _NSDeallocObserver, example class_wrapper4.py
+
     _objc_class = None
     _objc_ptr   = None  # shut PyChecker up
 
@@ -482,18 +485,13 @@ class ObjCInstance(ObjCBase):
         if method:
             return ObjCBoundClassMethod(method, self._objc_class.ptr)
 
-        # try this class' property, ...
-        try:
-            attr = getattr(self.__class__, bytes2str(name))
-            if isinstance(attr, property):
-                attr = attr.fget
-            if callable(attr):
-                return attr(self)
-        except (AttributeError, TypeError, ValueError):
-            pass
+        # Try this class' property, ...
+        getter = propertyGetter(self, bytes2str(name))
+        if getter:
+            return getter(self)
 
-        # ... handle substitutes for method name
-        # conflicts with Python reserved words
+        # ... handle substitutes for method names
+        # conflicting with Python reserved words
 #       if name in ('throw',):  # and self.isKindOf(NSException):
 #           return self.__getattr__('raise')
 
@@ -538,11 +536,11 @@ class ObjCInstance(ObjCBase):
         '''Garbage collect this instance.
 
            @note: May result in Python memory errors, aborts and/or
-                  segfaults.  Run with python3 -X faulthandler ...
-                  the get the Python traceback.
+                  segfaults.  Use 'python3 -X faulthandler ...' to
+                  get a Python traceback.
         '''
-        # _libobjcall(_objc_msgSend, c_void, (Id_t, SEL_t),
-        #              self.ptr, get_selector('autorelease'))
+        # send_message(self.ptr, 'autorelease',
+        #              restype=c_void)  # argtypes=[]
         self.autorelease()  # PYCHOK expected
 #   __del__ = release  # XXX test.simple_application crashes
 
@@ -571,7 +569,7 @@ class ObjCInstance(ObjCBase):
         raise AttributeError('Type(%r): %r' % (self, ty or missing))
 
 
-class ObjCMethod(ObjCBase):
+class ObjCMethod(_ObjCBase):
     '''Python class representing an unbound ObjC class- or
        instance-method (actually an L{IMP_t}).
     '''
@@ -705,7 +703,7 @@ def _pyresult(result):
         return result
 
 
-class ObjCSubclass(ObjCBase):
+class ObjCSubclass(_ObjCBase):
     '''Python class creating an ObjC sub-class of an existing ObjC (super-)class.
 
        This class is used only to *define* the interface and implementation
@@ -955,7 +953,7 @@ def add_method(clas, name_, method, encoding):
 
        @raise TypeError: If I{method} is not a Python callable.
     '''
-    if isinstance(method, ObjCBase) or not callable(method):
+    if isinstance(method, _ObjCBase) or not callable(method):
         raise TypeError('%s not a %s: %r' % ('method', 'callable', method))
 
     codes, signature = split_emcoding2(encoding)
@@ -1015,7 +1013,7 @@ def isClass(obj):
 
 
 def isImmutable(obj, mutableClass, immutableClass, name='ns'):
-    '''Check that an Obj object is an instance of the immutable class.
+    '''Check that an ObjC object is an instance of the immutable class.
 
        @param obj: The instance to check (L{ObjCInstance}).
        @param mutableClass: The mutable ObjC classes (C{NSMutable...}).
@@ -1103,12 +1101,30 @@ def register_subclass(subclas):
     libobjc.objc_registerClassPair(subclas)
 
 
+def retain(objc):
+    '''Prevent an ObjC object from being garbage collected.
+
+       @param objc: The object (L{ObjCInstance}).
+
+       @return: The retained object (L{ObjCInstance}).
+
+       @raise TypeError: If I{objc} can't be retained.
+    '''
+    if isinstance(objc, ObjCInstance):
+        try:
+            objc.retain()
+            return objc
+        except AttributeError:
+            pass
+    raise TypeError('retain: %r' % (objc,))
+
+
 def _receiver(receiver):
     # from PyBee/Rubicon-Objc <http://GitHub.com/pybee/rubicon-objc>
     receiver = getattr(receiver, '_as_parameter', receiver)
     if isinstance(receiver, Id_t):
         return receiver
-    elif type(receiver) in (c_void_p, ObjCInstance):
+    elif isinstance(receiver, (c_void_p, ObjCInstance)):
         return cast(receiver, Id_t)
 #   elif isinstance(receiver, _Strs):
 #       return cast(get_class(receiver), Id_t)
@@ -1151,13 +1167,13 @@ elif __LP64__:
     _FLOATS_ = c_longdouble,
 
     def _stret(restype):  # PYCHOK expected
-        return type(restype) == type(c_struct_t) and sizeof(restype) > 16
+        return issubclass(restype, c_struct_t) and sizeof(restype) > 16
 
 else:
     _FLOATS_ = c_longdouble, c_float, c_double
 
     def _stret(restype):  # PYCHOK expected
-        return type(restype) == type(c_struct_t) and sizeof(restype) not in (1, 2, 4, 8)  # XXX > 8
+        return issubclass(restype, c_struct_t) and sizeof(restype) not in (1, 2, 4, 8)  # XXX > 8
 
 
 def send_message(receiver, name_, *args, **resargtypes):
@@ -1206,9 +1222,6 @@ def send_message(receiver, name_, *args, **resargtypes):
     return result
 
 
-objc_super_t_ptr = POINTER(objc_super_t)  # XXX backward compatibility
-
-
 # http://StackOverflow.com/questions/3095360/what-exactly-is-super-in-objective-c
 def send_super(receiver, name_, *args, **resargtypes):
     '''Send message to the super-class of an ObjC object.
@@ -1234,7 +1247,7 @@ def send_super(receiver, name_, *args, **resargtypes):
               arguments only (without the C{Id/self} and C{SEL/cmd}
               arguments).
     '''
-    _ObjC_logf('send_super(%r, %s, %r)', receiver, name_, args)
+    _ObjC_logf('send_super(%r, %s, %r) %r', receiver, name_, args, resargtypes)
 
     receiver = _receiver(receiver)
     supercls = get_superclassof(receiver)
@@ -1284,8 +1297,8 @@ class _Observed(_Constants):
 def _objc_cache_pop(inst, cmd):
     '''(INTERNAL) Remove an C{ObjCInstance} from the objects cache.
     '''
-    obj = get_ivar(inst, _Observed.name, ctype=_Observed.c_t)
-    ObjCInstance._objc_cache.pop(obj, None)
+    objc = get_ivar(inst, _Observed.name, ctype=_Observed.c_t)
+    ObjCInstance._objc_cache.pop(objc, None)
     send_super(inst, cmd)
 
 
@@ -1347,8 +1360,8 @@ def nsDeallocObserver(objc):
               the L{ObjCInstance}.
     '''
     observer = send_message(_NSDeallocObserver.__name__, 'alloc',
-                            restype=Id_t, argtypes=[])
-    observer = send_message(observer, 'initWithObject:', objc,
+                            restype=Id_t)  # argtypes=[]
+    observer = send_message(observer, 'initWithObject_', objc,
                             restype=Id_t, argtypes=[_Observed.c_t])
     # The observer is retained by the object we associate it to.
     libobjc.objc_setAssociatedObject(objc, observer, observer,

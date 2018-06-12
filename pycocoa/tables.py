@@ -41,14 +41,14 @@ from oslibs   import NSTableViewSolidHorizontalGridLineMask, \
                      NSTextAlignmentLeft, NSTextAlignmentNatural, \
                      NSTextAlignmentRight, YES
 from runtime  import isInstanceOf, ObjCClass, ObjCInstance, \
-                     ObjCSubclass, send_super
+                     ObjCSubclass, retain, send_super
 from utils    import _Globals, isinstanceOf, _Types
 from windows  import Screen, Window, WindowStyle
 
 __all__ = ('NSTableViewDelegate',
            'Table', 'TableWindow',
            'closeTables')
-__version__ = '18.06.10'
+__version__ = '18.06.11'
 
 _Alignment = dict(center=NSTextAlignmentCenter,
                justified=NSTextAlignmentJustified,
@@ -125,6 +125,15 @@ class Table(_Type2):
         self._headers = tuple(map(str, headers))
         self._rows    = []
 
+    def _release(self):
+        # release all NSStr-s
+        while self._rows:
+            for s in (self._rows.pop() or ()):
+                if isinstance(s, NSStr) and s is not _NS.BlankCell:
+                    s.release()
+        self.NSdelegate.release()
+        self.NS.release()
+
     def append(self, *cols):
         '''Append another row of column values.
         '''
@@ -140,6 +149,7 @@ class Table(_Type2):
         if self._window:
             self._window.close()
             self._window = None
+            self._release()
         self.NS = NSMain.Null
 
     def display(self, title, width=600, height=400):
@@ -196,8 +206,8 @@ class Table(_Type2):
 #       v.setEditing_(NSMain.NO_false)  # NO
         v.reloadData()
 
-        self.NS = v
-        self.NSDelegate = d
+        self.NS = retain(v)
+        self.NSdelegate = retain(d)
 
         self._window = w = TableWindow(title, self)
         # v.setDelegate_(w.delegate)
@@ -210,7 +220,7 @@ class Table(_Type2):
 
 
 class _NSTableViewDelegate(object):
-    '''An ObjC-callable I{NSDelegate} class, providing both ObjC
+    '''An ObjC-callable I{NSDelegate} class, conforming to ObjC
        protocols L{NSTableViewDelegate} and L{NSTableViewDataSource}.
 
        @see: The C{_NSApplicationDelegate} for more I{NSDelegate} details.

@@ -45,12 +45,12 @@ from oslibs   import NO, NSBackingStoreBuffered, \
                      NSWindowStyleMaskUsual, \
                      NSWindowStyleMaskUtilityWindow, YES
 from runtime  import isInstanceOf, ObjCClass, ObjCInstance, \
-                     ObjCSubclass, send_super
+                     ObjCSubclass, retain, send_super
 from utils    import aspect_ratio, bytes2str, _Constants, _exports, \
                      _Globals, isinstanceOf, _text_title, _Types
 # from enum   import Enum
 
-__version__ = '18.06.10'
+__version__ = '18.06.11'
 
 _Cascade = NSPoint_t(25, 25)  # PYCHOK false
 
@@ -155,6 +155,7 @@ class Screen(Rect):
 class Window(_Type2):
     '''Basic window Python Type, wrapping ObjC L{NSWindow}.
     '''
+    _auto      = False
     _frame     = None
     _isKey     = None
     _isMain    = None
@@ -198,7 +199,8 @@ class Window(_Type2):
 
         if auto:
             self.NS.setReleasedWhenClosed_(YES)
-        self.NSdelegate = NSWindowDelegate.alloc().init(self)
+            self._auto = True
+        self.NSdelegate = retain(NSWindowDelegate.alloc().init(self))
 
     def close(self):
         '''Close this window (by a click of the close button).
@@ -358,6 +360,8 @@ class Window(_Type2):
         '''
         if self.app:
             self.app.windowClose_(self)
+        if self._auto:
+            self.NSdelegate.release()
 
     def windowCloseOK_(self):
         '''Is it OK? to close I{window} callback.

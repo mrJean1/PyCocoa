@@ -61,7 +61,7 @@
 
 @var missing: Missing keyword argument value.
 '''
-__version__ = '18.06.10'
+__version__ = '18.06.11'
 
 try:  # all imports listed explicitly to help PyChecker
     from math import gcd  # Python 3+
@@ -145,9 +145,9 @@ class _Globals(object):
     App      = None  # set by .apps.App.__init__, not an NSApplication!
     argv0    = 'PyCocoa'  # set by .nstypes.nsBundleRename and _allisting
     Items    = {}  # set by .menus.Item.__init__, gotten by .menus.ns2Item
-    raiser   = False
+    raiser   = False  # set by .apps.App.__init__
     Tables   = []  # set by .tables.TableWindow.__init__
-    Windows  = {}
+    Windows  = {}  # set by .windows.Window.__init__
     Xhandler = None  # set by .nstype.nsUncaughtExceptionHandler
 
 
@@ -164,10 +164,11 @@ class _Singletons(_MutableConstants):
         '''
         c = self.__class__
         for n in dir(self):
-            if hasattr(c, '_' + n) and \
-               isinstance(getattr(c, n), property):
-                # XXX resolves all properties
-                yield n, getattr(self, n)
+            if not n.startswith('_'):
+                g = propertyGetter(self, n)
+                if g and hasattr(c, '_' + n):
+                    # XXX resolves the property
+                    yield n, g(self)
 
 
 class _Types(_MutableConstants):
@@ -520,6 +521,26 @@ def isinstanceOf(inst, *classes, **name_missing):
     raise TypeError('%s not %s: %r' % (name, t, inst))
 
 
+def propertyGetter(inst, name):
+    '''Return the property C{get} method.
+
+       @param inst: An instance (C{any}).
+       @param name: Property name (C{str}).
+
+       @return: The getter (C{callable}) or C{None}
+                if I{inst.name} is not a property.
+    '''
+    try:
+        p = getattr(inst.__class__, name)
+        if isinstance(p, property):
+            g = p.fget
+            if callable(g):
+                return g  # g(inst)
+    except (AttributeError, TypeError, ValueError):
+        pass
+    return None
+
+
 def name2objc(name):
     '''Convert a (selector) name to bytes and ObjC naming rules.
 
@@ -616,9 +637,7 @@ def z1000str(size, sep='_'):
     if z < 0:
         return '-'
     try:  # '_' only in Python 3.6+
-        t = '{0:_}'.format(z)
-        if sep != '_':
-            t = t.replace('_', sep)
+        t = '{0:_}'.format(z).replace('_', sep)
     except ValueError:
         try:  # ',' only in Python 3.1+
             t = '{0:,}'.format(z).replace(',', sep)
@@ -654,7 +673,8 @@ def zSIstr(size, B='B'):
 
 __all__ = _exports(locals(), 'aspect_ratio', 'clip', 'DEFAULT_UNICODE',
                              'flint', 'isinstanceOf', 'gcd', 'iterbytes',
-                             'missing', 'printf', 'type2strepr',
+                             'missing', 'printf', 'propertyGetter',
+                             'type2strepr',
                    starts=('bytes', 'inst', 'str', 'z'))
 
 if __name__ == '__main__':

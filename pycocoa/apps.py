@@ -33,7 +33,7 @@ from nstypes import NSApplication, nsBundleRename, \
                     nsOf, NSStr
 # from oslibs  import YES
 from runtime import isInstanceOf, ObjCClass, ObjCInstance, \
-                    _ObjC_log_totals, ObjCSubclass, send_super
+                    _ObjC_log_totals, ObjCSubclass, retain, send_super
 from utils   import _Globals, bytes2str, isinstanceOf, printf, _Types
 
 from threading import Thread
@@ -44,11 +44,11 @@ __all__ = ('App',
            'Tile',
            'app_title',
            'ns2App')
-__version__ = '18.06.10'
+__version__ = '18.06.11'
 
 
 class App(_Type2):
-    '''Python C{App} Type, wrapping an ObjC C{NSApplication}.
+    '''Python C{App} Type, wrapping an ObjC L{NSApplication}.
     '''
     _badge      = None
     _isUp       = None
@@ -60,7 +60,7 @@ class App(_Type2):
     def __init__(self, title='PyCocao', raiser=False, **kwds):
         '''New L{App}.
 
-           @keyword title: App name or title ((C{str})).
+           @keyword title: App name or title (C{str}).
            @keyword raiser: Throw exceptions for silent errors (C{bool}).
            @keyword kwds: Optional, additional keyword arguments.
 
@@ -81,7 +81,7 @@ class App(_Type2):
         if kwds:  # optional, additional attributes
             super(App, self).__init__(**kwds)
 
-        self.NSdelegate = NSApplicationDelegate.alloc().init(self)
+        self.NSdelegate = retain(NSApplicationDelegate.alloc().init(self))
 
     def append(self, menu):
         '''Add a menu to this app's menu bar.
@@ -328,8 +328,9 @@ class App(_Type2):
 
 class _NSApplicationDelegate(object):
     '''An ObjC-callable I{NSDelegate} class to handle L{NSApplication},
-       L{NSMenu} and L{NSWindow} events as L{App}C{.app..._}, L{App}C{.menu..._}
-       respectively L{App}C{.window..._} callback calls.
+       L{NSMenu} and L{NSWindow} events as calls to L{App}C{.app..._},
+       L{App}C{.menu..._} respectively L{App}C{.window..._} callback
+       methods.
     '''
     # Cobbled together from the pycocoa.ObjCSubclass.__doc__,
     # pycocoa.runtime._NSDeallocObserver and PyObjC examples:
@@ -348,7 +349,7 @@ class _NSApplicationDelegate(object):
 
     @_ObjC.method('@P')
     def init(self, app):
-        '''Initialize the allocated L{NSApplicationDelegate}.
+        '''Initialize the allocated C{NSApplicationDelegate}.
 
            @note: I{MUST} be called as C{.alloc().init(...)}.
         '''

@@ -380,6 +380,8 @@ class objc_super_t(c_struct_t):
     _fields_ = ('receiver', Id_t), ('super_class', Class_t)
 
 
+objc_super_t_ptr = POINTER(objc_super_t)  # used in .runtime.send_super and .__init__
+
 NSDouble_t = c_double  # always 64-bit double
 NSFloat_t  = c_float   # always 32-bit float
 

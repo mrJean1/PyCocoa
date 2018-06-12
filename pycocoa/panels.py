@@ -60,7 +60,7 @@ __all__ = ('AlertPanel', 'AlertStyle',
            'PanelButton',
            'SavePanel',
            'TextPanel')
-__version__ = '18.06.10'
+__version__ = '18.06.11'
 
 
 class AlertStyle(_Constants):  # Enum?
@@ -81,6 +81,10 @@ _AlertStyleStr = {AlertStyle.Critical: 'Critical ',
 class AlertPanel(_Type2):
     '''Python Type to show an alert, wrapping ObjC L{NSAlert}.
     '''
+    _cancel   = False
+    _info     = ''
+    _ok       = 'OK'
+    _other    = False
     _style    = None
     _suppress = None
 
@@ -98,46 +102,30 @@ class AlertPanel(_Type2):
 
           @raise ValueError: Multi-line I{info} or too long.
 
-          @note: The first, C{OK} button is always shown.  The I{info} string is
-                 limited to about 50 characters and must be without C{linesep}arators.
+          @note: The first, C{OK} button is always shown.  The I{info}
+                 text is limited to about 50 characters and must be
+                 without C{linesep}arators.
         '''
-        # <http://Developer.Apple.com/documentation/appkit/nsalert>
-        self._style = style
-        self.NS = ns = NSAlert.alloc().init()
+        if info and isinstance(info, _Strs):
+            if len(info) > 50 or linesep in info:
+                raise ValueError('%s invalid: %r' % ('info', info))
+            self._info = info
 
-        ns.setAlertStyle_(style)
+        self._ok = ok if isinstance(ok, _Strs) else 'OK'
+        if cancel:
+            self._cancel = cancel if isinstance(cancel, _Strs) else 'Cancel'
+            if other:
+                self._other = other if isinstance(other, _Strs) else 'Other'
+
+        if suppressable:
+            self._suppress = YES
+
+        self._style = style
         s = _AlertStyleStr.get(style, '')
         t = s or 'Alert '
         if title:
             t = '%s- %s' % (t, title)
         self.title = t
-        ns.setMessageText_(NSStr(t))
-
-        if info:
-            if len(info) > 50 and linesep in info:
-                raise ValueError('%s invalid: %r' % ('info', info))
-            # <http://Developer.Apple.com/library/content/documentation/
-            #       Cocoa/Conceptual/Strings/Articles/stringsParagraphBreaks.html>
-            ns.setInformativeText_(NSStr(info))
-
-        ns.addButtonWithTitle_(NSStr(ok or 'OK'))
-        if cancel:
-            t = cancel if isinstance(cancel, _Strs) else 'Cancel'
-            ns.addButtonWithTitle_(NSStr(t))
-            if other:
-                t = other if isinstance(other, _Strs) else 'Other'
-                ns.addButtonWithTitle_(NSStr(t))
-
-        if suppressable:
-            self._suppress = False
-            ns.setShowsSuppressionButton_(YES)
-            s = 'Do not show this %sAlert again' % (s,)
-            ns.suppressionButton().setTitle_(NSStr(s))
-
-        # <http://Developer.Apple.com/library/content/documentation/
-        #       Cocoa/Conceptual/Dialog/Tasks/DisplayAlertHelp.html>
-        # ns.showsHelp_(YES)
-        # ns.helpAnchor_(HTML?)
 
     def show(self, text='', font=None, timeout=None):
         '''Show alert message iff not suppressed.
@@ -154,7 +142,34 @@ class AlertPanel(_Type2):
                     if no button was clicked before the I{timeout}
                     expired.
         '''
-        ns = self.NS
+        # <http://Developer.Apple.com/documentation/appkit/nsalert>
+        ns = NSAlert.alloc().init()
+        ns.setAlertStyle_(self._style)
+        ns.setMessageText_(NSStr(self.title))
+
+        if self._info:
+            # <http://Developer.Apple.com/library/content/documentation/
+            #       Cocoa/Conceptual/Strings/Articles/stringsParagraphBreaks.html>
+            ns.setInformativeText_(NSStr(self._info))
+
+        ns.addButtonWithTitle_(NSStr(self._ok))
+        if self._cancel:
+            ns.addButtonWithTitle_(NSStr(self._cancel))
+            if self._other:
+                ns.addButtonWithTitle_(NSStr(self._other))
+
+        if self._suppress in (False, YES):
+            self._suppress = False
+            ns.setShowsSuppressionButton_(YES)
+            s = _AlertStyleStr.get(self._style, '')
+            s = 'Do not show this %sAlert again' % (s,)
+            ns.suppressionButton().setTitle_(NSStr(s))
+
+        # <http://Developer.Apple.com/library/content/documentation/
+        #       Cocoa/Conceptual/Dialog/Tasks/DisplayAlertHelp.html>
+        # ns.showsHelp_(YES)
+        # ns.helpAnchor_(HTML?)
+
         if text:
             t = nsTextView(text, NSFont.systemFontOfSize_(0)
                                  if font is None else font.NS)
@@ -163,40 +178,18 @@ class AlertPanel(_Type2):
         # <http://Developer.Apple.com/documentation/appkit/
         #       nsalert/1535196-showssuppressionbutton>
         if self._suppress is None:
-            r = self._run(timeout)
+            r = _runModal(ns, timeout)
         elif self._suppress is False:
             s = ns.suppressionButton().state()
-            r = self._run(timeout)
+            r = _runModal(ns, timeout)
             # XXX value of NSOnState?
             if ns.suppressionButton().state() != s:
                 self._suppress = True
         else:
             r = PanelButton.Suppressed
+
+        ns.release()
         return r
-
-    def _run(self, timeout):
-        r = None
-        try:
-            s = float(timeout or 0)
-        except (TypeError, ValueError):
-            s = 0
-
-        if s > 0:
-            def _stopModal():
-                sleep(s + 0.5)
-                if r is None:
-                    NSMain.Application.stopModalWithCode_(1003)
-
-            t = Thread(target=_stopModal)
-            t.start()
-        # NSAlert buttons values are 1000, 1001 and 1002
-        # <http://Developer.Apple.com/documentation/appkit/
-        #       nsapplication.modalresponse>
-        r = self.NS.runModal()
-        return {1000: PanelButton.OK,  # alertFirstButtonReturn
-                1001: PanelButton.Cancel,  # alertSecondButtonReturn
-                1002: PanelButton.Other,  # alertThirdButtonReturn
-                1003: PanelButton.TimedOut}.get(r, PanelButton.Error)
 
 
 class BrowserPanel(_Type2):
@@ -263,9 +256,6 @@ class ErrorPanel(AlertPanel):
 
            @keyword title: The panel name and title (C{str}).
         '''
-        # <http://Developer.Apple.com/documentation/
-        #       appkit/nsalert/1531823-alertwitherror>
-        # <http://Developer.Apple.com/documentation/foundation/nserror>
         self.title = title
 
     def show(self, ns_error, timeout=None):  # PYCHOK expected
@@ -278,9 +268,12 @@ class ErrorPanel(AlertPanel):
 
            @raise TypeError: Invalid I{ns_error}.
         '''
+        # <http://Developer.Apple.com/documentation/
+        #       appkit/nsalert/1531823-alertwitherror>
+        # <http://Developer.Apple.com/documentation/foundation/nserror>
         if isInstanceOf(ns_error, NSError, name='ns_error'):
             ns = NSAlert.alloc().alertWithError_(ns_error)
-            r = self._run(timeout)
+            r = _runModal(ns, timeout)
             ns.release()
         else:
             r = PanelButton.Error
@@ -296,9 +289,7 @@ class OpenPanel(_Type2):
 
           @keyword title: The panel name (C{str}).
         '''
-        self.NS = NSOpenPanel.openPanel()
         self.title = title
-#       self.NS.setTitleHidden_(bool(False))  # "does nothing now"
 
     def pick(self, filetypes, aliases=False,
                                  dirs=False,
@@ -326,7 +317,9 @@ class OpenPanel(_Type2):
         '''
         if multiple:  # setAllowsMultipleSelection_
             raise NotImplementedError('multiple %s' % (multiple,))
-        ns = self.NS
+
+        ns = NSOpenPanel.openPanel()
+#       ns.setTitleHidden_(bool(False))  # "does nothing now"
 
         ns.setResolvesAliases_(bool(aliases))
         ns.setCanChooseDirectories_(bool(dirs))
@@ -346,17 +339,20 @@ class OpenPanel(_Type2):
             ns.setPrompt_(NSStr(prompt))
 
         while True:
-            ns.orderFrontRegardless()  # only flashes
+            # ns.orderFrontRegardless()  # only flashes
             # <http://Developer.Apple.com//documentation/
             #       appkit/nssavepanel/1525357-runmodal>
             if ns.runModal() == NSCancelButton:  # runModalForTypes_
-                return dflt  # nothing selected
+                path = dflt  # nothing selected
+                break
 #           paths = ns.filenames()  # returns an NSArray
 #           urls = ns.URLs()  # returns an NSArray
             path = nsString2str(ns.filename())  # == ns.URL().path()
             # mimick NSOpenPanel.setAllowedFileTypes_
             if path.lower().endswith(filetypes):
-                return path
+                break
+        ns.release()
+        return path
 
 
 class PanelButton(_Constants):  # Enum?
@@ -374,6 +370,31 @@ class PanelButton(_Constants):  # Enum?
 PanelButton = PanelButton()  #: Panel button kinds (C{int}).
 
 
+def _runModal(ns, timeout=None):
+    r = None
+    try:
+        s = float(timeout or 0)
+    except (TypeError, ValueError):
+        s = 0
+
+    if s > 0:
+        def _stopModal():
+            sleep(s + 0.5)
+            if r is None:
+                NSMain.Application.stopModalWithCode_(1003)
+
+        t = Thread(target=_stopModal)
+        t.start()
+    # NSAlert buttons values are 1000, 1001 and 1002
+    # <http://Developer.Apple.com/documentation/appkit/
+    #       nsapplication.modalresponse>
+    r = ns.runModal()
+    return {1000: PanelButton.OK,  # alertFirstButtonReturn
+            1001: PanelButton.Cancel,  # alertSecondButtonReturn
+            1002: PanelButton.Other,  # alertThirdButtonReturn
+            1003: PanelButton.TimedOut}.get(r, PanelButton.Error)
+
+
 # <http://PseudoFish.com/p/saving-a-file-using-nssavepanel.html>
 # <http://PseudoFish.com/showing-a-nssavepanel-as-a-sheet.html>
 
@@ -383,11 +404,9 @@ class SavePanel(_Type2):
     def __init__(self, title=''):
         '''New L{SavePanel}, a file save dialog.
 
-          @param title: The panel name (C{str}).
+           @keyword title: The panel name (C{str}).
         '''
-        self.NS = NSSavePanel.savePanel()
         self.title = title
-#       self.NS.setTitleHidden_(bool(False))  # "does nothing now"
 
     def save_as(self, name='', filetype='',  # PYCHOK expected
                                     dir='',
@@ -412,7 +431,8 @@ class SavePanel(_Type2):
 
            @return: The specified file name path (C{str}) or I{dflt}.
         '''
-        ns = self.NS
+        ns = NSSavePanel.savePanel()
+#       ns.setTitleHidden_(bool(False))  # "does nothing now"
 
         if name:
             ns.setNameFieldStringValue_(NSStr(name))
@@ -446,11 +466,15 @@ class SavePanel(_Type2):
             ns.setShowsTagField_(False)
 
         while True:
-            r = ns.runModal()  # == runModalForDirectory_file_(None, None)
+            r = _runModal(ns)  # == runModalForDirectory_file_(None, None)
             if r == NSOKButton:
-                return nsString2str(ns.filename())  # == ns.URL().path()
+                r = nsString2str(ns.filename())  # == ns.URL().path()
+                break
             elif r == NSCancelButton:
-                return dflt
+                r = dflt
+                break
+        ns.release()
+        return r
 
 
 class TextPanel(AlertPanel):
@@ -461,10 +485,6 @@ class TextPanel(AlertPanel):
 
            @keyword title: The panel name and title (C{str}).
         '''
-        ns = NSAlert.alloc().init()
-        ns.setAlertStyle_(AlertStyle.Info)
-        ns.addButtonWithTitle_(NSStr('Close'))
-        self.NS = ns
         self.title = title
 
     def show(self, text_or_file='', font=None, timeout=None):
@@ -479,7 +499,10 @@ class TextPanel(AlertPanel):
 
            @raise ValueError: No I{text_or_file} given.
         '''
-        ns = self.NS
+        ns = NSAlert.alloc().init()
+        ns.setAlertStyle_(AlertStyle.Info)
+        ns.addButtonWithTitle_(NSStr('Close'))
+
         if not text_or_file:
             raise ValueError('no %s: %r' % ('text_or_file', text_or_file))
 
@@ -490,7 +513,9 @@ class TextPanel(AlertPanel):
         t = nsTextView(text, NSFont.userFixedPitchFontOfSize_(0)
                              if font is None else font.NS)
         ns.setAccessoryView_(t)
-        return self._run(timeout)
+        r = _runModal(ns, timeout)
+        ns.release()
+        return r
 
 
 _Types.AlertPanel = AlertPanel
