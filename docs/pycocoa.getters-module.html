@@ -64,7 +64,7 @@
 
 <hr />
 <div class="fields">      <p><strong>Version:</strong>
-        18.06.08
+        18.06.14
       </p>
 </div><!-- ==================== FUNCTIONS ==================== -->
 <a name="section-Functions"></a>
@@ -152,7 +152,7 @@
     </td><td class="summary">
       <table width="100%" cellpadding="0" cellspacing="0" border="0">
         <tr>
-          <td><span class="summary-sig"><a href="pycocoa.getters-module.html#get_classnameof" class="summary-sig-name">get_classnameof</a>(<span class="summary-sig-arg">obj</span>,
+          <td><span class="summary-sig"><a href="pycocoa.getters-module.html#get_classnameof" class="summary-sig-name">get_classnameof</a>(<span class="summary-sig-arg">objc</span>,
         <span class="summary-sig-arg">dflt</span>=<span class="summary-sig-default">missing()</span>)</span><br />
       Get the name of the ObjC class of an object.</td>
           <td align="right" valign="top">
@@ -170,7 +170,7 @@
     </td><td class="summary">
       <table width="100%" cellpadding="0" cellspacing="0" border="0">
         <tr>
-          <td><span class="summary-sig"><a href="pycocoa.getters-module.html#get_classof" class="summary-sig-name">get_classof</a>(<span class="summary-sig-arg">obj</span>)</span><br />
+          <td><span class="summary-sig"><a href="pycocoa.getters-module.html#get_classof" class="summary-sig-name">get_classof</a>(<span class="summary-sig-arg">objc</span>)</span><br />
       Get the ObjC class of an object.</td>
           <td align="right" valign="top">
             
@@ -187,7 +187,7 @@
     </td><td class="summary">
       <table width="100%" cellpadding="0" cellspacing="0" border="0">
         <tr>
-          <td><span class="summary-sig"><a href="pycocoa.getters-module.html#get_ivar" class="summary-sig-name">get_ivar</a>(<span class="summary-sig-arg">obj</span>,
+          <td><span class="summary-sig"><a href="pycocoa.getters-module.html#get_ivar" class="summary-sig-name">get_ivar</a>(<span class="summary-sig-arg">objc</span>,
         <span class="summary-sig-arg">name</span>,
         <span class="summary-sig-arg">ctype</span>=<span class="summary-sig-default">None</span>)</span><br />
       Get the value of an instance variable (ivar).</td>
@@ -402,7 +402,7 @@
     </td><td class="summary">
       <table width="100%" cellpadding="0" cellspacing="0" border="0">
         <tr>
-          <td><span class="summary-sig"><a href="pycocoa.getters-module.html#get_superclassof" class="summary-sig-name">get_superclassof</a>(<span class="summary-sig-arg">obj</span>)</span><br />
+          <td><span class="summary-sig"><a href="pycocoa.getters-module.html#get_superclassof" class="summary-sig-name">get_superclassof</a>(<span class="summary-sig-arg">objc</span>)</span><br />
       Get the ObjC super-class of an object.</td>
           <td align="right" valign="top">
             
@@ -419,7 +419,7 @@
     </td><td class="summary">
       <table width="100%" cellpadding="0" cellspacing="0" border="0">
         <tr>
-          <td><span class="summary-sig"><a href="pycocoa.getters-module.html#get_superclassnameof" class="summary-sig-name">get_superclassnameof</a>(<span class="summary-sig-arg">obj</span>,
+          <td><span class="summary-sig"><a href="pycocoa.getters-module.html#get_superclassnameof" class="summary-sig-name">get_superclassnameof</a>(<span class="summary-sig-arg">objc</span>,
         <span class="summary-sig-arg">dflt</span>=<span class="summary-sig-default">missing()</span>)</span><br />
       Get the name of the ObjC super-class of an object.</td>
           <td align="right" valign="top">
@@ -575,7 +575,7 @@
 <tr><td>
   <table width="100%" cellpadding="0" cellspacing="0" border="0">
   <tr valign="top"><td>
-  <h3 class="epydoc"><span class="sig"><span class="sig-name">get_classnameof</span>(<span class="sig-arg">obj</span>,
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">get_classnameof</span>(<span class="sig-arg">objc</span>,
         <span class="sig-arg">dflt</span>=<span class="sig-default">missing()</span>)</span>
   </h3>
   </td><td align="right" valign="top"
@@ -587,14 +587,14 @@
   <dl class="fields">
     <dt>Parameters:</dt>
     <dd><ul class="nomargin-top">
-        <li><strong class="pname"><code>obj</code></strong> - The object (<code>Object</code> or <a 
+        <li><strong class="pname"><code>objc</code></strong> - The object (<code>Object</code> or <a 
           href="pycocoa.octypes.Id_t-class.html" class="link">Id_t</a>).</li>
     </ul></dd>
     <dt>Returns:</dt>
         <dd>The object's class name (<code>str</code>).</dd>
     <dt>Raises:</dt>
     <dd><ul class="nomargin-top">
-        <li><code><strong class='fraise'>ValueError</strong></code> - Invalid <i>obj</i>, iff no <i>dflt</i> provided.</li>
+        <li><code><strong class='fraise'>ValueError</strong></code> - Invalid <i>objc</i>, iff no <i>dflt</i> provided.</li>
     </ul></dd>
   </dl>
 </td></tr></table>
@@ -606,7 +606,7 @@
 <tr><td>
   <table width="100%" cellpadding="0" cellspacing="0" border="0">
   <tr valign="top"><td>
-  <h3 class="epydoc"><span class="sig"><span class="sig-name">get_classof</span>(<span class="sig-arg">obj</span>)</span>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">get_classof</span>(<span class="sig-arg">objc</span>)</span>
   </h3>
   </td><td align="right" valign="top"
     >&nbsp;
@@ -617,7 +617,7 @@
   <dl class="fields">
     <dt>Parameters:</dt>
     <dd><ul class="nomargin-top">
-        <li><strong class="pname"><code>obj</code></strong> - The object (<code>Object</code> or <a 
+        <li><strong class="pname"><code>objc</code></strong> - The object (<code>Object</code> or <a 
           href="pycocoa.octypes.Id_t-class.html" class="link">Id_t</a>).</li>
     </ul></dd>
     <dt>Returns:</dt>
@@ -633,7 +633,7 @@
 <tr><td>
   <table width="100%" cellpadding="0" cellspacing="0" border="0">
   <tr valign="top"><td>
-  <h3 class="epydoc"><span class="sig"><span class="sig-name">get_ivar</span>(<span class="sig-arg">obj</span>,
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">get_ivar</span>(<span class="sig-arg">objc</span>,
         <span class="sig-arg">name</span>,
         <span class="sig-arg">ctype</span>=<span class="sig-default">None</span>)</span>
   </h3>
@@ -646,7 +646,7 @@
   <dl class="fields">
     <dt>Parameters:</dt>
     <dd><ul class="nomargin-top">
-        <li><strong class="pname"><code>obj</code></strong> - The object (<code>Object</code> or <a 
+        <li><strong class="pname"><code>objc</code></strong> - The object (<code>Object</code> or <a 
           href="pycocoa.octypes.Id_t-class.html" class="link">Id_t</a>).</li>
         <li><strong class="pname"><code>name</code></strong> - The instance variable name (<code>str</code>).</li>
         <li><strong class="pname"><code>ctype</code></strong> - The instance variable type (<code>ctypes</code>),</li>
@@ -1038,7 +1038,7 @@
 <tr><td>
   <table width="100%" cellpadding="0" cellspacing="0" border="0">
   <tr valign="top"><td>
-  <h3 class="epydoc"><span class="sig"><span class="sig-name">get_superclassof</span>(<span class="sig-arg">obj</span>)</span>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">get_superclassof</span>(<span class="sig-arg">objc</span>)</span>
   </h3>
   </td><td align="right" valign="top"
     >&nbsp;
@@ -1049,7 +1049,7 @@
   <dl class="fields">
     <dt>Parameters:</dt>
     <dd><ul class="nomargin-top">
-        <li><strong class="pname"><code>obj</code></strong> - The object (<code>Object</code> or <a 
+        <li><strong class="pname"><code>objc</code></strong> - The object (<code>Object</code> or <a 
           href="pycocoa.octypes.Id_t-class.html" class="link">Id_t</a>).</li>
     </ul></dd>
     <dt>Returns:</dt>
@@ -1065,7 +1065,7 @@
 <tr><td>
   <table width="100%" cellpadding="0" cellspacing="0" border="0">
   <tr valign="top"><td>
-  <h3 class="epydoc"><span class="sig"><span class="sig-name">get_superclassnameof</span>(<span class="sig-arg">obj</span>,
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">get_superclassnameof</span>(<span class="sig-arg">objc</span>,
         <span class="sig-arg">dflt</span>=<span class="sig-default">missing()</span>)</span>
   </h3>
   </td><td align="right" valign="top"
@@ -1077,14 +1077,14 @@
   <dl class="fields">
     <dt>Parameters:</dt>
     <dd><ul class="nomargin-top">
-        <li><strong class="pname"><code>obj</code></strong> - The object (<code>Object</code> or <a 
+        <li><strong class="pname"><code>objc</code></strong> - The object (<code>Object</code> or <a 
           href="pycocoa.octypes.Id_t-class.html" class="link">Id_t</a>).</li>
     </ul></dd>
     <dt>Returns:</dt>
         <dd>The object'ssuper-class name (<code>str</code>).</dd>
     <dt>Raises:</dt>
     <dd><ul class="nomargin-top">
-        <li><code><strong class='fraise'>ValueError</strong></code> - Invalid <i>obj</i>, iff no <i>dflt</i> provided.</li>
+        <li><code><strong class='fraise'>ValueError</strong></code> - Invalid <i>objc</i>, iff no <i>dflt</i> provided.</li>
     </ul></dd>
   </dl>
 </td></tr></table>
@@ -1121,7 +1121,7 @@
 <table border="0" cellpadding="0" cellspacing="0" width="100%%">
   <tr>
     <td align="left" class="footer">
-    Generated by Epydoc 3.0.1 on Tue Jun 12 19:49:47 2018
+    Generated by Epydoc 3.0.1 on Thu Jun 14 12:38:56 2018
     </td>
     <td align="right" class="footer">
       <a target="mainFrame" href="http://epydoc.sourceforge.net"

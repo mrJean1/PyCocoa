@@ -81,7 +81,7 @@ from utils   import bytes2str, _ByteStrs, clip, _exports, _Globals, \
 
 from os import linesep, path as os_path
 
-__version__ = '18.06.11'
+__version__ = '18.06.14'
 
 
 def _lambda(arg):
@@ -406,7 +406,8 @@ class _NSMain(_Singletons):
         return self._YES_true
 
 
-NSMain = _NSMain()  # global C{NS...} singletons
+NSMain  = _NSMain()  # global C{NS...} singletons
+_NSStr1 = {}  # empty and single character strings
 
 
 class NSStr(CFStr):
@@ -421,10 +422,19 @@ class NSStr(CFStr):
 
            @return: The string (L{NSStr}).
         '''
-        # the ObjC class is .objc_class or __NSCFString
-        self = super(NSStr, cls).__new__(cls, ustr)
-        if auto:
-            self.autorelease()  # PYCHOK expected
+        if len(ustr) > 1:
+            # the ObjC class is .objc_class, __NSCFString, NSConstantString, etc.
+            self = super(NSStr, cls).__new__(cls, ustr)
+            if auto:
+                # XXX use .autorelease, iff .release causes
+                # a RuntimeError for some (shared?) strings
+                self.release()  # PYCHOK expected
+        else:
+            # singletons for empty and single character strings
+            self = _NSStr1.get(ustr, None)
+            if self is None:
+                _NSStr1[ustr] = self = super(NSStr, cls).__new__(cls, ustr)
+            retain(self)
         return self
 
 

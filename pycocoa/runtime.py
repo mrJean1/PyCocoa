@@ -84,9 +84,9 @@ from octypes import __i386__, __LP64__, c_struct_t, c_void, \
                     TypeCodeError
 from oslibs  import cfString2str, libobjc
 from utils   import bytes2str, _Constants, _exports, missing, name2py, \
-                    printf, propertyGetter, str2bytes
+                    printf, property2, str2bytes
 
-__version__ = '18.06.11'
+__version__ = '18.06.14'
 
 # <http://Developer.Apple.com/documentation/objectivec/
 #         objc_associationpolicy?language=objc>
@@ -240,7 +240,7 @@ class ObjCBoundMethod(_ObjCBase):
 
 
 class ObjCBoundClassMethod(ObjCBoundMethod):
-    '''Only to distinguish bound class- from bound instance-methods.
+    '''Only to distinguish BoundClass- from Bound(Instance)Methods.
     '''
     pass
 
@@ -248,6 +248,8 @@ class ObjCBoundClassMethod(ObjCBoundMethod):
 class ObjCClass(_ObjCBase):
     '''Python wrapper for an ObjC class.
     '''
+    _as_paramater = None  # for ctypes
+
     _classmethods = {}  # shut PyChecker up
     _methods = {}
 
@@ -419,9 +421,10 @@ class ObjCInstance(_ObjCBase):
     _as_paramater = None  # for ctypes
 
     _objc_cache = {}  # see _NSDeallocObserver, example class_wrapper4.py
-
     _objc_class = None
     _objc_ptr   = None  # shut PyChecker up
+
+    _retained = 1
 
     def __new__(cls, objc_ptr):
         '''New L{ObjCInstance} or return a previously created one.
@@ -441,7 +444,9 @@ class ObjCInstance(_ObjCBase):
         # That ObjCInstance will persist until the object is de-
         # allocated by ObjC, see _NSDeallocObserver below.
         try:
-            return cls._objc_cache[objc_ptr.value]
+            self = cls._objc_cache[objc_ptr.value]
+            self._retained += 1  # retain(self) causes infinite recursion
+            return self
         except KeyError:
             pass
 
@@ -458,10 +463,10 @@ class ObjCInstance(_ObjCBase):
         # by the (integer) memory address pointed to by the obj_ptr.
         cls._objc_cache[objc_ptr.value] = self
 
-        # Associate a _NSDeallocObserver with this object, but only
-        # if this object is not an ObjC class.
+        # Associate a _NSDeallocObserver with this object, but
+        # only if this object is not an ObjC class.
         if not isClass(self):
-            nsDeallocObserver(self)
+            _nsDeallocObserver(objc_ptr.value)  # note, objc_ptr_value!
 
         return self
 
@@ -486,7 +491,7 @@ class ObjCInstance(_ObjCBase):
             return ObjCBoundClassMethod(method, self._objc_class.ptr)
 
         # Try this class' property, ...
-        getter = propertyGetter(self, bytes2str(name))
+        getter, _ = property2(self, bytes2str(name))
         if getter:
             return getter(self)
 
@@ -533,16 +538,29 @@ class ObjCInstance(_ObjCBase):
         return self._objc_ptr
 
     def release(self):
-        '''Garbage collect this instance.
+        '''Garbage collect this instance, eventually.
+
+           @raise RuntimeError: Not or no longer retained (and perhaps
+                                garbage collected already).
 
            @note: May result in Python memory errors, aborts and/or
                   segfaults.  Use 'python3 -X faulthandler ...' to
                   get a Python traceback.
         '''
-        # send_message(self.ptr, 'autorelease',
+        # send_message(self._objc_ptr, 'autorelease',
         #              restype=c_void)  # argtypes=[]
+        if self._retained > 0:
+            self._retained -= 1
+        else:
+            raise RuntimeError('not retained: %r' % (self,))
         self.autorelease()  # PYCHOK expected
 #   __del__ = release  # XXX test.simple_application crashes
+
+    @property
+    def retained(self):
+        '''Get this instance' reference count (C{int}).
+        '''
+        return self._retained
 
     def set_ivar(self, name, value, ctype=None):
         '''Set an instance variable (ivar) to the given value.
@@ -762,6 +780,8 @@ class ObjCSubclass(_ObjCBase):
        >>> myclass = ObjCClass('MySubclassName')
        >>> myinstance = myclass.alloc().init()
     '''
+    _as_paramater = None  # for ctypes
+
     _imp_cache = {}  # decorated class/method cache
     _name      = b''
 
@@ -781,7 +801,7 @@ class ObjCSubclass(_ObjCBase):
                            of the instance variable.
         '''
         self._imp_cache = {}
-        self._name = name
+        self._name = str2bytes(name)
         self._as_parameter_ = self._objc_class = add_subclass(parent, name)
 
         # must add instance variables before registering!
@@ -794,12 +814,12 @@ class ObjCSubclass(_ObjCBase):
         _ObjC_log(self, 'new', 'S')
 
     def __str__(self):
-        return '[sub]class(%r)' % (bytes2str(self.name),)
+        return '%s(%r)' % ('sub-class', self.name)
 
     def _add_classmethod(self, method, name, encoding):
         if not self._objc_metaclass:
             raise ValueError('add method %s to unregistered %s %r' %
-                            (bytes2str(name), 'sub-class', bytes2str(self.name),))
+                            (bytes2str(name), 'sub-class', self.name,))
         imp = add_method(self._objc_metaclass, name, method, encoding)
         self._imp_cache[name] = imp
 
@@ -819,8 +839,8 @@ class ObjCSubclass(_ObjCBase):
                   BEFORE the class is registered.
         '''
         if self._objc_metaclass:
-            raise ValueError('add ivar %s to already registered %s %r' %
-                            (bytes2str(name), 'sub-class', bytes2str(self.name)))
+            raise ValueError('add ivar %r to registered %s %r' %
+                            (bytes2str(name), 'sub-class', self.name))
         return add_ivar(self._objc_class, name, ctype)
 
     def classmethod(self, encoding):
@@ -907,7 +927,7 @@ class ObjCSubclass(_ObjCBase):
         '''Register this new class with the ObjC runtime.
         '''
         if self._objc_metaclass:
-            raise ValueError('%r already registered' % (self,))
+            raise ValueError('%s %r already registered' % ('sub-class', self))
 
         register_subclass(self._objc_class)
         # We can get the metaclass only after the class is registered.
@@ -1001,92 +1021,107 @@ def add_subclass(superclas, name, register=False):
     return clas or None
 
 
-def isClass(obj):
+def isClass(objc):
     '''Check whether an object is an ObjC clas.
 
-       @param obj: Object to check (C{Object} or C{Class}).
+       @param objc: Object to check (C{Object} or C{Class}).
 
-       @return: True if the I{obj} is a clas, False otherwise.
+       @return: True if the I{objc} is a clas, False otherwise.
     '''
-    # an obj is a class if its super-class is a metaclass
-    return isMetaClass(get_classof(obj))
+    # an objc is a class if its super-class is a metaclass
+    return isMetaClass(get_classof(objc))
 
 
-def isImmutable(obj, mutableClass, immutableClass, name='ns'):
+def isImmutable(objc, mutableClass, immutableClass, name='ns'):
     '''Check that an ObjC object is an instance of the immutable class.
 
-       @param obj: The instance to check (L{ObjCInstance}).
+       @param objc: The instance to check (L{ObjCInstance}).
        @param mutableClass: The mutable ObjC classes (C{NSMutable...}).
        @param immutableClass: The immutable ObjC classes (C{Object}).
        @keyword name: The name of the instance (C{str}).
 
-       @return: True if I{obj} is an I{immutableClass} instance, False otherwise.
+       @return: True if I{objc} is an I{immutableClass} instance, False otherwise.
 
-       @raise TypeError: If I{obj} is a I{mutableClass} instance, provided
+       @raise TypeError: If I{objc} is a I{mutableClass} instance, provided
                          keyword argument I{name='...'} is given.
     '''
     # check for the NSMutable- class first, since the mutable
     # classes seem to be sub-class of the immutable one
-    if isInstanceOf(obj, mutableClass):
-        raise TypeError('classof(%s) is mutable: %r' % (name, obj))
-    return isInstanceOf(obj, immutableClass, name=name) is immutableClass
+    if isInstanceOf(objc, mutableClass):
+        raise TypeError('classof(%s) is mutable: %r' % (name, objc))
+    return isInstanceOf(objc, immutableClass, name=name) is immutableClass
 
 
-def isInstanceOf(obj, *Classes, **name_missing):
+def isInstanceOf(objc, *Classes, **name_missing):
     '''Check whether an ObjC object is an instance of some ObjC class.
 
-       @param obj: The instance to check (L{ObjCInstance} or C{c_void_p}).
+       @param objc: The instance to check (L{ObjCInstance} or C{c_void_p}).
        @param Classes: One or several ObjC classes (C{Object}).
        @keyword name: The name of the instance (C{str}).
 
        @return: The matching I{Class} from I{Classes}, None otherwise.
 
-       @raise TypeError: If I{obj} is not an L{ObjCInstance} or C{c_void_p}
-                         or if I{obj} does not match any of the I{Classes}
+       @raise TypeError: If I{objc} is not an L{ObjCInstance} or C{c_void_p}
+                         or if I{objc} does not match any of the I{Classes}
                          and only if keyword I{name='...'} is provided.
 
        @see: Function L{isinstanceOf} for checking Python instances.
     '''
-    if isinstance(obj, ObjCInstance):
+    if isinstance(objc, ObjCInstance):
         try:
-            if obj.objc_class in Classes or get_classof(obj) in Classes:
-                return obj.objc_class
+            if objc.objc_class in Classes or get_classof(objc) in Classes:
+                return objc.objc_class
 
-            iskind_ = obj.isKindOfClass_
+            iskind_ = objc.isKindOfClass_
             for c in Classes:
                 if iskind_(c):
                     return c
         except AttributeError:
             pass
 
-    elif isinstance(obj, ObjC_t):
+    elif isinstance(objc, ObjC_t):
         if ObjC_t in Classes:
             return ObjC_t
-    elif isinstance(obj, c_void_p):
+    elif isinstance(objc, c_void_p):
         if c_void_p in Classes:
             return c_void_p
 
     else:
-        name = name_missing.get('name', 'obj')
+        name = name_missing.get('name', 'objc')
         t = ObjCInstance.__name__
-        raise TypeError('%s not an %s: %r' % (name, t, obj))
+        raise TypeError('%s not an %s: %r' % (name, t, objc))
 
     name = name_missing.get('name', missing)
     if name is missing:
         return None
 
     t = ', '.join(getattr(c, 'name', getattr(c, '__name__', str(c))) for c in Classes)
-    raise TypeError('%s not %s: %r' % (name, t, obj))
+    raise TypeError('%s not %s: %r' % (name, t, objc))
 
 
-def isMetaClass(obj):
+def isMetaClass(objc):
     '''Check whether an object is an ObjC metaclass.
 
-       @param obj: Object to check (C{Object} or C{Class}).
+       @param objc: Object to check (C{Object} or C{Class}).
 
-       @return: True if the I{obj} is a metaclass, False otherwise.
+       @return: True if the I{objc} is a metaclass, False otherwise.
     '''
-    return bool(libobjc.class_isMetaClass(obj))
+    return bool(libobjc.class_isMetaClass(objc))
+
+
+def release(objc):
+    '''Release an ObjC object to eventually be garbage collected.
+
+       @param objc: The object to release (L{ObjCInstance}).
+
+       @raise TypeError: If I{objc} can't be released.
+    '''
+    if isinstance(objc, ObjCInstance):
+        try:
+            objc.release()
+        except AttributeError:
+            pass
+    raise TypeError('%s: %r' % ('release', objc))
 
 
 def register_subclass(subclas):
@@ -1094,7 +1129,7 @@ def register_subclass(subclas):
 
        @param subclas: Class to be registered (C{Class}).
 
-       @see: L{nsDeallocObserver} below.
+       @see: L{ObjCSubclass}C{.register}.
     '''
     if not isinstance(subclas, Class_t):
         subclas = Class_t(subclas)
@@ -1104,7 +1139,7 @@ def register_subclass(subclas):
 def retain(objc):
     '''Prevent an ObjC object from being garbage collected.
 
-       @param objc: The object (L{ObjCInstance}).
+       @param objc: The object to retain (L{ObjCInstance}).
 
        @return: The retained object (L{ObjCInstance}).
 
@@ -1113,10 +1148,11 @@ def retain(objc):
     if isinstance(objc, ObjCInstance):
         try:
             objc.retain()
+            objc._retained += 1
             return objc
         except AttributeError:
             pass
-    raise TypeError('retain: %r' % (objc,))
+    raise TypeError('%s: %r' % ('retain', objc))
 
 
 def _receiver(receiver):
@@ -1267,10 +1303,10 @@ def send_super(receiver, name_, *args, **resargtypes):
                             byref(superobj), sel, *args)
 
 
-def set_ivar(obj, name, value, ctype=None):
+def set_ivar(objc, name, value, ctype=None):
     '''Set an instance variable of an ObjC object.
 
-       @param obj: The instance (C{Object}).
+       @param objc: The instance (C{Object}).
        @param name: Name of the ivar (C{str}).
        @param value: New value for the ivar (C{any}).
        @keyword ctype: Optional, the ivar type (C{ctypes}).
@@ -1282,24 +1318,32 @@ def set_ivar(obj, name, value, ctype=None):
        @raise TypeError: Invalid I{name}, I{value} or I{ctype} type.
     '''
     if ctype is None or ctype is missing:
-        ctype = _ivar_ctype(obj, name)
+        ctype = _ivar_ctype(objc, name)
 
     argtypes = [Ivar_t, c_char_p, ctype]
     return _libobjcall(_object_setInstanceVariable, c_void, argtypes,
-                        obj, str2bytes(name), value)
+                        objc, str2bytes(name), value)
 
 
-class _Observed(_Constants):
-    name = '_ObservedObjC'
+class _Ivar1(_Constants):
+    # the _NSDeallocObserver ivar
+    name = '_ObjCPtrValue'
     c_t  = Id_t
 
 
-def _objc_cache_pop(inst, cmd):
-    '''(INTERNAL) Remove an C{ObjCInstance} from the objects cache.
+def _objc_cache_pop(nself, sel_cmd):
+    '''(INTERNAL) Remove an L{ObjCInstance} from the instances cache
+       called by the instance' associated dealloc/finalize observer.
+
+       @param nself: The instance' observer (C{_NSDeallocObserver}).
+       @param sel_cmd: The message for the parent (C{str}).
     '''
-    objc = get_ivar(inst, _Observed.name, ctype=_Observed.c_t)
-    ObjCInstance._objc_cache.pop(objc, None)
-    send_super(inst, cmd)
+    objc_ptr_value = get_ivar(nself, _Ivar1.name, ctype=_Ivar1.c_t)
+    if objc_ptr_value:
+        objc = ObjCInstance._objc_cache.pop(objc_ptr_value, None)
+        if objc:
+            objc._retained = 0
+    send_super(nself, sel_cmd)
 
 
 class _NSDeallocObserver(object):
@@ -1312,25 +1356,25 @@ class _NSDeallocObserver(object):
 
        The methods of the class defined below are decorated with
        C{.rawmethod} instead of C{.method} because C{_NSDeallocObserver}s
-       are created inside the L{ObjCInstance}C{.__new__} method and we've
-       to be careful to not create another L{ObjCInstance} here (which
+       are created inside the L{ObjCInstance}C{.__new__} method and we
+       must be careful to not create another L{ObjCInstance} here (which
        happens when the usual method decorator turns the C{self} argument
        into an L{ObjCInstance}) and get trapped in an infinite recursion.
 
        The I{unused} argument in all decorated methods below represents
-       the C{SEL/cmd}, see L{ObjCSubclass.rawmethod}.
+       the C{SEL/cmd}, see L{ObjCSubclass}C{.rawmethod}.
     '''
     _ObjC = ObjCSubclass('NSObject', '_NSDeallocObserver',  # .__name__
-                                    *{_Observed.name: _Observed.c_t})  # ivar
+                                   **{_Ivar1.name: _Ivar1.c_t})  # ivar
 #   ... instead of, previously:
-#   _ObjC = ObjCSubclass('NSObject', __name__, register=False)
-#   _ObjC.add_ivar(_Observed.name, ctype=_Observed.c_t)
+#   _ObjC = ObjCSubclass('NSObject', '_NSDeallocObserver', register=False)
+#   _ObjC.add_ivar(_Ivar1.name, ctype=_Ivar1.c_t)
 #   _ObjC.register()
 
     @_ObjC.rawmethod('@@')
-    def initWithObject_(self, unused, objc):
+    def initWithObject_(self, unused, objc_ptr_value):
         self = send_super(self, 'init').value
-        set_ivar(self, _Observed.name, objc, ctype=_Observed.c_t)
+        set_ivar(self, _Ivar1.name, objc_ptr_value, ctype=_Ivar1.c_t)
         return self
 
     @_ObjC.rawmethod('@')
@@ -1339,42 +1383,59 @@ class _NSDeallocObserver(object):
 
     @_ObjC.rawmethod('@')
     def finalize(self, unused):
-        # Called instead of dealloc if using garbage collection.
+        # Called instead of dealloc if using garbage collection
         # (which would have to be explicitly started with
         # objc_startCollectorThread(), so probably not much
         # reason to have this here, but it can't hurt.)
         _objc_cache_pop(self, 'finalize')
 
 
-def nsDeallocObserver(objc):
+def _nsDeallocObserver(objc_ptr_value):
     '''Create a de-allocation observer for an ObjC instance.
 
-       @param objc: The object to be observed (L{ObjCInstance}).
+       @param objc_ptr_value: The ObjC instance to be observed
+                              (L{ObjCInstance}C{.ptr.value}).
 
        @return: The observer (C{_NSDeallocObserver}).
 
-       @note: When the observed ObjC object is de-allocated, the
+       @note: When the observed ObjC instance is de-allocated, the
               C{_NSDeallocObserver} removes the corresponding
-              L{ObjCInstance} from the dictionary of cached objects
+              L{ObjCInstance} from thecached objects dictionary
               L{ObjCInstance}C{._objc_cache_}, effectively destroying
               the L{ObjCInstance}.
     '''
     observer = send_message(_NSDeallocObserver.__name__, 'alloc',
                             restype=Id_t)  # argtypes=[]
-    observer = send_message(observer, 'initWithObject_', objc,
-                            restype=Id_t, argtypes=[_Observed.c_t])
-    # The observer is retained by the object we associate it to.
-    libobjc.objc_setAssociatedObject(objc, observer, observer,
+    observer = send_message(observer, 'initWithObject_', objc_ptr_value,
+                            restype=Id_t, argtypes=[_Ivar1.c_t])
+    # the observer is retained by the object associate to it
+    libobjc.objc_setAssociatedObject(objc_ptr_value, observer, observer,
                                      OBJC_ASSOCIATION_RETAIN)
-    # Release the observer now so that it will be de-allocated
+    # release the observer now so that it will be de-allocated
     # when the associated object is de-allocated.
     send_message(observer, 'release')
     return observer
 
 
+def _nsDeallocObserverIvar1():
+    # check that exactly one _NSDeallocObserver ivar exists
+    from getters import get_ivars
+
+    i = None
+    for n, _, c, i in get_ivars(get_class(_NSDeallocObserver.__name__)):
+        if n != _Ivar1.name or c != _Ivar1.c_t:
+            raise AssertionError('%r %s != %r %s' % (n, c,
+                                 _Ivar1.name, _Ivar1.c_t))
+    if i is None:
+        raise AssertionError('%s %s: %r %s' % ('missing', 'ivar',
+                             _Ivar1.name, _Ivar1.c_t))
+
+_nsDeallocObserverIvar1()  # PYCHOK expected
+del _nsDeallocObserverIvar1
+
+
 # filter locals() for .__init__.py
-__all__ = _exports(locals(), 'libobjc', 'nsDeallocObserver',
-                             'register_subclass',
+__all__ = _exports(locals(), 'libobjc', 'release', 'register_subclass', 'retain',
                    starts=('add_', 'is', 'OBJC_', 'ObjC', 'send_', 'set_'))
 
 if __name__ == '__main__':

@@ -60,7 +60,7 @@
 '''C{get_...} functions for obtaining ObjC classes, methods, protocols, etc.
 '''
 # all imports listed explicitly to help PyChecker
-from ctypes  import byref, c_uint, cast, CFUNCTYPE
+from ctypes  import ArgumentError, byref, c_uint, cast, CFUNCTYPE
 from octypes import emcoding2ctype, encoding2ctype, \
                     Class_t, Id_t, IMP_t, Ivar_t, Protocol_t, SEL_t, \
                     split_encoding
@@ -68,18 +68,27 @@ from oslibs  import libobjc  # get_lib
 from utils   import bytes2str, _exports, isinstanceOf, missing, \
                     name2objc, str2bytes
 
-__version__ = '18.06.08'
+__version__ = '18.06.14'
 
 _c_func_t_cache = {}
 
 
-def _ivar_ctype(obj, name):
+def _ivar_ctype(objc, name):
     '''(INTERNAL) Find the ctype of an ObjC instance variable.
     '''
-    for ivar, _, ctype, _ in get_ivars(obj, name):
-        if ivar == name:
-            return ctype
-    raise ValueError('no %r ivar of %r' % (name, obj))
+    try:
+        for ivar, _, ctype, _ in get_ivars(objc, name):
+            if ivar == name:
+                return ctype
+    except ArgumentError:
+        pass
+    try:
+        for ivar, _, ctype, _ in get_ivars(get_classof(objc), name):
+            if ivar == name:
+                return ctype
+    except ArgumentError:
+        pass
+    raise ValueError('no %r ivar: %r' % (name, objc))
 
 
 def get_c_func_t(encoding, codes=None):
@@ -152,42 +161,42 @@ def get_classname(clas, dflt=missing):
     return dflt
 
 
-def get_classnameof(obj, dflt=missing):
+def get_classnameof(objc, dflt=missing):
     '''Get the name of the ObjC class of an object.
 
-       @param obj: The object (C{Object} or L{Id_t}).
+       @param objc: The object (C{Object} or L{Id_t}).
 
        @return: The object's class name (C{str}).
 
-       @raise ValueError: Invalid I{obj}, iff no I{dflt} provided.
+       @raise ValueError: Invalid I{objc}, iff no I{dflt} provided.
     '''
-    return get_classname(get_classof(obj), dflt=dflt)
+    return get_classname(get_classof(objc), dflt=dflt)
 
 
-def get_classof(obj):
+def get_classof(objc):
     '''Get the ObjC class of an object.
 
-       @param obj: The object (C{Object} or L{Id_t}).
+       @param objc: The object (C{Object} or L{Id_t}).
 
        @return: The object's class (L{Class_t}) if found, None otherwise.
     '''
-    return libobjc.object_getClass(cast(obj, Id_t)) or None
+    return libobjc.object_getClass(cast(objc, Id_t)) or None
 
 
-def get_ivar(obj, name, ctype=None):
+def get_ivar(objc, name, ctype=None):
     '''Get the value of an instance variable (ivar).
 
-       @param obj: The object (C{Object} or L{Id_t}).
+       @param objc: The object (C{Object} or L{Id_t}).
        @param name: The instance variable name (C{str}).
        @keyword ctype: The instance variable type (C{ctypes}),
 
        @return: The ivar value (C{any}) if found, None otherwise.
     '''
     if ctype is None:  # lookup ivar by name
-        ctype = _ivar_ctype(obj, name)
+        ctype = _ivar_ctype(objc, name)
 
     ivar = ctype()
-    libobjc.object_getInstanceVariable(obj, str2bytes(name), byref(ivar))
+    libobjc.object_getInstanceVariable(objc, str2bytes(name), byref(ivar))
     try:
         return ivar.value
     except AttributeError:
@@ -419,29 +428,29 @@ def get_superclass(clas):
     return libobjc.class_getSuperclass(clas) or None
 
 
-def get_superclassof(obj):
+def get_superclassof(objc):
     '''Get the ObjC super-class of an object.
 
-       @param obj: The object (C{Object} or L{Id_t}).
+       @param objc: The object (C{Object} or L{Id_t}).
 
        @return: The super-class (L{Class_t}), None otherwise.
     '''
-    clas = get_classof(obj)
+    clas = get_classof(objc)
     if clas:
         clas = get_superclass(clas)
     return clas
 
 
-def get_superclassnameof(obj, dflt=missing):
+def get_superclassnameof(objc, dflt=missing):
     '''Get the name of the ObjC super-class of an object.
 
-       @param obj: The object (C{Object} or L{Id_t}).
+       @param objc: The object (C{Object} or L{Id_t}).
 
        @return: The object'ssuper-class name (C{str}).
 
-       @raise ValueError: Invalid I{obj}, iff no I{dflt} provided.
+       @raise ValueError: Invalid I{objc}, iff no I{dflt} provided.
     '''
-    return get_classname(get_superclassof(obj), dflt=dflt)
+    return get_classname(get_superclassof(objc), dflt=dflt)
 
 
 # filter locals() for .__init__.py

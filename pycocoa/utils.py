@@ -61,7 +61,7 @@
 
 @var missing: Missing keyword argument value.
 '''
-__version__ = '18.06.11'
+__version__ = '18.06.14'
 
 try:  # all imports listed explicitly to help PyChecker
     from math import gcd  # Python 3+
@@ -165,7 +165,7 @@ class _Singletons(_MutableConstants):
         c = self.__class__
         for n in dir(self):
             if not n.startswith('_'):
-                g = propertyGetter(self, n)
+                g, _ = property2(self, n)
                 if g and hasattr(c, '_' + n):
                     # XXX resolves the property
                     yield n, g(self)
@@ -521,13 +521,14 @@ def isinstanceOf(inst, *classes, **name_missing):
     raise TypeError('%s not %s: %r' % (name, t, inst))
 
 
-def propertyGetter(inst, name):
-    '''Return the property C{get} method.
+def property2(inst, name):
+    '''Return the property C{get} and C{set} method.
 
        @param inst: An instance (C{any}).
        @param name: Property name (C{str}).
 
-       @return: The getter (C{callable}) or C{None}
+       @return: 2-Tuple (getter, setter) as C{callable}s,
+                (C{callable}, C{None}) or (C{None}, C{None})
                 if I{inst.name} is not a property.
     '''
     try:
@@ -535,10 +536,10 @@ def propertyGetter(inst, name):
         if isinstance(p, property):
             g = p.fget
             if callable(g):
-                return g  # g(inst)
+                return g, p.fset
     except (AttributeError, TypeError, ValueError):
         pass
-    return None
+    return None, None
 
 
 def name2objc(name):
@@ -673,8 +674,7 @@ def zSIstr(size, B='B'):
 
 __all__ = _exports(locals(), 'aspect_ratio', 'clip', 'DEFAULT_UNICODE',
                              'flint', 'isinstanceOf', 'gcd', 'iterbytes',
-                             'missing', 'printf', 'propertyGetter',
-                             'type2strepr',
+                             'missing', 'printf', 'property2', 'type2strepr',
                    starts=('bytes', 'inst', 'str', 'z'))
 
 if __name__ == '__main__':

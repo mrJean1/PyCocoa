@@ -173,7 +173,7 @@
 
 <hr />
 <div class="fields">      <p><strong>Version:</strong>
-        18.06.12
+        18.06.14
       </p>
 </div><!-- ==================== SUBMODULES ==================== -->
 <a name="section-Submodules"></a>
@@ -749,7 +749,7 @@
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
         <a href="pycocoa.runtime.ObjCBoundClassMethod-class.html" class="summary-name">ObjCBoundClassMethod</a><br />
-      Only to distinguish bound class- from bound instance-methods.
+      Only to distinguish BoundClass- from Bound(Instance)Methods.
     </td>
   </tr>
 <tr>
@@ -1726,7 +1726,7 @@
     </td><td class="summary">
       <table width="100%" cellpadding="0" cellspacing="0" border="0">
         <tr>
-          <td><span class="summary-sig"><a href="pycocoa-module.html#get_classnameof" class="summary-sig-name">get_classnameof</a>(<span class="summary-sig-arg">obj</span>,
+          <td><span class="summary-sig"><a href="pycocoa-module.html#get_classnameof" class="summary-sig-name">get_classnameof</a>(<span class="summary-sig-arg">objc</span>,
         <span class="summary-sig-arg">dflt</span>=<span class="summary-sig-default">missing()</span>)</span><br />
       Get the name of the ObjC class of an object.</td>
           <td align="right" valign="top">
@@ -1744,7 +1744,7 @@
     </td><td class="summary">
       <table width="100%" cellpadding="0" cellspacing="0" border="0">
         <tr>
-          <td><span class="summary-sig"><a href="pycocoa-module.html#get_classof" class="summary-sig-name">get_classof</a>(<span class="summary-sig-arg">obj</span>)</span><br />
+          <td><span class="summary-sig"><a href="pycocoa-module.html#get_classof" class="summary-sig-name">get_classof</a>(<span class="summary-sig-arg">objc</span>)</span><br />
       Get the ObjC class of an object.</td>
           <td align="right" valign="top">
             
@@ -1778,7 +1778,7 @@
     </td><td class="summary">
       <table width="100%" cellpadding="0" cellspacing="0" border="0">
         <tr>
-          <td><span class="summary-sig"><a href="pycocoa-module.html#get_ivar" class="summary-sig-name">get_ivar</a>(<span class="summary-sig-arg">obj</span>,
+          <td><span class="summary-sig"><a href="pycocoa-module.html#get_ivar" class="summary-sig-name">get_ivar</a>(<span class="summary-sig-arg">objc</span>,
         <span class="summary-sig-arg">name</span>,
         <span class="summary-sig-arg">ctype</span>=<span class="summary-sig-default">None</span>)</span><br />
       Get the value of an instance variable (ivar).</td>
@@ -1993,7 +1993,7 @@
     </td><td class="summary">
       <table width="100%" cellpadding="0" cellspacing="0" border="0">
         <tr>
-          <td><span class="summary-sig"><a href="pycocoa-module.html#get_superclassnameof" class="summary-sig-name">get_superclassnameof</a>(<span class="summary-sig-arg">obj</span>,
+          <td><span class="summary-sig"><a href="pycocoa-module.html#get_superclassnameof" class="summary-sig-name">get_superclassnameof</a>(<span class="summary-sig-arg">objc</span>,
         <span class="summary-sig-arg">dflt</span>=<span class="summary-sig-default">missing()</span>)</span><br />
       Get the name of the ObjC super-class of an object.</td>
           <td align="right" valign="top">
@@ -2011,7 +2011,7 @@
     </td><td class="summary">
       <table width="100%" cellpadding="0" cellspacing="0" border="0">
         <tr>
-          <td><span class="summary-sig"><a href="pycocoa-module.html#get_superclassof" class="summary-sig-name">get_superclassof</a>(<span class="summary-sig-arg">obj</span>)</span><br />
+          <td><span class="summary-sig"><a href="pycocoa-module.html#get_superclassof" class="summary-sig-name">get_superclassof</a>(<span class="summary-sig-arg">objc</span>)</span><br />
       Get the ObjC super-class of an object.</td>
           <td align="right" valign="top">
             
@@ -2083,7 +2083,7 @@
     </td><td class="summary">
       <table width="100%" cellpadding="0" cellspacing="0" border="0">
         <tr>
-          <td><span class="summary-sig"><a href="pycocoa-module.html#isClass" class="summary-sig-name">isClass</a>(<span class="summary-sig-arg">obj</span>)</span><br />
+          <td><span class="summary-sig"><a href="pycocoa-module.html#isClass" class="summary-sig-name">isClass</a>(<span class="summary-sig-arg">objc</span>)</span><br />
       Check whether an object is an ObjC clas.</td>
           <td align="right" valign="top">
             
@@ -2100,7 +2100,7 @@
     </td><td class="summary">
       <table width="100%" cellpadding="0" cellspacing="0" border="0">
         <tr>
-          <td><span class="summary-sig"><a href="pycocoa-module.html#isImmutable" class="summary-sig-name">isImmutable</a>(<span class="summary-sig-arg">obj</span>,
+          <td><span class="summary-sig"><a href="pycocoa-module.html#isImmutable" class="summary-sig-name">isImmutable</a>(<span class="summary-sig-arg">objc</span>,
         <span class="summary-sig-arg">mutableClass</span>,
         <span class="summary-sig-arg">immutableClass</span>,
         <span class="summary-sig-arg">name</span>=<span class="summary-sig-default"><code class="variable-quote">'</code><code class="variable-string">ns</code><code class="variable-quote">'</code></span>)</span><br />
@@ -2120,7 +2120,7 @@
     </td><td class="summary">
       <table width="100%" cellpadding="0" cellspacing="0" border="0">
         <tr>
-          <td><span class="summary-sig"><a href="pycocoa-module.html#isInstanceOf" class="summary-sig-name">isInstanceOf</a>(<span class="summary-sig-arg">obj</span>,
+          <td><span class="summary-sig"><a href="pycocoa-module.html#isInstanceOf" class="summary-sig-name">isInstanceOf</a>(<span class="summary-sig-arg">objc</span>,
         <span class="summary-sig-arg">*Classes</span>,
         <span class="summary-sig-arg">**name_missing</span>)</span><br />
       Check whether an ObjC object is an instance of some ObjC class.</td>
@@ -2156,7 +2156,7 @@
     </td><td class="summary">
       <table width="100%" cellpadding="0" cellspacing="0" border="0">
         <tr>
-          <td><span class="summary-sig"><a href="pycocoa-module.html#isMetaClass" class="summary-sig-name">isMetaClass</a>(<span class="summary-sig-arg">obj</span>)</span><br />
+          <td><span class="summary-sig"><a href="pycocoa-module.html#isMetaClass" class="summary-sig-name">isMetaClass</a>(<span class="summary-sig-arg">objc</span>)</span><br />
       Check whether an object is an ObjC metaclass.</td>
           <td align="right" valign="top">
             
@@ -2438,23 +2438,6 @@
         <span class="summary-sig-arg">dflt</span>=<span class="summary-sig-default"><code class="variable-quote">'</code><code class="variable-string"></code><code class="variable-quote">'</code></span>)</span><br />
       Create Python <code>bytes</code> from <a 
       href="pycocoa.nstypes-module.html#NSData" class="link">NSData</a>.</td>
-          <td align="right" valign="top">
-            
-            
-          </td>
-        </tr>
-      </table>
-      
-    </td>
-  </tr>
-<tr>
-    <td width="15%" align="right" valign="top" class="summary">
-      <span class="summary-type">&nbsp;</span>
-    </td><td class="summary">
-      <table width="100%" cellpadding="0" cellspacing="0" border="0">
-        <tr>
-          <td><span class="summary-sig"><a href="pycocoa-module.html#nsDeallocObserver" class="summary-sig-name">nsDeallocObserver</a>(<span class="summary-sig-arg">objc</span>)</span><br />
-      Create a de-allocation observer for an ObjC instance.</td>
           <td align="right" valign="top">
             
             
@@ -2772,9 +2755,9 @@
     </td><td class="summary">
       <table width="100%" cellpadding="0" cellspacing="0" border="0">
         <tr>
-          <td><span class="summary-sig"><a href="pycocoa-module.html#propertyGetter" class="summary-sig-name">propertyGetter</a>(<span class="summary-sig-arg">inst</span>,
+          <td><span class="summary-sig"><a href="pycocoa-module.html#property2" class="summary-sig-name">property2</a>(<span class="summary-sig-arg">inst</span>,
         <span class="summary-sig-arg">name</span>)</span><br />
-      Return the property <code>get</code> method.</td>
+      Return the property <code>get</code> and <code>set</code> method.</td>
           <td align="right" valign="top">
             
             
@@ -2829,6 +2812,40 @@
         <tr>
           <td><span class="summary-sig"><a href="pycocoa-module.html#register_subclass" class="summary-sig-name">register_subclass</a>(<span class="summary-sig-arg">subclas</span>)</span><br />
       Register an ObjC sub-class.</td>
+          <td align="right" valign="top">
+            
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a href="pycocoa-module.html#release" class="summary-sig-name">release</a>(<span class="summary-sig-arg">objc</span>)</span><br />
+      Release an ObjC object to eventually be garbage collected.</td>
+          <td align="right" valign="top">
+            
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a href="pycocoa-module.html#retain" class="summary-sig-name">retain</a>(<span class="summary-sig-arg">objc</span>)</span><br />
+      Prevent an ObjC object from being garbage collected.</td>
           <td align="right" valign="top">
             
             
@@ -2903,7 +2920,7 @@
     </td><td class="summary">
       <table width="100%" cellpadding="0" cellspacing="0" border="0">
         <tr>
-          <td><span class="summary-sig"><a href="pycocoa-module.html#set_ivar" class="summary-sig-name">set_ivar</a>(<span class="summary-sig-arg">obj</span>,
+          <td><span class="summary-sig"><a href="pycocoa-module.html#set_ivar" class="summary-sig-name">set_ivar</a>(<span class="summary-sig-arg">objc</span>,
         <span class="summary-sig-arg">name</span>,
         <span class="summary-sig-arg">value</span>,
         <span class="summary-sig-arg">ctype</span>=<span class="summary-sig-default">None</span>)</span><br />
@@ -3974,15 +3991,15 @@ traits='Bold', weight=9),
     <td width="15%" align="right" valign="top" class="summary">
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
-        <a href="pycocoa-module.html#NSMain" class="summary-name">NSMain</a> = <code title="NSMain.Application=NSApplication(&lt;Id_t at 0x106c18b90&gt;) of 0x105ac4da0\
+        <a href="pycocoa-module.html#NSMain" class="summary-name">NSMain</a> = <code title="NSMain.Application=NSApplication(&lt;Id_t at 0x107141f80&gt;) of 0x100387760\
 ,
-      .BooleanNO=NSBoolean(&lt;Id_t at 0x106c0ef80&gt;) of 0x7fff8dcb63f8,
-      .BooleanYES=NSBoolean(&lt;Id_t at 0x106a13ef0&gt;) of 0x7fff8dcb63e8,
-      .Bundle=NSBundle(&lt;Id_t at 0x106c0e3b0&gt;) of 0x1005e0220,
+      .BooleanNO=NSBoolean(&lt;Id_t at 0x1071417a0&gt;) of 0x7fff8dcb63f8,
+      .BooleanYES=NSBoolean(&lt;Id_t at 0x10713df80&gt;) of 0x7fff8dcb63e8,
+      .Bundle=NSBundle(&lt;Id_t at 0x106ca3200&gt;) of 0x102245820,
       .BundleName=NSConstantString('CFBundleName'),
-      .FontManager=NSFontManager(&lt;Id_t at 0x106a13b00&gt;) of 0x105adfff0\
+      .FontManager=NSFontManager(&lt;Id_t at 0x106ab7dd0&gt;) of 0x105e12230\
 ,
-...">NSMain.Application=NSApplication(&lt;Id_t at 0x106c18b90<code class="variable-ellipsis">...</code></code>
+...">NSMain.Application=NSApplication(&lt;Id_t at 0x107141f80<code class="variable-ellipsis">...</code></code>
     </td>
   </tr>
 <tr>
@@ -4596,7 +4613,7 @@ traits='Bold', weight=9),
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
         <a href="pycocoa-module.html#libAppKit" class="summary-name">libAppKit</a> = <code title="&lt;CDLL '/System/Library/Frameworks/AppKit.framework/AppKit', handle 100\
-44e730 at 103013490&gt;">&lt;CDLL '/System/Library/Frameworks/AppKit.framework<code class="variable-ellipsis">...</code></code>
+496f70 at 10275b450&gt;">&lt;CDLL '/System/Library/Frameworks/AppKit.framework<code class="variable-ellipsis">...</code></code>
     </td>
   </tr>
 <tr>
@@ -4604,7 +4621,7 @@ traits='Bold', weight=9),
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
         <a href="pycocoa-module.html#libCF" class="summary-name">libCF</a> = <code title="&lt;CDLL '/System/Library/Frameworks/CoreFoundation.framework/CoreFoundat\
-ion', handle 10c8a6800 at 102e08910&gt;">&lt;CDLL '/System/Library/Frameworks/CoreFoundation.frame<code class="variable-ellipsis">...</code></code>
+ion', handle 104213800 at 1027438d0&gt;">&lt;CDLL '/System/Library/Frameworks/CoreFoundation.frame<code class="variable-ellipsis">...</code></code>
     </td>
   </tr>
 <tr>
@@ -4612,7 +4629,7 @@ ion', handle 10c8a6800 at 102e08910&gt;">&lt;CDLL '/System/Library/Frameworks/Co
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
         <a href="pycocoa-module.html#libCT" class="summary-name">libCT</a> = <code title="&lt;CDLL '/System/Library/Frameworks/CoreText.framework/CoreText', handle\
- 10048dae0 at 10301e610&gt;">&lt;CDLL '/System/Library/Frameworks/CoreText.framework/C<code class="variable-ellipsis">...</code></code>
+ 100477bc0 at 1027695d0&gt;">&lt;CDLL '/System/Library/Frameworks/CoreText.framework/C<code class="variable-ellipsis">...</code></code>
     </td>
   </tr>
 <tr>
@@ -4620,14 +4637,14 @@ ion', handle 10c8a6800 at 102e08910&gt;">&lt;CDLL '/System/Library/Frameworks/Co
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
         <a href="pycocoa-module.html#libFoundation" class="summary-name">libFoundation</a> = <code title="&lt;CDLL '/System/Library/Frameworks/Foundation.framework/Foundation', ha\
-ndle 10048c950 at 10301ec50&gt;">&lt;CDLL '/System/Library/Frameworks/Foundation.f<code class="variable-ellipsis">...</code></code>
+ndle 100476aa0 at 102769c10&gt;">&lt;CDLL '/System/Library/Frameworks/Foundation.f<code class="variable-ellipsis">...</code></code>
     </td>
   </tr>
 <tr>
     <td width="15%" align="right" valign="top" class="summary">
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
-        <a href="pycocoa-module.html#libobjc" class="summary-name">libobjc</a> = <code title="&lt;CDLL '/usr/lib/libobjc.dylib', handle 10c8a8680 at 10301ea90&gt;">&lt;CDLL '/usr/lib/libobjc.dylib', handle 10c8a8680 at <code class="variable-ellipsis">...</code></code>
+        <a href="pycocoa-module.html#libobjc" class="summary-name">libobjc</a> = <code title="&lt;CDLL '/usr/lib/libobjc.dylib', handle 104215680 at 102769a50&gt;">&lt;CDLL '/usr/lib/libobjc.dylib', handle 104215680 at <code class="variable-ellipsis">...</code></code>
     </td>
   </tr>
 <tr>
@@ -4635,7 +4652,7 @@ ndle 10048c950 at 10301ec50&gt;">&lt;CDLL '/System/Library/Frameworks/Foundation
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
         <a href="pycocoa-module.html#libquartz" class="summary-name">libquartz</a> = <code title="&lt;CDLL '/System/Library/Frameworks/quartz.framework/quartz', handle 100\
-4a0870 at 1030136d0&gt;">&lt;CDLL '/System/Library/Frameworks/quartz.framework<code class="variable-ellipsis">...</code></code>
+4ab7e0 at 10275b690&gt;">&lt;CDLL '/System/Library/Frameworks/quartz.framework<code class="variable-ellipsis">...</code></code>
     </td>
   </tr>
 <tr>
@@ -5488,7 +5505,7 @@ ndle 10048c950 at 10301ec50&gt;">&lt;CDLL '/System/Library/Frameworks/Foundation
 <tr><td>
   <table width="100%" cellpadding="0" cellspacing="0" border="0">
   <tr valign="top"><td>
-  <h3 class="epydoc"><span class="sig"><span class="sig-name">get_classnameof</span>(<span class="sig-arg">obj</span>,
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">get_classnameof</span>(<span class="sig-arg">objc</span>,
         <span class="sig-arg">dflt</span>=<span class="sig-default">missing()</span>)</span>
   </h3>
   </td><td align="right" valign="top"
@@ -5500,14 +5517,14 @@ ndle 10048c950 at 10301ec50&gt;">&lt;CDLL '/System/Library/Frameworks/Foundation
   <dl class="fields">
     <dt>Parameters:</dt>
     <dd><ul class="nomargin-top">
-        <li><strong class="pname"><code>obj</code></strong> - The object (<code>Object</code> or <a 
+        <li><strong class="pname"><code>objc</code></strong> - The object (<code>Object</code> or <a 
           href="pycocoa.octypes.Id_t-class.html" class="link">Id_t</a>).</li>
     </ul></dd>
     <dt>Returns:</dt>
         <dd>The object's class name (<code>str</code>).</dd>
     <dt>Raises:</dt>
     <dd><ul class="nomargin-top">
-        <li><code><strong class='fraise'>ValueError</strong></code> - Invalid <i>obj</i>, iff no <i>dflt</i> provided.</li>
+        <li><code><strong class='fraise'>ValueError</strong></code> - Invalid <i>objc</i>, iff no <i>dflt</i> provided.</li>
     </ul></dd>
   </dl>
 </td></tr></table>
@@ -5519,7 +5536,7 @@ ndle 10048c950 at 10301ec50&gt;">&lt;CDLL '/System/Library/Frameworks/Foundation
 <tr><td>
   <table width="100%" cellpadding="0" cellspacing="0" border="0">
   <tr valign="top"><td>
-  <h3 class="epydoc"><span class="sig"><span class="sig-name">get_classof</span>(<span class="sig-arg">obj</span>)</span>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">get_classof</span>(<span class="sig-arg">objc</span>)</span>
   </h3>
   </td><td align="right" valign="top"
     >&nbsp;
@@ -5530,7 +5547,7 @@ ndle 10048c950 at 10301ec50&gt;">&lt;CDLL '/System/Library/Frameworks/Foundation
   <dl class="fields">
     <dt>Parameters:</dt>
     <dd><ul class="nomargin-top">
-        <li><strong class="pname"><code>obj</code></strong> - The object (<code>Object</code> or <a 
+        <li><strong class="pname"><code>objc</code></strong> - The object (<code>Object</code> or <a 
           href="pycocoa.octypes.Id_t-class.html" class="link">Id_t</a>).</li>
     </ul></dd>
     <dt>Returns:</dt>
@@ -5573,7 +5590,7 @@ ndle 10048c950 at 10301ec50&gt;">&lt;CDLL '/System/Library/Frameworks/Foundation
 <tr><td>
   <table width="100%" cellpadding="0" cellspacing="0" border="0">
   <tr valign="top"><td>
-  <h3 class="epydoc"><span class="sig"><span class="sig-name">get_ivar</span>(<span class="sig-arg">obj</span>,
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">get_ivar</span>(<span class="sig-arg">objc</span>,
         <span class="sig-arg">name</span>,
         <span class="sig-arg">ctype</span>=<span class="sig-default">None</span>)</span>
   </h3>
@@ -5586,7 +5603,7 @@ ndle 10048c950 at 10301ec50&gt;">&lt;CDLL '/System/Library/Frameworks/Foundation
   <dl class="fields">
     <dt>Parameters:</dt>
     <dd><ul class="nomargin-top">
-        <li><strong class="pname"><code>obj</code></strong> - The object (<code>Object</code> or <a 
+        <li><strong class="pname"><code>objc</code></strong> - The object (<code>Object</code> or <a 
           href="pycocoa.octypes.Id_t-class.html" class="link">Id_t</a>).</li>
         <li><strong class="pname"><code>name</code></strong> - The instance variable name (<code>str</code>).</li>
         <li><strong class="pname"><code>ctype</code></strong> - The instance variable type (<code>ctypes</code>),</li>
@@ -5979,7 +5996,7 @@ ndle 10048c950 at 10301ec50&gt;">&lt;CDLL '/System/Library/Frameworks/Foundation
 <tr><td>
   <table width="100%" cellpadding="0" cellspacing="0" border="0">
   <tr valign="top"><td>
-  <h3 class="epydoc"><span class="sig"><span class="sig-name">get_superclassnameof</span>(<span class="sig-arg">obj</span>,
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">get_superclassnameof</span>(<span class="sig-arg">objc</span>,
         <span class="sig-arg">dflt</span>=<span class="sig-default">missing()</span>)</span>
   </h3>
   </td><td align="right" valign="top"
@@ -5991,14 +6008,14 @@ ndle 10048c950 at 10301ec50&gt;">&lt;CDLL '/System/Library/Frameworks/Foundation
   <dl class="fields">
     <dt>Parameters:</dt>
     <dd><ul class="nomargin-top">
-        <li><strong class="pname"><code>obj</code></strong> - The object (<code>Object</code> or <a 
+        <li><strong class="pname"><code>objc</code></strong> - The object (<code>Object</code> or <a 
           href="pycocoa.octypes.Id_t-class.html" class="link">Id_t</a>).</li>
     </ul></dd>
     <dt>Returns:</dt>
         <dd>The object'ssuper-class name (<code>str</code>).</dd>
     <dt>Raises:</dt>
     <dd><ul class="nomargin-top">
-        <li><code><strong class='fraise'>ValueError</strong></code> - Invalid <i>obj</i>, iff no <i>dflt</i> provided.</li>
+        <li><code><strong class='fraise'>ValueError</strong></code> - Invalid <i>objc</i>, iff no <i>dflt</i> provided.</li>
     </ul></dd>
   </dl>
 </td></tr></table>
@@ -6010,7 +6027,7 @@ ndle 10048c950 at 10301ec50&gt;">&lt;CDLL '/System/Library/Frameworks/Foundation
 <tr><td>
   <table width="100%" cellpadding="0" cellspacing="0" border="0">
   <tr valign="top"><td>
-  <h3 class="epydoc"><span class="sig"><span class="sig-name">get_superclassof</span>(<span class="sig-arg">obj</span>)</span>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">get_superclassof</span>(<span class="sig-arg">objc</span>)</span>
   </h3>
   </td><td align="right" valign="top"
     >&nbsp;
@@ -6021,7 +6038,7 @@ ndle 10048c950 at 10301ec50&gt;">&lt;CDLL '/System/Library/Frameworks/Foundation
   <dl class="fields">
     <dt>Parameters:</dt>
     <dd><ul class="nomargin-top">
-        <li><strong class="pname"><code>obj</code></strong> - The object (<code>Object</code> or <a 
+        <li><strong class="pname"><code>objc</code></strong> - The object (<code>Object</code> or <a 
           href="pycocoa.octypes.Id_t-class.html" class="link">Id_t</a>).</li>
     </ul></dd>
     <dt>Returns:</dt>
@@ -6137,7 +6154,7 @@ ndle 10048c950 at 10301ec50&gt;">&lt;CDLL '/System/Library/Frameworks/Foundation
 <tr><td>
   <table width="100%" cellpadding="0" cellspacing="0" border="0">
   <tr valign="top"><td>
-  <h3 class="epydoc"><span class="sig"><span class="sig-name">isClass</span>(<span class="sig-arg">obj</span>)</span>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">isClass</span>(<span class="sig-arg">objc</span>)</span>
   </h3>
   </td><td align="right" valign="top"
     >&nbsp;
@@ -6148,10 +6165,10 @@ ndle 10048c950 at 10301ec50&gt;">&lt;CDLL '/System/Library/Frameworks/Foundation
   <dl class="fields">
     <dt>Parameters:</dt>
     <dd><ul class="nomargin-top">
-        <li><strong class="pname"><code>obj</code></strong> - Object to check (<code>Object</code> or <code>Class</code>).</li>
+        <li><strong class="pname"><code>objc</code></strong> - Object to check (<code>Object</code> or <code>Class</code>).</li>
     </ul></dd>
     <dt>Returns:</dt>
-        <dd>True if the <i>obj</i> is a clas, False otherwise.</dd>
+        <dd>True if the <i>objc</i> is a clas, False otherwise.</dd>
   </dl>
 </td></tr></table>
 </div>
@@ -6162,7 +6179,7 @@ ndle 10048c950 at 10301ec50&gt;">&lt;CDLL '/System/Library/Frameworks/Foundation
 <tr><td>
   <table width="100%" cellpadding="0" cellspacing="0" border="0">
   <tr valign="top"><td>
-  <h3 class="epydoc"><span class="sig"><span class="sig-name">isImmutable</span>(<span class="sig-arg">obj</span>,
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">isImmutable</span>(<span class="sig-arg">objc</span>,
         <span class="sig-arg">mutableClass</span>,
         <span class="sig-arg">immutableClass</span>,
         <span class="sig-arg">name</span>=<span class="sig-default"><code class="variable-quote">'</code><code class="variable-string">ns</code><code class="variable-quote">'</code></span>)</span>
@@ -6176,7 +6193,7 @@ ndle 10048c950 at 10301ec50&gt;">&lt;CDLL '/System/Library/Frameworks/Foundation
   <dl class="fields">
     <dt>Parameters:</dt>
     <dd><ul class="nomargin-top">
-        <li><strong class="pname"><code>obj</code></strong> - The instance to check (<a 
+        <li><strong class="pname"><code>objc</code></strong> - The instance to check (<a 
           href="pycocoa.runtime.ObjCInstance-class.html" 
           class="link">ObjCInstance</a>).</li>
         <li><strong class="pname"><code>mutableClass</code></strong> - The mutable ObjC classes (<code>NSMutable...</code>).</li>
@@ -6184,11 +6201,11 @@ ndle 10048c950 at 10301ec50&gt;">&lt;CDLL '/System/Library/Frameworks/Foundation
         <li><strong class="pname"><code>name</code></strong> - The name of the instance (<code>str</code>).</li>
     </ul></dd>
     <dt>Returns:</dt>
-        <dd>True if <i>obj</i> is an <i>immutableClass</i> instance, False 
+        <dd>True if <i>objc</i> is an <i>immutableClass</i> instance, False 
           otherwise.</dd>
     <dt>Raises:</dt>
     <dd><ul class="nomargin-top">
-        <li><code><strong class='fraise'>TypeError</strong></code> - If <i>obj</i> is a <i>mutableClass</i> instance, provided keyword 
+        <li><code><strong class='fraise'>TypeError</strong></code> - If <i>objc</i> is a <i>mutableClass</i> instance, provided keyword 
         argument <i>name='...'</i> is given.</li>
     </ul></dd>
   </dl>
@@ -6201,7 +6218,7 @@ ndle 10048c950 at 10301ec50&gt;">&lt;CDLL '/System/Library/Frameworks/Foundation
 <tr><td>
   <table width="100%" cellpadding="0" cellspacing="0" border="0">
   <tr valign="top"><td>
-  <h3 class="epydoc"><span class="sig"><span class="sig-name">isInstanceOf</span>(<span class="sig-arg">obj</span>,
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">isInstanceOf</span>(<span class="sig-arg">objc</span>,
         <span class="sig-arg">*Classes</span>,
         <span class="sig-arg">**name_missing</span>)</span>
   </h3>
@@ -6214,7 +6231,7 @@ ndle 10048c950 at 10301ec50&gt;">&lt;CDLL '/System/Library/Frameworks/Foundation
   <dl class="fields">
     <dt>Parameters:</dt>
     <dd><ul class="nomargin-top">
-        <li><strong class="pname"><code>obj</code></strong> - The instance to check (<a 
+        <li><strong class="pname"><code>objc</code></strong> - The instance to check (<a 
           href="pycocoa.runtime.ObjCInstance-class.html" 
           class="link">ObjCInstance</a> or <code>c_void_p</code>).</li>
         <li><strong class="pname"><code>Classes</code></strong> - One or several ObjC classes (<code>Object</code>).</li>
@@ -6224,10 +6241,10 @@ ndle 10048c950 at 10301ec50&gt;">&lt;CDLL '/System/Library/Frameworks/Foundation
         <dd>The matching <i>Class</i> from <i>Classes</i>, None otherwise.</dd>
     <dt>Raises:</dt>
     <dd><ul class="nomargin-top">
-        <li><code><strong class='fraise'>TypeError</strong></code> - If <i>obj</i> is not an <a 
+        <li><code><strong class='fraise'>TypeError</strong></code> - If <i>objc</i> is not an <a 
         href="pycocoa.runtime.ObjCInstance-class.html" 
         class="link">ObjCInstance</a> or <code>c_void_p</code> or if 
-        <i>obj</i> does not match any of the <i>Classes</i> and only if 
+        <i>objc</i> does not match any of the <i>Classes</i> and only if 
         keyword <i>name='...'</i> is provided.</li>
     </ul></dd>
   </dl>
@@ -6270,7 +6287,7 @@ ndle 10048c950 at 10301ec50&gt;">&lt;CDLL '/System/Library/Frameworks/Foundation
 <tr><td>
   <table width="100%" cellpadding="0" cellspacing="0" border="0">
   <tr valign="top"><td>
-  <h3 class="epydoc"><span class="sig"><span class="sig-name">isMetaClass</span>(<span class="sig-arg">obj</span>)</span>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">isMetaClass</span>(<span class="sig-arg">objc</span>)</span>
   </h3>
   </td><td align="right" valign="top"
     >&nbsp;
@@ -6281,10 +6298,10 @@ ndle 10048c950 at 10301ec50&gt;">&lt;CDLL '/System/Library/Frameworks/Foundation
   <dl class="fields">
     <dt>Parameters:</dt>
     <dd><ul class="nomargin-top">
-        <li><strong class="pname"><code>obj</code></strong> - Object to check (<code>Object</code> or <code>Class</code>).</li>
+        <li><strong class="pname"><code>objc</code></strong> - Object to check (<code>Object</code> or <code>Class</code>).</li>
     </ul></dd>
     <dt>Returns:</dt>
-        <dd>True if the <i>obj</i> is a metaclass, False otherwise.</dd>
+        <dd>True if the <i>objc</i> is a metaclass, False otherwise.</dd>
   </dl>
 </td></tr></table>
 </div>
@@ -6803,44 +6820,6 @@ ndle 10048c950 at 10301ec50&gt;">&lt;CDLL '/System/Library/Frameworks/Foundation
   </dl>
 </td></tr></table>
 </div>
-<a name="nsDeallocObserver"></a>
-<div>
-<table class="details" border="1" cellpadding="3"
-       cellspacing="0" width="100%" bgcolor="white">
-<tr><td>
-  <table width="100%" cellpadding="0" cellspacing="0" border="0">
-  <tr valign="top"><td>
-  <h3 class="epydoc"><span class="sig"><span class="sig-name">nsDeallocObserver</span>(<span class="sig-arg">objc</span>)</span>
-  </h3>
-  </td><td align="right" valign="top"
-    >&nbsp;
-    </td>
-  </tr></table>
-  
-  <p>Create a de-allocation observer for an ObjC instance.</p>
-  <dl class="fields">
-    <dt>Parameters:</dt>
-    <dd><ul class="nomargin-top">
-        <li><strong class="pname"><code>objc</code></strong> - The object to be observed (<a 
-          href="pycocoa.runtime.ObjCInstance-class.html" 
-          class="link">ObjCInstance</a>).</li>
-    </ul></dd>
-    <dt>Returns:</dt>
-        <dd>The observer (<code>_NSDeallocObserver</code>).</dd>
-  </dl>
-<div class="fields">      <p><strong>Note:</strong>
-        When the observed ObjC object is de-allocated, the 
-        <code>_NSDeallocObserver</code> removes the corresponding <a 
-        href="pycocoa.runtime.ObjCInstance-class.html" 
-        class="link">ObjCInstance</a> from the dictionary of cached objects
-        <a href="pycocoa.runtime.ObjCInstance-class.html" 
-        class="link">ObjCInstance</a><code>._objc_cache_</code>, 
-        effectively destroying the <a 
-        href="pycocoa.runtime.ObjCInstance-class.html" 
-        class="link">ObjCInstance</a>.
-      </p>
-</div></td></tr></table>
-</div>
 <a name="nsDecimal2decimal"></a>
 <div>
 <table class="details" border="1" cellpadding="3"
@@ -7313,14 +7292,14 @@ ndle 10048c950 at 10301ec50&gt;">&lt;CDLL '/System/Library/Frameworks/Foundation
   </dl>
 </td></tr></table>
 </div>
-<a name="propertyGetter"></a>
+<a name="property2"></a>
 <div>
 <table class="details" border="1" cellpadding="3"
        cellspacing="0" width="100%" bgcolor="white">
 <tr><td>
   <table width="100%" cellpadding="0" cellspacing="0" border="0">
   <tr valign="top"><td>
-  <h3 class="epydoc"><span class="sig"><span class="sig-name">propertyGetter</span>(<span class="sig-arg">inst</span>,
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">property2</span>(<span class="sig-arg">inst</span>,
         <span class="sig-arg">name</span>)</span>
   </h3>
   </td><td align="right" valign="top"
@@ -7328,7 +7307,7 @@ ndle 10048c950 at 10301ec50&gt;">&lt;CDLL '/System/Library/Frameworks/Foundation
     </td>
   </tr></table>
   
-  <p>Return the property <code>get</code> method.</p>
+  <p>Return the property <code>get</code> and <code>set</code> method.</p>
   <dl class="fields">
     <dt>Parameters:</dt>
     <dd><ul class="nomargin-top">
@@ -7336,8 +7315,9 @@ ndle 10048c950 at 10301ec50&gt;">&lt;CDLL '/System/Library/Frameworks/Foundation
         <li><strong class="pname"><code>name</code></strong> - Property name (<code>str</code>).</li>
     </ul></dd>
     <dt>Returns:</dt>
-        <dd>The getter (<code>callable</code>) or <code>None</code> if 
-          <i>inst.name</i> is not a property.</dd>
+        <dd>2-Tuple (getter, setter) as <code>callable</code>s, 
+          (<code>callable</code>, <code>None</code>) or (<code>None</code>,
+          <code>None</code>) if <i>inst.name</i> is not a property.</dd>
   </dl>
 </td></tr></table>
 </div>
@@ -7483,10 +7463,72 @@ ndle 10048c950 at 10301ec50&gt;">&lt;CDLL '/System/Library/Frameworks/Foundation
     </ul></dd>
   </dl>
 <div class="fields">      <p><strong>See Also:</strong>
-        <a href="pycocoa.runtime-module.html#nsDeallocObserver" 
-        class="link">nsDeallocObserver</a> below.
+        <a href="pycocoa.runtime.ObjCSubclass-class.html" 
+        class="link">ObjCSubclass</a><code>.register</code>.
       </p>
 </div></td></tr></table>
+</div>
+<a name="release"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">release</span>(<span class="sig-arg">objc</span>)</span>
+  </h3>
+  </td><td align="right" valign="top"
+    >&nbsp;
+    </td>
+  </tr></table>
+  
+  <p>Release an ObjC object to eventually be garbage collected.</p>
+  <dl class="fields">
+    <dt>Parameters:</dt>
+    <dd><ul class="nomargin-top">
+        <li><strong class="pname"><code>objc</code></strong> - The object to release (<a 
+          href="pycocoa.runtime.ObjCInstance-class.html" 
+          class="link">ObjCInstance</a>).</li>
+    </ul></dd>
+    <dt>Raises:</dt>
+    <dd><ul class="nomargin-top">
+        <li><code><strong class='fraise'>TypeError</strong></code> - If <i>objc</i> can't be released.</li>
+    </ul></dd>
+  </dl>
+</td></tr></table>
+</div>
+<a name="retain"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">retain</span>(<span class="sig-arg">objc</span>)</span>
+  </h3>
+  </td><td align="right" valign="top"
+    >&nbsp;
+    </td>
+  </tr></table>
+  
+  <p>Prevent an ObjC object from being garbage collected.</p>
+  <dl class="fields">
+    <dt>Parameters:</dt>
+    <dd><ul class="nomargin-top">
+        <li><strong class="pname"><code>objc</code></strong> - The object to retain (<a 
+          href="pycocoa.runtime.ObjCInstance-class.html" 
+          class="link">ObjCInstance</a>).</li>
+    </ul></dd>
+    <dt>Returns:</dt>
+        <dd>The retained object (<a 
+          href="pycocoa.runtime.ObjCInstance-class.html" 
+          class="link">ObjCInstance</a>).</dd>
+    <dt>Raises:</dt>
+    <dd><ul class="nomargin-top">
+        <li><code><strong class='fraise'>TypeError</strong></code> - If <i>objc</i> can't be retained.</li>
+    </ul></dd>
+  </dl>
+</td></tr></table>
 </div>
 <a name="send_message"></a>
 <div>
@@ -7622,7 +7664,7 @@ ndle 10048c950 at 10301ec50&gt;">&lt;CDLL '/System/Library/Frameworks/Foundation
 <tr><td>
   <table width="100%" cellpadding="0" cellspacing="0" border="0">
   <tr valign="top"><td>
-  <h3 class="epydoc"><span class="sig"><span class="sig-name">set_ivar</span>(<span class="sig-arg">obj</span>,
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">set_ivar</span>(<span class="sig-arg">objc</span>,
         <span class="sig-arg">name</span>,
         <span class="sig-arg">value</span>,
         <span class="sig-arg">ctype</span>=<span class="sig-default">None</span>)</span>
@@ -7636,7 +7678,7 @@ ndle 10048c950 at 10301ec50&gt;">&lt;CDLL '/System/Library/Frameworks/Foundation
   <dl class="fields">
     <dt>Parameters:</dt>
     <dd><ul class="nomargin-top">
-        <li><strong class="pname"><code>obj</code></strong> - The instance (<code>Object</code>).</li>
+        <li><strong class="pname"><code>objc</code></strong> - The instance (<code>Object</code>).</li>
         <li><strong class="pname"><code>name</code></strong> - Name of the ivar (<code>str</code>).</li>
         <li><strong class="pname"><code>value</code></strong> - New value for the ivar (<code>any</code>).</li>
         <li><strong class="pname"><code>ctype</code></strong> - Optional, the ivar type (<code>ctypes</code>).</li>
@@ -8354,13 +8396,13 @@ traits='Bold', weight=9),
   <dl class="fields">
     <dt>Value:</dt>
       <dd><table><tr><td><pre class="variable">
-NSMain.Application=NSApplication(&lt;Id_t at 0x106c18b90&gt;) of 0x105ac4da0<span class="variable-linewrap"><img src="crarr.png" alt="\" /></span>
+NSMain.Application=NSApplication(&lt;Id_t at 0x107141f80&gt;) of 0x100387760<span class="variable-linewrap"><img src="crarr.png" alt="\" /></span>
 ,
-      .BooleanNO=NSBoolean(&lt;Id_t at 0x106c0ef80&gt;) of 0x7fff8dcb63f8,
-      .BooleanYES=NSBoolean(&lt;Id_t at 0x106a13ef0&gt;) of 0x7fff8dcb63e8,
-      .Bundle=NSBundle(&lt;Id_t at 0x106c0e3b0&gt;) of 0x1005e0220,
+      .BooleanNO=NSBoolean(&lt;Id_t at 0x1071417a0&gt;) of 0x7fff8dcb63f8,
+      .BooleanYES=NSBoolean(&lt;Id_t at 0x10713df80&gt;) of 0x7fff8dcb63e8,
+      .Bundle=NSBundle(&lt;Id_t at 0x106ca3200&gt;) of 0x102245820,
       .BundleName=NSConstantString('CFBundleName'),
-      .FontManager=NSFontManager(&lt;Id_t at 0x106a13b00&gt;) of 0x105adfff0<span class="variable-linewrap"><img src="crarr.png" alt="\" /></span>
+      .FontManager=NSFontManager(&lt;Id_t at 0x106ab7dd0&gt;) of 0x105e12230<span class="variable-linewrap"><img src="crarr.png" alt="\" /></span>
 ,
 <code class="variable-ellipsis">...</code>
 </pre></td></tr></table>
@@ -8446,7 +8488,7 @@ WindowStyle.Closable=2,
     <dt>Value:</dt>
       <dd><table><tr><td><pre class="variable">
 &lt;CDLL '/System/Library/Frameworks/AppKit.framework/AppKit', handle 100<span class="variable-linewrap"><img src="crarr.png" alt="\" /></span>
-44e730 at 103013490&gt;
+496f70 at 10275b450&gt;
 </pre></td></tr></table>
 </dd>
   </dl>
@@ -8465,7 +8507,7 @@ WindowStyle.Closable=2,
     <dt>Value:</dt>
       <dd><table><tr><td><pre class="variable">
 &lt;CDLL '/System/Library/Frameworks/CoreFoundation.framework/CoreFoundat<span class="variable-linewrap"><img src="crarr.png" alt="\" /></span>
-ion', handle 10c8a6800 at 102e08910&gt;
+ion', handle 104213800 at 1027438d0&gt;
 </pre></td></tr></table>
 </dd>
   </dl>
@@ -8484,7 +8526,7 @@ ion', handle 10c8a6800 at 102e08910&gt;
     <dt>Value:</dt>
       <dd><table><tr><td><pre class="variable">
 &lt;CDLL '/System/Library/Frameworks/CoreText.framework/CoreText', handle<span class="variable-linewrap"><img src="crarr.png" alt="\" /></span>
- 10048dae0 at 10301e610&gt;
+ 100477bc0 at 1027695d0&gt;
 </pre></td></tr></table>
 </dd>
   </dl>
@@ -8503,7 +8545,7 @@ ion', handle 10c8a6800 at 102e08910&gt;
     <dt>Value:</dt>
       <dd><table><tr><td><pre class="variable">
 &lt;CDLL '/System/Library/Frameworks/Foundation.framework/Foundation', ha<span class="variable-linewrap"><img src="crarr.png" alt="\" /></span>
-ndle 10048c950 at 10301ec50&gt;
+ndle 100476aa0 at 102769c10&gt;
 </pre></td></tr></table>
 </dd>
   </dl>
@@ -8521,7 +8563,7 @@ ndle 10048c950 at 10301ec50&gt;
   <dl class="fields">
     <dt>Value:</dt>
       <dd><table><tr><td><pre class="variable">
-&lt;CDLL '/usr/lib/libobjc.dylib', handle 10c8a8680 at 10301ea90&gt;
+&lt;CDLL '/usr/lib/libobjc.dylib', handle 104215680 at 102769a50&gt;
 </pre></td></tr></table>
 </dd>
   </dl>
@@ -8540,7 +8582,7 @@ ndle 10048c950 at 10301ec50&gt;
     <dt>Value:</dt>
       <dd><table><tr><td><pre class="variable">
 &lt;CDLL '/System/Library/Frameworks/quartz.framework/quartz', handle 100<span class="variable-linewrap"><img src="crarr.png" alt="\" /></span>
-4a0870 at 1030136d0&gt;
+4ab7e0 at 10275b690&gt;
 </pre></td></tr></table>
 </dd>
   </dl>
@@ -8578,7 +8620,7 @@ ndle 10048c950 at 10301ec50&gt;
 <table border="0" cellpadding="0" cellspacing="0" width="100%%">
   <tr>
     <td align="left" class="footer">
-    Generated by Epydoc 3.0.1 on Tue Jun 12 19:49:46 2018
+    Generated by Epydoc 3.0.1 on Thu Jun 14 12:38:56 2018
     </td>
     <td align="right" class="footer">
       <a target="mainFrame" href="http://epydoc.sourceforge.net"
