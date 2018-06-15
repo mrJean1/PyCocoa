@@ -24,10 +24,10 @@ and I{simple_VLCplayer.py} require installation of the U{VLC App
 <http://www.VideoLan.org/vlc/download-macosx.html>} for I{macOS} and the
 corresponding U{Python-VLC<http://PyPI.org/project/python-vlc>} binding.
 
-The tests and examples have only been run with 64-bit Python 2.7.14 and
+The tests and examples have only been run with 64-bit Python 2.7.15 and
 3.6.5 using U{Python-VLC<http://PyPI.org/project/python-vlc>} 2.2.6, 3.0.1,
 3.0.2 and 3.0.3 (with the compatible U{VLC App<http://www.VideoLan.org/vlc>}),
-but only on macOS 10.13.4 High Sierra.  PyCocoa has I{not been tested} on
+but only on macOS 10.13.5 High Sierra.  PyCocoa has I{not been tested} on
 iOS nor with 32-bit Python and I{does not work} using
 U{PyPy<http://PyPy.org>} nor with U{Intel(R) Python
 <http://Software.Intel.com/en-us/distribution-for-python>}.
@@ -37,7 +37,7 @@ U{checked<http://GitHub.com/ActiveState/code/tree/master/recipes/Python/546532_P
 with U{PyChecker<http://PyPI.org/project/pychecker>},
 U{PyFlakes<http://PyPI.org/project/pyflakes>},
 U{PyCodeStyle<http://PyPI.org/project/pycodestyle>} (formerly Pep8) and
-U{McCabe<http://PyPI.org/project/mccabe>} using 64-bit Python 2.7.14 and with
+U{McCabe<http://PyPI.org/project/mccabe>} using 64-bit Python 2.7.15 and with
 U{Flake8<http://PyPI.org/project/flake8>} using 64-bit Python 3.6.5.
 
 To install PyCocoa, type C{pip install PyCocoa} or C{easy_install PyCocoa}
@@ -117,7 +117,7 @@ OTHER DEALINGS IN THE SOFTWARE.}
 from os.path import abspath, dirname
 import sys
 
-__version__ = '18.06.14'
+__version__ = '18.06.15'
 
 p = sys.platform
 if not p.startswith('darwin'):
@@ -157,7 +157,7 @@ from windows  import *  # PYCHOK expected
 # cfarray_to_list               = cfArray2list               # PYCHOK expected
 # cfnumber_to_number            = cfNumber2num               # PYCHOK expected
 # cfset_to_set                  = cfSet2set                  # PYCHOK expected
-# CFSTR                         = CFStr                      # PYCHOK expected
+# CFSTR                         = NSStr                      # PYCHOK expected
 # cfstring_to_string            = cfString2str               # PYCHOK expected
 # cftype_to_value               = cfType2py                  # PYCHOK expected
 # create_subclass               = add_subclass               # PYCHOK expected

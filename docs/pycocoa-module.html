@@ -84,11 +84,11 @@
   App</a> for <i>macOS</i> and the corresponding <a 
   href="http://PyPI.org/project/python-vlc" target="_top">Python-VLC</a> 
   binding.</p>
-  <p>The tests and examples have only been run with 64-bit Python 2.7.14 
+  <p>The tests and examples have only been run with 64-bit Python 2.7.15 
   and 3.6.5 using <a href="http://PyPI.org/project/python-vlc" 
   target="_top">Python-VLC</a> 2.2.6, 3.0.1, 3.0.2 and 3.0.3 (with the 
   compatible <a href="http://www.VideoLan.org/vlc" target="_top">VLC 
-  App</a>), but only on macOS 10.13.4 High Sierra.  PyCocoa has <i>not been
+  App</a>), but only on macOS 10.13.5 High Sierra.  PyCocoa has <i>not been
   tested</i> on iOS nor with 32-bit Python and <i>does not work</i> using 
   <a href="http://PyPy.org" target="_top">PyPy</a> nor with <a 
   href="http://Software.Intel.com/en-us/distribution-for-python" 
@@ -100,7 +100,7 @@
   href="http://PyPI.org/project/pyflakes" target="_top">PyFlakes</a>, <a 
   href="http://PyPI.org/project/pycodestyle" target="_top">PyCodeStyle</a> 
   (formerly Pep8) and <a href="http://PyPI.org/project/mccabe" 
-  target="_top">McCabe</a> using 64-bit Python 2.7.14 and with <a 
+  target="_top">McCabe</a> using 64-bit Python 2.7.15 and with <a 
   href="http://PyPI.org/project/flake8" target="_top">Flake8</a> using 
   64-bit Python 3.6.5.</p>
   <p>To install PyCocoa, type <code>pip install PyCocoa</code> or 
@@ -173,7 +173,7 @@
 
 <hr />
 <div class="fields">      <p><strong>Version:</strong>
-        18.06.14
+        18.06.15
       </p>
 </div><!-- ==================== SUBMODULES ==================== -->
 <a name="section-Submodules"></a>
@@ -339,15 +339,6 @@
         <a href="pycocoa.octypes.CFRange_t-class.html" class="summary-name">CFRange_t</a><br />
       ObjC <code>struct</code> with fields <code>loc[ation]</code> and 
         <code>len[gth]</code> (both <code>CFIndex_t</code>).
-    </td>
-  </tr>
-<tr>
-    <td width="15%" align="right" valign="top" class="summary">
-      <span class="summary-type">&nbsp;</span>
-    </td><td class="summary">
-        <a href="pycocoa.nstypes.CFStr-class.html" class="summary-name">CFStr</a><br />
-      Python wrapper for the ObjC <code>CFString</code> class, creating 
-        <i>retained</i> instances, by default.
     </td>
   </tr>
 <tr>
@@ -710,10 +701,8 @@
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
         <a href="pycocoa.nstypes.NSStr-class.html" class="summary-name">NSStr</a><br />
-      Python wrapper for the ObjC <a 
-        href="pycocoa.nstypes-module.html#NSString" 
-        class="link">NSString</a> class, creating <i>auto-released</i> 
-        instances, by default.
+      Python wrapper for the ObjC <code>NS[Constant]String</code> class, 
+        creating <i>auto-released</i> instances, by default.
     </td>
   </tr>
 <tr>
@@ -749,7 +738,7 @@
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
         <a href="pycocoa.runtime.ObjCBoundClassMethod-class.html" class="summary-name">ObjCBoundClassMethod</a><br />
-      Only to distinguish BoundClass- from Bound(Instance)Methods.
+      Only to distinguish bound class from bound (instance) methods.
     </td>
   </tr>
 <tr>
@@ -3285,12 +3274,12 @@
     </td><td class="summary">
         <a href="pycocoa-module.html#Fonts" class="summary-name">Fonts</a> = <code title="Fonts.App=Font(name='Helvetica', family='Helvetica', size=12, weight=5\
 ),
-     .Bold=Font(name='.SFNSText-Bold', family='.SF NS Text', size=13, \
-traits='Bold', weight=9),
-     .BoldItalic=Font(name='.SFNSText-BoldItalic', family='.SF NS Text\
-', size=13, traits='Bold Italic', weight=9),
-     .Italic=Font(name='.SFNSText-Italic', family='.SF NS Text', size=\
-13, traits='Italic', weight=5),
+     .Bold=Font(name='.AppleSystemUIFontBold', family='.AppleSystemUIF\
+ont', size=13, traits='Bold', weight=9),
+     .BoldItalic=Font(name='.AppleSystemUIFontEmphasizedItalic', famil\
+y='.AppleSystemUIFont', size=13, traits='Bold Italic', weight=9),
+     .Italic=Font(name='.AppleSystemUIFontItalic', family='.AppleSyste\
+mUIFont', size=13, traits='Italic', weight=5),
 ...">Fonts.App=Font(name='Helvetica', family='Helvetica', s<code class="variable-ellipsis">...</code></code>
     </td>
   </tr>
@@ -3375,14 +3364,14 @@ traits='Bold', weight=9),
     <td width="15%" align="right" valign="top" class="summary">
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
-        <a name="NSApplicationDidHideNotification"></a><span class="summary-name">NSApplicationDidHideNotification</span> = <code title="c_void_p(140735562117056)">c_void_p(140735562117056)</code>
+        <a name="NSApplicationDidHideNotification"></a><span class="summary-name">NSApplicationDidHideNotification</span> = <code title="c_void_p(140735470510016)">c_void_p(140735470510016)</code>
     </td>
   </tr>
 <tr>
     <td width="15%" align="right" valign="top" class="summary">
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
-        <a name="NSApplicationDidUnhideNotification"></a><span class="summary-name">NSApplicationDidUnhideNotification</span> = <code title="c_void_p(140735562117152)">c_void_p(140735562117152)</code>
+        <a name="NSApplicationDidUnhideNotification"></a><span class="summary-name">NSApplicationDidUnhideNotification</span> = <code title="c_void_p(140735470510112)">c_void_p(140735470510112)</code>
     </td>
   </tr>
 <tr>
@@ -3557,7 +3546,7 @@ traits='Bold', weight=9),
     <td width="15%" align="right" valign="top" class="summary">
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
-        <a name="NSDefaultRunLoopMode"></a><span class="summary-name">NSDefaultRunLoopMode</span> = <code title="c_void_p(140735571296632)">c_void_p(140735571296632)</code>
+        <a name="NSDefaultRunLoopMode"></a><span class="summary-name">NSDefaultRunLoopMode</span> = <code title="c_void_p(140735479689592)">c_void_p(140735479689592)</code>
     </td>
   </tr>
 <tr>
@@ -3613,7 +3602,7 @@ traits='Bold', weight=9),
     <td width="15%" align="right" valign="top" class="summary">
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
-        <a name="NSEventTrackingRunLoopMode"></a><span class="summary-name">NSEventTrackingRunLoopMode</span> = <code title="c_void_p(140735562111744)">c_void_p(140735562111744)</code>
+        <a name="NSEventTrackingRunLoopMode"></a><span class="summary-name">NSEventTrackingRunLoopMode</span> = <code title="c_void_p(140735470504704)">c_void_p(140735470504704)</code>
     </td>
   </tr>
 <tr>
@@ -3991,15 +3980,15 @@ traits='Bold', weight=9),
     <td width="15%" align="right" valign="top" class="summary">
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
-        <a href="pycocoa-module.html#NSMain" class="summary-name">NSMain</a> = <code title="NSMain.Application=NSApplication(&lt;Id_t at 0x107141f80&gt;) of 0x100387760\
-,
-      .BooleanNO=NSBoolean(&lt;Id_t at 0x1071417a0&gt;) of 0x7fff8dcb63f8,
-      .BooleanYES=NSBoolean(&lt;Id_t at 0x10713df80&gt;) of 0x7fff8dcb63e8,
-      .Bundle=NSBundle(&lt;Id_t at 0x106ca3200&gt;) of 0x102245820,
+        <a href="pycocoa-module.html#NSMain" class="summary-name">NSMain</a> = <code title="NSMain.Application=NSApplication(&lt;Id_t at 0x10bca3c20&gt;) of 0x7ff93e1ef\
+cc0,
+      .BooleanNO=NSBoolean(&lt;Id_t at 0x10bca3170&gt;) of 0x7fff885593f8,
+      .BooleanYES=NSBoolean(&lt;Id_t at 0x10b72b560&gt;) of 0x7fff885593e8,
+      .Bundle=NSBundle(&lt;Id_t at 0x10b715710&gt;) of 0x7ff93bcbf2b0,
       .BundleName=NSConstantString('CFBundleName'),
-      .FontManager=NSFontManager(&lt;Id_t at 0x106ab7dd0&gt;) of 0x105e12230\
-,
-...">NSMain.Application=NSApplication(&lt;Id_t at 0x107141f80<code class="variable-ellipsis">...</code></code>
+      .FontManager=NSFontManager(&lt;Id_t at 0x10b715170&gt;) of 0x7ff93be9b\
+870,
+...">NSMain.Application=NSApplication(&lt;Id_t at 0x10bca3c20<code class="variable-ellipsis">...</code></code>
     </td>
   </tr>
 <tr>
@@ -4612,8 +4601,8 @@ traits='Bold', weight=9),
     <td width="15%" align="right" valign="top" class="summary">
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
-        <a href="pycocoa-module.html#libAppKit" class="summary-name">libAppKit</a> = <code title="&lt;CDLL '/System/Library/Frameworks/AppKit.framework/AppKit', handle 100\
-496f70 at 10275b450&gt;">&lt;CDLL '/System/Library/Frameworks/AppKit.framework<code class="variable-ellipsis">...</code></code>
+        <a href="pycocoa-module.html#libAppKit" class="summary-name">libAppKit</a> = <code title="&lt;CDLL '/System/Library/Frameworks/AppKit.framework/AppKit', handle 7ff\
+93bc53510 at 107c2c590&gt;">&lt;CDLL '/System/Library/Frameworks/AppKit.framework<code class="variable-ellipsis">...</code></code>
     </td>
   </tr>
 <tr>
@@ -4621,7 +4610,7 @@ traits='Bold', weight=9),
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
         <a href="pycocoa-module.html#libCF" class="summary-name">libCF</a> = <code title="&lt;CDLL '/System/Library/Frameworks/CoreFoundation.framework/CoreFoundat\
-ion', handle 104213800 at 1027438d0&gt;">&lt;CDLL '/System/Library/Frameworks/CoreFoundation.frame<code class="variable-ellipsis">...</code></code>
+ion', handle 10ddae800 at 107b64990&gt;">&lt;CDLL '/System/Library/Frameworks/CoreFoundation.frame<code class="variable-ellipsis">...</code></code>
     </td>
   </tr>
 <tr>
@@ -4629,7 +4618,7 @@ ion', handle 104213800 at 1027438d0&gt;">&lt;CDLL '/System/Library/Frameworks/Co
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
         <a href="pycocoa-module.html#libCT" class="summary-name">libCT</a> = <code title="&lt;CDLL '/System/Library/Frameworks/CoreText.framework/CoreText', handle\
- 100477bc0 at 1027695d0&gt;">&lt;CDLL '/System/Library/Frameworks/CoreText.framework/C<code class="variable-ellipsis">...</code></code>
+ 7ff93bc5d200 at 107c39710&gt;">&lt;CDLL '/System/Library/Frameworks/CoreText.framework/C<code class="variable-ellipsis">...</code></code>
     </td>
   </tr>
 <tr>
@@ -4637,22 +4626,22 @@ ion', handle 104213800 at 1027438d0&gt;">&lt;CDLL '/System/Library/Frameworks/Co
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
         <a href="pycocoa-module.html#libFoundation" class="summary-name">libFoundation</a> = <code title="&lt;CDLL '/System/Library/Frameworks/Foundation.framework/Foundation', ha\
-ndle 100476aa0 at 102769c10&gt;">&lt;CDLL '/System/Library/Frameworks/Foundation.f<code class="variable-ellipsis">...</code></code>
+ndle 7ff93bc5c0e0 at 107c39d50&gt;">&lt;CDLL '/System/Library/Frameworks/Foundation.f<code class="variable-ellipsis">...</code></code>
     </td>
   </tr>
 <tr>
     <td width="15%" align="right" valign="top" class="summary">
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
-        <a href="pycocoa-module.html#libobjc" class="summary-name">libobjc</a> = <code title="&lt;CDLL '/usr/lib/libobjc.dylib', handle 104215680 at 102769a50&gt;">&lt;CDLL '/usr/lib/libobjc.dylib', handle 104215680 at <code class="variable-ellipsis">...</code></code>
+        <a href="pycocoa-module.html#libobjc" class="summary-name">libobjc</a> = <code title="&lt;CDLL '/usr/lib/libobjc.dylib', handle 10ddb0680 at 107c39b90&gt;">&lt;CDLL '/usr/lib/libobjc.dylib', handle 10ddb0680 at <code class="variable-ellipsis">...</code></code>
     </td>
   </tr>
 <tr>
     <td width="15%" align="right" valign="top" class="summary">
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
-        <a href="pycocoa-module.html#libquartz" class="summary-name">libquartz</a> = <code title="&lt;CDLL '/System/Library/Frameworks/quartz.framework/quartz', handle 100\
-4ab7e0 at 10275b690&gt;">&lt;CDLL '/System/Library/Frameworks/quartz.framework<code class="variable-ellipsis">...</code></code>
+        <a href="pycocoa-module.html#libquartz" class="summary-name">libquartz</a> = <code title="&lt;CDLL '/System/Library/Frameworks/quartz.framework/quartz', handle 7ff\
+93bd849c0 at 107c2c7d0&gt;">&lt;CDLL '/System/Library/Frameworks/quartz.framework<code class="variable-ellipsis">...</code></code>
     </td>
   </tr>
 <tr>
@@ -6130,10 +6119,8 @@ ndle 100476aa0 at 102769c10&gt;">&lt;CDLL '/System/Library/Frameworks/Foundation
   <dl class="fields">
     <dt>Parameters:</dt>
     <dd><ul class="nomargin-top">
-        <li><strong class="pname"><code>path</code></strong> - The alias name (<code>str</code>, <a 
-          href="pycocoa.nstypes.NSStr-class.html" class="link">NSStr</a> or
-          <a href="pycocoa.nstypes.CFStr-class.html" 
-          class="link">CFStr</a>).</li>
+        <li><strong class="pname"><code>path</code></strong> - The alias name (<code>str</code> or <a 
+          href="pycocoa.nstypes.NSStr-class.html" class="link">NSStr</a>).</li>
     </ul></dd>
     <dt>Returns:</dt>
         <dd>The alias' target (<code>str</code>) or <code>None</code> if 
@@ -6647,43 +6634,46 @@ ndle 100476aa0 at 102769c10&gt;">&lt;CDLL '/System/Library/Frameworks/Foundation
         Conversion map:
         <ul>
           <li>
-            NSArray         -&gt; tuple
+            NSArray          -&gt; tuple
           </li>
           <li>
-            NSBoolean       -&gt; bool
+            NSBoolean        -&gt; bool
           </li>
           <li>
-            NSData          -&gt; bytes
+            NSConstantString -&gt; str
           </li>
           <li>
-            NSDecimalNumber -&gt; Decimal
+            NSData           -&gt; bytes
           </li>
           <li>
-            NSDictionary    -&gt; dict
+            NSDecimalNumber  -&gt; Decimal
           </li>
           <li>
-            NSMutableArray  -&gt; list
+            NSDictionary     -&gt; dict
           </li>
           <li>
-            NSMutableSet    -&gt; set
+            NSMutableArray   -&gt; list
           </li>
           <li>
-            NSMutableString -&gt; str
+            NSMutableSet     -&gt; set
           </li>
           <li>
-            NSNumber        -&gt; int or float
+            NSMutableString  -&gt; str
           </li>
           <li>
-            NSNull          -&gt; None
+            NSNumber         -&gt; int or float
           </li>
           <li>
-            NSSet           -&gt; frozenset
+            NSNull           -&gt; None
           </li>
           <li>
-            NSString        -&gt; str
+            NSSet            -&gt; frozenset
           </li>
           <li>
-            NSStr/CFStr     -&gt; str
+            NSString         -&gt; str
+          </li>
+          <li>
+            NSStr            -&gt; str
           </li>
         </ul>
       </p>
@@ -8372,12 +8362,12 @@ FontTrait.Bold=2,
       <dd><table><tr><td><pre class="variable">
 Fonts.App=Font(name='Helvetica', family='Helvetica', size=12, weight=5<span class="variable-linewrap"><img src="crarr.png" alt="\" /></span>
 ),
-     .Bold=Font(name='.SFNSText-Bold', family='.SF NS Text', size=13, <span class="variable-linewrap"><img src="crarr.png" alt="\" /></span>
-traits='Bold', weight=9),
-     .BoldItalic=Font(name='.SFNSText-BoldItalic', family='.SF NS Text<span class="variable-linewrap"><img src="crarr.png" alt="\" /></span>
-', size=13, traits='Bold Italic', weight=9),
-     .Italic=Font(name='.SFNSText-Italic', family='.SF NS Text', size=<span class="variable-linewrap"><img src="crarr.png" alt="\" /></span>
-13, traits='Italic', weight=5),
+     .Bold=Font(name='.AppleSystemUIFontBold', family='.AppleSystemUIF<span class="variable-linewrap"><img src="crarr.png" alt="\" /></span>
+ont', size=13, traits='Bold', weight=9),
+     .BoldItalic=Font(name='.AppleSystemUIFontEmphasizedItalic', famil<span class="variable-linewrap"><img src="crarr.png" alt="\" /></span>
+y='.AppleSystemUIFont', size=13, traits='Bold Italic', weight=9),
+     .Italic=Font(name='.AppleSystemUIFontItalic', family='.AppleSyste<span class="variable-linewrap"><img src="crarr.png" alt="\" /></span>
+mUIFont', size=13, traits='Italic', weight=5),
 <code class="variable-ellipsis">...</code>
 </pre></td></tr></table>
 </dd>
@@ -8396,14 +8386,14 @@ traits='Bold', weight=9),
   <dl class="fields">
     <dt>Value:</dt>
       <dd><table><tr><td><pre class="variable">
-NSMain.Application=NSApplication(&lt;Id_t at 0x107141f80&gt;) of 0x100387760<span class="variable-linewrap"><img src="crarr.png" alt="\" /></span>
-,
-      .BooleanNO=NSBoolean(&lt;Id_t at 0x1071417a0&gt;) of 0x7fff8dcb63f8,
-      .BooleanYES=NSBoolean(&lt;Id_t at 0x10713df80&gt;) of 0x7fff8dcb63e8,
-      .Bundle=NSBundle(&lt;Id_t at 0x106ca3200&gt;) of 0x102245820,
+NSMain.Application=NSApplication(&lt;Id_t at 0x10bca3c20&gt;) of 0x7ff93e1ef<span class="variable-linewrap"><img src="crarr.png" alt="\" /></span>
+cc0,
+      .BooleanNO=NSBoolean(&lt;Id_t at 0x10bca3170&gt;) of 0x7fff885593f8,
+      .BooleanYES=NSBoolean(&lt;Id_t at 0x10b72b560&gt;) of 0x7fff885593e8,
+      .Bundle=NSBundle(&lt;Id_t at 0x10b715710&gt;) of 0x7ff93bcbf2b0,
       .BundleName=NSConstantString('CFBundleName'),
-      .FontManager=NSFontManager(&lt;Id_t at 0x106ab7dd0&gt;) of 0x105e12230<span class="variable-linewrap"><img src="crarr.png" alt="\" /></span>
-,
+      .FontManager=NSFontManager(&lt;Id_t at 0x10b715170&gt;) of 0x7ff93be9b<span class="variable-linewrap"><img src="crarr.png" alt="\" /></span>
+870,
 <code class="variable-ellipsis">...</code>
 </pre></td></tr></table>
 </dd>
@@ -8487,8 +8477,8 @@ WindowStyle.Closable=2,
   <dl class="fields">
     <dt>Value:</dt>
       <dd><table><tr><td><pre class="variable">
-&lt;CDLL '/System/Library/Frameworks/AppKit.framework/AppKit', handle 100<span class="variable-linewrap"><img src="crarr.png" alt="\" /></span>
-496f70 at 10275b450&gt;
+&lt;CDLL '/System/Library/Frameworks/AppKit.framework/AppKit', handle 7ff<span class="variable-linewrap"><img src="crarr.png" alt="\" /></span>
+93bc53510 at 107c2c590&gt;
 </pre></td></tr></table>
 </dd>
   </dl>
@@ -8507,7 +8497,7 @@ WindowStyle.Closable=2,
     <dt>Value:</dt>
       <dd><table><tr><td><pre class="variable">
 &lt;CDLL '/System/Library/Frameworks/CoreFoundation.framework/CoreFoundat<span class="variable-linewrap"><img src="crarr.png" alt="\" /></span>
-ion', handle 104213800 at 1027438d0&gt;
+ion', handle 10ddae800 at 107b64990&gt;
 </pre></td></tr></table>
 </dd>
   </dl>
@@ -8526,7 +8516,7 @@ ion', handle 104213800 at 1027438d0&gt;
     <dt>Value:</dt>
       <dd><table><tr><td><pre class="variable">
 &lt;CDLL '/System/Library/Frameworks/CoreText.framework/CoreText', handle<span class="variable-linewrap"><img src="crarr.png" alt="\" /></span>
- 100477bc0 at 1027695d0&gt;
+ 7ff93bc5d200 at 107c39710&gt;
 </pre></td></tr></table>
 </dd>
   </dl>
@@ -8545,7 +8535,7 @@ ion', handle 104213800 at 1027438d0&gt;
     <dt>Value:</dt>
       <dd><table><tr><td><pre class="variable">
 &lt;CDLL '/System/Library/Frameworks/Foundation.framework/Foundation', ha<span class="variable-linewrap"><img src="crarr.png" alt="\" /></span>
-ndle 100476aa0 at 102769c10&gt;
+ndle 7ff93bc5c0e0 at 107c39d50&gt;
 </pre></td></tr></table>
 </dd>
   </dl>
@@ -8563,7 +8553,7 @@ ndle 100476aa0 at 102769c10&gt;
   <dl class="fields">
     <dt>Value:</dt>
       <dd><table><tr><td><pre class="variable">
-&lt;CDLL '/usr/lib/libobjc.dylib', handle 104215680 at 102769a50&gt;
+&lt;CDLL '/usr/lib/libobjc.dylib', handle 10ddb0680 at 107c39b90&gt;
 </pre></td></tr></table>
 </dd>
   </dl>
@@ -8581,8 +8571,8 @@ ndle 100476aa0 at 102769c10&gt;
   <dl class="fields">
     <dt>Value:</dt>
       <dd><table><tr><td><pre class="variable">
-&lt;CDLL '/System/Library/Frameworks/quartz.framework/quartz', handle 100<span class="variable-linewrap"><img src="crarr.png" alt="\" /></span>
-4ab7e0 at 10275b690&gt;
+&lt;CDLL '/System/Library/Frameworks/quartz.framework/quartz', handle 7ff<span class="variable-linewrap"><img src="crarr.png" alt="\" /></span>
+93bd849c0 at 107c2c7d0&gt;
 </pre></td></tr></table>
 </dd>
   </dl>
@@ -8620,7 +8610,7 @@ ndle 100476aa0 at 102769c10&gt;
 <table border="0" cellpadding="0" cellspacing="0" width="100%%">
   <tr>
     <td align="left" class="footer">
-    Generated by Epydoc 3.0.1 on Thu Jun 14 12:38:56 2018
+    Generated by Epydoc 3.0.1 on Fri Jun 15 13:50:01 2018
     </td>
     <td align="right" class="footer">
       <a target="mainFrame" href="http://epydoc.sourceforge.net"

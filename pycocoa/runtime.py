@@ -86,7 +86,7 @@ from oslibs  import cfString2str, libobjc
 from utils   import bytes2str, _Constants, _exports, missing, name2py, \
                     printf, property2, str2bytes
 
-__version__ = '18.06.14'
+__version__ = '18.06.15'
 
 # <http://Developer.Apple.com/documentation/objectivec/
 #         objc_associationpolicy?language=objc>
@@ -100,7 +100,6 @@ _objc_msgSend_fpret      = 'objc_msgSend_fpret'
 _objc_msgSend_stret      = 'objc_msgSend_stret'
 _objc_msgSendSuper       = 'objc_msgSendSuper'
 _objc_msgSendSuper_stret = 'objc_msgSendSuper_stret'
-
 
 # <http://Developer.Apple.com/documentation/objectivec/
 #         1441499-object_getinstancevariable>
@@ -209,6 +208,8 @@ def _Xargs(x, name, argtypes, restype='void'):
 class _ObjCBase(object):
     '''Base class for Python C{runtime.ObjC...} classes.
     '''
+    _as_parameter_ = None  # for ctypes
+
     def __repr__(self):
         return '<%s(%s) at %#x>' % (self.__class__.__name__, self, id(self))
 
@@ -240,7 +241,7 @@ class ObjCBoundMethod(_ObjCBase):
 
 
 class ObjCBoundClassMethod(ObjCBoundMethod):
-    '''Only to distinguish BoundClass- from Bound(Instance)Methods.
+    '''Only to distinguish bound class from bound (instance) methods.
     '''
     pass
 
@@ -248,8 +249,6 @@ class ObjCBoundClassMethod(ObjCBoundMethod):
 class ObjCClass(_ObjCBase):
     '''Python wrapper for an ObjC class.
     '''
-    _as_paramater = None  # for ctypes
-
     _classmethods = {}  # shut PyChecker up
     _methods = {}
 
@@ -418,18 +417,17 @@ class ObjCClass(_ObjCBase):
 class ObjCInstance(_ObjCBase):
     '''Python wrapper for an ObjC instance.
     '''
-    _as_paramater = None  # for ctypes
-
     _objc_cache = {}  # see _NSDeallocObserver, example class_wrapper4.py
     _objc_class = None
     _objc_ptr   = None  # shut PyChecker up
 
     _retained = 1
 
-    def __new__(cls, objc_ptr):
-        '''New L{ObjCInstance} or return a previously created one.
+    def __new__(cls, objc_ptr, cached=True):
+        '''New L{ObjCInstance} or return a previously created, cached one.
 
-           @param objc_ptr: The ObjC class L{Id_t}.
+           @param objc_ptr: The ObjC instance (L{Id_t} or C{c_void_p}).
+           @keyword cached: Cache new instance (C{bool}).
         '''
         # Make sure that obj_ptr is wrapped in an Id_t.
         if not isinstance(objc_ptr, Id_t):
@@ -438,17 +436,19 @@ class ObjCInstance(_ObjCBase):
         if not objc_ptr.value:
             return None  # nil pointer
 
-        # Check if we've already created an ObjCInstance for this
-        # Id_t(objc_ptr) and if so, return it.  Otherwise, create
-        # an ObjCInstance any object pointer first encountered.
-        # That ObjCInstance will persist until the object is de-
-        # allocated by ObjC, see _NSDeallocObserver below.
-        try:
-            self = cls._objc_cache[objc_ptr.value]
-            self._retained += 1  # retain(self) causes infinite recursion
-            return self
-        except KeyError:
-            pass
+        if cached:
+            # Check if we've already created an ObjCInstance for this
+            # Id_t(objc_ptr) and if so, return it.  Otherwise, create
+            # an ObjCInstance any object pointer first encountered.
+            # That ObjCInstance will persist until the object is de-
+            # allocated by ObjC, see _ns/NSDeallocObserver below.
+            try:
+                # cls._objc_cache == ObjCInstance._objc_cache
+                self = cls._objc_cache[objc_ptr.value]
+                self._retained += 1  # retain(self) is infinitely recursive
+                return self
+            except KeyError:
+                pass
 
         # Otherwise, create a new ObjCInstance.
         self = super(ObjCInstance, cls).__new__(cls)  # objc_instance
@@ -459,14 +459,18 @@ class ObjCInstance(_ObjCBase):
 
         _ObjC_log(self, 'new', 'I')
 
-        # Store new object in the dictionary of cached objects, keyed
-        # by the (integer) memory address pointed to by the obj_ptr.
-        cls._objc_cache[objc_ptr.value] = self
+        if cached:
+            # store new object in the dictionary of cached objects,
+            # keyed by the (integer) memory address pointed to by the
+            # obj_ptr (cls._objc_cache == ObjCInstance._objc_cache)
+            cls._objc_cache[objc_ptr.value] = self
 
-        # Associate a _NSDeallocObserver with this object, but
-        # only if this object is not an ObjC class.
-        if not isClass(self):
-            _nsDeallocObserver(objc_ptr.value)  # note, objc_ptr_value!
+            # Associate a _NSDeallocObserver with this object, but
+            # only if this object is not an ObjC class.
+            if not isClass(self):
+                # observe the objc_ptr.value, the
+                # key used for the _objc_cache dict
+                _nsDeallocObserver(objc_ptr.value)
 
         return self
 
@@ -780,8 +784,6 @@ class ObjCSubclass(_ObjCBase):
        >>> myclass = ObjCClass('MySubclassName')
        >>> myinstance = myclass.alloc().init()
     '''
-    _as_paramater = None  # for ctypes
-
     _imp_cache = {}  # decorated class/method cache
     _name      = b''
 
@@ -1157,7 +1159,7 @@ def retain(objc):
 
 def _receiver(receiver):
     # from PyBee/Rubicon-Objc <http://GitHub.com/pybee/rubicon-objc>
-    receiver = getattr(receiver, '_as_parameter', receiver)
+    receiver = getattr(receiver, '_as_parameter_', receiver)
     if isinstance(receiver, Id_t):
         return receiver
     elif isinstance(receiver, (c_void_p, ObjCInstance)):

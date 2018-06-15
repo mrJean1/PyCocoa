@@ -70,31 +70,18 @@ from ctypes  import ArgumentError, byref, cast, c_byte, CFUNCTYPE, c_void_p
 from getters import get_selector
 from octypes import Array_t, Class_t, c_struct_t, Id_t, NSRect4_t, \
                     ObjC_t, SEL_t, Set_t
-from oslibs  import cfNumber2bool, cfNumber2num, CFStringEncoding, \
-                    cfString2str, cfURLResolveAlias, libAppKit, libCF, \
-                    libFoundation, libobjc, NO, NSExceptionHandler_t, YES
+from oslibs  import cfNumber2bool, cfNumber2num, cfString, cfString2str, \
+                    cfURLResolveAlias, libAppKit, libCF, libFoundation, \
+                    libobjc, NO, NSExceptionHandler_t, YES
 from runtime import isInstanceOf, ObjCClass, ObjCInstance, retain, \
                     send_message, _Xargs
 from utils   import bytes2str, _ByteStrs, clip, _exports, _Globals, \
                     isinstanceOf, iterbytes, missing, _Singletons, \
-                    str2bytes, _Types  # printf
+                    _Types  # printf
 
 from os import linesep, path as os_path
 
-__version__ = '18.06.14'
-
-
-def _lambda(arg):
-    # inlieu of  lambda arg: arg
-    return arg
-
-
-def _ns2ctype2py(ns, ctype):
-    # helper function
-    if not isinstance(ns, ctype):
-        ns = ctype(ns)
-    return ns2py(ns)
-
+__version__ = '18.06.15'
 
 # some commonly used Foundation and Cocoa classes, described here
 # <http://OMZ-Software.com/pythonista/docs/ios/objc_util.html>
@@ -171,42 +158,16 @@ NSLong     = NSNumber.numberWithLong_
 NSLongLong = NSNumber.numberWithLongLong_
 
 
-class CFStr(ObjCInstance):
-    '''Python wrapper for the ObjC C{CFString} class,
-       creating I{retained} instances, by default.
-    '''
-    _str = None
+def _lambda(arg):
+    # inlieu of  lambda arg: arg
+    return arg
 
-    def __new__(cls, ustr):
-        '''New L{CFStr}.
 
-           @param ustr: The string value (C{str} or C{bytes}).
-
-           @return: The string (L{CFStr}).
-        '''
-        ns = libCF.CFStringCreateWithCString(None, str2bytes(ustr),
-                                                   CFStringEncoding)
-        # ObjC class is ._objc_class or __NSCFConstantString
-        self = super(CFStr, cls).__new__(cls, ns)  # Id_t
-        self._str = bytes2str(ustr)
-        return self
-
-    def __str__(self):
-        return '%s(%r)' % (self.objc_classname, clip(self.value))
-
-#   @property
-#   def objc_classname(self):
-#       '''Get the ObjC class name (C{str}).
-#       '''
-#       return self.__class__.__name__
-
-    @property
-    def value(self):
-        '''Get the original C{CFStr} value (C{str}).
-        '''
-        return self._str
-
-    str = value
+def _ns2ctype2py(ns, ctype):
+    # helper function
+    if not isinstance(ns, ctype):
+        ns = ctype(ns)
+    return ns2py(ns)
 
 
 # We need to be able to create raw NSDecimalNumber objects.  If we use
@@ -328,7 +289,7 @@ class _NSMain(_Singletons):
         '''Get the C{NS/CFBundleName}.
         '''
         if self._BundleName is None:
-            _NSMain._BundleName = CFStr('CFBundleName')
+            _NSMain._BundleName = NSStr('CFBundleName', auto=False)
         return self._BundleName
 
     @property
@@ -407,35 +368,59 @@ class _NSMain(_Singletons):
 
 
 NSMain  = _NSMain()  # global C{NS...} singletons
-_NSStr1 = {}  # empty and single character strings
+_NSStr1 = {}  # empty and single-character strings
 
 
-class NSStr(CFStr):
-    '''Python wrapper for the ObjC L{NSString} class,
+class NSStr(ObjCInstance):
+    '''Python wrapper for the ObjC C{NS[Constant]String} class,
        creating I{auto-released} instances, by default.
     '''
+    _str = None
+
     def __new__(cls, ustr, auto=True):
         '''New L{NSStr}.
 
-           @param ustr: The string value (C{str} or C{bytes}).
-           @keyword auto: Retain or auto-release (C{bool}).
+           @param ustr: The string value (C{str} or C{unicode}).
+           @keyword auto: Auto-release or retain (C{bool}).
 
            @return: The string (L{NSStr}).
         '''
         if len(ustr) > 1:
             # the ObjC class is .objc_class, __NSCFString, NSConstantString, etc.
-            self = super(NSStr, cls).__new__(cls, ustr)
+            self = super(NSStr, cls).__new__(cls, cfString(ustr), cached=True)
+            self._str = bytes2str(ustr)
             if auto:
                 # XXX use .autorelease, iff .release causes
                 # a RuntimeError for some (shared?) strings
-                self.release()  # PYCHOK expected
+                self.release()
+
         else:
-            # singletons for empty and single character strings
+            # singletons for empty and single-character strings
             self = _NSStr1.get(ustr, None)
             if self is None:
-                _NSStr1[ustr] = self = super(NSStr, cls).__new__(cls, ustr)
+                self = super(NSStr, cls).__new__(cls, cfString(ustr), cached=False)
+                self._str = bytes2str(ustr)
+                _NSStr1[ustr] = self
             retain(self)
+
         return self
+
+    def __str__(self):
+        return '%s(%r)' % (self.objc_classname, clip(self.value))
+
+#   @property
+#   def objc_classname(self):
+#       '''Get the ObjC class name (C{str}).
+#       '''
+#       return self.__class__.__name__
+
+    @property
+    def value(self):
+        '''Get the original string value (C{str}).
+        '''
+        return self._str
+
+    str = value
 
 
 class at(NSStr):
@@ -451,7 +436,7 @@ class at(NSStr):
 def isAlias(path):
     '''Resolve a macOS file or folder alias.
 
-       @param path: The alias name (C{str}, L{NSStr} or L{CFStr}).
+       @param path: The alias name (C{str} or L{NSStr}).
 
        @return: The alias' target (C{str}) or C{None} if I{path}
                 isn't a macOS alias.
@@ -461,7 +446,7 @@ def isAlias(path):
     '''
     if isinstance(path, _ByteStrs):
         path = NSStr(path)
-    elif isinstanceOf(path, NSStr, CFStr, name='path'):
+    elif isinstanceOf(path, NSStr, name='path'):
         pass
 
     u = NSURL.alloc().initFileURLWithPath_(path)
@@ -482,9 +467,13 @@ def isLink(path):
        @return: The link's or alias' target (C{str}) or
                 C{None} if I{path} isn't a link or alias.
     '''
-    r = os_path.islink(path)
+    if isinstance(path, _ByteStrs):
+        p = path
+    elif isinstanceOf(path, NSStr, name='path'):
+        p = path.str
+    r = os_path.islink(p)
     if r:
-        r = os_path.realpath(path)
+        r = os_path.realpath(p)
     else:
         r = isAlias(path)
     return r
@@ -659,7 +648,7 @@ def nsLog(ns_fmt, *ns_args):
        @note: The I{ns_fmt} and all I{ns_args} must be C{NS...} ObjC
               instances.
     '''
-    if isinstanceOf(ns_fmt, NSStr, CFStr, name='ns_fmt'):
+    if isinstanceOf(ns_fmt, NSStr, name='ns_fmt'):
         for n, ns in enumerate(ns_args):
             if not isinstance(ns, (ObjCInstance, c_void_p)):
                 n = 'ns_arg[%s]' % (n,)  # raise error
@@ -761,7 +750,7 @@ def nsString2str(ns, dflt=None):  # XXX an NS*String method
        @return: The string (C{str} or C{unicode}) or I{dflt}.
     '''
     # XXX need c_void_p for nested strings in lists, sets, etc.?
-    if not isinstanceOf(ns, CFStr, NSStr, c_void_p):
+    if not isinstanceOf(ns, NSStr, c_void_p):
         isInstanceOf(ns, NSConstantString, NSMutableString, NSString,
                          c_void_p, name='ns')
 
@@ -886,21 +875,22 @@ def ns2py(ns, dflt=None):  # XXX an NSObject method?
 
        @note: Conversion map:
 
-        - NSArray         -> tuple
-        - NSBoolean       -> bool
-        - NSData          -> bytes
-        - NSDecimalNumber -> Decimal
-        - NSDictionary    -> dict
-        - NSMutableArray  -> list
-        - NSMutableSet    -> set
-        - NSMutableString -> str
-        - NSNumber        -> int or float
-        - NSNull          -> None
-        - NSSet           -> frozenset
-        - NSString        -> str
-        - NSStr/CFStr     -> str
+        - NSArray          -> tuple
+        - NSBoolean        -> bool
+        - NSConstantString -> str
+        - NSData           -> bytes
+        - NSDecimalNumber  -> Decimal
+        - NSDictionary     -> dict
+        - NSMutableArray   -> list
+        - NSMutableSet     -> set
+        - NSMutableString  -> str
+        - NSNumber         -> int or float
+        - NSNull           -> None
+        - NSSet            -> frozenset
+        - NSString         -> str
+        - NSStr            -> str
     '''
-    if isinstance(ns, (CFStr, NSStr)):
+    if isinstance(ns, NSStr):
         return ns.str
 
     elif ns is not None:  # not isNone(ns)
@@ -974,7 +964,7 @@ def ns2Type(ns):
 
 
 # filter locals() for .__init__.py
-__all__ = _exports(locals(), 'at', 'CFStr', 'isAlias', 'isLink', 'isNone',
+__all__ = _exports(locals(), 'at', 'isAlias', 'isLink', 'isNone',
                    starts=('NS', 'ns'),
                    ends='2NS')
 

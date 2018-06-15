@@ -61,15 +61,13 @@
 <!-- ==================== CLASS DESCRIPTION ==================== -->
 <h1 class="epydoc">Class NSStr</h1><p class="nomargin-top"></p>
 <pre class="base-tree">
-       object --+            
-                |            
-runtime._ObjCBase --+        
-                    |        
- <a href="pycocoa.runtime.ObjCInstance-class.html">runtime.ObjCInstance</a> --+    
-                        |    
-                    <a href="pycocoa.nstypes.CFStr-class.html">CFStr</a> --+
-                            |
-                           <strong class="uidshort">NSStr</strong>
+       object --+        
+                |        
+runtime._ObjCBase --+    
+                    |    
+ <a href="pycocoa.runtime.ObjCInstance-class.html">runtime.ObjCInstance</a> --+
+                        |
+                       <strong class="uidshort">NSStr</strong>
 </pre>
 
 <dl><dt>Known Subclasses:</dt>
@@ -79,9 +77,8 @@ runtime._ObjCBase --+
 </dd></dl>
 
 <hr />
-<p>Python wrapper for the ObjC <a 
-  href="pycocoa.nstypes-module.html#NSString" class="link">NSString</a> 
-  class, creating <i>auto-released</i> instances, by default.</p>
+<p>Python wrapper for the ObjC <code>NS[Constant]String</code> class, 
+  creating <i>auto-released</i> instances, by default.</p>
 
 <!-- ==================== INSTANCE METHODS ==================== -->
 <a name="section-InstanceMethods"></a>
@@ -91,11 +88,25 @@ runtime._ObjCBase --+
   <td align="left" colspan="2" class="table-header">
     <span class="table-header">Instance Methods</span></td>
 </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a href="pycocoa.nstypes.NSStr-class.html#__str__" class="summary-sig-name">__str__</a>(<span class="summary-sig-arg">self</span>)</span><br />
+      str(x)</td>
+          <td align="right" valign="top">
+            
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
   <tr>
     <td colspan="2" class="summary">
-    <p class="indent-wrapped-lines"><b>Inherited from <code><a href="pycocoa.nstypes.CFStr-class.html">CFStr</a></code></b>:
-      <code><a href="pycocoa.nstypes.CFStr-class.html#__str__">__str__</a></code>
-      </p>
     <p class="indent-wrapped-lines"><b>Inherited from <code><a href="pycocoa.runtime.ObjCInstance-class.html">runtime.ObjCInstance</a></code></b>:
       <code><a href="pycocoa.runtime.ObjCInstance-class.html#__getattr__">__getattr__</a></code>,
       <code><a href="pycocoa.runtime.ObjCInstance-class.html#release">release</a></code>,
@@ -148,6 +159,22 @@ runtime._ObjCBase --+
     </td>
   </tr>
 </table>
+<!-- ==================== CLASS VARIABLES ==================== -->
+<a name="section-ClassVariables"></a>
+<table class="summary" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr bgcolor="#70b0f0" class="table-header">
+  <td align="left" colspan="2" class="table-header">
+    <span class="table-header">Class Variables</span></td>
+</tr>
+  <tr>
+    <td colspan="2" class="summary">
+    <p class="indent-wrapped-lines"><b>Inherited from <code>runtime._ObjCBase</code></b>:
+      <code>_as_parameter_</code>
+      </p>
+    </td>
+  </tr>
+</table>
 <!-- ==================== PROPERTIES ==================== -->
 <a name="section-Properties"></a>
 <table class="summary" border="1" cellpadding="3"
@@ -156,12 +183,24 @@ runtime._ObjCBase --+
   <td align="left" colspan="2" class="table-header">
     <span class="table-header">Properties</span></td>
 </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="pycocoa.nstypes.NSStr-class.html#value" class="summary-name">value</a><br />
+      Get the original string value (<code>str</code>).
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="pycocoa.nstypes.NSStr-class.html#str" class="summary-name">str</a><br />
+      Get the original string value (<code>str</code>).
+    </td>
+  </tr>
   <tr>
     <td colspan="2" class="summary">
-    <p class="indent-wrapped-lines"><b>Inherited from <code><a href="pycocoa.nstypes.CFStr-class.html">CFStr</a></code></b>:
-      <code><a href="pycocoa.nstypes.CFStr-class.html#str">str</a></code>,
-      <code><a href="pycocoa.nstypes.CFStr-class.html#value">value</a></code>
-      </p>
     <p class="indent-wrapped-lines"><b>Inherited from <code><a href="pycocoa.runtime.ObjCInstance-class.html">runtime.ObjCInstance</a></code></b>:
       <code><a href="pycocoa.runtime.ObjCInstance-class.html#Type">Type</a></code>,
       <code><a href="pycocoa.runtime.ObjCInstance-class.html#objc_class">objc_class</a></code>,
@@ -207,8 +246,8 @@ runtime._ObjCBase --+
   <dl class="fields">
     <dt>Parameters:</dt>
     <dd><ul class="nomargin-top">
-        <li><strong class="pname"><code>ustr</code></strong> - The string value (<code>str</code> or <code>bytes</code>).</li>
-        <li><strong class="pname"><code>auto</code></strong> - Retain or auto-release (<code>bool</code>).</li>
+        <li><strong class="pname"><code>ustr</code></strong> - The string value (<code>str</code> or <code>unicode</code>).</li>
+        <li><strong class="pname"><code>auto</code></strong> - Auto-release or retain (<code>bool</code>).</li>
     </ul></dd>
     <dt>Returns: a new object with type S, a subtype of T</dt>
         <dd>The string (<a href="pycocoa.nstypes.NSStr-class.html" 
@@ -216,6 +255,70 @@ runtime._ObjCBase --+
     <dt>Overrides:
         object.__new__
     </dt>
+  </dl>
+</td></tr></table>
+</div>
+<a name="__str__"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">__str__</span>(<span class="sig-arg">self</span>)</span>
+    <br /><em class="fname">(Informal representation operator)</em>
+  </h3>
+  </td><td align="right" valign="top"
+    >&nbsp;
+    </td>
+  </tr></table>
+  
+  <p>str(x)</p>
+  <dl class="fields">
+    <dt>Overrides:
+        object.__str__
+        <dd><em class="note">(inherited documentation)</em></dd>
+    </dt>
+  </dl>
+</td></tr></table>
+</div>
+<br />
+<!-- ==================== PROPERTY DETAILS ==================== -->
+<a name="section-PropertyDetails"></a>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr bgcolor="#70b0f0" class="table-header">
+  <td align="left" colspan="2" class="table-header">
+    <span class="table-header">Property Details</span></td>
+</tr>
+</table>
+<a name="value"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <h3 class="epydoc">value</h3>
+  <p>Get the original string value (<code>str</code>).</p>
+  <dl class="fields">
+    <dt>Get Method:</dt>
+    <dd class="value"><span class="summary-sig">value(<span class="summary-sig-arg">self</span>)</span>
+        - Get the original string value (<code>str</code>).
+    </dd>
+  </dl>
+</td></tr></table>
+</div>
+<a name="str"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <h3 class="epydoc">str</h3>
+  <p>Get the original string value (<code>str</code>).</p>
+  <dl class="fields">
+    <dt>Get Method:</dt>
+    <dd class="value"><span class="summary-sig">value(<span class="summary-sig-arg">self</span>)</span>
+        - Get the original string value (<code>str</code>).
+    </dd>
   </dl>
 </td></tr></table>
 </div>
@@ -251,7 +354,7 @@ runtime._ObjCBase --+
 <table border="0" cellpadding="0" cellspacing="0" width="100%%">
   <tr>
     <td align="left" class="footer">
-    Generated by Epydoc 3.0.1 on Thu Jun 14 12:38:57 2018
+    Generated by Epydoc 3.0.1 on Fri Jun 15 13:50:02 2018
     </td>
     <td align="right" class="footer">
       <a target="mainFrame" href="http://epydoc.sourceforge.net"

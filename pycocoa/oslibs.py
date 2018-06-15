@@ -69,8 +69,8 @@
 @var libobjc:       The macOS C{objc} library (C{ctypes.CDLL}).
 @var libquartz:     The macOS C{quartz} library (C{ctypes.CDLL}).
 
-@var NO:  ObjC's False (C{const}).
-@var YES: ObjC's True (C{const}).
+@var NO:  ObjC's False (C{const c_byte}).
+@var YES: ObjC's True (C{const c_byte}).
 
 '''
 # all imports listed explicitly to help PyChecker
@@ -91,9 +91,9 @@ from octypes import Allocator_t, Array_t, BOOL_t, CFIndex_t, \
                     objc_property_t, objc_property_attribute_t, \
                     Protocol_t, SEL_t, Set_t, String_t, \
                     TypeRef_t, UniChar_t, URL_t
-from utils   import bytes2str, _exports
+from utils   import bytes2str, _exports, str2bytes
 
-__version__ = '18.06.10'
+__version__ = '18.06.15'
 
 NO  = False  # c_byte(0)
 YES = True   # c_byte(1)
@@ -380,6 +380,17 @@ def cfString2str(ns, dflt=None):  # XXX an NS*String method
         # bytes to unicode in Python 2, to str in Python 3+
         return bytes2str(buf.value)  # XXX was .decode(DEFAULT_UNICODE)
     return dflt
+
+
+def cfString(ustr):
+    '''Create an ObjC C{NS[Constant]String} from a Python string.
+
+       @param ustr: The string value (C{str} or C{unicode}).
+
+       @return: The string instance (C{NS[Constant]String}).
+    '''
+    return libCF.CFStringCreateWithCString(None, str2bytes(ustr),
+                                                 CFStringEncoding)
 
 
 _csignature(libCF.CFRelease, c_void, TypeRef_t)
