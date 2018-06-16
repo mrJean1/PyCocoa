@@ -61,7 +61,7 @@
 
 @var missing: Missing keyword argument value.
 '''
-__version__ = '18.06.14'
+__version__ = '18.06.16'
 
 try:  # all imports listed explicitly to help PyChecker
     from math import gcd  # Python 3+
@@ -521,25 +521,10 @@ def isinstanceOf(inst, *classes, **name_missing):
     raise TypeError('%s not %s: %r' % (name, t, inst))
 
 
-def property2(inst, name):
-    '''Return the property C{get} and C{set} method.
-
-       @param inst: An instance (C{any}).
-       @param name: Property name (C{str}).
-
-       @return: 2-Tuple (getter, setter) as C{callable}s,
-                (C{callable}, C{None}) or (C{None}, C{None})
-                if I{inst.name} is not a property.
+def lambda1(arg):
+    '''Inlieu of using M{lambda arg: arg}.
     '''
-    try:
-        p = getattr(inst.__class__, name)
-        if isinstance(p, property):
-            g = p.fget
-            if callable(g):
-                return g, p.fset
-    except (AttributeError, TypeError, ValueError):
-        pass
-    return None, None
+    return arg
 
 
 def name2objc(name):
@@ -591,6 +576,26 @@ def printf(fmt, *args, **kwds):  # argv0='', nl=0, nt=0
     nl = '\n' * kwds.get('nl', 0)
     nt = '\n' * kwds.get('nt', 0)
     print('%s%s %s%s' % (nl, a, t, nt))
+
+
+def property2(inst, name):
+    '''Return the property C{get} and C{set} method.
+
+       @param inst: An instance (C{any}).
+       @param name: Property name (C{str}).
+
+       @return: 2-Tuple (get, set) as C{callable}s, (C{callable}, C{None})
+                or (C{None}, C{None}) if I{inst.name} is not a property.
+    '''
+    try:
+        p = getattr(inst.__class__, name)
+        if isinstance(p, property):
+            g = p.fget
+            if callable(g):
+                return g, p.fset
+    except (AttributeError, TypeError, ValueError):
+        pass
+    return None, None
 
 
 def _text_title(text_or_file, title=''):
@@ -674,7 +679,8 @@ def zSIstr(size, B='B'):
 
 __all__ = _exports(locals(), 'aspect_ratio', 'clip', 'DEFAULT_UNICODE',
                              'flint', 'isinstanceOf', 'gcd', 'iterbytes',
-                             'missing', 'printf', 'property2', 'type2strepr',
+                             'lambda1', 'missing', 'printf', 'property2',
+                             'type2strepr',
                    starts=('bytes', 'inst', 'str', 'z'))
 
 if __name__ == '__main__':

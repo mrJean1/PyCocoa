@@ -86,7 +86,7 @@ from oslibs  import cfString2str, libobjc
 from utils   import bytes2str, _Constants, _exports, missing, name2py, \
                     printf, property2, str2bytes
 
-__version__ = '18.06.15'
+__version__ = '18.06.16'
 
 # <http://Developer.Apple.com/documentation/objectivec/
 #         objc_associationpolicy?language=objc>
@@ -111,10 +111,10 @@ _OBJC_LOG = dict((_, 0) for _ in os.environ.get(_OBJC_ENV, '').upper())
 del os
 
 
-def _argtypestr(argtypes):
-    '''Simplify names of c_... argument types.
+def _c_tstr(*c_ts):
+    '''Simplify names of c_..._t result or argument types.
     '''
-    return ', '.join(getattr(t, '__name__', str(t)) for t in argtypes)
+    return ', '.join(getattr(t, '__name__', str(t)) for t in c_ts)
 
 
 def _libobjcall(name, restype, argtypes, *args):
@@ -124,17 +124,21 @@ def _libobjcall(name, restype, argtypes, *args):
 
        @raise ArgumentError: Decorated by C{_Xargs}.
 
+       @raise KeyError: Decorated by C{_Xargs}.
+
        @raise TypeError: Decorated by C{_Xargs}.
     '''
-    objc_func = libobjc[name]  # XXX thread-specific?
-    objc_func.restype  = restype
-    objc_func.argtypes = argtypes
     try:
+        objc_func = libobjc[name]  # XXX thread-specific?
+        objc_func.restype  = restype  # or c_void
+        objc_func.argtypes = argtypes or []
+
         result = objc_func(*args)
-    except (ArgumentError, TypeError) as x:
+    except (ArgumentError, KeyError, TypeError) as x:
         raise _Xargs(x, objc_func.__name__, argtypes, restype)
 
-    if restype in (c_void_p, ObjC_t):  # XXX ... is ...
+    if restype is c_void_p or (restype and issubclass(restype, ObjC_t)
+                                   and not isinstance(result, ObjC_t)):
         result = restype(result)
     return result
 
@@ -183,7 +187,7 @@ def _resargtypesel3(args, resargtypes, name_):
     '''Get and check the restype and argtypes keyword arguments, get
        the SEL/selector and return 3-tuple (restype, argtypes, SEL).
     '''
-    restype  = resargtypes.pop('restype', c_void_p)
+    restype  = resargtypes.pop('restype', c_void_p)  # XXX dflt c_void?
     argtypes = resargtypes.pop('argtypes', [])
     if resargtypes:
         t = ', '.join('%s=%r' % _ for _ in sorted(resargtypes.items()))
@@ -191,7 +195,7 @@ def _resargtypesel3(args, resargtypes, name_):
 
     if argtypes and len(argtypes) != len(args):  # allow varargs
         raise ValueError('mismatch %s%r vs argtypes[%s]' % (name_,
-                          tuple(args), _argtypestr(argtypes)))
+                          tuple(args), _c_tstr(*argtypes)))
 
     return restype, argtypes, get_selector(name_)
 
@@ -199,9 +203,10 @@ def _resargtypesel3(args, resargtypes, name_):
 def _Xargs(x, name, argtypes, restype='void'):
     '''Expand the args of an ArgumentError I{x}.
     '''
-    restypestr = getattr(restype, '__name__', str(restype))
+    # x.args = tuple(x.args) + ('%s(%s) %s' % (name, _c_tstr(*argtypes),
+    #                                                _c_tstr(restype)),)
     x.args = ('%s: %s(%s) %s' % (', '.join(map(str, x.args)), name,
-                                _argtypestr(argtypes), restypestr),)
+                                _c_tstr(*argtypes), _c_tstr(restype)),)
     return x
 
 
@@ -218,26 +223,38 @@ class ObjCBoundMethod(_ObjCBase):
     '''Python wrapper for an ObjC class or instance method, an L{IMP_t}.
 
        @note: Each ObjC method invocation requires creation of another,
-       new L{ObjCBoundMethod} instance wich is immediately discarded
-       thereafter.
+              new C{ObjC[Bound]Method} instance which is immediately
+              discarded thereafter.
     '''
-    __slots__ = ('method', 'objc_id')
+    __slots__ = ('_method', '_objc_id')
 
     def __init__(self, method, objc_id):
         '''Initialize with an ObjC method L{IMP_t}, L{ObjCInstance}
-        or L{ObjCClass} object.
+           or L{ObjCClass} object.
         '''
-        self.method = method
-        self.objc_id = objc_id
+        self._method = method
+        self._objc_id = objc_id
 
     def __str__(self):
-        return '%s(%s)' % (self.method.name, self.objc_id)
+        return '%s.%s' % (self._objc_id, self._method.name)
 
     def __call__(self, *args):
         '''Call the method with the given arguments.
         '''
         _ObjC_log(self, 'call', 'B', *args)
-        return self.method(self.objc_id, *args)
+        return self._method(self._objc_id, *args)
+
+    @property
+    def method(self):
+        '''Get the method (C{ObjC[Class]Method}).
+        '''
+        return self._method
+
+    @property
+    def objc_id(self):
+        '''Get the instance (L{ObjCInstance}).
+        '''
+        return self._objc_id
 
 
 class ObjCBoundClassMethod(ObjCBoundMethod):
@@ -421,7 +438,7 @@ class ObjCInstance(_ObjCBase):
     _objc_class = None
     _objc_ptr   = None  # shut PyChecker up
 
-    _retained = 1
+    _dealloc_d = False
 
     def __new__(cls, objc_ptr, cached=True):
         '''New L{ObjCInstance} or return a previously created, cached one.
@@ -444,9 +461,7 @@ class ObjCInstance(_ObjCBase):
             # allocated by ObjC, see _ns/NSDeallocObserver below.
             try:
                 # cls._objc_cache == ObjCInstance._objc_cache
-                self = cls._objc_cache[objc_ptr.value]
-                self._retained += 1  # retain(self) is infinitely recursive
-                return self
+                return cls._objc_cache[objc_ptr.value]
             except KeyError:
                 pass
 
@@ -474,17 +489,27 @@ class ObjCInstance(_ObjCBase):
 
         return self
 
+    # def __eq__(self, other):
+    #     return True if (isinstance(other, ObjCInstance) and
+    #                     self.isEqualTo_(other)) else False
+
+    # def __ne__(self, other):
+    #     return not self.__eq__(other)
+
     def __getattr__(self, name):
         '''Returns a callable method object with the given name.
         '''
+        if self._dealloc_d:
+            raise RuntimeError('%r no longer exists' % (self,))
+
         # Search for named instance method in the class object and if it
         # exists, return callable object with self as hidden argument.
         method = self._objc_class.get_method(name)
         if method:
-            # Note: you should pass self and not self.ptr as a parameter
-            # to ObjCBoundMethod, so that it will be able to keep the
-            # ObjCInstance alive for chained calls like Class.alloc().init()
-            # where the object created by alloc() isn't assigned to a variable.
+            # Note: pass self and not self.ptr to ObjCBoundMethod, so
+            # that it will be able to keep the ObjCInstance alive for
+            # chained calls like Class.alloc().init() where the object
+            # created by alloc() isn't assigned to a variable.
             return ObjCBoundMethod(method, self)
 
         # Otherwise, search for class method with given name in the class
@@ -495,9 +520,9 @@ class ObjCInstance(_ObjCBase):
             return ObjCBoundClassMethod(method, self._objc_class.ptr)
 
         # Try this class' property, ...
-        getter, _ = property2(self, bytes2str(name))
-        if getter:
-            return getter(self)
+        get, _ = property2(self, bytes2str(name))
+        if get:
+            return get(self)
 
         # ... handle substitutes for method names
         # conflicting with Python reserved words
@@ -541,31 +566,6 @@ class ObjCInstance(_ObjCBase):
         '''
         return self._objc_ptr
 
-    def release(self):
-        '''Garbage collect this instance, eventually.
-
-           @raise RuntimeError: Not or no longer retained (and perhaps
-                                garbage collected already).
-
-           @note: May result in Python memory errors, aborts and/or
-                  segfaults.  Use 'python3 -X faulthandler ...' to
-                  get a Python traceback.
-        '''
-        # send_message(self._objc_ptr, 'autorelease',
-        #              restype=c_void)  # argtypes=[]
-        if self._retained > 0:
-            self._retained -= 1
-        else:
-            raise RuntimeError('not retained: %r' % (self,))
-        self.autorelease()  # PYCHOK expected
-#   __del__ = release  # XXX test.simple_application crashes
-
-    @property
-    def retained(self):
-        '''Get this instance' reference count (C{int}).
-        '''
-        return self._retained
-
     def set_ivar(self, name, value, ctype=None):
         '''Set an instance variable (ivar) to the given value.
 
@@ -600,23 +600,23 @@ class ObjCMethod(_ObjCBase):
     _name     = b''
     _SEL      = None
 
-    argtypes = []
+    argtypes = []  # ctypes
     encoding = b''
-    restype  = None
+    restype  = None  # c_void
 
-    def _pyresult(self, result):
+    def _pyresult(self, result):  # overwritten
         return result
 
     def __init__(self, method):
-        '''New ObjC method, initialized with an ObjC method pointer.
+        '''New C{ObjC[Class]Method} for an ObjC method pointer.
 
-           We then determine the return type and argument type
-           information of the method.
+           @param method: The method pointer (L{IMP_t}).
         '''
         self._IMP = libobjc.method_getImplementation(method)
         self._SEL = libobjc.method_getName(method)
-        self._name = libobjc.sel_getName(self._SEL)
+        self._name = libobjc.sel_getName(self._SEL)  # bytes
 
+        # determine the return type and argument types of the method
         self.encoding = libobjc.method_getTypeEncoding(method)
         try:  # Get the ctype for all args
             self.argtypes = []
@@ -627,11 +627,11 @@ class ObjCMethod(_ObjCBase):
         except TypeError:
             self.argtypes = []  # XXX or None?
 
-        # Some hacky stuff to get around ctypes issues on 64-bit.
-        # Can't let ctypes convert the return value itself, because
-        # it truncates the pointer along the way.  Instead, we must
-        # set the return type to c_void_p to ensure we get 64-bit
-        # addresses and then convert the return value manually.
+        # Some hacky stuff to get around ctypes issues on 64-bit:
+        # can't let ctypes convert the return value itself, because
+        # it truncates the pointer along the way.  Instead, set the
+        # return type to c_void_p to ensure we get 64-bit addresses
+        # and then convert the return value manually
         rescode = libobjc.method_copyReturnType(method)
         if rescode == b'@':
             self.restype = Id_t
@@ -640,16 +640,18 @@ class ObjCMethod(_ObjCBase):
             self.restype = Class_t
             self._pyresult = ObjCClass
         else:
-            try:  # Get the ctype for the result encoding.
+            try:  # to get the ctype from the result encoding
                 self.restype = emcoding2ctype(rescode, name=self._name)
             except TypeCodeError:
-                self.restype = None
+                pass  # assume c_void for b'v', b'Vv' rescode
 
     def __call__(self, objc_id, *args):
-        '''Call the method with the given id and arguments.
+        '''Call the method with the given instance and arguments.
 
-           You do not need to pass in the selector as an argument
-           since it is provided automatically.
+           @note: Do not pass in the selector as an argument,
+                  since that is provided automatically.
+
+           @see: L{ObjCBoundMethod}C{.__call__}.
         '''
         try:
             r = self.callable(objc_id, self._SEL, *args)
@@ -664,12 +666,12 @@ class ObjCMethod(_ObjCBase):
 
 #   def __repr__(self):
 #       return '<%s %s(%s) %s>' % (ObjCMethod.__name__, self.name,
-#                                 _argtypestr(self.argtypes),
+#                                 _c_tstr(*self.argtypes),
 #                                  bytes2str(self.encoding))
 
     def __str__(self):
-        return '%s(%s) %s' % (self.name, _argtypestr(self.argtypes),
-                                         bytes2str(self.encoding))
+        return '%s(%s) %s %s' % (self.name, _c_tstr(*self.argtypes),
+                         _c_tstr(self.restype), bytes2str(self.encoding))
 
     @property
     def callable(self):
@@ -1112,18 +1114,20 @@ def isMetaClass(objc):
 
 
 def release(objc):
-    '''Release an ObjC object to eventually be garbage collected.
+    '''Release an ObjC instance to eventually be garbage collected.
 
-       @param objc: The object to release (L{ObjCInstance}).
+       @param objc: The instance to release (L{ObjCInstance}).
 
-       @raise TypeError: If I{objc} can't be released.
+       @raise TypeError: If I{objc} is not releasable.
+
+       @note: May result in Python memory errors, aborts and/or
+              segfaults.  Use 'python3 -X faulthandler ...' to
+              get a Python traceback.
     '''
-    if isinstance(objc, ObjCInstance):
-        try:
-            objc.release()
-        except AttributeError:
-            pass
-    raise TypeError('%s: %r' % ('release', objc))
+    try:
+        objc.autorelease()  # XXX or objc.release()?
+    except (AttributeError, TypeError):
+        raise TypeError('not releasable: %r' % (objc,))
 
 
 def register_subclass(subclas):
@@ -1138,25 +1142,6 @@ def register_subclass(subclas):
     libobjc.objc_registerClassPair(subclas)
 
 
-def retain(objc):
-    '''Prevent an ObjC object from being garbage collected.
-
-       @param objc: The object to retain (L{ObjCInstance}).
-
-       @return: The retained object (L{ObjCInstance}).
-
-       @raise TypeError: If I{objc} can't be retained.
-    '''
-    if isinstance(objc, ObjCInstance):
-        try:
-            objc.retain()
-            objc._retained += 1
-            return objc
-        except AttributeError:
-            pass
-    raise TypeError('%s: %r' % ('retain', objc))
-
-
 def _receiver(receiver):
     # from PyBee/Rubicon-Objc <http://GitHub.com/pybee/rubicon-objc>
     receiver = getattr(receiver, '_as_parameter_', receiver)
@@ -1167,6 +1152,26 @@ def _receiver(receiver):
 #   elif isinstance(receiver, _Strs):
 #       return cast(get_class(receiver), Id_t)
     raise TypeError('%s invalid: %r' % ('receiver', receiver))
+
+
+def retain(objc):
+    '''Preserve an ObjC instance from destruction.
+
+       @param objc: The instance to retain (L{ObjCInstance}).
+
+       @return: The retained instance I{objc}.
+
+       @raise TypeError: If I{objc} is not retainable.
+
+       @note: May result in Python memory errors, aborts and/or
+              segfaults.  Use 'python3 -X faulthandler ...' to
+              get a Python traceback.
+    '''
+    try:
+        objc.retain()  # L{ObjCMethod}
+    except (AttributeError, TypeError):
+        raise TypeError('not retainable: %r' % (objc,))
+    return objc
 
 
 # <http://www.SealieSoftware.com/blog/archive/2008/11/16/objc_explain_objc_msgSend_fpret.html>
@@ -1344,7 +1349,7 @@ def _objc_cache_pop(nself, sel_cmd):
     if objc_ptr_value:
         objc = ObjCInstance._objc_cache.pop(objc_ptr_value, None)
         if objc:
-            objc._retained = 0
+            objc._dealloc_d = True
     send_super(nself, sel_cmd)
 
 

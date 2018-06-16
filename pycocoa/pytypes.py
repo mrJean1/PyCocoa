@@ -74,7 +74,7 @@ from runtime import ObjCInstance
 from types   import GeneratorType as _generator
 from utils   import bytes2str, clip, DEFAULT_UNICODE, _exports, _Ints
 
-__version__ = '18.06.10'
+__version__ = '18.06.16'
 
 
 def _iter2NS(ns, py, getCount):
@@ -251,15 +251,14 @@ def set2NS(py):
     return _iter2NS(NSMutableSet.set(), py, libCF.CFSetGetCount)
 
 
-def str2NS(py, auto=True):
+def str2NS(py):
     '''Create an L{NSStr} instance from a Python C{str}.
 
        @param py: The value (C{str}).
-       @keyword auto: Retain or auto-release (bool).
 
        @return: The ObjC instance (L{NSStr}).
     '''
-    return NSStr(py, auto=auto)
+    return NSStr(py)
 
 
 def tuple2NS(py):
@@ -275,15 +274,14 @@ def tuple2NS(py):
                        libCF.CFArrayGetCount)
 
 
-def unicode2NS(py, auto=True):
+def unicode2NS(py):
     '''Create an L{NSStr} instance from a Python C{unicode} string.
 
        @param py: The value (C{unicode}).
-       @keyword auto: Retain or auto-release (bool).
 
        @return: The ObjC instance (L{NSStr}).
     '''
-    return NSStr(py.encode(DEFAULT_UNICODE), auto=auto)  # .stringWithUTF8String_
+    return NSStr(py.encode(DEFAULT_UNICODE))  # .stringWithUTF8String_
 
 
 def url2NS(py, url2=None):

@@ -48,7 +48,7 @@ from windows  import Screen, Window, WindowStyle
 __all__ = ('NSTableViewDelegate',
            'Table', 'TableWindow',
            'closeTables')
-__version__ = '18.06.11'
+__version__ = '18.06.16'
 
 _Alignment = dict(center=NSTextAlignmentCenter,
                justified=NSTextAlignmentJustified,
@@ -60,8 +60,8 @@ _Alignment = dict(center=NSTextAlignmentCenter,
 class _NS(object):
     '''(INTERNAL) Singletons.
     '''
-    BlankCell = NSStr('',  auto=False)
-    EmptyCell = NSStr('-', auto=False)
+    BlankCell = NSStr('')   # retained
+    EmptyCell = NSStr('-')  # retained
 
 
 def _format(header, col):
@@ -138,8 +138,7 @@ class Table(_Type2):
         '''Append another row of column values.
         '''
         def _nstr(col):
-            # NSStr can't be auto-released
-            return NSStr(str(col), auto=False) if col else _NS.BlankCell
+            return retain(NSStr(str(col))) if col else _NS.BlankCell
 
         self._rows.append(tuple(map(_nstr, cols)))
 
@@ -174,7 +173,7 @@ class Table(_Type2):
         # <http://Developer.Apple.com//documentation/appkit/nstablecolumn>
         for i, h in enumerate(self._headers):
             # note, the identifier MUST be an NSStr (to avoid warnings)
-            t = NSStr(str(i), auto=False)
+            t = retain(NSStr(str(i)))
             c = NSTableColumn.alloc().initWithIdentifier_(t)
             # simply map col.identifier to int, instead of frequent and
             # costly int(nsString2str(col.identifier())) conversions in

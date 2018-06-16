@@ -76,12 +76,12 @@ from oslibs  import cfNumber2bool, cfNumber2num, cfString, cfString2str, \
 from runtime import isInstanceOf, ObjCClass, ObjCInstance, retain, \
                     send_message, _Xargs
 from utils   import bytes2str, _ByteStrs, clip, _exports, _Globals, \
-                    isinstanceOf, iterbytes, missing, _Singletons, \
-                    _Types  # printf
+                    isinstanceOf, iterbytes, lambda1, missing, \
+                    _Singletons, _Types  # printf
 
 from os import linesep, path as os_path
 
-__version__ = '18.06.15'
+__version__ = '18.06.16'
 
 # some commonly used Foundation and Cocoa classes, described here
 # <http://OMZ-Software.com/pythonista/docs/ios/objc_util.html>
@@ -156,11 +156,6 @@ NSFloat    = NSNumber.numberWithDouble_
 NSInt      = NSNumber.numberWithInt_
 NSLong     = NSNumber.numberWithLong_
 NSLongLong = NSNumber.numberWithLongLong_
-
-
-def _lambda(arg):
-    # inlieu of  lambda arg: arg
-    return arg
 
 
 def _ns2ctype2py(ns, ctype):
@@ -289,7 +284,7 @@ class _NSMain(_Singletons):
         '''Get the C{NS/CFBundleName}.
         '''
         if self._BundleName is None:
-            _NSMain._BundleName = NSStr('CFBundleName', auto=False)
+            _NSMain._BundleName = retain(NSStr('CFBundleName'))
         return self._BundleName
 
     @property
@@ -372,27 +367,21 @@ _NSStr1 = {}  # empty and single-character strings
 
 
 class NSStr(ObjCInstance):
-    '''Python wrapper for the ObjC C{NS[Constant]String} class,
-       creating I{auto-released} instances, by default.
+    '''Python wrapper for the ObjC C{NS[Constant]String}.
     '''
     _str = None
 
-    def __new__(cls, ustr, auto=True):
+    def __new__(cls, ustr):
         '''New L{NSStr}.
 
            @param ustr: The string value (C{str} or C{unicode}).
-           @keyword auto: Auto-release or retain (C{bool}).
 
            @return: The string (L{NSStr}).
         '''
         if len(ustr) > 1:
-            # the ObjC class is .objc_class, __NSCFString, NSConstantString, etc.
+            # the ObjC class is NSCFString, NSConstantString, etc.
             self = super(NSStr, cls).__new__(cls, cfString(ustr), cached=True)
             self._str = bytes2str(ustr)
-            if auto:
-                # XXX use .autorelease, iff .release causes
-                # a RuntimeError for some (shared?) strings
-                self.release()
 
         else:
             # singletons for empty and single-character strings
@@ -462,7 +451,7 @@ def isAlias(path):
 def isLink(path):
     '''Resolve a file or folder link or alias.
 
-       @param path: The link or alias name (C{str}).
+       @param path: The link or alias name (C{str} or L{NSStr}).
 
        @return: The link's or alias' target (C{str}) or
                 C{None} if I{path} isn't a link or alias.
@@ -901,7 +890,7 @@ def ns2py(ns, dflt=None):  # XXX an NSObject method?
             typeID = libCF.CFGetTypeID(ns)
             r = _CFTypeID2py[typeID](ns)
             c = {Class_t: ObjCClass,
-                 Id_t:    ObjCInstance}.get(type(r), _lambda)
+                 Id_t:    ObjCInstance}.get(type(r), lambda1)
             return c(r)
 
         except ArgumentError as x:
