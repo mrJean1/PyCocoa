@@ -41,14 +41,14 @@ from oslibs   import NSTableViewSolidHorizontalGridLineMask, \
                      NSTextAlignmentLeft, NSTextAlignmentNatural, \
                      NSTextAlignmentRight, YES
 from runtime  import isInstanceOf, ObjCClass, ObjCInstance, \
-                     ObjCSubclass, retain, send_super
+                     ObjCSubclass, release, retain, send_super
 from utils    import _Globals, isinstanceOf, _Types
 from windows  import Screen, Window, WindowStyle
 
 __all__ = ('NSTableViewDelegate',
            'Table', 'TableWindow',
            'closeTables')
-__version__ = '18.06.16'
+__version__ = '18.06.18'
 
 _Alignment = dict(center=NSTextAlignmentCenter,
                justified=NSTextAlignmentJustified,
@@ -60,8 +60,8 @@ _Alignment = dict(center=NSTextAlignmentCenter,
 class _NS(object):
     '''(INTERNAL) Singletons.
     '''
-    BlankCell = NSStr('')   # retained
-    EmptyCell = NSStr('-')  # retained
+    BlankCell = retain(NSStr(''))
+    EmptyCell = retain(NSStr('-'))
 
 
 def _format(header, col):
@@ -130,7 +130,7 @@ class Table(_Type2):
         while self._rows:
             for s in (self._rows.pop() or ()):
                 if isinstance(s, NSStr) and s is not _NS.BlankCell:
-                    s.release()
+                    release(s)
         self.NSdelegate.release()
         self.NS.release()
 
@@ -182,7 +182,7 @@ class Table(_Type2):
             # <http://Developer.Apple.com//documentation/appkit/nscell>
             h = _format(h, c)
             cols.append(h)
-            c.setTitle_(NSStr(h))  # == c.headerCell().setStringValue_(NSStr(h))
+            c.setTitle_(release(NSStr(h)))  # == c.headerCell().setStringValue_(NSStr(h))
             # <http://Developer.Apple.com//documentation/uikit/nstextalignment>
             v.addTableColumn_(c)
             high = max(high, Font(c.dataCell().font()).height)
@@ -280,7 +280,7 @@ class _NSTableViewDelegate(object):
             return r[c] if 0 <= c < len(r) else _NS.EmptyCell
         except (IndexError, KeyError):  # TypeError, ValueError
             c = col.identifier()
-        return NSStr('[C%r, R%s]' % (c, row))
+        return release(NSStr('[C%r, R%s]' % (c, row)))
 
     # XXX never called, NSCell- vs NSView-based NSTableView?
 #   @_ObjC.method('@@i')

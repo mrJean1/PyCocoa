@@ -174,7 +174,7 @@
 
 <hr />
 <div class="fields">      <p><strong>Version:</strong>
-        18.06.16
+        18.06.21
       </p>
 </div><!-- ==================== SUBMODULES ==================== -->
 <a name="section-Submodules"></a>
@@ -779,7 +779,7 @@
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
         <a href="pycocoa.runtime.ObjCMethod-class.html" class="summary-name">ObjCMethod</a><br />
-      Python class representing an unbound ObjC class- or instance-method
+      Python class representing an unbound ObjC class or instance method 
         (actually an <a href="pycocoa.octypes.IMP_t-class.html" 
         class="link">IMP_t</a>).
     </td>
@@ -790,7 +790,7 @@
     </td><td class="summary">
         <a href="pycocoa.runtime.ObjCSubclass-class.html" class="summary-name">ObjCSubclass</a><br />
       Python class creating an ObjC sub-class of an existing ObjC 
-        (super-)class.
+        (super)class.
     </td>
   </tr>
 <tr>
@@ -1306,7 +1306,7 @@
         <tr>
           <td><span class="summary-sig"><a href="pycocoa-module.html#aspect_ratio" class="summary-sig-name">aspect_ratio</a>(<span class="summary-sig-arg">width</span>,
         <span class="summary-sig-arg">height</span>)</span><br />
-      Compute the smallest, int aspect ratio.</td>
+      Compute the smallest, integer aspect ratio.</td>
           <td align="right" valign="top">
             
             
@@ -1395,7 +1395,8 @@
         <tr>
           <td><span class="summary-sig"><a href="pycocoa-module.html#bytes2str" class="summary-sig-name">bytes2str</a>(<span class="summary-sig-arg">bytestr</span>,
         <span class="summary-sig-arg">dflt</span>=<span class="summary-sig-default">missing()</span>)</span><br />
-      Convert bytes/unicode to str if needed.</td>
+      Convert <code>bytes</code>/<code>unicode</code> to <code>str</code> 
+      if needed.</td>
           <td align="right" valign="top">
             
             
@@ -2422,7 +2423,7 @@
     </td><td class="summary">
       <table width="100%" cellpadding="0" cellspacing="0" border="0">
         <tr>
-          <td><span class="summary-sig"><a href="pycocoa-module.html#nsBundleRename" class="summary-sig-name">nsBundleRename</a>(<span class="summary-sig-arg">nsTitle</span>,
+          <td><span class="summary-sig"><a href="pycocoa-module.html#nsBundleRename" class="summary-sig-name">nsBundleRename</a>(<span class="summary-sig-arg">ns_title</span>,
         <span class="summary-sig-arg">match</span>=<span class="summary-sig-default"><code class="variable-quote">'</code><code class="variable-string">Python</code><code class="variable-quote">'</code></span>)</span><br />
       Change the bundle title if the current title matches.</td>
           <td align="right" valign="top">
@@ -2834,7 +2835,7 @@
       <table width="100%" cellpadding="0" cellspacing="0" border="0">
         <tr>
           <td><span class="summary-sig"><a href="pycocoa-module.html#release" class="summary-sig-name">release</a>(<span class="summary-sig-arg">objc</span>)</span><br />
-      Release an ObjC instance to eventually be garbage collected.</td>
+      Release an ObjC instance to be released, eventually.</td>
           <td align="right" valign="top">
             
             
@@ -3002,7 +3003,8 @@
         <tr>
           <td><span class="summary-sig"><a href="pycocoa-module.html#str2bytes" class="summary-sig-name">str2bytes</a>(<span class="summary-sig-arg">bytestr</span>,
         <span class="summary-sig-arg">dflt</span>=<span class="summary-sig-default">missing()</span>)</span><br />
-      Convert str to bytes/unicode if needed.</td>
+      Convert <code>str</code> to <code>bytes</code>/<code>unicode</code> 
+      if needed.</td>
           <td align="right" valign="top">
             
             
@@ -3379,14 +3381,14 @@ mUIFont', size=13, traits='Italic', weight=5),
     <td width="15%" align="right" valign="top" class="summary">
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
-        <a name="NSApplicationDidHideNotification"></a><span class="summary-name">NSApplicationDidHideNotification</span> = <code title="c_void_p(140735878606784)">c_void_p(140735878606784)</code>
+        <a name="NSApplicationDidHideNotification"></a><span class="summary-name">NSApplicationDidHideNotification</span> = <code title="c_void_p(140735391297472)">c_void_p(140735391297472)</code>
     </td>
   </tr>
 <tr>
     <td width="15%" align="right" valign="top" class="summary">
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
-        <a name="NSApplicationDidUnhideNotification"></a><span class="summary-name">NSApplicationDidUnhideNotification</span> = <code title="c_void_p(140735878606880)">c_void_p(140735878606880)</code>
+        <a name="NSApplicationDidUnhideNotification"></a><span class="summary-name">NSApplicationDidUnhideNotification</span> = <code title="c_void_p(140735391297568)">c_void_p(140735391297568)</code>
     </td>
   </tr>
 <tr>
@@ -3561,7 +3563,7 @@ mUIFont', size=13, traits='Italic', weight=5),
     <td width="15%" align="right" valign="top" class="summary">
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
-        <a name="NSDefaultRunLoopMode"></a><span class="summary-name">NSDefaultRunLoopMode</span> = <code title="c_void_p(140735887786360)">c_void_p(140735887786360)</code>
+        <a name="NSDefaultRunLoopMode"></a><span class="summary-name">NSDefaultRunLoopMode</span> = <code title="c_void_p(140735400477048)">c_void_p(140735400477048)</code>
     </td>
   </tr>
 <tr>
@@ -3617,7 +3619,7 @@ mUIFont', size=13, traits='Italic', weight=5),
     <td width="15%" align="right" valign="top" class="summary">
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
-        <a name="NSEventTrackingRunLoopMode"></a><span class="summary-name">NSEventTrackingRunLoopMode</span> = <code title="c_void_p(140735878601472)">c_void_p(140735878601472)</code>
+        <a name="NSEventTrackingRunLoopMode"></a><span class="summary-name">NSEventTrackingRunLoopMode</span> = <code title="c_void_p(140735391292160)">c_void_p(140735391292160)</code>
     </td>
   </tr>
 <tr>
@@ -3995,15 +3997,15 @@ mUIFont', size=13, traits='Italic', weight=5),
     <td width="15%" align="right" valign="top" class="summary">
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
-        <a href="pycocoa-module.html#NSMain" class="summary-name">NSMain</a> = <code title="NSMain.Application=NSApplication(&lt;Id_t at 0x10dfb2ef0&gt;) of 0x7fe551d4e\
-650,
-      .BooleanNO=NSBoolean(&lt;Id_t at 0x10dfb23b0&gt;) of 0x7fffa0a8a3f8,
-      .BooleanYES=NSBoolean(&lt;Id_t at 0x10da3a7a0&gt;) of 0x7fffa0a8a3e8,
-      .Bundle=NSBundle(&lt;Id_t at 0x10da244d0&gt;) of 0x7fe551e233a0,
+        <a href="pycocoa-module.html#NSMain" class="summary-name">NSMain</a> = <code title="NSMain.Application=NSApplication(&lt;Id_t at 0x106847e60&gt;) of 0x7fdc2c37f\
+160,
+      .BooleanNO=NSBoolean(&lt;Id_t at 0x106847320&gt;) of 0x7fff839ce3f8,
+      .BooleanYES=NSBoolean(&lt;Id_t at 0x10683b7a0&gt;) of 0x7fff839ce3e8,
+      .Bundle=NSBundle(&lt;Id_t at 0x1068250e0&gt;) of 0x7fdc29ec8db0,
       .BundleName=NSConstantString('CFBundleName'),
-      .FontManager=NSFontManager(&lt;Id_t at 0x10da243b0&gt;) of 0x7fe554158\
-9c0,
-...">NSMain.Application=NSApplication(&lt;Id_t at 0x10dfb2ef0<code class="variable-ellipsis">...</code></code>
+      .FontManager=NSFontManager(&lt;Id_t at 0x106825290&gt;) of 0x7fdc2c32c\
+330,
+...">NSMain.Application=NSApplication(&lt;Id_t at 0x106847e60<code class="variable-ellipsis">...</code></code>
     </td>
   </tr>
 <tr>
@@ -4616,8 +4618,8 @@ mUIFont', size=13, traits='Italic', weight=5),
     <td width="15%" align="right" valign="top" class="summary">
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
-        <a href="pycocoa-module.html#libAppKit" class="summary-name">libAppKit</a> = <code title="&lt;CDLL '/System/Library/Frameworks/AppKit.framework/AppKit', handle 7fe\
-551d36600 at 109f39590&gt;">&lt;CDLL '/System/Library/Frameworks/AppKit.framework<code class="variable-ellipsis">...</code></code>
+        <a href="pycocoa-module.html#libAppKit" class="summary-name">libAppKit</a> = <code title="&lt;CDLL '/System/Library/Frameworks/AppKit.framework/AppKit', handle 7fd\
+c29d41c00 at 102d10610&gt;">&lt;CDLL '/System/Library/Frameworks/AppKit.framework<code class="variable-ellipsis">...</code></code>
     </td>
   </tr>
 <tr>
@@ -4625,7 +4627,7 @@ mUIFont', size=13, traits='Italic', weight=5),
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
         <a href="pycocoa-module.html#libCF" class="summary-name">libCF</a> = <code title="&lt;CDLL '/System/Library/Frameworks/CoreFoundation.framework/CoreFoundat\
-ion', handle 11685c800 at 109f24990&gt;">&lt;CDLL '/System/Library/Frameworks/CoreFoundation.frame<code class="variable-ellipsis">...</code></code>
+ion', handle 10eac1800 at 102cf8a10&gt;">&lt;CDLL '/System/Library/Frameworks/CoreFoundation.frame<code class="variable-ellipsis">...</code></code>
     </td>
   </tr>
 <tr>
@@ -4633,7 +4635,7 @@ ion', handle 11685c800 at 109f24990&gt;">&lt;CDLL '/System/Library/Frameworks/Co
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
         <a href="pycocoa-module.html#libCT" class="summary-name">libCT</a> = <code title="&lt;CDLL '/System/Library/Frameworks/CoreText.framework/CoreText', handle\
- 7fe551f040f0 at 109f4a710&gt;">&lt;CDLL '/System/Library/Frameworks/CoreText.framework/C<code class="variable-ellipsis">...</code></code>
+ 7fdc29d45020 at 102d1d790&gt;">&lt;CDLL '/System/Library/Frameworks/CoreText.framework/C<code class="variable-ellipsis">...</code></code>
     </td>
   </tr>
 <tr>
@@ -4641,22 +4643,22 @@ ion', handle 11685c800 at 109f24990&gt;">&lt;CDLL '/System/Library/Frameworks/Co
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
         <a href="pycocoa-module.html#libFoundation" class="summary-name">libFoundation</a> = <code title="&lt;CDLL '/System/Library/Frameworks/Foundation.framework/Foundation', ha\
-ndle 7fe551d35cd0 at 109f4ad50&gt;">&lt;CDLL '/System/Library/Frameworks/Foundation.f<code class="variable-ellipsis">...</code></code>
+ndle 7fdc29d43f00 at 102d1ddd0&gt;">&lt;CDLL '/System/Library/Frameworks/Foundation.f<code class="variable-ellipsis">...</code></code>
     </td>
   </tr>
 <tr>
     <td width="15%" align="right" valign="top" class="summary">
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
-        <a href="pycocoa-module.html#libobjc" class="summary-name">libobjc</a> = <code title="&lt;CDLL '/usr/lib/libobjc.dylib', handle 11685e680 at 109f4ab90&gt;">&lt;CDLL '/usr/lib/libobjc.dylib', handle 11685e680 at <code class="variable-ellipsis">...</code></code>
+        <a href="pycocoa-module.html#libobjc" class="summary-name">libobjc</a> = <code title="&lt;CDLL '/usr/lib/libobjc.dylib', handle 10eac3680 at 102d1dc10&gt;">&lt;CDLL '/usr/lib/libobjc.dylib', handle 10eac3680 at <code class="variable-ellipsis">...</code></code>
     </td>
   </tr>
 <tr>
     <td width="15%" align="right" valign="top" class="summary">
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
-        <a href="pycocoa-module.html#libquartz" class="summary-name">libquartz</a> = <code title="&lt;CDLL '/System/Library/Frameworks/quartz.framework/quartz', handle 7fe\
-551d163f0 at 109f397d0&gt;">&lt;CDLL '/System/Library/Frameworks/quartz.framework<code class="variable-ellipsis">...</code></code>
+        <a href="pycocoa-module.html#libquartz" class="summary-name">libquartz</a> = <code title="&lt;CDLL '/System/Library/Frameworks/quartz.framework/quartz', handle 7fd\
+c29d49120 at 102d10850&gt;">&lt;CDLL '/System/Library/Frameworks/quartz.framework<code class="variable-ellipsis">...</code></code>
     </td>
   </tr>
 <tr>
@@ -4894,15 +4896,16 @@ ndle 7fe551d35cd0 at 109f4ad50&gt;">&lt;CDLL '/System/Library/Frameworks/Foundat
     </td>
   </tr></table>
   
-  <p>Compute the smallest, int aspect ratio.</p>
+  <p>Compute the smallest, integer aspect ratio.</p>
   <dl class="fields">
     <dt>Parameters:</dt>
     <dd><ul class="nomargin-top">
-        <li><strong class="pname"><code>width</code></strong> - The width (float or int).</li>
-        <li><strong class="pname"><code>height</code></strong> - The height (float or int).</li>
+        <li><strong class="pname"><code>width</code></strong> - The width (<code>float</code> or <code>int</code>).</li>
+        <li><strong class="pname"><code>height</code></strong> - The height (<code>float</code> or <code>int</code>).</li>
     </ul></dd>
     <dt>Returns:</dt>
-        <dd>2-Tuple (width, height) or None.</dd>
+        <dd>2-Tuple (width, height) as (<code>int</code>, <code>int</code>) 
+          or <code>None</code>.</dd>
   </dl>
 <div class="fields">      <p><strong>Example:</strong>
         &gt;&gt;&gt; aspect_ratio(10, 15) (2, 3) &gt;&gt;&gt; 
@@ -5024,7 +5027,7 @@ ndle 7fe551d35cd0 at 109f4ad50&gt;">&lt;CDLL '/System/Library/Frameworks/Foundat
         <li><strong class="pname"><code>bytestr</code></strong> - Str or bytes.</li>
     </ul></dd>
     <dt>Returns:</dt>
-        <dd>Representation <code>b'...'</code> (str).</dd>
+        <dd>Representation <code>b'...'</code> (<code>str</code>).</dd>
   </dl>
 </td></tr></table>
 </div>
@@ -5043,18 +5046,20 @@ ndle 7fe551d35cd0 at 109f4ad50&gt;">&lt;CDLL '/System/Library/Frameworks/Foundat
     </td>
   </tr></table>
   
-  <p>Convert bytes/unicode to str if needed.</p>
+  <p>Convert <code>bytes</code>/<code>unicode</code> to <code>str</code> if
+  needed.</p>
   <dl class="fields">
     <dt>Parameters:</dt>
     <dd><ul class="nomargin-top">
-        <li><strong class="pname"><code>bytestr</code></strong> - Bytes, str or unicode.</li>
+        <li><strong class="pname"><code>bytestr</code></strong> - <code>bytes</code>, <code>str</code> or <code>unicode</code>.</li>
         <li><strong class="pname"><code>dflt</code></strong> - Optional, default return value.</li>
     </ul></dd>
     <dt>Returns:</dt>
-        <dd>Str or <i>dflt</i>.</dd>
+        <dd><code>str</code> or <i>dflt</i>.</dd>
     <dt>Raises:</dt>
     <dd><ul class="nomargin-top">
-        <li><code><strong class='fraise'>TypeError</strong></code> - If neither str nor bytes, but iff no <i>dflt</i> is provided.</li>
+        <li><code><strong class='fraise'>TypeError</strong></code> - If neither <code>str</code> nor <code>bytes</code>, but only if no 
+        <i>dflt</i> is provided.</li>
     </ul></dd>
   </dl>
 </td></tr></table>
@@ -5078,11 +5083,11 @@ ndle 7fe551d35cd0 at 109f4ad50&gt;">&lt;CDLL '/System/Library/Frameworks/Foundat
   <dl class="fields">
     <dt>Parameters:</dt>
     <dd><ul class="nomargin-top">
-        <li><strong class="pname"><code>bytestr</code></strong> - Bytes or str.</li>
-        <li><strong class="pname"><code>limit</code></strong> - Length limit (int).</li>
+        <li><strong class="pname"><code>bytestr</code></strong> - Original <code>bytes</code> or <code>str</code>.</li>
+        <li><strong class="pname"><code>limit</code></strong> - Length limit (<code>int</code>).</li>
     </ul></dd>
     <dt>Returns:</dt>
-        <dd>Bytes or str.</dd>
+        <dd>Clipped <code>bytes</code> or <code>str</code>.</dd>
   </dl>
 </td></tr></table>
 </div>
@@ -6076,7 +6081,7 @@ ndle 7fe551d35cd0 at 109f4ad50&gt;">&lt;CDLL '/System/Library/Frameworks/Foundat
         <li><strong class="pname"><code>attrs</code></strong> - Instance attribute names (<i>all positional</i>).</li>
     </ul></dd>
     <dt>Returns:</dt>
-        <dd>Instance representation (str).</dd>
+        <dd>Instance representation (<code>str</code>).</dd>
   </dl>
 </td></tr></table>
 </div>
@@ -6357,7 +6362,7 @@ ndle 7fe551d35cd0 at 109f4ad50&gt;">&lt;CDLL '/System/Library/Frameworks/Foundat
     <dd><ul class="nomargin-top">
         <li><strong class="pname"><code>inst</code></strong> - The instance to check (<i>any</i>).</li>
         <li><strong class="pname"><code>classes</code></strong> - One or several classes (<i>all positional</i>).</li>
-        <li><strong class="pname"><code>name</code></strong> - The name of the instance (str).</li>
+        <li><strong class="pname"><code>name</code></strong> - The name of the instance (<code>str</code>).</li>
     </ul></dd>
     <dt>Returns:</dt>
         <dd>The matching <i>class</i> from <i>classes</i>, None otherwise.</dd>
@@ -6768,7 +6773,7 @@ ndle 7fe551d35cd0 at 109f4ad50&gt;">&lt;CDLL '/System/Library/Frameworks/Foundat
 <tr><td>
   <table width="100%" cellpadding="0" cellspacing="0" border="0">
   <tr valign="top"><td>
-  <h3 class="epydoc"><span class="sig"><span class="sig-name">nsBundleRename</span>(<span class="sig-arg">nsTitle</span>,
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">nsBundleRename</span>(<span class="sig-arg">ns_title</span>,
         <span class="sig-arg">match</span>=<span class="sig-default"><code class="variable-quote">'</code><code class="variable-string">Python</code><code class="variable-quote">'</code></span>)</span>
   </h3>
   </td><td align="right" valign="top"
@@ -6780,7 +6785,7 @@ ndle 7fe551d35cd0 at 109f4ad50&gt;">&lt;CDLL '/System/Library/Frameworks/Foundat
   <dl class="fields">
     <dt>Parameters:</dt>
     <dd><ul class="nomargin-top">
-        <li><strong class="pname"><code>nsTitle</code></strong> - New bundle title (<a href="pycocoa.nstypes.NSStr-class.html" 
+        <li><strong class="pname"><code>ns_title</code></strong> - New bundle title (<a href="pycocoa.nstypes.NSStr-class.html" 
           class="link">NSStr</a>).</li>
         <li><strong class="pname"><code>match</code></strong> - Optional, previous title to match (<code>str</code>).</li>
     </ul></dd>
@@ -6788,7 +6793,7 @@ ndle 7fe551d35cd0 at 109f4ad50&gt;">&lt;CDLL '/System/Library/Frameworks/Foundat
         <dd>The previous bundle title (<code>str</code>) or None.</dd>
   </dl>
 <div class="fields">      <p><strong>Note:</strong>
-        Used to mimick <code>NSApplication.setTitle_(nsTitle)</code>, the 
+        Used to mimick <code>NSApplication.setTitle_(ns_title)</code>, the 
         name of an <a href="pycocoa.apps.App-class.html" 
         class="link">App</a> shown in the menu bar.
       </p>
@@ -7289,11 +7294,11 @@ ndle 7fe551d35cd0 at 109f4ad50&gt;">&lt;CDLL '/System/Library/Frameworks/Foundat
   <dl class="fields">
     <dt>Parameters:</dt>
     <dd><ul class="nomargin-top">
-        <li><strong class="pname"><code>fmt</code></strong> - Print-like format (str).</li>
+        <li><strong class="pname"><code>fmt</code></strong> - Print-like format (<code>str</code>).</li>
         <li><strong class="pname"><code>args</code></strong> - Optional arguments to include (<i>all positional</i>).</li>
-        <li><strong class="pname"><code>argv0</code></strong> - Optional prefix (str).</li>
-        <li><strong class="pname"><code>nl</code></strong> - Number of leading blank lines (int).</li>
-        <li><strong class="pname"><code>nt</code></strong> - Number of trailing blank lines (int).</li>
+        <li><strong class="pname"><code>argv0</code></strong> - Optional prefix (<code>str</code>).</li>
+        <li><strong class="pname"><code>nl</code></strong> - Number of leading blank lines (<code>int</code>).</li>
+        <li><strong class="pname"><code>nt</code></strong> - Number of trailing blank lines (<code>int</code>).</li>
     </ul></dd>
   </dl>
 </td></tr></table>
@@ -7488,7 +7493,7 @@ ndle 7fe551d35cd0 at 109f4ad50&gt;">&lt;CDLL '/System/Library/Frameworks/Foundat
     </td>
   </tr></table>
   
-  <p>Release an ObjC instance to eventually be garbage collected.</p>
+  <p>Release an ObjC instance to be released, eventually.</p>
   <dl class="fields">
     <dt>Parameters:</dt>
     <dd><ul class="nomargin-top">
@@ -7496,6 +7501,8 @@ ndle 7fe551d35cd0 at 109f4ad50&gt;">&lt;CDLL '/System/Library/Frameworks/Foundat
           href="pycocoa.runtime.ObjCInstance-class.html" 
           class="link">ObjCInstance</a>).</li>
     </ul></dd>
+    <dt>Returns:</dt>
+        <dd>The instance <i>objc</i>.</dd>
     <dt>Raises:</dt>
     <dd><ul class="nomargin-top">
         <li><code><strong class='fraise'>TypeError</strong></code> - If <i>objc</i> is not releasable.</li>
@@ -7949,18 +7956,20 @@ ndle 7fe551d35cd0 at 109f4ad50&gt;">&lt;CDLL '/System/Library/Frameworks/Foundat
     </td>
   </tr></table>
   
-  <p>Convert str to bytes/unicode if needed.</p>
+  <p>Convert <code>str</code> to <code>bytes</code>/<code>unicode</code> if
+  needed.</p>
   <dl class="fields">
     <dt>Parameters:</dt>
     <dd><ul class="nomargin-top">
-        <li><strong class="pname"><code>bytestr</code></strong> - Bytes, str or unicode.</li>
+        <li><strong class="pname"><code>bytestr</code></strong> - <code>bytes</code>, <code>str</code> or <code>unicode</code>.</li>
         <li><strong class="pname"><code>dflt</code></strong> - Optional, default return value.</li>
     </ul></dd>
     <dt>Returns:</dt>
-        <dd>Bytes or <i>dflt</i>.</dd>
+        <dd><code>bytes</code> or <i>dflt</i>.</dd>
     <dt>Raises:</dt>
     <dd><ul class="nomargin-top">
-        <li><code><strong class='fraise'>TypeError</strong></code> - If neither bytes nor str, but iff no <i>dflt</i> is provided.</li>
+        <li><code><strong class='fraise'>TypeError</strong></code> - If neither <code>bytes</code> nor <code>str</code>, but only if no 
+        <i>dflt</i> is provided.</li>
     </ul></dd>
   </dl>
 </td></tr></table>
@@ -7983,10 +7992,10 @@ ndle 7fe551d35cd0 at 109f4ad50&gt;">&lt;CDLL '/System/Library/Frameworks/Foundat
   <dl class="fields">
     <dt>Parameters:</dt>
     <dd><ul class="nomargin-top">
-        <li><strong class="pname"><code>title</code></strong> - The item's title (str).</li>
+        <li><strong class="pname"><code>title</code></strong> - The item's title (<code>str</code>).</li>
     </ul></dd>
     <dt>Returns:</dt>
-        <dd>Name for the callback method (str).</dd>
+        <dd>Name for the callback method (<code>str</code>).</dd>
     <dt>Raises:</dt>
     <dd><ul class="nomargin-top">
         <li><code><strong class='fraise'>ValueError</strong></code> - Invalid method name for this <i>title</i>.</li>
@@ -8086,7 +8095,7 @@ ndle 7fe551d35cd0 at 109f4ad50&gt;">&lt;CDLL '/System/Library/Frameworks/Foundat
         <li><strong class="pname"><code>strepr</code></strong> - Conversion (<code>repr</code> or <code>str</code>).</li>
     </ul></dd>
     <dt>Returns:</dt>
-        <dd>Instance representation (str).</dd>
+        <dd>Instance representation (<code>str</code>).</dd>
   </dl>
 </td></tr></table>
 </div>
@@ -8204,11 +8213,11 @@ ndle 7fe551d35cd0 at 109f4ad50&gt;">&lt;CDLL '/System/Library/Frameworks/Foundat
   <dl class="fields">
     <dt>Parameters:</dt>
     <dd><ul class="nomargin-top">
-        <li><strong class="pname"><code>size</code></strong> - Value to convert (float or int).</li>
+        <li><strong class="pname"><code>size</code></strong> - Value to convert (<code>float</code> or <code>int</code>).</li>
     </ul></dd>
     <dt>Returns:</dt>
         <dd>&quot;&lt;1or2digits&gt;&lt;sep&gt;&lt;3digits&gt;...&quot; or 
-          &quot;-&quot; if <i>size</i> is negative (str).</dd>
+          &quot;-&quot; if <i>size</i> is negative (<code>str</code>).</dd>
   </dl>
 </td></tr></table>
 </div>
@@ -8231,10 +8240,10 @@ ndle 7fe551d35cd0 at 109f4ad50&gt;">&lt;CDLL '/System/Library/Frameworks/Foundat
   <dl class="fields">
     <dt>Parameters:</dt>
     <dd><ul class="nomargin-top">
-        <li><strong class="pname"><code>size</code></strong> - Value to convert (float or int).</li>
+        <li><strong class="pname"><code>size</code></strong> - Value to convert (<code>float</code> or <code>int</code>).</li>
     </ul></dd>
     <dt>Returns:</dt>
-        <dd>&quot;&lt;Size&gt; &lt;B&gt;&lt;SI&gt;&quot; (str).</dd>
+        <dd>&quot;&lt;Size&gt; &lt;B&gt;&lt;SI&gt;&quot; (<code>str</code>).</dd>
   </dl>
 </td></tr></table>
 </div>
@@ -8404,14 +8413,14 @@ mUIFont', size=13, traits='Italic', weight=5),
   <dl class="fields">
     <dt>Value:</dt>
       <dd><table><tr><td><pre class="variable">
-NSMain.Application=NSApplication(&lt;Id_t at 0x10dfb2ef0&gt;) of 0x7fe551d4e<span class="variable-linewrap"><img src="crarr.png" alt="\" /></span>
-650,
-      .BooleanNO=NSBoolean(&lt;Id_t at 0x10dfb23b0&gt;) of 0x7fffa0a8a3f8,
-      .BooleanYES=NSBoolean(&lt;Id_t at 0x10da3a7a0&gt;) of 0x7fffa0a8a3e8,
-      .Bundle=NSBundle(&lt;Id_t at 0x10da244d0&gt;) of 0x7fe551e233a0,
+NSMain.Application=NSApplication(&lt;Id_t at 0x106847e60&gt;) of 0x7fdc2c37f<span class="variable-linewrap"><img src="crarr.png" alt="\" /></span>
+160,
+      .BooleanNO=NSBoolean(&lt;Id_t at 0x106847320&gt;) of 0x7fff839ce3f8,
+      .BooleanYES=NSBoolean(&lt;Id_t at 0x10683b7a0&gt;) of 0x7fff839ce3e8,
+      .Bundle=NSBundle(&lt;Id_t at 0x1068250e0&gt;) of 0x7fdc29ec8db0,
       .BundleName=NSConstantString('CFBundleName'),
-      .FontManager=NSFontManager(&lt;Id_t at 0x10da243b0&gt;) of 0x7fe554158<span class="variable-linewrap"><img src="crarr.png" alt="\" /></span>
-9c0,
+      .FontManager=NSFontManager(&lt;Id_t at 0x106825290&gt;) of 0x7fdc2c32c<span class="variable-linewrap"><img src="crarr.png" alt="\" /></span>
+330,
 <code class="variable-ellipsis">...</code>
 </pre></td></tr></table>
 </dd>
@@ -8495,8 +8504,8 @@ WindowStyle.Closable=2,
   <dl class="fields">
     <dt>Value:</dt>
       <dd><table><tr><td><pre class="variable">
-&lt;CDLL '/System/Library/Frameworks/AppKit.framework/AppKit', handle 7fe<span class="variable-linewrap"><img src="crarr.png" alt="\" /></span>
-551d36600 at 109f39590&gt;
+&lt;CDLL '/System/Library/Frameworks/AppKit.framework/AppKit', handle 7fd<span class="variable-linewrap"><img src="crarr.png" alt="\" /></span>
+c29d41c00 at 102d10610&gt;
 </pre></td></tr></table>
 </dd>
   </dl>
@@ -8515,7 +8524,7 @@ WindowStyle.Closable=2,
     <dt>Value:</dt>
       <dd><table><tr><td><pre class="variable">
 &lt;CDLL '/System/Library/Frameworks/CoreFoundation.framework/CoreFoundat<span class="variable-linewrap"><img src="crarr.png" alt="\" /></span>
-ion', handle 11685c800 at 109f24990&gt;
+ion', handle 10eac1800 at 102cf8a10&gt;
 </pre></td></tr></table>
 </dd>
   </dl>
@@ -8534,7 +8543,7 @@ ion', handle 11685c800 at 109f24990&gt;
     <dt>Value:</dt>
       <dd><table><tr><td><pre class="variable">
 &lt;CDLL '/System/Library/Frameworks/CoreText.framework/CoreText', handle<span class="variable-linewrap"><img src="crarr.png" alt="\" /></span>
- 7fe551f040f0 at 109f4a710&gt;
+ 7fdc29d45020 at 102d1d790&gt;
 </pre></td></tr></table>
 </dd>
   </dl>
@@ -8553,7 +8562,7 @@ ion', handle 11685c800 at 109f24990&gt;
     <dt>Value:</dt>
       <dd><table><tr><td><pre class="variable">
 &lt;CDLL '/System/Library/Frameworks/Foundation.framework/Foundation', ha<span class="variable-linewrap"><img src="crarr.png" alt="\" /></span>
-ndle 7fe551d35cd0 at 109f4ad50&gt;
+ndle 7fdc29d43f00 at 102d1ddd0&gt;
 </pre></td></tr></table>
 </dd>
   </dl>
@@ -8571,7 +8580,7 @@ ndle 7fe551d35cd0 at 109f4ad50&gt;
   <dl class="fields">
     <dt>Value:</dt>
       <dd><table><tr><td><pre class="variable">
-&lt;CDLL '/usr/lib/libobjc.dylib', handle 11685e680 at 109f4ab90&gt;
+&lt;CDLL '/usr/lib/libobjc.dylib', handle 10eac3680 at 102d1dc10&gt;
 </pre></td></tr></table>
 </dd>
   </dl>
@@ -8589,8 +8598,8 @@ ndle 7fe551d35cd0 at 109f4ad50&gt;
   <dl class="fields">
     <dt>Value:</dt>
       <dd><table><tr><td><pre class="variable">
-&lt;CDLL '/System/Library/Frameworks/quartz.framework/quartz', handle 7fe<span class="variable-linewrap"><img src="crarr.png" alt="\" /></span>
-551d163f0 at 109f397d0&gt;
+&lt;CDLL '/System/Library/Frameworks/quartz.framework/quartz', handle 7fd<span class="variable-linewrap"><img src="crarr.png" alt="\" /></span>
+c29d49120 at 102d10850&gt;
 </pre></td></tr></table>
 </dd>
   </dl>
@@ -8628,7 +8637,7 @@ ndle 7fe551d35cd0 at 109f4ad50&gt;
 <table border="0" cellpadding="0" cellspacing="0" width="100%%">
   <tr>
     <td align="left" class="footer">
-    Generated by Epydoc 3.0.1 on Sat Jun 16 16:27:47 2018
+    Generated by Epydoc 3.0.1 on Fri Jun 22 12:53:51 2018
     </td>
     <td align="right" class="footer">
       <a target="mainFrame" href="http://epydoc.sourceforge.net"

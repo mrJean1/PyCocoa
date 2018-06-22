@@ -38,12 +38,12 @@ from oslibs  import NSFontBoldMask, NSFontItalicMask, \
                     NSFontNarrowMask, NSFontPosterMask, \
                     NSFontSmallCapsMask, NSFontSansSerifClass, \
                     NSFontUnboldMask, NSFontUnitalicMask
-from runtime import isInstanceOf
+from runtime import isInstanceOf, release
 from strs    import Str
 from utils   import bytes2str, _ByteStrs, _Constants, _exports, \
                     flint, _Ints, isinstanceOf, _Singletons, _Types
 
-__version__ = '18.06.10'
+__version__ = '18.06.18'
 
 # <http://Developer.Apple.com/documentation/appkit/nsfont.weight>
 # _NSFontWeigthHeavy      = 13 ?
@@ -58,7 +58,10 @@ __version__ = '18.06.10'
 
 
 def _nsFontsOf(family):
-    return NSMain.FontManager.availableMembersOfFontFamily_(NSStr(family))
+    t = NSStr(family)
+    r = NSMain.FontManager.availableMembersOfFontFamily_(t)
+    t.release()  # PYCHOK expected
+    return r
 
 
 # XXX dict _familyTraits and class FontTrait
@@ -198,7 +201,7 @@ class Font(_Type0):
         if isinstance(family_or_font, Str):
             ns, py = family_or_font.NS, str(family_or_font)
         elif isinstance(family_or_font, _ByteStrs):
-            ns, py = NSStr(family_or_font), bytes2str(family_or_font)
+            ns, py = release(NSStr(family_or_font)), bytes2str(family_or_font)
         elif isinstance(family_or_font, NSStr):
             ns, py = family_or_font, nsString2str(family_or_font)
 #       elif isInstanceOf(family_or_font, NSFontDescriptor):
@@ -453,7 +456,7 @@ class Font(_Type0):
         if isinstance(bstr, Str):
             ns = bstr.NS
         elif isinstance(bstr, _ByteStrs):
-            ns = NSStr(bstr)
+            ns = release(NSStr(bstr))
         elif isinstanceOf(bstr, NSStr, name='bstr'):
             ns = bstr
         return flint(self.NS.widthOfString_(ns)), self.height

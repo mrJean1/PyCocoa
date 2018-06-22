@@ -36,9 +36,9 @@ from nstypes import NSAlert, NSError, NSFont, NSMain, \
                     NSStr, nsString2str, nsTextView
 from pytypes import dict2NS, py2NS, url2NS
 from oslibs  import NSCancelButton, NSOKButton, YES
-from runtime import isInstanceOf
+from runtime import isInstanceOf, release
 # from strs  import StrAttd
-from utils   import _Constants, _Strs, _text_title, _Types
+from utils   import _Constants, _Strs, _text_title2, _Types
 
 from os import linesep
 from threading import Thread
@@ -60,7 +60,7 @@ __all__ = ('AlertPanel', 'AlertStyle',
            'PanelButton',
            'SavePanel',
            'TextPanel')
-__version__ = '18.06.11'
+__version__ = '18.06.21'
 
 
 class AlertStyle(_Constants):  # Enum?
@@ -145,25 +145,25 @@ class AlertPanel(_Type2):
         # <http://Developer.Apple.com/documentation/appkit/nsalert>
         ns = NSAlert.alloc().init()
         ns.setAlertStyle_(self._style)
-        ns.setMessageText_(NSStr(self.title))
+        ns.setMessageText_(release(NSStr(self.title)))
 
         if self._info:
             # <http://Developer.Apple.com/library/content/documentation/
             #       Cocoa/Conceptual/Strings/Articles/stringsParagraphBreaks.html>
             ns.setInformativeText_(NSStr(self._info))
 
-        ns.addButtonWithTitle_(NSStr(self._ok))
+        ns.addButtonWithTitle_(release(NSStr(self._ok)))
         if self._cancel:
-            ns.addButtonWithTitle_(NSStr(self._cancel))
+            ns.addButtonWithTitle_(release(NSStr(self._cancel)))
             if self._other:
-                ns.addButtonWithTitle_(NSStr(self._other))
+                ns.addButtonWithTitle_(release(NSStr(self._other)))
 
         if self._suppress in (False, YES):
             self._suppress = False
             ns.setShowsSuppressionButton_(YES)
             s = _AlertStyleStr.get(self._style, '')
             s = 'Do not show this %sAlert again' % (s,)
-            ns.suppressionButton().setTitle_(NSStr(s))
+            ns.suppressionButton().setTitle_(release(NSStr(s)))
 
         # <http://Developer.Apple.com/library/content/documentation/
         #       Cocoa/Conceptual/Dialog/Tasks/DisplayAlertHelp.html>
@@ -244,6 +244,7 @@ class BrowserPanel(_Type2):
             d = dict2NS(dict(URL=ns, reveal=True, newTab=bool(tab)), frozen=True)
             u = NSStr('WebBrowserOpenURLNotification')
             self.NS.postNotificationName_object_userInfo_(u, None, d)
+            u.release()  # PYCHOK expected
         return _urlparse(nsString2str(ns.absoluteString()))
 
 
@@ -336,7 +337,7 @@ class OpenPanel(_Type2):
         ns.setTreatsFilePackagesAsDirectories_(bool(packages))
 
         if prompt:
-            ns.setPrompt_(NSStr(prompt))
+            ns.setPrompt_(release(NSStr(prompt)))
 
         while True:
             # ns.orderFrontRegardless()  # only flashes
@@ -435,16 +436,16 @@ class SavePanel(_Type2):
 #       ns.setTitleHidden_(bool(False))  # "does nothing now"
 
         if name:
-            ns.setNameFieldStringValue_(NSStr(name))
+            ns.setNameFieldStringValue_(release(NSStr(name)))
 
         if dir:
             if dir.lower().startswith('file:///'):
-                ns.setDirectoryURL_(NSStr(dir))
+                ns.setDirectoryURL_(release(NSStr(dir)))
             else:
-                ns.setDirectory_(NSStr(dir))
+                ns.setDirectory_(release(NSStr(dir)))
 
         if filetype:
-            ns.setRequiredFileType_(NSStr(filetype.lstrip('.')))
+            ns.setRequiredFileType_(release(NSStr(filetype.lstrip('.'))))
             hidexts = False
 
         ns.setShowsHiddenFiles_(bool(hidden))
@@ -452,12 +453,12 @@ class SavePanel(_Type2):
         ns.setExtensionHidden_(bool(hidexts))
 
         if label:
-            ns.setNameFieldLabel_(NSStr(label))
+            ns.setNameFieldLabel_(release(NSStr(label)))
 
         ns.setTreatsFilePackagesAsDirectories_(bool(packages))
 
         if prompt:
-            ns.setPrompt_(NSStr(prompt))
+            ns.setPrompt_(release(NSStr(prompt)))
 
         if tags:
             ns.setTagNames_(py2NS(tags))
@@ -501,14 +502,14 @@ class TextPanel(AlertPanel):
         '''
         ns = NSAlert.alloc().init()
         ns.setAlertStyle_(AlertStyle.Info)
-        ns.addButtonWithTitle_(NSStr('Close'))
+        ns.addButtonWithTitle_(release(NSStr('Close')))
 
         if not text_or_file:
             raise ValueError('no %s: %r' % ('text_or_file', text_or_file))
 
-        text, t = _text_title(text_or_file, self.title)
+        text, t = _text_title2(text_or_file, self.title)
         if t:
-            ns.setMessageText_(NSStr(t))
+            ns.setMessageText_(release(NSStr(t)))
 
         t = nsTextView(text, NSFont.userFixedPitchFontOfSize_(0)
                              if font is None else font.NS)

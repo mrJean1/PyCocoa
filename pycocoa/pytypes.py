@@ -70,11 +70,11 @@ from nstypes import NSArray, NSData, NSDecimal, NSDictionary, \
                     NSMutableArray, NSMutableDictionary, NSMutableSet, \
                     NSSet, NSStr, NSURL
 from oslibs  import libCF
-from runtime import ObjCInstance
+from runtime import ObjCInstance, release
 from types   import GeneratorType as _generator
 from utils   import bytes2str, clip, DEFAULT_UNICODE, _exports, _Ints
 
-__version__ = '18.06.16'
+__version__ = '18.06.18'
 
 
 def _iter2NS(ns, py, getCount):
@@ -295,7 +295,7 @@ def url2NS(py, url2=None):
        @see: U{URL<http://Developer.Apple.com//documentation/foundation/url>}
              for parsing an L{NSURL}.
     '''
-    ns = NSStr(py)
+    ns = release(NSStr(py))
     if ':' in bytes2str(py):
         if url2:
             return NSURL.alloc().initWithString_relativeToURL_(ns, url2NS(url2))

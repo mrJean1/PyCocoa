@@ -70,18 +70,21 @@ object --+
 
 <hr />
 <p>Python class creating an ObjC sub-class of an existing ObjC 
-  (super-)class.</p>
+  (super)class.</p>
   <p>This class is used only to *define* the interface and implementation 
   of an ObjC sub-class from Python.  It should not be used in any other 
   way.  If you want a Python representation of the resulting class, create 
-  it with ObjCClass.</p>
-  <p>It consists primarily of function decorators which you use to add 
-  methods to the sub-class.</p>
-  <p>ObjCSubclass is used to define an ObjC sub-class of an existing class 
-  registered with the runtime.  When you create an instance of 
-  ObjCSubclass, it registers the new sub-class with the ObjC runtime and 
-  creates a set of function decorators that you can use to add instance 
-  methods or class methods to the sub-class.</p>
+  it with <a href="pycocoa.runtime.ObjCClass-class.html" 
+  class="link">ObjCClass</a>.</p>
+  <p>*It consists primarily of function decorators which you use to add 
+  methods to the sub-class.*</p>
+  <p><a href="pycocoa.runtime.ObjCSubclass-class.html" 
+  class="link">ObjCSubclass</a> is used to define an ObjC sub-class of an 
+  existing class registered with the runtime.  When you create an instance 
+  of <a href="pycocoa.runtime.ObjCSubclass-class.html" 
+  class="link">ObjCSubclass</a>, it registers the new sub-class with the 
+  ObjC runtime and creates a set of function decorators that you can use to
+  add instance methods or class methods to the sub-class.</p>
   <p>Typical usage would be to first create and register the sub-class:</p>
 <pre class="py-doctest">
 <span class="py-prompt">&gt;&gt;&gt; </span>MySubclass = ObjCSubclass(<span class="py-string">'NSObject'</span>, <span class="py-string">'MySubclassName'</span>)</pre>
@@ -99,21 +102,24 @@ object --+
 <span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">def</span> <span class="py-defname">classMethodThatReturnsId</span>(self):
 <span class="py-prompt">&gt;&gt;&gt; </span>    return self</pre>
   <p>It is probably a good idea to organize the code related to a single 
-  sub-class by either putting it in its own module (note that you don't 
-  actually need to expose any of the method names or the ObjCSubclass) or 
-  by bundling it all up inside a Python class definition, perhaps called 
-  MySubclassImplementation.</p>
-  <p>It is also possible to add ObjC ivars to the sub-class, however if you
-  do so, you must call the __init__ method with register=False, and then 
-  call the register method after the ivars have been added.</p>
-  <p>However, instead of creating the ivars in ObjC land, it is easier to 
-  just define Python-based instance variables in your sub-class's init 
-  method.</p>
-  <p>Instances are created as a pointer to the objc object by using:</p>
+  sub-class by either (a) putting it in its own module (note that you don't
+  actually need to expose any of the method names or the <a 
+  href="pycocoa.runtime.ObjCSubclass-class.html" 
+  class="link">ObjCSubclass</a>) or (b) bundling it all up inside a Python 
+  class definition, perhaps called MySubclassImplementation.</p>
+  <p>It is also possible to add ObjC <i>ivars</i> to the sub-class, however
+  if you do so, you *{must call} the <code>.__init__</code> method with 
+  keyword argument <i>register=False</i>, and then call the 
+  <code>.register</code> method after the <i>ivars</i> have been added.</p>
+  <p>However, instead of creating the <i>ivars</i> in ObjC land, it is 
+  easier to just define Python-based <i>ivars</i> in your sub-class' 
+  <code>.__init__</code> method.</p>
+  <p>Instances are created as a pointer to the ObjC object by using:</p>
 <pre class="py-doctest">
 <span class="py-prompt">&gt;&gt;&gt; </span>myinstance = send_message(<span class="py-string">'MySubclassName'</span>, <span class="py-string">'alloc'</span>)
 <span class="py-prompt">&gt;&gt;&gt; </span>myinstance = send_message(myinstance, <span class="py-string">'init'</span>)</pre>
-  <p>or wrapped inside an ObjCInstance object by using:</p>
+  <p>or wrapped inside an <a href="pycocoa.runtime.ObjCInstance-class.html"
+  class="link">ObjCInstance</a> by using:</p>
 <pre class="py-doctest">
 <span class="py-prompt">&gt;&gt;&gt; </span>myclass = ObjCClass(<span class="py-string">'MySubclassName'</span>)
 <span class="py-prompt">&gt;&gt;&gt; </span>myinstance = myclass.alloc().init()</pre>
@@ -362,13 +368,13 @@ object --+
   <dl class="fields">
     <dt>Parameters:</dt>
     <dd><ul class="nomargin-top">
-        <li><strong class="pname"><code>parent</code></strong> - The super-class (<code>str</code> or <code>Object</code>).</li>
+        <li><strong class="pname"><code>parent</code></strong> - The super-class (<code>str</code> or <code>ObjCClass</code>).</li>
         <li><strong class="pname"><code>name</code></strong> - The sub-class name (<code>str</code>).</li>
-        <li><strong class="pname"><code>register</code></strong> - Optionally, register the new sub-class (bool).</li>
+        <li><strong class="pname"><code>register</code></strong> - Register the new sub-class (<code>bool</code>).</li>
         <li><strong class="pname"><code>ivars</code></strong> - Optionally, specify any number of instance variables to be added 
           <i>before</i> registering the new class, each with a keyword 
-          argument <code>ivarname=ctype</code> to specify the name and 
-          ctype of the instance variable.</li>
+          argument <code>name=ctype</code> to specify the name and 
+          <code>ctypes</code> of the instance variable.</li>
     </ul></dd>
     <dt>Overrides:
         object.__init__
@@ -453,10 +459,11 @@ object --+
   <dl class="fields">
     <dt>Parameters:</dt>
     <dd><ul class="nomargin-top">
-        <li><strong class="pname"><code>encoding</code></strong> - Signature of the method (<code>encoding</code>).</li>
+        <li><strong class="pname"><code>encoding</code></strong> - Signature of the method (<code>encoding</code>) without 
+          <code>Id/self</code> and <code>SEL/cmd</code> encoding.</li>
     </ul></dd>
     <dt>Returns:</dt>
-        <dd>Decorater.</dd>
+        <dd>Decorated class method.</dd>
   </dl>
 </td></tr></table>
 </div>
@@ -479,10 +486,11 @@ object --+
   <dl class="fields">
     <dt>Parameters:</dt>
     <dd><ul class="nomargin-top">
-        <li><strong class="pname"><code>encoding</code></strong> - Signature of the method (<code>encoding</code>).</li>
+        <li><strong class="pname"><code>encoding</code></strong> - Signature of the method (<code>encoding</code>) without 
+          <code>Id/self</code> and <code>SEL/cmd</code> encoding.</li>
     </ul></dd>
     <dt>Returns:</dt>
-        <dd>Decorater.</dd>
+        <dd>Decorated instance method.</dd>
   </dl>
 </td></tr></table>
 </div>
@@ -505,15 +513,16 @@ object --+
   <dl class="fields">
     <dt>Parameters:</dt>
     <dd><ul class="nomargin-top">
-        <li><strong class="pname"><code>encoding</code></strong> - Signature of the method (<code>encoding</code>).</li>
+        <li><strong class="pname"><code>encoding</code></strong> - Signature of the method (<code>encoding</code>) without 
+          <code>Id/self</code> and <code>SEL/cmd</code> encoding.</li>
     </ul></dd>
     <dt>Returns:</dt>
-        <dd>Decorater.</dd>
+        <dd>The instance method.</dd>
   </dl>
 <div class="fields">      <p><strong>Note:</strong>
         The method must have signature <i class="math">m(self, cmd, 
-        *args)</i> where both <code>self</code> and <code>cmd</code> are 
-        just pointers to ObjC objects.
+        *args)</i> where both <code>Id/self</code> and <code>SEL/cmd</code>
+        are just pointers to ObjC objects.
       </p>
 </div></td></tr></table>
 </div>
@@ -604,7 +613,7 @@ object --+
 <table border="0" cellpadding="0" cellspacing="0" width="100%%">
   <tr>
     <td align="left" class="footer">
-    Generated by Epydoc 3.0.1 on Sat Jun 16 16:27:49 2018
+    Generated by Epydoc 3.0.1 on Fri Jun 22 12:53:53 2018
     </td>
     <td align="right" class="footer">
       <a target="mainFrame" href="http://epydoc.sourceforge.net"

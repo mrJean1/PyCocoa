@@ -45,12 +45,12 @@ from oslibs   import NO, NSBackingStoreBuffered, \
                      NSWindowStyleMaskUsual, \
                      NSWindowStyleMaskUtilityWindow, YES
 from runtime  import isInstanceOf, ObjCClass, ObjCInstance, \
-                     ObjCSubclass, retain, send_super
+                     ObjCSubclass, release, retain, send_super
 from utils    import aspect_ratio, bytes2str, _Constants, _exports, \
-                     _Globals, isinstanceOf, _text_title, _Types
+                     _Globals, isinstanceOf, _text_title2, _Types
 # from enum   import Enum
 
-__version__ = '18.06.11'
+__version__ = '18.06.21'
 
 _Cascade = NSPoint_t(25, 25)  # PYCHOK false
 
@@ -488,7 +488,7 @@ class TextWindow(Window):
            @keyword fraction: Window size as fraction of the screen (C{float}).
            @keyword kwds: Optional, additional keyword arguments, see L{Window}.
         '''
-        text, t = _text_title(text_or_file, title)
+        text, t = _text_title2(text_or_file, title)
         super(TextWindow, self).__init__(title=t, frame=Screen(fraction), **kwds)
 
         if font is None:
@@ -531,7 +531,7 @@ class TextWindow(Window):
         tv.setVerticallyResizable_(YES)
 
         tv.setFont_(f)  # XXX set font BEFORE text
-        tv.insertText_(NSStr(text))
+        tv.insertText_(release(NSStr(text)))
         tv.setEditable_(NO)
         tv.setDrawsBackground_(NO)
 

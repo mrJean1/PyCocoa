@@ -73,15 +73,15 @@ from octypes import Array_t, Class_t, c_struct_t, Id_t, NSRect4_t, \
 from oslibs  import cfNumber2bool, cfNumber2num, cfString, cfString2str, \
                     cfURLResolveAlias, libAppKit, libCF, libFoundation, \
                     libobjc, NO, NSExceptionHandler_t, YES
-from runtime import isInstanceOf, ObjCClass, ObjCInstance, retain, \
-                    send_message, _Xargs
+from runtime import isInstanceOf, ObjCClass, ObjCInstance, release, \
+                    retain, send_message, _Xargs
 from utils   import bytes2str, _ByteStrs, clip, _exports, _Globals, \
                     isinstanceOf, iterbytes, lambda1, missing, \
                     _Singletons, _Types  # printf
 
 from os import linesep, path as os_path
 
-__version__ = '18.06.16'
+__version__ = '18.06.18'
 
 # some commonly used Foundation and Cocoa classes, described here
 # <http://OMZ-Software.com/pythonista/docs/ios/objc_util.html>
@@ -175,20 +175,19 @@ class NSDecimal(ObjCInstance):
     '''
     _Class = NSDecimalNumber
     _IMP   = None
+    _pyDec = None
     _SEL   = None
 
     def __new__(cls, py):
         '''New L{NSDecimal}.
 
-           @param py: The decimal value (C{Decimal} or L{NSDecimal}).
+           @param py: The decimal value (C{Decimal}, C{float}, C{int},
+                      C{str} or L{NSDecimal}).
 
            @return: New L{NSDecimal} (L{ObjCInstance}).
         '''
         if isinstance(py, NSDecimal):
-            py = py.Decimal
-        else:
-            py = _Decimal(py)  # from Decimal, float, int, str
-        py = py.to_eng_string()  # XXX to maintain accuracy
+            return py
 
         if None in (cls._IMP, cls._SEL):
             cls._SEL = get_selector('decimalNumberWithString:')
@@ -196,9 +195,12 @@ class NSDecimal(ObjCInstance):
             m = libobjc.method_getImplementation(m)
             cls._IMP = cast(m, CFUNCTYPE(Id_t, Id_t, SEL_t, Id_t))
 
-        d = cls._IMP(cast(cls._Class, Id_t), cls._SEL, NSStr(py))
+        py = _Decimal(py)  # from Decimal, float, int, str
+        t = NSStr(py.to_eng_string())  # maintains accuracy
+        d = cls._IMP(cast(cls._Class, Id_t), cls._SEL, t)
+        t.release()  # PYCHOK expected
         self = super(NSDecimal, cls).__new__(cls, d)
-# XXX?  self._objc_ptr = self._as_parameter_ = d  # for ctypes
+        self._pyDec = py
         return self
 
     def __str__(self):
@@ -218,10 +220,7 @@ class NSDecimal(ObjCInstance):
     def value(self):
         '''Get this L{NSDecimal} as a Python C{Decimal}.
         '''
-        d = self.doubleValue()  # PYCHOK expected
-        if d.is_integer():
-            d = int(d)
-        return _Decimal(d)
+        return self._pyDec
 
     Decimal = value
 
@@ -363,7 +362,6 @@ class _NSMain(_Singletons):
 
 
 NSMain  = _NSMain()  # global C{NS...} singletons
-_NSStr1 = {}  # empty and single-character strings
 
 
 class NSStr(ObjCInstance):
@@ -372,27 +370,19 @@ class NSStr(ObjCInstance):
     _str = None
 
     def __new__(cls, ustr):
-        '''New L{NSStr}.
+        '''New L{NSStr} wrapping C{NS[Constant]String}.
 
            @param ustr: The string value (C{str} or C{unicode}).
 
            @return: The string (L{NSStr}).
         '''
-        if len(ustr) > 1:
-            # the ObjC class is NSCFString, NSConstantString, etc.
-            self = super(NSStr, cls).__new__(cls, cfString(ustr), cached=True)
-            self._str = bytes2str(ustr)
-
-        else:
-            # singletons for empty and single-character strings
-            self = _NSStr1.get(ustr, None)
-            if self is None:
-                self = super(NSStr, cls).__new__(cls, cfString(ustr), cached=False)
-                self._str = bytes2str(ustr)
-                _NSStr1[ustr] = self
-            retain(self)
-
-        return self
+        self = super(NSStr, cls).__new__(cls, cfString(ustr))
+        self._str = bytes2str(ustr)
+        # L{ObjCinstance} caches ObjC objects using the
+        # objc_ptr.value as key, which may or may not
+        # create in a singleton for each string value,
+        # retaining strings seems to help singletons.
+        return self if len(ustr) > 1 else retain(self)
 
     def __str__(self):
         return '%s(%r)' % (self.objc_classname, clip(self.value))
@@ -434,7 +424,7 @@ def isAlias(path):
              U{here<http://StackOverflow.com/questions/21150169/>}.
     '''
     if isinstance(path, _ByteStrs):
-        path = NSStr(path)
+        path = release(NSStr(path))
     elif isinstanceOf(path, NSStr, name='path'):
         pass
 
@@ -512,18 +502,18 @@ def nsBoolean2bool(ns, dflt=missing):  # XXX an NSBoolean method?
     return cfNumber2bool(ns, dflt=dflt)
 
 
-def nsBundleRename(nsTitle, match='Python'):
+def nsBundleRename(ns_title, match='Python'):
     '''Change the bundle title if the current title matches.
 
-       @param nsTitle: New bundle title (L{NSStr}).
+       @param ns_title: New bundle title (L{NSStr}).
        @keyword match: Optional, previous title to match (C{str}).
 
        @return: The previous bundle title (C{str}) or None.
 
-       @note: Used to mimick C{NSApplication.setTitle_(nsTitle)},
+       @note: Used to mimick C{NSApplication.setTitle_(ns_title)},
               the name of an L{App} shown in the menu bar.
     '''
-    t = nsTitle and ns2py(nsTitle)
+    t = ns_title and ns2py(ns_title)
     if t:
         _Globals.argv0 = bytes2str(t)
 
@@ -537,8 +527,8 @@ def nsBundleRename(nsTitle, match='Python'):
             p = ns.objectForKey_(NSMain.BundleName) or None
             if p:
                 p = ns2py(p, dflt='') or ''
-                if match in ('', None, p) and t:  # can't be empty
-                    ns.setObject_forKey_(nsTitle, NSMain.BundleName)
+                if t and match in ('', None, p):  # can't be empty
+                    ns.setObject_forKey_(ns_title, NSMain.BundleName)
     return p
 
 
@@ -763,7 +753,7 @@ def nsTextSize3(text, ns_font=None):
     h = n = text.count(linesep) + 1
     if ns_font:
         h *= NSMain.LayoutManager.defaultLineHeightForFont_(ns_font)
-        w = ns_font.widthOfString_(NSStr(w))
+        w = ns_font.widthOfString_(release(NSStr(w)))
     else:
         w = len(w)
     return w, h, n
@@ -785,7 +775,7 @@ def nsTextView(text, ns_font):
     # t = NSAttributedString.alloc().initWithString_attributes_(NSStr(text), d)
     ns = NSTextView.alloc().initWithFrame_(r)
     ns.setFont_(ns_font)  # XXX set font BEFORE text
-    ns.insertText_(NSStr(text))
+    ns.insertText_(release(NSStr(text)))
     ns.setEditable_(NO)
     ns.setDrawsBackground_(NO)
     if n > 50:  # force scroll view

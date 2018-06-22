@@ -61,7 +61,7 @@
 
 @var missing: Missing keyword argument value.
 '''
-__version__ = '18.06.16'
+__version__ = '18.06.21'
 
 try:  # all imports listed explicitly to help PyChecker
     from math import gcd  # Python 3+
@@ -76,7 +76,7 @@ except ImportError:
 
 
 class _MutableConstants(object):
-    '''Enum-like, settable "constants".
+    '''(INTERNAL) Enum-like, settable "constants".
     '''
     def __setattr__(self, name, value):
         if not hasattr(self, name):
@@ -111,7 +111,7 @@ class _MutableConstants(object):
 
 
 class _Constants(_MutableConstants):
-    '''Enum-like, read-only constants.
+    '''(INTERNAL) Enum-like, read-only constants.
     '''
     def __setattr__(self, name, value):
         raise TypeError('%s.%s = %r' % (self.__class__.__name__, name, value))
@@ -140,7 +140,7 @@ class _Constants(_MutableConstants):
 
 
 class _Globals(object):
-    '''Some PyCocoa-internal globals
+    '''(INTERNAL) Some PyCocoa globals
     '''
     App      = None  # set by .apps.App.__init__, not an NSApplication!
     argv0    = 'PyCocoa'  # set by .nstypes.nsBundleRename and _allisting
@@ -152,7 +152,7 @@ class _Globals(object):
 
 
 class _Singletons(_MutableConstants):
-    '''Global, single instances.
+    '''(INTERNAL) Global, single instances.
     '''
     def __repr__(self):
         def _fmt(n, v):
@@ -221,12 +221,12 @@ missing         = missing()  # private, singleton
 
 
 def aspect_ratio(width, height):
-    '''Compute the smallest, int aspect ratio.
+    '''Compute the smallest, integer aspect ratio.
 
-       @param width: The width (float or int).
-       @param height: The height (float or int).
+       @param width: The width (C{float} or C{int}).
+       @param height: The height (C{float} or C{int}).
 
-       @return: 2-Tuple (width, height) or None.
+       @return: 2-Tuple (width, height) as (C{int}, C{int}) or C{None}.
 
        @example:
        >>> aspect_ratio(10, 15)
@@ -263,20 +263,20 @@ try:  # MCCABE 23
         '''Represent bytes like C{repr(bytestr)}.
 
            @param bytestr: Str or bytes.
-           @return: Representation C{b'...'} (str).
+           @return: Representation C{b'...'} (C{str}).
         '''
         return 'b%r' % (bytestr,)
 
     def bytes2str(bytestr, dflt=missing):
-        '''Convert bytes/unicode to str if needed.
+        '''Convert C{bytes}/C{unicode} to C{str} if needed.
 
-           @param bytestr: Bytes, str or unicode.
+           @param bytestr: C{bytes}, C{str} or C{unicode}.
            @keyword dflt: Optional, default return value.
 
-           @return: Str or I{dflt}.
+           @return: C{str} or I{dflt}.
 
-           @raise TypeError: If neither str nor bytes, but
-                             iff no I{dflt} is provided.
+           @raise TypeError: If neither C{str} nor C{bytes}, but
+                             only if no I{dflt} is provided.
         '''
         if isinstance(bytestr, _Strs):
             return bytestr
@@ -290,15 +290,15 @@ try:  # MCCABE 23
     iterbytes = iter
 
     def str2bytes(bytestr, dflt=missing):
-        '''Convert str to bytes/unicode if needed.
+        '''Convert C{str} to C{bytes}/C{unicode} if needed.
 
-           @param bytestr: Bytes, str or unicode.
+           @param bytestr: C{bytes}, C{str} or C{unicode}.
            @keyword dflt: Optional, default return value.
 
-           @return: Bytes or I{dflt}.
+           @return: C{bytes} or I{dflt}.
 
-           @raise TypeError: If neither bytes nor str, but
-                             iff no I{dflt} is provided.
+           @raise TypeError: If neither C{bytes} nor C{str}, but
+                             only if no I{dflt} is provided.
         '''
         if isinstance(bytestr, _Strs):
             return bytestr
@@ -316,15 +316,15 @@ except NameError:  # Python 3+
     bytes2repr = repr  # always b'...'
 
     def bytes2str(bytestr, dflt=missing):  # PYCHOK expected
-        '''Convert bytes to str if needed.
+        '''Convert C{bytes} to C{str} if needed.
 
-           @param bytestr: Str or bytes.
+           @param bytestr: C{str} or C{bytes}.
            @keyword dflt: Optional, default return value.
 
-           @return: Str or I{dflt}.
+           @return: C{str} or I{dflt}.
 
-           @raise TypeError: If neither str nor bytes, but
-                             iff no I{dflt} is provided.
+           @raise TypeError: If neither C{str} nor C{bytes}, but
+                             only if no I{dflt} is provided.
         '''
         if isinstance(bytestr, _Strs):
             return bytestr
@@ -336,7 +336,7 @@ except NameError:  # Python 3+
 
     # iter(bytes) yields an int in Python 3+
     def iterbytes(bytestr):
-        '''Iterate bytes, yielding each as C{byte}.
+        '''Iterate C{bytes}, yielding each as C{byte}.
         '''
         for b in bytestr:  # convert int to bytes
             yield bytes([b])
@@ -347,15 +347,15 @@ except NameError:  # Python 3+
     del b
 
     def str2bytes(bytestr, dflt=missing):  # PYCHOK expected
-        '''Convert str to bytes if needed.
+        '''Convert C{str} to C{bytes} if needed.
 
-           @param bytestr: Bytes or str.
+           @param bytestr: Original C{bytes} or C{str}.
            @keyword dflt: Optional, default return value.
 
-           @return: Bytes or I{dflt}.
+           @return: C{bytes} or I{dflt}.
 
-           @raise TypeError: If neither bytes nor str, but
-                             iff no I{dflt} is provided.
+           @raise TypeError: If neither C{bytes} nor C{str}, but
+                             only if no I{dflt} is provided.
         '''
         if isinstance(bytestr, _Bytes):
             return bytestr
@@ -414,10 +414,10 @@ def _allisting(alls, localls, version, filename, argv0='', itemf=None):
 def clip(bytestr, limit=50):
     '''Clip a string or bytes to the given length limit.
 
-       @param bytestr: Bytes or str.
-       @keyword limit: Length limit (int).
+       @param bytestr: Original C{bytes} or C{str}.
+       @keyword limit: Length limit (C{int}).
 
-       @return: Bytes or str.
+       @return: Clipped C{bytes} or C{str}.
     '''
     if bytestr and limit > 10:
         n = len(bytestr)
@@ -431,7 +431,7 @@ def clip(bytestr, limit=50):
 
 
 def _exports(localls, *names, **starts_ends):  # starts=(), ends=(), not_starts=())
-    '''(INTYERNAL) Return a tuple of __all__ exported names.
+    '''(INTERNAL) Return a tuple of __all__ exported names.
     '''
     s = starts_ends.pop('starts', ()) or ()
     e = starts_ends.pop('ends', ()) or ()
@@ -470,7 +470,7 @@ def inst2strepr(inst, strepr, *attrs):
        @param strepr: Conversion (C{repr} or C{str}).
        @param attrs: Instance attribute names (I{all positional}).
 
-       @return: Instance representation (str).
+       @return: Instance representation (C{str}).
     '''
     def _strepr(v):
         return repr(v) if isinstance(v, _ByteStrs) else strepr(v)
@@ -480,7 +480,7 @@ def inst2strepr(inst, strepr, *attrs):
 
 
 def _int2(i):
-    '''Split an C{int} into 2-tuple (int, shift).
+    '''(INTERNAL) Split an C{int} into 2-tuple (int, shift).
     '''
     s = 0
     if isinstance(i, _Ints) and i > 0:
@@ -501,7 +501,7 @@ def isinstanceOf(inst, *classes, **name_missing):
 
        @param inst: The instance to check (I{any}).
        @param classes: One or several classes (I{all positional}).
-       @keyword name: The name of the instance (str).
+       @keyword name: The name of the instance (C{str}).
 
        @return: The matching I{class} from I{classes}, None otherwise.
 
@@ -530,9 +530,9 @@ def lambda1(arg):
 def name2objc(name):
     '''Convert a (selector) name to bytes and ObjC naming rules.
 
-       @param name: Name to convert (str).
+       @param name: Name to convert (C{str}).
 
-       @return: Converted name (str).
+       @return: Converted name (C{str}).
     '''
     return str2bytes(name).replace(b'_', b':')
 
@@ -540,9 +540,9 @@ def name2objc(name):
 def name2py(name):
     '''Convert a (selector) name to str and Python naming conventions.
 
-       @param name: Name to convert (str).
+       @param name: Name to convert (C{str}).
 
-       @return: Converted name (str).
+       @return: Converted name (C{str}).
     '''
     return bytes2str(name).replace(':', '_')
 
@@ -550,9 +550,9 @@ def name2py(name):
 def name2pymethod(name):
     '''Convert a (selector) name to a valid Python callback method.
 
-       @param name: Name to convert (str).
+       @param name: Name to convert (C{str}).
 
-       @return: Converted name (str).
+       @return: Converted name (C{str}).
 
        @raise ValueError: Invalid, non-alphanumeric I{name}.
     '''
@@ -565,11 +565,11 @@ def name2pymethod(name):
 def printf(fmt, *args, **kwds):  # argv0='', nl=0, nt=0
     '''Formatted print I{fmt % args} with optional keywords.
 
-       @param fmt: Print-like format (str).
+       @param fmt: Print-like format (C{str}).
        @param args: Optional arguments to include (I{all positional}).
-       @keyword argv0: Optional prefix (str).
-       @keyword nl: Number of leading blank lines (int).
-       @keyword nt: Number of trailing blank lines (int).
+       @keyword argv0: Optional prefix (C{str}).
+       @keyword nl: Number of leading blank lines (C{int}).
+       @keyword nt: Number of trailing blank lines (C{int}).
     '''
     a = kwds.get('argv0', _Globals.argv0)
     t = (fmt % args) if args else fmt
@@ -598,8 +598,8 @@ def property2(inst, name):
     return None, None
 
 
-def _text_title(text_or_file, title=''):
-    '''Return 2-tuple (title, text).
+def _text_title2(text_or_file, title=''):
+    '''(INTERNAL) Return 2-tuple (title, text).
     '''
     if isinstance(text_or_file, _ByteStrs):
         text, t = text_or_file, title
@@ -618,7 +618,7 @@ def type2strepr(inst, strepr=str):
        @param inst: Instance (any).
        @keyword strepr: Conversion (C{repr} or C{str}).
 
-       @return: Instance representation (str).
+       @return: Instance representation (C{str}).
     '''
     try:
         t = getattr(inst.NS, 'objc_classname', '')  # PYCHOK expected
@@ -634,10 +634,10 @@ def type2strepr(inst, strepr=str):
 def z1000str(size, sep='_'):
     '''Convert a size value to string with 1_000's seperator.
 
-       @param size: Value to convert (float or int).
+       @param size: Value to convert (C{float} or C{int}).
 
        @return: "<1or2digits><sep><3digits>..." or "-" if I{size}
-                is negative (str).
+                is negative (C{str}).
    '''
     z = int(size)
     if z < 0:
@@ -659,9 +659,9 @@ def z1000str(size, sep='_'):
 def zSIstr(size, B='B'):
     '''Convert a size value to string with SI-units.
 
-       @param size: Value to convert (float or int).
+       @param size: Value to convert (C{float} or C{int}).
 
-       @return: "<Size> <B><SI>" (str).
+       @return: "<Size> <B><SI>" (C{str}).
     '''
     z, si = float(size), ''
     if z > 1024.0:

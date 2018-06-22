@@ -28,11 +28,11 @@
 # all imports listed explicitly to help PyChecker
 from nstypes import isNone, NSMain, NSStr
 from octypes import c_struct_t, ObjC_t
-from runtime import ObjCInstance
+from runtime import ObjCInstance, release
 from utils   import bytes2str, isinstanceOf, type2strepr
 
 __all__ = ()
-__version__ = '18.06.11'
+__version__ = '18.06.18'
 
 
 class _Type0(object):
@@ -156,11 +156,13 @@ class _Type2(_Type1):
     def title(self, title):
         '''Set the title.
         '''
-        self._title = bytes2str(title)
         try:
-            self.NS.setTitle_(NSStr(self._title))
+            t = NSStr(title)
+            self.NS.setTitle_(t)
+            release(t)
         except AttributeError:
-            pass  # no NSApplication.setTitle_
+            t.release()  # no NSApplication.setTitle_
+        self._title = bytes2str(title)
 
 
 if __name__ == '__main__':

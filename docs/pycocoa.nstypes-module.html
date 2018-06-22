@@ -64,7 +64,7 @@
 
 <hr />
 <div class="fields">      <p><strong>Version:</strong>
-        18.06.16
+        18.06.18
       </p>
 </div><!-- ==================== CLASSES ==================== -->
 <a name="section-Classes"></a>
@@ -224,7 +224,7 @@
     </td><td class="summary">
       <table width="100%" cellpadding="0" cellspacing="0" border="0">
         <tr>
-          <td><span class="summary-sig"><a href="pycocoa.nstypes-module.html#nsBundleRename" class="summary-sig-name">nsBundleRename</a>(<span class="summary-sig-arg">nsTitle</span>,
+          <td><span class="summary-sig"><a href="pycocoa.nstypes-module.html#nsBundleRename" class="summary-sig-name">nsBundleRename</a>(<span class="summary-sig-arg">ns_title</span>,
         <span class="summary-sig-arg">match</span>=<span class="summary-sig-default"><code class="variable-quote">'</code><code class="variable-string">Python</code><code class="variable-quote">'</code></span>)</span><br />
       Change the bundle title if the current title matches.</td>
           <td align="right" valign="top">
@@ -1015,15 +1015,15 @@
     <td width="15%" align="right" valign="top" class="summary">
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
-        <a href="pycocoa.nstypes-module.html#NSMain" class="summary-name">NSMain</a> = <code title="NSMain.Application=NSApplication(&lt;Id_t at 0x10dfb2ef0&gt;) of 0x7fe551d4e\
-650,
-      .BooleanNO=NSBoolean(&lt;Id_t at 0x10dfb23b0&gt;) of 0x7fffa0a8a3f8,
-      .BooleanYES=NSBoolean(&lt;Id_t at 0x10da3a7a0&gt;) of 0x7fffa0a8a3e8,
-      .Bundle=NSBundle(&lt;Id_t at 0x10da244d0&gt;) of 0x7fe551e233a0,
+        <a href="pycocoa.nstypes-module.html#NSMain" class="summary-name">NSMain</a> = <code title="NSMain.Application=NSApplication(&lt;Id_t at 0x106847e60&gt;) of 0x7fdc2c37f\
+160,
+      .BooleanNO=NSBoolean(&lt;Id_t at 0x106847320&gt;) of 0x7fff839ce3f8,
+      .BooleanYES=NSBoolean(&lt;Id_t at 0x10683b7a0&gt;) of 0x7fff839ce3e8,
+      .Bundle=NSBundle(&lt;Id_t at 0x1068250e0&gt;) of 0x7fdc29ec8db0,
       .BundleName=NSConstantString('CFBundleName'),
-      .FontManager=NSFontManager(&lt;Id_t at 0x10da243b0&gt;) of 0x7fe554158\
-9c0,
-...">NSMain.Application=NSApplication(&lt;Id_t at 0x10dfb2ef0<code class="variable-ellipsis">...</code></code><br />
+      .FontManager=NSFontManager(&lt;Id_t at 0x106825290&gt;) of 0x7fdc2c32c\
+330,
+...">NSMain.Application=NSApplication(&lt;Id_t at 0x106847e60<code class="variable-ellipsis">...</code></code><br />
       Global <code>NS...</code> singletons (<code>const</code>).
     </td>
   </tr>
@@ -1197,7 +1197,7 @@
 <tr><td>
   <table width="100%" cellpadding="0" cellspacing="0" border="0">
   <tr valign="top"><td>
-  <h3 class="epydoc"><span class="sig"><span class="sig-name">nsBundleRename</span>(<span class="sig-arg">nsTitle</span>,
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">nsBundleRename</span>(<span class="sig-arg">ns_title</span>,
         <span class="sig-arg">match</span>=<span class="sig-default"><code class="variable-quote">'</code><code class="variable-string">Python</code><code class="variable-quote">'</code></span>)</span>
   </h3>
   </td><td align="right" valign="top"
@@ -1209,7 +1209,7 @@
   <dl class="fields">
     <dt>Parameters:</dt>
     <dd><ul class="nomargin-top">
-        <li><strong class="pname"><code>nsTitle</code></strong> - New bundle title (<a href="pycocoa.nstypes.NSStr-class.html" 
+        <li><strong class="pname"><code>ns_title</code></strong> - New bundle title (<a href="pycocoa.nstypes.NSStr-class.html" 
           class="link">NSStr</a>).</li>
         <li><strong class="pname"><code>match</code></strong> - Optional, previous title to match (<code>str</code>).</li>
     </ul></dd>
@@ -1217,7 +1217,7 @@
         <dd>The previous bundle title (<code>str</code>) or None.</dd>
   </dl>
 <div class="fields">      <p><strong>Note:</strong>
-        Used to mimick <code>NSApplication.setTitle_(nsTitle)</code>, the 
+        Used to mimick <code>NSApplication.setTitle_(ns_title)</code>, the 
         name of an <a href="pycocoa.apps.App-class.html" 
         class="link">App</a> shown in the menu bar.
       </p>
@@ -1830,14 +1830,14 @@
   <dl class="fields">
     <dt>Value:</dt>
       <dd><table><tr><td><pre class="variable">
-NSMain.Application=NSApplication(&lt;Id_t at 0x10dfb2ef0&gt;) of 0x7fe551d4e<span class="variable-linewrap"><img src="crarr.png" alt="\" /></span>
-650,
-      .BooleanNO=NSBoolean(&lt;Id_t at 0x10dfb23b0&gt;) of 0x7fffa0a8a3f8,
-      .BooleanYES=NSBoolean(&lt;Id_t at 0x10da3a7a0&gt;) of 0x7fffa0a8a3e8,
-      .Bundle=NSBundle(&lt;Id_t at 0x10da244d0&gt;) of 0x7fe551e233a0,
+NSMain.Application=NSApplication(&lt;Id_t at 0x106847e60&gt;) of 0x7fdc2c37f<span class="variable-linewrap"><img src="crarr.png" alt="\" /></span>
+160,
+      .BooleanNO=NSBoolean(&lt;Id_t at 0x106847320&gt;) of 0x7fff839ce3f8,
+      .BooleanYES=NSBoolean(&lt;Id_t at 0x10683b7a0&gt;) of 0x7fff839ce3e8,
+      .Bundle=NSBundle(&lt;Id_t at 0x1068250e0&gt;) of 0x7fdc29ec8db0,
       .BundleName=NSConstantString('CFBundleName'),
-      .FontManager=NSFontManager(&lt;Id_t at 0x10da243b0&gt;) of 0x7fe554158<span class="variable-linewrap"><img src="crarr.png" alt="\" /></span>
-9c0,
+      .FontManager=NSFontManager(&lt;Id_t at 0x106825290&gt;) of 0x7fdc2c32c<span class="variable-linewrap"><img src="crarr.png" alt="\" /></span>
+330,
 <code class="variable-ellipsis">...</code>
 </pre></td></tr></table>
 </dd>
@@ -1876,7 +1876,7 @@ NSMain.Application=NSApplication(&lt;Id_t at 0x10dfb2ef0&gt;) of 0x7fe551d4e<spa
 <table border="0" cellpadding="0" cellspacing="0" width="100%%">
   <tr>
     <td align="left" class="footer">
-    Generated by Epydoc 3.0.1 on Sat Jun 16 16:27:47 2018
+    Generated by Epydoc 3.0.1 on Fri Jun 22 12:53:51 2018
     </td>
     <td align="right" class="footer">
       <a target="mainFrame" href="http://epydoc.sourceforge.net"

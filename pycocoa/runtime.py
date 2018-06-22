@@ -82,11 +82,11 @@ from octypes import __i386__, __LP64__, c_struct_t, c_void, \
                     Class_t, Id_t, IMP_t, Ivar_t, objc_super_t, \
                     objc_super_t_ptr, ObjC_t, SEL_t, split_emcoding2, \
                     TypeCodeError
-from oslibs  import cfString2str, libobjc
-from utils   import bytes2str, _Constants, _exports, missing, name2py, \
-                    printf, property2, str2bytes
+from oslibs  import cfString2str, _csignature, libobjc
+from utils   import bytes2str, _Constants, _exports, lambda1, missing, \
+                    name2py, printf, property2, str2bytes
 
-__version__ = '18.06.16'
+__version__ = '18.06.21'
 
 # <http://Developer.Apple.com/documentation/objectivec/
 #         objc_associationpolicy?language=objc>
@@ -183,6 +183,28 @@ def _ObjC_log_totals():
             printf('_OBJC_LOG[%s]: %d', k, v)
 
 
+def _pyargs(codes3, args):
+    '''Used by L{ObjCSubclass} to convert ObjC method arguments to
+       Python values before passing those to the Python-defined method.
+    '''
+    if len(codes3) != len(args):
+        raise ValueError('mismatch codes3 %r and args %r' % (codes3, args))
+
+    for code, arg in zip(codes3, args):
+        ObjC, _ = _PyRes_t2.get(code, (lambda1, None))
+        yield ObjC(arg)
+
+
+def _pyresult(result):
+    '''Used by L{ObjCSubclass} to convert the result of an ObjC
+       method to the corresponding Python type/value.
+    '''
+    if isinstance(result, (ObjCInstance, ObjCClass)):
+        return result.ptr.value
+    else:
+        return result
+
+
 def _resargtypesel3(args, resargtypes, name_):
     '''Get and check the restype and argtypes keyword arguments, get
        the SEL/selector and return 3-tuple (restype, argtypes, SEL).
@@ -194,8 +216,8 @@ def _resargtypesel3(args, resargtypes, name_):
         raise ValueError('unused %s kwds %s' % (name_, t))
 
     if argtypes and len(argtypes) != len(args):  # allow varargs
-        raise ValueError('mismatch %s%r vs argtypes[%s]' % (name_,
-                          tuple(args), _c_tstr(*argtypes)))
+        raise ValueError('mismatch %s%r[%d] vs argtypes[%s][%d]' % (name_,
+                          tuple(args), len(args), _c_tstr(*argtypes), len(argtypes)))
 
     return restype, argtypes, get_selector(name_)
 
@@ -223,15 +245,21 @@ class ObjCBoundMethod(_ObjCBase):
     '''Python wrapper for an ObjC class or instance method, an L{IMP_t}.
 
        @note: Each ObjC method invocation requires creation of another,
-              new C{ObjC[Bound]Method} instance which is immediately
-              discarded thereafter.
+              new C{ObjCBound[Class]Method} instance which is discarded
+              immediately thereafter.
     '''
-    __slots__ = ('_method', '_objc_id')
+    __slots__ = ('_inst', '_method', '_objc_id')
 
-    def __init__(self, method, objc_id):
-        '''Initialize with an ObjC method L{IMP_t}, L{ObjCInstance}
-           or L{ObjCClass} object.
+    def __init__(self, method, objc_id, inst):
+        '''Initialize with an ObjC instance or class method.
+
+           @param method: The ObjC method (C{ObjC[Class]Method}).
+           @param objc_id: The ObjC instance (L{ObjCInstance}) or
+                           class (C{Class_t}).
+           @param inst: The instance C{ObjCInstance} or C{ObjCClass},
+                        used only to report invokation errors.
         '''
+        self._inst = inst
         self._method = method
         self._objc_id = objc_id
 
@@ -242,7 +270,7 @@ class ObjCBoundMethod(_ObjCBase):
         '''Call the method with the given arguments.
         '''
         _ObjC_log(self, 'call', 'B', *args)
-        return self._method(self._objc_id, *args)
+        return self._method(self._inst, self._objc_id, *args)
 
     @property
     def method(self):
@@ -251,8 +279,14 @@ class ObjCBoundMethod(_ObjCBase):
         return self._method
 
     @property
+    def inst(self):
+        '''Get the C{ObjCInstance} or C{ObjCClass}.
+        '''
+        return self._inst
+
+    @property
     def objc_id(self):
-        '''Get the instance (L{ObjCInstance}).
+        '''Get the ObjC instance (C{Class_t} or L{ObjCSubclass}).
         '''
         return self._objc_id
 
@@ -316,10 +350,10 @@ class ObjCClass(_ObjCBase):
 
         # Cache Python representations of all instance methods from
         # by this class (but does not find methods of superclass).
-        self._methods = self._cache_methods(ptr)
+        self._methods = self._cache_methods(ptr, ObjCMethod)
         # Cache Python representations of all class methods from
         # by this class (but does not find methods of superclass)
-        self._classmethods = self._cache_methods(get_classof(ptr))
+        self._classmethods = self._cache_methods(get_classof(ptr), ObjCClassMethod)
 
         # add any protocols
         for p in protocols:
@@ -337,7 +371,7 @@ class ObjCClass(_ObjCBase):
         # for the class method with self.ptr as hidden first parameter.
         method = self.get_classmethod(name)
         if method:
-            return ObjCBoundMethod(method, self.ptr)
+            return ObjCBoundClassMethod(method, self.ptr, self)
 
         # If name refers to an instance method, then simply return the method.
         # The caller will need to supply an instance as the first parameter.
@@ -364,13 +398,13 @@ class ObjCClass(_ObjCBase):
             return method
         return None
 
-    def _cache_methods(self, which):
+    def _cache_methods(self, which, Class):
         # build a cache of all class or instance methods
         cache = {}
         if False:  # not __debug__:
             n = c_uint()
             for method in libobjc.class_copyMethodList(which, byref(n)):
-                method = ObjCMethod(method)
+                method = Class(method)
                 cache[method.name] = method
                 _ObjC_log(method, 'new', 'M')
         return cache
@@ -418,7 +452,7 @@ class ObjCClass(_ObjCBase):
 
     @property
     def ptr(self):
-        '''Get this class' ObjC class (L{Class_t}).
+        '''Get the ObjC class (L{Class_t}).
         '''
         return self._ptr
 
@@ -441,10 +475,10 @@ class ObjCInstance(_ObjCBase):
     _dealloc_d = False
 
     def __new__(cls, objc_ptr, cached=True):
-        '''New L{ObjCInstance} or return a previously created, cached one.
+        '''New L{ObjCInstance} or a previously created, cached one.
 
            @param objc_ptr: The ObjC instance (L{Id_t} or C{c_void_p}).
-           @keyword cached: Cache new instance (C{bool}).
+           @keyword cached: Cache the new instance (C{bool}).
         '''
         # Make sure that obj_ptr is wrapped in an Id_t.
         if not isinstance(objc_ptr, Id_t):
@@ -479,9 +513,6 @@ class ObjCInstance(_ObjCBase):
             # keyed by the (integer) memory address pointed to by the
             # obj_ptr (cls._objc_cache == ObjCInstance._objc_cache)
             cls._objc_cache[objc_ptr.value] = self
-
-            # Associate a _NSDeallocObserver with this object, but
-            # only if this object is not an ObjC class.
             if not isClass(self):
                 # observe the objc_ptr.value, the
                 # key used for the _objc_cache dict
@@ -497,27 +528,39 @@ class ObjCInstance(_ObjCBase):
     #     return not self.__eq__(other)
 
     def __getattr__(self, name):
-        '''Returns a callable method object with the given name.
+        '''Return a callable ObjC method or Python property
+           with the given name.
+
+           @param name: The method or property name (C{str}).
+
+           @return: A bound class or instance method (C{ObjCBound[Class]Method})
+                    or this instance's Python property C{get} function.
+
+           @raise AttributeError: No I{name} method or property.
+
+           @raise RuntimeError: This instance' ObjC object has been
+                                deallocated and no longer exists.
         '''
         if self._dealloc_d:
             raise RuntimeError('%r no longer exists' % (self,))
 
-        # Search for named instance method in the class object and if it
-        # exists, return callable object with self as hidden argument.
-        method = self._objc_class.get_method(name)
+        clas = self._objc_class
+        # Get the named instance method in the class object and if it
+        # exists, return callable object (with self as hidden argument).
+        method = clas.get_method(name)
         if method:
             # Note: pass self and not self.ptr to ObjCBoundMethod, so
             # that it will be able to keep the ObjCInstance alive for
             # chained calls like Class.alloc().init() where the object
             # created by alloc() isn't assigned to a variable.
-            return ObjCBoundMethod(method, self)
+            return ObjCBoundMethod(method, self, self)
 
-        # Otherwise, search for class method with given name in the class
-        # object.  If that exists, return callable object with a pointer
-        # to the class as a hidden argument.
-        method = self._objc_class.get_classmethod(name)
+        # Otherwise, get the class method with given name in the class
+        # object.  If that exists, return callable object (with a pointer
+        # to the class as the hidden argument).
+        method = clas.get_classmethod(name)
         if method:
-            return ObjCBoundClassMethod(method, self._objc_class.ptr)
+            return ObjCBoundClassMethod(method, clas.ptr, self)
 
         # Try this class' property, ...
         get, _ = property2(self, bytes2str(name))
@@ -530,7 +573,7 @@ class ObjCInstance(_ObjCBase):
 #           return self.__getattr__('raise')
 
         # ... otherwise raise error
-        raise AttributeError('no %r [class]method: %s' % (name, self))
+        raise AttributeError('no %r [class]method or property: %s' % (name, self))
 
 #   def __repr__(self):
 #       return '<%s %#x: %s>' % (ObjCInstance.__name__, id(self), self)
@@ -546,9 +589,11 @@ class ObjCInstance(_ObjCBase):
 
     @property
     def objc_classname(self):
-        '''Get the name of this instance' ObjC class (C{str}).
+        '''Get this instance' ObjC class name (C{str}).
         '''
         return self._objc_class.name.replace('__NSCF', 'NS')  # .lstrip('_')
+
+    name = objc_classname  # for C{ObjCMethod.__call__}
 
     @property
     def objc_description(self):
@@ -562,7 +607,7 @@ class ObjCInstance(_ObjCBase):
 
     @property
     def ptr(self):
-        '''Get this instance' equivalent ObjC instance (L{Id_t}).
+        '''Get this instance' ObjC object (L{Id_t}).
         '''
         return self._objc_ptr
 
@@ -591,21 +636,22 @@ class ObjCInstance(_ObjCBase):
         raise AttributeError('Type(%r): %r' % (self, ty or missing))
 
 
+_PyRes_t2 = {b'@': (ObjCInstance, Id_t),
+             b'#': (ObjCClass, Class_t)}
+
+
 class ObjCMethod(_ObjCBase):
-    '''Python class representing an unbound ObjC class- or
-       instance-method (actually an L{IMP_t}).
+    '''Python class representing an unbound ObjC class or instance
+       method (actually an L{IMP_t}).
     '''
+    _argtypes = []  # list of ctypes
     _callable = None
+    _encoding = b''
     _IMP      = None
     _name     = b''
+    _pyresult = None  # None, ObjCClass or ObjCInstance
     _SEL      = None
-
-    argtypes = []  # ctypes
-    encoding = b''
-    restype  = None  # c_void
-
-    def _pyresult(self, result):  # overwritten
-        return result
+    _restype  = None  # None (i.e. c_void), Class_t or Id_t
 
     def __init__(self, method):
         '''New C{ObjC[Class]Method} for an ObjC method pointer.
@@ -616,52 +662,58 @@ class ObjCMethod(_ObjCBase):
         self._SEL = libobjc.method_getName(method)
         self._name = libobjc.sel_getName(self._SEL)  # bytes
 
-        # determine the return type and argument types of the method
-        self.encoding = libobjc.method_getTypeEncoding(method)
-        try:  # Get the ctype for all args
-            self.argtypes = []
-            buf = c_buffer(512)
+        # determine the return and argument types of the method
+        self._encoding = libobjc.method_getTypeEncoding(method)
+        try:  # to get the ctype for all args
+            c, t = c_buffer(512), []
             for i in range(libobjc.method_getNumberOfArguments(method)):
-                libobjc.method_getArgumentType(method, i, buf, len(buf))
-                self.argtypes.append(emcoding2ctype(buf.value))
+                libobjc.method_getArgumentType(method, i, c, len(c))
+                t.append(emcoding2ctype(c.value))
         except TypeError:
-            self.argtypes = []  # XXX or None?
+            t = []  # XXX ignore all?
+        self._argtypes = t
 
         # Some hacky stuff to get around ctypes issues on 64-bit:
         # can't let ctypes convert the return value itself, because
         # it truncates the pointer along the way.  Instead, set the
         # return type to c_void_p to ensure we get 64-bit addresses
         # and then convert the return value manually
-        rescode = libobjc.method_copyReturnType(method)
-        if rescode == b'@':
-            self.restype = Id_t
-            self._pyresult = ObjCInstance
-        elif rescode == b'#':
-            self.restype = Class_t
-            self._pyresult = ObjCClass
-        else:
+        c = libobjc.method_copyReturnType(method)
+        self._pyresult, t = _PyRes_t2.get(c, (None, None))
+        if t is None:
             try:  # to get the ctype from the result encoding
-                self.restype = emcoding2ctype(rescode, name=self._name)
+                t = emcoding2ctype(c, name=self._name)
             except TypeCodeError:
-                pass  # assume c_void for b'v', b'Vv' rescode
+                pass  # assume c_void for b'v', b'Vv' code
+        self._restype = t
 
-    def __call__(self, objc_id, *args):
-        '''Call the method with the given instance and arguments.
+        # finally, build a Python callable for the method
+        t = CFUNCTYPE(self._restype, *self._argtypes)
+        self._callable = cast(self._IMP, t)
+        # XXX also _csignature_list, _str, _variadic?
+        _csignature(self._callable, self._restype, *self._argtypes)
 
-           @note: Do not pass in the selector as an argument,
-                  since that is provided automatically.
+    def __call__(self, inst, objc_id, *args):
+        '''Call an ObjC instance or class method with the given arguments.
+
+           @param inst: The ObjC instance (L{ObjCInstance}), only
+                        used for reporting errors.
+           @param objc_id: The ObjC instance (L{ObjCInstance}) or
+                           ObjC class (C{Class_t}).
+           @param args: Method arguments (C{all positional}).
+
+           @note: Do not pass in the C{Sel/cmd} as an argument, since
+                  that is provided automatically.
 
            @see: L{ObjCBoundMethod}C{.__call__}.
         '''
         try:
-            r = self.callable(objc_id, self._SEL, *args)
-            return self._pyresult(r)
+            r = self._callable(objc_id, self._SEL, *args)
+            if self._pyresult:
+                r = self._pyresult(r)
+            return r
         except (ArgumentError, TypeError) as x:
-            try:
-                n = ObjCInstance(objc_id).objc_classname
-            except AttributeError:
-                n = 'objc_id'
-            n = '%s.%s' % (n, self.name)
+            n = '%s.%s' % (inst.name, self.name)
             raise _Xargs(x, n, self.argtypes, self.restype)
 
 #   def __repr__(self):
@@ -674,26 +726,28 @@ class ObjCMethod(_ObjCBase):
                          _c_tstr(self.restype), bytes2str(self.encoding))
 
     @property
-    def callable(self):
-        '''Get a Python-callable for this method's L{IMP_t}.
+    def argtypes(self):
+        '''Get this method's argument types (C{ctypes}[]).
         '''
-        if not self._callable:
-            self._callable = cast(self._IMP, self.c_func_t)
-            self._callable.restype  = self.restype
-            self._callable.argtypes = self.argtypes
-        return self._callable
+        return self._argtypes
 
     @property
-    def c_func_t(self):
-        '''Get a C{ctypes} prototype for this method (C{CFUNCTYPE}).
+    def encoding(self):
+        '''Get this method's encoding (C{bytes}).
         '''
-        return CFUNCTYPE(self.restype, *self.argtypes)
+        return self._encoding
 
     @property
     def name(self):
-        '''Get the method/SELector/cmd name (C{str}).
+        '''Get this method's C{Sel/cmd} name (C{str}).
         '''
         return name2py(self._name)
+
+    @property
+    def restype(self):
+        '''Get this method's result type (C{ctypes}).
+        '''
+        return self._restype
 
 
 class ObjCClassMethod(ObjCMethod):
@@ -702,45 +756,20 @@ class ObjCClassMethod(ObjCMethod):
     pass
 
 
-def _pyargs(codes3, args):
-    '''Used by L{ObjCSubclass} to convert ObjC method arguments to
-       Python values before passing those to the Python-defined method.
-    '''
-    if len(codes3) != len(args):
-        raise ValueError('mismatch codes3 %r and args %r' % (codes3, args))
-
-    for code, arg in zip(codes3, args):
-        if code == b'@':
-            arg = ObjCInstance(arg)
-        elif code == b'#':
-            arg = ObjCClass(arg)
-        yield arg
-
-
-def _pyresult(result):
-    '''Used by L{ObjCSubclass} to convert the result of an ObjC
-       method to the corresponding Python type/value.
-    '''
-    if isinstance(result, (ObjCInstance, ObjCClass)):
-        return result.ptr.value
-    else:
-        return result
-
-
 class ObjCSubclass(_ObjCBase):
-    '''Python class creating an ObjC sub-class of an existing ObjC (super-)class.
+    '''Python class creating an ObjC sub-class of an existing ObjC (super)class.
 
        This class is used only to *define* the interface and implementation
-       of an ObjC sub-class from Python.  It should not be used in any
-       other way.  If you want a Python representation of the resulting
-       class, create it with ObjCClass.
+       of an ObjC sub-class from Python.  It should not be used in any other
+       way.  If you want a Python representation of the resulting class,
+       create it with L{ObjCClass}.
 
-       It consists primarily of function decorators which you use to add
-       methods to the sub-class.
+       *It consists primarily of function decorators which you use to add
+       methods to the sub-class.*
 
-       ObjCSubclass is used to define an ObjC sub-class of an existing
+       L{ObjCSubclass} is used to define an ObjC sub-class of an existing
        class registered with the runtime.  When you create an instance of
-       ObjCSubclass, it registers the new sub-class with the ObjC
+       L{ObjCSubclass}, it registers the new sub-class with the ObjC
        runtime and creates a set of function decorators that you can use
        to add instance methods or class methods to the sub-class.
 
@@ -763,25 +792,25 @@ class ObjCSubclass(_ObjCBase):
        >>>     return self
 
        It is probably a good idea to organize the code related to a single
-       sub-class by either putting it in its own module (note that you don't
-       actually need to expose any of the method names or the ObjCSubclass)
-       or by bundling it all up inside a Python class definition, perhaps
-       called MySubclassImplementation.
+       sub-class by either (a) putting it in its own module (note that you
+       don't actually need to expose any of the method names or the
+       L{ObjCSubclass}) or (b) bundling it all up inside a Python class
+       definition, perhaps called MySubclassImplementation.
 
-       It is also possible to add ObjC ivars to the sub-class, however if
-       you do so, you must call the __init__ method with register=False,
-       and then call the register method after the ivars have been added.
+       It is also possible to add ObjC I{ivars} to the sub-class, however
+       if you do so, you *{must call} the C{.__init__} method with keyword
+       argument I{register=False}, and then call the C{.register} method
+       after the I{ivars} have been added.
 
-       However, instead of creating the ivars in ObjC land, it is easier
-       to just define Python-based instance variables in your sub-class's
-       init method.
+       However, instead of creating the I{ivars} in ObjC land, it is easier to
+       just define Python-based I{ivars} in your sub-class' C{.__init__} method.
 
-       Instances are created as a pointer to the objc object by using:
+       Instances are created as a pointer to the ObjC object by using:
 
        >>> myinstance = send_message('MySubclassName', 'alloc')
        >>> myinstance = send_message(myinstance, 'init')
 
-       or wrapped inside an ObjCInstance object by using:
+       or wrapped inside an L{ObjCInstance} by using:
 
        >>> myclass = ObjCClass('MySubclassName')
        >>> myinstance = myclass.alloc().init()
@@ -795,13 +824,13 @@ class ObjCSubclass(_ObjCBase):
     def __init__(self, parent, name, register=True, **ivars):
         '''New sub-class of the given (super-)class.
 
-           @param parent: The super-class (C{str} or C{Object}).
+           @param parent: The super-class (C{str} or C{ObjCClass}).
            @param name: The sub-class name (C{str}).
-           @keyword register: Optionally, register the new sub-class (bool).
+           @keyword register: Register the new sub-class (C{bool}).
            @keyword ivars: Optionally, specify any number of instance
                            variables to be added I{before} registering
                            the new class, each with a keyword argument
-                           C{ivarname=ctype} to specify the name and ctype
+                           C{name=ctype} to specify the name and C{ctypes}
                            of the instance variable.
         '''
         self._imp_cache = {}
@@ -850,9 +879,10 @@ class ObjCSubclass(_ObjCBase):
     def classmethod(self, encoding):
         '''Decorator for class methods.
 
-           @param encoding: Signature of the method (C{encoding}).
+           @param encoding: Signature of the method (C{encoding})
+                            without C{Id/self} and C{SEL/cmd} encoding.
 
-           @return: Decorater.
+           @return: Decorated class method.
         '''
         codes3, encoding = split_emcoding2(encoding, 3)
 
@@ -872,9 +902,10 @@ class ObjCSubclass(_ObjCBase):
     def method(self, encoding):
         '''Decorator for instance methods.
 
-           @param encoding: Signature of the method (C{encoding}).
+           @param encoding: Signature of the method (C{encoding})
+                            without C{Id/self} and C{SEL/cmd} encoding.
 
-           @return: Decorater.
+           @return: Decorated instance method.
         '''
         codes3, encoding = split_emcoding2(encoding, 3)
 
@@ -912,13 +943,14 @@ class ObjCSubclass(_ObjCBase):
     def rawmethod(self, encoding):
         '''Decorator for instance methods without any fancy shenanigans.
 
-           @param encoding: Signature of the method (C{encoding}).
+           @param encoding: Signature of the method (C{encoding})
+                            without C{Id/self} and C{SEL/cmd} encoding.
 
-           @return: Decorater.
+           @return: The instance method.
 
            @note: The method must have signature M{m(self, cmd, *args)}
-                  where both C{self} and C{cmd} are just pointers to
-                  ObjC objects.
+                  where both C{Id/self} and C{SEL/cmd} are just pointers
+                  to ObjC objects.
         '''
         _, encoding = split_emcoding2(encoding)
 
@@ -1114,9 +1146,11 @@ def isMetaClass(objc):
 
 
 def release(objc):
-    '''Release an ObjC instance to eventually be garbage collected.
+    '''Release an ObjC instance to be released, eventually.
 
        @param objc: The instance to release (L{ObjCInstance}).
+
+       @return: The instance I{objc}.
 
        @raise TypeError: If I{objc} is not releasable.
 
@@ -1128,6 +1162,7 @@ def release(objc):
         objc.autorelease()  # XXX or objc.release()?
     except (AttributeError, TypeError):
         raise TypeError('not releasable: %r' % (objc,))
+    return objc
 
 
 def register_subclass(subclas):

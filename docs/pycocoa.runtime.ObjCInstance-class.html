@@ -91,9 +91,9 @@ object --+
     </td><td class="summary">
       <table width="100%" cellpadding="0" cellspacing="0" border="0">
         <tr>
-          <td><span class="summary-sig"><a name="__getattr__"></a><span class="summary-sig-name">__getattr__</span>(<span class="summary-sig-arg">self</span>,
+          <td><span class="summary-sig"><a href="pycocoa.runtime.ObjCInstance-class.html#__getattr__" class="summary-sig-name">__getattr__</a>(<span class="summary-sig-arg">self</span>,
         <span class="summary-sig-arg">name</span>)</span><br />
-      Returns a callable method object with the given name.</td>
+      Return a callable ObjC method or Python property with the given name.</td>
           <td align="right" valign="top">
             
             
@@ -178,8 +178,7 @@ object --+
         <span class="summary-sig-arg">objc_ptr</span>,
         <span class="summary-sig-arg">cached</span>=<span class="summary-sig-default">True</span>)</span><br />
       New <a href="pycocoa.runtime.ObjCInstance-class.html" 
-      class="link">ObjCInstance</a> or return a previously created, cached 
-      one.</td>
+      class="link">ObjCInstance</a> or a previously created, cached one.</td>
           <td align="right" valign="top">
             
             
@@ -229,7 +228,15 @@ object --+
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
         <a href="pycocoa.runtime.ObjCInstance-class.html#objc_classname" class="summary-name">objc_classname</a><br />
-      Get the name of this instance' ObjC class (<code>str</code>).
+      Get this instance' ObjC class name (<code>str</code>).
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="pycocoa.runtime.ObjCInstance-class.html#name" class="summary-name">name</a><br />
+      Get this instance' ObjC class name (<code>str</code>).
     </td>
   </tr>
 <tr>
@@ -245,7 +252,7 @@ object --+
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
         <a href="pycocoa.runtime.ObjCInstance-class.html#ptr" class="summary-name">ptr</a><br />
-      Get this instance' equivalent ObjC instance (<a 
+      Get this instance' ObjC object (<a 
       href="pycocoa.octypes.Id_t-class.html" class="link">Id_t</a>).
     </td>
   </tr>
@@ -293,19 +300,54 @@ object --+
   </tr></table>
   
   <p>New <a href="pycocoa.runtime.ObjCInstance-class.html" 
-  class="link">ObjCInstance</a> or return a previously created, cached 
-  one.</p>
+  class="link">ObjCInstance</a> or a previously created, cached one.</p>
   <dl class="fields">
     <dt>Parameters:</dt>
     <dd><ul class="nomargin-top">
         <li><strong class="pname"><code>objc_ptr</code></strong> - The ObjC instance (<a href="pycocoa.octypes.Id_t-class.html" 
           class="link">Id_t</a> or <code>c_void_p</code>).</li>
-        <li><strong class="pname"><code>cached</code></strong> - Cache new instance (<code>bool</code>).</li>
+        <li><strong class="pname"><code>cached</code></strong> - Cache the new instance (<code>bool</code>).</li>
     </ul></dd>
     <dt>Returns: a new object with type S, a subtype of T</dt>
     <dt>Overrides:
         object.__new__
     </dt>
+  </dl>
+</td></tr></table>
+</div>
+<a name="__getattr__"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">__getattr__</span>(<span class="sig-arg">self</span>,
+        <span class="sig-arg">name</span>)</span>
+    <br /><em class="fname">(Qualification operator)</em>
+  </h3>
+  </td><td align="right" valign="top"
+    >&nbsp;
+    </td>
+  </tr></table>
+  
+  <p>Return a callable ObjC method or Python property with the given 
+  name.</p>
+  <dl class="fields">
+    <dt>Parameters:</dt>
+    <dd><ul class="nomargin-top">
+        <li><strong class="pname"><code>name</code></strong> - The method or property name (<code>str</code>).</li>
+    </ul></dd>
+    <dt>Returns:</dt>
+        <dd>A bound class or instance method 
+          (<code>ObjCBound[Class]Method</code>) or this instance's Python 
+          property <code>get</code> function.</dd>
+    <dt>Raises:</dt>
+    <dd><ul class="nomargin-top">
+        <li><code><strong class='fraise'>AttributeError</strong></code> - No <i>name</i> method or property.</li>
+        <li><code><strong class='fraise'>RuntimeError</strong></code> - This instance' ObjC object has been deallocated and no longer 
+        exists.</li>
+    </ul></dd>
   </dl>
 </td></tr></table>
 </div>
@@ -403,11 +445,26 @@ href="pycocoa.runtime.ObjCClass-class.html" class="link">ObjCClass</a>).
        cellspacing="0" width="100%" bgcolor="white">
 <tr><td>
   <h3 class="epydoc">objc_classname</h3>
-  <p>Get the name of this instance' ObjC class (<code>str</code>).</p>
+  <p>Get this instance' ObjC class name (<code>str</code>).</p>
   <dl class="fields">
     <dt>Get Method:</dt>
     <dd class="value"><span class="summary-sig">objc_classname(<span class="summary-sig-arg">self</span>)</span>
-        - Get the name of this instance' ObjC class (<code>str</code>).
+        - Get this instance' ObjC class name (<code>str</code>).
+    </dd>
+  </dl>
+</td></tr></table>
+</div>
+<a name="name"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <h3 class="epydoc">name</h3>
+  <p>Get this instance' ObjC class name (<code>str</code>).</p>
+  <dl class="fields">
+    <dt>Get Method:</dt>
+    <dd class="value"><span class="summary-sig">objc_classname(<span class="summary-sig-arg">self</span>)</span>
+        - Get this instance' ObjC class name (<code>str</code>).
     </dd>
   </dl>
 </td></tr></table>
@@ -433,13 +490,13 @@ href="pycocoa.runtime.ObjCClass-class.html" class="link">ObjCClass</a>).
        cellspacing="0" width="100%" bgcolor="white">
 <tr><td>
   <h3 class="epydoc">ptr</h3>
-  <p>Get this instance' equivalent ObjC instance (<a 
+  <p>Get this instance' ObjC object (<a 
   href="pycocoa.octypes.Id_t-class.html" class="link">Id_t</a>).</p>
   <dl class="fields">
     <dt>Get Method:</dt>
     <dd class="value"><span class="summary-sig">ptr(<span class="summary-sig-arg">self</span>)</span>
-        - Get this instance' equivalent ObjC instance (<a 
-href="pycocoa.octypes.Id_t-class.html" class="link">Id_t</a>).
+        - Get this instance' ObjC object (<a href="pycocoa.octypes.Id_t-class.html" 
+class="link">Id_t</a>).
     </dd>
   </dl>
 </td></tr></table>
@@ -492,7 +549,7 @@ href="pycocoa.octypes.Id_t-class.html" class="link">Id_t</a>).
 <table border="0" cellpadding="0" cellspacing="0" width="100%%">
   <tr>
     <td align="left" class="footer">
-    Generated by Epydoc 3.0.1 on Sat Jun 16 16:27:49 2018
+    Generated by Epydoc 3.0.1 on Fri Jun 22 12:53:53 2018
     </td>
     <td align="right" class="footer">
       <a target="mainFrame" href="http://epydoc.sourceforge.net"

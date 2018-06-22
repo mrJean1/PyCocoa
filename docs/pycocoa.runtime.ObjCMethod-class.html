@@ -75,7 +75,7 @@ object --+
 </dd></dl>
 
 <hr />
-<p>Python class representing an unbound ObjC class- or instance-method 
+<p>Python class representing an unbound ObjC class or instance method 
   (actually an <a href="pycocoa.octypes.IMP_t-class.html" 
   class="link">IMP_t</a>).</p>
 
@@ -112,9 +112,10 @@ object --+
       <table width="100%" cellpadding="0" cellspacing="0" border="0">
         <tr>
           <td><span class="summary-sig"><a href="pycocoa.runtime.ObjCMethod-class.html#__call__" class="summary-sig-name">__call__</a>(<span class="summary-sig-arg">self</span>,
+        <span class="summary-sig-arg">inst</span>,
         <span class="summary-sig-arg">objc_id</span>,
         <span class="summary-sig-arg">*args</span>)</span><br />
-      Call the method with the given instance and arguments.</td>
+      Call an ObjC instance or class method with the given arguments.</td>
           <td align="right" valign="top">
             
             
@@ -169,28 +170,6 @@ object --+
   <td align="left" colspan="2" class="table-header">
     <span class="table-header">Class Variables</span></td>
 </tr>
-<tr>
-    <td width="15%" align="right" valign="top" class="summary">
-      <span class="summary-type">&nbsp;</span>
-    </td><td class="summary">
-        <a name="argtypes"></a><span class="summary-name">argtypes</span> = <code title="[]"><code class="variable-group">[</code><code class="variable-group">]</code></code>
-    </td>
-  </tr>
-<tr>
-    <td width="15%" align="right" valign="top" class="summary">
-      <span class="summary-type">&nbsp;</span>
-    </td><td class="summary">
-        <a name="encoding"></a><span class="summary-name">encoding</span> = <code title="''"><code class="variable-quote">'</code><code class="variable-string"></code><code class="variable-quote">'</code></code>
-    </td>
-  </tr>
-<tr>
-    <td width="15%" align="right" valign="top" class="summary">
-      <span class="summary-type">&nbsp;</span>
-    </td><td class="summary">
-        <a name="restype"></a><span class="summary-name">restype</span> = <code title="None">None</code><br />
-      hash(x)
-    </td>
-  </tr>
   <tr>
     <td colspan="2" class="summary">
     <p class="indent-wrapped-lines"><b>Inherited from <code>_ObjCBase</code></b>:
@@ -211,18 +190,16 @@ object --+
     <td width="15%" align="right" valign="top" class="summary">
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
-        <a href="pycocoa.runtime.ObjCMethod-class.html#callable" class="summary-name">callable</a><br />
-      Get a Python-callable for this method's <a 
-      href="pycocoa.octypes.IMP_t-class.html" class="link">IMP_t</a>.
+        <a href="pycocoa.runtime.ObjCMethod-class.html#argtypes" class="summary-name">argtypes</a><br />
+      Get this method's argument types (<code>ctypes</code>[]).
     </td>
   </tr>
 <tr>
     <td width="15%" align="right" valign="top" class="summary">
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
-        <a href="pycocoa.runtime.ObjCMethod-class.html#c_func_t" class="summary-name">c_func_t</a><br />
-      Get a <code>ctypes</code> prototype for this method 
-      (<code>CFUNCTYPE</code>).
+        <a href="pycocoa.runtime.ObjCMethod-class.html#encoding" class="summary-name">encoding</a><br />
+      Get this method's encoding (<code>bytes</code>).
     </td>
   </tr>
 <tr>
@@ -230,7 +207,15 @@ object --+
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
         <a href="pycocoa.runtime.ObjCMethod-class.html#name" class="summary-name">name</a><br />
-      Get the method/SELector/cmd name (<code>str</code>).
+      Get this method's <code>Sel/cmd</code> name (<code>str</code>).
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="pycocoa.runtime.ObjCMethod-class.html#restype" class="summary-name">restype</a><br />
+      Get this method's result type (<code>ctypes</code>).
     </td>
   </tr>
   <tr>
@@ -287,6 +272,7 @@ object --+
   <table width="100%" cellpadding="0" cellspacing="0" border="0">
   <tr valign="top"><td>
   <h3 class="epydoc"><span class="sig"><span class="sig-name">__call__</span>(<span class="sig-arg">self</span>,
+        <span class="sig-arg">inst</span>,
         <span class="sig-arg">objc_id</span>,
         <span class="sig-arg">*args</span>)</span>
     <br /><em class="fname">(Call operator)</em>
@@ -296,12 +282,23 @@ object --+
     </td>
   </tr></table>
   
-  <p>Call the method with the given instance and arguments.</p>
+  <p>Call an ObjC instance or class method with the given arguments.</p>
   <dl class="fields">
+    <dt>Parameters:</dt>
+    <dd><ul class="nomargin-top">
+        <li><strong class="pname"><code>inst</code></strong> - The ObjC instance (<a 
+          href="pycocoa.runtime.ObjCInstance-class.html" 
+          class="link">ObjCInstance</a>), only used for reporting errors.</li>
+        <li><strong class="pname"><code>objc_id</code></strong> - The ObjC instance (<a 
+          href="pycocoa.runtime.ObjCInstance-class.html" 
+          class="link">ObjCInstance</a>) or ObjC class 
+          (<code>Class_t</code>).</li>
+        <li><strong class="pname"><code>args</code></strong> - Method arguments (<code>all positional</code>).</li>
+    </ul></dd>
   </dl>
 <div class="fields">      <p><strong>Note:</strong>
-        Do not pass in the selector as an argument, since that is provided 
-        automatically.
+        Do not pass in the <code>Sel/cmd</code> as an argument, since that 
+        is provided automatically.
       </p>
       <p><strong>See Also:</strong>
         <a href="pycocoa.runtime.ObjCBoundMethod-class.html" 
@@ -343,36 +340,32 @@ object --+
     <span class="table-header">Property Details</span></td>
 </tr>
 </table>
-<a name="callable"></a>
+<a name="argtypes"></a>
 <div>
 <table class="details" border="1" cellpadding="3"
        cellspacing="0" width="100%" bgcolor="white">
 <tr><td>
-  <h3 class="epydoc">callable</h3>
-  <p>Get a Python-callable for this method's <a 
-  href="pycocoa.octypes.IMP_t-class.html" class="link">IMP_t</a>.</p>
+  <h3 class="epydoc">argtypes</h3>
+  <p>Get this method's argument types (<code>ctypes</code>[]).</p>
   <dl class="fields">
     <dt>Get Method:</dt>
-    <dd class="value"><span class="summary-sig">callable(<span class="summary-sig-arg">self</span>)</span>
-        - Get a Python-callable for this method's <a 
-href="pycocoa.octypes.IMP_t-class.html" class="link">IMP_t</a>.
+    <dd class="value"><span class="summary-sig">argtypes(<span class="summary-sig-arg">self</span>)</span>
+        - Get this method's argument types (<code>ctypes</code>[]).
     </dd>
   </dl>
 </td></tr></table>
 </div>
-<a name="c_func_t"></a>
+<a name="encoding"></a>
 <div>
 <table class="details" border="1" cellpadding="3"
        cellspacing="0" width="100%" bgcolor="white">
 <tr><td>
-  <h3 class="epydoc">c_func_t</h3>
-  <p>Get a <code>ctypes</code> prototype for this method 
-  (<code>CFUNCTYPE</code>).</p>
+  <h3 class="epydoc">encoding</h3>
+  <p>Get this method's encoding (<code>bytes</code>).</p>
   <dl class="fields">
     <dt>Get Method:</dt>
-    <dd class="value"><span class="summary-sig">c_func_t(<span class="summary-sig-arg">self</span>)</span>
-        - Get a <code>ctypes</code> prototype for this method 
-(<code>CFUNCTYPE</code>).
+    <dd class="value"><span class="summary-sig">encoding(<span class="summary-sig-arg">self</span>)</span>
+        - Get this method's encoding (<code>bytes</code>).
     </dd>
   </dl>
 </td></tr></table>
@@ -383,11 +376,26 @@ href="pycocoa.octypes.IMP_t-class.html" class="link">IMP_t</a>.
        cellspacing="0" width="100%" bgcolor="white">
 <tr><td>
   <h3 class="epydoc">name</h3>
-  <p>Get the method/SELector/cmd name (<code>str</code>).</p>
+  <p>Get this method's <code>Sel/cmd</code> name (<code>str</code>).</p>
   <dl class="fields">
     <dt>Get Method:</dt>
     <dd class="value"><span class="summary-sig">name(<span class="summary-sig-arg">self</span>)</span>
-        - Get the method/SELector/cmd name (<code>str</code>).
+        - Get this method's <code>Sel/cmd</code> name (<code>str</code>).
+    </dd>
+  </dl>
+</td></tr></table>
+</div>
+<a name="restype"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <h3 class="epydoc">restype</h3>
+  <p>Get this method's result type (<code>ctypes</code>).</p>
+  <dl class="fields">
+    <dt>Get Method:</dt>
+    <dd class="value"><span class="summary-sig">restype(<span class="summary-sig-arg">self</span>)</span>
+        - Get this method's result type (<code>ctypes</code>).
     </dd>
   </dl>
 </td></tr></table>
@@ -424,7 +432,7 @@ href="pycocoa.octypes.IMP_t-class.html" class="link">IMP_t</a>.
 <table border="0" cellpadding="0" cellspacing="0" width="100%%">
   <tr>
     <td align="left" class="footer">
-    Generated by Epydoc 3.0.1 on Sat Jun 16 16:27:49 2018
+    Generated by Epydoc 3.0.1 on Fri Jun 22 12:53:53 2018
     </td>
     <td align="right" class="footer">
       <a target="mainFrame" href="http://epydoc.sourceforge.net"

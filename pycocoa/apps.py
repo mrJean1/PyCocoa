@@ -33,7 +33,8 @@ from nstypes import NSApplication, nsBundleRename, \
                     nsOf, NSStr
 # from oslibs  import YES
 from runtime import isInstanceOf, ObjCClass, ObjCInstance, \
-                    _ObjC_log_totals, ObjCSubclass, retain, send_super
+                    _ObjC_log_totals, ObjCSubclass, release, retain, \
+                    send_super
 from utils   import _Globals, bytes2str, isinstanceOf, printf, _Types
 
 from threading import Thread
@@ -44,7 +45,7 @@ __all__ = ('App',
            'Tile',
            'app_title',
            'ns2App')
-__version__ = '18.06.11'
+__version__ = '18.06.18'
 
 
 class App(_Type2):
@@ -499,7 +500,7 @@ class Tile(_Type2):
         '''Set the badge text of the app's dock tile (C{str}).
         '''
         self._label = bytes2str(label)
-        self.NS.setBadgeLabel_(NSStr(self._label))
+        self.NS.setBadgeLabel_(release(NSStr(label)))
         self.NS.display()
 
 
@@ -510,7 +511,7 @@ def app_title(title):
 
        @return: Previous title (C{str}).
     '''
-    return nsBundleRename(NSStr(title))
+    return nsBundleRename(release(NSStr(title)))
 
 
 def ns2App(ns):

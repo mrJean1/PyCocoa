@@ -63,7 +63,7 @@
 
 <hr />
 <div class="fields">      <p><strong>Version:</strong>
-        18.06.16
+        18.06.21
       </p>
 </div><!-- ==================== FUNCTIONS ==================== -->
 <a name="section-Functions"></a>
@@ -99,7 +99,7 @@
         <tr>
           <td><span class="summary-sig"><a href="pycocoa.utils-module.html#aspect_ratio" class="summary-sig-name">aspect_ratio</a>(<span class="summary-sig-arg">width</span>,
         <span class="summary-sig-arg">height</span>)</span><br />
-      Compute the smallest, int aspect ratio.</td>
+      Compute the smallest, integer aspect ratio.</td>
           <td align="right" valign="top">
             
             
@@ -134,7 +134,8 @@
         <tr>
           <td><span class="summary-sig"><a href="pycocoa.utils-module.html#bytes2str" class="summary-sig-name">bytes2str</a>(<span class="summary-sig-arg">bytestr</span>,
         <span class="summary-sig-arg">dflt</span>=<span class="summary-sig-default">missing()</span>)</span><br />
-      Convert bytes/unicode to str if needed.</td>
+      Convert <code>bytes</code>/<code>unicode</code> to <code>str</code> 
+      if needed.</td>
           <td align="right" valign="top">
             
             
@@ -169,7 +170,8 @@
         <tr>
           <td><span class="summary-sig"><a href="pycocoa.utils-module.html#str2bytes" class="summary-sig-name">str2bytes</a>(<span class="summary-sig-arg">bytestr</span>,
         <span class="summary-sig-arg">dflt</span>=<span class="summary-sig-default">missing()</span>)</span><br />
-      Convert str to bytes/unicode if needed.</td>
+      Convert <code>str</code> to <code>bytes</code>/<code>unicode</code> 
+      if needed.</td>
           <td align="right" valign="top">
             
             
@@ -432,15 +434,16 @@
     </td>
   </tr></table>
   
-  <p>Compute the smallest, int aspect ratio.</p>
+  <p>Compute the smallest, integer aspect ratio.</p>
   <dl class="fields">
     <dt>Parameters:</dt>
     <dd><ul class="nomargin-top">
-        <li><strong class="pname"><code>width</code></strong> - The width (float or int).</li>
-        <li><strong class="pname"><code>height</code></strong> - The height (float or int).</li>
+        <li><strong class="pname"><code>width</code></strong> - The width (<code>float</code> or <code>int</code>).</li>
+        <li><strong class="pname"><code>height</code></strong> - The height (<code>float</code> or <code>int</code>).</li>
     </ul></dd>
     <dt>Returns:</dt>
-        <dd>2-Tuple (width, height) or None.</dd>
+        <dd>2-Tuple (width, height) as (<code>int</code>, <code>int</code>) 
+          or <code>None</code>.</dd>
   </dl>
 <div class="fields">      <p><strong>Example:</strong>
         &gt;&gt;&gt; aspect_ratio(10, 15) (2, 3) &gt;&gt;&gt; 
@@ -471,7 +474,7 @@
         <li><strong class="pname"><code>bytestr</code></strong> - Str or bytes.</li>
     </ul></dd>
     <dt>Returns:</dt>
-        <dd>Representation <code>b'...'</code> (str).</dd>
+        <dd>Representation <code>b'...'</code> (<code>str</code>).</dd>
   </dl>
 </td></tr></table>
 </div>
@@ -490,18 +493,20 @@
     </td>
   </tr></table>
   
-  <p>Convert bytes/unicode to str if needed.</p>
+  <p>Convert <code>bytes</code>/<code>unicode</code> to <code>str</code> if
+  needed.</p>
   <dl class="fields">
     <dt>Parameters:</dt>
     <dd><ul class="nomargin-top">
-        <li><strong class="pname"><code>bytestr</code></strong> - Bytes, str or unicode.</li>
+        <li><strong class="pname"><code>bytestr</code></strong> - <code>bytes</code>, <code>str</code> or <code>unicode</code>.</li>
         <li><strong class="pname"><code>dflt</code></strong> - Optional, default return value.</li>
     </ul></dd>
     <dt>Returns:</dt>
-        <dd>Str or <i>dflt</i>.</dd>
+        <dd><code>str</code> or <i>dflt</i>.</dd>
     <dt>Raises:</dt>
     <dd><ul class="nomargin-top">
-        <li><code><strong class='fraise'>TypeError</strong></code> - If neither str nor bytes, but iff no <i>dflt</i> is provided.</li>
+        <li><code><strong class='fraise'>TypeError</strong></code> - If neither <code>str</code> nor <code>bytes</code>, but only if no 
+        <i>dflt</i> is provided.</li>
     </ul></dd>
   </dl>
 </td></tr></table>
@@ -544,18 +549,20 @@
     </td>
   </tr></table>
   
-  <p>Convert str to bytes/unicode if needed.</p>
+  <p>Convert <code>str</code> to <code>bytes</code>/<code>unicode</code> if
+  needed.</p>
   <dl class="fields">
     <dt>Parameters:</dt>
     <dd><ul class="nomargin-top">
-        <li><strong class="pname"><code>bytestr</code></strong> - Bytes, str or unicode.</li>
+        <li><strong class="pname"><code>bytestr</code></strong> - <code>bytes</code>, <code>str</code> or <code>unicode</code>.</li>
         <li><strong class="pname"><code>dflt</code></strong> - Optional, default return value.</li>
     </ul></dd>
     <dt>Returns:</dt>
-        <dd>Bytes or <i>dflt</i>.</dd>
+        <dd><code>bytes</code> or <i>dflt</i>.</dd>
     <dt>Raises:</dt>
     <dd><ul class="nomargin-top">
-        <li><code><strong class='fraise'>TypeError</strong></code> - If neither bytes nor str, but iff no <i>dflt</i> is provided.</li>
+        <li><code><strong class='fraise'>TypeError</strong></code> - If neither <code>bytes</code> nor <code>str</code>, but only if no 
+        <i>dflt</i> is provided.</li>
     </ul></dd>
   </dl>
 </td></tr></table>
@@ -579,11 +586,11 @@
   <dl class="fields">
     <dt>Parameters:</dt>
     <dd><ul class="nomargin-top">
-        <li><strong class="pname"><code>bytestr</code></strong> - Bytes or str.</li>
-        <li><strong class="pname"><code>limit</code></strong> - Length limit (int).</li>
+        <li><strong class="pname"><code>bytestr</code></strong> - Original <code>bytes</code> or <code>str</code>.</li>
+        <li><strong class="pname"><code>limit</code></strong> - Length limit (<code>int</code>).</li>
     </ul></dd>
     <dt>Returns:</dt>
-        <dd>Bytes or str.</dd>
+        <dd>Clipped <code>bytes</code> or <code>str</code>.</dd>
   </dl>
 </td></tr></table>
 </div>
@@ -612,7 +619,7 @@
         <li><strong class="pname"><code>attrs</code></strong> - Instance attribute names (<i>all positional</i>).</li>
     </ul></dd>
     <dt>Returns:</dt>
-        <dd>Instance representation (str).</dd>
+        <dd>Instance representation (<code>str</code>).</dd>
   </dl>
 </td></tr></table>
 </div>
@@ -638,7 +645,7 @@
     <dd><ul class="nomargin-top">
         <li><strong class="pname"><code>inst</code></strong> - The instance to check (<i>any</i>).</li>
         <li><strong class="pname"><code>classes</code></strong> - One or several classes (<i>all positional</i>).</li>
-        <li><strong class="pname"><code>name</code></strong> - The name of the instance (str).</li>
+        <li><strong class="pname"><code>name</code></strong> - The name of the instance (<code>str</code>).</li>
     </ul></dd>
     <dt>Returns:</dt>
         <dd>The matching <i>class</i> from <i>classes</i>, None otherwise.</dd>
@@ -674,11 +681,11 @@
   <dl class="fields">
     <dt>Parameters:</dt>
     <dd><ul class="nomargin-top">
-        <li><strong class="pname"><code>fmt</code></strong> - Print-like format (str).</li>
+        <li><strong class="pname"><code>fmt</code></strong> - Print-like format (<code>str</code>).</li>
         <li><strong class="pname"><code>args</code></strong> - Optional arguments to include (<i>all positional</i>).</li>
-        <li><strong class="pname"><code>argv0</code></strong> - Optional prefix (str).</li>
-        <li><strong class="pname"><code>nl</code></strong> - Number of leading blank lines (int).</li>
-        <li><strong class="pname"><code>nt</code></strong> - Number of trailing blank lines (int).</li>
+        <li><strong class="pname"><code>argv0</code></strong> - Optional prefix (<code>str</code>).</li>
+        <li><strong class="pname"><code>nl</code></strong> - Number of leading blank lines (<code>int</code>).</li>
+        <li><strong class="pname"><code>nt</code></strong> - Number of trailing blank lines (<code>int</code>).</li>
     </ul></dd>
   </dl>
 </td></tr></table>
@@ -736,7 +743,7 @@
         <li><strong class="pname"><code>strepr</code></strong> - Conversion (<code>repr</code> or <code>str</code>).</li>
     </ul></dd>
     <dt>Returns:</dt>
-        <dd>Instance representation (str).</dd>
+        <dd>Instance representation (<code>str</code>).</dd>
   </dl>
 </td></tr></table>
 </div>
@@ -759,11 +766,11 @@
   <dl class="fields">
     <dt>Parameters:</dt>
     <dd><ul class="nomargin-top">
-        <li><strong class="pname"><code>size</code></strong> - Value to convert (float or int).</li>
+        <li><strong class="pname"><code>size</code></strong> - Value to convert (<code>float</code> or <code>int</code>).</li>
     </ul></dd>
     <dt>Returns:</dt>
         <dd>&quot;&lt;1or2digits&gt;&lt;sep&gt;&lt;3digits&gt;...&quot; or 
-          &quot;-&quot; if <i>size</i> is negative (str).</dd>
+          &quot;-&quot; if <i>size</i> is negative (<code>str</code>).</dd>
   </dl>
 </td></tr></table>
 </div>
@@ -786,10 +793,10 @@
   <dl class="fields">
     <dt>Parameters:</dt>
     <dd><ul class="nomargin-top">
-        <li><strong class="pname"><code>size</code></strong> - Value to convert (float or int).</li>
+        <li><strong class="pname"><code>size</code></strong> - Value to convert (<code>float</code> or <code>int</code>).</li>
     </ul></dd>
     <dt>Returns:</dt>
-        <dd>&quot;&lt;Size&gt; &lt;B&gt;&lt;SI&gt;&quot; (str).</dd>
+        <dd>&quot;&lt;Size&gt; &lt;B&gt;&lt;SI&gt;&quot; (<code>str</code>).</dd>
   </dl>
 </td></tr></table>
 </div>
@@ -825,7 +832,7 @@
 <table border="0" cellpadding="0" cellspacing="0" width="100%%">
   <tr>
     <td align="left" class="footer">
-    Generated by Epydoc 3.0.1 on Sat Jun 16 16:27:47 2018
+    Generated by Epydoc 3.0.1 on Fri Jun 22 12:53:52 2018
     </td>
     <td align="right" class="footer">
       <a target="mainFrame" href="http://epydoc.sourceforge.net"

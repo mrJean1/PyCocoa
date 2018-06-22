@@ -41,7 +41,7 @@ __all__ = ('Item',
            'Separator',
            'ns2Item',
            'title2action')
-__version__ = '18.06.10'
+__version__ = '18.06.18'
 
 _menuItemHandler_name = 'menuItemHandler_'
 
@@ -61,14 +61,14 @@ class Item(_Type2):
                                          shift=False):
         '''New menu L{Item}.
 
-           @param title: Item title (str).
-           @keyword action: Callback, the method to be called (str
-                            ending with ':' or _', C{SEL_t} or C{None}).
-           @keyword key: The shortcut key, if any (str).
+           @param title: Item title (C{str}).
+           @keyword action: Callback, the method to be called (C{str
+                            ending with ':' or _'}, C{SEL_t} or C{None}).
+           @keyword key: The shortcut key, if any (C{str}).
            @keyword alt: Hold C{option} or C{alt} with I{key} (bool).
            @keyword cmd: Hold C{command} with I{key} (bool).
            @keyword cntl: Hold C{control} with I{key} (bool).
-           @keyword shift: Hold C{shift} with {key} (bool).
+           @keyword shift: Hold C{shift} with I{key} (bool).
 
            @raise ValueError: Invalid I{title} for C{None} I{action}.
 
@@ -93,7 +93,7 @@ class Item(_Type2):
         # <http://Developer.Apple.com//documentation/appkit/
         #       nsmenuitem/1514858-initwithtitle>
         self.NS = NSMenuItem.alloc().initWithTitle_action_keyEquivalent_(
-                                     NSStr(self.title), self._SEL_, NSStr(key))
+                             NSStr(self.title), self._SEL_, NSStr(key or ''))
         if key:
             mask = 0
             if alt:
@@ -172,7 +172,7 @@ class Menu(_Type2):
     def __init__(self, title=''):
         '''New L{Menu}.
 
-           @keyword title: The menu title (str).
+           @keyword title: The menu title (C{str}).
         '''
         self._items = []
         self.NS = NSMenu.alloc().init()
@@ -196,7 +196,7 @@ class Menu(_Type2):
     def item(self, title, action=None, **kwds):
         '''New menu item with action and optional shortcut key.
 
-           @param title: Item title (str).
+           @param title: Item title (C{str}).
            @keyword action: See L{Item}C{.__init__}.
            @keyword kwds: See L{Item}C{.__init__}.
 
@@ -207,7 +207,7 @@ class Menu(_Type2):
     def items(self, separators=False):
         '''Yield each of the items in this menu (L{Item}).
 
-           @keyword separators: Yield or skip L{Separator} items (bool).
+           @keyword separators: Yield or skip L{Separator} items (C{bool}).
         '''
         if separators:
             for item in self._items:
@@ -235,7 +235,7 @@ class MenuBar(_Type2):
     def __init__(self, app=None):
         '''New L{MenuBar}.
 
-           @keyword app: The application (L{App} or None).
+           @keyword app: The application (L{App} or C{None}).
 
            @raise TypeError: If I{app} not an L{App}.
 
@@ -277,7 +277,7 @@ class MenuBar(_Type2):
     def main(self, app=None):
         '''Make this menu bar the app's main menu.
 
-           @keyword app: The application (L{App} or None).
+           @keyword app: The application (L{App} or C{None}).
 
            @raise TypeError: If I{app} not an L{App}.
 
@@ -324,9 +324,9 @@ def ns2Item(ns):
 def title2action(title):
     '''Convert a menu item title to a valid callback method name.
 
-       @param title: The item's title (str).
+       @param title: The item's title (C{str}).
 
-       @return: Name for the callback method (str).
+       @return: Name for the callback method (C{str}).
 
        @raise ValueError: Invalid method name for this I{title}.
     '''

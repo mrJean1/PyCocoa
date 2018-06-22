@@ -81,8 +81,8 @@ object --+
 <hr />
 <div class="fields">      <p><strong>Note:</strong>
         Each ObjC method invocation requires creation of another, new 
-        <code>ObjC[Bound]Method</code> instance which is immediately 
-        discarded thereafter.
+        <code>ObjCBound[Class]Method</code> instance which is discarded 
+        immediately thereafter.
       </p>
 </div><!-- ==================== INSTANCE METHODS ==================== -->
 <a name="section-InstanceMethods"></a>
@@ -100,13 +100,9 @@ object --+
         <tr>
           <td><span class="summary-sig"><a href="pycocoa.runtime.ObjCBoundMethod-class.html#__init__" class="summary-sig-name">__init__</a>(<span class="summary-sig-arg">self</span>,
         <span class="summary-sig-arg">method</span>,
-        <span class="summary-sig-arg">objc_id</span>)</span><br />
-      Initialize with an ObjC method <a 
-      href="pycocoa.octypes.IMP_t-class.html" class="link">IMP_t</a>, <a 
-      href="pycocoa.runtime.ObjCInstance-class.html" 
-      class="link">ObjCInstance</a> or <a 
-      href="pycocoa.runtime.ObjCClass-class.html" 
-      class="link">ObjCClass</a> object.</td>
+        <span class="summary-sig-arg">objc_id</span>,
+        <span class="summary-sig-arg">inst</span>)</span><br />
+      Initialize with an ObjC instance or class method.</td>
           <td align="right" valign="top">
             
             
@@ -207,9 +203,18 @@ object --+
     <td width="15%" align="right" valign="top" class="summary">
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
+        <a href="pycocoa.runtime.ObjCBoundMethod-class.html#inst" class="summary-name">inst</a><br />
+      Get the <code>ObjCInstance</code> or <code>ObjCClass</code>.
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
         <a href="pycocoa.runtime.ObjCBoundMethod-class.html#objc_id" class="summary-name">objc_id</a><br />
-      Get the instance (<a href="pycocoa.runtime.ObjCInstance-class.html" 
-      class="link">ObjCInstance</a>).
+      Get the ObjC instance (<code>Class_t</code> or <a 
+      href="pycocoa.runtime.ObjCSubclass-class.html" 
+      class="link">ObjCSubclass</a>).
     </td>
   </tr>
   <tr>
@@ -238,7 +243,8 @@ object --+
   <tr valign="top"><td>
   <h3 class="epydoc"><span class="sig"><span class="sig-name">__init__</span>(<span class="sig-arg">self</span>,
         <span class="sig-arg">method</span>,
-        <span class="sig-arg">objc_id</span>)</span>
+        <span class="sig-arg">objc_id</span>,
+        <span class="sig-arg">inst</span>)</span>
     <br /><em class="fname">(Constructor)</em>
   </h3>
   </td><td align="right" valign="top"
@@ -246,13 +252,17 @@ object --+
     </td>
   </tr></table>
   
-  <p>Initialize with an ObjC method <a 
-  href="pycocoa.octypes.IMP_t-class.html" class="link">IMP_t</a>, <a 
-  href="pycocoa.runtime.ObjCInstance-class.html" 
-  class="link">ObjCInstance</a> or <a 
-  href="pycocoa.runtime.ObjCClass-class.html" class="link">ObjCClass</a> 
-  object.</p>
+  <p>Initialize with an ObjC instance or class method.</p>
   <dl class="fields">
+    <dt>Parameters:</dt>
+    <dd><ul class="nomargin-top">
+        <li><strong class="pname"><code>method</code></strong> - The ObjC method (<code>ObjC[Class]Method</code>).</li>
+        <li><strong class="pname"><code>objc_id</code></strong> - The ObjC instance (<a 
+          href="pycocoa.runtime.ObjCInstance-class.html" 
+          class="link">ObjCInstance</a>) or class (<code>Class_t</code>).</li>
+        <li><strong class="pname"><code>inst</code></strong> - The instance <code>ObjCInstance</code> or <code>ObjCClass</code>,
+          used only to report invokation errors.</li>
+    </ul></dd>
     <dt>Overrides:
         object.__init__
     </dt>
@@ -308,19 +318,36 @@ object --+
   </dl>
 </td></tr></table>
 </div>
+<a name="inst"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <h3 class="epydoc">inst</h3>
+  <p>Get the <code>ObjCInstance</code> or <code>ObjCClass</code>.</p>
+  <dl class="fields">
+    <dt>Get Method:</dt>
+    <dd class="value"><span class="summary-sig">inst(<span class="summary-sig-arg">self</span>)</span>
+        - Get the <code>ObjCInstance</code> or <code>ObjCClass</code>.
+    </dd>
+  </dl>
+</td></tr></table>
+</div>
 <a name="objc_id"></a>
 <div>
 <table class="details" border="1" cellpadding="3"
        cellspacing="0" width="100%" bgcolor="white">
 <tr><td>
   <h3 class="epydoc">objc_id</h3>
-  <p>Get the instance (<a href="pycocoa.runtime.ObjCInstance-class.html" 
-  class="link">ObjCInstance</a>).</p>
+  <p>Get the ObjC instance (<code>Class_t</code> or <a 
+  href="pycocoa.runtime.ObjCSubclass-class.html" 
+  class="link">ObjCSubclass</a>).</p>
   <dl class="fields">
     <dt>Get Method:</dt>
     <dd class="value"><span class="summary-sig">objc_id(<span class="summary-sig-arg">self</span>)</span>
-        - Get the instance (<a href="pycocoa.runtime.ObjCInstance-class.html" 
-class="link">ObjCInstance</a>).
+        - Get the ObjC instance (<code>Class_t</code> or <a 
+href="pycocoa.runtime.ObjCSubclass-class.html" 
+class="link">ObjCSubclass</a>).
     </dd>
   </dl>
 </td></tr></table>
@@ -357,7 +384,7 @@ class="link">ObjCInstance</a>).
 <table border="0" cellpadding="0" cellspacing="0" width="100%%">
   <tr>
     <td align="left" class="footer">
-    Generated by Epydoc 3.0.1 on Sat Jun 16 16:27:48 2018
+    Generated by Epydoc 3.0.1 on Fri Jun 22 12:53:53 2018
     </td>
     <td align="right" class="footer">
       <a target="mainFrame" href="http://epydoc.sourceforge.net"
