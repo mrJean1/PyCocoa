@@ -63,7 +63,7 @@
 
 <hr />
 <div class="fields">      <p><strong>Version:</strong>
-        18.06.21
+        18.06.23
       </p>
 </div><!-- ==================== FUNCTIONS ==================== -->
 <a name="section-Functions"></a>
@@ -116,7 +116,8 @@
       <table width="100%" cellpadding="0" cellspacing="0" border="0">
         <tr>
           <td><span class="summary-sig"><a href="pycocoa.utils-module.html#bytes2repr" class="summary-sig-name">bytes2repr</a>(<span class="summary-sig-arg">bytestr</span>)</span><br />
-      Represent bytes like <code>repr(bytestr)</code>.</td>
+      Represent <code>bytes</code> or <code>str</code> as 
+      <code>b&quot;...&quot;</code>.</td>
           <td align="right" valign="top">
             
             
@@ -189,7 +190,7 @@
         <tr>
           <td><span class="summary-sig"><a href="pycocoa.utils-module.html#clip" class="summary-sig-name">clip</a>(<span class="summary-sig-arg">bytestr</span>,
         <span class="summary-sig-arg">limit</span>=<span class="summary-sig-default">50</span>)</span><br />
-      Clip a string or bytes to the given length limit.</td>
+      Clip a string to the given length limit.</td>
           <td align="right" valign="top">
             
             
@@ -244,7 +245,7 @@
           <td><span class="summary-sig"><a href="pycocoa.utils-module.html#isinstanceOf" class="summary-sig-name">isinstanceOf</a>(<span class="summary-sig-arg">inst</span>,
         <span class="summary-sig-arg">*classes</span>,
         <span class="summary-sig-arg">**name_missing</span>)</span><br />
-      Check a Python object's class.</td>
+      Check a Python instance' class.</td>
           <td align="right" valign="top">
             
             
@@ -262,6 +263,57 @@
         <tr>
           <td><span class="summary-sig"><a name="lambda1"></a><span class="summary-sig-name">lambda1</span>(<span class="summary-sig-arg">arg</span>)</span><br />
       Inlieu of using <i class="math">lambda arg: arg</i>.</td>
+          <td align="right" valign="top">
+            
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a href="pycocoa.utils-module.html#name2objc" class="summary-sig-name">name2objc</a>(<span class="summary-sig-arg">name</span>)</span><br />
+      Convert a (selector) name to bytes and ObjC naming rules.</td>
+          <td align="right" valign="top">
+            
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a href="pycocoa.utils-module.html#name2py" class="summary-sig-name">name2py</a>(<span class="summary-sig-arg">name</span>)</span><br />
+      Convert a (selector) name to str and Python naming conventions.</td>
+          <td align="right" valign="top">
+            
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a href="pycocoa.utils-module.html#name2pymethod" class="summary-sig-name">name2pymethod</a>(<span class="summary-sig-arg">name</span>)</span><br />
+      Convert a (selector) name to a valid Python callback method.</td>
           <td align="right" valign="top">
             
             
@@ -316,7 +368,7 @@
         <tr>
           <td><span class="summary-sig"><a href="pycocoa.utils-module.html#type2strepr" class="summary-sig-name">type2strepr</a>(<span class="summary-sig-arg">inst</span>,
         <span class="summary-sig-arg">strepr</span>=<span class="summary-sig-default">&lt;type 'str'&gt;</span>)</span><br />
-      Return a Python Type instance as <code class="link">str</code> or 
+      Represent a Python Type instance as <code class="link">str</code> or 
       <code class="link">repr</code>.</td>
           <td align="right" valign="top">
             
@@ -335,7 +387,7 @@
         <tr>
           <td><span class="summary-sig"><a href="pycocoa.utils-module.html#z1000str" class="summary-sig-name">z1000str</a>(<span class="summary-sig-arg">size</span>,
         <span class="summary-sig-arg">sep</span>=<span class="summary-sig-default"><code class="variable-quote">'</code><code class="variable-string">_</code><code class="variable-quote">'</code></span>)</span><br />
-      Convert a size value to string with 1_000's seperator.</td>
+      Convert a size to string with 1_000's seperator.</td>
           <td align="right" valign="top">
             
             
@@ -352,8 +404,9 @@
       <table width="100%" cellpadding="0" cellspacing="0" border="0">
         <tr>
           <td><span class="summary-sig"><a href="pycocoa.utils-module.html#zSIstr" class="summary-sig-name">zSIstr</a>(<span class="summary-sig-arg">size</span>,
-        <span class="summary-sig-arg">B</span>=<span class="summary-sig-default"><code class="variable-quote">'</code><code class="variable-string">B</code><code class="variable-quote">'</code></span>)</span><br />
-      Convert a size value to string with SI-units.</td>
+        <span class="summary-sig-arg">B</span>=<span class="summary-sig-default"><code class="variable-quote">'</code><code class="variable-string">B</code><code class="variable-quote">'</code></span>,
+        <span class="summary-sig-arg">K</span>=<span class="summary-sig-default">1024</span>)</span><br />
+      Convert a size to string with SI-units suffix.</td>
           <td align="right" valign="top">
             
             
@@ -467,11 +520,12 @@
     </td>
   </tr></table>
   
-  <p>Represent bytes like <code>repr(bytestr)</code>.</p>
+  <p>Represent <code>bytes</code> or <code>str</code> as 
+  <code>b&quot;...&quot;</code>.</p>
   <dl class="fields">
     <dt>Parameters:</dt>
     <dd><ul class="nomargin-top">
-        <li><strong class="pname"><code>bytestr</code></strong> - Str or bytes.</li>
+        <li><strong class="pname"><code>bytestr</code></strong> - <code>bytes</code> or <code>str</code>..</li>
     </ul></dd>
     <dt>Returns:</dt>
         <dd>Representation <code>b'...'</code> (<code>str</code>).</dd>
@@ -582,11 +636,11 @@
     </td>
   </tr></table>
   
-  <p>Clip a string or bytes to the given length limit.</p>
+  <p>Clip a string to the given length limit.</p>
   <dl class="fields">
     <dt>Parameters:</dt>
     <dd><ul class="nomargin-top">
-        <li><strong class="pname"><code>bytestr</code></strong> - Original <code>bytes</code> or <code>str</code>.</li>
+        <li><strong class="pname"><code>bytestr</code></strong> - String (<code>bytes</code> or <code>str</code>).</li>
         <li><strong class="pname"><code>limit</code></strong> - Length limit (<code>int</code>).</li>
     </ul></dd>
     <dt>Returns:</dt>
@@ -614,7 +668,7 @@
   <dl class="fields">
     <dt>Parameters:</dt>
     <dd><ul class="nomargin-top">
-        <li><strong class="pname"><code>inst</code></strong> - Instance (any).</li>
+        <li><strong class="pname"><code>inst</code></strong> - Instance (<code>any</code>).</li>
         <li><strong class="pname"><code>strepr</code></strong> - Conversion (<code>repr</code> or <code>str</code>).</li>
         <li><strong class="pname"><code>attrs</code></strong> - Instance attribute names (<i>all positional</i>).</li>
     </ul></dd>
@@ -639,7 +693,7 @@
     </td>
   </tr></table>
   
-  <p>Check a Python object's class.</p>
+  <p>Check a Python instance' class.</p>
   <dl class="fields">
     <dt>Parameters:</dt>
     <dd><ul class="nomargin-top">
@@ -660,6 +714,85 @@
         class="link">isInstanceOf</a> for checking ObjC instances.
       </p>
 </div></td></tr></table>
+</div>
+<a name="name2objc"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">name2objc</span>(<span class="sig-arg">name</span>)</span>
+  </h3>
+  </td><td align="right" valign="top"
+    >&nbsp;
+    </td>
+  </tr></table>
+  
+  <p>Convert a (selector) name to bytes and ObjC naming rules.</p>
+  <dl class="fields">
+    <dt>Parameters:</dt>
+    <dd><ul class="nomargin-top">
+        <li><strong class="pname"><code>name</code></strong> - Name to convert (<code>str</code>).</li>
+    </ul></dd>
+    <dt>Returns:</dt>
+        <dd>Converted name (<code>str</code>).</dd>
+  </dl>
+</td></tr></table>
+</div>
+<a name="name2py"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">name2py</span>(<span class="sig-arg">name</span>)</span>
+  </h3>
+  </td><td align="right" valign="top"
+    >&nbsp;
+    </td>
+  </tr></table>
+  
+  <p>Convert a (selector) name to str and Python naming conventions.</p>
+  <dl class="fields">
+    <dt>Parameters:</dt>
+    <dd><ul class="nomargin-top">
+        <li><strong class="pname"><code>name</code></strong> - Name to convert (<code>str</code>).</li>
+    </ul></dd>
+    <dt>Returns:</dt>
+        <dd>Converted name (<code>str</code>).</dd>
+  </dl>
+</td></tr></table>
+</div>
+<a name="name2pymethod"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">name2pymethod</span>(<span class="sig-arg">name</span>)</span>
+  </h3>
+  </td><td align="right" valign="top"
+    >&nbsp;
+    </td>
+  </tr></table>
+  
+  <p>Convert a (selector) name to a valid Python callback method.</p>
+  <dl class="fields">
+    <dt>Parameters:</dt>
+    <dd><ul class="nomargin-top">
+        <li><strong class="pname"><code>name</code></strong> - Name to convert (<code>str</code>).</li>
+    </ul></dd>
+    <dt>Returns:</dt>
+        <dd>Converted name (<code>str</code>).</dd>
+    <dt>Raises:</dt>
+    <dd><ul class="nomargin-top">
+        <li><code><strong class='fraise'>ValueError</strong></code> - Invalid, non-alphanumeric <i>name</i>.</li>
+    </ul></dd>
+  </dl>
+</td></tr></table>
 </div>
 <a name="printf"></a>
 <div>
@@ -734,13 +867,13 @@
     </td>
   </tr></table>
   
-  <p>Return a Python Type instance as <code class="link">str</code> or 
+  <p>Represent a Python Type instance as <code class="link">str</code> or 
   <code class="link">repr</code>.</p>
   <dl class="fields">
     <dt>Parameters:</dt>
     <dd><ul class="nomargin-top">
-        <li><strong class="pname"><code>inst</code></strong> - Instance (any).</li>
-        <li><strong class="pname"><code>strepr</code></strong> - Conversion (<code>repr</code> or <code>str</code>).</li>
+        <li><strong class="pname"><code>inst</code></strong> - Instance (<code>any</code>).</li>
+        <li><strong class="pname"><code>strepr</code></strong> - Representation function (<code>repr</code> or <code>str</code>).</li>
     </ul></dd>
     <dt>Returns:</dt>
         <dd>Instance representation (<code>str</code>).</dd>
@@ -762,11 +895,12 @@
     </td>
   </tr></table>
   
-  <p>Convert a size value to string with 1_000's seperator.</p>
+  <p>Convert a size to string with 1_000's seperator.</p>
   <dl class="fields">
     <dt>Parameters:</dt>
     <dd><ul class="nomargin-top">
         <li><strong class="pname"><code>size</code></strong> - Value to convert (<code>float</code> or <code>int</code>).</li>
+        <li><strong class="pname"><code>sep</code></strong> - 1_000's separator (<code>str</code>),</li>
     </ul></dd>
     <dt>Returns:</dt>
         <dd>&quot;&lt;1or2digits&gt;&lt;sep&gt;&lt;3digits&gt;...&quot; or 
@@ -782,21 +916,25 @@
   <table width="100%" cellpadding="0" cellspacing="0" border="0">
   <tr valign="top"><td>
   <h3 class="epydoc"><span class="sig"><span class="sig-name">zSIstr</span>(<span class="sig-arg">size</span>,
-        <span class="sig-arg">B</span>=<span class="sig-default"><code class="variable-quote">'</code><code class="variable-string">B</code><code class="variable-quote">'</code></span>)</span>
+        <span class="sig-arg">B</span>=<span class="sig-default"><code class="variable-quote">'</code><code class="variable-string">B</code><code class="variable-quote">'</code></span>,
+        <span class="sig-arg">K</span>=<span class="sig-default">1024</span>)</span>
   </h3>
   </td><td align="right" valign="top"
     >&nbsp;
     </td>
   </tr></table>
   
-  <p>Convert a size value to string with SI-units.</p>
+  <p>Convert a size to string with SI-units suffix.</p>
   <dl class="fields">
     <dt>Parameters:</dt>
     <dd><ul class="nomargin-top">
         <li><strong class="pname"><code>size</code></strong> - Value to convert (<code>float</code> or <code>int</code>).</li>
+        <li><strong class="pname"><code>B</code></strong> - The unit (<code>str</code>).</li>
+        <li><strong class="pname"><code>K</code></strong> - 1024 or 1000 (<code>int</code>).</li>
     </ul></dd>
     <dt>Returns:</dt>
-        <dd>&quot;&lt;Size&gt; &lt;B&gt;&lt;SI&gt;&quot; (<code>str</code>).</dd>
+        <dd>&quot;&lt;Size&gt; &lt;SI&gt;[i]&lt;B&gt;&quot; 
+          (<code>str</code>).</dd>
   </dl>
 </td></tr></table>
 </div>
@@ -832,7 +970,7 @@
 <table border="0" cellpadding="0" cellspacing="0" width="100%%">
   <tr>
     <td align="left" class="footer">
-    Generated by Epydoc 3.0.1 on Fri Jun 22 12:53:52 2018
+    Generated by Epydoc 3.0.1 on Thu Jun 28 16:06:53 2018
     </td>
     <td align="right" class="footer">
       <a target="mainFrame" href="http://epydoc.sourceforge.net"

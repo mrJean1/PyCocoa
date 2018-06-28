@@ -86,7 +86,7 @@ from oslibs  import cfString2str, _csignature, libobjc
 from utils   import bytes2str, _Constants, _exports, lambda1, missing, \
                     name2py, printf, property2, str2bytes
 
-__version__ = '18.06.21'
+__version__ = '18.06.23'
 
 # <http://Developer.Apple.com/documentation/objectivec/
 #         objc_associationpolicy?language=objc>
@@ -184,8 +184,9 @@ def _ObjC_log_totals():
 
 
 def _pyargs(codes3, args):
-    '''Used by L{ObjCSubclass} to convert ObjC method arguments to
-       Python values before passing those to the Python-defined method.
+    '''Used by L{ObjCSubclass} to convert ObjC method arguments
+       to the corresponding Python type/value before passing
+       those to the decorated Python method.
     '''
     if len(codes3) != len(args):
         raise ValueError('mismatch codes3 %r and args %r' % (codes3, args))
@@ -233,7 +234,7 @@ def _Xargs(x, name, argtypes, restype='void'):
 
 
 class _ObjCBase(object):
-    '''Base class for Python C{runtime.ObjC...} classes.
+    '''(INTERNAL) Base class for C{runtime.ObjC...} classes.
     '''
     _as_parameter_ = None  # for ctypes
 
@@ -242,7 +243,7 @@ class _ObjCBase(object):
 
 
 class ObjCBoundMethod(_ObjCBase):
-    '''Python wrapper for an ObjC class or instance method, an L{IMP_t}.
+    '''Python wrapper for a bound ObjC instance method, an L{IMP_t}.
 
        @note: Each ObjC method invocation requires creation of another,
               new C{ObjCBound[Class]Method} instance which is discarded
@@ -273,16 +274,16 @@ class ObjCBoundMethod(_ObjCBase):
         return self._method(self._inst, self._objc_id, *args)
 
     @property
-    def method(self):
-        '''Get the method (C{ObjC[Class]Method}).
-        '''
-        return self._method
-
-    @property
     def inst(self):
         '''Get the C{ObjCInstance} or C{ObjCClass}.
         '''
         return self._inst
+
+    @property
+    def method(self):
+        '''Get the method (C{ObjC[Class]Method}).
+        '''
+        return self._method
 
     @property
     def objc_id(self):
@@ -292,7 +293,8 @@ class ObjCBoundMethod(_ObjCBase):
 
 
 class ObjCBoundClassMethod(ObjCBoundMethod):
-    '''Only to distinguish bound class from bound (instance) methods.
+    '''Python wrapper for a bound ObjC instance method, only
+       to distinguish bound class from bound instance methods.
     '''
     pass
 
@@ -641,8 +643,8 @@ _PyRes_t2 = {b'@': (ObjCInstance, Id_t),
 
 
 class ObjCMethod(_ObjCBase):
-    '''Python class representing an unbound ObjC class or instance
-       method (actually an L{IMP_t}).
+    '''Python class representing an unbound ObjC instance
+       method, actually an L{IMP_t}.
     '''
     _argtypes = []  # list of ctypes
     _callable = None
@@ -745,13 +747,14 @@ class ObjCMethod(_ObjCBase):
 
     @property
     def restype(self):
-        '''Get this method's result type (C{ctypes}).
+        '''Get this method's result type (C{ctype}).
         '''
         return self._restype
 
 
 class ObjCClassMethod(ObjCMethod):
-    '''Only to distinguish class methods from instance methods.
+    '''Python class representing an unbound ObjC class method,
+       only to distinguish class methods from instance methods.
     '''
     pass
 
@@ -759,13 +762,13 @@ class ObjCClassMethod(ObjCMethod):
 class ObjCSubclass(_ObjCBase):
     '''Python class creating an ObjC sub-class of an existing ObjC (super)class.
 
-       This class is used only to *define* the interface and implementation
+       This class is used only to I{define} the interface and implementation
        of an ObjC sub-class from Python.  It should not be used in any other
        way.  If you want a Python representation of the resulting class,
        create it with L{ObjCClass}.
 
-       *It consists primarily of function decorators which you use to add
-       methods to the sub-class.*
+       I{It consists primarily of function decorators which you use to add
+       methods to the sub-class.}
 
        L{ObjCSubclass} is used to define an ObjC sub-class of an existing
        class registered with the runtime.  When you create an instance of
@@ -798,7 +801,7 @@ class ObjCSubclass(_ObjCBase):
        definition, perhaps called MySubclassImplementation.
 
        It is also possible to add ObjC I{ivars} to the sub-class, however
-       if you do so, you *{must call} the C{.__init__} method with keyword
+       if you do so, you I{must call} the C{.__init__} method with keyword
        argument I{register=False}, and then call the C{.register} method
        after the I{ivars} have been added.
 
@@ -829,8 +832,8 @@ class ObjCSubclass(_ObjCBase):
            @keyword register: Register the new sub-class (C{bool}).
            @keyword ivars: Optionally, specify any number of instance
                            variables to be added I{before} registering
-                           the new class, each with a keyword argument
-                           C{name=ctype} to specify the name and C{ctypes}
+                           the new class, each by a keyword argument
+                           C{name=ctype} to specify the name and C{ctype}
                            of the instance variable.
         '''
         self._imp_cache = {}
@@ -866,7 +869,7 @@ class ObjCSubclass(_ObjCBase):
            @param name: Name of the ivar (C{str}).
            @param ctype: The ivar type (C{ctypes}).
 
-           @raise ValueError: Class is already registered.
+           @raise ValueError: This class is already registered.
 
            @note: Instance variables can only be added
                   BEFORE the class is registered.
@@ -966,7 +969,7 @@ class ObjCSubclass(_ObjCBase):
             raise ValueError('%s %r already registered' % ('sub-class', self))
 
         register_subclass(self._objc_class)
-        # We can get the metaclass only after the class is registered.
+        # We can't get the metaclass before the class is registered.
         self._objc_metaclass = get_metaclass(self.name)
 
 
@@ -1270,13 +1273,11 @@ def send_message(receiver, name_, *args, **resargtypes):
        @raise TypeError: Invalid I{receiver}, I{name}, I{args} or
                          I{resargtypes} type.
 
-       @note: By default, the result and all arguments are C{c_void_p}
-              wrapped.  Use keyword arguments I{restype=c_void_p} and
-              I{argtypes=[]} to change the defaults.  The I{restype}
-              defines the C{ctypes} type for the returned result and
-              I{argtypes} is the list of C{ctypes} types for the message
-              arguments only (without the C{Id/self} and C{SEL/cmd}
-              arguments).
+       @note: Use keyword arguments I{restype=c_void_p} and I{argtypes=[]}
+              to specify the result and argument C{ctypes}.  The I{restype}
+              defines the C{ctype} for the result and I{argtypes} is the
+              list of C{ctypes} for the message arguments only, I{without}
+              the C{Id/self} and C{SEL/cmd} arguments.
     '''
     receiver, _ = _obj_and_name(receiver, get_class)
     _ObjC_logf('send_message(%r, %s, %r) %r', receiver, name_, args, resargtypes)

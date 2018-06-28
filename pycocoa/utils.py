@@ -61,7 +61,7 @@
 
 @var missing: Missing keyword argument value.
 '''
-__version__ = '18.06.21'
+__version__ = '18.06.23'
 
 try:  # all imports listed explicitly to help PyChecker
     from math import gcd  # Python 3+
@@ -260,9 +260,9 @@ try:  # MCCABE 23
     _Strs  = basestring,
 
     def bytes2repr(bytestr):
-        '''Represent bytes like C{repr(bytestr)}.
+        '''Represent C{bytes} or C{str} as C{b"..."}.
 
-           @param bytestr: Str or bytes.
+           @param bytestr: C{bytes} or C{str}..
            @return: Representation C{b'...'} (C{str}).
         '''
         return 'b%r' % (bytestr,)
@@ -278,9 +278,11 @@ try:  # MCCABE 23
            @raise TypeError: If neither C{str} nor C{bytes}, but
                              only if no I{dflt} is provided.
         '''
+        # XXX see Python-Vlc's vlc.py
         if isinstance(bytestr, _Strs):
             return bytestr
         elif isinstance(bytestr, _Bytes):
+            # return str(bytestr, DEFAULT_UNICODE)
             return bytestr.decode(DEFAULT_UNICODE)
         elif dflt is missing:
             raise TypeError('%s: %r' % ('bytes2str', bytestr))
@@ -300,6 +302,7 @@ try:  # MCCABE 23
            @raise TypeError: If neither C{bytes} nor C{str}, but
                              only if no I{dflt} is provided.
         '''
+        # XXX see Python-Vlc's vlc.py
         if isinstance(bytestr, _Strs):
             return bytestr
         elif isinstance(bytestr, _Bytes):
@@ -313,7 +316,7 @@ except NameError:  # Python 3+
     _Ints  = int,
     _Strs  = str,
 
-    bytes2repr = repr  # always b'...'
+    bytes2repr = repr  # produces always b'...'
 
     def bytes2str(bytestr, dflt=missing):  # PYCHOK expected
         '''Convert C{bytes} to C{str} if needed.
@@ -412,9 +415,9 @@ def _allisting(alls, localls, version, filename, argv0='', itemf=None):
 
 
 def clip(bytestr, limit=50):
-    '''Clip a string or bytes to the given length limit.
+    '''Clip a string to the given length limit.
 
-       @param bytestr: Original C{bytes} or C{str}.
+       @param bytestr: String (C{bytes} or C{str}).
        @keyword limit: Length limit (C{int}).
 
        @return: Clipped C{bytes} or C{str}.
@@ -466,7 +469,7 @@ def flint(f):
 def inst2strepr(inst, strepr, *attrs):
     '''Convert an instance's attributes, maintaining the order.
 
-       @param inst: Instance (any).
+       @param inst: Instance (C{any}).
        @param strepr: Conversion (C{repr} or C{str}).
        @param attrs: Instance attribute names (I{all positional}).
 
@@ -497,7 +500,7 @@ def _int2(i):
 
 
 def isinstanceOf(inst, *classes, **name_missing):
-    '''Check a Python object's class.
+    '''Check a Python instance' class.
 
        @param inst: The instance to check (I{any}).
        @param classes: One or several classes (I{all positional}).
@@ -613,10 +616,10 @@ def _text_title2(text_or_file, title=''):
 
 
 def type2strepr(inst, strepr=str):
-    '''Return a Python Type instance as L{str} or L{repr}.
+    '''Represent a Python Type instance as L{str} or L{repr}.
 
-       @param inst: Instance (any).
-       @keyword strepr: Conversion (C{repr} or C{str}).
+       @param inst: Instance (C{any}).
+       @keyword strepr: Representation function (C{repr} or C{str}).
 
        @return: Instance representation (C{str}).
     '''
@@ -632,12 +635,13 @@ def type2strepr(inst, strepr=str):
 
 
 def z1000str(size, sep='_'):
-    '''Convert a size value to string with 1_000's seperator.
+    '''Convert a size to string with 1_000's seperator.
 
        @param size: Value to convert (C{float} or C{int}).
+       @keyword sep: 1_000's separator (C{str}),
 
-       @return: "<1or2digits><sep><3digits>..." or "-" if I{size}
-                is negative (C{str}).
+       @return: "<1or2digits><sep><3digits>..." or "-" if
+                I{size} is negative (C{str}).
    '''
     z = int(size)
     if z < 0:
@@ -656,18 +660,22 @@ def z1000str(size, sep='_'):
     return t
 
 
-def zSIstr(size, B='B'):
-    '''Convert a size value to string with SI-units.
+def zSIstr(size, B='B', K=1024):
+    '''Convert a size to string with SI-units suffix.
 
        @param size: Value to convert (C{float} or C{int}).
+       @keyword B: The unit (C{str}).
+       @keyword K: 1024 or 1000 (C{int}).
 
-       @return: "<Size> <B><SI>" (C{str}).
+       @return: "<Size> <SI>[i]<B>" (C{str}).
     '''
-    z, si = float(size), ''
-    if z > 1024.0:
+    z, si, k = float(size), '', float(K)
+    if z > k:
         for si in iter('KMGTPE'):
-            z /= 1024.0
-            if z < 1024.0:
+            z /= k
+            if z < k:
+                if k == 1024.0:
+                    si = 'i' + si
                 si = '%.1f %si%s' % (z, si, B)
                 break
         else:
@@ -681,7 +689,7 @@ __all__ = _exports(locals(), 'aspect_ratio', 'clip', 'DEFAULT_UNICODE',
                              'flint', 'isinstanceOf', 'gcd', 'iterbytes',
                              'lambda1', 'missing', 'printf', 'property2',
                              'type2strepr',
-                   starts=('bytes', 'inst', 'str', 'z'))
+                   starts=('bytes', 'inst', 'name2', 'str', 'z'))
 
 if __name__ == '__main__':
 

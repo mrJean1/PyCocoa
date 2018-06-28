@@ -17,6 +17,7 @@ pycocoa.bytes2NS	pycocoa-module.html#bytes2NS
 pycocoa.NSWindowZoomButton	pycocoa-module.html#NSWindowZoomButton
 pycocoa.closeTables	pycocoa-module.html#closeTables
 pycocoa.NSShiftKeyMask	pycocoa-module.html#NSShiftKeyMask
+pycocoa.name2pymethod	pycocoa-module.html#name2pymethod
 pycocoa.NSFontUIOptimizedMask	pycocoa-module.html#NSFontUIOptimizedMask
 pycocoa.NSNumericPadKeyMask	pycocoa-module.html#NSNumericPadKeyMask
 pycocoa.nsSet2set	pycocoa-module.html#nsSet2set
@@ -241,6 +242,7 @@ pycocoa.NSAlert	pycocoa-module.html#NSAlert
 pycocoa.NSFontUnitalicMask	pycocoa-module.html#NSFontUnitalicMask
 pycocoa.FontTrait	pycocoa-module.html#FontTrait
 pycocoa.set_ivar	pycocoa-module.html#set_ivar
+pycocoa.name2py	pycocoa-module.html#name2py
 pycocoa.NSApplicationPresentationHideDock	pycocoa-module.html#NSApplicationPresentationHideDock
 pycocoa.bytes2repr	pycocoa-module.html#bytes2repr
 pycocoa.libCF	pycocoa-module.html#libCF
@@ -313,6 +315,7 @@ pycocoa.NSMutableString	pycocoa-module.html#NSMutableString
 pycocoa.NSTextAlignmentJustified	pycocoa-module.html#NSTextAlignmentJustified
 pycocoa.isinstanceOf	pycocoa-module.html#isinstanceOf
 pycocoa.NSMenuItem	pycocoa-module.html#NSMenuItem
+pycocoa.name2objc	pycocoa-module.html#name2objc
 pycocoa.NSApplicationActivationPolicyProhibited	pycocoa-module.html#NSApplicationActivationPolicyProhibited
 pycocoa.apps	pycocoa.apps-module.html
 pycocoa.apps.bytes2str	pycocoa.utils-module.html#bytes2str
@@ -331,11 +334,12 @@ pycocoa.apps.release	pycocoa.runtime-module.html#release
 pycocoa.apps.retain	pycocoa.runtime-module.html#retain
 pycocoa.apps.isInstanceOf	pycocoa.runtime-module.html#isInstanceOf
 pycocoa.bases	pycocoa.bases-module.html
+pycocoa.bases.type2strepr	pycocoa.utils-module.html#type2strepr
 pycocoa.bases.bytes2str	pycocoa.utils-module.html#bytes2str
 pycocoa.bases.__package__	pycocoa.bases-module.html#__package__
 pycocoa.bases.isNone	pycocoa.nstypes-module.html#isNone
 pycocoa.bases.release	pycocoa.runtime-module.html#release
-pycocoa.bases.type2strepr	pycocoa.utils-module.html#type2strepr
+pycocoa.bases.nsString2str	pycocoa.nstypes-module.html#nsString2str
 pycocoa.bases.isinstanceOf	pycocoa.utils-module.html#isinstanceOf
 pycocoa.dicts	pycocoa.dicts-module.html
 pycocoa.dicts.isImmutable	pycocoa.runtime-module.html#isImmutable
@@ -1290,14 +1294,14 @@ pycocoa.geometry.Rect.x	pycocoa.geometry.Rect-class.html#x
 pycocoa.geometry.Rect.left	pycocoa.geometry.Rect-class.html#left
 pycocoa.geometry.Size	pycocoa.geometry.Size-class.html
 pycocoa.geometry.Size.height	pycocoa.geometry.Size-class.html#height
+pycocoa.geometry.Size.width	pycocoa.geometry.Size-class.html#width
 pycocoa.geometry.Size.__init__	pycocoa.geometry.Size-class.html#__init__
 pycocoa.geometry.Size.size	pycocoa.geometry.Size-class.html#size
-pycocoa.geometry.Size.width	pycocoa.geometry.Size-class.html#width
 pycocoa.geometry.Size2	pycocoa.geometry.Size2-class.html
 pycocoa.geometry.Size.height	pycocoa.geometry.Size-class.html#height
+pycocoa.geometry.Size.width	pycocoa.geometry.Size-class.html#width
 pycocoa.geometry.Size2.__init__	pycocoa.geometry.Size2-class.html#__init__
 pycocoa.geometry.Size.size	pycocoa.geometry.Size-class.html#size
-pycocoa.geometry.Size.width	pycocoa.geometry.Size-class.html#width
 pycocoa.lists.List	pycocoa.lists.List-class.html
 pycocoa.tuples.Tuple._NS_copy	pycocoa.tuples.Tuple-class.html#_NS_copy
 pycocoa.lists.List.pop	pycocoa.lists.List-class.html#pop

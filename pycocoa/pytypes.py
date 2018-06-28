@@ -74,7 +74,7 @@ from runtime import ObjCInstance, release
 from types   import GeneratorType as _generator
 from utils   import bytes2str, clip, DEFAULT_UNICODE, _exports, _Ints
 
-__version__ = '18.06.18'
+__version__ = '18.06.23'
 
 
 def _iter2NS(ns, py, getCount):
@@ -125,12 +125,12 @@ def bytes2NS(py):
 
 
 def dict2NS(py, frozen=False):
-    '''Create an L{NSMutableDictionary} instance from a Python C{dict}.
+    '''Create an C{NS[Mutable]Dictionary} instance from a Python C{dict}.
 
        @param py: The value (C{dict}).
        @keyword frozen: Immutable (C{bool}), mutable otherwise.
 
-       @return: The ObjC instance (L{NSMutableDictionary}).
+       @return: The ObjC instance (L{NSDictionary} or L{NSMutableDictionary}).
 
        @raise RuntimeError: If C{len} vs C{count} assertion failed.
     '''
@@ -382,7 +382,7 @@ def py2NS(py):
 
 
 def type2NS(py):
-    '''Create the  C{NS...} ObjC object for a Python Type or wrapper instance.
+    '''Create the C{NS...} ObjC object for a Python Type or wrapper instance.
 
        @param py: The value (C{Type}).
 

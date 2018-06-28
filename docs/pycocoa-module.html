@@ -85,7 +85,7 @@
   href="http://PyPI.org/project/python-vlc" target="_top">Python-VLC</a> 
   binding.</p>
   <p>The tests and examples have only been run with 64-bit Python 2.7.15 
-  and 3.6.5 using <a href="http://PyPI.org/project/python-vlc" 
+  and 3.7.0 using <a href="http://PyPI.org/project/python-vlc" 
   target="_top">Python-VLC</a> 2.2.6, 3.0.1, 3.0.2 and 3.0.3 (with the 
   compatible <a href="http://www.VideoLan.org/vlc" target="_top">VLC 
   App</a>), but only on macOS 10.13.3, 10.13.4, or 10.13.5 High Sierra.  
@@ -103,7 +103,7 @@
   (formerly Pep8) and <a href="http://PyPI.org/project/mccabe" 
   target="_top">McCabe</a> using 64-bit Python 2.7.15 and with <a 
   href="http://PyPI.org/project/flake8" target="_top">Flake8</a> using 
-  64-bit Python 3.6.5.</p>
+  64-bit Python 3.7.0.</p>
   <p>To install PyCocoa, type <code>pip install PyCocoa</code> or 
   <code>easy_install PyCocoa</code> in a terminal window.  Alternatively, 
   download <code>PyCocoa-X.Y.Z</code> from <a 
@@ -174,7 +174,7 @@
 
 <hr />
 <div class="fields">      <p><strong>Version:</strong>
-        18.06.21
+        18.06.27
       </p>
 </div><!-- ==================== SUBMODULES ==================== -->
 <a name="section-Submodules"></a>
@@ -738,7 +738,8 @@
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
         <a href="pycocoa.runtime.ObjCBoundClassMethod-class.html" class="summary-name">ObjCBoundClassMethod</a><br />
-      Only to distinguish bound class from bound (instance) methods.
+      Python wrapper for a bound ObjC instance method, only to 
+        distinguish bound class from bound instance methods.
     </td>
   </tr>
 <tr>
@@ -746,7 +747,7 @@
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
         <a href="pycocoa.runtime.ObjCBoundMethod-class.html" class="summary-name">ObjCBoundMethod</a><br />
-      Python wrapper for an ObjC class or instance method, an <a 
+      Python wrapper for a bound ObjC instance method, an <a 
         href="pycocoa.octypes.IMP_t-class.html" class="link">IMP_t</a>.
     </td>
   </tr>
@@ -763,7 +764,8 @@
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
         <a href="pycocoa.runtime.ObjCClassMethod-class.html" class="summary-name">ObjCClassMethod</a><br />
-      Only to distinguish class methods from instance methods.
+      Python class representing an unbound ObjC class method, only to 
+        distinguish class methods from instance methods.
     </td>
   </tr>
 <tr>
@@ -779,9 +781,9 @@
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
         <a href="pycocoa.runtime.ObjCMethod-class.html" class="summary-name">ObjCMethod</a><br />
-      Python class representing an unbound ObjC class or instance method 
-        (actually an <a href="pycocoa.octypes.IMP_t-class.html" 
-        class="link">IMP_t</a>).
+      Python class representing an unbound ObjC instance method, actually
+        an <a href="pycocoa.octypes.IMP_t-class.html" 
+        class="link">IMP_t</a>.
     </td>
   </tr>
 <tr>
@@ -1377,7 +1379,8 @@
       <table width="100%" cellpadding="0" cellspacing="0" border="0">
         <tr>
           <td><span class="summary-sig"><a href="pycocoa-module.html#bytes2repr" class="summary-sig-name">bytes2repr</a>(<span class="summary-sig-arg">bytestr</span>)</span><br />
-      Represent bytes like <code>repr(bytestr)</code>.</td>
+      Represent <code>bytes</code> or <code>str</code> as 
+      <code>b&quot;...&quot;</code>.</td>
           <td align="right" valign="top">
             
             
@@ -1414,7 +1417,7 @@
         <tr>
           <td><span class="summary-sig"><a href="pycocoa-module.html#clip" class="summary-sig-name">clip</a>(<span class="summary-sig-arg">bytestr</span>,
         <span class="summary-sig-arg">limit</span>=<span class="summary-sig-default">50</span>)</span><br />
-      Clip a string or bytes to the given length limit.</td>
+      Clip a string to the given length limit.</td>
           <td align="right" valign="top">
             
             
@@ -1449,9 +1452,8 @@
         <tr>
           <td><span class="summary-sig"><a href="pycocoa-module.html#dict2NS" class="summary-sig-name">dict2NS</a>(<span class="summary-sig-arg">py</span>,
         <span class="summary-sig-arg">frozen</span>=<span class="summary-sig-default">False</span>)</span><br />
-      Create an <a href="pycocoa.pytypes-module.html#NSMutableDictionary" 
-      class="link" onclick="show_private();">NSMutableDictionary</a> 
-      instance from a Python <code>dict</code>.</td>
+      Create an <code>NS[Mutable]Dictionary</code> instance from a Python 
+      <code>dict</code>.</td>
           <td align="right" valign="top">
             
             
@@ -2184,7 +2186,7 @@
           <td><span class="summary-sig"><a href="pycocoa-module.html#isinstanceOf" class="summary-sig-name">isinstanceOf</a>(<span class="summary-sig-arg">inst</span>,
         <span class="summary-sig-arg">*classes</span>,
         <span class="summary-sig-arg">**name_missing</span>)</span><br />
-      Check a Python object's class.</td>
+      Check a Python instance' class.</td>
           <td align="right" valign="top">
             
             
@@ -2274,6 +2276,57 @@
       Create an <a href="pycocoa.pytypes-module.html#NSArray" class="link" 
       onclick="show_private();">NSArray</a> instance from a Python 
       <code>map</code>.</td>
+          <td align="right" valign="top">
+            
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a href="pycocoa-module.html#name2objc" class="summary-sig-name">name2objc</a>(<span class="summary-sig-arg">name</span>)</span><br />
+      Convert a (selector) name to bytes and ObjC naming rules.</td>
+          <td align="right" valign="top">
+            
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a href="pycocoa-module.html#name2py" class="summary-sig-name">name2py</a>(<span class="summary-sig-arg">name</span>)</span><br />
+      Convert a (selector) name to str and Python naming conventions.</td>
+          <td align="right" valign="top">
+            
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a href="pycocoa-module.html#name2pymethod" class="summary-sig-name">name2pymethod</a>(<span class="summary-sig-arg">name</span>)</span><br />
+      Convert a (selector) name to a valid Python callback method.</td>
           <td align="right" valign="top">
             
             
@@ -3057,7 +3110,7 @@
       <table width="100%" cellpadding="0" cellspacing="0" border="0">
         <tr>
           <td><span class="summary-sig"><a href="pycocoa-module.html#type2NS" class="summary-sig-name">type2NS</a>(<span class="summary-sig-arg">py</span>)</span><br />
-      Create the  <code>NS...</code> ObjC object for a Python Type or 
+      Create the <code>NS...</code> ObjC object for a Python Type or 
       wrapper instance.</td>
           <td align="right" valign="top">
             
@@ -3076,7 +3129,7 @@
         <tr>
           <td><span class="summary-sig"><a href="pycocoa-module.html#type2strepr" class="summary-sig-name">type2strepr</a>(<span class="summary-sig-arg">inst</span>,
         <span class="summary-sig-arg">strepr</span>=<span class="summary-sig-default">&lt;type 'str'&gt;</span>)</span><br />
-      Return a Python Type instance as <code class="link">str</code> or 
+      Represent a Python Type instance as <code class="link">str</code> or 
       <code class="link">repr</code>.</td>
           <td align="right" valign="top">
             
@@ -3150,7 +3203,7 @@
         <tr>
           <td><span class="summary-sig"><a href="pycocoa-module.html#z1000str" class="summary-sig-name">z1000str</a>(<span class="summary-sig-arg">size</span>,
         <span class="summary-sig-arg">sep</span>=<span class="summary-sig-default"><code class="variable-quote">'</code><code class="variable-string">_</code><code class="variable-quote">'</code></span>)</span><br />
-      Convert a size value to string with 1_000's seperator.</td>
+      Convert a size to string with 1_000's seperator.</td>
           <td align="right" valign="top">
             
             
@@ -3167,8 +3220,9 @@
       <table width="100%" cellpadding="0" cellspacing="0" border="0">
         <tr>
           <td><span class="summary-sig"><a href="pycocoa-module.html#zSIstr" class="summary-sig-name">zSIstr</a>(<span class="summary-sig-arg">size</span>,
-        <span class="summary-sig-arg">B</span>=<span class="summary-sig-default"><code class="variable-quote">'</code><code class="variable-string">B</code><code class="variable-quote">'</code></span>)</span><br />
-      Convert a size value to string with SI-units.</td>
+        <span class="summary-sig-arg">B</span>=<span class="summary-sig-default"><code class="variable-quote">'</code><code class="variable-string">B</code><code class="variable-quote">'</code></span>,
+        <span class="summary-sig-arg">K</span>=<span class="summary-sig-default">1024</span>)</span><br />
+      Convert a size to string with SI-units suffix.</td>
           <td align="right" valign="top">
             
             
@@ -3381,14 +3435,14 @@ mUIFont', size=13, traits='Italic', weight=5),
     <td width="15%" align="right" valign="top" class="summary">
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
-        <a name="NSApplicationDidHideNotification"></a><span class="summary-name">NSApplicationDidHideNotification</span> = <code title="c_void_p(140735391297472)">c_void_p(140735391297472)</code>
+        <a name="NSApplicationDidHideNotification"></a><span class="summary-name">NSApplicationDidHideNotification</span> = <code title="c_void_p(140736110395328)">c_void_p(140736110395328)</code>
     </td>
   </tr>
 <tr>
     <td width="15%" align="right" valign="top" class="summary">
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
-        <a name="NSApplicationDidUnhideNotification"></a><span class="summary-name">NSApplicationDidUnhideNotification</span> = <code title="c_void_p(140735391297568)">c_void_p(140735391297568)</code>
+        <a name="NSApplicationDidUnhideNotification"></a><span class="summary-name">NSApplicationDidUnhideNotification</span> = <code title="c_void_p(140736110395424)">c_void_p(140736110395424)</code>
     </td>
   </tr>
 <tr>
@@ -3563,7 +3617,7 @@ mUIFont', size=13, traits='Italic', weight=5),
     <td width="15%" align="right" valign="top" class="summary">
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
-        <a name="NSDefaultRunLoopMode"></a><span class="summary-name">NSDefaultRunLoopMode</span> = <code title="c_void_p(140735400477048)">c_void_p(140735400477048)</code>
+        <a name="NSDefaultRunLoopMode"></a><span class="summary-name">NSDefaultRunLoopMode</span> = <code title="c_void_p(140736119574904)">c_void_p(140736119574904)</code>
     </td>
   </tr>
 <tr>
@@ -3619,7 +3673,7 @@ mUIFont', size=13, traits='Italic', weight=5),
     <td width="15%" align="right" valign="top" class="summary">
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
-        <a name="NSEventTrackingRunLoopMode"></a><span class="summary-name">NSEventTrackingRunLoopMode</span> = <code title="c_void_p(140735391292160)">c_void_p(140735391292160)</code>
+        <a name="NSEventTrackingRunLoopMode"></a><span class="summary-name">NSEventTrackingRunLoopMode</span> = <code title="c_void_p(140736110390016)">c_void_p(140736110390016)</code>
     </td>
   </tr>
 <tr>
@@ -3997,15 +4051,15 @@ mUIFont', size=13, traits='Italic', weight=5),
     <td width="15%" align="right" valign="top" class="summary">
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
-        <a href="pycocoa-module.html#NSMain" class="summary-name">NSMain</a> = <code title="NSMain.Application=NSApplication(&lt;Id_t at 0x106847e60&gt;) of 0x7fdc2c37f\
-160,
-      .BooleanNO=NSBoolean(&lt;Id_t at 0x106847320&gt;) of 0x7fff839ce3f8,
-      .BooleanYES=NSBoolean(&lt;Id_t at 0x10683b7a0&gt;) of 0x7fff839ce3e8,
-      .Bundle=NSBundle(&lt;Id_t at 0x1068250e0&gt;) of 0x7fdc29ec8db0,
+        <a href="pycocoa-module.html#NSMain" class="summary-name">NSMain</a> = <code title="NSMain.Application=NSApplication(&lt;Id_t at 0x10d943950&gt;) of 0x7fe3bead0\
+df0,
+      .BooleanNO=NSBoolean(&lt;Id_t at 0x10d943680&gt;) of 0x7fffae7973f8,
+      .BooleanYES=NSBoolean(&lt;Id_t at 0x10d923170&gt;) of 0x7fffae7973e8,
+      .Bundle=NSBundle(&lt;Id_t at 0x10d938ef0&gt;) of 0x7fe3bc720000,
       .BundleName=NSConstantString('CFBundleName'),
-      .FontManager=NSFontManager(&lt;Id_t at 0x106825290&gt;) of 0x7fdc2c32c\
-330,
-...">NSMain.Application=NSApplication(&lt;Id_t at 0x106847e60<code class="variable-ellipsis">...</code></code>
+      .FontManager=NSFontManager(&lt;Id_t at 0x10d923320&gt;) of 0x7fe3beb0e\
+550,
+...">NSMain.Application=NSApplication(&lt;Id_t at 0x10d943950<code class="variable-ellipsis">...</code></code>
     </td>
   </tr>
 <tr>
@@ -4618,8 +4672,8 @@ mUIFont', size=13, traits='Italic', weight=5),
     <td width="15%" align="right" valign="top" class="summary">
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
-        <a href="pycocoa-module.html#libAppKit" class="summary-name">libAppKit</a> = <code title="&lt;CDLL '/System/Library/Frameworks/AppKit.framework/AppKit', handle 7fd\
-c29d41c00 at 102d10610&gt;">&lt;CDLL '/System/Library/Frameworks/AppKit.framework<code class="variable-ellipsis">...</code></code>
+        <a href="pycocoa-module.html#libAppKit" class="summary-name">libAppKit</a> = <code title="&lt;CDLL '/System/Library/Frameworks/AppKit.framework/AppKit', handle 7fe\
+3bc536b30 at 109e066d0&gt;">&lt;CDLL '/System/Library/Frameworks/AppKit.framework<code class="variable-ellipsis">...</code></code>
     </td>
   </tr>
 <tr>
@@ -4627,7 +4681,7 @@ c29d41c00 at 102d10610&gt;">&lt;CDLL '/System/Library/Frameworks/AppKit.framewor
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
         <a href="pycocoa-module.html#libCF" class="summary-name">libCF</a> = <code title="&lt;CDLL '/System/Library/Frameworks/CoreFoundation.framework/CoreFoundat\
-ion', handle 10eac1800 at 102cf8a10&gt;">&lt;CDLL '/System/Library/Frameworks/CoreFoundation.frame<code class="variable-ellipsis">...</code></code>
+ion', handle 10e1b4800 at 109ded9d0&gt;">&lt;CDLL '/System/Library/Frameworks/CoreFoundation.frame<code class="variable-ellipsis">...</code></code>
     </td>
   </tr>
 <tr>
@@ -4635,7 +4689,7 @@ ion', handle 10eac1800 at 102cf8a10&gt;">&lt;CDLL '/System/Library/Frameworks/Co
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
         <a href="pycocoa-module.html#libCT" class="summary-name">libCT</a> = <code title="&lt;CDLL '/System/Library/Frameworks/CoreText.framework/CoreText', handle\
- 7fdc29d45020 at 102d1d790&gt;">&lt;CDLL '/System/Library/Frameworks/CoreText.framework/C<code class="variable-ellipsis">...</code></code>
+ 7fe3bc53ab50 at 109e13850&gt;">&lt;CDLL '/System/Library/Frameworks/CoreText.framework/C<code class="variable-ellipsis">...</code></code>
     </td>
   </tr>
 <tr>
@@ -4643,22 +4697,22 @@ ion', handle 10eac1800 at 102cf8a10&gt;">&lt;CDLL '/System/Library/Frameworks/Co
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
         <a href="pycocoa-module.html#libFoundation" class="summary-name">libFoundation</a> = <code title="&lt;CDLL '/System/Library/Frameworks/Foundation.framework/Foundation', ha\
-ndle 7fdc29d43f00 at 102d1ddd0&gt;">&lt;CDLL '/System/Library/Frameworks/Foundation.f<code class="variable-ellipsis">...</code></code>
+ndle 7fe3bc539d00 at 109e13e90&gt;">&lt;CDLL '/System/Library/Frameworks/Foundation.f<code class="variable-ellipsis">...</code></code>
     </td>
   </tr>
 <tr>
     <td width="15%" align="right" valign="top" class="summary">
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
-        <a href="pycocoa-module.html#libobjc" class="summary-name">libobjc</a> = <code title="&lt;CDLL '/usr/lib/libobjc.dylib', handle 10eac3680 at 102d1dc10&gt;">&lt;CDLL '/usr/lib/libobjc.dylib', handle 10eac3680 at <code class="variable-ellipsis">...</code></code>
+        <a href="pycocoa-module.html#libobjc" class="summary-name">libobjc</a> = <code title="&lt;CDLL '/usr/lib/libobjc.dylib', handle 10e1b6680 at 109e13cd0&gt;">&lt;CDLL '/usr/lib/libobjc.dylib', handle 10e1b6680 at <code class="variable-ellipsis">...</code></code>
     </td>
   </tr>
 <tr>
     <td width="15%" align="right" valign="top" class="summary">
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
-        <a href="pycocoa-module.html#libquartz" class="summary-name">libquartz</a> = <code title="&lt;CDLL '/System/Library/Frameworks/quartz.framework/quartz', handle 7fd\
-c29d49120 at 102d10850&gt;">&lt;CDLL '/System/Library/Frameworks/quartz.framework<code class="variable-ellipsis">...</code></code>
+        <a href="pycocoa-module.html#libquartz" class="summary-name">libquartz</a> = <code title="&lt;CDLL '/System/Library/Frameworks/quartz.framework/quartz', handle 7fe\
+3bc457350 at 109e06910&gt;">&lt;CDLL '/System/Library/Frameworks/quartz.framework<code class="variable-ellipsis">...</code></code>
     </td>
   </tr>
 <tr>
@@ -5020,11 +5074,12 @@ c29d49120 at 102d10850&gt;">&lt;CDLL '/System/Library/Frameworks/quartz.framewor
     </td>
   </tr></table>
   
-  <p>Represent bytes like <code>repr(bytestr)</code>.</p>
+  <p>Represent <code>bytes</code> or <code>str</code> as 
+  <code>b&quot;...&quot;</code>.</p>
   <dl class="fields">
     <dt>Parameters:</dt>
     <dd><ul class="nomargin-top">
-        <li><strong class="pname"><code>bytestr</code></strong> - Str or bytes.</li>
+        <li><strong class="pname"><code>bytestr</code></strong> - <code>bytes</code> or <code>str</code>..</li>
     </ul></dd>
     <dt>Returns:</dt>
         <dd>Representation <code>b'...'</code> (<code>str</code>).</dd>
@@ -5079,11 +5134,11 @@ c29d49120 at 102d10850&gt;">&lt;CDLL '/System/Library/Frameworks/quartz.framewor
     </td>
   </tr></table>
   
-  <p>Clip a string or bytes to the given length limit.</p>
+  <p>Clip a string to the given length limit.</p>
   <dl class="fields">
     <dt>Parameters:</dt>
     <dd><ul class="nomargin-top">
-        <li><strong class="pname"><code>bytestr</code></strong> - Original <code>bytes</code> or <code>str</code>.</li>
+        <li><strong class="pname"><code>bytestr</code></strong> - String (<code>bytes</code> or <code>str</code>).</li>
         <li><strong class="pname"><code>limit</code></strong> - Length limit (<code>int</code>).</li>
     </ul></dd>
     <dt>Returns:</dt>
@@ -5106,9 +5161,8 @@ c29d49120 at 102d10850&gt;">&lt;CDLL '/System/Library/Frameworks/quartz.framewor
     </td>
   </tr></table>
   
-  <p>Create an <a href="pycocoa.pytypes-module.html#NSMutableDictionary" 
-  class="link" onclick="show_private();">NSMutableDictionary</a> instance 
-  from a Python <code>dict</code>.</p>
+  <p>Create an <code>NS[Mutable]Dictionary</code> instance from a Python 
+  <code>dict</code>.</p>
   <dl class="fields">
     <dt>Parameters:</dt>
     <dd><ul class="nomargin-top">
@@ -5117,6 +5171,8 @@ c29d49120 at 102d10850&gt;">&lt;CDLL '/System/Library/Frameworks/quartz.framewor
     </ul></dd>
     <dt>Returns:</dt>
         <dd>The ObjC instance (<a 
+          href="pycocoa.pytypes-module.html#NSDictionary" class="link" 
+          onclick="show_private();">NSDictionary</a> or <a 
           href="pycocoa.pytypes-module.html#NSMutableDictionary" 
           class="link" onclick="show_private();">NSMutableDictionary</a>).</dd>
     <dt>Raises:</dt>
@@ -6076,7 +6132,7 @@ c29d49120 at 102d10850&gt;">&lt;CDLL '/System/Library/Frameworks/quartz.framewor
   <dl class="fields">
     <dt>Parameters:</dt>
     <dd><ul class="nomargin-top">
-        <li><strong class="pname"><code>inst</code></strong> - Instance (any).</li>
+        <li><strong class="pname"><code>inst</code></strong> - Instance (<code>any</code>).</li>
         <li><strong class="pname"><code>strepr</code></strong> - Conversion (<code>repr</code> or <code>str</code>).</li>
         <li><strong class="pname"><code>attrs</code></strong> - Instance attribute names (<i>all positional</i>).</li>
     </ul></dd>
@@ -6356,7 +6412,7 @@ c29d49120 at 102d10850&gt;">&lt;CDLL '/System/Library/Frameworks/quartz.framewor
     </td>
   </tr></table>
   
-  <p>Check a Python object's class.</p>
+  <p>Check a Python instance' class.</p>
   <dl class="fields">
     <dt>Parameters:</dt>
     <dd><ul class="nomargin-top">
@@ -6484,6 +6540,85 @@ c29d49120 at 102d10850&gt;">&lt;CDLL '/System/Library/Frameworks/quartz.framewor
     <dt>Raises:</dt>
     <dd><ul class="nomargin-top">
         <li><code><strong class='fraise'>RuntimeError</strong></code> - If <code>len</code> vs <code>count</code> assertion failed.</li>
+    </ul></dd>
+  </dl>
+</td></tr></table>
+</div>
+<a name="name2objc"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">name2objc</span>(<span class="sig-arg">name</span>)</span>
+  </h3>
+  </td><td align="right" valign="top"
+    >&nbsp;
+    </td>
+  </tr></table>
+  
+  <p>Convert a (selector) name to bytes and ObjC naming rules.</p>
+  <dl class="fields">
+    <dt>Parameters:</dt>
+    <dd><ul class="nomargin-top">
+        <li><strong class="pname"><code>name</code></strong> - Name to convert (<code>str</code>).</li>
+    </ul></dd>
+    <dt>Returns:</dt>
+        <dd>Converted name (<code>str</code>).</dd>
+  </dl>
+</td></tr></table>
+</div>
+<a name="name2py"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">name2py</span>(<span class="sig-arg">name</span>)</span>
+  </h3>
+  </td><td align="right" valign="top"
+    >&nbsp;
+    </td>
+  </tr></table>
+  
+  <p>Convert a (selector) name to str and Python naming conventions.</p>
+  <dl class="fields">
+    <dt>Parameters:</dt>
+    <dd><ul class="nomargin-top">
+        <li><strong class="pname"><code>name</code></strong> - Name to convert (<code>str</code>).</li>
+    </ul></dd>
+    <dt>Returns:</dt>
+        <dd>Converted name (<code>str</code>).</dd>
+  </dl>
+</td></tr></table>
+</div>
+<a name="name2pymethod"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">name2pymethod</span>(<span class="sig-arg">name</span>)</span>
+  </h3>
+  </td><td align="right" valign="top"
+    >&nbsp;
+    </td>
+  </tr></table>
+  
+  <p>Convert a (selector) name to a valid Python callback method.</p>
+  <dl class="fields">
+    <dt>Parameters:</dt>
+    <dd><ul class="nomargin-top">
+        <li><strong class="pname"><code>name</code></strong> - Name to convert (<code>str</code>).</li>
+    </ul></dd>
+    <dt>Returns:</dt>
+        <dd>Converted name (<code>str</code>).</dd>
+    <dt>Raises:</dt>
+    <dd><ul class="nomargin-top">
+        <li><code><strong class='fraise'>ValueError</strong></code> - Invalid, non-alphanumeric <i>name</i>.</li>
     </ul></dd>
   </dl>
 </td></tr></table>
@@ -7586,13 +7721,13 @@ c29d49120 at 102d10850&gt;">&lt;CDLL '/System/Library/Frameworks/quartz.framewor
     </ul></dd>
   </dl>
 <div class="fields">      <p><strong>Note:</strong>
-        By default, the result and all arguments are <code>c_void_p</code> 
-        wrapped.  Use keyword arguments <i>restype=c_void_p</i> and 
-        <i>argtypes=[]</i> to change the defaults.  The <i>restype</i> 
-        defines the <code>ctypes</code> type for the returned result and 
-        <i>argtypes</i> is the list of <code>ctypes</code> types for the 
-        message arguments only (without the <code>Id/self</code> and 
-        <code>SEL/cmd</code> arguments).
+        Use keyword arguments <i>restype=c_void_p</i> and 
+        <i>argtypes=[]</i> to specify the result and argument 
+        <code>ctypes</code>.  The <i>restype</i> defines the 
+        <code>ctype</code> for the result and <i>argtypes</i> is the list 
+        of <code>ctypes</code> for the message arguments only, 
+        <i>without</i> the <code>Id/self</code> and <code>SEL/cmd</code> 
+        arguments.
       </p>
 </div></td></tr></table>
 </div>
@@ -8049,8 +8184,8 @@ c29d49120 at 102d10850&gt;">&lt;CDLL '/System/Library/Frameworks/quartz.framewor
     </td>
   </tr></table>
   
-  <p>Create the  <code>NS...</code> ObjC object for a Python Type or 
-  wrapper instance.</p>
+  <p>Create the <code>NS...</code> ObjC object for a Python Type or wrapper
+  instance.</p>
   <dl class="fields">
     <dt>Parameters:</dt>
     <dd><ul class="nomargin-top">
@@ -8086,13 +8221,13 @@ c29d49120 at 102d10850&gt;">&lt;CDLL '/System/Library/Frameworks/quartz.framewor
     </td>
   </tr></table>
   
-  <p>Return a Python Type instance as <code class="link">str</code> or 
+  <p>Represent a Python Type instance as <code class="link">str</code> or 
   <code class="link">repr</code>.</p>
   <dl class="fields">
     <dt>Parameters:</dt>
     <dd><ul class="nomargin-top">
-        <li><strong class="pname"><code>inst</code></strong> - Instance (any).</li>
-        <li><strong class="pname"><code>strepr</code></strong> - Conversion (<code>repr</code> or <code>str</code>).</li>
+        <li><strong class="pname"><code>inst</code></strong> - Instance (<code>any</code>).</li>
+        <li><strong class="pname"><code>strepr</code></strong> - Representation function (<code>repr</code> or <code>str</code>).</li>
     </ul></dd>
     <dt>Returns:</dt>
         <dd>Instance representation (<code>str</code>).</dd>
@@ -8209,11 +8344,12 @@ c29d49120 at 102d10850&gt;">&lt;CDLL '/System/Library/Frameworks/quartz.framewor
     </td>
   </tr></table>
   
-  <p>Convert a size value to string with 1_000's seperator.</p>
+  <p>Convert a size to string with 1_000's seperator.</p>
   <dl class="fields">
     <dt>Parameters:</dt>
     <dd><ul class="nomargin-top">
         <li><strong class="pname"><code>size</code></strong> - Value to convert (<code>float</code> or <code>int</code>).</li>
+        <li><strong class="pname"><code>sep</code></strong> - 1_000's separator (<code>str</code>),</li>
     </ul></dd>
     <dt>Returns:</dt>
         <dd>&quot;&lt;1or2digits&gt;&lt;sep&gt;&lt;3digits&gt;...&quot; or 
@@ -8229,21 +8365,25 @@ c29d49120 at 102d10850&gt;">&lt;CDLL '/System/Library/Frameworks/quartz.framewor
   <table width="100%" cellpadding="0" cellspacing="0" border="0">
   <tr valign="top"><td>
   <h3 class="epydoc"><span class="sig"><span class="sig-name">zSIstr</span>(<span class="sig-arg">size</span>,
-        <span class="sig-arg">B</span>=<span class="sig-default"><code class="variable-quote">'</code><code class="variable-string">B</code><code class="variable-quote">'</code></span>)</span>
+        <span class="sig-arg">B</span>=<span class="sig-default"><code class="variable-quote">'</code><code class="variable-string">B</code><code class="variable-quote">'</code></span>,
+        <span class="sig-arg">K</span>=<span class="sig-default">1024</span>)</span>
   </h3>
   </td><td align="right" valign="top"
     >&nbsp;
     </td>
   </tr></table>
   
-  <p>Convert a size value to string with SI-units.</p>
+  <p>Convert a size to string with SI-units suffix.</p>
   <dl class="fields">
     <dt>Parameters:</dt>
     <dd><ul class="nomargin-top">
         <li><strong class="pname"><code>size</code></strong> - Value to convert (<code>float</code> or <code>int</code>).</li>
+        <li><strong class="pname"><code>B</code></strong> - The unit (<code>str</code>).</li>
+        <li><strong class="pname"><code>K</code></strong> - 1024 or 1000 (<code>int</code>).</li>
     </ul></dd>
     <dt>Returns:</dt>
-        <dd>&quot;&lt;Size&gt; &lt;B&gt;&lt;SI&gt;&quot; (<code>str</code>).</dd>
+        <dd>&quot;&lt;Size&gt; &lt;SI&gt;[i]&lt;B&gt;&quot; 
+          (<code>str</code>).</dd>
   </dl>
 </td></tr></table>
 </div>
@@ -8413,14 +8553,14 @@ mUIFont', size=13, traits='Italic', weight=5),
   <dl class="fields">
     <dt>Value:</dt>
       <dd><table><tr><td><pre class="variable">
-NSMain.Application=NSApplication(&lt;Id_t at 0x106847e60&gt;) of 0x7fdc2c37f<span class="variable-linewrap"><img src="crarr.png" alt="\" /></span>
-160,
-      .BooleanNO=NSBoolean(&lt;Id_t at 0x106847320&gt;) of 0x7fff839ce3f8,
-      .BooleanYES=NSBoolean(&lt;Id_t at 0x10683b7a0&gt;) of 0x7fff839ce3e8,
-      .Bundle=NSBundle(&lt;Id_t at 0x1068250e0&gt;) of 0x7fdc29ec8db0,
+NSMain.Application=NSApplication(&lt;Id_t at 0x10d943950&gt;) of 0x7fe3bead0<span class="variable-linewrap"><img src="crarr.png" alt="\" /></span>
+df0,
+      .BooleanNO=NSBoolean(&lt;Id_t at 0x10d943680&gt;) of 0x7fffae7973f8,
+      .BooleanYES=NSBoolean(&lt;Id_t at 0x10d923170&gt;) of 0x7fffae7973e8,
+      .Bundle=NSBundle(&lt;Id_t at 0x10d938ef0&gt;) of 0x7fe3bc720000,
       .BundleName=NSConstantString('CFBundleName'),
-      .FontManager=NSFontManager(&lt;Id_t at 0x106825290&gt;) of 0x7fdc2c32c<span class="variable-linewrap"><img src="crarr.png" alt="\" /></span>
-330,
+      .FontManager=NSFontManager(&lt;Id_t at 0x10d923320&gt;) of 0x7fe3beb0e<span class="variable-linewrap"><img src="crarr.png" alt="\" /></span>
+550,
 <code class="variable-ellipsis">...</code>
 </pre></td></tr></table>
 </dd>
@@ -8504,8 +8644,8 @@ WindowStyle.Closable=2,
   <dl class="fields">
     <dt>Value:</dt>
       <dd><table><tr><td><pre class="variable">
-&lt;CDLL '/System/Library/Frameworks/AppKit.framework/AppKit', handle 7fd<span class="variable-linewrap"><img src="crarr.png" alt="\" /></span>
-c29d41c00 at 102d10610&gt;
+&lt;CDLL '/System/Library/Frameworks/AppKit.framework/AppKit', handle 7fe<span class="variable-linewrap"><img src="crarr.png" alt="\" /></span>
+3bc536b30 at 109e066d0&gt;
 </pre></td></tr></table>
 </dd>
   </dl>
@@ -8524,7 +8664,7 @@ c29d41c00 at 102d10610&gt;
     <dt>Value:</dt>
       <dd><table><tr><td><pre class="variable">
 &lt;CDLL '/System/Library/Frameworks/CoreFoundation.framework/CoreFoundat<span class="variable-linewrap"><img src="crarr.png" alt="\" /></span>
-ion', handle 10eac1800 at 102cf8a10&gt;
+ion', handle 10e1b4800 at 109ded9d0&gt;
 </pre></td></tr></table>
 </dd>
   </dl>
@@ -8543,7 +8683,7 @@ ion', handle 10eac1800 at 102cf8a10&gt;
     <dt>Value:</dt>
       <dd><table><tr><td><pre class="variable">
 &lt;CDLL '/System/Library/Frameworks/CoreText.framework/CoreText', handle<span class="variable-linewrap"><img src="crarr.png" alt="\" /></span>
- 7fdc29d45020 at 102d1d790&gt;
+ 7fe3bc53ab50 at 109e13850&gt;
 </pre></td></tr></table>
 </dd>
   </dl>
@@ -8562,7 +8702,7 @@ ion', handle 10eac1800 at 102cf8a10&gt;
     <dt>Value:</dt>
       <dd><table><tr><td><pre class="variable">
 &lt;CDLL '/System/Library/Frameworks/Foundation.framework/Foundation', ha<span class="variable-linewrap"><img src="crarr.png" alt="\" /></span>
-ndle 7fdc29d43f00 at 102d1ddd0&gt;
+ndle 7fe3bc539d00 at 109e13e90&gt;
 </pre></td></tr></table>
 </dd>
   </dl>
@@ -8580,7 +8720,7 @@ ndle 7fdc29d43f00 at 102d1ddd0&gt;
   <dl class="fields">
     <dt>Value:</dt>
       <dd><table><tr><td><pre class="variable">
-&lt;CDLL '/usr/lib/libobjc.dylib', handle 10eac3680 at 102d1dc10&gt;
+&lt;CDLL '/usr/lib/libobjc.dylib', handle 10e1b6680 at 109e13cd0&gt;
 </pre></td></tr></table>
 </dd>
   </dl>
@@ -8598,8 +8738,8 @@ ndle 7fdc29d43f00 at 102d1ddd0&gt;
   <dl class="fields">
     <dt>Value:</dt>
       <dd><table><tr><td><pre class="variable">
-&lt;CDLL '/System/Library/Frameworks/quartz.framework/quartz', handle 7fd<span class="variable-linewrap"><img src="crarr.png" alt="\" /></span>
-c29d49120 at 102d10850&gt;
+&lt;CDLL '/System/Library/Frameworks/quartz.framework/quartz', handle 7fe<span class="variable-linewrap"><img src="crarr.png" alt="\" /></span>
+3bc457350 at 109e06910&gt;
 </pre></td></tr></table>
 </dd>
   </dl>
@@ -8637,7 +8777,7 @@ c29d49120 at 102d10850&gt;
 <table border="0" cellpadding="0" cellspacing="0" width="100%%">
   <tr>
     <td align="left" class="footer">
-    Generated by Epydoc 3.0.1 on Fri Jun 22 12:53:51 2018
+    Generated by Epydoc 3.0.1 on Thu Jun 28 16:06:53 2018
     </td>
     <td align="right" class="footer">
       <a target="mainFrame" href="http://epydoc.sourceforge.net"

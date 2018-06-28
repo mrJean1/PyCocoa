@@ -79,7 +79,7 @@ from ctypes  import byref, cast, cdll, c_buffer, c_byte, c_char, c_char_p, \
                     c_int, c_int8, c_int16, c_int32, c_int64, \
                     CFUNCTYPE, c_long, c_longlong, c_short, c_size_t, \
                     c_uint, c_uint8, c_uint32, c_void_p, \
-                    POINTER, sizeof, util  # c_ubyte, string_at
+                    POINTER, sizeof  # c_ubyte, string_at
 from octypes import Allocator_t, Array_t, BOOL_t, CFIndex_t, \
                     CFRange_t, CGBitmapInfo_t, CGDirectDisplayID_t, \
                     CGError_t, CGFloat_t, CGGlyph_t, CGPoint_t, \
@@ -93,7 +93,15 @@ from octypes import Allocator_t, Array_t, BOOL_t, CFIndex_t, \
                     TypeRef_t, UniChar_t, URL_t
 from utils   import bytes2str, _exports, str2bytes
 
-__version__ = '18.06.15'
+try:
+    from ctypes.util import find_library as _find_lib
+except ImportError:  # XXX Pythonista/iOS
+    def _find_lib(unused):
+        return None
+
+__version__ = '18.06.27'
+_leaked2    = []  # leaked memory, 2-tuples (ptr, size)
+_libs_cache = {}  # loaded libraries, by name
 
 NO  = False  # c_byte(0)
 YES = True   # c_byte(1)
@@ -171,13 +179,10 @@ def get_lib(name):
     try:
         lib = _libs_cache[name]
     except KeyError:
-        lib = cdll.LoadLibrary(util.find_library(name))
+        lib = cdll.LoadLibrary(_find_lib(name))
         _libs_cache[name] = lib
     return lib
 
-
-_leaked2    = []  # leaked memory, 2-tuples (ptr, size)
-_libs_cache = {}  # loaded libraries
 
 # get function free(void *ptr) from the C runtime
 # (see <http://GitHub.com/oaubert/python-vlc>, the
@@ -759,7 +764,6 @@ kCTFontClassScripts             = NSFontScriptsClass            = 10 << kCTFontC
 kCTFontClassSymbolic            = NSFontSymbolicClass           = 12 << kCTFontClassMaskShift
 kCTFontClassMaskTrait           = NSFontClassMask               = 15 << kCTFontClassMaskShift
 
-
 _csignature(libCT.CTFontCreateWithGraphicsFont, c_void_p, c_void_p, CGFloat_t, c_void_p, c_void_p)
 _csignature(libCT.CTFontCopyFamilyName, c_void_p, c_void_p)
 _csignature(libCT.CTFontCopyFullName, c_void_p, c_void_p)
@@ -791,11 +795,11 @@ _csignature(libobjc.class_addMethod, BOOL_t, Class_t, SEL_t, IMP_t, c_char_p)
 _csignature(libobjc.class_addProtocol, BOOL_t, Class_t, Protocol_t)
 # BOOL class_conformsToProtocol(Class_t cls, Protocol_t *protocol)
 _csignature(libobjc.class_conformsToProtocol, BOOL_t, Class_t, Protocol_t)
-# Ivar_t * class_copyIvarList(Class_t cls, unsigned int *outCount)
+# Ivar_t *class_copyIvarList(Class_t cls, unsigned int *outCount)
 # Returns an array of pointers of type Ivar_t describing instance variables.
 # The array has *outCount pointers, NULL terminated.  You must free() the returned array!
 _csignature_list(libobjc.class_copyIvarList, POINTER(Ivar_t), Class_t, POINTER(c_uint))
-# Method_t * class_copyMethodList(Class_t cls, unsigned int *outCount)
+# Method_t *class_copyMethodList(Class_t cls, unsigned int *outCount)
 # Returns an array of pointers of type Method_t describing instance methods.
 # The array has *outCount pointers, NULL terminated.  You must free() the returned array!
 _csignature_list(libobjc.class_copyMethodList, POINTER(Method_t), Class_t, POINTER(c_uint))
@@ -803,7 +807,7 @@ _csignature_list(libobjc.class_copyMethodList, POINTER(Method_t), Class_t, POINT
 # Returns an array of pointers of type objc_property_t describing properties.
 # The array has *outCount pointers, NULL terminated.  You must free() the returned array!
 _csignature_list(libobjc.class_copyPropertyList, POINTER(objc_property_t), Class_t, POINTER(c_uint))
-# Protocol_t ** class_copyProtocolList(Class_t cls, unsigned int *outCount)
+# Protocol_t **class_copyProtocolList(Class_t cls, unsigned int *outCount)
 # Returns an array of pointers of type Protocol_t* describing protocols.
 # The array has *outCount pointers, NULL terminated.  You must free() the returned array!
 _csignature_list(libobjc.class_copyProtocolList, POINTER(Protocol_t), Class_t, POINTER(c_uint))
@@ -827,7 +831,7 @@ _csignature(libobjc.class_getIvarLayout, c_char_p, Class_t)
 _csignature(libobjc.class_getMethodImplementation, IMP_t, Class_t, SEL_t)
 # IMP_t class_getMethodImplementation_stret(Class_t cls, SEL_t name)
 _csignature(libobjc.class_getMethodImplementation_stret, IMP_t, Class_t, SEL_t)
-# const char * class_getName(Class_t cls)
+# const char *class_getName(Class_t cls)
 _csignature(libobjc.class_getName, c_char_p, Class_t)
 # objc_property_t class_getProperty(Class_t cls, const char *name)
 _csignature(libobjc.class_getProperty, objc_property_t, Class_t, c_char_p)
@@ -852,17 +856,17 @@ _csignature(libobjc.class_setVersion, c_void, Class_t, c_int)
 # void class_setWeakIvarLayout(Class_t cls, const char *layout)
 _csignature(libobjc.class_setWeakIvarLayout, c_void, Class_t, c_char_p)
 
-# const char * ivar_getName(Ivar_t ivar)
+# const char *ivar_getName(Ivar_t ivar)
 _csignature(libobjc.ivar_getName, c_char_p, Ivar_t)
 # ptrdiff_t ivar_getOffset(Ivar_t ivar)
 _csignature(libobjc.ivar_getOffset, c_ptrdiff_t, Ivar_t)
-# const char * ivar_getTypeEncoding(Ivar_t ivar)
+# const char *ivar_getTypeEncoding(Ivar_t ivar)
 _csignature(libobjc.ivar_getTypeEncoding, c_char_p, Ivar_t)
 
-# char * method_copyArgumentType(Method_t method, unsigned int index).
+# char *method_copyArgumentType(Method_t method, unsigned int index).
 # You must free() the returned string!
 _csignature_str(libobjc.method_copyArgumentType, c_char_p, Method_t, c_uint)
-# char * method_copyReturnType(Method_t method).
+# char *method_copyReturnType(Method_t method).
 # You must free() the returned string, but can't despite the documentation
 # http://Developer.Apple.com/documentation/objectivec/1418777-method_copyreturntype
 _csignature(libobjc.method_copyReturnType, c_char_p, Method_t)
@@ -880,7 +884,7 @@ _csignature(libobjc.method_getNumberOfArguments, c_uint, Method_t)
 # void method_getReturnType(Method_t method, char *dst, size_t dst_len)
 # Functionally similar to strncpy(dst, return_type, dst_len)
 _csignature(libobjc.method_getReturnType, c_void, Method_t, c_char_p, c_size_t)
-# const char * method_getTypeEncoding(Method_t method)
+# const char *method_getTypeEncoding(Method_t method)
 _csignature(libobjc.method_getTypeEncoding, c_char_p, Method_t)
 # IMP_t method_setImplementation(Method_t method, IMP_t imp)
 _csignature(libobjc.method_setImplementation, IMP_t, Method_t, IMP_t)
@@ -961,7 +965,7 @@ _csignature(libobjc.protocol_conformsToProtocol, BOOL_t, Protocol_t, Protocol_t)
 # struct objc_method_description_t *protocol_copyMethodDescriptionList(Protocol_t *p, BOOL isRequiredMethod,
 #                                   BOOL isInstanceMethod, unsigned int *outCount).  You must free() the returned array!
 _csignature_list(libobjc.protocol_copyMethodDescriptionList, POINTER(objc_method_description_t), Protocol_t, BOOL_t, BOOL_t, POINTER(c_uint))
-# objc_property_t * protocol_copyPropertyList(Protocol_t *protocol, unsigned int *outCount)
+# objc_property_t *protocol_copyPropertyList(Protocol_t *protocol, unsigned int *outCount)
 _csignature_list(libobjc.protocol_copyPropertyList, POINTER(objc_property_t), Protocol_t, POINTER(c_uint))
 # Protocol_t **protocol_copyProtocolList(Protocol_t *proto, unsigned int *outCount)
 _csignature_list(libobjc.protocol_copyProtocolList, POINTER(Protocol_t), Protocol_t, POINTER(c_uint))
@@ -972,7 +976,7 @@ _csignature(libobjc.protocol_getName, c_char_p, Protocol_t)
 # void objc_registerProtocol(Protocol_t *proto)
 _csignature(libobjc.objc_registerProtocol, c_void, Protocol_t)
 
-# const char* sel_getName(SEL_t aSelector)
+# const char *sel_getName(SEL_t aSelector)
 _csignature(libobjc.sel_getName, c_char_p, SEL_t)
 # BOOL sel_isEqual(SEL_t lhs, SEL_t rhs)
 _csignature(libobjc.sel_isEqual, BOOL_t, SEL_t, SEL_t)

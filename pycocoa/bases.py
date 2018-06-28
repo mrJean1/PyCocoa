@@ -26,19 +26,27 @@
 '''(INTERNAL) Base classes for Python C{Types}.
 '''
 # all imports listed explicitly to help PyChecker
-from nstypes import isNone, NSMain, NSStr
+from nstypes import isNone, NSMain, NSStr, nsString2str
 from octypes import c_struct_t, ObjC_t
 from runtime import ObjCInstance, release
 from utils   import bytes2str, isinstanceOf, type2strepr
 
 __all__ = ()
-__version__ = '18.06.18'
+__version__ = '18.06.23'
 
 
 class _Type0(object):
-    '''The base Type.
+    '''(INTERNAL) The base Type, just property NS.
     '''
     _NS  = None  # NSMain.Null
+
+    def __init__(self, *args, **kwds):
+        # ignore __init__ from __new__, like Item
+        if kwds and not args:
+            for a, v in kwds.items():
+                if hasattr(self, a):
+                    raise AttributeError('%s=%r exists' % (a, v))
+                setattr(self, a, v)
 
     def __repr__(self):
         return '%s at %#x' % (self, id(self))
@@ -66,26 +74,18 @@ class _Type0(object):
         self._NS = ns
 
     @property
-    def NSDelegate(self):
+    def NSDelegate(self):  # to catch typos
         raise AttributeError('use %r not %r' % ('NSdelegate', 'NSD-'))
 
     @NSDelegate.setter  # PYCHOK property.setter
-    def NSdelegate(self, unused):
+    def NSDelegate(self, unused):
         raise AttributeError('use %r not %r' % ('NSdelegate', 'NSD-'))
 
 
 class _Type1(_Type0):
-    '''Basic Type with app and delegate.
+    '''(INTERNAL) Basic Type with properties app, delegate and NS.
     '''
     _app = None
-
-    def __init__(self, *args, **kwds):
-        # ignore __init__ from __new__, like Item
-        if kwds and not args:
-            for a, v in kwds.items():
-                if hasattr(self, a):
-                    raise AttributeError('%s=%r exists' % (a, v))
-                setattr(self, a, v)
 
     @property
     def app(self):
@@ -118,7 +118,7 @@ class _Type1(_Type0):
 
 
 class _Type2(_Type1):
-    '''Basic Type with app, delegate, tag and title.
+    '''(INTERNAL) Basic Type with properties app, delegate, NS, tag and title.
     '''
     _tag   = None
     _title = None
@@ -156,13 +156,20 @@ class _Type2(_Type1):
     def title(self, title):
         '''Set the title.
         '''
-        try:
-            t = NSStr(title)
-            self.NS.setTitle_(t)
-            release(t)
-        except AttributeError:
-            t.release()  # no NSApplication.setTitle_
-        self._title = bytes2str(title)
+        if isinstance(title, NSStr):
+            try:
+                self.NS.setTitle_(title)
+            except AttributeError:  # no NSApplication.setTitle_
+                pass
+            self._title = nsString2str(title)
+        else:
+            try:
+                t = NSStr(title)
+                self.NS.setTitle_(t)
+                release(t)
+            except AttributeError:  # no NSApplication.setTitle_
+                t.release()
+            self._title = bytes2str(title)
 
 
 if __name__ == '__main__':
