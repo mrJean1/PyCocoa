@@ -5,7 +5,12 @@
 
 from pycocoa import get_class, get_ivar, get_ivars, leaked2
 
-__version__ = '17.11.10'
+__version__ = '18.06.28'
+
+
+def _up(t4):
+    return t4[0].upper()
+
 
 if __name__ == '__main__':
 
@@ -18,7 +23,7 @@ if __name__ == '__main__':
     clstr, prefs = sys.argv[1], sys.argv[2:]
 
     cls, n = get_class(clstr), 0
-    for name, encoding, ctype, _ in sorted(get_ivars(cls, *prefs)):
+    for name, encoding, ctype, _ in sorted(get_ivars(cls, *prefs), key=_up):
         n += 1
         value = get_ivar(cls, name, ctype)
         t = getattr(ctype, '__name__', ctype)

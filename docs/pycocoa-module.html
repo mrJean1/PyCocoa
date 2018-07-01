@@ -123,6 +123,26 @@
   href="http://CoSC.Canterbury.AC.NZ/greg.ewing/python_gui" 
   target="_top">PyGUI</a> for <i>macOS</i>.</p>
   <p>__</p>
+  <p><a href="http://OpenSource.org/licenses/MIT" target="_top">Copyright 
+  (C) 2017-2018 -- mrJean1 at Gmail dot com</a></p>
+  <p><code>Permission is hereby granted, free of charge, to any person 
+  obtaining a copy of this software and associated documentation files (the
+  &quot;Software&quot;), to deal in the Software without restriction, 
+  including without limitation the rights to use, copy, modify, merge, 
+  publish, distribute, sublicense, and/or sell copies of the Software, and 
+  to permit persons to whom the Software is furnished to do so, subject to 
+  the following conditions:</code></p>
+  <p><code>The above copyright notice and this permission notice shall be 
+  included in all copies or substantial portions of the 
+  Software.</code></p>
+  <p><code>THE SOFTWARE IS PROVIDED &quot;AS IS&quot;, WITHOUT WARRANTY OF 
+  ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES
+  OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.
+  IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY 
+  CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT
+  OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR 
+  THE USE OR OTHER DEALINGS IN THE SOFTWARE.</code></p>
+  <p>__</p>
   <p><a href="http://OpenSource.org/licenses/BSD-3-Clause" 
   target="_top">Copyright (C) 2011 -- Phillip Nguyen -- All Rights 
   Reserved.</a></p>
@@ -151,30 +171,10 @@
   (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF 
   THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH 
   DAMAGE.</code></p>
-  <p>__</p>
-  <p><a href="http://OpenSource.org/licenses/MIT" target="_top">Copyright 
-  (C) 2017-2018 -- mrJean1 at Gmail dot com</a></p>
-  <p><code>Permission is hereby granted, free of charge, to any person 
-  obtaining a copy of this software and associated documentation files (the
-  &quot;Software&quot;), to deal in the Software without restriction, 
-  including without limitation the rights to use, copy, modify, merge, 
-  publish, distribute, sublicense, and/or sell copies of the Software, and 
-  to permit persons to whom the Software is furnished to do so, subject to 
-  the following conditions:</code></p>
-  <p><code>The above copyright notice and this permission notice shall be 
-  included in all copies or substantial portions of the 
-  Software.</code></p>
-  <p><code>THE SOFTWARE IS PROVIDED &quot;AS IS&quot;, WITHOUT WARRANTY OF 
-  ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES
-  OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.
-  IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY 
-  CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT
-  OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR 
-  THE USE OR OTHER DEALINGS IN THE SOFTWARE.</code></p>
 
 <hr />
 <div class="fields">      <p><strong>Version:</strong>
-        18.06.27
+        18.06.29
       </p>
 </div><!-- ==================== SUBMODULES ==================== -->
 <a name="section-Submodules"></a>
@@ -205,7 +205,7 @@
         wrapping ObjC <code>NSPoint_t</code>, <a 
         href="pycocoa.octypes.NSRect_t-class.html" 
         class="link">NSRect_t</a>, <code>NSSize_t</code>.</em>    </li>
-    <li> <strong class="uidlink"><a href="pycocoa.getters-module.html">pycocoa.getters</a></strong>: <em class="summary"><code>get_...</code> functions for obtaining ObjC classes, methods,
+    <li> <strong class="uidlink"><a href="pycocoa.getters-module.html">pycocoa.getters</a></strong>: <em class="summary"><code>get_...</code> functions to obtian ObjC classes, methods, 
         protocols, etc.</em>    </li>
     <li> <strong class="uidlink"><a href="pycocoa.lists-module.html">pycocoa.lists</a></strong>: <em class="summary">Type <a href="pycocoa.lists.List-class.html" class="link">List</a>,
         wrapping ObjC NSMutableArray.</em>    </li>
@@ -242,9 +242,10 @@
     <li> <strong class="uidlink"><a href="pycocoa.tuples-module.html">pycocoa.tuples</a></strong>: <em class="summary">Type <a href="pycocoa.tuples.Tuple-class.html" 
         class="link">Tuple</a>, wrapping (immutable) ObjC NSArray.</em>    </li>
     <li> <strong class="uidlink"><a href="pycocoa.utils-module.html">pycocoa.utils</a></strong>: <em class="summary">(INTERNAL) Utility functions, constants, etc.</em>    </li>
-    <li> <strong class="uidlink"><a href="pycocoa.windows-module.html">pycocoa.windows</a></strong>: <em class="summary">Types <a href="pycocoa.windows.Window-class.html" 
-        class="link">Window</a>, <a 
-        href="pycocoa.windows.MediaWindow-class.html" 
+    <li> <strong class="uidlink"><a href="pycocoa.windows-module.html">pycocoa.windows</a></strong>: <em class="summary">Types <a href="pycocoa.windows-module.html#AutoResize" 
+        class="link">AutoResize</a>, <a 
+        href="pycocoa.windows.Window-class.html" class="link">Window</a>, 
+        <a href="pycocoa.windows.MediaWindow-class.html" 
         class="link">MediaWindow</a>, <a 
         href="pycocoa.windows.Screen-class.html" class="link">Screen</a>, 
         <a href="pycocoa.windows-module.html#WindowStyle" 
@@ -4051,15 +4052,15 @@ mUIFont', size=13, traits='Italic', weight=5),
     <td width="15%" align="right" valign="top" class="summary">
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
-        <a href="pycocoa-module.html#NSMain" class="summary-name">NSMain</a> = <code title="NSMain.Application=NSApplication(&lt;Id_t at 0x10d943950&gt;) of 0x7fe3bead0\
-df0,
-      .BooleanNO=NSBoolean(&lt;Id_t at 0x10d943680&gt;) of 0x7fffae7973f8,
-      .BooleanYES=NSBoolean(&lt;Id_t at 0x10d923170&gt;) of 0x7fffae7973e8,
-      .Bundle=NSBundle(&lt;Id_t at 0x10d938ef0&gt;) of 0x7fe3bc720000,
+        <a href="pycocoa-module.html#NSMain" class="summary-name">NSMain</a> = <code title="NSMain.Application=NSApplication(&lt;Id_t at 0x1068228c0&gt;) of 0x7fa3b7ad7\
+be0,
+      .BooleanNO=NSBoolean(&lt;Id_t at 0x1068223b0&gt;) of 0x7fffae7973f8,
+      .BooleanYES=NSBoolean(&lt;Id_t at 0x1068023b0&gt;) of 0x7fffae7973e8,
+      .Bundle=NSBundle(&lt;Id_t at 0x106817950&gt;) of 0x7fa3b550f4b0,
       .BundleName=NSConstantString('CFBundleName'),
-      .FontManager=NSFontManager(&lt;Id_t at 0x10d923320&gt;) of 0x7fe3beb0e\
-550,
-...">NSMain.Application=NSApplication(&lt;Id_t at 0x10d943950<code class="variable-ellipsis">...</code></code>
+      .FontManager=NSFontManager(&lt;Id_t at 0x106802290&gt;) of 0x7fa3b7b50\
+6f0,
+...">NSMain.Application=NSApplication(&lt;Id_t at 0x1068228c0<code class="variable-ellipsis">...</code></code>
     </td>
   </tr>
 <tr>
@@ -4672,8 +4673,8 @@ df0,
     <td width="15%" align="right" valign="top" class="summary">
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
-        <a href="pycocoa-module.html#libAppKit" class="summary-name">libAppKit</a> = <code title="&lt;CDLL '/System/Library/Frameworks/AppKit.framework/AppKit', handle 7fe\
-3bc536b30 at 109e066d0&gt;">&lt;CDLL '/System/Library/Frameworks/AppKit.framework<code class="variable-ellipsis">...</code></code>
+        <a href="pycocoa-module.html#libAppKit" class="summary-name">libAppKit</a> = <code title="&lt;CDLL '/System/Library/Frameworks/AppKit.framework/AppKit', handle 7fa\
+3b56488b0 at 102cea710&gt;">&lt;CDLL '/System/Library/Frameworks/AppKit.framework<code class="variable-ellipsis">...</code></code>
     </td>
   </tr>
 <tr>
@@ -4681,7 +4682,7 @@ df0,
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
         <a href="pycocoa-module.html#libCF" class="summary-name">libCF</a> = <code title="&lt;CDLL '/System/Library/Frameworks/CoreFoundation.framework/CoreFoundat\
-ion', handle 10e1b4800 at 109ded9d0&gt;">&lt;CDLL '/System/Library/Frameworks/CoreFoundation.frame<code class="variable-ellipsis">...</code></code>
+ion', handle 10f55b800 at 102cd19d0&gt;">&lt;CDLL '/System/Library/Frameworks/CoreFoundation.frame<code class="variable-ellipsis">...</code></code>
     </td>
   </tr>
 <tr>
@@ -4689,7 +4690,7 @@ ion', handle 10e1b4800 at 109ded9d0&gt;">&lt;CDLL '/System/Library/Frameworks/Co
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
         <a href="pycocoa-module.html#libCT" class="summary-name">libCT</a> = <code title="&lt;CDLL '/System/Library/Frameworks/CoreText.framework/CoreText', handle\
- 7fe3bc53ab50 at 109e13850&gt;">&lt;CDLL '/System/Library/Frameworks/CoreText.framework/C<code class="variable-ellipsis">...</code></code>
+ 7fa3b5493020 at 102cf7890&gt;">&lt;CDLL '/System/Library/Frameworks/CoreText.framework/C<code class="variable-ellipsis">...</code></code>
     </td>
   </tr>
 <tr>
@@ -4697,22 +4698,22 @@ ion', handle 10e1b4800 at 109ded9d0&gt;">&lt;CDLL '/System/Library/Frameworks/Co
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
         <a href="pycocoa-module.html#libFoundation" class="summary-name">libFoundation</a> = <code title="&lt;CDLL '/System/Library/Frameworks/Foundation.framework/Foundation', ha\
-ndle 7fe3bc539d00 at 109e13e90&gt;">&lt;CDLL '/System/Library/Frameworks/Foundation.f<code class="variable-ellipsis">...</code></code>
+ndle 7fa3b5729240 at 102cf7ed0&gt;">&lt;CDLL '/System/Library/Frameworks/Foundation.f<code class="variable-ellipsis">...</code></code>
     </td>
   </tr>
 <tr>
     <td width="15%" align="right" valign="top" class="summary">
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
-        <a href="pycocoa-module.html#libobjc" class="summary-name">libobjc</a> = <code title="&lt;CDLL '/usr/lib/libobjc.dylib', handle 10e1b6680 at 109e13cd0&gt;">&lt;CDLL '/usr/lib/libobjc.dylib', handle 10e1b6680 at <code class="variable-ellipsis">...</code></code>
+        <a href="pycocoa-module.html#libobjc" class="summary-name">libobjc</a> = <code title="&lt;CDLL '/usr/lib/libobjc.dylib', handle 10f55d680 at 102cf7d10&gt;">&lt;CDLL '/usr/lib/libobjc.dylib', handle 10f55d680 at <code class="variable-ellipsis">...</code></code>
     </td>
   </tr>
 <tr>
     <td width="15%" align="right" valign="top" class="summary">
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
-        <a href="pycocoa-module.html#libquartz" class="summary-name">libquartz</a> = <code title="&lt;CDLL '/System/Library/Frameworks/quartz.framework/quartz', handle 7fe\
-3bc457350 at 109e06910&gt;">&lt;CDLL '/System/Library/Frameworks/quartz.framework<code class="variable-ellipsis">...</code></code>
+        <a href="pycocoa-module.html#libquartz" class="summary-name">libquartz</a> = <code title="&lt;CDLL '/System/Library/Frameworks/quartz.framework/quartz', handle 7fa\
+3b549a9b0 at 102cea950&gt;">&lt;CDLL '/System/Library/Frameworks/quartz.framework<code class="variable-ellipsis">...</code></code>
     </td>
   </tr>
 <tr>
@@ -8553,14 +8554,14 @@ mUIFont', size=13, traits='Italic', weight=5),
   <dl class="fields">
     <dt>Value:</dt>
       <dd><table><tr><td><pre class="variable">
-NSMain.Application=NSApplication(&lt;Id_t at 0x10d943950&gt;) of 0x7fe3bead0<span class="variable-linewrap"><img src="crarr.png" alt="\" /></span>
-df0,
-      .BooleanNO=NSBoolean(&lt;Id_t at 0x10d943680&gt;) of 0x7fffae7973f8,
-      .BooleanYES=NSBoolean(&lt;Id_t at 0x10d923170&gt;) of 0x7fffae7973e8,
-      .Bundle=NSBundle(&lt;Id_t at 0x10d938ef0&gt;) of 0x7fe3bc720000,
+NSMain.Application=NSApplication(&lt;Id_t at 0x1068228c0&gt;) of 0x7fa3b7ad7<span class="variable-linewrap"><img src="crarr.png" alt="\" /></span>
+be0,
+      .BooleanNO=NSBoolean(&lt;Id_t at 0x1068223b0&gt;) of 0x7fffae7973f8,
+      .BooleanYES=NSBoolean(&lt;Id_t at 0x1068023b0&gt;) of 0x7fffae7973e8,
+      .Bundle=NSBundle(&lt;Id_t at 0x106817950&gt;) of 0x7fa3b550f4b0,
       .BundleName=NSConstantString('CFBundleName'),
-      .FontManager=NSFontManager(&lt;Id_t at 0x10d923320&gt;) of 0x7fe3beb0e<span class="variable-linewrap"><img src="crarr.png" alt="\" /></span>
-550,
+      .FontManager=NSFontManager(&lt;Id_t at 0x106802290&gt;) of 0x7fa3b7b50<span class="variable-linewrap"><img src="crarr.png" alt="\" /></span>
+6f0,
 <code class="variable-ellipsis">...</code>
 </pre></td></tr></table>
 </dd>
@@ -8644,8 +8645,8 @@ WindowStyle.Closable=2,
   <dl class="fields">
     <dt>Value:</dt>
       <dd><table><tr><td><pre class="variable">
-&lt;CDLL '/System/Library/Frameworks/AppKit.framework/AppKit', handle 7fe<span class="variable-linewrap"><img src="crarr.png" alt="\" /></span>
-3bc536b30 at 109e066d0&gt;
+&lt;CDLL '/System/Library/Frameworks/AppKit.framework/AppKit', handle 7fa<span class="variable-linewrap"><img src="crarr.png" alt="\" /></span>
+3b56488b0 at 102cea710&gt;
 </pre></td></tr></table>
 </dd>
   </dl>
@@ -8664,7 +8665,7 @@ WindowStyle.Closable=2,
     <dt>Value:</dt>
       <dd><table><tr><td><pre class="variable">
 &lt;CDLL '/System/Library/Frameworks/CoreFoundation.framework/CoreFoundat<span class="variable-linewrap"><img src="crarr.png" alt="\" /></span>
-ion', handle 10e1b4800 at 109ded9d0&gt;
+ion', handle 10f55b800 at 102cd19d0&gt;
 </pre></td></tr></table>
 </dd>
   </dl>
@@ -8683,7 +8684,7 @@ ion', handle 10e1b4800 at 109ded9d0&gt;
     <dt>Value:</dt>
       <dd><table><tr><td><pre class="variable">
 &lt;CDLL '/System/Library/Frameworks/CoreText.framework/CoreText', handle<span class="variable-linewrap"><img src="crarr.png" alt="\" /></span>
- 7fe3bc53ab50 at 109e13850&gt;
+ 7fa3b5493020 at 102cf7890&gt;
 </pre></td></tr></table>
 </dd>
   </dl>
@@ -8702,7 +8703,7 @@ ion', handle 10e1b4800 at 109ded9d0&gt;
     <dt>Value:</dt>
       <dd><table><tr><td><pre class="variable">
 &lt;CDLL '/System/Library/Frameworks/Foundation.framework/Foundation', ha<span class="variable-linewrap"><img src="crarr.png" alt="\" /></span>
-ndle 7fe3bc539d00 at 109e13e90&gt;
+ndle 7fa3b5729240 at 102cf7ed0&gt;
 </pre></td></tr></table>
 </dd>
   </dl>
@@ -8720,7 +8721,7 @@ ndle 7fe3bc539d00 at 109e13e90&gt;
   <dl class="fields">
     <dt>Value:</dt>
       <dd><table><tr><td><pre class="variable">
-&lt;CDLL '/usr/lib/libobjc.dylib', handle 10e1b6680 at 109e13cd0&gt;
+&lt;CDLL '/usr/lib/libobjc.dylib', handle 10f55d680 at 102cf7d10&gt;
 </pre></td></tr></table>
 </dd>
   </dl>
@@ -8738,8 +8739,8 @@ ndle 7fe3bc539d00 at 109e13e90&gt;
   <dl class="fields">
     <dt>Value:</dt>
       <dd><table><tr><td><pre class="variable">
-&lt;CDLL '/System/Library/Frameworks/quartz.framework/quartz', handle 7fe<span class="variable-linewrap"><img src="crarr.png" alt="\" /></span>
-3bc457350 at 109e06910&gt;
+&lt;CDLL '/System/Library/Frameworks/quartz.framework/quartz', handle 7fa<span class="variable-linewrap"><img src="crarr.png" alt="\" /></span>
+3b549a9b0 at 102cea950&gt;
 </pre></td></tr></table>
 </dd>
   </dl>
@@ -8777,7 +8778,7 @@ ndle 7fe3bc539d00 at 109e13e90&gt;
 <table border="0" cellpadding="0" cellspacing="0" width="100%%">
   <tr>
     <td align="left" class="footer">
-    Generated by Epydoc 3.0.1 on Thu Jun 28 16:06:53 2018
+    Generated by Epydoc 3.0.1 on Sun Jul  1 13:25:41 2018
     </td>
     <td align="right" class="footer">
       <a target="mainFrame" href="http://epydoc.sourceforge.net"

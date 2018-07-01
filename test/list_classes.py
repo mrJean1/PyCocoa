@@ -7,7 +7,12 @@
 
 from pycocoa import get_classes, leaked2
 
-__version__ = '17.11.18'
+__version__ = '18.06.28'
+
+
+def _up(t2):
+    return t2[0].upper()
+
 
 if __name__ == '__main__':
 
@@ -18,7 +23,7 @@ if __name__ == '__main__':
 
     n, prefs = 0, sys.argv[1:]
 
-    for name, _ in sorted(get_classes(*prefs)):
+    for name, _ in sorted(get_classes(*prefs), key=_up):
         n += 1
         print(name)
 

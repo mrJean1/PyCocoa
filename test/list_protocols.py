@@ -5,7 +5,12 @@
 
 from pycocoa import get_class, get_protocols, leaked2
 
-__version__ = '17.11.10'
+__version__ = '18.06.28'
+
+
+def _up(t2):
+    return t2[0].upper()
+
 
 if __name__ == '__main__':
 
@@ -17,7 +22,7 @@ if __name__ == '__main__':
     clstr, prefs = sys.argv[1], sys.argv[2:]
 
     n, cls = 0, get_class(clstr)
-    for name, _ in sorted(get_protocols(cls, *prefs)):
+    for name, _ in sorted(get_protocols(cls, *prefs), key=_up):
         n += 1
         print(name)
 

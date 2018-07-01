@@ -1,27 +1,7 @@
 
 # -*- coding: utf-8 -*-
 
-# MIT License <http://opensource.org/licenses/MIT>
-#
-# Copyright (C) 2017-2018 -- mrJean1 at Gmail dot com
-#
-# Permission is hereby granted, free of charge, to any person obtaining a
-# copy of this software and associated documentation files (the "Software"),
-# to deal in the Software without restriction, including without limitation
-# the rights to use, copy, modify, merge, publish, distribute, sublicense,
-# and/or sell copies of the Software, and to permit persons to whom the
-# Software is furnished to do so, subject to the following conditions:
-#
-# The above copyright notice and this permission notice shall be included
-# in all copies or substantial portions of the Software.
-#
-# THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS
-# OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-# FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.  IN NO EVENT SHALL
-# THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR
-# OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE,
-# ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
-# OTHER DEALINGS IN THE SOFTWARE.
+# License at the end of this file.
 
 '''Types L{Point}, L{Rect} and L{Size}, wrapping ObjC C{NSPoint_t}, L{NSRect_t}, C{NSSize_t}.
 '''
@@ -33,7 +13,7 @@ from utils   import isinstanceOf
 __all__ = ('Point', 'Point2',
            'Rect', 'Rect4',
            'Size', 'Size2')
-__version__ = '18.06.10'
+__version__ = '18.06.28'
 
 
 class Point(_Type0):
@@ -46,7 +26,7 @@ class Point(_Type0):
 
     @property
     def point(self):
-        '''Get the x and y coordinate (2-tuple) of (C{float} or C{int}).
+        '''Get the 2-tuple (x, y) coordinate of (C{float} or C{int}).
         '''
         return self.x, self.y
 
@@ -301,3 +281,25 @@ if __name__ == '__main__':
     from utils import _allisting
 
     _allisting(__all__, locals(), __version__, __file__)
+
+# MIT License <http://OpenSource.org/licenses/MIT>
+#
+# Copyright (C) 2017-2018 -- mrJean1 at Gmail dot com
+#
+# Permission is hereby granted, free of charge, to any person obtaining a
+# copy of this software and associated documentation files (the "Software"),
+# to deal in the Software without restriction, including without limitation
+# the rights to use, copy, modify, merge, publish, distribute, sublicense,
+# and/or sell copies of the Software, and to permit persons to whom the
+# Software is furnished to do so, subject to the following conditions:
+#
+# The above copyright notice and this permission notice shall be included
+# in all copies or substantial portions of the Software.
+#
+# THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS
+# OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+# FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.  IN NO EVENT SHALL
+# THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR
+# OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE,
+# ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
+# OTHER DEALINGS IN THE SOFTWARE.

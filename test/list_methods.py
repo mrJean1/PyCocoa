@@ -7,7 +7,12 @@
 
 from pycocoa import get_class, get_methods, leaked2
 
-__version__ = '17.11.18'
+__version__ = '18.06.28'
+
+
+def _up(t4):
+    return t4[0].upper()
+
 
 if __name__ == '__main__':
 
@@ -20,7 +25,7 @@ if __name__ == '__main__':
     clstr, prefs = sys.argv[1], sys.argv[2:]
 
     cls, n = get_class(clstr), 0
-    for name, encoding, rargtypes, _ in sorted(get_methods(cls, *prefs)):
+    for name, encoding, rargtypes, _ in sorted(get_methods(cls, *prefs), key=_up):
         n += 1
         rargtypes = [getattr(rarg, '__name__', rarg) for rarg in rargtypes]
         print('%s %s (%s)' % (name, encoding, ', '.join(map(str, rargtypes))))

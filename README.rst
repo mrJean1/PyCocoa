@@ -37,7 +37,7 @@ Some alternatives to PyCocoa are (a) PyObjC_, the most comprehensive Python
 to Objective-C bridge, (b) `Rubicon-ObjC`_ for Python 3.5+, taking advantage
 of Python's new typing_ annotations and (c) PyGUI_ for macOS_.
 
-*Last updated: June 27, 2018.*
+*Last updated: June 29, 2018.*
 
 .. _checked: http://GitHub.com/ActiveState/code/tree/master/recipes/Python/546532_PyChecker_postprocessor
 .. _cocoa-python: http://GitHub.com/phillip-nguyen/cocoa-python
@@ -64,6 +64,27 @@ of Python's new typing_ annotations and (c) PyGUI_ for macOS_.
 .. _typing: http://Docs.Python.org/3/library/typing.html
 .. _Python-VLC: http://PyPI.org/project/python-vlc
 .. _VLC App: http://www.VideoLan.org/vlc/download-macosx.html
+
+
+``Copyright (C) 2017-2018 -- mrJean1 at Gmail dot com``
+
+``Permission is hereby granted, free of charge, to any person obtaining a
+copy of this software and associated documentation files (the "Software"),
+to deal in the Software without restriction, including without limitation
+the rights to use, copy, modify, merge, publish, distribute, sublicense,
+and/or sell copies of the Software, and to permit persons to whom the
+Software is furnished to do so, subject to the following conditions:``
+
+``The above copyright notice and this permission notice shall be included
+in all copies or substantial portions of the Software.``
+
+``THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS
+OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL
+THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR
+OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE,
+ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
+OTHER DEALINGS IN THE SOFTWARE.``
 
 
 ``Copyright (C) 2011 -- Phillip Nguyen -- All Rights Reserved.``
@@ -95,24 +116,3 @@ CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT
 LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN
 ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 POSSIBILITY OF SUCH DAMAGE.``
-
-
-``Copyright (C) 2017-2018 -- mrJean1 at Gmail dot com``
-
-``Permission is hereby granted, free of charge, to any person obtaining a
-copy of this software and associated documentation files (the "Software"),
-to deal in the Software without restriction, including without limitation
-the rights to use, copy, modify, merge, publish, distribute, sublicense,
-and/or sell copies of the Software, and to permit persons to whom the
-Software is furnished to do so, subject to the following conditions:``
-
-``The above copyright notice and this permission notice shall be included
-in all copies or substantial portions of the Software.``
-
-``THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS
-OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL
-THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR
-OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE,
-ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
-OTHER DEALINGS IN THE SOFTWARE.``

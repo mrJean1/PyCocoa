@@ -22,19 +22,11 @@
 from setuptools import setup
 
 __all__ = ()
-__version__ = '18.06.04'
+__version__ = '18.06.28'
 
 
 def _c2(*names):
     return ' :: '.join(names)
-
-
-def _version():
-    with open('pycocoa/__init__.py') as f:
-        for t in f.readlines():
-            if t.startswith('__version__'):
-                v = t.split('=')[-1].strip().strip('\'"')
-                return '.'.join(map(str, map(int, v.split('.'))))
 
 
 def _long_description():
@@ -43,6 +35,14 @@ def _long_description():
         if isinstance(t, bytes):
             t = t.decode('utf-8')
         return t
+
+
+def _version():
+    with open('pycocoa/__init__.py') as f:
+        for t in f.readlines():
+            if t.startswith('__version__'):
+                v = t.split('=')[-1].strip().strip('\'"')
+                return '.'.join(map(str, map(int, v.split('.'))))
 
 
 _KeyWords=('Cocoa', 'cocoavlc', 'ctypes',
@@ -54,7 +54,7 @@ _KeyWords=('Cocoa', 'cocoavlc', 'ctypes',
 setup(
     name='PyCocoa',
     packages=['pycocoa'],
-    description="Python binding to macOS' Objective-C Cocoa",
+    description="Basic Python binding to macOS' Objective-C Cocoa",
     version=_version(),
 
     author='Jean M. Brouwers',
@@ -83,6 +83,7 @@ setup(
         _c2('Programming Language', 'Python'),
         _c2('Programming Language', 'Python', '2.7'),
         _c2('Programming Language', 'Python', '3.6'),
+        _c2('Programming Language', 'Python', '3.7'),
         _c2('Topic', 'Software Development'),
         _c2('Topic', 'Software Development', 'User Interfaces'),
         _c2('Topic', 'Scientific/Engineering', 'Human Machine Interfaces'),
