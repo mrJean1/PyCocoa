@@ -3,7 +3,7 @@
 
 # License at the end of this file.
 
-'''C{get_...} functions to obtian ObjC classes, methods, protocols, etc.
+'''C{get_...} functions to obtain ObjC classes, methods, protocols, etc.
 '''
 # all imports listed explicitly to help PyChecker
 from ctypes  import ArgumentError, byref, c_uint, cast, CFUNCTYPE
@@ -14,7 +14,7 @@ from oslibs  import libobjc  # get_lib
 from utils   import bytes2str, _exports, isinstanceOf, missing, \
                     name2objc, str2bytes
 
-__version__ = '18.06.28'
+__version__ = '18.06.30'
 
 _c_func_t_cache = {}
 

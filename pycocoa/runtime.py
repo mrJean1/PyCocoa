@@ -32,10 +32,11 @@ from octypes import __i386__, __LP64__, c_struct_t, c_void, \
                     objc_super_t_ptr, ObjC_t, SEL_t, split_emcoding2, \
                     TypeCodeError
 from oslibs  import cfString2str, _csignature, libobjc
-from utils   import bytes2str, _Constants, _exports, lambda1, missing, \
-                    name2py, printf, property2, str2bytes
+from utils   import bytes2str, _ByteStrs, _Constants, _exports, \
+                    isinstanceOf, lambda1, missing,  name2py, \
+                    printf, property2, str2bytes
 
-__version__ = '18.06.28'
+__version__ = '18.07.03'
 
 # <http://Developer.Apple.com/documentation/objectivec/
 #         objc_associationpolicy?language=objc>
@@ -245,7 +246,12 @@ class ObjCBoundClassMethod(ObjCBoundMethod):
     '''Python wrapper for a bound ObjC instance method, only
        to distinguish bound class from bound instance methods.
     '''
-    pass
+    # __slots__ must be repeated in sub-classes, see "Problems
+    # with __slots__" in Luciano Ramalho, "Fluent Python", page
+    # 276+, O'Reilly, 2016, also at <http://Books.Google.ie/
+    #   books?id=bIZHCgAAQBAJ&lpg=PP1&dq=fluent%20python&pg=
+    #   PT364#v=onepage&q=“Problems%20with%20__slots__”&f=false>
+    __slots__ = ObjCBoundMethod.__slots__
 
 
 class ObjCClass(_ObjCBase):
@@ -589,6 +595,21 @@ class ObjCInstance(_ObjCBase):
 
 _PyRes_t2 = {b'@': (ObjCInstance, Id_t),
              b'#': (ObjCClass, Class_t)}
+
+
+class ObjCConstant(ObjCInstance):
+    '''Python wrapper for an ObjC constant.
+    '''
+    def __new__(cls, dylib, name, const_t=ObjC_t):
+        '''New L{ObjCConst} pointer constant in a C{dylib}.
+
+           @param dylib: The library (C{ctypes.CDLL}).
+           @param name: The constant's name (C{str} or C{bytes}).
+           @keyword const_t: C type (C{ObjC_t} or other C{ctypes}_t).
+        '''
+        if isinstanceOf(name, _ByteStrs, name='name'):
+            o = const_t.in_dll(dylib, name)
+            return super(ObjCConstant, cls).__new__(cls, o)
 
 
 class ObjCMethod(_ObjCBase):

@@ -3,7 +3,7 @@
           "DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
 <head>
-  <title>pycocoa.apps.Tile</title>
+  <title>pycocoa.runtime.ObjCConstant</title>
   <link rel="stylesheet" href="epydoc.css" type="text/css" />
   <script type="text/javascript" src="epydoc.js"></script>
 </head>
@@ -43,8 +43,8 @@
     <td width="100%">
       <span class="breadcrumbs">
         <a href="pycocoa-module.html">Package&nbsp;pycocoa</a> ::
-        <a href="pycocoa.apps-module.html">Module&nbsp;apps</a> ::
-        Class&nbsp;Tile
+        <a href="pycocoa.runtime-module.html">Module&nbsp;runtime</a> ::
+        Class&nbsp;ObjCConstant
       </span>
     </td>
     <td>
@@ -52,30 +52,26 @@
         <!-- hide/show private -->
         <tr><td align="right"><span class="options"
             >[<a href="frames.html" target="_top">frames</a
-            >]&nbsp;|&nbsp;<a href="pycocoa.apps.Tile-class.html"
+            >]&nbsp;|&nbsp;<a href="pycocoa.runtime.ObjCConstant-class.html"
             target="_top">no&nbsp;frames</a>]</span></td></tr>
       </table>
     </td>
   </tr>
 </table>
 <!-- ==================== CLASS DESCRIPTION ==================== -->
-<h1 class="epydoc">Class Tile</h1><p class="nomargin-top"></p>
+<h1 class="epydoc">Class ObjCConstant</h1><p class="nomargin-top"></p>
 <pre class="base-tree">
-  object --+            
-           |            
-bases._Type0 --+        
-               |        
-    bases._Type1 --+    
-                   |    
-        bases._Type2 --+
-                       |
-                      <strong class="uidshort">Tile</strong>
+object --+        
+         |        
+ _ObjCBase --+    
+             |    
+  <a href="pycocoa.runtime.ObjCInstance-class.html">ObjCInstance</a> --+
+                 |
+                <strong class="uidshort">ObjCConstant</strong>
 </pre>
 
 <hr />
-<p>Dock tile for an <a href="pycocoa.apps.App-class.html" 
-  class="link">App</a>, wrapping an ObjC <a 
-  href="pycocoa-module.html#NSDockTile" class="link">NSDockTile</a>.</p>
+<p>Python wrapper for an ObjC constant.</p>
 
 <!-- ==================== INSTANCE METHODS ==================== -->
 <a name="section-InstanceMethods"></a>
@@ -85,16 +81,51 @@ bases._Type0 --+
   <td align="left" colspan="2" class="table-header">
     <span class="table-header">Instance Methods</span></td>
 </tr>
+  <tr>
+    <td colspan="2" class="summary">
+    <p class="indent-wrapped-lines"><b>Inherited from <code><a href="pycocoa.runtime.ObjCInstance-class.html">ObjCInstance</a></code></b>:
+      <code><a href="pycocoa.runtime.ObjCInstance-class.html#__getattr__">__getattr__</a></code>,
+      <code><a href="pycocoa.runtime.ObjCInstance-class.html#__str__">__str__</a></code>,
+      <code><a href="pycocoa.runtime.ObjCInstance-class.html#set_ivar">set_ivar</a></code>
+      </p>
+    <p class="indent-wrapped-lines"><b>Inherited from <code>_ObjCBase</code></b>:
+      <code>__repr__</code>
+      </p>
+    <p class="indent-wrapped-lines"><b>Inherited from <code>object</code></b>:
+      <code>__delattr__</code>,
+      <code>__format__</code>,
+      <code>__getattribute__</code>,
+      <code>__hash__</code>,
+      <code>__init__</code>,
+      <code>__reduce__</code>,
+      <code>__reduce_ex__</code>,
+      <code>__setattr__</code>,
+      <code>__sizeof__</code>,
+      <code>__subclasshook__</code>
+      </p>
+    </td>
+  </tr>
+</table>
+<!-- ==================== STATIC METHODS ==================== -->
+<a name="section-StaticMethods"></a>
+<table class="summary" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr bgcolor="#70b0f0" class="table-header">
+  <td align="left" colspan="2" class="table-header">
+    <span class="table-header">Static Methods</span></td>
+</tr>
 <tr>
     <td width="15%" align="right" valign="top" class="summary">
-      <span class="summary-type">&nbsp;</span>
+      <span class="summary-type">a new object with type S, a subtype of T</span>
     </td><td class="summary">
       <table width="100%" cellpadding="0" cellspacing="0" border="0">
         <tr>
-          <td><span class="summary-sig"><a href="pycocoa.apps.Tile-class.html#__init__" class="summary-sig-name">__init__</a>(<span class="summary-sig-arg">self</span>,
-        <span class="summary-sig-arg">app</span>)</span><br />
-      New dock <a href="pycocoa.apps.Tile-class.html" 
-      class="link">Tile</a>.</td>
+          <td><span class="summary-sig"><a href="pycocoa.runtime.ObjCConstant-class.html#__new__" class="summary-sig-name">__new__</a>(<span class="summary-sig-arg">cls</span>,
+        <span class="summary-sig-arg">dylib</span>,
+        <span class="summary-sig-arg">name</span>,
+        <span class="summary-sig-arg">const_t</span>=<span class="summary-sig-default">&lt;class 'pycocoa.octypes.ObjC_t'&gt;</span>)</span><br />
+      New <code class="link">ObjCConst</code> pointer constant in a 
+      <code>dylib</code>.</td>
           <td align="right" valign="top">
             
             
@@ -104,26 +135,19 @@ bases._Type0 --+
       
     </td>
   </tr>
+</table>
+<!-- ==================== CLASS VARIABLES ==================== -->
+<a name="section-ClassVariables"></a>
+<table class="summary" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr bgcolor="#70b0f0" class="table-header">
+  <td align="left" colspan="2" class="table-header">
+    <span class="table-header">Class Variables</span></td>
+</tr>
   <tr>
     <td colspan="2" class="summary">
-    <p class="indent-wrapped-lines"><b>Inherited from <code>bases._Type2</code></b>:
-      <code>__str__</code>
-      </p>
-    <p class="indent-wrapped-lines"><b>Inherited from <code>bases._Type0</code></b>:
-      <code>__repr__</code>,
-      <code>type2strepr</code>
-      </p>
-    <p class="indent-wrapped-lines"><b>Inherited from <code>object</code></b>:
-      <code>__delattr__</code>,
-      <code>__format__</code>,
-      <code>__getattribute__</code>,
-      <code>__hash__</code>,
-      <code>__new__</code>,
-      <code>__reduce__</code>,
-      <code>__reduce_ex__</code>,
-      <code>__setattr__</code>,
-      <code>__sizeof__</code>,
-      <code>__subclasshook__</code>
+    <p class="indent-wrapped-lines"><b>Inherited from <code>_ObjCBase</code></b>:
+      <code>_as_parameter_</code>
       </p>
     </td>
   </tr>
@@ -136,27 +160,15 @@ bases._Type0 --+
   <td align="left" colspan="2" class="table-header">
     <span class="table-header">Properties</span></td>
 </tr>
-<tr>
-    <td width="15%" align="right" valign="top" class="summary">
-      <span class="summary-type">&nbsp;</span>
-    </td><td class="summary">
-        <a href="pycocoa.apps.Tile-class.html#label" class="summary-name">label</a><br />
-      Get the badge text of the app's dock tile (<code>str</code>).
-    </td>
-  </tr>
   <tr>
     <td colspan="2" class="summary">
-    <p class="indent-wrapped-lines"><b>Inherited from <code>bases._Type2</code></b>:
-      <code>tag</code>,
-      <code>title</code>
-      </p>
-    <p class="indent-wrapped-lines"><b>Inherited from <code>bases._Type1</code></b>:
-      <code>NSdelegate</code>,
-      <code>app</code>
-      </p>
-    <p class="indent-wrapped-lines"><b>Inherited from <code>bases._Type0</code></b>:
-      <code>NS</code>,
-      <code>NSDelegate</code>
+    <p class="indent-wrapped-lines"><b>Inherited from <code><a href="pycocoa.runtime.ObjCInstance-class.html">ObjCInstance</a></code></b>:
+      <code><a href="pycocoa.runtime.ObjCInstance-class.html#Type">Type</a></code>,
+      <code><a href="pycocoa.runtime.ObjCInstance-class.html#name">name</a></code>,
+      <code><a href="pycocoa.runtime.ObjCInstance-class.html#objc_class">objc_class</a></code>,
+      <code><a href="pycocoa.runtime.ObjCInstance-class.html#objc_classname">objc_classname</a></code>,
+      <code><a href="pycocoa.runtime.ObjCInstance-class.html#objc_description">objc_description</a></code>,
+      <code><a href="pycocoa.runtime.ObjCInstance-class.html#ptr">ptr</a></code>
       </p>
     <p class="indent-wrapped-lines"><b>Inherited from <code>object</code></b>:
       <code>__class__</code>
@@ -173,63 +185,37 @@ bases._Type0 --+
     <span class="table-header">Method Details</span></td>
 </tr>
 </table>
-<a name="__init__"></a>
+<a name="__new__"></a>
 <div>
 <table class="details" border="1" cellpadding="3"
        cellspacing="0" width="100%" bgcolor="white">
 <tr><td>
   <table width="100%" cellpadding="0" cellspacing="0" border="0">
   <tr valign="top"><td>
-  <h3 class="epydoc"><span class="sig"><span class="sig-name">__init__</span>(<span class="sig-arg">self</span>,
-        <span class="sig-arg">app</span>)</span>
-    <br /><em class="fname">(Constructor)</em>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">__new__</span>(<span class="sig-arg">cls</span>,
+        <span class="sig-arg">dylib</span>,
+        <span class="sig-arg">name</span>,
+        <span class="sig-arg">const_t</span>=<span class="sig-default">&lt;class 'pycocoa.octypes.ObjC_t'&gt;</span>)</span>
+    <br /><em class="fname">Static Method</em>
   </h3>
   </td><td align="right" valign="top"
     >&nbsp;
     </td>
   </tr></table>
   
-  <p>New dock <a href="pycocoa.apps.Tile-class.html" 
-  class="link">Tile</a>.</p>
+  <p>New <code class="link">ObjCConst</code> pointer constant in a 
+  <code>dylib</code>.</p>
   <dl class="fields">
     <dt>Parameters:</dt>
     <dd><ul class="nomargin-top">
-        <li><strong class="pname"><code>app</code></strong> - The app (<a href="pycocoa.apps.App-class.html" 
-          class="link">App</a>).</li>
+        <li><strong class="pname"><code>dylib</code></strong> - The library (<code>ctypes.CDLL</code>).</li>
+        <li><strong class="pname"><code>name</code></strong> - The constant's name (<code>str</code> or <code>bytes</code>).</li>
+        <li><strong class="pname"><code>const_t</code></strong> - C type (<code>ObjC_t</code> or other <code>ctypes</code>_t).</li>
     </ul></dd>
+    <dt>Returns: a new object with type S, a subtype of T</dt>
     <dt>Overrides:
-        object.__init__
+        object.__new__
     </dt>
-  </dl>
-</td></tr></table>
-</div>
-<br />
-<!-- ==================== PROPERTY DETAILS ==================== -->
-<a name="section-PropertyDetails"></a>
-<table class="details" border="1" cellpadding="3"
-       cellspacing="0" width="100%" bgcolor="white">
-<tr bgcolor="#70b0f0" class="table-header">
-  <td align="left" colspan="2" class="table-header">
-    <span class="table-header">Property Details</span></td>
-</tr>
-</table>
-<a name="label"></a>
-<div>
-<table class="details" border="1" cellpadding="3"
-       cellspacing="0" width="100%" bgcolor="white">
-<tr><td>
-  <h3 class="epydoc">label</h3>
-  <p>Get the badge text of the app's dock tile (<code>str</code>).</p>
-  <dl class="fields">
-    <dt>Get Method:</dt>
-    <dd class="value"><span class="summary-sig">label(<span class="summary-sig-arg">self</span>)</span>
-        - Get the badge text of the app's dock tile (<code>str</code>).
-    </dd>
-    <dt>Set Method:</dt>
-    <dd class="value"><span class="summary-sig">label(<span class="summary-sig-arg">self</span>,
-        <span class="summary-sig-arg">label</span>)</span>
-        - Set the badge text of the app's dock tile (<code>str</code>).
-    </dd>
   </dl>
 </td></tr></table>
 </div>
@@ -265,7 +251,7 @@ bases._Type0 --+
 <table border="0" cellpadding="0" cellspacing="0" width="100%%">
   <tr>
     <td align="left" class="footer">
-    Generated by Epydoc 3.0.1 on Thu Jul  5 12:52:49 2018
+    Generated by Epydoc 3.0.1 on Thu Jul  5 12:52:50 2018
     </td>
     <td align="right" class="footer">
       <a target="mainFrame" href="http://epydoc.sourceforge.net"
