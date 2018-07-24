@@ -14,9 +14,11 @@ from oslibs  import libobjc  # get_lib
 from utils   import bytes2str, _exports, isinstanceOf, missing, \
                     name2objc, str2bytes
 
-__version__ = '18.06.30'
+__version__ = '18.07.23'
 
 _c_func_t_cache = {}
+_SEL_t_cache_L1 = {}
+_SEL_t_cache_L2 = {}
 
 
 def _ivar_ctype(objc, name):
@@ -345,12 +347,22 @@ def get_selector(name_):
 
        @param name_: The selector name (C{str}).
 
-       @return: The selector (L{SEL_t}) if found, None otherwise.
+       @return: The selector (L{SEL_t}) if found, C{None} otherwise.
     '''
-    sel = name2objc(name_)
-#   if not sel.endswith(b':'):
-#       raise ValueError('%s invalid: %s' % ('selector', name_))
-    return libobjc.sel_registerName(sel) or None
+    try:
+        sel = _SEL_t_cache_L1[name_]
+    except KeyError:
+        try:  # elevate _L2 item to _L1 cache
+            sel = _SEL_t_cache_L2.pop(name_)
+            _SEL_t_cache_L1[name_] = sel
+        except KeyError:
+            if len(_SEL_t_cache_L2) > 128:  # cut cache size
+                # XXX can't change dict during iteration
+                for k in tuple(_SEL_t_cache_L2.keys())[:128//4]:
+                    _SEL_t_cache_L2.pop(k)
+            sel = libobjc.sel_registerName(name2objc(name_)) or None
+            _SEL_t_cache_L2[name_] = sel
+    return sel
 
 
 def get_selectornameof(sel):
@@ -358,7 +370,7 @@ def get_selectornameof(sel):
 
        @param sel: The selector (L{SEL_t}).
 
-       @return: The selector name (C{str}) if found, "" otherwise.
+       @return: The selector name (C{str}) if found, C{""} otherwise.
     '''
     isinstanceOf(sel, SEL_t, name='sel')
     return bytes2str(libobjc.sel_getName(sel)) or ''

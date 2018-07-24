@@ -23,7 +23,7 @@ from strs    import Str
 from utils   import bytes2str, _ByteStrs, _Constants, _exports, \
                     flint, _Ints, isinstanceOf, _Singletons, _Types
 
-__version__ = '18.06.28'
+__version__ = '18.07.15'
 
 # <http://Developer.Apple.com/documentation/appkit/nsfont.weight>
 # _NSFontWeigthHeavy      = 13 ?
@@ -754,26 +754,15 @@ if __name__ == '__main__':
 
     from utils import _allisting
 
-    def _itemf(fmt, *args):
-        t = fmt % args
-        for f in (' is Fonts', ' is FontTrait'):
-            i = t.find(f)
-            if i > 0:
-                t = t[:i] + t[i+len(f):]
-                f = ' ' * (len(f) - 4)
-                i = ' ' * (i + 1)
-                t = t.replace(f, i)
-        return t
-
-    _allisting(__all__, locals(), __version__, __file__, itemf=_itemf)
+    _allisting(__all__, locals(), __version__, __file__)
 
 _ = '''
 
  fonts.__all__ = tuple(
    fonts.Font is <class .Font>,
    fonts.FontError is <class .FontError>,
-   fonts.fontfamilies is <function .fontfamilies at 0x103a56840>,
-   fonts.fontnamesof is <function .fontnamesof at 0x103a5c510>,
+   fonts.fontfamilies is <function .fontfamilies at 0x106b93b18>,
+   fonts.fontnamesof is <function .fontnamesof at 0x106b97488>,
    fonts.Fonts.App=Font(name='Helvetica', family='Helvetica', size=12, weight=5),
               .Bold=Font(name='.AppleSystemUIFontBold', family='.AppleSystemUIFont', size=13, traits='Bold', weight=9),
               .BoldItalic=Font(name='.AppleSystemUIFontEmphasizedItalic', family='.AppleSystemUIFont', size=13, traits='Bold Italic', weight=9),
@@ -788,8 +777,8 @@ _ = '''
               .TableData=Font(name='.AppleSystemUIFont', family='.AppleSystemUIFont', size=13, weight=5),
               .TableHeader=Font(name='.AppleSystemUIFont', family='.AppleSystemUIFont', size=11, weight=5),
               .Title=Font(name='.AppleSystemUIFont', family='.AppleSystemUIFont', size=13, weight=5),
-   fonts.fontsof is <function .fontsof at 0x103a5c598>,
-   fonts.fontsof4 is <function .fontsof4 at 0x103a5c620>,
+   fonts.fontsof is <function .fontsof at 0x106b97500>,
+   fonts.fontsof4 is <function .fontsof4 at 0x106b97578>,
    fonts.FontTrait.Bold=2,
                   .Compressed=1<<9,
                   .Condensed=1<<6,
@@ -803,10 +792,10 @@ _ = '''
                   .UnBold=1<<2,
                   .UnItalic=1<<24,
    fonts.FontTraitError is <class .FontTraitError>,
-   fonts.fontTraits is <function .fontTraits at 0x103a5c6a8>,
-   fonts.fontTraitstrs is <function .fontTraitstrs at 0x103a5c730>,
+   fonts.fontTraits is <function .fontTraits at 0x106b975f0>,
+   fonts.fontTraitstrs is <function .fontTraitstrs at 0x106b97668>,
  )[11]
- fonts.__version__ = '18.06.10'
+ fonts.__version__ = '18.07.15'
 '''
 del _
 

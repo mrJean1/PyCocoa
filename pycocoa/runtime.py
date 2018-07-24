@@ -36,7 +36,7 @@ from utils   import bytes2str, _ByteStrs, _Constants, _exports, \
                     isinstanceOf, lambda1, missing,  name2py, \
                     printf, property2, str2bytes
 
-__version__ = '18.07.03'
+__version__ = '18.07.23'
 
 # <http://Developer.Apple.com/documentation/objectivec/
 #         objc_associationpolicy?language=objc>
@@ -156,21 +156,29 @@ def _pyresult(result):
         return result
 
 
-def _resargtypesel3(args, resargtypes, name_):
+def _resargtypesel3(id_t, args, resargtypes, sel_name_):
     '''Get and check the restype and argtypes keyword arguments, get
-       the SEL/selector and return 3-tuple (restype, argtypes, SEL).
+       the C{SEL/cmd} and return 3-tuple (restype, argtypes, SEL_t).
     '''
-    restype  = resargtypes.pop('restype', c_void_p)  # XXX dflt c_void?
-    argtypes = resargtypes.pop('argtypes', [])
-    if resargtypes:
-        t = ', '.join('%s=%r' % _ for _ in sorted(resargtypes.items()))
-        raise ValueError('unused %s kwds %s' % (name_, t))
+    def _2kwds(restype=c_void_p, argtypes=[], **kwds):
+        if kwds:  # not empty
+            t = ', '.join('%s=%r' % _ for _ in sorted(kwds.items()))
+            raise ValueError('unused %s kwds %s' % (sel_name_, t))
+        return restype, argtypes
 
-    if argtypes and len(argtypes) != len(args):  # allow varargs
-        raise ValueError('mismatch %s%r[%d] vs argtypes[%s][%d]' % (name_,
-                          tuple(args), len(args), _c_tstr(*argtypes), len(argtypes)))
+    restype, argtypes = _2kwds(**resargtypes)
+    if argtypes:  # allow varargs
+        if len(argtypes) != len(args):
+            raise ValueError('mismatch %s%r[%d] vs argtypes[%s][%d]' %
+                             (sel_name_, tuple(args), len(args),
+                             _c_tstr(*argtypes), len(argtypes)))
+        argtypes = [id_t, SEL_t] + argtypes
 
-    return restype, argtypes, get_selector(name_)
+    if isinstance(sel_name_, _ByteStrs):
+        sel_name_ = get_selector(sel_name_)
+    elif isinstanceOf(sel_name_, SEL_t, name='sel_name_'):
+        pass
+    return restype, argtypes, sel_name_  # SEL_t
 
 
 def _Xargs(x, name, argtypes, restype='void'):
@@ -190,6 +198,15 @@ class _ObjCBase(object):
 
     def __repr__(self):
         return '<%s(%s) at %#x>' % (self.__class__.__name__, self, id(self))
+
+    @property
+    def description(self):
+        '''Return this ObjC's description, first line of C{__doc__}.
+        '''
+        n = getattr(self, 'name', self.__class__.__name__)
+        d = '%s: %s' % (n, getattr(self, '__doc__', 'n/a').strip())
+        n = d.find('\n')
+        return d if n < 0 else d[:n]
 
 
 class ObjCBoundMethod(_ObjCBase):
@@ -236,6 +253,12 @@ class ObjCBoundMethod(_ObjCBase):
         return self._method
 
     @property
+    def name(self):
+        '''Get the method's name (C{str}).
+        '''
+        return self._method.name
+
+    @property
     def objc_id(self):
         '''Get the ObjC instance (C{Class_t} or L{ObjCSubclass}).
         '''
@@ -243,14 +266,14 @@ class ObjCBoundMethod(_ObjCBase):
 
 
 class ObjCBoundClassMethod(ObjCBoundMethod):
-    '''Python wrapper for a bound ObjC instance method, only
+    '''Python wrapper for a bound ObjC class method, only
        to distinguish bound class from bound instance methods.
     '''
-    # __slots__ must be repeated in sub-classes, see "Problems
-    # with __slots__" in Luciano Ramalho, "Fluent Python", page
-    # 276+, O'Reilly, 2016, also at <http://Books.Google.ie/
-    #   books?id=bIZHCgAAQBAJ&lpg=PP1&dq=fluent%20python&pg=
-    #   PT364#v=onepage&q=“Problems%20with%20__slots__”&f=false>
+    # __slots__ must be repeated in sub-classes, see "Problems with
+    # __slots__" in Luciano Ramalho, "Fluent Python", page 276+,
+    # O'Reilly, 2016, also at <http://Books.Google.ie/books?
+    # id=bIZHCgAAQBAJ&lpg=PP1&dq=fluent%20python&pg=PT364#
+    # v=onepage&q=“Problems%20with%20__slots__”&f=false>
     __slots__ = ObjCBoundMethod.__slots__
 
 
@@ -601,7 +624,7 @@ class ObjCConstant(ObjCInstance):
     '''Python wrapper for an ObjC constant.
     '''
     def __new__(cls, dylib, name, const_t=ObjC_t):
-        '''New L{ObjCConst} pointer constant in a C{dylib}.
+        '''New L{ObjCConstant} pointer constant in a C{dylib}.
 
            @param dylib: The library (C{ctypes.CDLL}).
            @param name: The constant's name (C{str} or C{bytes}).
@@ -923,7 +946,7 @@ class ObjCSubclass(_ObjCBase):
 
            @note: The method must have signature M{m(self, cmd, *args)}
                   where both C{Id/self} and C{SEL/cmd} are just pointers
-                  to ObjC objects.
+                  to ObjC objects of type C{Id_t} respectively C{SEL_t}.
         '''
         _, encoding = split_emcoding2(encoding)
 
@@ -1227,20 +1250,20 @@ else:
         return issubclass(restype, c_struct_t) and sizeof(restype) not in (1, 2, 4, 8)  # XXX > 8
 
 
-def send_message(receiver, name_, *args, **resargtypes):
+def send_message(receiver, sel_name_, *args, **resargtypes):
     '''Send message to an ObjC object.
 
        @param receiver: The recipient (C{Object}).
-       @param name_: Message selector (C{str}).
+       @param sel_name_: Message selector (C{SEL_t}) or name (C{str} or C{bytes}).
        @param args: Message arguments (I{all positional}).
        @keyword resargtypes: Optional, result and argument types (C{ctypes}).
 
        @return: Message result (I{restype}).
 
-       @raise ArgumentError: Invalid I{receiver}, I{name}, I{args} or
+       @raise ArgumentError: Invalid I{receiver}, I{sel_name_}, I{args} or
                              I{resargtypes}.
 
-       @raise TypeError: Invalid I{receiver}, I{name}, I{args} or
+       @raise TypeError: Invalid I{receiver}, I{sel_name_}, I{args} or
                          I{resargtypes} type.
 
        @note: Use keyword arguments I{restype=c_void_p} and I{argtypes=[]}
@@ -1250,12 +1273,11 @@ def send_message(receiver, name_, *args, **resargtypes):
               the C{Id/self} and C{SEL/cmd} arguments.
     '''
     receiver, _ = _obj_and_name(receiver, get_class)
-    _ObjC_logf('send_message(%r, %s, %r) %r', receiver, name_, args, resargtypes)
+    _ObjC_logf('send_%s(%r, %s, %r) %r', 'message', receiver, sel_name_,
+                                          args, resargtypes)
     receiver = _receiver(receiver)
-
-    restype, argtypes, sel = _resargtypesel3(args, resargtypes, name_)
-    if argtypes:
-        argtypes = [type(receiver), SEL_t] + argtypes
+    restype, argtypes, sel = _resargtypesel3(type(receiver), args,
+                              resargtypes, sel_name_)
 
     if restype in _FLOATS_:  # x86_should_use_fpret(restype):
         result = _libobjcall(_objc_msgSend_fpret, restype, argtypes,
@@ -1272,20 +1294,20 @@ def send_message(receiver, name_, *args, **resargtypes):
 
 
 # http://StackOverflow.com/questions/3095360/what-exactly-is-super-in-objective-c
-def send_super(receiver, name_, *args, **resargtypes):
+def send_super(receiver, sel_name_, *args, **resargtypes):
     '''Send message to the super-class of an ObjC object.
 
        @param receiver: The recipient (C{Object}).
-       @param name_: Message selector (C{str}).
+       @param sel_name_: Message selector (C{SEL_t}) or name (C{str} or C{bytes}).
        @param args: Message arguments (I{all positional}).
        @keyword resargtypes: Optional, result and argument types (C{ctypes}).
 
        @return: Message result (I{restype}).
 
-       @raise ArgumentError: Invalid I{receiver}, I{name}, I{args} or
+       @raise ArgumentError: Invalid I{receiver}, I{sel_name_}, I{args} or
                              I{resargtypes}.
 
-       @raise TypeError: Invalid I{receiver}, I{name}, I{args} or
+       @raise TypeError: Invalid I{receiver}, I{sel_name_}, I{args} or
                          I{resargtypes} type.
 
        @note: By default, the result and all arguments are C{c_void_p}
@@ -1296,17 +1318,14 @@ def send_super(receiver, name_, *args, **resargtypes):
               arguments only (without the C{Id/self} and C{SEL/cmd}
               arguments).
     '''
-    _ObjC_logf('send_super(%r, %s, %r) %r', receiver, name_, args, resargtypes)
+    _ObjC_logf('send_%s(%r, %s, %r) %r', 'super', receiver, sel_name_,
+                                          args, resargtypes)
+
+    restype, argtypes, sel = _resargtypesel3(objc_super_t_ptr, args,
+                              resargtypes, sel_name_)
 
     receiver = _receiver(receiver)
-    supercls = get_superclassof(receiver)
-    superobj = objc_super_t(receiver, supercls)
-
-    restype, argtypes, sel = _resargtypesel3(args, resargtypes, name_)
-    if argtypes:
-        argtypes = [objc_super_t_ptr, SEL_t] + argtypes
-#   else:
-#       argtypes = None  # []
+    superobj = objc_super_t(receiver, get_superclassof(receiver))
 
     if _stret(restype):  # x86_should_use_stret(restype):
         return _libobjcall(_objc_msgSendSuper_stret, restype, argtypes,
@@ -1344,38 +1363,39 @@ class _Ivar1(_Constants):
     c_t  = Id_t
 
 
-def _objc_cache_pop(nself, sel_cmd):
+def _objc_cache_pop(nself, sel_):
     '''(INTERNAL) Remove an L{ObjCInstance} from the instances cache
        called by the instance' associated dealloc/finalize observer.
 
        @param nself: The instance' observer (C{_NSDeallocObserver}).
-       @param sel_cmd: The message for the parent (C{str}).
+       @param sel_: The message for the parent (C{str} or C{SEL_t}).
     '''
     objc_ptr_value = get_ivar(nself, _Ivar1.name, ctype=_Ivar1.c_t)
     if objc_ptr_value:
         objc = ObjCInstance._objc_cache.pop(objc_ptr_value, None)
         if objc:
             objc._dealloc_d = True
-    send_super(nself, sel_cmd)
+    send_super(nself, sel_)
 
 
-class _NSDeallocObserver(object):
+class _NSDeallocObserver(object):  # XXX (_ObjCBase):
     '''Instances of C{_NSDeallocObserver} are associated with every
-       ObjC object that gets wrapped and cached by an L{ObjCInstance}.
+       ObjC object that is wrapped and cached by an L{ObjCInstance}.
 
        Their sole purpose is to watch when the ObjC object is de-allocated,
        and then remove the object from the L{ObjCInstance}C{._objc_cache_}
        dictionary kept by the L{ObjCInstance} class.
 
        The methods of the class defined below are decorated with
-       C{.rawmethod} instead of C{.method} because C{_NSDeallocObserver}s
-       are created inside the L{ObjCInstance}C{.__new__} method and we
-       must be careful to not create another L{ObjCInstance} here (which
-       happens when the usual method decorator turns the C{self} argument
-       into an L{ObjCInstance}) and get trapped in an infinite recursion.
+       C{.rawmethod} instead of C{.method} because C{_NSDeallocObserver}
+       instances are created inside the L{ObjCInstance}C{.__new__} method
+       and we must be careful to not create another L{ObjCInstance} here
+       (which happens when the usual method decorator turns the C{self}
+       argument into an L{ObjCInstance}) and get trapped in an infinite
+       recursion.
 
-       The I{unused} argument in all decorated methods below represents
-       the C{SEL/cmd}, see L{ObjCSubclass}C{.rawmethod}.
+       The I{sel} argument in all decorated methods below represents
+       the C{SEL/cmd} C{SEL_t}, see L{ObjCSubclass}C{.rawmethod}.
     '''
     _ObjC = ObjCSubclass('NSObject', '_NSDeallocObserver',  # .__name__
                                    **{_Ivar1.name: _Ivar1.c_t})  # ivar
@@ -1391,16 +1411,17 @@ class _NSDeallocObserver(object):
         return self
 
     @_ObjC.rawmethod('@')
-    def dealloc(self, unused):
-        _objc_cache_pop(self, 'dealloc')
+    def dealloc(self, sel):
+        # Called before ObjC object is destroyed
+        _objc_cache_pop(self, sel)  # .name = 'dealloc'
 
     @_ObjC.rawmethod('@')
-    def finalize(self, unused):
+    def finalize(self, sel):
         # Called instead of dealloc if using garbage collection
         # (which would have to be explicitly started with
         # objc_startCollectorThread(), so probably not much
-        # reason to have this here, but it can't hurt.)
-        _objc_cache_pop(self, 'finalize')
+        # reason to have this here, but it can't hurt)
+        _objc_cache_pop(self, sel)  # .name = 'finalize'
 
 
 def _nsDeallocObserver(objc_ptr_value):
@@ -1417,17 +1438,17 @@ def _nsDeallocObserver(objc_ptr_value):
               L{ObjCInstance}C{._objc_cache_}, effectively destroying
               the L{ObjCInstance}.
     '''
-    observer = send_message(_NSDeallocObserver.__name__, 'alloc',
-                            restype=Id_t)  # argtypes=[]
-    observer = send_message(observer, 'initWithObject_', objc_ptr_value,
-                            restype=Id_t, argtypes=[_Ivar1.c_t])
+    nso = send_message(_NSDeallocObserver.__name__, 'alloc',
+                        restype=Id_t)  # argtypes=[]
+    nso = send_message(nso, 'initWithObject_', objc_ptr_value,
+                       restype=Id_t, argtypes=[_Ivar1.c_t])
     # the observer is retained by the object associate to it
-    libobjc.objc_setAssociatedObject(objc_ptr_value, observer, observer,
+    libobjc.objc_setAssociatedObject(objc_ptr_value, nso, nso,
                                      OBJC_ASSOCIATION_RETAIN)
     # release the observer now so that it will be de-allocated
     # when the associated object is de-allocated.
-    send_message(observer, 'release')
-    return observer
+    send_message(nso, 'release')
+    return nso
 
 
 def _nsDeallocObserverIvar1():

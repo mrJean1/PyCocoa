@@ -7,7 +7,7 @@
 
 @var missing: Missing keyword argument value.
 '''
-__version__ = '18.06.29'
+__version__ = '18.07.23'
 
 try:  # all imports listed explicitly to help PyChecker
     from math import gcd  # Python 3+
@@ -38,7 +38,7 @@ class _MutableConstants(object):
     def __repr__(self):
         def _fmt(n, v):
             b, s = _int2(v)
-            if s > 1:
+            if s > 0:
                 v = '%s<<%s' % (b, s)
             return '%s=%s' % (n, v)
         return self._strepr(_fmt)
@@ -317,7 +317,7 @@ except NameError:  # Python 3+
 _ByteStrs = _Bytes + _Strs  # bytes and/or str types
 
 
-def _allisting(alls, localls, version, filename, argv0='', itemf=None):
+def _allisting(alls, localls, version, filename, argv0=''):
     '''(INTERNAL) Print sorted __all__ names and values.
     '''
     import os
@@ -347,9 +347,9 @@ def _allisting(alls, localls, version, filename, argv0='', itemf=None):
             r += ' DUPLICATE'
         else:
             p = n
-        if itemf:
-            printf(itemf('  %s.%s is %s,', m, n, r))
-        elif r.startswith(n + '.'):
+        if r.startswith(n + '.'):
+            # increase indentation to align enums, constants, etc.
+            r = r.replace(' ' * len(n), ' ' * (len(n) + len(m) + 4))
             printf('  %s.%s,', m, r)
         else:
             printf('  %s.%s is %s,', m, n, r)
@@ -478,38 +478,38 @@ def lambda1(arg):
     return arg
 
 
-def name2objc(name):
+def name2objc(name_):
     '''Convert a (selector) name to bytes and ObjC naming rules.
 
-       @param name: Name to convert (C{str}).
+       @param name_: Name to convert (C{str} or C{bytes}).
 
-       @return: Converted name (C{str}).
+       @return: Converted name (C{bytes}).
     '''
-    return str2bytes(name).replace(b'_', b':')
+    return str2bytes(name_).replace(b'_', b':')
 
 
-def name2py(name):
+def name2py(name_):
     '''Convert a (selector) name to str and Python naming conventions.
 
-       @param name: Name to convert (C{str}).
+       @param name_: Name to convert (C{str} or C{bytes}).
 
        @return: Converted name (C{str}).
     '''
-    return bytes2str(name).replace(':', '_')
+    return bytes2str(name_).replace(':', '_')
 
 
-def name2pymethod(name):
+def name2pymethod(name_):
     '''Convert a (selector) name to a valid Python callback method.
 
-       @param name: Name to convert (C{str}).
+       @param name_: Name to convert (C{str} or C{bytes}).
 
        @return: Converted name (C{str}).
 
-       @raise ValueError: Invalid, non-alphanumeric I{name}.
+       @raise ValueError: Invalid, non-alphanumeric I{name_}.
     '''
-    m = name2py(name)
+    m = name2py(name_)
     if not (m and m.replace('_', '').isalnum()):
-        raise ValueError('%s invalid: %r' % ('name', name))
+        raise ValueError('%s invalid: %r' % ('name_', name_))
     return m
 
 

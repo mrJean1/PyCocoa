@@ -25,7 +25,7 @@ __all__ = ('App',
            'Tile',
            'app_title',
            'ns2App')
-__version__ = '18.06.28'
+__version__ = '18.07.23'
 
 
 class App(_Type2):
@@ -309,9 +309,9 @@ class App(_Type2):
 
 class _NSApplicationDelegate(object):
     '''An ObjC-callable I{NSDelegate} class to handle L{NSApplication},
-       L{NSMenu} and L{NSWindow} events as calls to L{App}C{.app..._},
-       L{App}C{.menu..._} respectively L{App}C{.window..._} callback
-       methods.
+       L{NSMenu} and L{NSWindow} events as calls to Python
+       L{App}C{.app..._}, L{App}C{.menu..._} respectively
+       L{App}C{.window..._} callback methods.
     '''
     # Cobbled together from the pycocoa.ObjCSubclass.__doc__,
     # pycocoa.runtime._NSDeallocObserver and PyObjC examples:

@@ -63,7 +63,7 @@
 
 <hr />
 <div class="fields">      <p><strong>Version:</strong>
-        18.06.29
+        18.07.23
       </p>
 </div><!-- ==================== FUNCTIONS ==================== -->
 <a name="section-Functions"></a>
@@ -278,7 +278,7 @@
     </td><td class="summary">
       <table width="100%" cellpadding="0" cellspacing="0" border="0">
         <tr>
-          <td><span class="summary-sig"><a href="pycocoa.utils-module.html#name2objc" class="summary-sig-name">name2objc</a>(<span class="summary-sig-arg">name</span>)</span><br />
+          <td><span class="summary-sig"><a href="pycocoa.utils-module.html#name2objc" class="summary-sig-name">name2objc</a>(<span class="summary-sig-arg">name_</span>)</span><br />
       Convert a (selector) name to bytes and ObjC naming rules.</td>
           <td align="right" valign="top">
             
@@ -295,7 +295,7 @@
     </td><td class="summary">
       <table width="100%" cellpadding="0" cellspacing="0" border="0">
         <tr>
-          <td><span class="summary-sig"><a href="pycocoa.utils-module.html#name2py" class="summary-sig-name">name2py</a>(<span class="summary-sig-arg">name</span>)</span><br />
+          <td><span class="summary-sig"><a href="pycocoa.utils-module.html#name2py" class="summary-sig-name">name2py</a>(<span class="summary-sig-arg">name_</span>)</span><br />
       Convert a (selector) name to str and Python naming conventions.</td>
           <td align="right" valign="top">
             
@@ -312,7 +312,7 @@
     </td><td class="summary">
       <table width="100%" cellpadding="0" cellspacing="0" border="0">
         <tr>
-          <td><span class="summary-sig"><a href="pycocoa.utils-module.html#name2pymethod" class="summary-sig-name">name2pymethod</a>(<span class="summary-sig-arg">name</span>)</span><br />
+          <td><span class="summary-sig"><a href="pycocoa.utils-module.html#name2pymethod" class="summary-sig-name">name2pymethod</a>(<span class="summary-sig-arg">name_</span>)</span><br />
       Convert a (selector) name to a valid Python callback method.</td>
           <td align="right" valign="top">
             
@@ -722,7 +722,7 @@
 <tr><td>
   <table width="100%" cellpadding="0" cellspacing="0" border="0">
   <tr valign="top"><td>
-  <h3 class="epydoc"><span class="sig"><span class="sig-name">name2objc</span>(<span class="sig-arg">name</span>)</span>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">name2objc</span>(<span class="sig-arg">name_</span>)</span>
   </h3>
   </td><td align="right" valign="top"
     >&nbsp;
@@ -733,10 +733,10 @@
   <dl class="fields">
     <dt>Parameters:</dt>
     <dd><ul class="nomargin-top">
-        <li><strong class="pname"><code>name</code></strong> - Name to convert (<code>str</code>).</li>
+        <li><strong class="pname"><code>name_</code></strong> - Name to convert (<code>str</code> or <code>bytes</code>).</li>
     </ul></dd>
     <dt>Returns:</dt>
-        <dd>Converted name (<code>str</code>).</dd>
+        <dd>Converted name (<code>bytes</code>).</dd>
   </dl>
 </td></tr></table>
 </div>
@@ -747,7 +747,7 @@
 <tr><td>
   <table width="100%" cellpadding="0" cellspacing="0" border="0">
   <tr valign="top"><td>
-  <h3 class="epydoc"><span class="sig"><span class="sig-name">name2py</span>(<span class="sig-arg">name</span>)</span>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">name2py</span>(<span class="sig-arg">name_</span>)</span>
   </h3>
   </td><td align="right" valign="top"
     >&nbsp;
@@ -758,7 +758,7 @@
   <dl class="fields">
     <dt>Parameters:</dt>
     <dd><ul class="nomargin-top">
-        <li><strong class="pname"><code>name</code></strong> - Name to convert (<code>str</code>).</li>
+        <li><strong class="pname"><code>name_</code></strong> - Name to convert (<code>str</code> or <code>bytes</code>).</li>
     </ul></dd>
     <dt>Returns:</dt>
         <dd>Converted name (<code>str</code>).</dd>
@@ -772,7 +772,7 @@
 <tr><td>
   <table width="100%" cellpadding="0" cellspacing="0" border="0">
   <tr valign="top"><td>
-  <h3 class="epydoc"><span class="sig"><span class="sig-name">name2pymethod</span>(<span class="sig-arg">name</span>)</span>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">name2pymethod</span>(<span class="sig-arg">name_</span>)</span>
   </h3>
   </td><td align="right" valign="top"
     >&nbsp;
@@ -783,13 +783,13 @@
   <dl class="fields">
     <dt>Parameters:</dt>
     <dd><ul class="nomargin-top">
-        <li><strong class="pname"><code>name</code></strong> - Name to convert (<code>str</code>).</li>
+        <li><strong class="pname"><code>name_</code></strong> - Name to convert (<code>str</code> or <code>bytes</code>).</li>
     </ul></dd>
     <dt>Returns:</dt>
         <dd>Converted name (<code>str</code>).</dd>
     <dt>Raises:</dt>
     <dd><ul class="nomargin-top">
-        <li><code><strong class='fraise'>ValueError</strong></code> - Invalid, non-alphanumeric <i>name</i>.</li>
+        <li><code><strong class='fraise'>ValueError</strong></code> - Invalid, non-alphanumeric <i>name_</i>.</li>
     </ul></dd>
   </dl>
 </td></tr></table>
@@ -970,7 +970,7 @@
 <table border="0" cellpadding="0" cellspacing="0" width="100%%">
   <tr>
     <td align="left" class="footer">
-    Generated by Epydoc 3.0.1 on Thu Jul  5 12:52:49 2018
+    Generated by Epydoc 3.0.1 on Mon Jul 23 20:37:05 2018
     </td>
     <td align="right" class="footer">
       <a target="mainFrame" href="http://epydoc.sourceforge.net"

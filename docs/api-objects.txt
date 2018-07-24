@@ -401,6 +401,7 @@ pycocoa.geometry	pycocoa.geometry-module.html
 pycocoa.geometry.__package__	pycocoa.geometry-module.html#__package__
 pycocoa.geometry.isinstanceOf	pycocoa.utils-module.html#isinstanceOf
 pycocoa.getters	pycocoa.getters-module.html
+pycocoa.getters.libobjc	pycocoa.getters-module.html#libobjc
 pycocoa.getters.get_methods	pycocoa.getters-module.html#get_methods
 pycocoa.getters._ivar_ctype	pycocoa.getters-module.html#_ivar_ctype
 pycocoa.getters.get_class	pycocoa.getters-module.html#get_class
@@ -421,7 +422,8 @@ pycocoa.getters.isinstanceOf	pycocoa.utils-module.html#isinstanceOf
 pycocoa.getters.split_encoding	pycocoa.octypes-module.html#split_encoding
 pycocoa.getters.get_selectornameof	pycocoa.getters-module.html#get_selectornameof
 pycocoa.getters.get_classnameof	pycocoa.getters-module.html#get_classnameof
-pycocoa.getters.libobjc	pycocoa.getters-module.html#libobjc
+pycocoa.getters._SEL_t_cache_L1	pycocoa.getters-module.html#_SEL_t_cache_L1
+pycocoa.getters._SEL_t_cache_L2	pycocoa.getters-module.html#_SEL_t_cache_L2
 pycocoa.getters.missing	pycocoa.getters-module.html#missing
 pycocoa.getters.get_superclassof	pycocoa.getters-module.html#get_superclassof
 pycocoa.getters.get_method	pycocoa.getters-module.html#get_method
@@ -1644,6 +1646,7 @@ pycocoa.runtime.ObjCBoundMethod.inst	pycocoa.runtime.ObjCBoundMethod-class.html#
 pycocoa.runtime.ObjCBoundClassMethod._objc_id	pycocoa.runtime.ObjCBoundClassMethod-class.html#_objc_id
 pycocoa.runtime.ObjCBoundClassMethod._inst	pycocoa.runtime.ObjCBoundClassMethod-class.html#_inst
 pycocoa.runtime.ObjCBoundClassMethod._method	pycocoa.runtime.ObjCBoundClassMethod-class.html#_method
+pycocoa.runtime.ObjCBoundMethod.name	pycocoa.runtime.ObjCBoundMethod-class.html#name
 pycocoa.runtime.ObjCBoundMethod	pycocoa.runtime.ObjCBoundMethod-class.html
 pycocoa.runtime.ObjCBoundMethod.__str__	pycocoa.runtime.ObjCBoundMethod-class.html#__str__
 pycocoa.runtime.ObjCBoundMethod.objc_id	pycocoa.runtime.ObjCBoundMethod-class.html#objc_id
@@ -1654,6 +1657,7 @@ pycocoa.runtime.ObjCBoundMethod.inst	pycocoa.runtime.ObjCBoundMethod-class.html#
 pycocoa.runtime.ObjCBoundMethod._objc_id	pycocoa.runtime.ObjCBoundMethod-class.html#_objc_id
 pycocoa.runtime.ObjCBoundMethod._inst	pycocoa.runtime.ObjCBoundMethod-class.html#_inst
 pycocoa.runtime.ObjCBoundMethod._method	pycocoa.runtime.ObjCBoundMethod-class.html#_method
+pycocoa.runtime.ObjCBoundMethod.name	pycocoa.runtime.ObjCBoundMethod-class.html#name
 pycocoa.runtime.ObjCClass	pycocoa.runtime.ObjCClass-class.html
 pycocoa.runtime.ObjCClass._cache_method	pycocoa.runtime.ObjCClass-class.html#_cache_method
 pycocoa.runtime.ObjCClass.__str__	pycocoa.runtime.ObjCClass-class.html#__str__
@@ -1680,9 +1684,9 @@ pycocoa.runtime.ObjCMethod.encoding	pycocoa.runtime.ObjCMethod-class.html#encodi
 pycocoa.runtime.ObjCMethod.__str__	pycocoa.runtime.ObjCMethod-class.html#__str__
 pycocoa.runtime.ObjCMethod.argtypes	pycocoa.runtime.ObjCMethod-class.html#argtypes
 pycocoa.runtime.ObjCMethod.__init__	pycocoa.runtime.ObjCMethod-class.html#__init__
+pycocoa.runtime.ObjCMethod._SEL	pycocoa.runtime.ObjCMethod-class.html#_SEL
 pycocoa.runtime.ObjCMethod.restype	pycocoa.runtime.ObjCMethod-class.html#restype
 pycocoa.runtime.ObjCMethod.__call__	pycocoa.runtime.ObjCMethod-class.html#__call__
-pycocoa.runtime.ObjCMethod._SEL	pycocoa.runtime.ObjCMethod-class.html#_SEL
 pycocoa.runtime.ObjCMethod._IMP	pycocoa.runtime.ObjCMethod-class.html#_IMP
 pycocoa.runtime.ObjCMethod._restype	pycocoa.runtime.ObjCMethod-class.html#_restype
 pycocoa.runtime.ObjCMethod.name	pycocoa.runtime.ObjCMethod-class.html#name
@@ -1726,9 +1730,9 @@ pycocoa.runtime.ObjCMethod.encoding	pycocoa.runtime.ObjCMethod-class.html#encodi
 pycocoa.runtime.ObjCMethod.__str__	pycocoa.runtime.ObjCMethod-class.html#__str__
 pycocoa.runtime.ObjCMethod.argtypes	pycocoa.runtime.ObjCMethod-class.html#argtypes
 pycocoa.runtime.ObjCMethod.__init__	pycocoa.runtime.ObjCMethod-class.html#__init__
+pycocoa.runtime.ObjCMethod._SEL	pycocoa.runtime.ObjCMethod-class.html#_SEL
 pycocoa.runtime.ObjCMethod.restype	pycocoa.runtime.ObjCMethod-class.html#restype
 pycocoa.runtime.ObjCMethod.__call__	pycocoa.runtime.ObjCMethod-class.html#__call__
-pycocoa.runtime.ObjCMethod._SEL	pycocoa.runtime.ObjCMethod-class.html#_SEL
 pycocoa.runtime.ObjCMethod._IMP	pycocoa.runtime.ObjCMethod-class.html#_IMP
 pycocoa.runtime.ObjCMethod._restype	pycocoa.runtime.ObjCMethod-class.html#_restype
 pycocoa.runtime.ObjCMethod.name	pycocoa.runtime.ObjCMethod-class.html#name
@@ -1738,6 +1742,7 @@ pycocoa.runtime.ObjCMethod._argtypes	pycocoa.runtime.ObjCMethod-class.html#_argt
 pycocoa.runtime.ObjCSubclass	pycocoa.runtime.ObjCSubclass-class.html
 pycocoa.runtime.ObjCSubclass._objc_metaclass	pycocoa.runtime.ObjCSubclass-class.html#_objc_metaclass
 pycocoa.runtime.ObjCSubclass.obj_metaclass	pycocoa.runtime.ObjCSubclass-class.html#obj_metaclass
+pycocoa.runtime.ObjCSubclass.add_ivar	pycocoa.runtime.ObjCSubclass-class.html#add_ivar
 pycocoa.runtime.ObjCSubclass._add_method	pycocoa.runtime.ObjCSubclass-class.html#_add_method
 pycocoa.runtime.ObjCSubclass._imp_cache	pycocoa.runtime.ObjCSubclass-class.html#_imp_cache
 pycocoa.runtime.ObjCSubclass._objc_class	pycocoa.runtime.ObjCSubclass-class.html#_objc_class
@@ -1745,7 +1750,6 @@ pycocoa.runtime.ObjCSubclass.__init__	pycocoa.runtime.ObjCSubclass-class.html#__
 pycocoa.runtime.ObjCSubclass.method	pycocoa.runtime.ObjCSubclass-class.html#method
 pycocoa.runtime.ObjCSubclass.obj_class	pycocoa.runtime.ObjCSubclass-class.html#obj_class
 pycocoa.runtime.ObjCSubclass.__str__	pycocoa.runtime.ObjCSubclass-class.html#__str__
-pycocoa.runtime.ObjCSubclass.add_ivar	pycocoa.runtime.ObjCSubclass-class.html#add_ivar
 pycocoa.runtime.ObjCSubclass.name	pycocoa.runtime.ObjCSubclass-class.html#name
 pycocoa.runtime.ObjCSubclass.classmethod	pycocoa.runtime.ObjCSubclass-class.html#classmethod
 pycocoa.runtime.ObjCSubclass.register	pycocoa.runtime.ObjCSubclass-class.html#register
