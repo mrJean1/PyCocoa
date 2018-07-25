@@ -7,7 +7,7 @@
 
 @var missing: Missing keyword argument value.
 '''
-__version__ = '18.07.23'
+__version__ = '18.07.24'
 
 try:  # all imports listed explicitly to help PyChecker
     from math import gcd  # Python 3+
@@ -147,6 +147,123 @@ class _Types(_MutableConstants):
 
 
 _Types = _Types()  # freeze
+
+
+class Cache2(dict):
+    '''Two-level cache implemented by two C{dict}s, a primary
+       level-1 C{dict} and a secondary level-2 C{dict}.
+
+       Frequently gotten key-value items are elevated into this,
+       the primary level-1 C{dict}.  Newly created key-value pairs
+       are entered into the secondary level-2 C{dict}.
+
+       The secondary level-2 C{dict} can optionally be limited in
+       size to avoid excessive growth.
+    '''
+    def __init__(self, limit2=None):
+        '''New L{Cache2}, optionally limited in size.
+
+           @keyword limit2: Size limit for the secondary level-2
+                            C{dict} (C{int} or C{None}).
+        '''
+        self._limit2 = limit2
+        self._dict2 = {}
+
+    def __getitem__(self, key):
+        try:
+            return dict.__getitem__(self, key)
+        except KeyError:
+            # .pop raises KeyError
+            value = self._dict2.pop(key)
+            # elevate to primary
+            dict.__setitem__(self, key, value)
+            return value
+
+    def __setitem__(self, key, value):
+        try:  # replace item if in primary
+            if dict.__getitem__(self, key) != value:
+                dict.__setitem__(self, key, value)
+        except KeyError:
+            if self._limit2:
+                n = len(self._dict2)
+                if n > max(4, self._limit2):
+                    for k in list(self._dict2.keys())[:n//4]:
+                        self._dict2.pop(k)
+            self._dict2[key] = value
+            # print(len(self), len(self._dict2))
+
+    @property
+    def dict2(self):
+        '''Get the secondary level-2 C{dict}.
+        '''
+        return self._dict2
+
+    def get(self, key, default=None):
+        '''Return the specified item's value.
+
+           @param key: The item's key (C{any}).
+           @keyword default: Default value for missing item (C{any}).
+
+           @return: C{Cache2}I{[key]} if I{key} in C{Cache2}
+                    else I{default} or C{None} if no I{default}
+                    specified.
+        '''
+        try:
+            return self.__getitem__(key)  # self[key]
+        except KeyError:
+            return default
+
+    @property
+    def limit2(self):
+        '''Get the secondary level-2 C{dict} size limit (C{int} or C{None}).
+        '''
+        return self._limit2
+
+    def pop(self, key, *default):
+        '''Remove the specified item.
+
+           @param key: The item's key (C{any}).
+           @param default: Optional default for missing item (C{any}).
+
+           @return: C{Cache2}I{[key]} if I{key} in C{Cache2}
+                    else I{default} if specified.
+
+           @raise KeyError: No such item I{key} and no I{default} given.
+
+           @note: The item is removed from the primary level-1 C{dict}
+                  first and if missing from secondary level-2 C{dict}.
+        '''
+        try:
+            return dict.pop(self, key)
+        except KeyError:
+            return self._dict2.pop(key, *default)
+
+    def popitem(self):
+        '''Remove the most recently entered item from the
+           secondary level-2 C{dict}.
+
+           @return: 2-Tuple (key, value).
+
+           @raise KeywordError: Empty secondary level-2 C{dict}.
+
+           @note: C{Cache2}I{.popitem()} is equivalent to
+                  C{Cache2}I{.dict2.popitem()}.
+        '''
+        return self._dict2.popitem()
+
+    def update(self, *other, **kwds):
+        '''Update this cache with additional items.
+
+           @param other: Iterable of 2-tuples (key, value) or C{dict}.
+           @keyword kwds: Key=value arguments.
+        '''
+        d = {}
+        if other:
+            d.update(other[0])
+        if kwds:
+            d.update(kwds)
+        for k, v in d.items():
+            self.__setitem__(k, v)
 
 
 class missing(object):
@@ -633,10 +750,10 @@ def zSIstr(size, B='B', K=1024):
     return si
 
 
-__all__ = _exports(locals(), 'aspect_ratio', 'clip', 'DEFAULT_UNICODE',
-                             'flint', 'isinstanceOf', 'gcd', 'iterbytes',
-                             'lambda1', 'missing', 'printf', 'property2',
-                             'type2strepr',
+__all__ = _exports(locals(), 'aspect_ratio', 'Cache2', 'clip',
+                             'DEFAULT_UNICODE', 'flint', 'isinstanceOf',
+                             'gcd', 'iterbytes', 'lambda1', 'missing',
+                             'printf', 'property2', 'type2strepr',
                    starts=('bytes', 'inst', 'name2', 'str', 'z'))
 
 if __name__ == '__main__':

@@ -401,7 +401,6 @@ pycocoa.geometry	pycocoa.geometry-module.html
 pycocoa.geometry.__package__	pycocoa.geometry-module.html#__package__
 pycocoa.geometry.isinstanceOf	pycocoa.utils-module.html#isinstanceOf
 pycocoa.getters	pycocoa.getters-module.html
-pycocoa.getters.libobjc	pycocoa.getters-module.html#libobjc
 pycocoa.getters.get_methods	pycocoa.getters-module.html#get_methods
 pycocoa.getters._ivar_ctype	pycocoa.getters-module.html#_ivar_ctype
 pycocoa.getters.get_class	pycocoa.getters-module.html#get_class
@@ -417,13 +416,13 @@ pycocoa.getters.get_metaclass	pycocoa.getters-module.html#get_metaclass
 pycocoa.getters.get_properties	pycocoa.getters-module.html#get_properties
 pycocoa.getters.__package__	pycocoa.getters-module.html#__package__
 pycocoa.getters._PropertyAttributes	pycocoa.getters-module.html#_PropertyAttributes
+pycocoa.getters._SEL_t_cache	pycocoa.getters-module.html#_SEL_t_cache
 pycocoa.getters.get_selector	pycocoa.getters-module.html#get_selector
 pycocoa.getters.isinstanceOf	pycocoa.utils-module.html#isinstanceOf
 pycocoa.getters.split_encoding	pycocoa.octypes-module.html#split_encoding
 pycocoa.getters.get_selectornameof	pycocoa.getters-module.html#get_selectornameof
 pycocoa.getters.get_classnameof	pycocoa.getters-module.html#get_classnameof
-pycocoa.getters._SEL_t_cache_L1	pycocoa.getters-module.html#_SEL_t_cache_L1
-pycocoa.getters._SEL_t_cache_L2	pycocoa.getters-module.html#_SEL_t_cache_L2
+pycocoa.getters.libobjc	pycocoa.getters-module.html#libobjc
 pycocoa.getters.missing	pycocoa.getters-module.html#missing
 pycocoa.getters.get_superclassof	pycocoa.getters-module.html#get_superclassof
 pycocoa.getters.get_method	pycocoa.getters-module.html#get_method
@@ -1003,7 +1002,6 @@ pycocoa.utils._text_title2	pycocoa.utils-module.html#_text_title2
 pycocoa.utils.bytes2repr	pycocoa.utils-module.html#bytes2repr
 pycocoa.utils.iterbytes	pycocoa.utils-module.html#iterbytes
 pycocoa.utils._allisting	pycocoa.utils-module.html#_allisting
-pycocoa.utils.clip	pycocoa.utils-module.html#clip
 pycocoa.utils.printf	pycocoa.utils-module.html#printf
 pycocoa.utils._ByteStrs	pycocoa.utils-module.html#_ByteStrs
 pycocoa.utils.str2bytes	pycocoa.utils-module.html#str2bytes
@@ -1011,7 +1009,7 @@ pycocoa.utils.lambda1	pycocoa.utils-module.html#lambda1
 pycocoa.utils.bytes2str	pycocoa.utils-module.html#bytes2str
 pycocoa.utils.name2objc	pycocoa.utils-module.html#name2objc
 pycocoa.utils.property2	pycocoa.utils-module.html#property2
-pycocoa.utils.gcd	pycocoa.utils-module.html#gcd
+pycocoa.utils.clip	pycocoa.utils-module.html#clip
 pycocoa.utils.__package__	pycocoa.utils-module.html#__package__
 pycocoa.utils.inst2strepr	pycocoa.utils-module.html#inst2strepr
 pycocoa.utils._Types	pycocoa.utils-module.html#_Types
@@ -1023,6 +1021,7 @@ pycocoa.utils._int2	pycocoa.utils-module.html#_int2
 pycocoa.utils.flint	pycocoa.utils-module.html#flint
 pycocoa.utils.type2strepr	pycocoa.utils-module.html#type2strepr
 pycocoa.utils.isinstanceOf	pycocoa.utils-module.html#isinstanceOf
+pycocoa.utils.gcd	pycocoa.utils-module.html#gcd
 pycocoa.utils._exports	pycocoa.utils-module.html#_exports
 pycocoa.utils._Ints	pycocoa.utils-module.html#_Ints
 pycocoa.utils._Bytes	pycocoa.utils-module.html#_Bytes
@@ -1901,6 +1900,16 @@ pycocoa.tuples.Tuple.insert	pycocoa.tuples.Tuple-class.html#insert
 pycocoa.tuples.Tuple.__reversed__	pycocoa.tuples.Tuple-class.html#__reversed__
 pycocoa.tuples.Tuple.clear	pycocoa.tuples.Tuple-class.html#clear
 pycocoa.tuples.Tuple.__setitem__	pycocoa.tuples.Tuple-class.html#__setitem__
+pycocoa.utils.Cache2	pycocoa.utils.Cache2-class.html
+pycocoa.utils.Cache2.pop	pycocoa.utils.Cache2-class.html#pop
+pycocoa.utils.Cache2.__init__	pycocoa.utils.Cache2-class.html#__init__
+pycocoa.utils.Cache2.dict2	pycocoa.utils.Cache2-class.html#dict2
+pycocoa.utils.Cache2.__getitem__	pycocoa.utils.Cache2-class.html#__getitem__
+pycocoa.utils.Cache2.get	pycocoa.utils.Cache2-class.html#get
+pycocoa.utils.Cache2.update	pycocoa.utils.Cache2-class.html#update
+pycocoa.utils.Cache2.__setitem__	pycocoa.utils.Cache2-class.html#__setitem__
+pycocoa.utils.Cache2.popitem	pycocoa.utils.Cache2-class.html#popitem
+pycocoa.utils.Cache2.limit2	pycocoa.utils.Cache2-class.html#limit2
 pycocoa.windows.AutoResizeError	pycocoa.windows.AutoResizeError-class.html
 pycocoa.windows.MediaWindow	pycocoa.windows.MediaWindow-class.html
 pycocoa.windows.Window._ratio	pycocoa.windows.Window-class.html#_ratio

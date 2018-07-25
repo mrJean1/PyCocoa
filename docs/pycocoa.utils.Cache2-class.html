@@ -3,7 +3,7 @@
           "DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
 <head>
-  <title>pycocoa.dicts.Dict</title>
+  <title>pycocoa.utils.Cache2</title>
   <link rel="stylesheet" href="epydoc.css" type="text/css" />
   <script type="text/javascript" src="epydoc.js"></script>
 </head>
@@ -43,8 +43,8 @@
     <td width="100%">
       <span class="breadcrumbs">
         <a href="pycocoa-module.html">Package&nbsp;pycocoa</a> ::
-        <a href="pycocoa.dicts-module.html">Module&nbsp;dicts</a> ::
-        Class&nbsp;Dict
+        <a href="pycocoa.utils-module.html">Module&nbsp;utils</a> ::
+        Class&nbsp;Cache2
       </span>
     </td>
     <td>
@@ -52,27 +52,30 @@
         <!-- hide/show private -->
         <tr><td align="right"><span class="options"
             >[<a href="frames.html" target="_top">frames</a
-            >]&nbsp;|&nbsp;<a href="pycocoa.dicts.Dict-class.html"
+            >]&nbsp;|&nbsp;<a href="pycocoa.utils.Cache2-class.html"
             target="_top">no&nbsp;frames</a>]</span></td></tr>
       </table>
     </td>
   </tr>
 </table>
 <!-- ==================== CLASS DESCRIPTION ==================== -->
-<h1 class="epydoc">Class Dict</h1><p class="nomargin-top"></p>
+<h1 class="epydoc">Class Cache2</h1><p class="nomargin-top"></p>
 <pre class="base-tree">
-  object --+        
-           |        
-bases._Type0 --+    
-               |    
-      <a href="pycocoa.dicts.FrozenDict-class.html">FrozenDict</a> --+
-                   |
-                  <strong class="uidshort">Dict</strong>
+object --+    
+         |    
+      dict --+
+             |
+            <strong class="uidshort">Cache2</strong>
 </pre>
 
 <hr />
-<p>Python <code>dict</code> Type, wrapping an ObjC 
-  NSMutableDictionary.</p>
+<p>Two-level cache implemented by two <code>dict</code>s, a primary 
+  level-1 <code>dict</code> and a secondary level-2 <code>dict</code>.</p>
+  <p>Frequently gotten key-value items are elevated into this, the primary 
+  level-1 <code>dict</code>.  Newly created key-value pairs are entered 
+  into the secondary level-2 <code>dict</code>.</p>
+  <p>The secondary level-2 <code>dict</code> can optionally be limited in 
+  size to avoid excessive growth.</p>
 
 <!-- ==================== INSTANCE METHODS ==================== -->
 <a name="section-InstanceMethods"></a>
@@ -84,12 +87,17 @@ bases._Type0 --+
 </tr>
 <tr>
     <td width="15%" align="right" valign="top" class="summary">
-      <span class="summary-type">&nbsp;</span>
+      <span class="summary-type"><pre class="literalblock">
+new empty dictionary
+
+</pre></span>
     </td><td class="summary">
       <table width="100%" cellpadding="0" cellspacing="0" border="0">
         <tr>
-          <td><span class="summary-sig"><a href="pycocoa.dicts.Dict-class.html#__iter__" class="summary-sig-name">__iter__</a>(<span class="summary-sig-arg">self</span>)</span><br />
-      Yield the keys, like <code>dict.keys</code>.</td>
+          <td><span class="summary-sig"><a href="pycocoa.utils.Cache2-class.html#__init__" class="summary-sig-name">__init__</a>(<span class="summary-sig-arg">self</span>,
+        <span class="summary-sig-arg">limit2</span>=<span class="summary-sig-default">None</span>)</span><br />
+      New <a href="pycocoa.utils.Cache2-class.html" 
+      class="link">Cache2</a>, optionally limited in size.</td>
           <td align="right" valign="top">
             
             
@@ -105,29 +113,9 @@ bases._Type0 --+
     </td><td class="summary">
       <table width="100%" cellpadding="0" cellspacing="0" border="0">
         <tr>
-          <td><span class="summary-sig"><a href="pycocoa.dicts.Dict-class.html#__init__" class="summary-sig-name">__init__</a>(<span class="summary-sig-arg">self</span>,
-        <span class="summary-sig-arg">*ns_dict</span>,
-        <span class="summary-sig-arg">**kwds</span>)</span><br />
-      New mutable <a href="pycocoa.dicts.Dict-class.html" 
-      class="link">Dict</a>, like <code>dict.__init__</code>.</td>
-          <td align="right" valign="top">
-            
-            
-          </td>
-        </tr>
-      </table>
-      
-    </td>
-  </tr>
-<tr>
-    <td width="15%" align="right" valign="top" class="summary">
-      <span class="summary-type">&nbsp;</span>
-    </td><td class="summary">
-      <table width="100%" cellpadding="0" cellspacing="0" border="0">
-        <tr>
-          <td><span class="summary-sig"><a href="pycocoa.dicts.Dict-class.html#__delitem__" class="summary-sig-name">__delitem__</a>(<span class="summary-sig-arg">self</span>,
+          <td><span class="summary-sig"><a href="pycocoa.utils.Cache2-class.html#__getitem__" class="summary-sig-name">__getitem__</a>(<span class="summary-sig-arg">self</span>,
         <span class="summary-sig-arg">key</span>)</span><br />
-      Remove an item, like <code>dict.__delitem__</code>.</td>
+      x[y]</td>
           <td align="right" valign="top">
             
             
@@ -143,9 +131,10 @@ bases._Type0 --+
     </td><td class="summary">
       <table width="100%" cellpadding="0" cellspacing="0" border="0">
         <tr>
-          <td><span class="summary-sig"><a href="pycocoa.dicts.Dict-class.html#__setitem__" class="summary-sig-name">__setitem__</a>(<span class="summary-sig-arg">self</span>,
+          <td><span class="summary-sig"><a href="pycocoa.utils.Cache2-class.html#__setitem__" class="summary-sig-name">__setitem__</a>(<span class="summary-sig-arg">self</span>,
         <span class="summary-sig-arg">key</span>,
-        <span class="summary-sig-arg">value</span>)</span></td>
+        <span class="summary-sig-arg">value</span>)</span><br />
+      x[i]=y</td>
           <td align="right" valign="top">
             
             
@@ -157,48 +146,14 @@ bases._Type0 --+
   </tr>
 <tr>
     <td width="15%" align="right" valign="top" class="summary">
-      <span class="summary-type">&nbsp;</span>
+      <span class="summary-type">D[k] if k in D, else d</span>
     </td><td class="summary">
       <table width="100%" cellpadding="0" cellspacing="0" border="0">
         <tr>
-          <td><span class="summary-sig"><a href="pycocoa.dicts.Dict-class.html#clear" class="summary-sig-name">clear</a>(<span class="summary-sig-arg">self</span>)</span><br />
-      Remove all items, like <code>dict.clear</code>.</td>
-          <td align="right" valign="top">
-            
-            
-          </td>
-        </tr>
-      </table>
-      
-    </td>
-  </tr>
-<tr>
-    <td width="15%" align="right" valign="top" class="summary">
-      <span class="summary-type">&nbsp;</span>
-    </td><td class="summary">
-      <table width="100%" cellpadding="0" cellspacing="0" border="0">
-        <tr>
-          <td><span class="summary-sig"><a href="pycocoa.dicts.Dict-class.html#copy" class="summary-sig-name">copy</a>(<span class="summary-sig-arg">self</span>)</span><br />
-      Make a shallow copy.</td>
-          <td align="right" valign="top">
-            
-            
-          </td>
-        </tr>
-      </table>
-      
-    </td>
-  </tr>
-<tr>
-    <td width="15%" align="right" valign="top" class="summary">
-      <span class="summary-type">&nbsp;</span>
-    </td><td class="summary">
-      <table width="100%" cellpadding="0" cellspacing="0" border="0">
-        <tr>
-          <td><span class="summary-sig"><a href="pycocoa.dicts.Dict-class.html#pop" class="summary-sig-name">pop</a>(<span class="summary-sig-arg">self</span>,
+          <td><span class="summary-sig"><a href="pycocoa.utils.Cache2-class.html#get" class="summary-sig-name">get</a>(<span class="summary-sig-arg">self</span>,
         <span class="summary-sig-arg">key</span>,
-        <span class="summary-sig-arg">default</span>=<span class="summary-sig-default">missing()</span>)</span><br />
-      Remove an item, like <code>dict.pop</code>.</td>
+        <span class="summary-sig-arg">default</span>=<span class="summary-sig-default">None</span>)</span><br />
+      Return the specified item's value.</td>
           <td align="right" valign="top">
             
             
@@ -210,15 +165,14 @@ bases._Type0 --+
   </tr>
 <tr>
     <td width="15%" align="right" valign="top" class="summary">
-      <span class="summary-type">&nbsp;</span>
+      <span class="summary-type">v, remove specified key and return the corresponding value</span>
     </td><td class="summary">
       <table width="100%" cellpadding="0" cellspacing="0" border="0">
         <tr>
-          <td><span class="summary-sig"><a href="pycocoa.dicts.Dict-class.html#setdefault" class="summary-sig-name">setdefault</a>(<span class="summary-sig-arg">self</span>,
+          <td><span class="summary-sig"><a href="pycocoa.utils.Cache2-class.html#pop" class="summary-sig-name">pop</a>(<span class="summary-sig-arg">self</span>,
         <span class="summary-sig-arg">key</span>,
-        <span class="summary-sig-arg">default</span>=<span class="summary-sig-default">missing()</span>)</span><br />
-      Get/set an item, like <code>dict.setdefault</code>, except the 
-      <i>default</i> keyword argument is required.</td>
+        <span class="summary-sig-arg">*default</span>)</span><br />
+      Remove the specified item.</td>
           <td align="right" valign="top">
             
             
@@ -230,18 +184,32 @@ bases._Type0 --+
   </tr>
 <tr>
     <td width="15%" align="right" valign="top" class="summary">
-      <span class="summary-type">&nbsp;</span>
+      <span class="summary-type">(k, v), remove and return some (key, value) pair as a</span>
     </td><td class="summary">
       <table width="100%" cellpadding="0" cellspacing="0" border="0">
         <tr>
-          <td><span class="summary-sig"><a href="pycocoa.dicts.Dict-class.html#update" class="summary-sig-name">update</a>(<span class="summary-sig-arg">self</span>,
+          <td><span class="summary-sig"><a href="pycocoa.utils.Cache2-class.html#popitem" class="summary-sig-name">popitem</a>(<span class="summary-sig-arg">self</span>)</span><br />
+      Remove the most recently entered item from the secondary level-2 
+      <code>dict</code>.</td>
+          <td align="right" valign="top">
+            
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">None</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a href="pycocoa.utils.Cache2-class.html#update" class="summary-sig-name">update</a>(<span class="summary-sig-arg">self</span>,
         <span class="summary-sig-arg">*other</span>,
         <span class="summary-sig-arg">**kwds</span>)</span><br />
-      Update, like <code>dict.update</code>, except <i>other</i> must be a 
-      <code>dict</code>, <a href="pycocoa.dicts.Dict-class.html" 
-      class="link">Dict</a> or <a 
-      href="pycocoa.dicts.FrozenDict-class.html" 
-      class="link">FrozenDict</a>.</td>
+      Update this cache with additional items.</td>
           <td align="right" valign="top">
             
             
@@ -253,33 +221,61 @@ bases._Type0 --+
   </tr>
   <tr>
     <td colspan="2" class="summary">
-    <p class="indent-wrapped-lines"><b>Inherited from <code><a href="pycocoa.dicts.FrozenDict-class.html">FrozenDict</a></code></b>:
-      <code><a href="pycocoa.dicts.FrozenDict-class.html#__contains__">__contains__</a></code>,
-      <code><a href="pycocoa.dicts.FrozenDict-class.html#__eq__">__eq__</a></code>,
-      <code><a href="pycocoa.dicts.FrozenDict-class.html#__getitem__">__getitem__</a></code>,
-      <code><a href="pycocoa.dicts.FrozenDict-class.html#__len__">__len__</a></code>,
-      <code><a href="pycocoa.dicts.FrozenDict-class.html#__ne__">__ne__</a></code>,
-      <code><a href="pycocoa.dicts.FrozenDict-class.html#get">get</a></code>,
-      <code><a href="pycocoa.dicts.FrozenDict-class.html#items">items</a></code>,
-      <code><a href="pycocoa.dicts.FrozenDict-class.html#keys">keys</a></code>,
-      <code><a href="pycocoa.dicts.FrozenDict-class.html#values">values</a></code>
-      </p>
-    <p class="indent-wrapped-lines"><b>Inherited from <code>bases._Type0</code></b>:
+    <p class="indent-wrapped-lines"><b>Inherited from <code>dict</code></b>:
+      <code>__cmp__</code>,
+      <code>__contains__</code>,
+      <code>__delitem__</code>,
+      <code>__eq__</code>,
+      <code>__ge__</code>,
+      <code>__getattribute__</code>,
+      <code>__gt__</code>,
+      <code>__iter__</code>,
+      <code>__le__</code>,
+      <code>__len__</code>,
+      <code>__lt__</code>,
+      <code>__ne__</code>,
+      <code>__new__</code>,
       <code>__repr__</code>,
-      <code>__str__</code>,
-      <code>type2strepr</code>
+      <code>__sizeof__</code>,
+      <code>clear</code>,
+      <code>copy</code>,
+      <code>fromkeys</code>,
+      <code>has_key</code>,
+      <code>items</code>,
+      <code>iteritems</code>,
+      <code>iterkeys</code>,
+      <code>itervalues</code>,
+      <code>keys</code>,
+      <code>setdefault</code>,
+      <code>values</code>,
+      <code>viewitems</code>,
+      <code>viewkeys</code>,
+      <code>viewvalues</code>
       </p>
     <p class="indent-wrapped-lines"><b>Inherited from <code>object</code></b>:
       <code>__delattr__</code>,
       <code>__format__</code>,
-      <code>__getattribute__</code>,
-      <code>__hash__</code>,
-      <code>__new__</code>,
       <code>__reduce__</code>,
       <code>__reduce_ex__</code>,
       <code>__setattr__</code>,
-      <code>__sizeof__</code>,
+      <code>__str__</code>,
       <code>__subclasshook__</code>
+      </p>
+    </td>
+  </tr>
+</table>
+<!-- ==================== CLASS VARIABLES ==================== -->
+<a name="section-ClassVariables"></a>
+<table class="summary" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr bgcolor="#70b0f0" class="table-header">
+  <td align="left" colspan="2" class="table-header">
+    <span class="table-header">Class Variables</span></td>
+</tr>
+  <tr>
+    <td colspan="2" class="summary">
+    <p class="indent-wrapped-lines"><b>Inherited from <code>dict</code></b>:
+      <code>__hash__</code>
       </p>
     </td>
   </tr>
@@ -292,12 +288,25 @@ bases._Type0 --+
   <td align="left" colspan="2" class="table-header">
     <span class="table-header">Properties</span></td>
 </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="pycocoa.utils.Cache2-class.html#dict2" class="summary-name">dict2</a><br />
+      Get the secondary level-2 <code>dict</code>.
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="pycocoa.utils.Cache2-class.html#limit2" class="summary-name">limit2</a><br />
+      Get the secondary level-2 <code>dict</code> size limit 
+      (<code>int</code> or <code>None</code>).
+    </td>
+  </tr>
   <tr>
     <td colspan="2" class="summary">
-    <p class="indent-wrapped-lines"><b>Inherited from <code>bases._Type0</code></b>:
-      <code>NS</code>,
-      <code>NSDelegate</code>
-      </p>
     <p class="indent-wrapped-lines"><b>Inherited from <code>object</code></b>:
       <code>__class__</code>
       </p>
@@ -313,28 +322,6 @@ bases._Type0 --+
     <span class="table-header">Method Details</span></td>
 </tr>
 </table>
-<a name="__iter__"></a>
-<div>
-<table class="details" border="1" cellpadding="3"
-       cellspacing="0" width="100%" bgcolor="white">
-<tr><td>
-  <table width="100%" cellpadding="0" cellspacing="0" border="0">
-  <tr valign="top"><td>
-  <h3 class="epydoc"><span class="sig"><span class="sig-name">__iter__</span>(<span class="sig-arg">self</span>)</span>
-  </h3>
-  </td><td align="right" valign="top"
-    >&nbsp;
-    </td>
-  </tr></table>
-  
-  <p>Yield the keys, like <code>dict.keys</code>.</p>
-  <dl class="fields">
-    <dt>Overrides:
-        <a href="pycocoa.dicts.FrozenDict-class.html#keys">FrozenDict.keys</a>
-    </dt>
-  </dl>
-</td></tr></table>
-</div>
 <a name="__init__"></a>
 <div>
 <table class="details" border="1" cellpadding="3"
@@ -343,8 +330,7 @@ bases._Type0 --+
   <table width="100%" cellpadding="0" cellspacing="0" border="0">
   <tr valign="top"><td>
   <h3 class="epydoc"><span class="sig"><span class="sig-name">__init__</span>(<span class="sig-arg">self</span>,
-        <span class="sig-arg">*ns_dict</span>,
-        <span class="sig-arg">**kwds</span>)</span>
+        <span class="sig-arg">limit2</span>=<span class="sig-default">None</span>)</span>
     <br /><em class="fname">(Constructor)</em>
   </h3>
   </td><td align="right" valign="top"
@@ -352,39 +338,45 @@ bases._Type0 --+
     </td>
   </tr></table>
   
-  <p>New mutable <a href="pycocoa.dicts.Dict-class.html" 
-  class="link">Dict</a>, like <code>dict.__init__</code>.</p>
+  <p>New <a href="pycocoa.utils.Cache2-class.html" class="link">Cache2</a>,
+  optionally limited in size.</p>
   <dl class="fields">
+    <dt>Parameters:</dt>
+    <dd><ul class="nomargin-top">
+        <li><strong class="pname"><code>limit2</code></strong> - Size limit for the secondary level-2 <code>dict</code> 
+          (<code>int</code> or <code>None</code>).</li>
+    </ul></dd>
+    <dt>Returns: <pre class="literalblock">
+new empty dictionary
+
+</pre></dt>
     <dt>Overrides:
         object.__init__
     </dt>
   </dl>
 </td></tr></table>
 </div>
-<a name="__delitem__"></a>
+<a name="__getitem__"></a>
 <div>
 <table class="details" border="1" cellpadding="3"
        cellspacing="0" width="100%" bgcolor="white">
 <tr><td>
   <table width="100%" cellpadding="0" cellspacing="0" border="0">
   <tr valign="top"><td>
-  <h3 class="epydoc"><span class="sig"><span class="sig-name">__delitem__</span>(<span class="sig-arg">self</span>,
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">__getitem__</span>(<span class="sig-arg">self</span>,
         <span class="sig-arg">key</span>)</span>
-    <br /><em class="fname">(Index deletion operator)</em>
+    <br /><em class="fname">(Indexing operator)</em>
   </h3>
   </td><td align="right" valign="top"
     >&nbsp;
     </td>
   </tr></table>
   
-  <p>Remove an item, like <code>dict.__delitem__</code>.</p>
+  <p>x[y]</p>
   <dl class="fields">
-    <dt>Raises:</dt>
-    <dd><ul class="nomargin-top">
-        <li><code><strong class='fraise'>KeyError</strong></code> - No such <i>key</i>.</li>
-    </ul></dd>
     <dt>Overrides:
-        <a href="pycocoa.dicts.FrozenDict-class.html#__delitem__">FrozenDict.__delitem__</a>
+        dict.__getitem__
+        <dd><em class="note">(inherited documentation)</em></dd>
     </dt>
   </dl>
 </td></tr></table>
@@ -406,57 +398,44 @@ bases._Type0 --+
     </td>
   </tr></table>
   
-  
+  <p>x[i]=y</p>
   <dl class="fields">
     <dt>Overrides:
-        <a href="pycocoa.dicts.FrozenDict-class.html#__setitem__">FrozenDict.__setitem__</a>
+        dict.__setitem__
+        <dd><em class="note">(inherited documentation)</em></dd>
     </dt>
   </dl>
 </td></tr></table>
 </div>
-<a name="clear"></a>
+<a name="get"></a>
 <div>
 <table class="details" border="1" cellpadding="3"
        cellspacing="0" width="100%" bgcolor="white">
 <tr><td>
   <table width="100%" cellpadding="0" cellspacing="0" border="0">
   <tr valign="top"><td>
-  <h3 class="epydoc"><span class="sig"><span class="sig-name">clear</span>(<span class="sig-arg">self</span>)</span>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">get</span>(<span class="sig-arg">self</span>,
+        <span class="sig-arg">key</span>,
+        <span class="sig-arg">default</span>=<span class="sig-default">None</span>)</span>
   </h3>
   </td><td align="right" valign="top"
     >&nbsp;
     </td>
   </tr></table>
   
-  <p>Remove all items, like <code>dict.clear</code>.</p>
+  <p>Return the specified item's value.</p>
   <dl class="fields">
+    <dt>Parameters:</dt>
+    <dd><ul class="nomargin-top">
+        <li><strong class="pname"><code>key</code></strong> - The item's key (<code>any</code>).</li>
+        <li><strong class="pname"><code>default</code></strong> - Default value for missing item (<code>any</code>).</li>
+    </ul></dd>
+    <dt>Returns: D[k] if k in D, else d</dt>
+        <dd><code>Cache2</code><i>[key]</i> if <i>key</i> in 
+          <code>Cache2</code> else <i>default</i> or <code>None</code> if 
+          no <i>default</i> specified.</dd>
     <dt>Overrides:
-        <a href="pycocoa.dicts.FrozenDict-class.html#clear">FrozenDict.clear</a>
-    </dt>
-  </dl>
-</td></tr></table>
-</div>
-<a name="copy"></a>
-<div>
-<table class="details" border="1" cellpadding="3"
-       cellspacing="0" width="100%" bgcolor="white">
-<tr><td>
-  <table width="100%" cellpadding="0" cellspacing="0" border="0">
-  <tr valign="top"><td>
-  <h3 class="epydoc"><span class="sig"><span class="sig-name">copy</span>(<span class="sig-arg">self</span>)</span>
-  </h3>
-  </td><td align="right" valign="top"
-    >&nbsp;
-    </td>
-  </tr></table>
-  
-  <p>Make a shallow copy.</p>
-  <dl class="fields">
-    <dt>Returns:</dt>
-        <dd>The copy (<a href="pycocoa.dicts.Dict-class.html" 
-          class="link">Dict</a>).</dd>
-    <dt>Overrides:
-        <a href="pycocoa.dicts.FrozenDict-class.html#copy">FrozenDict.copy</a>
+        dict.get
     </dt>
   </dl>
 </td></tr></table>
@@ -470,50 +449,69 @@ bases._Type0 --+
   <tr valign="top"><td>
   <h3 class="epydoc"><span class="sig"><span class="sig-name">pop</span>(<span class="sig-arg">self</span>,
         <span class="sig-arg">key</span>,
-        <span class="sig-arg">default</span>=<span class="sig-default">missing()</span>)</span>
+        <span class="sig-arg">*default</span>)</span>
   </h3>
   </td><td align="right" valign="top"
     >&nbsp;
     </td>
   </tr></table>
   
-  <p>Remove an item, like <code>dict.pop</code>.</p>
+  <p>Remove the specified item.</p>
   <dl class="fields">
+    <dt>Parameters:</dt>
+    <dd><ul class="nomargin-top">
+        <li><strong class="pname"><code>key</code></strong> - The item's key (<code>any</code>).</li>
+        <li><strong class="pname"><code>default</code></strong> - Optional default for missing item (<code>any</code>).</li>
+    </ul></dd>
+    <dt>Returns: v, remove specified key and return the corresponding value</dt>
+        <dd><code>Cache2</code><i>[key]</i> if <i>key</i> in 
+          <code>Cache2</code> else <i>default</i> if specified.</dd>
     <dt>Raises:</dt>
     <dd><ul class="nomargin-top">
-        <li><code><strong class='fraise'>KeyError</strong></code> - No such <i>key</i> and no <i>default</i> provided.</li>
+        <li><code><strong class='fraise'>KeyError</strong></code> - No such item <i>key</i> and no <i>default</i> given.</li>
     </ul></dd>
     <dt>Overrides:
-        <a href="pycocoa.dicts.FrozenDict-class.html#pop">FrozenDict.pop</a>
+        dict.pop
     </dt>
   </dl>
-</td></tr></table>
+<div class="fields">      <p><strong>Note:</strong>
+        The item is removed from the primary level-1 <code>dict</code> 
+        first and if missing from secondary level-2 <code>dict</code>.
+      </p>
+</div></td></tr></table>
 </div>
-<a name="setdefault"></a>
+<a name="popitem"></a>
 <div>
 <table class="details" border="1" cellpadding="3"
        cellspacing="0" width="100%" bgcolor="white">
 <tr><td>
   <table width="100%" cellpadding="0" cellspacing="0" border="0">
   <tr valign="top"><td>
-  <h3 class="epydoc"><span class="sig"><span class="sig-name">setdefault</span>(<span class="sig-arg">self</span>,
-        <span class="sig-arg">key</span>,
-        <span class="sig-arg">default</span>=<span class="sig-default">missing()</span>)</span>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">popitem</span>(<span class="sig-arg">self</span>)</span>
   </h3>
   </td><td align="right" valign="top"
     >&nbsp;
     </td>
   </tr></table>
   
-  <p>Get/set an item, like <code>dict.setdefault</code>, except the 
-  <i>default</i> keyword argument is required.</p>
+  <p>Remove the most recently entered item from the secondary level-2 
+  <code>dict</code>.</p>
   <dl class="fields">
+    <dt>Returns: (k, v), remove and return some (key, value) pair as a</dt>
+        <dd>2-Tuple (key, value).</dd>
     <dt>Raises:</dt>
     <dd><ul class="nomargin-top">
-        <li><code><strong class='fraise'>ValueError</strong></code> - No <i>default</i> provided for new <i>key</i>.</li>
+        <li><code><strong class='fraise'>KeywordError</strong></code> - Empty secondary level-2 <code>dict</code>.</li>
     </ul></dd>
+    <dt>Overrides:
+        dict.popitem
+    </dt>
   </dl>
-</td></tr></table>
+<div class="fields">      <p><strong>Note:</strong>
+        <code>Cache2</code><i>.popitem()</i> is equivalent to 
+        <code>Cache2</code><i>.dict2.popitem()</i>.
+      </p>
+</div></td></tr></table>
 </div>
 <a name="update"></a>
 <div>
@@ -531,20 +529,61 @@ bases._Type0 --+
     </td>
   </tr></table>
   
-  <p>Update, like <code>dict.update</code>, except <i>other</i> must be a 
-  <code>dict</code>, <a href="pycocoa.dicts.Dict-class.html" 
-  class="link">Dict</a> or <a href="pycocoa.dicts.FrozenDict-class.html" 
-  class="link">FrozenDict</a>.</p>
+  <p>Update this cache with additional items.</p>
   <dl class="fields">
-    <dt>Raises:</dt>
+    <dt>Parameters:</dt>
     <dd><ul class="nomargin-top">
-        <li><code><strong class='fraise'>TypeError</strong></code> - Invalid type of <i>other</i>.</li>
+        <li><strong class="pname"><code>other</code></strong> - Iterable of 2-tuples (key, value) or <code>dict</code>.</li>
+        <li><strong class="pname"><code>kwds</code></strong> - Key=value arguments.</li>
     </ul></dd>
+    <dt>Returns: None</dt>
+    <dt>Overrides:
+        dict.update
+    </dt>
   </dl>
-<div class="fields">      <p><strong>See Also:</strong>
-        &lt;http://Docs.Python.org/3/library/stdtypes.html#dict.update&gt;
-      </p>
-</div></td></tr></table>
+</td></tr></table>
+</div>
+<br />
+<!-- ==================== PROPERTY DETAILS ==================== -->
+<a name="section-PropertyDetails"></a>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr bgcolor="#70b0f0" class="table-header">
+  <td align="left" colspan="2" class="table-header">
+    <span class="table-header">Property Details</span></td>
+</tr>
+</table>
+<a name="dict2"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <h3 class="epydoc">dict2</h3>
+  <p>Get the secondary level-2 <code>dict</code>.</p>
+  <dl class="fields">
+    <dt>Get Method:</dt>
+    <dd class="value"><span class="summary-sig">dict2(<span class="summary-sig-arg">self</span>)</span>
+        - Get the secondary level-2 <code>dict</code>.
+    </dd>
+  </dl>
+</td></tr></table>
+</div>
+<a name="limit2"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <h3 class="epydoc">limit2</h3>
+  <p>Get the secondary level-2 <code>dict</code> size limit 
+  (<code>int</code> or <code>None</code>).</p>
+  <dl class="fields">
+    <dt>Get Method:</dt>
+    <dd class="value"><span class="summary-sig">limit2(<span class="summary-sig-arg">self</span>)</span>
+        - Get the secondary level-2 <code>dict</code> size limit (<code>int</code> or
+<code>None</code>).
+    </dd>
+  </dl>
+</td></tr></table>
 </div>
 <br />
 <!-- ==================== NAVIGATION BAR ==================== -->
@@ -578,7 +617,7 @@ bases._Type0 --+
 <table border="0" cellpadding="0" cellspacing="0" width="100%%">
   <tr>
     <td align="left" class="footer">
-    Generated by Epydoc 3.0.1 on Wed Jul 25 12:29:45 2018
+    Generated by Epydoc 3.0.1 on Wed Jul 25 12:29:47 2018
     </td>
     <td align="right" class="footer">
       <a target="mainFrame" href="http://epydoc.sourceforge.net"

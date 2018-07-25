@@ -89,8 +89,8 @@
   target="_top">Python-VLC</a> 2.2.6, 3.0.1, 3.0.2 and 3.0.3 (with the 
   compatible <a href="http://www.VideoLan.org/vlc" target="_top">VLC 
   App</a>), but only on macOS 10.13.3, 10.13.4, 10.13.5 or 10.13.6 High 
-  Sierra.  PyCocoa has <i>not been tested</i> on iOS nor with 32-bit Python
-  and <i>does not work</i> using <a href="http://PyPy.org" 
+  Sierra.  PyCocoa has <i>not been tested</i> on iOS nor 32-bit Python and 
+  <i>does not work</i> with <a href="http://PyPy.org" 
   target="_top">PyPy</a> nor with <a 
   href="http://Software.Intel.com/en-us/distribution-for-python" 
   target="_top">Intel(R) Python</a>.</p>
@@ -174,7 +174,7 @@
 
 <hr />
 <div class="fields">      <p><strong>Version:</strong>
-        18.07.23
+        18.07.24
       </p>
 </div><!-- ==================== SUBMODULES ==================== -->
 <a name="section-Submodules"></a>
@@ -417,6 +417,16 @@
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
         <a href="ctypes.c_uint-class.html" class="summary-name">CTFontSymbolicTraits_t</a>
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="pycocoa.utils.Cache2-class.html" class="summary-name">Cache2</a><br />
+      Two-level cache implemented by two <code>dict</code>s, a primary 
+        level-1 <code>dict</code> and a secondary level-2 
+        <code>dict</code>.
     </td>
   </tr>
 <tr>
@@ -4060,15 +4070,15 @@ mUIFont', size=13, traits='Italic', weight=5),
     <td width="15%" align="right" valign="top" class="summary">
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
-        <a href="pycocoa-module.html#NSMain" class="summary-name">NSMain</a> = <code title="NSMain.Application=NSApplication(&lt;Id_t at 0x1148d6d40&gt;) of 0x7f90aed7e\
-220,
-      .BooleanNO=NSBoolean(&lt;Id_t at 0x1148d63b0&gt;) of 0x7fff985f53f8,
-      .BooleanYES=NSBoolean(&lt;Id_t at 0x1148d14d0&gt;) of 0x7fff985f53e8,
-      .Bundle=NSBundle(&lt;Id_t at 0x1148d1170&gt;) of 0x7f90aee24390,
+        <a href="pycocoa-module.html#NSMain" class="summary-name">NSMain</a> = <code title="NSMain.Application=NSApplication(&lt;Id_t at 0x1088add40&gt;) of 0x7f9a1bcb0\
+2d0,
+      .BooleanNO=NSBoolean(&lt;Id_t at 0x1088ad9e0&gt;) of 0x7fff985f53f8,
+      .BooleanYES=NSBoolean(&lt;Id_t at 0x1088c94d0&gt;) of 0x7fff985f53e8,
+      .Bundle=NSBundle(&lt;Id_t at 0x1088c9b00&gt;) of 0x7f9a1be92120,
       .BundleName=NSConstantString('CFBundleName'),
-      .FontManager=NSFontManager(&lt;Id_t at 0x1145f04d0&gt;) of 0x7f90b1332\
-8d0,
-...">NSMain.Application=NSApplication(&lt;Id_t at 0x1148d6d40<code class="variable-ellipsis">...</code></code>
+      .FontManager=NSFontManager(&lt;Id_t at 0x108829950&gt;) of 0x7f9a1e3b6\
+330,
+...">NSMain.Application=NSApplication(&lt;Id_t at 0x1088add40<code class="variable-ellipsis">...</code></code>
     </td>
   </tr>
 <tr>
@@ -4682,7 +4692,7 @@ mUIFont', size=13, traits='Italic', weight=5),
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
         <a href="pycocoa-module.html#libAppKit" class="summary-name">libAppKit</a> = <code title="&lt;CDLL '/System/Library/Frameworks/AppKit.framework/AppKit', handle 7f9\
-0aed0c7d0 at 110a1f750&gt;">&lt;CDLL '/System/Library/Frameworks/AppKit.framework<code class="variable-ellipsis">...</code></code>
+a1bdbe9d0 at 104d20a90&gt;">&lt;CDLL '/System/Library/Frameworks/AppKit.framework<code class="variable-ellipsis">...</code></code>
     </td>
   </tr>
 <tr>
@@ -4690,7 +4700,7 @@ mUIFont', size=13, traits='Italic', weight=5),
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
         <a href="pycocoa-module.html#libCF" class="summary-name">libCF</a> = <code title="&lt;CDLL '/System/Library/Frameworks/CoreFoundation.framework/CoreFoundat\
-ion', handle 110ecf800 at 110a08a10&gt;">&lt;CDLL '/System/Library/Frameworks/CoreFoundation.frame<code class="variable-ellipsis">...</code></code>
+ion', handle 10e434800 at 104d03d50&gt;">&lt;CDLL '/System/Library/Frameworks/CoreFoundation.frame<code class="variable-ellipsis">...</code></code>
     </td>
   </tr>
 <tr>
@@ -4698,7 +4708,7 @@ ion', handle 110ecf800 at 110a08a10&gt;">&lt;CDLL '/System/Library/Frameworks/Co
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
         <a href="pycocoa-module.html#libCT" class="summary-name">libCT</a> = <code title="&lt;CDLL '/System/Library/Frameworks/CoreText.framework/CoreText', handle\
- 7f90aed1abd0 at 110a2f8d0&gt;">&lt;CDLL '/System/Library/Frameworks/CoreText.framework/C<code class="variable-ellipsis">...</code></code>
+ 7f9a1bdc0db0 at 104d2bc10&gt;">&lt;CDLL '/System/Library/Frameworks/CoreText.framework/C<code class="variable-ellipsis">...</code></code>
     </td>
   </tr>
 <tr>
@@ -4706,14 +4716,14 @@ ion', handle 110ecf800 at 110a08a10&gt;">&lt;CDLL '/System/Library/Frameworks/Co
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
         <a href="pycocoa-module.html#libFoundation" class="summary-name">libFoundation</a> = <code title="&lt;CDLL '/System/Library/Frameworks/Foundation.framework/Foundation', ha\
-ndle 7f90aed19ba0 at 110a2ff10&gt;">&lt;CDLL '/System/Library/Frameworks/Foundation.f<code class="variable-ellipsis">...</code></code>
+ndle 7f9a1bdbfde0 at 104d37290&gt;">&lt;CDLL '/System/Library/Frameworks/Foundation.f<code class="variable-ellipsis">...</code></code>
     </td>
   </tr>
 <tr>
     <td width="15%" align="right" valign="top" class="summary">
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
-        <a href="pycocoa-module.html#libobjc" class="summary-name">libobjc</a> = <code title="&lt;CDLL '/usr/lib/libobjc.dylib', handle 110ed1680 at 110a2fd50&gt;">&lt;CDLL '/usr/lib/libobjc.dylib', handle 110ed1680 at <code class="variable-ellipsis">...</code></code>
+        <a href="pycocoa-module.html#libobjc" class="summary-name">libobjc</a> = <code title="&lt;CDLL '/usr/lib/libobjc.dylib', handle 10e436680 at 104d370d0&gt;">&lt;CDLL '/usr/lib/libobjc.dylib', handle 10e436680 at <code class="variable-ellipsis">...</code></code>
     </td>
   </tr>
 <tr>
@@ -4721,7 +4731,7 @@ ndle 7f90aed19ba0 at 110a2ff10&gt;">&lt;CDLL '/System/Library/Frameworks/Foundat
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
         <a href="pycocoa-module.html#libquartz" class="summary-name">libquartz</a> = <code title="&lt;CDLL '/System/Library/Frameworks/quartz.framework/quartz', handle 7f9\
-0aec00360 at 110a1f990&gt;">&lt;CDLL '/System/Library/Frameworks/quartz.framework<code class="variable-ellipsis">...</code></code>
+a1be443c0 at 104d20cd0&gt;">&lt;CDLL '/System/Library/Frameworks/quartz.framework<code class="variable-ellipsis">...</code></code>
     </td>
   </tr>
 <tr>
@@ -7714,7 +7724,7 @@ ndle 7f90aed19ba0 at 110a2ff10&gt;">&lt;CDLL '/System/Library/Frameworks/Foundat
   <dl class="fields">
     <dt>Parameters:</dt>
     <dd><ul class="nomargin-top">
-        <li><strong class="pname"><code>receiver</code></strong> - The recipient (<code>Object</code>).</li>
+        <li><strong class="pname"><code>receiver</code></strong> - The recipient (<code>Object</code>, <code>Id_t</code>, etc.).</li>
         <li><strong class="pname"><code>sel_name_</code></strong> - Message selector (<code>SEL_t</code>) or name (<code>str</code> 
           or <code>bytes</code>).</li>
         <li><strong class="pname"><code>args</code></strong> - Message arguments (<i>all positional</i>).</li>
@@ -7731,13 +7741,13 @@ ndle 7f90aed19ba0 at 110a2ff10&gt;">&lt;CDLL '/System/Library/Frameworks/Foundat
     </ul></dd>
   </dl>
 <div class="fields">      <p><strong>Note:</strong>
-        Use keyword arguments <i>restype=c_void_p</i> and 
-        <i>argtypes=[]</i> to specify the result and argument 
-        <code>ctypes</code>.  The <i>restype</i> defines the 
-        <code>ctype</code> for the result and <i>argtypes</i> is the list 
-        of <code>ctypes</code> for the message arguments only, 
-        <i>without</i> the <code>Id/self</code> and <code>SEL/cmd</code> 
-        arguments.
+        By default, the result and any arguments are <code>c_void_p</code> 
+        wrapped.  Use keyword arguments <i>restype=c_void_p</i> and 
+        <i>argtypes=[]</i> to change the defaults.  The <i>restype</i> 
+        defines the <code>ctypes</code> type for the returned result and 
+        <i>argtypes</i> is the list of <code>ctypes</code> types for the 
+        <i>message arguments only without</i> the <code>Id/self</code> and 
+        <code>SEL/cmd</code> arguments.
       </p>
 </div></td></tr></table>
 </div>
@@ -7762,7 +7772,7 @@ ndle 7f90aed19ba0 at 110a2ff10&gt;">&lt;CDLL '/System/Library/Frameworks/Foundat
   <dl class="fields">
     <dt>Parameters:</dt>
     <dd><ul class="nomargin-top">
-        <li><strong class="pname"><code>receiver</code></strong> - The recipient (<code>Object</code>).</li>
+        <li><strong class="pname"><code>receiver</code></strong> - The recipient (<code>Object</code>, <code>Id_t</code>, etc.).</li>
         <li><strong class="pname"><code>sel_name_</code></strong> - Message selector (<code>SEL_t</code>) or name (<code>str</code> 
           or <code>bytes</code>).</li>
         <li><strong class="pname"><code>args</code></strong> - Message arguments (<i>all positional</i>).</li>
@@ -7779,13 +7789,13 @@ ndle 7f90aed19ba0 at 110a2ff10&gt;">&lt;CDLL '/System/Library/Frameworks/Foundat
     </ul></dd>
   </dl>
 <div class="fields">      <p><strong>Note:</strong>
-        By default, the result and all arguments are <code>c_void_p</code> 
+        By default, the result and any arguments are <code>c_void_p</code> 
         wrapped.  Use keyword arguments <i>restype=c_void_p</i> and 
         <i>argtypes=[]</i> to change the defaults.  The <i>restype</i> 
         defines the <code>ctypes</code> type for the returned result and 
         <i>argtypes</i> is the list of <code>ctypes</code> types for the 
-        message arguments only (without the <code>Id/self</code> and 
-        <code>SEL/cmd</code> arguments).
+        <i>message arguments only without</i> the <code>Id/self</code> and 
+        <code>SEL/cmd</code> arguments.
       </p>
 </div></td></tr></table>
 </div>
@@ -8564,14 +8574,14 @@ mUIFont', size=13, traits='Italic', weight=5),
   <dl class="fields">
     <dt>Value:</dt>
       <dd><table><tr><td><pre class="variable">
-NSMain.Application=NSApplication(&lt;Id_t at 0x1148d6d40&gt;) of 0x7f90aed7e<span class="variable-linewrap"><img src="crarr.png" alt="\" /></span>
-220,
-      .BooleanNO=NSBoolean(&lt;Id_t at 0x1148d63b0&gt;) of 0x7fff985f53f8,
-      .BooleanYES=NSBoolean(&lt;Id_t at 0x1148d14d0&gt;) of 0x7fff985f53e8,
-      .Bundle=NSBundle(&lt;Id_t at 0x1148d1170&gt;) of 0x7f90aee24390,
+NSMain.Application=NSApplication(&lt;Id_t at 0x1088add40&gt;) of 0x7f9a1bcb0<span class="variable-linewrap"><img src="crarr.png" alt="\" /></span>
+2d0,
+      .BooleanNO=NSBoolean(&lt;Id_t at 0x1088ad9e0&gt;) of 0x7fff985f53f8,
+      .BooleanYES=NSBoolean(&lt;Id_t at 0x1088c94d0&gt;) of 0x7fff985f53e8,
+      .Bundle=NSBundle(&lt;Id_t at 0x1088c9b00&gt;) of 0x7f9a1be92120,
       .BundleName=NSConstantString('CFBundleName'),
-      .FontManager=NSFontManager(&lt;Id_t at 0x1145f04d0&gt;) of 0x7f90b1332<span class="variable-linewrap"><img src="crarr.png" alt="\" /></span>
-8d0,
+      .FontManager=NSFontManager(&lt;Id_t at 0x108829950&gt;) of 0x7f9a1e3b6<span class="variable-linewrap"><img src="crarr.png" alt="\" /></span>
+330,
 <code class="variable-ellipsis">...</code>
 </pre></td></tr></table>
 </dd>
@@ -8656,7 +8666,7 @@ WindowStyle.Closable=1&lt;&lt;1,
     <dt>Value:</dt>
       <dd><table><tr><td><pre class="variable">
 &lt;CDLL '/System/Library/Frameworks/AppKit.framework/AppKit', handle 7f9<span class="variable-linewrap"><img src="crarr.png" alt="\" /></span>
-0aed0c7d0 at 110a1f750&gt;
+a1bdbe9d0 at 104d20a90&gt;
 </pre></td></tr></table>
 </dd>
   </dl>
@@ -8675,7 +8685,7 @@ WindowStyle.Closable=1&lt;&lt;1,
     <dt>Value:</dt>
       <dd><table><tr><td><pre class="variable">
 &lt;CDLL '/System/Library/Frameworks/CoreFoundation.framework/CoreFoundat<span class="variable-linewrap"><img src="crarr.png" alt="\" /></span>
-ion', handle 110ecf800 at 110a08a10&gt;
+ion', handle 10e434800 at 104d03d50&gt;
 </pre></td></tr></table>
 </dd>
   </dl>
@@ -8694,7 +8704,7 @@ ion', handle 110ecf800 at 110a08a10&gt;
     <dt>Value:</dt>
       <dd><table><tr><td><pre class="variable">
 &lt;CDLL '/System/Library/Frameworks/CoreText.framework/CoreText', handle<span class="variable-linewrap"><img src="crarr.png" alt="\" /></span>
- 7f90aed1abd0 at 110a2f8d0&gt;
+ 7f9a1bdc0db0 at 104d2bc10&gt;
 </pre></td></tr></table>
 </dd>
   </dl>
@@ -8713,7 +8723,7 @@ ion', handle 110ecf800 at 110a08a10&gt;
     <dt>Value:</dt>
       <dd><table><tr><td><pre class="variable">
 &lt;CDLL '/System/Library/Frameworks/Foundation.framework/Foundation', ha<span class="variable-linewrap"><img src="crarr.png" alt="\" /></span>
-ndle 7f90aed19ba0 at 110a2ff10&gt;
+ndle 7f9a1bdbfde0 at 104d37290&gt;
 </pre></td></tr></table>
 </dd>
   </dl>
@@ -8731,7 +8741,7 @@ ndle 7f90aed19ba0 at 110a2ff10&gt;
   <dl class="fields">
     <dt>Value:</dt>
       <dd><table><tr><td><pre class="variable">
-&lt;CDLL '/usr/lib/libobjc.dylib', handle 110ed1680 at 110a2fd50&gt;
+&lt;CDLL '/usr/lib/libobjc.dylib', handle 10e436680 at 104d370d0&gt;
 </pre></td></tr></table>
 </dd>
   </dl>
@@ -8750,7 +8760,7 @@ ndle 7f90aed19ba0 at 110a2ff10&gt;
     <dt>Value:</dt>
       <dd><table><tr><td><pre class="variable">
 &lt;CDLL '/System/Library/Frameworks/quartz.framework/quartz', handle 7f9<span class="variable-linewrap"><img src="crarr.png" alt="\" /></span>
-0aec00360 at 110a1f990&gt;
+a1be443c0 at 104d20cd0&gt;
 </pre></td></tr></table>
 </dd>
   </dl>
@@ -8788,7 +8798,7 @@ ndle 7f90aed19ba0 at 110a2ff10&gt;
 <table border="0" cellpadding="0" cellspacing="0" width="100%%">
   <tr>
     <td align="left" class="footer">
-    Generated by Epydoc 3.0.1 on Mon Jul 23 20:37:04 2018
+    Generated by Epydoc 3.0.1 on Wed Jul 25 12:29:45 2018
     </td>
     <td align="right" class="footer">
       <a target="mainFrame" href="http://epydoc.sourceforge.net"

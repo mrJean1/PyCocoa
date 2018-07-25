@@ -36,7 +36,7 @@ from utils   import bytes2str, _ByteStrs, _Constants, _exports, \
                     isinstanceOf, lambda1, missing,  name2py, \
                     printf, property2, str2bytes
 
-__version__ = '18.07.23'
+__version__ = '18.07.24'
 
 # <http://Developer.Apple.com/documentation/objectivec/
 #         objc_associationpolicy?language=objc>
@@ -156,12 +156,13 @@ def _pyresult(result):
         return result
 
 
-def _resargtypesel3(id_t, args, resargtypes, sel_name_):
-    '''Get and check the restype and argtypes keyword arguments, get
-       the C{SEL/cmd} and return 3-tuple (restype, argtypes, SEL_t).
+def _resargtypesel3(objc_t, args, resargtypes, sel_name_):
+    '''Get and return the restype, the argtypes and the C{SEL/cmd}
+       for send_message/_super as 3-tuple (restype, argtypes, sel).
     '''
     def _2kwds(restype=c_void_p, argtypes=[], **kwds):
-        if kwds:  # not empty
+        # split resargtypes into the restype and argstypes
+        if kwds:  # must be empty
             t = ', '.join('%s=%r' % _ for _ in sorted(kwds.items()))
             raise ValueError('unused %s kwds %s' % (sel_name_, t))
         return restype, argtypes
@@ -172,13 +173,13 @@ def _resargtypesel3(id_t, args, resargtypes, sel_name_):
             raise ValueError('mismatch %s%r[%d] vs argtypes[%s][%d]' %
                              (sel_name_, tuple(args), len(args),
                              _c_tstr(*argtypes), len(argtypes)))
-        argtypes = [id_t, SEL_t] + argtypes
+        argtypes = [objc_t, SEL_t] + argtypes
 
     if isinstance(sel_name_, _ByteStrs):
-        sel_name_ = get_selector(sel_name_)
+        sel = get_selector(sel_name_)
     elif isinstanceOf(sel_name_, SEL_t, name='sel_name_'):
-        pass
-    return restype, argtypes, sel_name_  # SEL_t
+        sel = sel_name_
+    return restype, argtypes, sel
 
 
 def _Xargs(x, name, argtypes, restype='void'):
@@ -1253,7 +1254,7 @@ else:
 def send_message(receiver, sel_name_, *args, **resargtypes):
     '''Send message to an ObjC object.
 
-       @param receiver: The recipient (C{Object}).
+       @param receiver: The recipient (C{Object}, C{Id_t}, etc.).
        @param sel_name_: Message selector (C{SEL_t}) or name (C{str} or C{bytes}).
        @param args: Message arguments (I{all positional}).
        @keyword resargtypes: Optional, result and argument types (C{ctypes}).
@@ -1266,11 +1267,13 @@ def send_message(receiver, sel_name_, *args, **resargtypes):
        @raise TypeError: Invalid I{receiver}, I{sel_name_}, I{args} or
                          I{resargtypes} type.
 
-       @note: Use keyword arguments I{restype=c_void_p} and I{argtypes=[]}
-              to specify the result and argument C{ctypes}.  The I{restype}
-              defines the C{ctype} for the result and I{argtypes} is the
-              list of C{ctypes} for the message arguments only, I{without}
-              the C{Id/self} and C{SEL/cmd} arguments.
+       @note: By default, the result and any arguments are C{c_void_p}
+              wrapped.  Use keyword arguments I{restype=c_void_p} and
+              I{argtypes=[]} to change the defaults.  The I{restype}
+              defines the C{ctypes} type for the returned result and
+              I{argtypes} is the list of C{ctypes} types for the
+              I{message arguments only without} the C{Id/self} and
+              C{SEL/cmd} arguments.
     '''
     receiver, _ = _obj_and_name(receiver, get_class)
     _ObjC_logf('send_%s(%r, %s, %r) %r', 'message', receiver, sel_name_,
@@ -1297,7 +1300,7 @@ def send_message(receiver, sel_name_, *args, **resargtypes):
 def send_super(receiver, sel_name_, *args, **resargtypes):
     '''Send message to the super-class of an ObjC object.
 
-       @param receiver: The recipient (C{Object}).
+       @param receiver: The recipient (C{Object}, C{Id_t}, etc.).
        @param sel_name_: Message selector (C{SEL_t}) or name (C{str} or C{bytes}).
        @param args: Message arguments (I{all positional}).
        @keyword resargtypes: Optional, result and argument types (C{ctypes}).
@@ -1310,13 +1313,13 @@ def send_super(receiver, sel_name_, *args, **resargtypes):
        @raise TypeError: Invalid I{receiver}, I{sel_name_}, I{args} or
                          I{resargtypes} type.
 
-       @note: By default, the result and all arguments are C{c_void_p}
+       @note: By default, the result and any arguments are C{c_void_p}
               wrapped.  Use keyword arguments I{restype=c_void_p} and
               I{argtypes=[]} to change the defaults.  The I{restype}
               defines the C{ctypes} type for the returned result and
-              I{argtypes} is the list of C{ctypes} types for the message
-              arguments only (without the C{Id/self} and C{SEL/cmd}
-              arguments).
+              I{argtypes} is the list of C{ctypes} types for the
+              I{message arguments only without} the C{Id/self} and
+              C{SEL/cmd} arguments.
     '''
     _ObjC_logf('send_%s(%r, %s, %r) %r', 'super', receiver, sel_name_,
                                           args, resargtypes)
@@ -1363,19 +1366,20 @@ class _Ivar1(_Constants):
     c_t  = Id_t
 
 
-def _objc_cache_pop(nself, sel_):
+def _objc_cache_pop(nself, sel_name_):
     '''(INTERNAL) Remove an L{ObjCInstance} from the instances cache
-       called by the instance' associated dealloc/finalize observer.
+       called by the instance' associated C{dealloc/finalize} observer.
 
        @param nself: The instance' observer (C{_NSDeallocObserver}).
-       @param sel_: The message for the parent (C{str} or C{SEL_t}).
+       @param sel_name_: Parent's message selector (C{SEL_t}) or name
+                         (C{str} or C{bytes}).
     '''
     objc_ptr_value = get_ivar(nself, _Ivar1.name, ctype=_Ivar1.c_t)
     if objc_ptr_value:
         objc = ObjCInstance._objc_cache.pop(objc_ptr_value, None)
         if objc:
             objc._dealloc_d = True
-    send_super(nself, sel_)
+    send_super(nself, sel_name_)
 
 
 class _NSDeallocObserver(object):  # XXX (_ObjCBase):
@@ -1413,7 +1417,7 @@ class _NSDeallocObserver(object):  # XXX (_ObjCBase):
     @_ObjC.rawmethod('@')
     def dealloc(self, sel):
         # Called before ObjC object is destroyed
-        _objc_cache_pop(self, sel)  # .name = 'dealloc'
+        _objc_cache_pop(self, sel)  # sel.name = 'dealloc'
 
     @_ObjC.rawmethod('@')
     def finalize(self, sel):
@@ -1421,7 +1425,7 @@ class _NSDeallocObserver(object):  # XXX (_ObjCBase):
         # (which would have to be explicitly started with
         # objc_startCollectorThread(), so probably not much
         # reason to have this here, but it can't hurt)
-        _objc_cache_pop(self, sel)  # .name = 'finalize'
+        _objc_cache_pop(self, sel)  # sel.name = 'finalize'
 
 
 def _nsDeallocObserver(objc_ptr_value):

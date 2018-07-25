@@ -11,14 +11,13 @@ from octypes import emcoding2ctype, encoding2ctype, \
                     Class_t, Id_t, IMP_t, Ivar_t, Protocol_t, SEL_t, \
                     split_encoding
 from oslibs  import libobjc  # get_lib
-from utils   import bytes2str, _exports, isinstanceOf, missing, \
+from utils   import bytes2str, Cache2, _exports, isinstanceOf, missing, \
                     name2objc, str2bytes
 
-__version__ = '18.07.23'
+__version__ = '18.07.24'
 
 _c_func_t_cache = {}
-_SEL_t_cache_L1 = {}
-_SEL_t_cache_L2 = {}
+_SEL_t_cache = Cache2(limit2=128)
 
 
 def _ivar_ctype(objc, name):
@@ -350,18 +349,10 @@ def get_selector(name_):
        @return: The selector (L{SEL_t}) if found, C{None} otherwise.
     '''
     try:
-        sel = _SEL_t_cache_L1[name_]
+        sel = _SEL_t_cache[name_]
     except KeyError:
-        try:  # elevate _L2 item to _L1 cache
-            sel = _SEL_t_cache_L2.pop(name_)
-            _SEL_t_cache_L1[name_] = sel
-        except KeyError:
-            if len(_SEL_t_cache_L2) > 128:  # cut cache size
-                # XXX can't change dict during iteration
-                for k in tuple(_SEL_t_cache_L2.keys())[:128//4]:
-                    _SEL_t_cache_L2.pop(k)
-            sel = libobjc.sel_registerName(name2objc(name_)) or None
-            _SEL_t_cache_L2[name_] = sel
+        sel = libobjc.sel_registerName(name2objc(name_)) or None
+        _SEL_t_cache[name_] = sel
     return sel
 
 
