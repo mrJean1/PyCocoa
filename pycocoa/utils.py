@@ -7,7 +7,7 @@
 
 @var missing: Missing keyword argument value.
 '''
-__version__ = '18.07.24'
+__version__ = '18.07.25'
 
 try:  # all imports listed explicitly to help PyChecker
     from math import gcd  # Python 3+
@@ -169,6 +169,9 @@ class Cache2(dict):
         self._limit2 = limit2
         self._dict2 = {}
 
+    def __contains__(self, key):
+        return dict.__contains__(key) or key in self._dict2
+
     def __getitem__(self, key):
         try:
             return dict.__getitem__(self, key)
@@ -223,15 +226,15 @@ class Cache2(dict):
         '''Remove the specified item.
 
            @param key: The item's key (C{any}).
-           @param default: Optional default for missing item (C{any}).
+           @param default: Value for missing item (C{any}).
 
-           @return: C{Cache2}I{[key]} if I{key} in C{Cache2}
-                    else I{default} if specified.
+           @return: C{Cache2}I{[key]} if I{key} in C{Cache2} else
+                    I{default}, provided I{default} was specified.
 
            @raise KeyError: No such item I{key} and no I{default} given.
 
-           @note: The item is removed from the primary level-1 C{dict}
-                  first and if missing from secondary level-2 C{dict}.
+           @note: If I{key} is not in the primary level-1 C{dict}, the
+                  secondary level-2 C{dict} is checked.
         '''
         try:
             return dict.pop(self, key)
@@ -239,23 +242,24 @@ class Cache2(dict):
             return self._dict2.pop(key, *default)
 
     def popitem(self):
-        '''Remove the most recently entered item from the
-           secondary level-2 C{dict}.
+        '''Remove the item most recently elevated into the primary
+           level-1 C{dict}.
 
-           @return: 2-Tuple (key, value).
+           @return: The removed item as 2-Tuple (key, value).
 
-           @raise KeywordError: Empty secondary level-2 C{dict}.
+           @raise KeyError: The secondary level-2 C{dict} is empty.
 
-           @note: C{Cache2}I{.popitem()} is equivalent to
-                  C{Cache2}I{.dict2.popitem()}.
+           @note: Use C{Cache2.dict2.popitem()} to remove the most
+                  recently entered item to the secondary level-2 C{dict}.
         '''
-        return self._dict2.popitem()
+        return dict.popitem(self)
 
     def update(self, *other, **kwds):
-        '''Update this cache with additional items.
+        '''Update this cache with one or more additional items.
 
-           @param other: Iterable of 2-tuples (key, value) or C{dict}.
-           @keyword kwds: Key=value arguments.
+           @param other: Items specified as an terable of 2-tuples
+                         (key, value) or a C{dict}.
+           @keyword kwds: Items given as C{key=value} pairs.
         '''
         d = {}
         if other:

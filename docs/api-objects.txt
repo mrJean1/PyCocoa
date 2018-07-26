@@ -420,10 +420,11 @@ pycocoa.getters._SEL_t_cache	pycocoa.getters-module.html#_SEL_t_cache
 pycocoa.getters.get_selector	pycocoa.getters-module.html#get_selector
 pycocoa.getters.isinstanceOf	pycocoa.utils-module.html#isinstanceOf
 pycocoa.getters.split_encoding	pycocoa.octypes-module.html#split_encoding
-pycocoa.getters.get_selectornameof	pycocoa.getters-module.html#get_selectornameof
+pycocoa.getters._super_cache	pycocoa.getters-module.html#_super_cache
 pycocoa.getters.get_classnameof	pycocoa.getters-module.html#get_classnameof
 pycocoa.getters.libobjc	pycocoa.getters-module.html#libobjc
 pycocoa.getters.missing	pycocoa.getters-module.html#missing
+pycocoa.getters.get_selectornameof	pycocoa.getters-module.html#get_selectornameof
 pycocoa.getters.get_superclassof	pycocoa.getters-module.html#get_superclassof
 pycocoa.getters.get_method	pycocoa.getters-module.html#get_method
 pycocoa.getters._exports	pycocoa.utils-module.html#_exports
@@ -892,7 +893,6 @@ pycocoa.runtime._object_setInstanceVariable	pycocoa.runtime-module.html#_object_
 pycocoa.runtime._objc_msgSendSuper_stret	pycocoa.runtime-module.html#_objc_msgSendSuper_stret
 pycocoa.runtime.OBJC_ASSOCIATION_RETAIN_NONATOMIC	pycocoa.runtime-module.html#OBJC_ASSOCIATION_RETAIN_NONATOMIC
 pycocoa.runtime.send_message	pycocoa.runtime-module.html#send_message
-pycocoa.runtime._resargtypesel3	pycocoa.runtime-module.html#_resargtypesel3
 pycocoa.runtime._pyargs	pycocoa.runtime-module.html#_pyargs
 pycocoa.runtime.emcoding2ctype	pycocoa.octypes-module.html#emcoding2ctype
 pycocoa.runtime.get_ivar	pycocoa.getters-module.html#get_ivar
@@ -916,7 +916,6 @@ pycocoa.runtime._OBJC_ENV	pycocoa.runtime-module.html#_OBJC_ENV
 pycocoa.runtime.send_super	pycocoa.runtime-module.html#send_super
 pycocoa.runtime.missing	pycocoa.runtime-module.html#missing
 pycocoa.runtime.get_superclassof	pycocoa.getters-module.html#get_superclassof
-pycocoa.runtime._receiver	pycocoa.runtime-module.html#_receiver
 pycocoa.runtime.isMetaClass	pycocoa.runtime-module.html#isMetaClass
 pycocoa.runtime._pyresult	pycocoa.runtime-module.html#_pyresult
 pycocoa.runtime.get_classof	pycocoa.getters-module.html#get_classof
@@ -942,9 +941,11 @@ pycocoa.runtime.get_classname	pycocoa.getters-module.html#get_classname
 pycocoa.runtime.__i386__	pycocoa.runtime-module.html#__i386__
 pycocoa.runtime._objc_msgSendSuper	pycocoa.runtime-module.html#_objc_msgSendSuper
 pycocoa.runtime.ctype2encoding	pycocoa.octypes-module.html#ctype2encoding
+pycocoa.runtime._objc_cast	pycocoa.runtime-module.html#_objc_cast
 pycocoa.runtime.OBJC_ASSOCIATION_RETAIN	pycocoa.runtime-module.html#OBJC_ASSOCIATION_RETAIN
 pycocoa.runtime._csignature	pycocoa.oslibs-module.html#_csignature
 pycocoa.runtime.add_ivar	pycocoa.runtime-module.html#add_ivar
+pycocoa.runtime._FLOATS_	pycocoa.runtime-module.html#_FLOATS_
 pycocoa.runtime._Xargs	pycocoa.runtime-module.html#_Xargs
 pycocoa.runtime.isClass	pycocoa.runtime-module.html#isClass
 pycocoa.runtime.add_subclass	pycocoa.runtime-module.html#add_subclass
@@ -957,7 +958,7 @@ pycocoa.runtime._objc_msgSend	pycocoa.runtime-module.html#_objc_msgSend
 pycocoa.runtime.isinstanceOf	pycocoa.runtime-module.html#isinstanceOf
 pycocoa.runtime.get_c_func_t	pycocoa.getters-module.html#get_c_func_t
 pycocoa.runtime.isImmutable	pycocoa.runtime-module.html#isImmutable
-pycocoa.runtime._FLOATS_	pycocoa.runtime-module.html#_FLOATS_
+pycocoa.runtime._signature3	pycocoa.runtime-module.html#_signature3
 pycocoa.runtime.name2py	pycocoa.utils-module.html#name2py
 pycocoa.runtime._ObjC_log	pycocoa.runtime-module.html#_ObjC_log
 pycocoa.runtime._nsDeallocObserver	pycocoa.runtime-module.html#_nsDeallocObserver
@@ -1901,14 +1902,15 @@ pycocoa.tuples.Tuple.__reversed__	pycocoa.tuples.Tuple-class.html#__reversed__
 pycocoa.tuples.Tuple.clear	pycocoa.tuples.Tuple-class.html#clear
 pycocoa.tuples.Tuple.__setitem__	pycocoa.tuples.Tuple-class.html#__setitem__
 pycocoa.utils.Cache2	pycocoa.utils.Cache2-class.html
+pycocoa.utils.Cache2.popitem	pycocoa.utils.Cache2-class.html#popitem
 pycocoa.utils.Cache2.pop	pycocoa.utils.Cache2-class.html#pop
 pycocoa.utils.Cache2.__init__	pycocoa.utils.Cache2-class.html#__init__
-pycocoa.utils.Cache2.dict2	pycocoa.utils.Cache2-class.html#dict2
+pycocoa.utils.Cache2.__contains__	pycocoa.utils.Cache2-class.html#__contains__
 pycocoa.utils.Cache2.__getitem__	pycocoa.utils.Cache2-class.html#__getitem__
 pycocoa.utils.Cache2.get	pycocoa.utils.Cache2-class.html#get
 pycocoa.utils.Cache2.update	pycocoa.utils.Cache2-class.html#update
 pycocoa.utils.Cache2.__setitem__	pycocoa.utils.Cache2-class.html#__setitem__
-pycocoa.utils.Cache2.popitem	pycocoa.utils.Cache2-class.html#popitem
+pycocoa.utils.Cache2.dict2	pycocoa.utils.Cache2-class.html#dict2
 pycocoa.utils.Cache2.limit2	pycocoa.utils.Cache2-class.html#limit2
 pycocoa.windows.AutoResizeError	pycocoa.windows.AutoResizeError-class.html
 pycocoa.windows.MediaWindow	pycocoa.windows.MediaWindow-class.html

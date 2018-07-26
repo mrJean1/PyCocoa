@@ -62,13 +62,13 @@ del os
 
 
 def _c_tstr(*c_ts):
-    '''Simplify names of c_..._t result or argument types.
+    '''(INTERNAL) Simplify names of c_..._t result or argument types.
     '''
     return ', '.join(getattr(t, '__name__', str(t)) for t in c_ts)
 
 
 def _libobjcall(name, restype, argtypes, *args):
-    '''Call an ObjC library function and return the result.
+    '''(INTERNAL) Call an ObjC library function and return the result.
 
        @return: The result (C{any}).
 
@@ -94,7 +94,7 @@ def _libobjcall(name, restype, argtypes, *args):
 
 
 def _obj_and_name(name_or_obj, getter):
-    '''Return or get an object by name.
+    '''(INTERNAL) Return or get an object by name.
     '''
     name = str2bytes(name_or_obj, dflt=None)
     if name is not None:
@@ -102,8 +102,22 @@ def _obj_and_name(name_or_obj, getter):
     return name_or_obj, name
 
 
+def _objc_cast(objc):
+    '''(INTERNAL) Re-cast an ObjC C{send_message/_super} instance.
+    '''
+    # from PyBee/Rubicon-Objc <http://GitHub.com/pybee/rubicon-objc>
+    objc = getattr(objc, '_as_parameter_', objc)
+    if isinstance(objc, Id_t):
+        return objc
+    elif isinstance(objc, (c_void_p, ObjCInstance)):
+        return cast(objc, Id_t)
+#   elif isinstance(objc, _Strs):
+#       return cast(get_class(objc), Id_t)
+    raise TypeError('%s invalid: %r' % ('objc', objc))
+
+
 def _ObjC_log(inst, what, T, *args):  # B, C, I, M, S
-    '''Log a new instance, method or call to the console.
+    '''(INTERNAL) Log a new instance, method or call to the console.
     '''
     if inst and T in _OBJC_LOG:
         _OBJC_LOG[T] += 1
@@ -114,7 +128,7 @@ def _ObjC_log(inst, what, T, *args):  # B, C, I, M, S
 
 
 def _ObjC_logf(fmt, *args):
-    '''Log a message to the console.
+    '''(INTERNAL) Log a message to the console.
     '''
     if 'X' in _OBJC_LOG:
         _OBJC_LOG['X'] += 1
@@ -125,7 +139,7 @@ def _ObjC_logf(fmt, *args):
 
 
 def _ObjC_log_totals():
-    '''Log summary to the console.
+    '''(INTERNAL) Log summary to the console.
     '''
     if _OBJC_LOG:
         printf('%s: ...', _OBJC_ENV, nl=1)
@@ -134,7 +148,7 @@ def _ObjC_log_totals():
 
 
 def _pyargs(codes3, args):
-    '''Used by L{ObjCSubclass} to convert ObjC method arguments
+    '''(INTERNAL) Used by L{ObjCSubclass} to convert ObjC method arguments
        to the corresponding Python type/value before passing
        those to the decorated Python method.
     '''
@@ -147,7 +161,7 @@ def _pyargs(codes3, args):
 
 
 def _pyresult(result):
-    '''Used by L{ObjCSubclass} to convert the result of an ObjC
+    '''(INTERNAL) Used by L{ObjCSubclass} to convert the result of an ObjC
        method to the corresponding Python type/value.
     '''
     if isinstance(result, (ObjCInstance, ObjCClass)):
@@ -156,18 +170,18 @@ def _pyresult(result):
         return result
 
 
-def _resargtypesel3(objc_t, args, resargtypes, sel_name_):
-    '''Get and return the restype, the argtypes and the C{SEL/cmd}
-       for send_message/_super as 3-tuple (restype, argtypes, sel).
+def _signature3(objc_t, sel_name_, args, restype=c_void_p,
+                                         argtypes=[], **extra):
+    '''(INTERNAL) Return the I{restype}, the I{argtypes} and the
+       C{SEL/cmd} for C{send_message/_super} as 3-tuple C{(restype,
+       argtypes, sel)}, where a non-empty C{argtypes} has been
+       prefixed with the C{type(Id/self)} and C{type(sel)} pair as
+       [I{objc_t}, C{SEL_t}].
     '''
-    def _2kwds(restype=c_void_p, argtypes=[], **kwds):
-        # split resargtypes into the restype and argstypes
-        if kwds:  # must be empty
-            t = ', '.join('%s=%r' % _ for _ in sorted(kwds.items()))
-            raise ValueError('unused %s kwds %s' % (sel_name_, t))
-        return restype, argtypes
+    if extra:  # must be empty
+        t = ', '.join('%s=%r' % _ for _ in sorted(extra.items()))
+        raise ValueError('extra %s kwds %s' % (sel_name_, t))
 
-    restype, argtypes = _2kwds(**resargtypes)
     if argtypes:  # allow varargs
         if len(argtypes) != len(args):
             raise ValueError('mismatch %s%r[%d] vs argtypes[%s][%d]' %
@@ -177,13 +191,13 @@ def _resargtypesel3(objc_t, args, resargtypes, sel_name_):
 
     if isinstance(sel_name_, _ByteStrs):
         sel = get_selector(sel_name_)
-    elif isinstanceOf(sel_name_, SEL_t, name='sel_name_'):
+    elif isinstanceOf(sel_name_, SEL_t, name='sel_name_'):  # never False
         sel = sel_name_
     return restype, argtypes, sel
 
 
-def _Xargs(x, name, argtypes, restype='void'):
-    '''Expand the args of an ArgumentError I{x}.
+def _Xargs(x, name, argtypes, restype='void'):  # imported by nstypes.py
+    '''(INTERNAL) Expand the args of an C{ctypes.ArgumentError} I{x}.
     '''
     # x.args = tuple(x.args) + ('%s(%s) %s' % (name, _c_tstr(*argtypes),
     #                                                _c_tstr(restype)),)
@@ -1143,7 +1157,7 @@ def isMetaClass(objc):
 
 
 def release(objc):
-    '''Release an ObjC instance to be released, eventually.
+    '''Release an ObjC instance to be deleted, eventually.
 
        @param objc: The instance to release (L{ObjCInstance}).
 
@@ -1172,18 +1186,6 @@ def register_subclass(subclas):
     if not isinstance(subclas, Class_t):
         subclas = Class_t(subclas)
     libobjc.objc_registerClassPair(subclas)
-
-
-def _receiver(receiver):
-    # from PyBee/Rubicon-Objc <http://GitHub.com/pybee/rubicon-objc>
-    receiver = getattr(receiver, '_as_parameter_', receiver)
-    if isinstance(receiver, Id_t):
-        return receiver
-    elif isinstance(receiver, (c_void_p, ObjCInstance)):
-        return cast(receiver, Id_t)
-#   elif isinstance(receiver, _Strs):
-#       return cast(get_class(receiver), Id_t)
-    raise TypeError('%s invalid: %r' % ('receiver', receiver))
 
 
 def retain(objc):
@@ -1251,20 +1253,20 @@ else:
         return issubclass(restype, c_struct_t) and sizeof(restype) not in (1, 2, 4, 8)  # XXX > 8
 
 
-def send_message(receiver, sel_name_, *args, **resargtypes):
+def send_message(objc, sel_name_, *args, **resargtypes):
     '''Send message to an ObjC object.
 
-       @param receiver: The recipient (C{Object}, C{Id_t}, etc.).
+       @param objc: The recipient (C{Object}, C{Id_t}, etc.) instance.
        @param sel_name_: Message selector (C{SEL_t}) or name (C{str} or C{bytes}).
        @param args: Message arguments (I{all positional}).
        @keyword resargtypes: Optional, result and argument types (C{ctypes}).
 
        @return: Message result (I{restype}).
 
-       @raise ArgumentError: Invalid I{receiver}, I{sel_name_}, I{args} or
+       @raise ArgumentError: Invalid I{objc}, I{sel_name_}, I{args} or
                              I{resargtypes}.
 
-       @raise TypeError: Invalid I{receiver}, I{sel_name_}, I{args} or
+       @raise TypeError: Invalid I{objc}, I{sel_name_}, I{args} or
                          I{resargtypes} type.
 
        @note: By default, the result and any arguments are C{c_void_p}
@@ -1275,42 +1277,42 @@ def send_message(receiver, sel_name_, *args, **resargtypes):
               I{message arguments only without} the C{Id/self} and
               C{SEL/cmd} arguments.
     '''
-    receiver, _ = _obj_and_name(receiver, get_class)
-    _ObjC_logf('send_%s(%r, %s, %r) %r', 'message', receiver, sel_name_,
+    objc, _ = _obj_and_name(objc, get_class)
+    _ObjC_logf('send_%s(%r, %s, %r) %r', 'message', objc, sel_name_,
                                           args, resargtypes)
-    receiver = _receiver(receiver)
-    restype, argtypes, sel = _resargtypesel3(type(receiver), args,
-                              resargtypes, sel_name_)
+    objc = _objc_cast(objc)
+    restype, argtypes, sel = _signature3(type(objc), sel_name_,
+                                         args, **resargtypes)
 
     if restype in _FLOATS_:  # x86_should_use_fpret(restype):
         result = _libobjcall(_objc_msgSend_fpret, restype, argtypes,
-                              receiver, sel, *args)
+                              objc, sel, *args)
     elif _stret(restype):  # x86_should_use_stret(restype):
         argtypes = [POINTER(restype)] + argtypes
         result = restype()
         _libobjcall(_objc_msgSend_stret, c_void, argtypes,
-                     byref(result), receiver, sel, *args)
+                     byref(result), objc, sel, *args)
     else:
         result = _libobjcall(_objc_msgSend, restype, argtypes,
-                              receiver, sel, *args)
+                              objc, sel, *args)
     return result
 
 
 # http://StackOverflow.com/questions/3095360/what-exactly-is-super-in-objective-c
-def send_super(receiver, sel_name_, *args, **resargtypes):
+def send_super(objc, sel_name_, *args, **resargtypes):
     '''Send message to the super-class of an ObjC object.
 
-       @param receiver: The recipient (C{Object}, C{Id_t}, etc.).
+       @param objc: The recipient (C{Object}, C{Id_t}, etc.) instance.
        @param sel_name_: Message selector (C{SEL_t}) or name (C{str} or C{bytes}).
        @param args: Message arguments (I{all positional}).
        @keyword resargtypes: Optional, result and argument types (C{ctypes}).
 
        @return: Message result (I{restype}).
 
-       @raise ArgumentError: Invalid I{receiver}, I{sel_name_}, I{args} or
+       @raise ArgumentError: Invalid I{objc}, I{sel_name_}, I{args} or
                              I{resargtypes}.
 
-       @raise TypeError: Invalid I{receiver}, I{sel_name_}, I{args} or
+       @raise TypeError: Invalid I{objc}, I{sel_name_}, I{args} or
                          I{resargtypes} type.
 
        @note: By default, the result and any arguments are C{c_void_p}
@@ -1321,21 +1323,20 @@ def send_super(receiver, sel_name_, *args, **resargtypes):
               I{message arguments only without} the C{Id/self} and
               C{SEL/cmd} arguments.
     '''
-    _ObjC_logf('send_%s(%r, %s, %r) %r', 'super', receiver, sel_name_,
+    _ObjC_logf('send_%s(%r, %s, %r) %r', 'super', objc, sel_name_,
                                           args, resargtypes)
 
-    restype, argtypes, sel = _resargtypesel3(objc_super_t_ptr, args,
-                              resargtypes, sel_name_)
-
-    receiver = _receiver(receiver)
-    superobj = objc_super_t(receiver, get_superclassof(receiver))
+    objc = _objc_cast(objc)
+    objc_ref = byref(objc_super_t(objc, get_superclassof(objc)))
+    restype, argtypes, sel = _signature3(objc_super_t_ptr, sel_name_,
+                                         args, **resargtypes)
 
     if _stret(restype):  # x86_should_use_stret(restype):
         return _libobjcall(_objc_msgSendSuper_stret, restype, argtypes,
-                            byref(superobj), sel, *args)
+                            objc_ref, sel, *args)
     else:
         return _libobjcall(_objc_msgSendSuper, restype, argtypes,
-                            byref(superobj), sel, *args)
+                            objc_ref, sel, *args)
 
 
 def set_ivar(objc, name, value, ctype=None):
@@ -1366,20 +1367,22 @@ class _Ivar1(_Constants):
     c_t  = Id_t
 
 
-def _objc_cache_pop(nself, sel_name_):
+def _objc_cache_pop(nso, sel_name_):
     '''(INTERNAL) Remove an L{ObjCInstance} from the instances cache
        called by the instance' associated C{dealloc/finalize} observer.
 
-       @param nself: The instance' observer (C{_NSDeallocObserver}).
+       @param nso: The instance' observer (C{_NSDeallocObserver}).
        @param sel_name_: Parent's message selector (C{SEL_t}) or name
                          (C{str} or C{bytes}).
     '''
-    objc_ptr_value = get_ivar(nself, _Ivar1.name, ctype=_Ivar1.c_t)
+    objc_ptr_value = get_ivar(nso, _Ivar1.name, ctype=_Ivar1.c_t)
     if objc_ptr_value:
+        # dis-associate the observer from ObjC objc_ptr_value
+        # libobjc.objc_removeAssociatedObjects(objc_ptr_value)
         objc = ObjCInstance._objc_cache.pop(objc_ptr_value, None)
         if objc:
             objc._dealloc_d = True
-    send_super(nself, sel_name_)
+    send_super(nso, sel_name_)
 
 
 class _NSDeallocObserver(object):  # XXX (_ObjCBase):
@@ -1416,12 +1419,12 @@ class _NSDeallocObserver(object):  # XXX (_ObjCBase):
 
     @_ObjC.rawmethod('@')
     def dealloc(self, sel):
-        # Called before ObjC object is destroyed
+        # called before the observer is destroyed
         _objc_cache_pop(self, sel)  # sel.name = 'dealloc'
 
     @_ObjC.rawmethod('@')
     def finalize(self, sel):
-        # Called instead of dealloc if using garbage collection
+        # called instead of dealloc if using garbage collection
         # (which would have to be explicitly started with
         # objc_startCollectorThread(), so probably not much
         # reason to have this here, but it can't hurt)
@@ -1446,17 +1449,22 @@ def _nsDeallocObserver(objc_ptr_value):
                         restype=Id_t)  # argtypes=[]
     nso = send_message(nso, 'initWithObject_', objc_ptr_value,
                        restype=Id_t, argtypes=[_Ivar1.c_t])
-    # the observer is retained by the object associate to it
+    # the observer is retained by ObjC objc_ptr_value
+    # and associated to it as key=nso with value=nso
     libobjc.objc_setAssociatedObject(objc_ptr_value, nso, nso,
                                      OBJC_ASSOCIATION_RETAIN)
-    # release the observer now so that it will be de-allocated
-    # when the associated object is de-allocated.
+    # double-check the association
+#   obs = libobjc.objc_getAssociatedObject(objc_ptr_value, nso)
+#   assert(obs and obs.value == nso.value)
+    # release to observer now, such that dealloc/finalize
+    # messages are received which delete the ObjCInstance
     send_message(nso, 'release')
     return nso
 
 
 def _nsDeallocObserverIvar1():
-    # check that exactly one _NSDeallocObserver ivar exists
+    '''(INTERNAL) Check that C{_NSDeallocObserver} has exactly one C{ivar}.
+    '''
     from getters import get_ivars
 
     i = None
@@ -1470,7 +1478,6 @@ def _nsDeallocObserverIvar1():
 
 _nsDeallocObserverIvar1()  # PYCHOK expected
 del _nsDeallocObserverIvar1
-
 
 # filter locals() for .__init__.py
 __all__ = _exports(locals(), 'libobjc', 'release', 'register_subclass', 'retain',

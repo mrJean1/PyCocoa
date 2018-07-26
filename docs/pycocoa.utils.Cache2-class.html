@@ -109,6 +109,23 @@ new empty dictionary
   </tr>
 <tr>
     <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">True if D has a key k, else False</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a href="pycocoa.utils.Cache2-class.html#__contains__" class="summary-sig-name">__contains__</a>(<span class="summary-sig-arg">self</span>,
+        <span class="summary-sig-arg">key</span>)</span></td>
+          <td align="right" valign="top">
+            
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
       <table width="100%" cellpadding="0" cellspacing="0" border="0">
@@ -189,7 +206,7 @@ new empty dictionary
       <table width="100%" cellpadding="0" cellspacing="0" border="0">
         <tr>
           <td><span class="summary-sig"><a href="pycocoa.utils.Cache2-class.html#popitem" class="summary-sig-name">popitem</a>(<span class="summary-sig-arg">self</span>)</span><br />
-      Remove the most recently entered item from the secondary level-2 
+      Remove the item most recently elevated into the primary level-1 
       <code>dict</code>.</td>
           <td align="right" valign="top">
             
@@ -209,7 +226,7 @@ new empty dictionary
           <td><span class="summary-sig"><a href="pycocoa.utils.Cache2-class.html#update" class="summary-sig-name">update</a>(<span class="summary-sig-arg">self</span>,
         <span class="summary-sig-arg">*other</span>,
         <span class="summary-sig-arg">**kwds</span>)</span><br />
-      Update this cache with additional items.</td>
+      Update this cache with one or more additional items.</td>
           <td align="right" valign="top">
             
             
@@ -223,7 +240,6 @@ new empty dictionary
     <td colspan="2" class="summary">
     <p class="indent-wrapped-lines"><b>Inherited from <code>dict</code></b>:
       <code>__cmp__</code>,
-      <code>__contains__</code>,
       <code>__delitem__</code>,
       <code>__eq__</code>,
       <code>__ge__</code>,
@@ -356,6 +372,32 @@ new empty dictionary
   </dl>
 </td></tr></table>
 </div>
+<a name="__contains__"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">__contains__</span>(<span class="sig-arg">self</span>,
+        <span class="sig-arg">key</span>)</span>
+    <br /><em class="fname">(In operator)</em>
+  </h3>
+  </td><td align="right" valign="top"
+    >&nbsp;
+    </td>
+  </tr></table>
+  
+  
+  <dl class="fields">
+    <dt>Returns: True if D has a key k, else False</dt>
+    <dt>Overrides:
+        dict.__contains__
+        <dd><em class="note">(inherited documentation)</em></dd>
+    </dt>
+  </dl>
+</td></tr></table>
+</div>
 <a name="__getitem__"></a>
 <div>
 <table class="details" border="1" cellpadding="3"
@@ -461,11 +503,12 @@ new empty dictionary
     <dt>Parameters:</dt>
     <dd><ul class="nomargin-top">
         <li><strong class="pname"><code>key</code></strong> - The item's key (<code>any</code>).</li>
-        <li><strong class="pname"><code>default</code></strong> - Optional default for missing item (<code>any</code>).</li>
+        <li><strong class="pname"><code>default</code></strong> - Value for missing item (<code>any</code>).</li>
     </ul></dd>
     <dt>Returns: v, remove specified key and return the corresponding value</dt>
         <dd><code>Cache2</code><i>[key]</i> if <i>key</i> in 
-          <code>Cache2</code> else <i>default</i> if specified.</dd>
+          <code>Cache2</code> else <i>default</i>, provided <i>default</i> 
+          was specified.</dd>
     <dt>Raises:</dt>
     <dd><ul class="nomargin-top">
         <li><code><strong class='fraise'>KeyError</strong></code> - No such item <i>key</i> and no <i>default</i> given.</li>
@@ -475,8 +518,8 @@ new empty dictionary
     </dt>
   </dl>
 <div class="fields">      <p><strong>Note:</strong>
-        The item is removed from the primary level-1 <code>dict</code> 
-        first and if missing from secondary level-2 <code>dict</code>.
+        If <i>key</i> is not in the primary level-1 <code>dict</code>, the 
+        secondary level-2 <code>dict</code> is checked.
       </p>
 </div></td></tr></table>
 </div>
@@ -494,22 +537,22 @@ new empty dictionary
     </td>
   </tr></table>
   
-  <p>Remove the most recently entered item from the secondary level-2 
+  <p>Remove the item most recently elevated into the primary level-1 
   <code>dict</code>.</p>
   <dl class="fields">
     <dt>Returns: (k, v), remove and return some (key, value) pair as a</dt>
-        <dd>2-Tuple (key, value).</dd>
+        <dd>The removed item as 2-Tuple (key, value).</dd>
     <dt>Raises:</dt>
     <dd><ul class="nomargin-top">
-        <li><code><strong class='fraise'>KeywordError</strong></code> - Empty secondary level-2 <code>dict</code>.</li>
+        <li><code><strong class='fraise'>KeyError</strong></code> - The secondary level-2 <code>dict</code> is empty.</li>
     </ul></dd>
     <dt>Overrides:
         dict.popitem
     </dt>
   </dl>
 <div class="fields">      <p><strong>Note:</strong>
-        <code>Cache2</code><i>.popitem()</i> is equivalent to 
-        <code>Cache2</code><i>.dict2.popitem()</i>.
+        Use <code>Cache2.dict2.popitem()</code> to remove the most recently
+        entered item to the secondary level-2 <code>dict</code>.
       </p>
 </div></td></tr></table>
 </div>
@@ -529,12 +572,13 @@ new empty dictionary
     </td>
   </tr></table>
   
-  <p>Update this cache with additional items.</p>
+  <p>Update this cache with one or more additional items.</p>
   <dl class="fields">
     <dt>Parameters:</dt>
     <dd><ul class="nomargin-top">
-        <li><strong class="pname"><code>other</code></strong> - Iterable of 2-tuples (key, value) or <code>dict</code>.</li>
-        <li><strong class="pname"><code>kwds</code></strong> - Key=value arguments.</li>
+        <li><strong class="pname"><code>other</code></strong> - Items specified as an terable of 2-tuples (key, value) or a 
+          <code>dict</code>.</li>
+        <li><strong class="pname"><code>kwds</code></strong> - Items given as <code>key=value</code> pairs.</li>
     </ul></dd>
     <dt>Returns: None</dt>
     <dt>Overrides:
@@ -617,7 +661,7 @@ new empty dictionary
 <table border="0" cellpadding="0" cellspacing="0" width="100%%">
   <tr>
     <td align="left" class="footer">
-    Generated by Epydoc 3.0.1 on Wed Jul 25 12:29:47 2018
+    Generated by Epydoc 3.0.1 on Thu Jul 26 14:18:47 2018
     </td>
     <td align="right" class="footer">
       <a target="mainFrame" href="http://epydoc.sourceforge.net"

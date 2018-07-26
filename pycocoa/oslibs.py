@@ -42,7 +42,7 @@ except ImportError:  # XXX Pythonista/iOS
     def _find_lib(unused):
         return None
 
-__version__ = '18.06.28'
+__version__ = '18.07.25'
 _leaked2    = []  # leaked memory, 2-tuples (ptr, size)
 _libs_cache = {}  # loaded libraries, by name
 
@@ -834,11 +834,20 @@ _csignature(libobjc.method_setImplementation, IMP_t, Method_t, IMP_t)
 
 # Class_t objc_allocateClassPair(Class_t superclass, const char *name, size_t extraBytes)
 _csignature(libobjc.objc_allocateClassPair, Class_t, Class_t, c_char_p, c_size_t)
+# void objc_registerClassPair(Class_t cls)
+_csignature(libobjc.objc_registerClassPair, c_void, Class_t)
+
 # Protocol_t **objc_copyProtocolList(unsigned int *outCount)
 # Returns an array of *outcount pointers NULL terminated.  You must free() the array!
 _csignature_list(libobjc.objc_copyProtocolList, POINTER(Protocol_t), POINTER(c_uint))
+
 # Id_t objc_getAssociatedObject(Id_t object, void *key)
 _csignature(libobjc.objc_getAssociatedObject, Id_t, Id_t, c_void_p)
+# void objc_removeAssociatedObjects(Id_t object)
+_csignature(libobjc.objc_removeAssociatedObjects, c_void, Id_t)
+# void objc_setAssociatedObject(Id_t object, void *key, Id_t value, objc_AssociationPolicy policy)
+_csignature(libobjc.objc_setAssociatedObject, c_void, Id_t, c_void_p, Id_t, c_int)
+
 # Class_t objc_getClass(const char *name)
 _csignature(libobjc.objc_getClass, Class_t, c_char_p)
 # int objc_getClassList(Class_t *buffer, int bufferLen)
@@ -848,6 +857,7 @@ _csignature(libobjc.objc_getClassList, c_int, Class_t, c_int)
 _csignature(libobjc.objc_getMetaClass, Class_t, c_char_p)
 # Protocol_t *objc_getProtocol(const char *name)
 _csignature(libobjc.objc_getProtocol, Protocol_t, c_char_p)
+
 # You should set return and argument types depending on context.
 # Id_t objc_msgSend(Id_t theReceiver, SEL_t theSelector, ...)
 # Id_t objc_msgSendSuper(struct objc_super_t *super, SEL_t op,  ...)
@@ -857,12 +867,6 @@ _csignature_variadic(libobjc.objc_msgSendSuper_stret, c_void)
 _csignature_variadic(libobjc.objc_msgSend_fpret, c_float)  # c_float, c_longdouble
 # void objc_msgSend_stret(void * stretAddr, Id_t theReceiver, SEL_t theSelector,  ...)
 _csignature_variadic(libobjc.objc_msgSend_stret, c_void)
-# void objc_registerClassPair(Class_t cls)
-_csignature(libobjc.objc_registerClassPair, c_void, Class_t)
-# void objc_removeAssociatedObjects(Id_t object)
-_csignature(libobjc.objc_removeAssociatedObjects, c_void, Id_t)
-# void objc_setAssociatedObject(Id_t object, void *key, Id_t value, objc_AssociationPolicy policy)
-_csignature(libobjc.objc_setAssociatedObject, c_void, Id_t, c_void_p, Id_t, c_int)
 
 # Id_t object_copy(Id_t obj, size_t size)
 _csignature(libobjc.object_copy, Id_t, Id_t, c_size_t)

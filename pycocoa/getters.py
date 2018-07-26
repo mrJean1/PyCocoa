@@ -14,10 +14,11 @@ from oslibs  import libobjc  # get_lib
 from utils   import bytes2str, Cache2, _exports, isinstanceOf, missing, \
                     name2objc, str2bytes
 
-__version__ = '18.07.24'
+__version__ = '18.07.25'
 
 _c_func_t_cache = {}
 _SEL_t_cache = Cache2(limit2=128)
+_super_cache = Cache2(limit2=32)
 
 
 def _ivar_ctype(objc, name):
@@ -101,7 +102,7 @@ def get_classname(clas, dflt=missing):
 
        @raise ValueError: Invalid I{clas}, iff no I{dflt} provided.
     '''
-    if clas:
+    if clas and isinstanceOf(clas, Class_t, name='clas'):
         return bytes2str(libobjc.class_getName(clas))
     if dflt is missing:
         raise ValueError('no such %s: %r' % ('Class', clas))
@@ -374,7 +375,13 @@ def get_superclass(clas):
 
        @return: The super-class (L{Class_t}), None otherwise.
     '''
-    return libobjc.class_getSuperclass(clas) or None
+    isinstanceOf(clas, Class_t, name='clas')
+    try:
+        supr = _super_cache[clas.value]
+    except KeyError:
+        supr = libobjc.class_getSuperclass(clas) or None
+        _super_cache[clas.value] = supr
+    return supr
 
 
 def get_superclassof(objc):

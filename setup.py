@@ -1,10 +1,10 @@
 
 # -*- coding: utf-8 -*-
 
-# The setuptools script to build, install and test a PyGeodesy distribution.
+# The setuptools script to build, install and test a PyCocoa distribution.
 
-# Tested with 64-bit Python 2.7.13, 2.7.14 and 3.6.2 (using setuptools
-# 28.8.0) but only on macOS 10.12.6 Sierra.
+# Tested with 64-bit Python 2.7.14, 2.7.15, 3.6.5 and 3.7.0 (and setuptools
+# 28.8.0) but only on macOS 10.12 Sierra and 10.13 High Sierra.
 
 # python setup.py sdist --formats=gztar,bztar,zip  # ztar,tar
 # python setup.py bdist_wheel --universal  # XXX
@@ -22,7 +22,7 @@
 from setuptools import setup
 
 __all__ = ()
-__version__ = '18.06.28'
+__version__ = '18.07.25'
 
 
 def _c2(*names):
@@ -45,8 +45,8 @@ def _version():
                 return '.'.join(map(str, map(int, v.split('.'))))
 
 
-_KeyWords=('Cocoa', 'cocoavlc', 'ctypes',
-           'macOS',
+_KeyWords=('Cocoa', 'cocoa-python', 'cocoavlc', 'ctypes',
+           'macOS', 'MacOSX',
            'Objective-C',
            'PyCocoa', 'python-vlc',
            'VLC', 'VLCplayer')
