@@ -1278,7 +1278,7 @@ def send_message(objc, sel_name_, *args, **resargtypes):
               C{SEL/cmd} arguments.
     '''
     objc, _ = _obj_and_name(objc, get_class)
-    _ObjC_logf('send_%s(%r, %s, %r) %r', 'message', objc, sel_name_,
+    _ObjC_logf('send_%s(%r, %r, %r) %r', 'message', objc, sel_name_,
                                           args, resargtypes)
     objc = _objc_cast(objc)
     restype, argtypes, sel = _signature3(type(objc), sel_name_,
@@ -1323,7 +1323,7 @@ def send_super(objc, sel_name_, *args, **resargtypes):
               I{message arguments only without} the C{Id/self} and
               C{SEL/cmd} arguments.
     '''
-    _ObjC_logf('send_%s(%r, %s, %r) %r', 'super', objc, sel_name_,
+    _ObjC_logf('send_%s(%r, %r, %r) %r', 'super', objc, sel_name_,
                                           args, resargtypes)
 
     objc = _objc_cast(objc)
@@ -1337,6 +1337,21 @@ def send_super(objc, sel_name_, *args, **resargtypes):
     else:
         return _libobjcall(_objc_msgSendSuper, restype, argtypes,
                             objc_ref, sel, *args)
+
+
+def send_super_init(objc):
+    '''Send 'init' message to the super-class of an ObjC object.
+
+       @param objc: The recipient (C{Object}, C{Id_t}, etc.) instance.
+
+       @return: Message result (C{Id_t}).
+    '''
+    _ObjC_logf('send_%s(%r, %r)', 'super', objc, 'init')
+
+    objc = _objc_cast(objc)
+    objc_ref = byref(objc_super_t(objc, get_superclassof(objc)))
+    return _libobjcall(_objc_msgSendSuper, Id_t, [],  # [objc_super_t_ptr, SEL_t]
+                        objc_ref, get_selector('init'))
 
 
 def set_ivar(objc, name, value, ctype=None):
@@ -1413,7 +1428,7 @@ class _NSDeallocObserver(object):  # XXX (_ObjCBase):
 
     @_ObjC.rawmethod('@@')
     def initWithObject_(self, unused, objc_ptr_value):
-        self = send_super(self, 'init').value
+        self = send_super_init(self).value
         set_ivar(self, _Ivar1.name, objc_ptr_value, ctype=_Ivar1.c_t)
         return self
 

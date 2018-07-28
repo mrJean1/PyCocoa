@@ -14,7 +14,7 @@ from nstypes import NSApplication, nsBundleRename, \
 # from oslibs  import YES
 from runtime import isInstanceOf, ObjCClass, ObjCInstance, \
                     _ObjC_log_totals, ObjCSubclass, release, retain, \
-                    send_super
+                    send_super_init
 from utils   import _Globals, bytes2str, isinstanceOf, printf, _Types
 
 from threading import Thread
@@ -25,7 +25,7 @@ __all__ = ('App',
            'Tile',
            'app_title',
            'ns2App')
-__version__ = '18.07.23'
+__version__ = '18.07.27'
 
 
 class App(_Type2):
@@ -336,7 +336,7 @@ class _NSApplicationDelegate(object):
         '''
         isinstanceOf(app, App, name='app')
 #       self = ObjCInstance(send_message('NSObject', 'alloc'))
-        self = ObjCInstance(send_super(self, 'init'))
+        self = ObjCInstance(send_super_init(self))
         self.app = app
         return self
 

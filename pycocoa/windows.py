@@ -26,12 +26,12 @@ from oslibs   import NO, NSBackingStoreBuffered, \
                      NSWindowStyleMaskUsual, \
                      NSWindowStyleMaskUtilityWindow, YES
 from runtime  import isInstanceOf, ObjCClass, ObjCInstance, \
-                     ObjCSubclass, release, retain, send_super
+                     ObjCSubclass, release, retain, send_super_init
 from utils    import aspect_ratio, bytes2str, _Constants, _exports, \
                      _Globals, isinstanceOf, _text_title2, _Types
 # from enum   import Enum
 
-__version__ = '18.06.28'
+__version__ = '18.07.27'
 
 _Cascade = NSPoint_t(25, 25)  # PYCHOK false
 
@@ -537,7 +537,7 @@ class _NSWindowDelegate(object):
         '''
         isinstanceOf(window, Window, name='window')
 #       self = ObjCInstance(send_message('NSObject', 'alloc'))
-        self = ObjCInstance(send_super(self, 'init'))
+        self = ObjCInstance(send_super_init(self))
         self.window = window
         return self
 

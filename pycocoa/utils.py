@@ -7,7 +7,7 @@
 
 @var missing: Missing keyword argument value.
 '''
-__version__ = '18.07.25'
+__version__ = '18.07.27'
 
 try:  # all imports listed explicitly to help PyChecker
     from math import gcd  # Python 3+
@@ -744,8 +744,8 @@ def zSIstr(size, B='B', K=1024):
             z /= k
             if z < k:
                 if k == 1024.0:
-                    si = 'i' + si
-                si = '%.1f %si%s' % (z, si, B)
+                    si += 'i'
+                si = '%.1f %s%s' % (z, si, B)
                 break
         else:
             si = '%.3e %s' % (float(size), B)

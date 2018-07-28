@@ -21,14 +21,14 @@ from oslibs   import NSTableViewSolidHorizontalGridLineMask, \
                      NSTextAlignmentLeft, NSTextAlignmentNatural, \
                      NSTextAlignmentRight, YES
 from runtime  import isInstanceOf, ObjCClass, ObjCInstance, \
-                     ObjCSubclass, release, retain, send_super
+                     ObjCSubclass, release, retain, send_super_init
 from utils    import _Globals, isinstanceOf, _Types
 from windows  import Screen, Window, WindowStyle
 
 __all__ = ('NSTableViewDelegate',
            'Table', 'TableWindow',
            'closeTables')
-__version__ = '18.06.28'
+__version__ = '18.07.27'
 
 _Alignment = dict(center=NSTextAlignmentCenter,
                justified=NSTextAlignmentJustified,
@@ -131,7 +131,7 @@ class Table(_Type2):
             self._release()
         self.NS = NSMain.Null
 
-    def display(self, title, width=600, height=400):
+    def display(self, title, width=400, height=300):
         '''Show the table in a scrollable window.
 
            @param title: Window title (C{str}).
@@ -217,7 +217,7 @@ class _NSTableViewDelegate(object):
         isinstanceOf(cols, list, tuple, name='cols')
         isinstanceOf(rows, list, tuple, name='rows')
 #       self = ObjCInstance(send_message('NSObject', 'alloc'))
-        self = ObjCInstance(send_super(self, 'init'))
+        self = ObjCInstance(send_super_init(self))
         self.cols = cols  # column headers/titles
         self.rows = rows
         self.id2i = id2i  # map col.identifier to number

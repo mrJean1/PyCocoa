@@ -49,6 +49,7 @@ pycocoa.NSInt	pycocoa-module.html#NSInt
 pycocoa.NSFontMonoSpaceMask	pycocoa-module.html#NSFontMonoSpaceMask
 pycocoa.NSFontScriptsClass	pycocoa-module.html#NSFontScriptsClass
 pycocoa.NSFontCompositeMask	pycocoa-module.html#NSFontCompositeMask
+pycocoa.send_super_init	pycocoa-module.html#send_super_init
 pycocoa.BezelStyle	pycocoa-module.html#BezelStyle
 pycocoa.CGSizeEncoding	pycocoa-module.html#CGSizeEncoding
 pycocoa.gcd	pycocoa-module.html#gcd
@@ -318,12 +319,12 @@ pycocoa.NSMenuItem	pycocoa-module.html#NSMenuItem
 pycocoa.name2objc	pycocoa-module.html#name2objc
 pycocoa.NSApplicationActivationPolicyProhibited	pycocoa-module.html#NSApplicationActivationPolicyProhibited
 pycocoa.apps	pycocoa.apps-module.html
+pycocoa.apps.send_super_init	pycocoa.runtime-module.html#send_super_init
 pycocoa.apps.bytes2str	pycocoa.utils-module.html#bytes2str
 pycocoa.apps.nsOf	pycocoa.nstypes-module.html#nsOf
 pycocoa.apps.NSApplicationDelegate	pycocoa.apps-module.html#NSApplicationDelegate
 pycocoa.apps.printf	pycocoa.utils-module.html#printf
 pycocoa.apps.__package__	pycocoa.apps-module.html#__package__
-pycocoa.apps.send_super	pycocoa.runtime-module.html#send_super
 pycocoa.apps.ns2Item	pycocoa.menus-module.html#ns2Item
 pycocoa.apps.nsBundleRename	pycocoa.nstypes-module.html#nsBundleRename
 pycocoa.apps.app_title	pycocoa.apps-module.html#app_title
@@ -940,6 +941,7 @@ pycocoa.runtime._exports	pycocoa.utils-module.html#_exports
 pycocoa.runtime.get_classname	pycocoa.getters-module.html#get_classname
 pycocoa.runtime.__i386__	pycocoa.runtime-module.html#__i386__
 pycocoa.runtime._objc_msgSendSuper	pycocoa.runtime-module.html#_objc_msgSendSuper
+pycocoa.runtime.send_super_init	pycocoa.runtime-module.html#send_super_init
 pycocoa.runtime.ctype2encoding	pycocoa.octypes-module.html#ctype2encoding
 pycocoa.runtime._objc_cast	pycocoa.runtime-module.html#_objc_cast
 pycocoa.runtime.OBJC_ASSOCIATION_RETAIN	pycocoa.runtime-module.html#OBJC_ASSOCIATION_RETAIN
@@ -982,9 +984,9 @@ pycocoa.tables	pycocoa.tables-module.html
 pycocoa.tables.closeTables	pycocoa.tables-module.html#closeTables
 pycocoa.tables.retain	pycocoa.runtime-module.html#retain
 pycocoa.tables.__package__	pycocoa.tables-module.html#__package__
-pycocoa.tables.send_super	pycocoa.runtime-module.html#send_super
 pycocoa.tables.NSTableViewDelegate	pycocoa.tables-module.html#NSTableViewDelegate
 pycocoa.tables.release	pycocoa.runtime-module.html#release
+pycocoa.tables.send_super_init	pycocoa.runtime-module.html#send_super_init
 pycocoa.tables.isinstanceOf	pycocoa.utils-module.html#isinstanceOf
 pycocoa.tables._format	pycocoa.tables-module.html#_format
 pycocoa.tables._Alignment	pycocoa.tables-module.html#_Alignment
@@ -1031,6 +1033,7 @@ pycocoa.utils.aspect_ratio	pycocoa.utils-module.html#aspect_ratio
 pycocoa.utils.zSIstr	pycocoa.utils-module.html#zSIstr
 pycocoa.utils.name2pymethod	pycocoa.utils-module.html#name2pymethod
 pycocoa.windows	pycocoa.windows-module.html
+pycocoa.windows.send_super_init	pycocoa.runtime-module.html#send_super_init
 pycocoa.windows.BezelStyle	pycocoa.windows-module.html#BezelStyle
 pycocoa.windows._Cascade	pycocoa.windows-module.html#_Cascade
 pycocoa.windows.NSView	pycocoa.windows-module.html#NSView
@@ -1067,7 +1070,6 @@ pycocoa.windows.NSWindowStyleMaskUsual	pycocoa.windows-module.html#NSWindowStyle
 pycocoa.windows.aspect_ratio	pycocoa.utils-module.html#aspect_ratio
 pycocoa.windows.NSWindow	pycocoa.windows-module.html#NSWindow
 pycocoa.windows.YES	pycocoa.windows-module.html#YES
-pycocoa.windows.send_super	pycocoa.runtime-module.html#send_super
 pycocoa.windows.Border	pycocoa.windows-module.html#Border
 pycocoa.windows.bytes2str	pycocoa.utils-module.html#bytes2str
 pycocoa.windows.isInstanceOf	pycocoa.runtime-module.html#isInstanceOf

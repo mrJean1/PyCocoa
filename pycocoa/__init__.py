@@ -117,7 +117,7 @@ POSSIBILITY OF SUCH DAMAGE.}
 from os.path import abspath, dirname
 import sys
 
-__version__ = '18.07.25'
+__version__ = '18.07.27'
 
 p = sys.platform
 if not p.startswith('darwin'):
