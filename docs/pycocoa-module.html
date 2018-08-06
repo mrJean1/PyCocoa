@@ -86,13 +86,12 @@
   binding.</p>
   <p>The tests and examples have only been run with 64-bit Python 2.7.15 
   and 3.7.0 using <a href="http://PyPI.org/project/python-vlc" 
-  target="_top">Python-VLC</a> 2.2.6, 3.0.1, 3.0.2 and 3.0.3 (with the 
-  compatible <a href="http://www.VideoLan.org/vlc" target="_top">VLC 
-  App</a>), but only on macOS 10.13.3, 10.13.4, 10.13.5 or 10.13.6 High 
-  Sierra.  PyCocoa has <i>not been tested</i> on iOS nor with 32-bit Python
-  and <i>does not work</i> with <a href="http://PyPy.org" 
-  target="_top">PyPy</a> nor with <a 
-  href="http://Software.Intel.com/en-us/distribution-for-python" 
+  target="_top">Python-VLC</a> 2.2.8, 3.0.1 and 3.0.3 (with the compatible 
+  <a href="http://www.VideoLan.org/vlc" target="_top">VLC App</a>), but 
+  only on macOS 10.13.3, 10.13.4, 10.13.5 or 10.13.6 High Sierra.  PyCocoa 
+  has <i>not been tested</i> on iOS nor with 32-bit Python and <i>does not 
+  work</i> with <a href="http://PyPy.org" target="_top">PyPy</a> nor with 
+  <a href="http://Software.Intel.com/en-us/distribution-for-python" 
   target="_top">Intel(R) Python</a>.</p>
   <p>All PyCocoa source code has been statically <a 
   href="http://GitHub.com/ActiveState/code/tree/master/recipes/Python/546532_PyChecker_postprocessor"
@@ -114,9 +113,9 @@
   run the PyCocoa tests, type <code>python setup.py test</code> before 
   installation.</p>
   <p>Some alternatives to PyCocoa are (a) <a 
-  href="http://PyPI.org/project/pyobjc/" target="_top">PyObjC</a>, the most
+  href="http://PyPI.org/project/pyobjc" target="_top">PyObjC</a>, the most 
   comprehensive Python to Objective-C bridge, (b) <a 
-  href="http://PyPI.org/project/rubicon-objc/" 
+  href="http://PyPI.org/project/rubicon-objc" 
   target="_top">Rubicon-ObjC</a> for Python 3.5+, taking advantage of 
   Python's new <a href="http://Docs.Python.org/3/library/typing.html" 
   target="_top">typing</a> annotations and (c) <a 
@@ -174,7 +173,7 @@
 
 <hr />
 <div class="fields">      <p><strong>Version:</strong>
-        18.07.27
+        18.08.04
       </p>
 </div><!-- ==================== SUBMODULES ==================== -->
 <a name="section-Submodules"></a>
@@ -208,13 +207,14 @@
     <li> <strong class="uidlink"><a href="pycocoa.getters-module.html">pycocoa.getters</a></strong>: <em class="summary"><code>get_...</code> functions to obtain ObjC classes, methods, 
         protocols, etc.</em>    </li>
     <li> <strong class="uidlink"><a href="pycocoa.lists-module.html">pycocoa.lists</a></strong>: <em class="summary">Type <a href="pycocoa.lists.List-class.html" class="link">List</a>,
-        wrapping ObjC NSMutableArray.</em>    </li>
+        wrapping ObjC <code>NSMutableArray</code>.</em>    </li>
     <li> <strong class="uidlink"><a href="pycocoa.menus-module.html">pycocoa.menus</a></strong>: <em class="summary">Types <a href="pycocoa.menus.Item-class.html" 
         class="link">Item</a>, <a href="pycocoa.menus.Menu-class.html" 
         class="link">Menu</a>, <a href="pycocoa.menus.MenuBar-class.html" 
         class="link">MenuBar</a> and <a 
         href="pycocoa.menus.Separator-class.html" 
-        class="link">Separator</a>, wrapping ObjC NSMenuItem and NSMenu.</em>    </li>
+        class="link">Separator</a>, wrapping ObjC <code>NSMenuItem</code> 
+        and <code>NSMenu</code>.</em>    </li>
     <li> <strong class="uidlink"><a href="pycocoa.nstypes-module.html">pycocoa.nstypes</a></strong>: <em class="summary">ObjC classes <code>NS...</code> and conversions from 
         <code>NS...</code> ObjC to Python instances.</em>    </li>
     <li> <strong class="uidlink"><a href="pycocoa.octypes-module.html">pycocoa.octypes</a></strong>: <em class="summary">ObjC <code>..._t</code> type definitions and some additional 
@@ -223,8 +223,18 @@
     <li> <strong class="uidlink"><a href="pycocoa.panels-module.html">pycocoa.panels</a></strong>: <em class="summary">Types <a href="pycocoa.panels.OpenPanel-class.html" 
         class="link">OpenPanel</a> and <a 
         href="pycocoa.panels.SavePanel-class.html" 
-        class="link">SavePanel</a>, wrapping ObjC NSOpenPanel and 
-        NSSavePanel.</em>    </li>
+        class="link">SavePanel</a>, wrapping ObjC <code>NSOpenPanel</code> 
+        and <code>NSSavePanel</code>.</em>    </li>
+    <li> <strong class="uidlink"><a href="pycocoa.printers-module.html">pycocoa.printers</a></strong>: <em class="summary">Types <a href="pycocoa.printers.Printer-class.html" 
+        class="link">Printer</a>, <a 
+        href="pycocoa.printers.Paper-class.html" class="link">Paper</a>, <a
+        href="pycocoa.printers.PaperCustom-class.html" 
+        class="link">PaperCustom</a> and <a 
+        href="pycocoa.printers.PaperMargins-class.html" 
+        class="link">PaperMargins</a>, wrapping ObjC 
+        <code>NSPrinter</code>, <code>PMPrinter</code>, 
+        <code>PMPaper</code> respectively <code>PMPaperMargins</code> plus 
+        several <code>get_...</code> print functions.</em>    </li>
     <li> <strong class="uidlink"><a href="pycocoa.pytypes-module.html">pycocoa.pytypes</a></strong>: <em class="summary">Conversions from <code>NS...</code> ObjC instances to Python.</em>    </li>
     <li> <strong class="uidlink"><a href="pycocoa.runtime-module.html">pycocoa.runtime</a></strong>: <em class="summary">Classes <code>ObjCClass</code>, <code>ObjCInstance</code>, 
         <code>ObjCMethod</code>, <code>ObjCSubclass</code>, etc.</em>    </li>
@@ -237,10 +247,12 @@
     <li> <strong class="uidlink"><a href="pycocoa.tables-module.html">pycocoa.tables</a></strong>: <em class="summary">Types <a href="pycocoa.tables.Table-class.html" 
         class="link">Table</a> and <a 
         href="pycocoa.tables.TableWindow-class.html" 
-        class="link">TableWindow</a>, wrapping ObjC NSTableView, <a 
-        href="pycocoa-module.html#NSWindow" class="link">NSWindow</a>.</em>    </li>
+        class="link">TableWindow</a>, wrapping ObjC 
+        <code>NSTableView</code>, <a href="pycocoa-module.html#NSWindow" 
+        class="link">NSWindow</a>.</em>    </li>
     <li> <strong class="uidlink"><a href="pycocoa.tuples-module.html">pycocoa.tuples</a></strong>: <em class="summary">Type <a href="pycocoa.tuples.Tuple-class.html" 
-        class="link">Tuple</a>, wrapping (immutable) ObjC NSArray.</em>    </li>
+        class="link">Tuple</a>, wrapping (immutable) ObjC 
+        <code>NSArray</code>.</em>    </li>
     <li> <strong class="uidlink"><a href="pycocoa.utils-module.html">pycocoa.utils</a></strong>: <em class="summary">(INTERNAL) Utility functions, constants, etc.</em>    </li>
     <li> <strong class="uidlink"><a href="pycocoa.windows-module.html">pycocoa.windows</a></strong>: <em class="summary">Types <a href="pycocoa.windows-module.html#AutoResize" 
         class="link">AutoResize</a>, <a 
@@ -841,6 +853,33 @@
     <td width="15%" align="right" valign="top" class="summary">
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
+        <a href="pycocoa.printers.Paper-class.html" class="summary-name">Paper</a><br />
+      Python <code>Paper</code> Type, wrapping an opaque ObjC 
+        <code>PMPaper</code>.
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="pycocoa.printers.PaperCustom-class.html" class="summary-name">PaperCustom</a><br />
+      Create a custom <a href="pycocoa.printers.Paper-class.html" 
+        class="link">Paper</a>.
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="pycocoa.printers.PaperMargins-class.html" class="summary-name">PaperMargins</a><br />
+      Python <code>PaperMargins</code> Type, wrapping an ObjC 
+        <code>PMPaperMargins</code>.
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
         <a href="pycocoa.geometry.Point-class.html" class="summary-name">Point</a><br />
       Python Type, wrapping an ObjC <code>NSPoint_t</code>.
     </td>
@@ -852,6 +891,15 @@
         <a href="pycocoa.geometry.Point2-class.html" class="summary-name">Point2</a><br />
       Python Type, like <a href="pycocoa.geometry.Point-class.html" 
         class="link">Point</a>, different signature.
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="pycocoa.printers.Printer-class.html" class="summary-name">Printer</a><br />
+      Python <code>Printer</code> Type, wrapping ObjC 
+        <code>NSPrinter</code> and <code>PMPrinter</code>.
     </td>
   </tr>
 <tr>
@@ -931,7 +979,7 @@
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
         <a href="pycocoa.sets.Set-class.html" class="summary-name">Set</a><br />
-      Python c{Set} Type, wrapping an ObjC NSMutableSet.
+      Python <code>set</code> Type, wrapping an ObjC NSMutableSet.
     </td>
   </tr>
 <tr>
@@ -996,8 +1044,7 @@
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
         <a href="pycocoa.tables.Table-class.html" class="summary-name">Table</a><br />
-      Python Type table of rows and columns, wrapping an ObjC 
-        NSTableView.
+      Python rows and columns {Table} Type, wrapping an ObjC NSTableView.
     </td>
   </tr>
 <tr>
@@ -1844,6 +1891,42 @@
     </td><td class="summary">
       <table width="100%" cellpadding="0" cellspacing="0" border="0">
         <tr>
+          <td><span class="summary-sig"><a href="pycocoa-module.html#get_libPC" class="summary-sig-name">get_libPC</a>()</span><br />
+      Get the <code>PrintCore</code> framework library.</td>
+          <td align="right" valign="top">
+            
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a href="pycocoa-module.html#get_lib_framework" class="summary-sig-name">get_lib_framework</a>(<span class="summary-sig-arg">name</span>,
+        <span class="summary-sig-arg">services</span>=<span class="summary-sig-default"><code class="variable-quote">'</code><code class="variable-string">ApplicationServices</code><code class="variable-quote">'</code></span>,
+        <span class="summary-sig-arg">version</span>=<span class="summary-sig-default"><code class="variable-quote">'</code><code class="variable-string"></code><code class="variable-quote">'</code></span>)</span><br />
+      Load a <code>Frameworks services .framework</code> library.</td>
+          <td align="right" valign="top">
+            
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
           <td><span class="summary-sig"><a href="pycocoa-module.html#get_metaclass" class="summary-sig-name">get_metaclass</a>(<span class="summary-sig-arg">name</span>)</span><br />
       Get a registered ObjC metaclass by name.</td>
           <td align="right" valign="top">
@@ -1883,6 +1966,74 @@
         <span class="summary-sig-arg">*prefixes</span>)</span><br />
       Yield all methods of an ObjC class with a name starting with one of 
       the given prefixes.</td>
+          <td align="right" valign="top">
+            
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a href="pycocoa-module.html#get_papers" class="summary-sig-name">get_papers</a>(<span class="summary-sig-arg">*printers</span>)</span><br />
+      Yield the papers available at the given printer(s).</td>
+          <td align="right" valign="top">
+            
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a href="pycocoa-module.html#get_printer" class="summary-sig-name">get_printer</a>(<span class="summary-sig-arg">*prefixes</span>)</span><br />
+      Find a printer by name or by ID or get the default printer.</td>
+          <td align="right" valign="top">
+            
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a href="pycocoa-module.html#get_printer_browser" class="summary-sig-name">get_printer_browser</a>(<span class="summary-sig-arg">server</span>=<span class="summary-sig-default">None</span>)</span><br />
+      Show the printer browser for the given server.</td>
+          <td align="right" valign="top">
+            
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a href="pycocoa-module.html#get_printers" class="summary-sig-name">get_printers</a>(<span class="summary-sig-arg">server</span>=<span class="summary-sig-default">None</span>)</span><br />
+      Yield all printers available at the given server.</td>
           <td align="right" valign="top">
             
             
@@ -1938,6 +2089,23 @@
         <span class="summary-sig-arg">*prefixes</span>)</span><br />
       Yield all protocols of an ObjC class with a name starting with one of
       the given prefixes.</td>
+          <td align="right" valign="top">
+            
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a href="pycocoa-module.html#get_resolutions" class="summary-sig-name">get_resolutions</a>(<span class="summary-sig-arg">*printers</span>)</span><br />
+      Yield the resolutions supported by the given printer(s).</td>
           <td align="right" valign="top">
             
             
@@ -2311,7 +2479,8 @@
       <table width="100%" cellpadding="0" cellspacing="0" border="0">
         <tr>
           <td><span class="summary-sig"><a href="pycocoa-module.html#name2objc" class="summary-sig-name">name2objc</a>(<span class="summary-sig-arg">name_</span>)</span><br />
-      Convert a (selector) name to bytes and ObjC naming rules.</td>
+      Convert a (selector) name to <code>bytes</code> and ObjC naming 
+      rules.</td>
           <td align="right" valign="top">
             
             
@@ -2328,7 +2497,8 @@
       <table width="100%" cellpadding="0" cellspacing="0" border="0">
         <tr>
           <td><span class="summary-sig"><a href="pycocoa-module.html#name2py" class="summary-sig-name">name2py</a>(<span class="summary-sig-arg">name_</span>)</span><br />
-      Convert a (selector) name to str and Python naming conventions.</td>
+      Convert a (selector) name <code>str</code> and Python naming 
+      conventions.</td>
           <td align="right" valign="top">
             
             
@@ -2438,7 +2608,7 @@
       <table width="100%" cellpadding="0" cellspacing="0" border="0">
         <tr>
           <td><span class="summary-sig"><a href="pycocoa-module.html#ns2py" class="summary-sig-name">ns2py</a>(<span class="summary-sig-arg">ns</span>,
-        <span class="summary-sig-arg">dflt</span>=<span class="summary-sig-default">None</span>)</span><br />
+        <span class="summary-sig-arg">dflt</span>=<span class="summary-sig-default">missing()</span>)</span><br />
       Convert (an instance of) an ObjC class to an instance of the 
       equivalent Python standard type or wrapper and value.</td>
           <td align="right" valign="top">
@@ -2779,6 +2949,25 @@
         <tr>
           <td><span class="summary-sig"><a href="pycocoa-module.html#nsThrow" class="summary-sig-name">nsThrow</a>(<span class="summary-sig-arg">ns_exception</span>)</span><br />
       Mimick ObjC's <code>@throw NSException</code> to raise an exception.</td>
+          <td align="right" valign="top">
+            
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a href="pycocoa-module.html#nsURL2str" class="summary-sig-name">nsURL2str</a>(<span class="summary-sig-arg">ns</span>)</span><br />
+      Create a Python <code>str</code> from <a 
+      href="pycocoa.nstypes-module.html#NSURL" class="link">NSURL</a> 
+      string.</td>
           <td align="right" valign="top">
             
             
@@ -3268,6 +3457,24 @@
       
     </td>
   </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a href="pycocoa-module.html#zfstr" class="summary-sig-name">zfstr</a>(<span class="summary-sig-arg">flt</span>,
+        <span class="summary-sig-arg">prec</span>=<span class="summary-sig-default">3</span>)</span><br />
+      Format a <code>float</code> and strip trailing zero decimals.</td>
+          <td align="right" valign="top">
+            
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
 </table>
 <!-- ==================== VARIABLES ==================== -->
 <a name="section-Variables"></a>
@@ -3471,14 +3678,14 @@ mUIFont', size=13, traits='Italic', weight=5),
     <td width="15%" align="right" valign="top" class="summary">
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
-        <a name="NSApplicationDidHideNotification"></a><span class="summary-name">NSApplicationDidHideNotification</span> = <code title="c_void_p(140735739584448)">c_void_p(140735739584448)</code>
+        <a name="NSApplicationDidHideNotification"></a><span class="summary-name">NSApplicationDidHideNotification</span> = <code title="c_void_p(140736096071616)">c_void_p(140736096071616)</code>
     </td>
   </tr>
 <tr>
     <td width="15%" align="right" valign="top" class="summary">
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
-        <a name="NSApplicationDidUnhideNotification"></a><span class="summary-name">NSApplicationDidUnhideNotification</span> = <code title="c_void_p(140735739584544)">c_void_p(140735739584544)</code>
+        <a name="NSApplicationDidUnhideNotification"></a><span class="summary-name">NSApplicationDidUnhideNotification</span> = <code title="c_void_p(140736096071712)">c_void_p(140736096071712)</code>
     </td>
   </tr>
 <tr>
@@ -3653,7 +3860,7 @@ mUIFont', size=13, traits='Italic', weight=5),
     <td width="15%" align="right" valign="top" class="summary">
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
-        <a name="NSDefaultRunLoopMode"></a><span class="summary-name">NSDefaultRunLoopMode</span> = <code title="c_void_p(140735748764024)">c_void_p(140735748764024)</code>
+        <a name="NSDefaultRunLoopMode"></a><span class="summary-name">NSDefaultRunLoopMode</span> = <code title="c_void_p(140736105251192)">c_void_p(140736105251192)</code>
     </td>
   </tr>
 <tr>
@@ -3709,7 +3916,7 @@ mUIFont', size=13, traits='Italic', weight=5),
     <td width="15%" align="right" valign="top" class="summary">
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
-        <a name="NSEventTrackingRunLoopMode"></a><span class="summary-name">NSEventTrackingRunLoopMode</span> = <code title="c_void_p(140735739579136)">c_void_p(140735739579136)</code>
+        <a name="NSEventTrackingRunLoopMode"></a><span class="summary-name">NSEventTrackingRunLoopMode</span> = <code title="c_void_p(140736096066304)">c_void_p(140736096066304)</code>
     </td>
   </tr>
 <tr>
@@ -4010,6 +4217,13 @@ mUIFont', size=13, traits='Italic', weight=5),
     <td width="15%" align="right" valign="top" class="summary">
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
+        <a name="NSImageView"></a><span class="summary-name">NSImageView</span> = <code title="ObjCClass('NSImageView')">ObjCClass('NSImageView')</code>
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
         <a name="NSInsertFunctionKey"></a><span class="summary-name">NSInsertFunctionKey</span> = <code title="63271">63271</code>
     </td>
   </tr>
@@ -4087,15 +4301,15 @@ mUIFont', size=13, traits='Italic', weight=5),
     <td width="15%" align="right" valign="top" class="summary">
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
-        <a href="pycocoa-module.html#NSMain" class="summary-name">NSMain</a> = <code title="NSMain.Application=NSApplication(&lt;Id_t at 0x105f298c0&gt;) of 0x7fad01ff2\
-560,
-      .BooleanNO=NSBoolean(&lt;Id_t at 0x105f21200&gt;) of 0x7fff985f53f8,
-      .BooleanYES=NSBoolean(&lt;Id_t at 0x105f44b00&gt;) of 0x7fff985f53e8,
-      .Bundle=NSBundle(&lt;Id_t at 0x105ed97a0&gt;) of 0x7fad01c9e4a0,
+        <a href="pycocoa-module.html#NSMain" class="summary-name">NSMain</a> = <code title="NSMain.Application=NSApplication(&lt;Id_t at 0x10f0d17a0&gt;) of 0x7fc351cf9\
+f70,
+      .BooleanNO=NSBoolean(&lt;Id_t at 0x10f3b7200&gt;) of 0x7fffad9ee3f8,
+      .BooleanYES=NSBoolean(&lt;Id_t at 0x10f3b7d40&gt;) of 0x7fffad9ee3e8,
+      .Bundle=NSBundle(&lt;Id_t at 0x10f3cf050&gt;) of 0x7fc351c83b10,
       .BundleName=NSConstantString('CFBundleName'),
-      .FontManager=NSFontManager(&lt;Id_t at 0x105ed99e0&gt;) of 0x7fad040d4\
-d90,
-...">NSMain.Application=NSApplication(&lt;Id_t at 0x105f298c0<code class="variable-ellipsis">...</code></code>
+      .FontManager=NSFontManager(&lt;Id_t at 0x10eed0f80&gt;) of 0x7fc354523\
+4b0,
+...">NSMain.Application=NSApplication(&lt;Id_t at 0x10f0d17a0<code class="variable-ellipsis">...</code></code>
     </td>
   </tr>
 <tr>
@@ -4708,8 +4922,8 @@ d90,
     <td width="15%" align="right" valign="top" class="summary">
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
-        <a href="pycocoa-module.html#libAppKit" class="summary-name">libAppKit</a> = <code title="&lt;CDLL '/System/Library/Frameworks/AppKit.framework/AppKit', handle 7fa\
-d01d54670 at 102396a90&gt;">&lt;CDLL '/System/Library/Frameworks/AppKit.framework<code class="variable-ellipsis">...</code></code>
+        <a href="pycocoa-module.html#libAppKit" class="summary-name">libAppKit</a> = <code title="&lt;CDLL '/System/Library/Frameworks/AppKit.framework/AppKit', handle 7fc\
+351c49dd0 at 10b423b50&gt;">&lt;CDLL '/System/Library/Frameworks/AppKit.framework<code class="variable-ellipsis">...</code></code>
     </td>
   </tr>
 <tr>
@@ -4717,7 +4931,7 @@ d01d54670 at 102396a90&gt;">&lt;CDLL '/System/Library/Frameworks/AppKit.framewor
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
         <a href="pycocoa-module.html#libCF" class="summary-name">libCF</a> = <code title="&lt;CDLL '/System/Library/Frameworks/CoreFoundation.framework/CoreFoundat\
-ion', handle 109cbf800 at 102378d50&gt;">&lt;CDLL '/System/Library/Frameworks/CoreFoundation.frame<code class="variable-ellipsis">...</code></code>
+ion', handle 114f19800 at 10b401d10&gt;">&lt;CDLL '/System/Library/Frameworks/CoreFoundation.frame<code class="variable-ellipsis">...</code></code>
     </td>
   </tr>
 <tr>
@@ -4725,7 +4939,7 @@ ion', handle 109cbf800 at 102378d50&gt;">&lt;CDLL '/System/Library/Frameworks/Co
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
         <a href="pycocoa-module.html#libCT" class="summary-name">libCT</a> = <code title="&lt;CDLL '/System/Library/Frameworks/CoreText.framework/CoreText', handle\
- 7fad01f0c1d0 at 1023a0c10&gt;">&lt;CDLL '/System/Library/Frameworks/CoreText.framework/C<code class="variable-ellipsis">...</code></code>
+ 7fc351f50f20 at 10b42bcd0&gt;">&lt;CDLL '/System/Library/Frameworks/CoreText.framework/C<code class="variable-ellipsis">...</code></code>
     </td>
   </tr>
 <tr>
@@ -4733,22 +4947,30 @@ ion', handle 109cbf800 at 102378d50&gt;">&lt;CDLL '/System/Library/Frameworks/Co
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
         <a href="pycocoa-module.html#libFoundation" class="summary-name">libFoundation</a> = <code title="&lt;CDLL '/System/Library/Frameworks/Foundation.framework/Foundation', ha\
-ndle 7fad01c71c30 at 1023ac290&gt;">&lt;CDLL '/System/Library/Frameworks/Foundation.f<code class="variable-ellipsis">...</code></code>
+ndle 7fc351f357d0 at 10b437350&gt;">&lt;CDLL '/System/Library/Frameworks/Foundation.f<code class="variable-ellipsis">...</code></code>
     </td>
   </tr>
 <tr>
     <td width="15%" align="right" valign="top" class="summary">
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
-        <a href="pycocoa-module.html#libobjc" class="summary-name">libobjc</a> = <code title="&lt;CDLL '/usr/lib/libobjc.dylib', handle 109cc1680 at 1023ac0d0&gt;">&lt;CDLL '/usr/lib/libobjc.dylib', handle 109cc1680 at <code class="variable-ellipsis">...</code></code>
+        <a name="libPC"></a><span class="summary-name">libPC</span> = <code title="None">None</code><br />
+      hash(x)
     </td>
   </tr>
 <tr>
     <td width="15%" align="right" valign="top" class="summary">
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
-        <a href="pycocoa-module.html#libquartz" class="summary-name">libquartz</a> = <code title="&lt;CDLL '/System/Library/Frameworks/quartz.framework/quartz', handle 7fa\
-d01e1af50 at 102396cd0&gt;">&lt;CDLL '/System/Library/Frameworks/quartz.framework<code class="variable-ellipsis">...</code></code>
+        <a href="pycocoa-module.html#libobjc" class="summary-name">libobjc</a> = <code title="&lt;CDLL '/usr/lib/libobjc.dylib', handle 114f1b680 at 10b437190&gt;">&lt;CDLL '/usr/lib/libobjc.dylib', handle 114f1b680 at <code class="variable-ellipsis">...</code></code>
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="pycocoa-module.html#libquartz" class="summary-name">libquartz</a> = <code title="&lt;CDLL '/System/Library/Frameworks/quartz.framework/quartz', handle 7fc\
+351f5e3b0 at 10b423d90&gt;">&lt;CDLL '/System/Library/Frameworks/quartz.framework<code class="variable-ellipsis">...</code></code>
     </td>
   </tr>
 <tr>
@@ -5766,13 +5988,77 @@ d01e1af50 at 102396cd0&gt;">&lt;CDLL '/System/Library/Frameworks/quartz.framewor
   <dl class="fields">
     <dt>Parameters:</dt>
     <dd><ul class="nomargin-top">
-        <li><strong class="pname"><code>name</code></strong> - The library base name (str).</li>
+        <li><strong class="pname"><code>name</code></strong> - The library base name (<code>str</code>).</li>
     </ul></dd>
     <dt>Returns:</dt>
         <dd>The library (<code>ctypes.CDLL</code>).</dd>
   </dl>
 <div class="fields">      <p><strong>Note:</strong>
-        Private attribute <code>._name</code> shows the library file name.
+        Private attribute <code>._name</code> shows the library path.
+      </p>
+</div></td></tr></table>
+</div>
+<a name="get_libPC"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">get_libPC</span>()</span>
+  </h3>
+  </td><td align="right" valign="top"
+    >&nbsp;
+    </td>
+  </tr></table>
+  
+  <p>Get the <code>PrintCore</code> framework library.</p>
+  <dl class="fields">
+    <dt>Returns:</dt>
+        <dd>The <code>libPC</code> framework library 
+          (<code>ctypes.CDLL</code>).</dd>
+  </dl>
+</td></tr></table>
+</div>
+<a name="get_lib_framework"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">get_lib_framework</span>(<span class="sig-arg">name</span>,
+        <span class="sig-arg">services</span>=<span class="sig-default"><code class="variable-quote">'</code><code class="variable-string">ApplicationServices</code><code class="variable-quote">'</code></span>,
+        <span class="sig-arg">version</span>=<span class="sig-default"><code class="variable-quote">'</code><code class="variable-string"></code><code class="variable-quote">'</code></span>)</span>
+  </h3>
+  </td><td align="right" valign="top"
+    >&nbsp;
+    </td>
+  </tr></table>
+  
+  <p>Load a <code>Frameworks services .framework</code> library.</p>
+  <dl class="fields">
+    <dt>Parameters:</dt>
+    <dd><ul class="nomargin-top">
+        <li><strong class="pname"><code>name</code></strong> - Library base name (<code>str</code>).</li>
+        <li><strong class="pname"><code>services</code></strong> - Services framework base name (<code>str</code>).</li>
+        <li><strong class="pname"><code>version</code></strong> - Framework version (<code>str</code>), if not 'Current'.</li>
+    </ul></dd>
+    <dt>Returns:</dt>
+        <dd>The library (<code>ctypes.CDLL</code>).</dd>
+  </dl>
+<div class="fields">      <p><strong>Note:</strong>
+        Private attribute <code>._name</code> shows the library path.
+      </p>
+      <p><strong>Example:</strong>
+        <ul>
+          <li>
+            get_lib_framework('PrintCore')
+          </li>
+          <li>
+            get_lib_framework('Metadata', services='CoreServices')
+          </li>
+        </ul>
       </p>
 </div></td></tr></table>
 </div>
@@ -5870,6 +6156,114 @@ d01e1af50 at 102396cd0&gt;">&lt;CDLL '/System/Library/Frameworks/quartz.framewor
         <code>list</code>.
       </p>
 </div></td></tr></table>
+</div>
+<a name="get_papers"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">get_papers</span>(<span class="sig-arg">*printers</span>)</span>
+  </h3>
+  </td><td align="right" valign="top"
+    >&nbsp;
+    </td>
+  </tr></table>
+  
+  <p>Yield the papers available at the given printer(s).</p>
+  <dl class="fields">
+    <dt>Parameters:</dt>
+    <dd><ul class="nomargin-top">
+        <li><strong class="pname"><code>printers</code></strong> - No, one or more printers (<a 
+          href="pycocoa.printers.Printer-class.html" 
+          class="link">Printer</a>s).</li>
+    </ul></dd>
+    <dt>Returns:</dt>
+        <dd>Each paper (<a href="pycocoa.printers.Paper-class.html" 
+          class="link">Paper</a>).</dd>
+  </dl>
+</td></tr></table>
+</div>
+<a name="get_printer"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">get_printer</span>(<span class="sig-arg">*prefixes</span>)</span>
+  </h3>
+  </td><td align="right" valign="top"
+    >&nbsp;
+    </td>
+  </tr></table>
+  
+  <p>Find a printer by name or by ID or get the default printer.</p>
+  <dl class="fields">
+    <dt>Parameters:</dt>
+    <dd><ul class="nomargin-top">
+        <li><strong class="pname"><code>prefixes</code></strong> - No, one or more printer names or IDs to match 
+          (<code>str</code>s).</li>
+    </ul></dd>
+    <dt>Returns:</dt>
+        <dd>The printer (<a href="pycocoa.printers.Printer-class.html" 
+          class="link">Printer</a>) or <code>None</code> if none found.</dd>
+  </dl>
+</td></tr></table>
+</div>
+<a name="get_printer_browser"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">get_printer_browser</span>(<span class="sig-arg">server</span>=<span class="sig-default">None</span>)</span>
+  </h3>
+  </td><td align="right" valign="top"
+    >&nbsp;
+    </td>
+  </tr></table>
+  
+  <p>Show the printer browser for the given server.</p>
+  <dl class="fields">
+    <dt>Parameters:</dt>
+    <dd><ul class="nomargin-top">
+        <li><strong class="pname"><code>server</code></strong> - Print server (<code>PMServer</code>) or <code>None</code> for 
+          this server, the localhost.</li>
+    </ul></dd>
+    <dt>Returns:</dt>
+        <dd>Printers (<code>dict</code>) or <code>None</code>.</dd>
+  </dl>
+</td></tr></table>
+</div>
+<a name="get_printers"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">get_printers</span>(<span class="sig-arg">server</span>=<span class="sig-default">None</span>)</span>
+  </h3>
+  </td><td align="right" valign="top"
+    >&nbsp;
+    </td>
+  </tr></table>
+  
+  <p>Yield all printers available at the given server.</p>
+  <dl class="fields">
+    <dt>Parameters:</dt>
+    <dd><ul class="nomargin-top">
+        <li><strong class="pname"><code>server</code></strong> - Print server (<code>PMServer</code>) or <code>None</code> for 
+          this server, the localhost.</li>
+    </ul></dd>
+    <dt>Returns:</dt>
+        <dd>Each printer (<a href="pycocoa.printers.Printer-class.html" 
+          class="link">Printer</a>).</dd>
+  </dl>
+</td></tr></table>
 </div>
 <a name="get_properties"></a>
 <div>
@@ -6007,6 +6401,34 @@ d01e1af50 at 102396cd0&gt;">&lt;CDLL '/System/Library/Frameworks/quartz.framewor
           where <i>name</i> is the protocol name and <i>protocol</i> the <a
           href="pycocoa.octypes.Protocol_t-class.html" 
           class="link">Protocol_t</a> object.</dd>
+  </dl>
+</td></tr></table>
+</div>
+<a name="get_resolutions"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">get_resolutions</span>(<span class="sig-arg">*printers</span>)</span>
+  </h3>
+  </td><td align="right" valign="top"
+    >&nbsp;
+    </td>
+  </tr></table>
+  
+  <p>Yield the resolutions supported by the given printer(s).</p>
+  <dl class="fields">
+    <dt>Parameters:</dt>
+    <dd><ul class="nomargin-top">
+        <li><strong class="pname"><code>printers</code></strong> - No, one or more printers (<a 
+          href="pycocoa.printers.Printer-class.html" 
+          class="link">Printer</a>s).</li>
+    </ul></dd>
+    <dt>Returns:</dt>
+        <dd>Each resolution 2-tuple (horizontal, vertical) in dots per inch 
+          (<code>float</code>s).</dd>
   </dl>
 </td></tr></table>
 </div>
@@ -6241,7 +6663,7 @@ d01e1af50 at 102396cd0&gt;">&lt;CDLL '/System/Library/Frameworks/quartz.framewor
 <div class="fields">      <p><strong>See Also:</strong>
         <a href="http://GitHub.com/al45tair/mac_alias" 
         target="_top">mac-alias</a> and <a 
-        href="http://StackOverflow.com/questions/21150169/" 
+        href="http://StackOverflow.com/questions/21150169" 
         target="_top">here</a>.
       </p>
 </div></td></tr></table>
@@ -6594,7 +7016,8 @@ d01e1af50 at 102396cd0&gt;">&lt;CDLL '/System/Library/Frameworks/quartz.framewor
     </td>
   </tr></table>
   
-  <p>Convert a (selector) name to bytes and ObjC naming rules.</p>
+  <p>Convert a (selector) name to <code>bytes</code> and ObjC naming 
+  rules.</p>
   <dl class="fields">
     <dt>Parameters:</dt>
     <dd><ul class="nomargin-top">
@@ -6603,7 +7026,10 @@ d01e1af50 at 102396cd0&gt;">&lt;CDLL '/System/Library/Frameworks/quartz.framewor
     <dt>Returns:</dt>
         <dd>Converted name (<code>bytes</code>).</dd>
   </dl>
-</td></tr></table>
+<div class="fields">      <p><strong>Note:</strong>
+        A <i>name_</i> starting with an underscore is returned as-is.
+      </p>
+</div></td></tr></table>
 </div>
 <a name="name2py"></a>
 <div>
@@ -6619,7 +7045,8 @@ d01e1af50 at 102396cd0&gt;">&lt;CDLL '/System/Library/Frameworks/quartz.framewor
     </td>
   </tr></table>
   
-  <p>Convert a (selector) name to str and Python naming conventions.</p>
+  <p>Convert a (selector) name <code>str</code> and Python naming 
+  conventions.</p>
   <dl class="fields">
     <dt>Parameters:</dt>
     <dd><ul class="nomargin-top">
@@ -6628,7 +7055,10 @@ d01e1af50 at 102396cd0&gt;">&lt;CDLL '/System/Library/Frameworks/quartz.framewor
     <dt>Returns:</dt>
         <dd>Converted name (<code>str</code>).</dd>
   </dl>
-</td></tr></table>
+<div class="fields">      <p><strong>Note:</strong>
+        A <i>name_</i> starting with an underscore is returned as-is.
+      </p>
+</div></td></tr></table>
 </div>
 <a name="name2pymethod"></a>
 <div>
@@ -6797,7 +7227,7 @@ d01e1af50 at 102396cd0&gt;">&lt;CDLL '/System/Library/Frameworks/quartz.framewor
   <table width="100%" cellpadding="0" cellspacing="0" border="0">
   <tr valign="top"><td>
   <h3 class="epydoc"><span class="sig"><span class="sig-name">ns2py</span>(<span class="sig-arg">ns</span>,
-        <span class="sig-arg">dflt</span>=<span class="sig-default">None</span>)</span>
+        <span class="sig-arg">dflt</span>=<span class="sig-default">missing()</span>)</span>
   </h3>
   </td><td align="right" valign="top"
     >&nbsp;
@@ -6813,10 +7243,10 @@ d01e1af50 at 102396cd0&gt;">&lt;CDLL '/System/Library/Frameworks/quartz.framewor
           href="pycocoa.runtime.ObjCInstance-class.html" 
           class="link">ObjCInstance</a>).</li>
         <li><strong class="pname"><code>dflt</code></strong> - Default for unhandled, unexpected <code>NS...</code>s 
-          (<code>None</code>).</li>
+          (<code>missing</code>).</li>
     </ul></dd>
     <dt>Returns:</dt>
-        <dd>The value (<code>Python type</code>) or <i>dflt</i>.</dd>
+        <dd>The value (<code>Python type</code>) or <i>dflt</i> if provided.</dd>
     <dt>Raises:</dt>
     <dd><ul class="nomargin-top">
         <li><code><strong class='fraise'>TypeError</strong></code> - Unhandled, unexpected <code>TypeID</code>.</li>
@@ -6868,6 +7298,10 @@ d01e1af50 at 102396cd0&gt;">&lt;CDLL '/System/Library/Frameworks/quartz.framewor
             NSStr            -&gt; str
           </li>
         </ul>
+      </p>
+      <p><strong>See Also:</strong>
+        <a href="http://PythonHosted.org/pyobjc/core/typemapping.html" 
+        target="_top">Converting values between Python and Objective-C</a>
       </p>
 </div></td></tr></table>
 </div>
@@ -7406,6 +7840,35 @@ d01e1af50 at 102396cd0&gt;">&lt;CDLL '/System/Library/Frameworks/quartz.framewor
   </dl>
 </td></tr></table>
 </div>
+<a name="nsURL2str"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">nsURL2str</span>(<span class="sig-arg">ns</span>)</span>
+  </h3>
+  </td><td align="right" valign="top"
+    >&nbsp;
+    </td>
+  </tr></table>
+  
+  <p>Create a Python <code>str</code> from <a 
+  href="pycocoa.nstypes-module.html#NSURL" class="link">NSURL</a> 
+  string.</p>
+  <dl class="fields">
+    <dt>Parameters:</dt>
+    <dd><ul class="nomargin-top">
+        <li><strong class="pname"><code>ns</code></strong> - The <code>CFURL</code> (<a 
+          href="pycocoa.runtime.ObjCInstance-class.html" 
+          class="link">ObjCInstance</a>).</li>
+    </ul></dd>
+    <dt>Returns:</dt>
+        <dd>The URL as string (<code>str</code>).</dd>
+  </dl>
+</td></tr></table>
+</div>
 <a name="nsUncaughtExceptionHandler"></a>
 <div>
 <table class="details" border="1" cellpadding="3"
@@ -7588,6 +8051,10 @@ d01e1af50 at 102396cd0&gt;">&lt;CDLL '/System/Library/Frameworks/quartz.framewor
             unicode   -&gt; NSStr, immutable
           </li>
         </ul>
+      </p>
+      <p><strong>See Also:</strong>
+        <a href="http://PythonHosted.org/pyobjc/core/typemapping.html" 
+        target="_top">Converting values between Python and Objective-C</a>
       </p>
 </div></td></tr></table>
 </div>
@@ -8108,9 +8575,9 @@ d01e1af50 at 102396cd0&gt;">&lt;CDLL '/System/Library/Frameworks/quartz.framewor
         <a 
         href="http://Developer.Apple.com/library/content/documentation/Cocoa/Conceptual/ObjCRuntimeGuide/Articles/ocrtTypeEncodings.html"
         target="_top">Type Encodings</a>, <a 
-        href="http://NSHipster.com/type-encodings/" target="_top">NSHipster
+        href="http://NSHipster.com/type-encodings" target="_top">NSHipster 
         Type Encodings</a> and <a 
-        href="http://StackOverflow.com/questions/11527385/how-are-the-digits-in-objc-method-type-encoding-calculated/"
+        href="http://StackOverflow.com/questions/11527385/how-are-the-digits-in-objc-method-type-encoding-calculated"
         target="_top">Digits in type encoding</a>.
       </p>
 </div></td></tr></table>
@@ -8357,7 +8824,7 @@ d01e1af50 at 102396cd0&gt;">&lt;CDLL '/System/Library/Frameworks/quartz.framewor
           class="link" onclick="show_private();">NSURL</a>).</dd>
   </dl>
 <div class="fields">      <p><strong>See Also:</strong>
-        <a href="http://Developer.Apple.com//documentation/foundation/url" 
+        <a href="http://Developer.Apple.com/documentation/foundation/url" 
         target="_top">URL</a> for parsing an <a 
         href="pycocoa.pytypes-module.html#NSURL" class="link" 
         onclick="show_private();">NSURL</a>.
@@ -8450,6 +8917,33 @@ d01e1af50 at 102396cd0&gt;">&lt;CDLL '/System/Library/Frameworks/quartz.framewor
     <dt>Returns:</dt>
         <dd>&quot;&lt;Size&gt; &lt;SI&gt;[i]&lt;B&gt;&quot; 
           (<code>str</code>).</dd>
+  </dl>
+</td></tr></table>
+</div>
+<a name="zfstr"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">zfstr</span>(<span class="sig-arg">flt</span>,
+        <span class="sig-arg">prec</span>=<span class="sig-default">3</span>)</span>
+  </h3>
+  </td><td align="right" valign="top"
+    >&nbsp;
+    </td>
+  </tr></table>
+  
+  <p>Format a <code>float</code> and strip trailing zero decimals.</p>
+  <dl class="fields">
+    <dt>Parameters:</dt>
+    <dd><ul class="nomargin-top">
+        <li><strong class="pname"><code>flt</code></strong> - Value (<code>float</code>).</li>
+        <li><strong class="pname"><code>prec</code></strong> - Number of decimals (<code>int</code>).</li>
+    </ul></dd>
+    <dt>Returns:</dt>
+        <dd>Value (<code>str</code>).</dd>
   </dl>
 </td></tr></table>
 </div>
@@ -8619,14 +9113,14 @@ mUIFont', size=13, traits='Italic', weight=5),
   <dl class="fields">
     <dt>Value:</dt>
       <dd><table><tr><td><pre class="variable">
-NSMain.Application=NSApplication(&lt;Id_t at 0x105f298c0&gt;) of 0x7fad01ff2<span class="variable-linewrap"><img src="crarr.png" alt="\" /></span>
-560,
-      .BooleanNO=NSBoolean(&lt;Id_t at 0x105f21200&gt;) of 0x7fff985f53f8,
-      .BooleanYES=NSBoolean(&lt;Id_t at 0x105f44b00&gt;) of 0x7fff985f53e8,
-      .Bundle=NSBundle(&lt;Id_t at 0x105ed97a0&gt;) of 0x7fad01c9e4a0,
+NSMain.Application=NSApplication(&lt;Id_t at 0x10f0d17a0&gt;) of 0x7fc351cf9<span class="variable-linewrap"><img src="crarr.png" alt="\" /></span>
+f70,
+      .BooleanNO=NSBoolean(&lt;Id_t at 0x10f3b7200&gt;) of 0x7fffad9ee3f8,
+      .BooleanYES=NSBoolean(&lt;Id_t at 0x10f3b7d40&gt;) of 0x7fffad9ee3e8,
+      .Bundle=NSBundle(&lt;Id_t at 0x10f3cf050&gt;) of 0x7fc351c83b10,
       .BundleName=NSConstantString('CFBundleName'),
-      .FontManager=NSFontManager(&lt;Id_t at 0x105ed99e0&gt;) of 0x7fad040d4<span class="variable-linewrap"><img src="crarr.png" alt="\" /></span>
-d90,
+      .FontManager=NSFontManager(&lt;Id_t at 0x10eed0f80&gt;) of 0x7fc354523<span class="variable-linewrap"><img src="crarr.png" alt="\" /></span>
+4b0,
 <code class="variable-ellipsis">...</code>
 </pre></td></tr></table>
 </dd>
@@ -8710,8 +9204,8 @@ WindowStyle.Closable=1&lt;&lt;1,
   <dl class="fields">
     <dt>Value:</dt>
       <dd><table><tr><td><pre class="variable">
-&lt;CDLL '/System/Library/Frameworks/AppKit.framework/AppKit', handle 7fa<span class="variable-linewrap"><img src="crarr.png" alt="\" /></span>
-d01d54670 at 102396a90&gt;
+&lt;CDLL '/System/Library/Frameworks/AppKit.framework/AppKit', handle 7fc<span class="variable-linewrap"><img src="crarr.png" alt="\" /></span>
+351c49dd0 at 10b423b50&gt;
 </pre></td></tr></table>
 </dd>
   </dl>
@@ -8730,7 +9224,7 @@ d01d54670 at 102396a90&gt;
     <dt>Value:</dt>
       <dd><table><tr><td><pre class="variable">
 &lt;CDLL '/System/Library/Frameworks/CoreFoundation.framework/CoreFoundat<span class="variable-linewrap"><img src="crarr.png" alt="\" /></span>
-ion', handle 109cbf800 at 102378d50&gt;
+ion', handle 114f19800 at 10b401d10&gt;
 </pre></td></tr></table>
 </dd>
   </dl>
@@ -8749,7 +9243,7 @@ ion', handle 109cbf800 at 102378d50&gt;
     <dt>Value:</dt>
       <dd><table><tr><td><pre class="variable">
 &lt;CDLL '/System/Library/Frameworks/CoreText.framework/CoreText', handle<span class="variable-linewrap"><img src="crarr.png" alt="\" /></span>
- 7fad01f0c1d0 at 1023a0c10&gt;
+ 7fc351f50f20 at 10b42bcd0&gt;
 </pre></td></tr></table>
 </dd>
   </dl>
@@ -8768,7 +9262,7 @@ ion', handle 109cbf800 at 102378d50&gt;
     <dt>Value:</dt>
       <dd><table><tr><td><pre class="variable">
 &lt;CDLL '/System/Library/Frameworks/Foundation.framework/Foundation', ha<span class="variable-linewrap"><img src="crarr.png" alt="\" /></span>
-ndle 7fad01c71c30 at 1023ac290&gt;
+ndle 7fc351f357d0 at 10b437350&gt;
 </pre></td></tr></table>
 </dd>
   </dl>
@@ -8786,7 +9280,7 @@ ndle 7fad01c71c30 at 1023ac290&gt;
   <dl class="fields">
     <dt>Value:</dt>
       <dd><table><tr><td><pre class="variable">
-&lt;CDLL '/usr/lib/libobjc.dylib', handle 109cc1680 at 1023ac0d0&gt;
+&lt;CDLL '/usr/lib/libobjc.dylib', handle 114f1b680 at 10b437190&gt;
 </pre></td></tr></table>
 </dd>
   </dl>
@@ -8804,8 +9298,8 @@ ndle 7fad01c71c30 at 1023ac290&gt;
   <dl class="fields">
     <dt>Value:</dt>
       <dd><table><tr><td><pre class="variable">
-&lt;CDLL '/System/Library/Frameworks/quartz.framework/quartz', handle 7fa<span class="variable-linewrap"><img src="crarr.png" alt="\" /></span>
-d01e1af50 at 102396cd0&gt;
+&lt;CDLL '/System/Library/Frameworks/quartz.framework/quartz', handle 7fc<span class="variable-linewrap"><img src="crarr.png" alt="\" /></span>
+351f5e3b0 at 10b423d90&gt;
 </pre></td></tr></table>
 </dd>
   </dl>
@@ -8843,7 +9337,7 @@ d01e1af50 at 102396cd0&gt;
 <table border="0" cellpadding="0" cellspacing="0" width="100%%">
   <tr>
     <td align="left" class="footer">
-    Generated by Epydoc 3.0.1 on Sat Jul 28 11:42:49 2018
+    Generated by Epydoc 3.0.1 on Mon Aug  6 13:28:39 2018
     </td>
     <td align="right" class="footer">
       <a target="mainFrame" href="http://epydoc.sourceforge.net"

@@ -3,7 +3,7 @@
 
 # License at the end of this file.
 
-'''Types L{Item}, L{Menu}, L{MenuBar} and L{Separator}, wrapping ObjC L{NSMenuItem} and L{NSMenu}.
+'''Types L{Item}, L{Menu}, L{MenuBar} and L{Separator}, wrapping ObjC C{NSMenuItem} and C{NSMenu}.
 '''
 # all imports listed explicitly to help PyChecker
 from bases   import _Type1, _Type2
@@ -21,7 +21,7 @@ __all__ = ('Item',
            'Separator',
            'ns2Item',
            'title2action')
-__version__ = '18.06.28'
+__version__ = '18.08.04'
 
 _menuItemHandler_name = 'menuItemHandler_'
 
@@ -70,7 +70,7 @@ class Item(_Type2):
             # self._SEL_ = get_selector(a)
         self._action = a
 
-        # <http://Developer.Apple.com//documentation/appkit/
+        # <http://Developer.Apple.com/documentation/appkit/
         #       nsmenuitem/1514858-initwithtitle>
         self.NS = NSMenuItem.alloc().initWithTitle_action_keyEquivalent_(
                              NSStr(self.title), self._SEL_, NSStr(key or ''))
@@ -205,7 +205,7 @@ class Menu(_Type2):
         return Separator()
 
 
-# <http://Developer.Apple.com//library/content/qa/qa1420/_index.html
+# <http://Developer.Apple.com/library/content/qa/qa1420/_index.html
 #      #//apple_ref/doc/uid/DTS10004127>
 class MenuBar(_Type2):
     '''Python C{MenuBar} Type, wrapping ObjC L{NSMenu}.
@@ -310,7 +310,7 @@ def title2action(title):
 
        @raise ValueError: Invalid method name for this I{title}.
     '''
-    t = title.strip().rstrip('.')
+    t = title.rstrip().rstrip('.').strip()
     return name2pymethod('menu' + ''.join(t.split()) + '_')
 
 

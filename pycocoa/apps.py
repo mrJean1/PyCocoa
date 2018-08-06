@@ -25,7 +25,7 @@ __all__ = ('App',
            'Tile',
            'app_title',
            'ns2App')
-__version__ = '18.07.27'
+__version__ = '18.08.04'
 
 
 class App(_Type2):
@@ -34,6 +34,7 @@ class App(_Type2):
     _badge      = None
     _isUp       = None
     _keyWindow  = None  # Window
+    _lastWindow = None  # most recent key or main
     _mainWindow = None  # Window
     _menubar    = None
     _timeout    = None
@@ -152,13 +153,19 @@ class App(_Type2):
 
     @property
     def keyWindow(self):
-        '''Get this app's key window (L{Window}).
+        '''Get this app's key window (L{Window}) or C{None}.
         '''
         return self._keyWindow
 
     @property
+    def lastWindow(self):
+        '''Get this app's most recent key or main window (L{Window}).
+        '''
+        return self._lastWindow
+
+    @property
     def mainWindow(self):
-        '''Get this app's main window (L{Window}).
+        '''Get this app's main window (L{Window}) or C{None}.
         '''
         return self._mainWindow
 
@@ -270,14 +277,20 @@ class App(_Type2):
     def windowKey_(self, window):
         '''Callback I{window} becomes/resigns C{Key}.
         '''
-        self._keyWindow = window or None
+        if window:
+            self._keyWindow = self._lastWindow = window
+        else:
+            self._keyWindow = None
 #       if self._menubar:
 #           self._menubar.NS.update()
 
     def windowMain_(self, window):
         '''Callback I{window} becomes/resigns C{Main}.
         '''
-        self._mainWindow = window or None
+        if window:
+            self._mainWindow = self._lastWindow = window
+        else:
+            self._mainWindow = None
 
     def windowPrint_(self, window):  # PYCHOK expected
         '''Print I{window} callback.
@@ -299,11 +312,11 @@ class App(_Type2):
         return True
 
 
-# <http://Developer.Apple.com//library/content/samplecode/
+# <http://Developer.Apple.com/library/content/samplecode/
 #       CocoaTipsAndTricks/Listings/ExceptionReporting_ExceptionReportingAppDelegate_m.html>
-# <http://Developer.Apple.com//library/content/samplecode/
+# <http://Developer.Apple.com/library/content/samplecode/
 #       CocoaTipsAndTricks/Listings/ExceptionReporting_main_m.html>
-# <http://Developer.Apple.com//library/content/samplecode/
+# <http://Developer.Apple.com/library/content/samplecode/
 #       CocoaTipsAndTricks/Listings/ExceptionReporting_MyApplication_m.html>
 
 

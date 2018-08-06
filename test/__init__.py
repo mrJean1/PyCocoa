@@ -73,7 +73,7 @@ from time import sleep
 from testsuite import TestSuite  # PYCHOK for setup.py
 
 __all__ = ('terminating',)
-__version__ = '18.06.01'
+__version__ = '18.08.04'
 
 
 def terminating(app, timeout):
@@ -96,7 +96,7 @@ def terminating(app, timeout):
 
     def _terminating():
         sleep(secs)
-        # <http://Developer.Apple.com//documentation/appkit/nsapplication/1428417-terminate>
+        # <http://Developer.Apple.com/documentation/appkit/nsapplication/1428417-terminate>
         terminate(app)
 
     t = Thread(target=_terminating)

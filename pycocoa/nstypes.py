@@ -24,7 +24,7 @@ from utils   import bytes2str, _ByteStrs, clip, _exports, _Globals, \
 
 from os import linesep, path as os_path
 
-__version__ = '18.06.28'
+__version__ = '18.08.02'
 
 # some commonly used Foundation and Cocoa classes, described here
 # <http://OMZ-Software.com/pythonista/docs/ios/objc_util.html>
@@ -54,6 +54,7 @@ NSFontDescriptor       = ObjCClass('NSFontDescriptor')
 NSFontManager          = ObjCClass('NSFontManager')
 NSFontPanel            = ObjCClass('NSFontPanel')
 NSImage                = ObjCClass('NSImage')
+NSImageView            = ObjCClass('NSImageView')
 NSLayoutManager        = ObjCClass('NSLayoutManager')
 NSMenu                 = ObjCClass('NSMenu')
 NSMenuItem             = ObjCClass('NSMenuItem')
@@ -181,6 +182,7 @@ class _NSMain(_Singletons):
     _nil           = None  # final
     _NO_false      = NO  # c_byte
     _Null          = None
+    _PrintInfo     = None
     _Screen        = None
     _ScreenFrame   = None
     _ScreenSize    = None
@@ -266,6 +268,14 @@ class _NSMain(_Singletons):
         return self._Null
 
     @property
+    def PrintInfo(self):
+        '''Get the L{NSPrintInfo}.
+        '''
+        if self._PrintInfo is None:
+            _NSMain._PrintInfo = retain(NSPrintInfo.sharedPrintInfo())
+        return self._PrintInfo
+
+    @property
     def Screen(self):
         '''Get the C{NSScreen.mainScreen}.
         '''
@@ -304,7 +314,7 @@ class _NSMain(_Singletons):
         return self._YES_true
 
 
-NSMain  = _NSMain()  # global C{NS...} singletons
+NSMain = _NSMain()  # global C{NS...} singletons
 
 
 class NSStr(ObjCInstance):
@@ -364,7 +374,7 @@ def isAlias(path):
                 isn't a macOS alias.
 
        @see: U{mac-alias<http://GitHub.com/al45tair/mac_alias>} and
-             U{here<http://StackOverflow.com/questions/21150169/>}.
+             U{here<http://StackOverflow.com/questions/21150169>}.
     '''
     if isinstance(path, _ByteStrs):
         path = release(NSStr(path))
@@ -769,6 +779,18 @@ def nsUncaughtExceptionHandler(handler):
     return h
 
 
+def nsURL2str(ns):
+    '''Create a Python C{str} from L{NSURL} string.
+
+       @param ns: The C{CFURL} (L{ObjCInstance}).
+
+       @return: The URL as string (C{str}).
+    '''
+    if isInstanceOf(ns, NSURL, name='ns'):
+        # <http://NSHipster.com/nsurl>
+        return nsString2str(ns.absoluteString())
+
+
 _CFTypeID2py = {libCF.CFArrayGetTypeID():      nsArray2listuple,
                 libCF.CFBooleanGetTypeID():    nsBoolean2bool,
                 libCF.CFDataGetTypeID():       nsData2bytes,
@@ -776,7 +798,8 @@ _CFTypeID2py = {libCF.CFArrayGetTypeID():      nsArray2listuple,
                 libCF.CFNullGetTypeID():       nsNull2none,
                 libCF.CFNumberGetTypeID():     nsNumber2num,
                 libCF.CFSetGetTypeID():        nsSet2set,
-                libCF.CFStringGetTypeID():     nsString2str}
+                libCF.CFStringGetTypeID():     nsString2str,
+                libCF.CFURLGetTypeID():        nsURL2str}
 
 
 def _CFTypeID2py_items():
@@ -784,14 +807,14 @@ def _CFTypeID2py_items():
         yield int(i), ns.__name__
 
 
-def ns2py(ns, dflt=None):  # XXX an NSObject method?
+def ns2py(ns, dflt=missing):  # XXX an NSObject method?
     '''Convert (an instance of) an ObjC class to an instance of
        the equivalent Python standard type or wrapper and value.
 
        @param ns: The C{NS...} (L{ObjCInstance}).
-       @keyword dflt: Default for unhandled, unexpected C{NS...}s (C{None}).
+       @keyword dflt: Default for unhandled, unexpected C{NS...}s (C{missing}).
 
-       @return: The value (C{Python type}) or I{dflt}.
+       @return: The value (C{Python type}) or I{dflt} if provided.
 
        @raise TypeError: Unhandled, unexpected C{TypeID}.
 
@@ -811,34 +834,39 @@ def ns2py(ns, dflt=None):  # XXX an NSObject method?
         - NSSet            -> frozenset
         - NSString         -> str
         - NSStr            -> str
+
+       @see: U{Converting values between Python and Objective-C
+              <http://PythonHosted.org/pyobjc/core/typemapping.html>}
     '''
-    if isinstance(ns, NSStr):
+    if ns is None:  # isNone(ns)
+        return None
+
+    elif isinstance(ns, NSStr):
         return ns.str
 
-    elif ns is not None:  # not isNone(ns)
-        # see Rubicon-ObjC/objc/core_foundation.py
-        # if isinstance(ns, ObjCInstance):
-        #     ns = ns._as_parameter_
-        try:
-            typeID = libCF.CFGetTypeID(ns)
-            r = _CFTypeID2py[typeID](ns)
-            c = {Class_t: ObjCClass,
-                 Id_t:    ObjCInstance}.get(type(r), lambda1)
-            return c(r)
+    # see Rubicon-ObjC/objc/core_foundation.py
+    # if isinstance(ns, ObjCInstance):
+    #     ns = ns._as_parameter_
+    try:
+        typeID = libCF.CFGetTypeID(ns)
+        r = _CFTypeID2py[typeID](ns)
+        c = {Class_t: ObjCClass,
+             Id_t:    ObjCInstance}.get(type(r), lambda1)
+        return c(r)
 
-        except ArgumentError as x:
-            _Xargs(x, libCF.CFGetTypeID.__name__,
-                      libCF.CFGetTypeID.argtypes,
-                      libCF.CFGetTypeID.restype)
-            raise
+    except ArgumentError as x:
+        _Xargs(x, libCF.CFGetTypeID.__name__,
+                  libCF.CFGetTypeID.argtypes,
+                  libCF.CFGetTypeID.restype)
+        raise
 
-        except KeyError:
-            if dflt is None:
-                t = ', '.join('TypeID[%d]: %s' % t for t in
-                              sorted(_CFTypeID2py_items()))
-                raise TypeError('unhandled %s[%r]: %r {%s}' %
-                               ('TypeID', typeID, ns, t))
-    return dflt
+    except KeyError:
+        if dflt is missing:
+            t = ', '.join('TypeID[%d]: %s' % t for t in
+                          sorted(_CFTypeID2py_items()))
+            raise TypeError('unhandled %s[%r]: %r {%s}' %
+                           ('TypeID', typeID, ns, t))
+        return dflt
 
 
 def ns2Type(ns):

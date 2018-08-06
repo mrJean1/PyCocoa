@@ -1,0 +1,701 @@
+<?xml version="1.0" encoding="ascii"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+          "DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+  <title>pycocoa.printers.Printer</title>
+  <link rel="stylesheet" href="epydoc.css" type="text/css" />
+  <script type="text/javascript" src="epydoc.js"></script>
+</head>
+
+<body bgcolor="white" text="black" link="blue" vlink="#204080"
+      alink="#204080">
+<!-- ==================== NAVIGATION BAR ==================== -->
+<table class="navbar" border="0" width="100%" cellpadding="0"
+       bgcolor="#a0c0ff" cellspacing="0">
+  <tr valign="middle">
+  <!-- Home link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="pycocoa-module.html">Home</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Tree link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="module-tree.html">Trees</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Index link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="identifier-index.html">Indices</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Help link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="help.html">Help</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Project homepage -->
+      <th class="navbar" align="right" width="100%">
+        <table border="0" cellpadding="0" cellspacing="0">
+          <tr><th class="navbar" align="center"
+            ><a class="navbar" target="_top" href="http://GitHub.com/mrJean1/PyCocoa">PyCocoa</a></th>
+          </tr></table></th>
+  </tr>
+</table>
+<table width="100%" cellpadding="0" cellspacing="0">
+  <tr valign="top">
+    <td width="100%">
+      <span class="breadcrumbs">
+        <a href="pycocoa-module.html">Package&nbsp;pycocoa</a> ::
+        <a href="pycocoa.printers-module.html">Module&nbsp;printers</a> ::
+        Class&nbsp;Printer
+      </span>
+    </td>
+    <td>
+      <table cellpadding="0" cellspacing="0">
+        <!-- hide/show private -->
+        <tr><td align="right"><span class="options"
+            >[<a href="frames.html" target="_top">frames</a
+            >]&nbsp;|&nbsp;<a href="pycocoa.printers.Printer-class.html"
+            target="_top">no&nbsp;frames</a>]</span></td></tr>
+      </table>
+    </td>
+  </tr>
+</table>
+<!-- ==================== CLASS DESCRIPTION ==================== -->
+<h1 class="epydoc">Class Printer</h1><p class="nomargin-top"></p>
+<pre class="base-tree">
+  object --+        
+           |        
+bases._Type0 --+    
+               |    
+       _PM_Type0 --+
+                   |
+                  <strong class="uidshort">Printer</strong>
+</pre>
+
+<hr />
+<p>Python <code>Printer</code> Type, wrapping ObjC <code>NSPrinter</code>
+  and <code>PMPrinter</code>.</p>
+
+<!-- ==================== INSTANCE METHODS ==================== -->
+<a name="section-InstanceMethods"></a>
+<table class="summary" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr bgcolor="#70b0f0" class="table-header">
+  <td align="left" colspan="2" class="table-header">
+    <span class="table-header">Instance Methods</span></td>
+</tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a href="pycocoa.printers.Printer-class.html#__init__" class="summary-sig-name">__init__</a>(<span class="summary-sig-arg">self</span>,
+        <span class="summary-sig-arg">name_ns_pm</span>=<span class="summary-sig-default">None</span>)</span><br />
+      New <a href="pycocoa.printers.Printer-class.html" 
+      class="link">Printer</a> from a printer name (<code>str</code>), 
+      <code>NSPrinter</code> or <code>PMPrinter</code>.</td>
+          <td align="right" valign="top">
+            
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a href="pycocoa.printers.Printer-class.html#printView" class="summary-sig-name">printView</a>(<span class="summary-sig-arg">self</span>,
+        <span class="summary-sig-arg">PMview</span>,
+        <span class="summary-sig-arg">toPDF</span>=<span class="summary-sig-default"><code class="variable-quote">'</code><code class="variable-string"></code><code class="variable-quote">'</code></span>,
+        <span class="summary-sig-arg">wait</span>=<span class="summary-sig-default">True</span>)</span><br />
+      Print an ObjC <code>NSView</code> or <code>PMview</code>.</td>
+          <td align="right" valign="top">
+            
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a href="pycocoa.printers.Printer-class.html#setDefault" class="summary-sig-name">setDefault</a>(<span class="summary-sig-arg">self</span>)</span><br />
+      Make this printer the default printer (<code>bool</code>).</td>
+          <td align="right" valign="top">
+            
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+  <tr>
+    <td colspan="2" class="summary">
+    <p class="indent-wrapped-lines"><b>Inherited from <code>_PM_Type0</code></b>:
+      <code>__str__</code>,
+      <code>release</code>,
+      <code>retain</code>
+      </p>
+    <p class="indent-wrapped-lines"><b>Inherited from <code>bases._Type0</code></b>:
+      <code>__repr__</code>,
+      <code>type2strepr</code>
+      </p>
+    <p class="indent-wrapped-lines"><b>Inherited from <code>object</code></b>:
+      <code>__delattr__</code>,
+      <code>__format__</code>,
+      <code>__getattribute__</code>,
+      <code>__hash__</code>,
+      <code>__new__</code>,
+      <code>__reduce__</code>,
+      <code>__reduce_ex__</code>,
+      <code>__setattr__</code>,
+      <code>__sizeof__</code>,
+      <code>__subclasshook__</code>
+      </p>
+    </td>
+  </tr>
+</table>
+<!-- ==================== PROPERTIES ==================== -->
+<a name="section-Properties"></a>
+<table class="summary" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr bgcolor="#70b0f0" class="table-header">
+  <td align="left" colspan="2" class="table-header">
+    <span class="table-header">Properties</span></td>
+</tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="pycocoa.printers.Printer-class.html#description" class="summary-name">description</a><br />
+      Get printer description (<code>json</code>).
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="pycocoa.printers.Printer-class.html#deviceDescription" class="summary-name">deviceDescription</a><br />
+      Get the <code>NSDevice</code> description (<code>dict</code>).
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="pycocoa.printers.Printer-class.html#deviceURI" class="summary-name">deviceURI</a><br />
+      Get the printer device (<code>URI</code>).
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="pycocoa.printers.Printer-class.html#ID" class="summary-name">ID</a><br />
+      Get the printer IDentifier (<code>str</code>).
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="pycocoa.printers.Printer-class.html#isColor" class="summary-name">isColor</a><br />
+      Is printer color (<code>bool</code>).
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="pycocoa.printers.Printer-class.html#isDefault" class="summary-name">isDefault</a><br />
+      Is this the default printer (<code>bool</code>).
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="pycocoa.printers.Printer-class.html#isRemote" class="summary-name">isRemote</a><br />
+      Is this a remote printer (<code>bool</code>).
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="pycocoa.printers.Printer-class.html#location" class="summary-name">location</a><br />
+      Get the printer location (<code>str</code>).
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="pycocoa.printers.Printer-class.html#makemodel" class="summary-name">makemodel</a><br />
+      Get the printer make and model (<code>str</code>).
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="pycocoa.printers.Printer-class.html#name" class="summary-name">name</a><br />
+      Get the printer name (<code>str</code>).
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="pycocoa.printers.Printer-class.html#papers" class="summary-name">papers</a><br />
+      Yield each paper available (<a 
+      href="pycocoa.printers.Paper-class.html" class="link">Paper</a>).
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="pycocoa.printers.Printer-class.html#PPD" class="summary-name">PPD</a><br />
+      Get the printer PPD description (<code>URL</code>).
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="pycocoa.printers.Printer-class.html#psCapable" class="summary-name">psCapable</a><br />
+      Is the printer PostScript capable (<code>bool</code>).
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="pycocoa.printers.Printer-class.html#psLevel" class="summary-name">psLevel</a><br />
+      Get the printer's PostScript language level (<code>int</code>).
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="pycocoa.printers.Printer-class.html#resolution" class="summary-name">resolution</a><br />
+      Get the highest (horizontal, vertical) resolution supported by this 
+      printer (<code>float</code>s, dots-per-inch).
+    </td>
+  </tr>
+  <tr>
+    <td colspan="2" class="summary">
+    <p class="indent-wrapped-lines"><b>Inherited from <code>_PM_Type0</code></b>:
+      <code>PM</code>
+      </p>
+    <p class="indent-wrapped-lines"><b>Inherited from <code>bases._Type0</code></b>:
+      <code>NS</code>,
+      <code>NSDelegate</code>
+      </p>
+    <p class="indent-wrapped-lines"><b>Inherited from <code>object</code></b>:
+      <code>__class__</code>
+      </p>
+    </td>
+  </tr>
+</table>
+<!-- ==================== METHOD DETAILS ==================== -->
+<a name="section-MethodDetails"></a>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr bgcolor="#70b0f0" class="table-header">
+  <td align="left" colspan="2" class="table-header">
+    <span class="table-header">Method Details</span></td>
+</tr>
+</table>
+<a name="__init__"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">__init__</span>(<span class="sig-arg">self</span>,
+        <span class="sig-arg">name_ns_pm</span>=<span class="sig-default">None</span>)</span>
+    <br /><em class="fname">(Constructor)</em>
+  </h3>
+  </td><td align="right" valign="top"
+    >&nbsp;
+    </td>
+  </tr></table>
+  
+  <p>New <a href="pycocoa.printers.Printer-class.html" 
+  class="link">Printer</a> from a printer name (<code>str</code>), 
+  <code>NSPrinter</code> or <code>PMPrinter</code>.</p>
+  <dl class="fields">
+    <dt>Raises:</dt>
+    <dd><ul class="nomargin-top">
+        <li><code><strong class='fraise'>TypeError</strong></code> - Invalid <i>name_ns_pm</i>.</li>
+        <li><code><strong class='fraise'>PrintError</strong></code> - No printer with name <i>name_ns_pm</i>.</li>
+    </ul></dd>
+    <dt>Overrides:
+        object.__init__
+    </dt>
+  </dl>
+</td></tr></table>
+</div>
+<a name="printView"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">printView</span>(<span class="sig-arg">self</span>,
+        <span class="sig-arg">PMview</span>,
+        <span class="sig-arg">toPDF</span>=<span class="sig-default"><code class="variable-quote">'</code><code class="variable-string"></code><code class="variable-quote">'</code></span>,
+        <span class="sig-arg">wait</span>=<span class="sig-default">True</span>)</span>
+  </h3>
+  </td><td align="right" valign="top"
+    >&nbsp;
+    </td>
+  </tr></table>
+  
+  <p>Print an ObjC <code>NSView</code> or <code>PMview</code>.</p>
+  <dl class="fields">
+    <dt>Parameters:</dt>
+    <dd><ul class="nomargin-top">
+        <li><strong class="pname"><code>PMview</code></strong> - The ObjC view to print (<code>NSView</code> or 
+          <code>PMview</code>).</li>
+        <li><strong class="pname"><code>toPDF</code></strong> - Save as PDF file name (<code>str</code>).</li>
+        <li><strong class="pname"><code>wait</code></strong> - Wait for print completion (<code>bool</code>).</li>
+    </ul></dd>
+    <dt>Returns:</dt>
+        <dd><code>True</code> if printing succeeded, <code>False</code> if 
+          printing failed or <code>None</code> if ignored.</dd>
+    <dt>Raises:</dt>
+    <dd><ul class="nomargin-top">
+        <li><code><strong class='fraise'>PrintError</strong></code> - If <i>toPDF</i> file exists.</li>
+        <li><code><strong class='fraise'>TypeError</strong></code> - Invalid <i>PMview</i>.</li>
+    </ul></dd>
+  </dl>
+</td></tr></table>
+</div>
+<a name="setDefault"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">setDefault</span>(<span class="sig-arg">self</span>)</span>
+  </h3>
+  </td><td align="right" valign="top"
+    >&nbsp;
+    </td>
+  </tr></table>
+  
+  <p>Make this printer the default printer (<code>bool</code>).</p>
+  <dl class="fields">
+    <dt>Returns:</dt>
+        <dd><code>True</code> if set, <code>False</code> otherwise</dd>
+  </dl>
+</td></tr></table>
+</div>
+<br />
+<!-- ==================== PROPERTY DETAILS ==================== -->
+<a name="section-PropertyDetails"></a>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr bgcolor="#70b0f0" class="table-header">
+  <td align="left" colspan="2" class="table-header">
+    <span class="table-header">Property Details</span></td>
+</tr>
+</table>
+<a name="description"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <h3 class="epydoc">description</h3>
+  <p>Get printer description (<code>json</code>).</p>
+  <dl class="fields">
+    <dt>Get Method:</dt>
+    <dd class="value"><span class="summary-sig">description(<span class="summary-sig-arg">self</span>)</span>
+        - Get printer description (<code>json</code>).
+    </dd>
+  </dl>
+</td></tr></table>
+</div>
+<a name="deviceDescription"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <h3 class="epydoc">deviceDescription</h3>
+  <p>Get the <code>NSDevice</code> description (<code>dict</code>).</p>
+  <dl class="fields">
+    <dt>Get Method:</dt>
+    <dd class="value"><span class="summary-sig">deviceDescription(<span class="summary-sig-arg">self</span>)</span>
+        - Get the <code>NSDevice</code> description (<code>dict</code>).
+    </dd>
+  </dl>
+</td></tr></table>
+</div>
+<a name="deviceURI"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <h3 class="epydoc">deviceURI</h3>
+  <p>Get the printer device (<code>URI</code>).</p>
+  <dl class="fields">
+    <dt>Get Method:</dt>
+    <dd class="value"><span class="summary-sig">deviceURI(<span class="summary-sig-arg">self</span>)</span>
+        - Get the printer device (<code>URI</code>).
+    </dd>
+  </dl>
+</td></tr></table>
+</div>
+<a name="ID"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <h3 class="epydoc">ID</h3>
+  <p>Get the printer IDentifier (<code>str</code>).</p>
+  <dl class="fields">
+    <dt>Get Method:</dt>
+    <dd class="value"><span class="summary-sig">ID(<span class="summary-sig-arg">self</span>)</span>
+        - Get the printer IDentifier (<code>str</code>).
+    </dd>
+  </dl>
+</td></tr></table>
+</div>
+<a name="isColor"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <h3 class="epydoc">isColor</h3>
+  <p>Is printer color (<code>bool</code>).</p>
+  <dl class="fields">
+    <dt>Get Method:</dt>
+    <dd class="value"><span class="summary-sig">isColor(<span class="summary-sig-arg">self</span>)</span>
+        - Is printer color (<code>bool</code>).
+    </dd>
+  </dl>
+</td></tr></table>
+</div>
+<a name="isDefault"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <h3 class="epydoc">isDefault</h3>
+  <p>Is this the default printer (<code>bool</code>).</p>
+  <dl class="fields">
+    <dt>Get Method:</dt>
+    <dd class="value"><span class="summary-sig">isDefault(<span class="summary-sig-arg">self</span>)</span>
+        - Is this the default printer (<code>bool</code>).
+    </dd>
+  </dl>
+</td></tr></table>
+</div>
+<a name="isRemote"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <h3 class="epydoc">isRemote</h3>
+  <p>Is this a remote printer (<code>bool</code>).</p>
+  <dl class="fields">
+    <dt>Get Method:</dt>
+    <dd class="value"><span class="summary-sig">isRemote(<span class="summary-sig-arg">self</span>)</span>
+        - Is this a remote printer (<code>bool</code>).
+    </dd>
+  </dl>
+</td></tr></table>
+</div>
+<a name="location"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <h3 class="epydoc">location</h3>
+  <p>Get the printer location (<code>str</code>).</p>
+  <dl class="fields">
+    <dt>Get Method:</dt>
+    <dd class="value"><span class="summary-sig">location(<span class="summary-sig-arg">self</span>)</span>
+        - Get the printer location (<code>str</code>).
+    </dd>
+  </dl>
+</td></tr></table>
+</div>
+<a name="makemodel"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <h3 class="epydoc">makemodel</h3>
+  <p>Get the printer make and model (<code>str</code>).</p>
+  <dl class="fields">
+    <dt>Get Method:</dt>
+    <dd class="value"><span class="summary-sig">makemodel(<span class="summary-sig-arg">self</span>)</span>
+        - Get the printer make and model (<code>str</code>).
+    </dd>
+  </dl>
+</td></tr></table>
+</div>
+<a name="name"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <h3 class="epydoc">name</h3>
+  <p>Get the printer name (<code>str</code>).</p>
+  <dl class="fields">
+    <dt>Get Method:</dt>
+    <dd class="value"><span class="summary-sig">name(<span class="summary-sig-arg">self</span>)</span>
+        - Get the printer name (<code>str</code>).
+    </dd>
+  </dl>
+</td></tr></table>
+</div>
+<a name="papers"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <h3 class="epydoc">papers</h3>
+  <p>Yield each paper available (<a 
+  href="pycocoa.printers.Paper-class.html" class="link">Paper</a>).</p>
+  <dl class="fields">
+    <dt>Get Method:</dt>
+    <dd class="value"><span class="summary-sig">papers(<span class="summary-sig-arg">self</span>)</span>
+        - Yield each paper available (<a href="pycocoa.printers.Paper-class.html" 
+class="link">Paper</a>).
+    </dd>
+  </dl>
+</td></tr></table>
+</div>
+<a name="PPD"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <h3 class="epydoc">PPD</h3>
+  <p>Get the printer PPD description (<code>URL</code>).</p>
+  <dl class="fields">
+    <dt>Get Method:</dt>
+    <dd class="value"><span class="summary-sig">PPD(<span class="summary-sig-arg">self</span>)</span>
+        - Get the printer PPD description (<code>URL</code>).
+    </dd>
+  </dl>
+</td></tr></table>
+</div>
+<a name="psCapable"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <h3 class="epydoc">psCapable</h3>
+  <p>Is the printer PostScript capable (<code>bool</code>).</p>
+  <dl class="fields">
+    <dt>Get Method:</dt>
+    <dd class="value"><span class="summary-sig">psCapable(<span class="summary-sig-arg">self</span>)</span>
+        - Is the printer PostScript capable (<code>bool</code>).
+    </dd>
+  </dl>
+</td></tr></table>
+</div>
+<a name="psLevel"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <h3 class="epydoc">psLevel</h3>
+  <p>Get the printer's PostScript language level (<code>int</code>).</p>
+  <dl class="fields">
+    <dt>Get Method:</dt>
+    <dd class="value"><span class="summary-sig">psLevel(<span class="summary-sig-arg">self</span>)</span>
+        - Get the printer's PostScript language level (<code>int</code>).
+    </dd>
+  </dl>
+</td></tr></table>
+</div>
+<a name="resolution"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <h3 class="epydoc">resolution</h3>
+  <p>Get the highest (horizontal, vertical) resolution supported by this 
+  printer (<code>float</code>s, dots-per-inch).</p>
+  <dl class="fields">
+    <dt>Get Method:</dt>
+    <dd class="value"><span class="summary-sig">resolution(<span class="summary-sig-arg">self</span>)</span>
+        - Get the highest (horizontal, vertical) resolution supported by this printer
+(<code>float</code>s, dots-per-inch).
+    </dd>
+  </dl>
+</td></tr></table>
+</div>
+<br />
+<!-- ==================== NAVIGATION BAR ==================== -->
+<table class="navbar" border="0" width="100%" cellpadding="0"
+       bgcolor="#a0c0ff" cellspacing="0">
+  <tr valign="middle">
+  <!-- Home link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="pycocoa-module.html">Home</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Tree link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="module-tree.html">Trees</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Index link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="identifier-index.html">Indices</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Help link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="help.html">Help</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Project homepage -->
+      <th class="navbar" align="right" width="100%">
+        <table border="0" cellpadding="0" cellspacing="0">
+          <tr><th class="navbar" align="center"
+            ><a class="navbar" target="_top" href="http://GitHub.com/mrJean1/PyCocoa">PyCocoa</a></th>
+          </tr></table></th>
+  </tr>
+</table>
+<table border="0" cellpadding="0" cellspacing="0" width="100%%">
+  <tr>
+    <td align="left" class="footer">
+    Generated by Epydoc 3.0.1 on Mon Aug  6 13:28:41 2018
+    </td>
+    <td align="right" class="footer">
+      <a target="mainFrame" href="http://epydoc.sourceforge.net"
+        >http://epydoc.sourceforge.net</a>
+    </td>
+  </tr>
+</table>
+
+<script type="text/javascript">
+  <!--
+  // Private objects are initially displayed (because if
+  // javascript is turned off then we want them to be
+  // visible); but by default, we want to hide them.  So hide
+  // them unless we have a cookie that says to show them.
+  checkCookie();
+  // -->
+</script>
+</body>
+</html>

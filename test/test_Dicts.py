@@ -4,7 +4,7 @@
 from pycocoa import Dict, isNone, NSMain, NSStr, \
                     ns2Type, ObjCClass, Str, type2NS
 
-__version__ = '18.06.11'
+__version__ = '18.08.04'
 
 # get PyCocoa-internal _ObjCBase class
 _ObjCBase = tuple(_ for _ in ObjCClass.mro() if _.__name__ == '_ObjCBase')
@@ -29,7 +29,7 @@ if __name__ == '__main__':
 
         print('%s: %s' % ('b', _strepr(b)))
 
-        # <http://Developer.Apple.com//library/content/documentation/MacOSX/
+        # <http://Developer.Apple.com/library/content/documentation/MacOSX/
         #       Conceptual/BPFrameworks/Concepts/FrameworkAnatomy.html>
         # Table 2 Framework configuration keys
         nsD = b.localizedInfoDictionary() or b.infoDictionary()

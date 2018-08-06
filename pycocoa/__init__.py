@@ -25,8 +25,8 @@ and I{simple_VLCplayer.py} require installation of the U{VLC App
 corresponding U{Python-VLC<http://PyPI.org/project/python-vlc>} binding.
 
 The tests and examples have only been run with 64-bit Python 2.7.15 and
-3.7.0 using U{Python-VLC<http://PyPI.org/project/python-vlc>} 2.2.6, 3.0.1,
-3.0.2 and 3.0.3 (with the compatible U{VLC App<http://www.VideoLan.org/vlc>}),
+3.7.0 using U{Python-VLC<http://PyPI.org/project/python-vlc>} 2.2.8, 3.0.1
+and 3.0.3 (with the compatible U{VLC App<http://www.VideoLan.org/vlc>}),
 but only on macOS 10.13.3, 10.13.4, 10.13.5 or 10.13.6 High Sierra.  PyCocoa
 has I{not been tested} on iOS nor with 32-bit Python and I{does not work}
 with U{PyPy<http://PyPy.org>} nor with U{Intel(R) Python
@@ -47,9 +47,9 @@ U{GitHub<http://GitHub.com/mrJean1/PyCocoa>}, C{unzip} the downloaded file,
 C{cd} to directory C{PyCocoa-} and type C{python setup.py install}.  To
 run the PyCocoa tests, type C{python setup.py test} before installation.
 
-Some alternatives to PyCocoa are (a) U{PyObjC<http://PyPI.org/project/pyobjc/>},
+Some alternatives to PyCocoa are (a) U{PyObjC<http://PyPI.org/project/pyobjc>},
 the most comprehensive Python to Objective-C bridge, (b)
-U{Rubicon-ObjC<http://PyPI.org/project/rubicon-objc/>} for Python 3.5+,
+U{Rubicon-ObjC<http://PyPI.org/project/rubicon-objc>} for Python 3.5+,
 taking advantage of Python's new
 U{typing<http://Docs.Python.org/3/library/typing.html>} annotations and (c)
 U{PyGUI<http://CoSC.Canterbury.AC.NZ/greg.ewing/python_gui>} for I{macOS}.
@@ -117,7 +117,7 @@ POSSIBILITY OF SUCH DAMAGE.}
 from os.path import abspath, dirname
 import sys
 
-__version__ = '18.07.27'
+__version__ = '18.08.04'
 
 p = sys.platform
 if not p.startswith('darwin'):
@@ -146,6 +146,7 @@ from geometry import *  # PYCHOK expected
 from lists    import *  # PYCHOK expected
 from menus    import *  # PYCHOK expected
 from panels   import *  # PYCHOK expected
+from printers import *  # PYCHOK expected
 from sets     import *  # PYCHOK expected
 from strs     import *  # PYCHOK expected
 from tables   import *  # PYCHOK expected

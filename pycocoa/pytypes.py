@@ -17,7 +17,7 @@ from runtime import ObjCInstance, release
 from types   import GeneratorType as _generator
 from utils   import bytes2str, clip, DEFAULT_UNICODE, _exports, _Ints
 
-__version__ = '18.06.28'
+__version__ = '18.08.02'
 
 
 def _iter2NS(ns, py, getCount):
@@ -235,7 +235,7 @@ def url2NS(py, url2=None):
 
        @return: The ObjC instance (L{NSURL}).
 
-       @see: U{URL<http://Developer.Apple.com//documentation/foundation/url>}
+       @see: U{URL<http://Developer.Apple.com/documentation/foundation/url>}
              for parsing an L{NSURL}.
     '''
     ns = release(NSStr(py))
@@ -300,6 +300,9 @@ def py2NS(py):
         - str       -> NSStr, immutable
         - tuple     -> NSArray, immutable
         - unicode   -> NSStr, immutable
+
+       @see: U{Converting values between Python and Objective-C
+              <http://PythonHosted.org/pyobjc/core/typemapping.html>}
     '''
     try:
         return py.NS

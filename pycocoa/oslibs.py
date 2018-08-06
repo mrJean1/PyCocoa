@@ -41,8 +41,9 @@ try:
 except ImportError:  # XXX Pythonista/iOS
     def _find_lib(unused):
         return None
+import os.path as os_path
 
-__version__ = '18.07.25'
+__version__ = '18.08.02'
 _leaked2    = []  # leaked memory, 2-tuples (ptr, size)
 _libs_cache = {}  # loaded libraries, by name
 
@@ -97,9 +98,14 @@ def _dup(result, ctype):
     while result[n]:
         n += 1
     dup = result[:n]  # [result[i] for i in range(n)]
+    # leak the original memory
+    _free_memory(result, (n + 1) * sizeof(ctype))
+    return dup
 
-    # leak the original memory, only temporarily
-    _leaked2.append((result, (n + 1) * sizeof(ctype)))
+
+def _free_memory(ptr, size):
+    # leak freed memory, only temporarily
+    _leaked2.append((ptr, size))
     # free several, previously leaked memory, but
     # this segfaults or produces erratic results,
     # especially when memory is freed immediately
@@ -107,23 +113,50 @@ def _dup(result, ctype):
         ptr, _ = _leaked2.pop(0)
         _libc_free(ptr)
 
-    return dup
-
 
 def get_lib(name):
     '''Find and load a C{.dylib} library.
 
-       @param name: The library base name (str).
+       @param name: The library base name (C{str}).
 
        @return: The library (C{ctypes.CDLL}).
 
-       @note: Private attribute C{._name} shows the library file name.
+       @note: Private attribute C{._name} shows the library path.
     '''
     try:
         lib = _libs_cache[name]
     except KeyError:
         lib = cdll.LoadLibrary(_find_lib(name))
         _libs_cache[name] = lib
+    return lib
+
+
+def get_lib_framework(name, services='ApplicationServices', version=''):
+    '''Load a C{Frameworks services .framework} library.
+
+       @param name: Library base name (C{str}).
+       @keyword services: Services framework base name (C{str}).
+       @keyword version: Framework version (C{str}), if not 'Current'.
+
+       @return: The library (C{ctypes.CDLL}).
+
+       @note: Private attribute C{._name} shows the library path.
+
+       @example:
+        - get_lib_framework('PrintCore')
+        - get_lib_framework('Metadata', services='CoreServices')
+    '''
+    try:
+        n_fw = name + '.framework'
+        lib = _libs_cache[n_fw]
+    except KeyError:
+        s_fw = services + '.framework'
+        if version:  # not 'Current'
+            name = os_path.join('Versions', version, name)
+        p = os_path.join('System', 'Library', 'Frameworks',
+                          s_fw, 'Frameworks', n_fw, name)
+        lib = cdll.LoadLibrary(os_path.sep + p)
+        _libs_cache[n_fw] = lib
     return lib
 
 
@@ -164,6 +197,9 @@ def _strdup(result, *unused):  # func, args
 
 libCF = get_lib('CoreFoundation')
 
+# see also framework_constants_via_ctypes.py and -_pyobjc.py
+# <http://Gist.GitHub.com/pudquick/8f65bb9b306f91eafdcc> and
+# <http://Gist.GitHub.com/pudquick/ac8f22326f095ed2690e>
 kCFAllocatorDefault   = Allocator_t.in_dll(libCF, 'kCFAllocatorDefault')  # XXX or NULL
 kCFRunLoopDefaultMode =    c_void_p.in_dll(libCF, 'kCFRunLoopDefaultMode')
 
@@ -205,10 +241,10 @@ _csignature(libCF.CFDataGetBytes, c_void, Data_t, CFRange_t, c_void_p)
 _csignature(libCF.CFDataGetLength, CFIndex_t, Data_t)
 _csignature(libCF.CFDataGetTypeID, TypeID_t)
 
-# <http://Developer.Apple.com//documentation/corefoundation/cfdictionary-rum>
-# <http://Developer.Apple.com//library/content/documentation/CoreFoundation/
+# <http://Developer.Apple.com/documentation/corefoundation/cfdictionary-rum>
+# <http://Developer.Apple.com/library/content/documentation/CoreFoundation/
 #         Conceptual/CFMemoryMgmt/Concepts/Ownership.html>
-# <http://Developer.Apple.com//documentation/corefoundation/1516777-cfdictionaryaddvalue>
+# <http://Developer.Apple.com/documentation/corefoundation/1516777-cfdictionaryaddvalue>
 _csignature(libCF.CFDictionaryAddValue, c_void, Dictionary_t, c_void_p, c_void_p)  # (d, key, val)
 _csignature(libCF.CFDictionaryContainsKey, BOOL_t, Dictionary_t, c_void_p)
 _csignature(libCF.CFDictionaryContainsValue, BOOL_t, Dictionary_t, c_void_p)
@@ -372,12 +408,14 @@ kCFURLBookmarkResolutionWithSecurityScope   = 1 << 10
 #          CFURLBookmarkResolutionOptions options, CFURLRef relativeToURL,
 #          CFArrayRef resourcePropertiesToInclude, Boolean *isStale, CFErrorRef *error)
 _csignature(libCF.CFURLCreateByResolvingBookmarkData, URL_t, Allocator_t, Data_t, c_uint, URL_t, c_void_p, BOOL_t, c_void_p)
+# <http://Developer.Apple.com/documentation/corefoundation/1542826-cfurlgetstring>
+_csignature(libCF.CFURLGetString, String_t, URL_t)
+_csignature(libCF.CFURLGetTypeID, TypeID_t)
 
 
 # <http://GitHub.com/al45tair/mac_alias>
-# <http://StackOverflow.com/questions/21150169/
-#       how-to-use-mac-finder-to-list-all-aliases-in-a-folder/21151368>
-# <http://MichaelLynn.GitHub.io/2015/10/24/apples-bookmarkdata-exposed/>
+# <http://StackOverflow.com/questions/21150169>
+# <http://MichaelLynn.GitHub.io/2015/10/24/apples-bookmarkdata-exposed>
 def cfURLResolveAlias(alias):
     '''Resolve a macOS file alias.
 
@@ -390,6 +428,16 @@ def cfURLResolveAlias(alias):
         ns = libCF.CFURLCreateByResolvingBookmarkData(kCFAllocatorDefault, ns,
                                                       kCFURLBookmarkResolutionWithoutUIMask, 0, 0, NO, 0)
     return ns
+
+
+def cfURL2str(url):
+    '''Create a Python C{str} from C{CFURL}.
+
+       @param url: The C{CFURL} instance.
+
+       @return: The I{url} as string (C{str}).
+    '''
+    return cfString2str(libCF.CFURLGetString(url))
 
 
 # APPLICATION KIc
@@ -531,8 +579,8 @@ NSSquareStatusItemLength   = -2
 NSVariableStatusItemLength = -1
 
 # /System/Library/Frameworks/AppKit.framework/Headers/NSWindow.h
-# <http://Developer.Apple.com//documentation/appkit/nswindowstylemask>
-# <http://Developer.Apple.com//documentation/appkit/constants>
+# <http://Developer.Apple.com/documentation/appkit/nswindowstylemask>
+# <http://Developer.Apple.com/documentation/appkit/constants>
 # note, Deprecated -Mask's are marked with D? or commented out
 # note, Previously, NSWindowStyleMaskXyz was named NSXyzWindowMask
 # NSWindowStyleMaskBorderless             = 0  # D?
@@ -939,8 +987,8 @@ _csignature(libobjc.sel_registerName, SEL_t, c_char_p)
 # libVLCKit = get_lib('VLCKit')  # XXX not needed
 
 # filter locals() for .__init__.py
-__all__ = _exports(locals(), 'get_lib', 'leaked2', 'NO', 'YES',
-                   starts=('lib', 'NS',
+__all__ = _exports(locals(), 'leaked2', 'NO', 'YES',
+                   starts=('get_lib', 'lib', 'NS',
                          # 'CF', 'CG', 'ct', 'CTF',
                          # 'kCF', 'kCG', 'kCTF',
                           ))  # PYCHOK false

@@ -63,7 +63,7 @@
 
 <hr />
 <div class="fields">      <p><strong>Version:</strong>
-        18.07.27
+        18.08.01
       </p>
 </div><!-- ==================== CLASSES ==================== -->
 <a name="section-Classes"></a>
@@ -298,7 +298,8 @@
       <table width="100%" cellpadding="0" cellspacing="0" border="0">
         <tr>
           <td><span class="summary-sig"><a href="pycocoa.utils-module.html#name2objc" class="summary-sig-name">name2objc</a>(<span class="summary-sig-arg">name_</span>)</span><br />
-      Convert a (selector) name to bytes and ObjC naming rules.</td>
+      Convert a (selector) name to <code>bytes</code> and ObjC naming 
+      rules.</td>
           <td align="right" valign="top">
             
             
@@ -315,7 +316,8 @@
       <table width="100%" cellpadding="0" cellspacing="0" border="0">
         <tr>
           <td><span class="summary-sig"><a href="pycocoa.utils-module.html#name2py" class="summary-sig-name">name2py</a>(<span class="summary-sig-arg">name_</span>)</span><br />
-      Convert a (selector) name to str and Python naming conventions.</td>
+      Convert a (selector) name <code>str</code> and Python naming 
+      conventions.</td>
           <td align="right" valign="top">
             
             
@@ -407,6 +409,24 @@
           <td><span class="summary-sig"><a href="pycocoa.utils-module.html#z1000str" class="summary-sig-name">z1000str</a>(<span class="summary-sig-arg">size</span>,
         <span class="summary-sig-arg">sep</span>=<span class="summary-sig-default"><code class="variable-quote">'</code><code class="variable-string">_</code><code class="variable-quote">'</code></span>)</span><br />
       Convert a size to string with 1_000's seperator.</td>
+          <td align="right" valign="top">
+            
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a href="pycocoa.utils-module.html#zfstr" class="summary-sig-name">zfstr</a>(<span class="summary-sig-arg">flt</span>,
+        <span class="summary-sig-arg">prec</span>=<span class="summary-sig-default">3</span>)</span><br />
+      Format a <code>float</code> and strip trailing zero decimals.</td>
           <td align="right" valign="top">
             
             
@@ -748,7 +768,8 @@
     </td>
   </tr></table>
   
-  <p>Convert a (selector) name to bytes and ObjC naming rules.</p>
+  <p>Convert a (selector) name to <code>bytes</code> and ObjC naming 
+  rules.</p>
   <dl class="fields">
     <dt>Parameters:</dt>
     <dd><ul class="nomargin-top">
@@ -757,7 +778,10 @@
     <dt>Returns:</dt>
         <dd>Converted name (<code>bytes</code>).</dd>
   </dl>
-</td></tr></table>
+<div class="fields">      <p><strong>Note:</strong>
+        A <i>name_</i> starting with an underscore is returned as-is.
+      </p>
+</div></td></tr></table>
 </div>
 <a name="name2py"></a>
 <div>
@@ -773,7 +797,8 @@
     </td>
   </tr></table>
   
-  <p>Convert a (selector) name to str and Python naming conventions.</p>
+  <p>Convert a (selector) name <code>str</code> and Python naming 
+  conventions.</p>
   <dl class="fields">
     <dt>Parameters:</dt>
     <dd><ul class="nomargin-top">
@@ -782,7 +807,10 @@
     <dt>Returns:</dt>
         <dd>Converted name (<code>str</code>).</dd>
   </dl>
-</td></tr></table>
+<div class="fields">      <p><strong>Note:</strong>
+        A <i>name_</i> starting with an underscore is returned as-is.
+      </p>
+</div></td></tr></table>
 </div>
 <a name="name2pymethod"></a>
 <div>
@@ -927,6 +955,33 @@
   </dl>
 </td></tr></table>
 </div>
+<a name="zfstr"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">zfstr</span>(<span class="sig-arg">flt</span>,
+        <span class="sig-arg">prec</span>=<span class="sig-default">3</span>)</span>
+  </h3>
+  </td><td align="right" valign="top"
+    >&nbsp;
+    </td>
+  </tr></table>
+  
+  <p>Format a <code>float</code> and strip trailing zero decimals.</p>
+  <dl class="fields">
+    <dt>Parameters:</dt>
+    <dd><ul class="nomargin-top">
+        <li><strong class="pname"><code>flt</code></strong> - Value (<code>float</code>).</li>
+        <li><strong class="pname"><code>prec</code></strong> - Number of decimals (<code>int</code>).</li>
+    </ul></dd>
+    <dt>Returns:</dt>
+        <dd>Value (<code>str</code>).</dd>
+  </dl>
+</td></tr></table>
+</div>
 <a name="zSIstr"></a>
 <div>
 <table class="details" border="1" cellpadding="3"
@@ -989,7 +1044,7 @@
 <table border="0" cellpadding="0" cellspacing="0" width="100%%">
   <tr>
     <td align="left" class="footer">
-    Generated by Epydoc 3.0.1 on Sat Jul 28 11:42:49 2018
+    Generated by Epydoc 3.0.1 on Mon Aug  6 13:28:39 2018
     </td>
     <td align="right" class="footer">
       <a target="mainFrame" href="http://epydoc.sourceforge.net"

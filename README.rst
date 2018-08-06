@@ -18,7 +18,7 @@ Examples `cocoavlc.py`_ and *simple_VLCplayer.py* require installation of
 the `VLC App`_ and the corresponding `Python-VLC`_ binding.
 
 The tests and examples have only been run with 64-bit Python 2.7.15 and
-3.7.0 using `Python-VLC`_ 2.2.6, 3.0.1, 3.0.2 and 3.0.3 (with the compatible
+3.7.0 using `Python-VLC`_ 2.2.8, 3.0.1 and 3.0.3 (with the compatible
 `VLC App`_), but only on macOS 10.13.3, 10.13.4, 10.13.5 or 10.13.6 High
 Sierra.  PyCocoa has *not been tested* on iOS nor with 32-bit Python and
 *does not work* with PyPy_ nor with `Intel(R) Python`_.
@@ -37,7 +37,7 @@ Some alternatives to PyCocoa are (a) PyObjC_, the most comprehensive Python
 to Objective-C bridge, (b) `Rubicon-ObjC`_ for Python 3.5+, taking advantage
 of Python's new typing_ annotations and (c) PyGUI_ for macOS_.
 
-*Last updated: July 27, 2018.*
+*Last updated: Aug 04, 2018.*
 
 .. _checked: http://GitHub.com/ActiveState/code/tree/master/recipes/Python/546532_PyChecker_postprocessor
 .. _cocoa-python: http://GitHub.com/phillip-nguyen/cocoa-python
@@ -48,7 +48,7 @@ of Python's new typing_ annotations and (c) PyGUI_ for macOS_.
 .. _Flake8: http://PyPI.org/project/flake8
 .. _GitHub: http://GitHub.com/mrJean1/PyCocoa
 .. _Intel(R) Python: http://Software.Intel.com/en-us/distribution-for-python
-.. _macOS: http://WikipediA.org/wiki/MacOS
+.. _macOS: http://WikiPedia.org/wiki/MacOS
 .. _McCabe: http://PyPI.org/project/mccabe
 .. _MIT License: http://OpenSource.org/licenses/MIT
 .. _New BSD License: http://OpenSource.org/licenses/BSD-3-Clause

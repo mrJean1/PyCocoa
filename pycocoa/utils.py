@@ -7,7 +7,7 @@
 
 @var missing: Missing keyword argument value.
 '''
-__version__ = '18.07.27'
+__version__ = '18.08.01'
 
 try:  # all imports listed explicitly to help PyChecker
     from math import gcd  # Python 3+
@@ -600,23 +600,33 @@ def lambda1(arg):
 
 
 def name2objc(name_):
-    '''Convert a (selector) name to bytes and ObjC naming rules.
+    '''Convert a (selector) name to C{bytes} and ObjC naming rules.
 
        @param name_: Name to convert (C{str} or C{bytes}).
 
        @return: Converted name (C{bytes}).
+
+       @note: A I{name_} starting with an underscore is returned as-is.
     '''
-    return str2bytes(name_).replace(b'_', b':')
+    b = str2bytes(name_)
+    if not b.startswith(b'_'):
+        b = b.replace(b'_', b':')
+    return b
 
 
 def name2py(name_):
-    '''Convert a (selector) name to str and Python naming conventions.
+    '''Convert a (selector) name C{str} and Python naming conventions.
 
        @param name_: Name to convert (C{str} or C{bytes}).
 
        @return: Converted name (C{str}).
+
+       @note: A I{name_} starting with an underscore is returned as-is.
     '''
-    return bytes2str(name_).replace(':', '_')
+    s = bytes2str(name_)
+    if not s.startswith('_'):
+        s = s.replace(':', '_')
+    return s
 
 
 def name2pymethod(name_):
@@ -727,6 +737,20 @@ def z1000str(size, sep='_'):
                 n -= 3
                 t = t[:n] + sep + t[n:]
     return t
+
+
+def zfstr(flt, prec=3):
+    '''Format a C{float} and strip trailing zero decimals.
+
+       @param flt: Value (C{float}).
+       @keyword prec: Number of decimals (C{int}).
+
+       @return: Value (C{str}).
+    '''
+    fstr = '%.*f' % (prec, float(flt))
+    if prec > 0:
+        fstr = fstr.rstrip('0').rstrip('.')
+    return fstr
 
 
 def zSIstr(size, B='B', K=1024):

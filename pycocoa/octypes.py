@@ -53,7 +53,7 @@ from platform import machine  # as machine
 from utils import bytes2str, _exports, inst2strepr, iterbytes, \
                   missing, str2bytes
 
-__version__ = '18.06.28'
+__version__ = '18.06.30'
 
 z = sizeof(c_void_p)
 if z == 4:
@@ -113,8 +113,8 @@ def _join(codes):
 # Also, these types can't be subclasses of c_... ctypes.
 if __LP64__:
     CGFloat_t    = c_double  # CGFloat.nativeType
-    NSInteger_t  = c_long    # == Int?
-    NSUInteger_t = c_ulong   # == Uint?
+    NSInteger_t  = c_long    # == Int_t?
+    NSUInteger_t = c_ulong   # == Uint_t?
 
     NSIntegerMax = 0x7fffffffffffffff
 
@@ -125,8 +125,8 @@ if __LP64__:
 
 else:
     CGFloat_t    = c_float  # CGFloat.nativeType
-    NSInteger_t  = c_int    # == Int?
-    NSUInteger_t = c_uint   # == Uint?
+    NSInteger_t  = c_int    # == Int_t?
+    NSUInteger_t = c_uint   # == Uint_t?
 
     NSIntegerMax = 0x7fffffff
 
@@ -748,9 +748,9 @@ def split_encoding(encoding):  # MCCABE 18
 
        @see: U{Type Encodings<http://Developer.Apple.com/library/content/documentation/
              Cocoa/Conceptual/ObjCRuntimeGuide/Articles/ocrtTypeEncodings.html>},
-             U{NSHipster Type Encodings<http://NSHipster.com/type-encodings/>} and
+             U{NSHipster Type Encodings<http://NSHipster.com/type-encodings>} and
              U{Digits in type encoding<http://StackOverflow.com/questions/11527385/
-             how-are-the-digits-in-objc-method-type-encoding-calculated/>}.
+             how-are-the-digits-in-objc-method-type-encoding-calculated>}.
     '''
     code   = []
     codes  = []

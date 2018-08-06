@@ -3,7 +3,7 @@
 
 # License at the end of this file.
 
-'''Types L{OpenPanel} and L{SavePanel}, wrapping ObjC L{NSOpenPanel} and L{NSSavePanel}.
+'''Types L{OpenPanel} and L{SavePanel}, wrapping ObjC C{NSOpenPanel} and C{NSSavePanel}.
 
 @var AlertStyle:  Alert levels (C{enum}).
 @var PanelButton: Panel button kinds (C{enum}).
@@ -40,7 +40,7 @@ __all__ = ('AlertPanel', 'AlertStyle',
            'PanelButton',
            'SavePanel',
            'TextPanel')
-__version__ = '18.06.28'
+__version__ = '18.08.04'
 
 
 class AlertStyle(_Constants):  # Enum?
@@ -321,7 +321,7 @@ class OpenPanel(_Type2):
 
         while True:
             # ns.orderFrontRegardless()  # only flashes
-            # <http://Developer.Apple.com//documentation/
+            # <http://Developer.Apple.com/documentation/
             #       appkit/nssavepanel/1525357-runmodal>
             if ns.runModal() == NSCancelButton:  # runModalForTypes_
                 path = dflt  # nothing selected

@@ -14,9 +14,10 @@ L{WindowStyle}, wrapping ObjC L{NSWindow}, etc.
 # all imports listed explicitly to help PyChecker
 from bases    import _Type2
 from geometry import Rect
-from nstypes  import isNone, NSConcreteNotification, NSFont, NSMain, \
-                     NSNotification, NSScrollView, NSStr, nsTextSize3, \
-                     NSTextView, NSView, NSWindow
+from nstypes  import isNone, NSConcreteNotification, NSFont, \
+                     NSImageView, NSMain, NSNotification, NSScrollView, \
+                     NSStr, NSTableView, nsTextSize3, NSTextView, \
+                     NSView, NSWindow
 from octypes  import NSIntegerMax, NSPoint_t, NSSize_t
 from oslibs   import NO, NSBackingStoreBuffered, \
                      NSWindowStyleMaskClosable, \
@@ -31,7 +32,7 @@ from utils    import aspect_ratio, bytes2str, _Constants, _exports, \
                      _Globals, isinstanceOf, _text_title2, _Types
 # from enum   import Enum
 
-__version__ = '18.07.27'
+__version__ = '18.08.04'
 
 _Cascade = NSPoint_t(25, 25)  # PYCHOK false
 
@@ -136,13 +137,14 @@ class Screen(Rect):
 class Window(_Type2):
     '''Basic window Python Type, wrapping ObjC L{NSWindow}.
     '''
-    _auto      = False
-    _frame     = None
-    _isKey     = None
-    _isMain    = None
-    _ns_uniqID = 0
-    _ns_view   = None
-    _ratio     = ()
+    _auto     = False
+    _frame    = None
+    _isKey    = None  # True or False
+    _isMain   = None  # True or False
+    _NSuniqID = 0
+    _NSview   = None
+    _PMview   = None
+    _ratio    = ()
 
     def __init__(self, title='Main', frame=None, excl=0, auto=False, **kwds):
         '''Create a new L{Window}.
@@ -170,7 +172,7 @@ class Window(_Type2):
             super(Window, self).__init__(**kwds)
 
         # XXX self.NS.setIdentifier_(int2NS(id(self)))
-        self._ns_uniqID = u = self.NS.uniqueID()
+        self._NSuniqID = u = self.NS.uniqueID()
         if u in _Globals.Windows:
             raise WindowError('%s %r exists: %r' % ('.uniqueID', u,  _Globals.Windows[u]))
         _Globals.Windows[u] = self
@@ -281,18 +283,33 @@ class Window(_Type2):
 
     @property
     def NSview(self):
-        '''Get this window's C{NS} view (C{NSView...}).
+        '''Get this window's view (C{NSView...}).
         '''
-        return self._ns_view or NSMain.Null
+        return self._NSview or NSMain.Null
 
     @NSview.setter  # PYCHOK property.setter
     def NSview(self, ns_view):
-        '''Set this window's C{NS} view (C{NSView...}).
+        '''Set this window's view (C{NSView...}).
         '''
         if not isNone(ns_view):
             isInstanceOf(ns_view, NSScrollView, NSView, name='ns_view')
             self.NS.setContentView_(ns_view)
-        self._ns_view = ns_view
+        self._NSview = ns_view
+
+    @property
+    def PMview(self):
+        '''Get this window's print view (C{NSView...}).
+        '''
+        return self._PMview  # or NSMain.Null
+
+    @PMview.setter  # PYCHOK property.setter
+    def PMview(self, ns_view):
+        '''Set this window's print view (C{NSView...}).
+        '''
+        if isInstanceOf(ns_view, NSImageView, NSTableView, NSTextView, NSView):
+            self._PMview = ns_view
+        else:
+            self._PMview = None
 
     @property
     def ratio(self):
@@ -332,7 +349,7 @@ class Window(_Type2):
         if zoom is None or (zoom and not self.isZoomed) \
                         or (self.isZoomed and not zoom):
             # click the "zoom box", toggles the zoom state
-            # <http://Developer.Apple.com//documentation/appkit/nswindow/1419513-zoom>
+            # <http://Developer.Apple.com/documentation/appkit/nswindow/1419513-zoom>
             self.NS.performZoom_(self.NS)  # XXX self.delegate
 
     # Callback methods from NSWindowDelegate, to be overloaded as needed.
@@ -455,6 +472,7 @@ class MediaWindow(Window):
         # <http://StackOverflow.com/questions/11562587/create-nsview-directly-from-code>
         # <http://GitHub.com/ariabuckles/pyobjc-framework-Cocoa/blob/master/Examples/AppKit/DotView/DotView.py>
         self.NSview = NSView.alloc().initWithFrame_(self.frame.NS)
+        # self.PMview = self.NSview  # prints an empty box or crashes on Python 2
 
 
 class TextWindow(Window):
@@ -517,6 +535,7 @@ class TextWindow(Window):
         tv.setDrawsBackground_(NO)
 
         self.NSView = sv  # == ns.setContentView_(sv)
+        self.PMview = tv  # XXX or sv?
         ns.makeKeyAndOrderFront_(None)
         ns.makeFirstResponder_(tv)
 
@@ -617,7 +636,7 @@ class _NSWindowDelegate(object):
     def windowShouldZoom_toFrame_(self, ns_frame):
         '''ObjC callback to handle L{NSWindow} events.
         '''
-        # <http://Developer.Apple.com//documentation/appkit/
+        # <http://Developer.Apple.com/documentation/appkit/
         #       nswindowdelegate/1419533-windowshouldzoom>
         ok = self.window.windowZoomOK_(Rect(ns_frame))
         return YES if ok else NO
@@ -634,7 +653,7 @@ class _NSWindowDelegate(object):
 
 #   @_ObjC.method('@@@')
 #   def windowWillResize_toSize_(self, ns_window, ns_size):
-        # <http://Developer.Apple.com//documentation/appkit/
+        # <http://Developer.Apple.com/documentation/appkit/
         #       nswindowdelegate/1419292-windowwillresize>
 #       self._ns2w(ns_window)
 #       return ns_size
@@ -668,9 +687,9 @@ def ns2Window(ns):
         u = ns.object().uniqueID()
     try:
         w = _Globals.Windows[u]
-        if w._ns_uniqID == u:
+        if w._NSuniqID == u:
             return w
-        t = '%r of %r' % (w._ns_uniqID, w)
+        t = '%r of %r' % (w._NSuniqID, w)
     except KeyError:
         t = None
     raise RuntimeError('%s %s %r vs %s' % (ns, '.uniqueID', u, t))

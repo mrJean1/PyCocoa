@@ -3,7 +3,7 @@
 
 # License at the end of this file.
 
-'''Type L{Tuple}, wrapping (immutable) ObjC L{NSArray}.
+'''Type L{Tuple}, wrapping (immutable) ObjC C{NSArray}.
 '''
 # all imports listed explicitly to help PyChecker
 from bases   import _Type0

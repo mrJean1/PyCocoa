@@ -36,7 +36,7 @@ from utils   import bytes2str, _ByteStrs, _Constants, _exports, \
                     isinstanceOf, lambda1, missing,  name2py, \
                     printf, property2, str2bytes
 
-__version__ = '18.07.24'
+__version__ = '18.08.01'
 
 # <http://Developer.Apple.com/documentation/objectivec/
 #         objc_associationpolicy?language=objc>
@@ -67,7 +67,7 @@ def _c_tstr(*c_ts):
     return ', '.join(getattr(t, '__name__', str(t)) for t in c_ts)
 
 
-def _libobjcall(name, restype, argtypes, *args):
+def _libobjcall(name, restype, argtypes, *args):  # see printer.py
     '''(INTERNAL) Call an ObjC library function and return the result.
 
        @return: The result (C{any}).
@@ -196,7 +196,7 @@ def _signature3(objc_t, sel_name_, args, restype=c_void_p,
     return restype, argtypes, sel
 
 
-def _Xargs(x, name, argtypes, restype='void'):  # imported by nstypes.py
+def _Xargs(x, name, argtypes, restype='void'):  # imported by nstypes.py, printers.py
     '''(INTERNAL) Expand the args of an C{ctypes.ArgumentError} I{x}.
     '''
     # x.args = tuple(x.args) + ('%s(%s) %s' % (name, _c_tstr(*argtypes),
@@ -557,15 +557,20 @@ class ObjCInstance(_ObjCBase):
         if method:
             return ObjCBoundClassMethod(method, clas.ptr, self)
 
+        # ... handle substitutes for ObjC method names conflicting
+        # with Python reserved words, like 'throw' for 'raise' or
+        # ObjC attributes conflicting with Python properties, like
+        # NSPrinter.name()
+#       subst = {'name':  'objc_classname',  # self.isKindOf(NSPrinter)
+#                'throw': 'raise',  # self.isKindOf(NSException)
+#               }.get(name, None)  # PYCHOK expected
+#       if subst:
+#           return self.__getattr__(subst)
+
         # Try this class' property, ...
         get, _ = property2(self, bytes2str(name))
         if get:
             return get(self)
-
-        # ... handle substitutes for method names
-        # conflicting with Python reserved words
-#       if name in ('throw',):  # and self.isKindOf(NSException):
-#           return self.__getattr__('raise')
 
         # ... otherwise raise error
         raise AttributeError('no %r [class]method or property: %s' % (name, self))
@@ -588,14 +593,15 @@ class ObjCInstance(_ObjCBase):
         '''
         return self._objc_class.name.replace('__NSCF', 'NS')  # .lstrip('_')
 
+    # XXX name property clashes with NSPrinter.NS.name()
     name = objc_classname  # for C{ObjCMethod.__call__}
 
     @property
     def objc_description(self):
         '''Get this instance' ObjC description (C{str}).
         '''
-        d = _libobjcall(_objc_msgSend, Id_t, (Id_t, SEL_t),
-                         self._objc_ptr, get_selector('description'))
+        # XXX conflicts with NSPrinter.description()
+        d = send_message(self.ptr, 'description', restype=Id_t)
         s = cfString2str(d, dflt='N/A')
         # d.release()
         return s

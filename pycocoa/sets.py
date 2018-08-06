@@ -14,7 +14,7 @@ from utils   import _Types
 
 __all__ = ('FrozenSet',
            'Set')
-__version__ = '18.06.28'
+__version__ = '18.08.01'
 
 
 if True:  # MCCABE 69
@@ -50,7 +50,7 @@ if True:  # MCCABE 69
             return self.__class__(self)
 
     class Set(set, _Type0):  # set, first to maintain set behavior
-        '''Python c{Set} Type, wrapping an ObjC L{NSMutableSet}.
+        '''Python C{set} Type, wrapping an ObjC L{NSMutableSet}.
         '''
         def __new__(cls, ns_set=[]):
             '''New L{Set} from a C{set}, C{list}, L{Set} or L{NSMutableSet}.
@@ -86,7 +86,7 @@ if True:  # MCCABE 69
 else:  # XXX far too much duplication
 
     class FrozenSet(_Type0):  # PYCHOK expected
-        '''Python C{frozenset} Type, wrapping an immutable ObjC L{NSSet}.
+        '''Python C{FrozenSet} Type, wrapping an immutable ObjC L{NSSet}.
         '''
         _set  = frozenset()  # or set(), empty to start
         _type = frozenset

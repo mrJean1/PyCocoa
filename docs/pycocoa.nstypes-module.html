@@ -64,7 +64,7 @@
 
 <hr />
 <div class="fields">      <p><strong>Version:</strong>
-        18.06.28
+        18.08.02
       </p>
 </div><!-- ==================== CLASSES ==================== -->
 <a name="section-Classes"></a>
@@ -544,8 +544,27 @@
     </td><td class="summary">
       <table width="100%" cellpadding="0" cellspacing="0" border="0">
         <tr>
+          <td><span class="summary-sig"><a href="pycocoa.nstypes-module.html#nsURL2str" class="summary-sig-name">nsURL2str</a>(<span class="summary-sig-arg">ns</span>)</span><br />
+      Create a Python <code>str</code> from <a 
+      href="pycocoa.nstypes-module.html#NSURL" class="link">NSURL</a> 
+      string.</td>
+          <td align="right" valign="top">
+            
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
           <td><span class="summary-sig"><a href="pycocoa.nstypes-module.html#ns2py" class="summary-sig-name">ns2py</a>(<span class="summary-sig-arg">ns</span>,
-        <span class="summary-sig-arg">dflt</span>=<span class="summary-sig-default">None</span>)</span><br />
+        <span class="summary-sig-arg">dflt</span>=<span class="summary-sig-default">missing()</span>)</span><br />
       Convert (an instance of) an ObjC class to an instance of the 
       equivalent Python standard type or wrapper and value.</td>
           <td align="right" valign="top">
@@ -736,6 +755,13 @@
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
         <a name="NSImage"></a><span class="summary-name">NSImage</span> = <code title="ObjCClass('NSImage')">ObjCClass('NSImage')</code>
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a name="NSImageView"></a><span class="summary-name">NSImageView</span> = <code title="ObjCClass('NSImageView')">ObjCClass('NSImageView')</code>
     </td>
   </tr>
 <tr>
@@ -1015,15 +1041,15 @@
     <td width="15%" align="right" valign="top" class="summary">
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
-        <a href="pycocoa.nstypes-module.html#NSMain" class="summary-name">NSMain</a> = <code title="NSMain.Application=NSApplication(&lt;Id_t at 0x105f298c0&gt;) of 0x7fad01ff2\
-560,
-      .BooleanNO=NSBoolean(&lt;Id_t at 0x105f21200&gt;) of 0x7fff985f53f8,
-      .BooleanYES=NSBoolean(&lt;Id_t at 0x105f44b00&gt;) of 0x7fff985f53e8,
-      .Bundle=NSBundle(&lt;Id_t at 0x105ed97a0&gt;) of 0x7fad01c9e4a0,
+        <a href="pycocoa.nstypes-module.html#NSMain" class="summary-name">NSMain</a> = <code title="NSMain.Application=NSApplication(&lt;Id_t at 0x10f0d17a0&gt;) of 0x7fc351cf9\
+f70,
+      .BooleanNO=NSBoolean(&lt;Id_t at 0x10f3b7200&gt;) of 0x7fffad9ee3f8,
+      .BooleanYES=NSBoolean(&lt;Id_t at 0x10f3b7d40&gt;) of 0x7fffad9ee3e8,
+      .Bundle=NSBundle(&lt;Id_t at 0x10f3cf050&gt;) of 0x7fc351c83b10,
       .BundleName=NSConstantString('CFBundleName'),
-      .FontManager=NSFontManager(&lt;Id_t at 0x105ed99e0&gt;) of 0x7fad040d4\
-d90,
-...">NSMain.Application=NSApplication(&lt;Id_t at 0x105f298c0<code class="variable-ellipsis">...</code></code><br />
+      .FontManager=NSFontManager(&lt;Id_t at 0x10eed0f80&gt;) of 0x7fc354523\
+4b0,
+...">NSMain.Application=NSApplication(&lt;Id_t at 0x10f0d17a0<code class="variable-ellipsis">...</code></code><br />
       Global <code>NS...</code> singletons (<code>const</code>).
     </td>
   </tr>
@@ -1065,7 +1091,7 @@ d90,
 <div class="fields">      <p><strong>See Also:</strong>
         <a href="http://GitHub.com/al45tair/mac_alias" 
         target="_top">mac-alias</a> and <a 
-        href="http://StackOverflow.com/questions/21150169/" 
+        href="http://StackOverflow.com/questions/21150169" 
         target="_top">here</a>.
       </p>
 </div></td></tr></table>
@@ -1698,6 +1724,35 @@ d90,
       </p>
 </div></td></tr></table>
 </div>
+<a name="nsURL2str"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">nsURL2str</span>(<span class="sig-arg">ns</span>)</span>
+  </h3>
+  </td><td align="right" valign="top"
+    >&nbsp;
+    </td>
+  </tr></table>
+  
+  <p>Create a Python <code>str</code> from <a 
+  href="pycocoa.nstypes-module.html#NSURL" class="link">NSURL</a> 
+  string.</p>
+  <dl class="fields">
+    <dt>Parameters:</dt>
+    <dd><ul class="nomargin-top">
+        <li><strong class="pname"><code>ns</code></strong> - The <code>CFURL</code> (<a 
+          href="pycocoa.runtime.ObjCInstance-class.html" 
+          class="link">ObjCInstance</a>).</li>
+    </ul></dd>
+    <dt>Returns:</dt>
+        <dd>The URL as string (<code>str</code>).</dd>
+  </dl>
+</td></tr></table>
+</div>
 <a name="ns2py"></a>
 <div>
 <table class="details" border="1" cellpadding="3"
@@ -1706,7 +1761,7 @@ d90,
   <table width="100%" cellpadding="0" cellspacing="0" border="0">
   <tr valign="top"><td>
   <h3 class="epydoc"><span class="sig"><span class="sig-name">ns2py</span>(<span class="sig-arg">ns</span>,
-        <span class="sig-arg">dflt</span>=<span class="sig-default">None</span>)</span>
+        <span class="sig-arg">dflt</span>=<span class="sig-default">missing()</span>)</span>
   </h3>
   </td><td align="right" valign="top"
     >&nbsp;
@@ -1722,10 +1777,10 @@ d90,
           href="pycocoa.runtime.ObjCInstance-class.html" 
           class="link">ObjCInstance</a>).</li>
         <li><strong class="pname"><code>dflt</code></strong> - Default for unhandled, unexpected <code>NS...</code>s 
-          (<code>None</code>).</li>
+          (<code>missing</code>).</li>
     </ul></dd>
     <dt>Returns:</dt>
-        <dd>The value (<code>Python type</code>) or <i>dflt</i>.</dd>
+        <dd>The value (<code>Python type</code>) or <i>dflt</i> if provided.</dd>
     <dt>Raises:</dt>
     <dd><ul class="nomargin-top">
         <li><code><strong class='fraise'>TypeError</strong></code> - Unhandled, unexpected <code>TypeID</code>.</li>
@@ -1777,6 +1832,10 @@ d90,
             NSStr            -&gt; str
           </li>
         </ul>
+      </p>
+      <p><strong>See Also:</strong>
+        <a href="http://PythonHosted.org/pyobjc/core/typemapping.html" 
+        target="_top">Converting values between Python and Objective-C</a>
       </p>
 </div></td></tr></table>
 </div>
@@ -1830,14 +1889,14 @@ d90,
   <dl class="fields">
     <dt>Value:</dt>
       <dd><table><tr><td><pre class="variable">
-NSMain.Application=NSApplication(&lt;Id_t at 0x105f298c0&gt;) of 0x7fad01ff2<span class="variable-linewrap"><img src="crarr.png" alt="\" /></span>
-560,
-      .BooleanNO=NSBoolean(&lt;Id_t at 0x105f21200&gt;) of 0x7fff985f53f8,
-      .BooleanYES=NSBoolean(&lt;Id_t at 0x105f44b00&gt;) of 0x7fff985f53e8,
-      .Bundle=NSBundle(&lt;Id_t at 0x105ed97a0&gt;) of 0x7fad01c9e4a0,
+NSMain.Application=NSApplication(&lt;Id_t at 0x10f0d17a0&gt;) of 0x7fc351cf9<span class="variable-linewrap"><img src="crarr.png" alt="\" /></span>
+f70,
+      .BooleanNO=NSBoolean(&lt;Id_t at 0x10f3b7200&gt;) of 0x7fffad9ee3f8,
+      .BooleanYES=NSBoolean(&lt;Id_t at 0x10f3b7d40&gt;) of 0x7fffad9ee3e8,
+      .Bundle=NSBundle(&lt;Id_t at 0x10f3cf050&gt;) of 0x7fc351c83b10,
       .BundleName=NSConstantString('CFBundleName'),
-      .FontManager=NSFontManager(&lt;Id_t at 0x105ed99e0&gt;) of 0x7fad040d4<span class="variable-linewrap"><img src="crarr.png" alt="\" /></span>
-d90,
+      .FontManager=NSFontManager(&lt;Id_t at 0x10eed0f80&gt;) of 0x7fc354523<span class="variable-linewrap"><img src="crarr.png" alt="\" /></span>
+4b0,
 <code class="variable-ellipsis">...</code>
 </pre></td></tr></table>
 </dd>
@@ -1876,7 +1935,7 @@ d90,
 <table border="0" cellpadding="0" cellspacing="0" width="100%%">
   <tr>
     <td align="left" class="footer">
-    Generated by Epydoc 3.0.1 on Sat Jul 28 11:42:49 2018
+    Generated by Epydoc 3.0.1 on Mon Aug  6 13:28:39 2018
     </td>
     <td align="right" class="footer">
       <a target="mainFrame" href="http://epydoc.sourceforge.net"

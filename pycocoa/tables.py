@@ -3,7 +3,7 @@
 
 # License at the end of this file.
 
-'''Types L{Table} and L{TableWindow}, wrapping ObjC L{NSTableView}, L{NSWindow}.
+'''Types L{Table} and L{TableWindow}, wrapping ObjC C{NSTableView}, L{NSWindow}.
 '''
 # <http://StackOverflow.com/questions/15519296/pyobjc-crashes-by-using-nstableview>
 # <http://GitHub.com/versluis/Mac-TableViewCode/tree/master/Mac%20TableViewCode>
@@ -28,7 +28,7 @@ from windows  import Screen, Window, WindowStyle
 __all__ = ('NSTableViewDelegate',
            'Table', 'TableWindow',
            'closeTables')
-__version__ = '18.07.27'
+__version__ = '18.08.04'
 
 _Alignment = dict(center=NSTextAlignmentCenter,
                justified=NSTextAlignmentJustified,
@@ -82,7 +82,7 @@ def closeTables():
 
 
 class Table(_Type2):
-    '''Python Type table of rows and columns, wrapping an ObjC L{NSTableView}.
+    '''Python rows and columns {Table} Type, wrapping an ObjC L{NSTableView}.
     '''
     _Fonts   = None
     _headers = ()
@@ -150,7 +150,7 @@ class Table(_Type2):
         high = 0
         id2i = {}
         wide = f.width  # == v.frame().size.width
-        # <http://Developer.Apple.com//documentation/appkit/nstablecolumn>
+        # <http://Developer.Apple.com/documentation/appkit/nstablecolumn>
         for i, h in enumerate(self._headers):
             # note, the identifier MUST be an NSStr (to avoid warnings)
             t = retain(NSStr(str(i)))
@@ -159,11 +159,11 @@ class Table(_Type2):
             # costly int(nsString2str(col.identifier())) conversions in
             # _NSTableViewDelegate.tableView_objectValueForTableColumn_row_
             id2i[c.identifier()] = i
-            # <http://Developer.Apple.com//documentation/appkit/nscell>
+            # <http://Developer.Apple.com/documentation/appkit/nscell>
             h = _format(h, c)
             cols.append(h)
             c.setTitle_(release(NSStr(h)))  # == c.headerCell().setStringValue_(NSStr(h))
-            # <http://Developer.Apple.com//documentation/uikit/nstextalignment>
+            # <http://Developer.Apple.com/documentation/uikit/nstextalignment>
             v.addTableColumn_(c)
             high = max(high, Font(c.dataCell().font()).height)
             wide -= c.width()
@@ -173,7 +173,7 @@ class Table(_Type2):
         if high > v.rowHeight():  # adjust the row height
             v.setRowHeight_(high + 1)
 
-        # <http://Developer.Apple.com//library/content/documentation/
+        # <http://Developer.Apple.com/library/content/documentation/
         #         Cocoa/Conceptual/TableView/VisualAttributes/VisualAttributes.html>
         v.setGridStyleMask_(NSTableViewSolidHorizontalGridLineMask |
                             NSTableViewSolidVerticalGridLineMask)
@@ -251,7 +251,7 @@ class _NSTableViewDelegate(object):
             r = self.rows[row]
             if r in (None, ()):
                 # XXX reduce the height of row separator?
-                # <http://Developer.Apple.com//library/content/samplecode/
+                # <http://Developer.Apple.com/library/content/samplecode/
                 #       CocoaTipsAndTricks/Listings/TableViewVariableRowHeights_
                 #       TableViewVariableRowHeightsAppDelegate_m.html>
                 return _NS.BlankCell
@@ -329,7 +329,7 @@ class TableWindow(Window):
         tbl = getattr(table, 'NS', None)
         isInstanceOf(tbl, NSTableView, name='table')
 
-        # <http://Developer.Apple.com//documentation/appkit/nswindow>
+        # <http://Developer.Apple.com/documentation/appkit/nswindow>
         n = tbl.dataSource().numberOfRowsInTableView_(tbl)
         # approximate height of the table content, also to
         # .setContentMaxSize_ of the window in self.limit
@@ -346,6 +346,7 @@ class TableWindow(Window):
                                           excl=WindowStyle.Miniaturizable,
                                           auto=True)  # XXX False?
         self.NSview = sv = NSScrollView.alloc().initWithFrame_(f)
+        self.PMview = tbl  # printable view
 
         sv.setDocumentView_(tbl)
         sv.setHasVerticalScroller_(YES)

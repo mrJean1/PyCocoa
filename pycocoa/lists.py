@@ -3,7 +3,7 @@
 
 # License at the end of this file.
 
-'''Type L{List}, wrapping ObjC L{NSMutableArray}.
+'''Type L{List}, wrapping ObjC C{NSMutableArray}.
 '''
 # all imports listed explicitly to help PyChecker
 from nstypes import NSMutableArray
