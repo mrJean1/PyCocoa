@@ -73,7 +73,8 @@ bases._Type0 --+
 </pre>
 
 <hr />
-<p>Menu Python Type, wrapping ObjC NSMenu.</p>
+<p>Python <a href="pycocoa.menus.Menu-class.html" class="link">Menu</a> 
+  Type, wrapping ObjC <code>NSMenu</code>.</p>
 
 <!-- ==================== INSTANCE METHODS ==================== -->
 <a name="section-InstanceMethods"></a>
@@ -90,7 +91,7 @@ bases._Type0 --+
       <table width="100%" cellpadding="0" cellspacing="0" border="0">
         <tr>
           <td><span class="summary-sig"><a href="pycocoa.menus.Menu-class.html#__init__" class="summary-sig-name">__init__</a>(<span class="summary-sig-arg">self</span>,
-        <span class="summary-sig-arg">title</span>=<span class="summary-sig-default"><code class="variable-quote">'</code><code class="variable-string"></code><code class="variable-quote">'</code></span>)</span><br />
+        <span class="summary-sig-arg">title</span>)</span><br />
       New <a href="pycocoa.menus.Menu-class.html" class="link">Menu</a>.</td>
           <td align="right" valign="top">
             
@@ -141,11 +142,29 @@ bases._Type0 --+
     </td><td class="summary">
       <table width="100%" cellpadding="0" cellspacing="0" border="0">
         <tr>
+          <td><span class="summary-sig"><a href="pycocoa.menus.Menu-class.html#__getitem__" class="summary-sig-name">__getitem__</a>(<span class="summary-sig-arg">self</span>,
+        <span class="summary-sig-arg">index</span>)</span><br />
+      Yield an or several items by index, by slice or by title.</td>
+          <td align="right" valign="top">
+            
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
           <td><span class="summary-sig"><a href="pycocoa.menus.Menu-class.html#item" class="summary-sig-name">item</a>(<span class="summary-sig-arg">self</span>,
-        <span class="summary-sig-arg">title</span>,
-        <span class="summary-sig-arg">action</span>=<span class="summary-sig-default">None</span>,
-        <span class="summary-sig-arg">**kwds</span>)</span><br />
-      New menu item with action and optional shortcut key.</td>
+        <span class="summary-sig-arg">title</span>=<span class="summary-sig-default"><code class="variable-quote">'</code><code class="variable-string"></code><code class="variable-quote">'</code></span>,
+        <span class="summary-sig-arg">action</span>=<span class="summary-sig-default"><code class="variable-quote">'</code><code class="variable-string"></code><code class="variable-quote">'</code></span>,
+        <span class="summary-sig-arg">dflt</span>=<span class="summary-sig-default">missing()</span>)</span><br />
+      Find an item by title or by action.</td>
           <td align="right" valign="top">
             
             
@@ -163,25 +182,7 @@ bases._Type0 --+
         <tr>
           <td><span class="summary-sig"><a href="pycocoa.menus.Menu-class.html#items" class="summary-sig-name">items</a>(<span class="summary-sig-arg">self</span>,
         <span class="summary-sig-arg">separators</span>=<span class="summary-sig-default">False</span>)</span><br />
-      Yield each of the items in this menu (<a 
-      href="pycocoa.menus.Item-class.html" class="link">Item</a>).</td>
-          <td align="right" valign="top">
-            
-            
-          </td>
-        </tr>
-      </table>
-      
-    </td>
-  </tr>
-<tr>
-    <td width="15%" align="right" valign="top" class="summary">
-      <span class="summary-type">&nbsp;</span>
-    </td><td class="summary">
-      <table width="100%" cellpadding="0" cellspacing="0" border="0">
-        <tr>
-          <td><span class="summary-sig"><a href="pycocoa.menus.Menu-class.html#separator" class="summary-sig-name">separator</a>(<span class="summary-sig-arg">self</span>)</span><br />
-      New menu separator.</td>
+      Yield the items in this menu.</td>
           <td align="right" valign="top">
             
             
@@ -260,7 +261,7 @@ bases._Type0 --+
   <table width="100%" cellpadding="0" cellspacing="0" border="0">
   <tr valign="top"><td>
   <h3 class="epydoc"><span class="sig"><span class="sig-name">__init__</span>(<span class="sig-arg">self</span>,
-        <span class="sig-arg">title</span>=<span class="sig-default"><code class="variable-quote">'</code><code class="variable-string"></code><code class="variable-quote">'</code></span>)</span>
+        <span class="sig-arg">title</span>)</span>
     <br /><em class="fname">(Constructor)</em>
   </h3>
   </td><td align="right" valign="top"
@@ -299,10 +300,45 @@ bases._Type0 --+
   <dl class="fields">
     <dt>Parameters:</dt>
     <dd><ul class="nomargin-top">
-        <li><strong class="pname"><code>items</code></strong> - The items to add (<a href="pycocoa.menus.Item-class.html" 
+        <li><strong class="pname"><code>items</code></strong> - The items (<a href="pycocoa.menus.Item-class.html" 
           class="link">Item</a> or <a 
-          href="pycocoa.menus.Separator-class.html" 
-          class="link">Separator</a>).</li>
+          href="pycocoa.menus.ItemSeparator-class.html" 
+          class="link">ItemSeparator</a>) to add.</li>
+    </ul></dd>
+  </dl>
+</td></tr></table>
+</div>
+<a name="__getitem__"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">__getitem__</span>(<span class="sig-arg">self</span>,
+        <span class="sig-arg">index</span>)</span>
+    <br /><em class="fname">(Indexing operator)</em>
+  </h3>
+  </td><td align="right" valign="top"
+    >&nbsp;
+    </td>
+  </tr></table>
+  
+  <p>Yield an or several items by index, by slice or by title.</p>
+  <dl class="fields">
+    <dt>Parameters:</dt>
+    <dd><ul class="nomargin-top">
+        <li><strong class="pname"><code>index</code></strong> - Index (<code>int</code>, <code>str</code> or <code>slice</code>).</li>
+    </ul></dd>
+    <dt>Returns:</dt>
+        <dd>Each item (<a href="pycocoa.menus.Item-class.html" 
+          class="link">Item</a> or <a 
+          href="pycocoa.menus.ItemSeparator-class.html" 
+          class="link">ItemSeparator</a>).</dd>
+    <dt>Raises:</dt>
+    <dd><ul class="nomargin-top">
+        <li><code><strong class='fraise'>IndexError</strong></code> - If <i>index</i> out of range or if no item titled <i>index</i> 
+        exists.</li>
     </ul></dd>
   </dl>
 </td></tr></table>
@@ -315,28 +351,31 @@ bases._Type0 --+
   <table width="100%" cellpadding="0" cellspacing="0" border="0">
   <tr valign="top"><td>
   <h3 class="epydoc"><span class="sig"><span class="sig-name">item</span>(<span class="sig-arg">self</span>,
-        <span class="sig-arg">title</span>,
-        <span class="sig-arg">action</span>=<span class="sig-default">None</span>,
-        <span class="sig-arg">**kwds</span>)</span>
+        <span class="sig-arg">title</span>=<span class="sig-default"><code class="variable-quote">'</code><code class="variable-string"></code><code class="variable-quote">'</code></span>,
+        <span class="sig-arg">action</span>=<span class="sig-default"><code class="variable-quote">'</code><code class="variable-string"></code><code class="variable-quote">'</code></span>,
+        <span class="sig-arg">dflt</span>=<span class="sig-default">missing()</span>)</span>
   </h3>
   </td><td align="right" valign="top"
     >&nbsp;
     </td>
   </tr></table>
   
-  <p>New menu item with action and optional shortcut key.</p>
+  <p>Find an item by title or by action.</p>
   <dl class="fields">
     <dt>Parameters:</dt>
     <dd><ul class="nomargin-top">
-        <li><strong class="pname"><code>title</code></strong> - Item title (<code>str</code>).</li>
-        <li><strong class="pname"><code>action</code></strong> - See <a href="pycocoa.menus.Item-class.html" 
-          class="link">Item</a><code>.__init__</code>.</li>
-        <li><strong class="pname"><code>kwds</code></strong> - See <a href="pycocoa.menus.Item-class.html" 
-          class="link">Item</a><code>.__init__</code>.</li>
+        <li><strong class="pname"><code>title</code></strong> - Item title to match (<code>str</code>).</li>
+        <li><strong class="pname"><code>action</code></strong> - Item action to match (<code>str</code>).</li>
+        <li><strong class="pname"><code>dflt</code></strong> - Optional, default return value.</li>
     </ul></dd>
     <dt>Returns:</dt>
-        <dd>New item (<a href="pycocoa.menus.Item-class.html" 
-          class="link">Item</a>).</dd>
+        <dd>The first matching item (<a href="pycocoa.menus.Item-class.html" 
+          class="link">Item</a>) or <i>dflt</i> if no <i>title</i> or 
+          <i>action</i> match found.</dd>
+    <dt>Raises:</dt>
+    <dd><ul class="nomargin-top">
+        <li><code><strong class='fraise'>ValueError</strong></code> - No <i>dflt</i> provided and no <i>title</i> or <i>action</i> match.</li>
+    </ul></dd>
   </dl>
 </td></tr></table>
 </div>
@@ -355,36 +394,19 @@ bases._Type0 --+
     </td>
   </tr></table>
   
-  <p>Yield each of the items in this menu (<a 
-  href="pycocoa.menus.Item-class.html" class="link">Item</a>).</p>
+  <p>Yield the items in this menu.</p>
   <dl class="fields">
     <dt>Parameters:</dt>
     <dd><ul class="nomargin-top">
-        <li><strong class="pname"><code>separators</code></strong> - Yield or skip <a href="pycocoa.menus.Separator-class.html" 
-          class="link">Separator</a> items (<code>bool</code>).</li>
+        <li><strong class="pname"><code>separators</code></strong> - Yield <a href="pycocoa.menus.ItemSeparator-class.html" 
+          class="link">ItemSeparator</a>s (<code>bool</code>), skip 
+          otherwise.</li>
     </ul></dd>
-  </dl>
-</td></tr></table>
-</div>
-<a name="separator"></a>
-<div>
-<table class="details" border="1" cellpadding="3"
-       cellspacing="0" width="100%" bgcolor="white">
-<tr><td>
-  <table width="100%" cellpadding="0" cellspacing="0" border="0">
-  <tr valign="top"><td>
-  <h3 class="epydoc"><span class="sig"><span class="sig-name">separator</span>(<span class="sig-arg">self</span>)</span>
-  </h3>
-  </td><td align="right" valign="top"
-    >&nbsp;
-    </td>
-  </tr></table>
-  
-  <p>New menu separator.</p>
-  <dl class="fields">
     <dt>Returns:</dt>
-        <dd>New item (<a href="pycocoa.menus.Separator-class.html" 
-          class="link">Separator</a>).</dd>
+        <dd>Each <a href="pycocoa.menus.Item-class.html" 
+          class="link">Item</a> or <a 
+          href="pycocoa.menus.ItemSeparator-class.html" 
+          class="link">ItemSeparator</a>.</dd>
   </dl>
 </td></tr></table>
 </div>
@@ -420,7 +442,7 @@ bases._Type0 --+
 <table border="0" cellpadding="0" cellspacing="0" width="100%%">
   <tr>
     <td align="left" class="footer">
-    Generated by Epydoc 3.0.1 on Mon Aug  6 13:28:40 2018
+    Generated by Epydoc 3.0.1 on Sun Aug 12 21:20:49 2018
     </td>
     <td align="right" class="footer">
       <a target="mainFrame" href="http://epydoc.sourceforge.net"

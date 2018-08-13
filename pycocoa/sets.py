@@ -9,7 +9,7 @@
 from bases   import _Type0
 from nstypes import isNone, ns2py, NSMutableSet, nsSet2set, NSSet
 from pytypes import frozenset2NS, py2NS, set2NS
-from runtime import isImmutable, isInstanceOf, ObjCInstance
+from runtime import isImmutable, isObjCInstanceOf, ObjCInstance
 from utils   import _Types
 
 __all__ = ('FrozenSet',
@@ -20,10 +20,10 @@ __version__ = '18.08.01'
 if True:  # MCCABE 69
 
     class FrozenSet(frozenset, _Type0):  # frozenset, first to maintain frozenset behavior
-        '''Python C{frozenset} Type, wrapping an immutable ObjC L{NSSet}.
+        '''Python C{frozenset} Type, wrapping an immutable ObjC C{NSSet}.
         '''
         def __new__(cls, ns_frozenset=()):
-            '''New L{FrozenSet} from a C{frozenset}, C{tuple}, L{FrozenSet} or L{NSSet}.
+            '''New L{FrozenSet} from a C{frozenset}, C{tuple}, L{FrozenSet} or C{NSSet}.
             '''
             if isinstance(ns_frozenset, FrozenSet):
                 return ns_frozenset
@@ -50,10 +50,10 @@ if True:  # MCCABE 69
             return self.__class__(self)
 
     class Set(set, _Type0):  # set, first to maintain set behavior
-        '''Python C{set} Type, wrapping an ObjC L{NSMutableSet}.
+        '''Python C{set} Type, wrapping an ObjC C{NSMutableSet}.
         '''
         def __new__(cls, ns_set=[]):
-            '''New L{Set} from a C{set}, C{list}, L{Set} or L{NSMutableSet}.
+            '''New L{Set} from a C{set}, C{list}, L{Set} or C{NSMutableSet}.
             '''
             if isinstance(ns_set, Set):
                 ns, py = ns_set.NS, ns_set
@@ -63,7 +63,7 @@ if True:  # MCCABE 69
             elif isinstance(ns_set, list):
                 py = set(ns_set)
                 ns = set2NS(py)
-            elif isInstanceOf(ns_set, NSMutableSet, name=Set.__name__):
+            elif isObjCInstanceOf(ns_set, NSMutableSet, name=Set.__name__):
                 ns = ns_set
                 py = nsSet2set(ns)
 
@@ -86,13 +86,13 @@ if True:  # MCCABE 69
 else:  # XXX far too much duplication
 
     class FrozenSet(_Type0):  # PYCHOK expected
-        '''Python C{FrozenSet} Type, wrapping an immutable ObjC L{NSSet}.
+        '''Python C{FrozenSet} Type, wrapping an immutable ObjC C{NSSet}.
         '''
         _set  = frozenset()  # or set(), empty to start
         _type = frozenset
 
         def __init__(self, ns_set=()):
-            '''New L{FrozenSet} from a C{frozenset}, C{tuple}, L{FrozenSet} or L{NSSet}.
+            '''New L{FrozenSet} from a C{frozenset}, C{tuple}, L{FrozenSet} or C{NSSet}.
             '''
             if isinstance(ns_set, frozenset):
                 self._set = ns_set
@@ -222,12 +222,12 @@ else:  # XXX far too much duplication
             return self.__class__(self._set.union(*others))
 
     class Set(FrozenSet):  # PYCHOK expected
-        '''Python C{Set} Type, wrapping an ObjC L{NSMutableSet}.
+        '''Python C{Set} Type, wrapping an ObjC C{NSMutableSet}.
         '''
         _type = set
 
         def __init__(self, ns_set=[]):
-            '''New L{Set} from a C{set}, C{list}, L{FrozenSet}, L{Set} or L{NSMutableSet}.
+            '''New L{Set} from a C{set}, C{list}, L{FrozenSet}, L{Set} or C{NSMutableSet}.
             '''
             if isinstance(ns_set, set):
                 self._set = ns_set
@@ -235,7 +235,7 @@ else:  # XXX far too much duplication
                 self._set = set(ns_set)
             elif isinstance(ns_set, (Set, FrozenSet)):
                 self._set = set(ns_set._set)
-            elif isInstanceOf(ns_set, NSMutableSet, name=Set.__name__):
+            elif isObjCInstanceOf(ns_set, NSMutableSet, name=Set.__name__):
                 self._set = nsSet2set(ns_set)
 
         def __iand__(self, elem):

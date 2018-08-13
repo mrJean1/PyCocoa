@@ -41,22 +41,22 @@ def _len2NS(py, ns, getCount):
 
 
 def bool2NS(py):
-    '''Create an L{NSBoolean} instance from a Python C{bool}.
+    '''Create an C{NSBoolean} instance from a Python C{bool}.
 
        @param py: The value (C{int} or C{bool}).
 
        @return: The C{NSMain.BooleanYES} or C{.BooleanNO}
-                singleton (L{NSBoolean}).
+                singleton (C{NSBoolean}).
     '''
     return NSMain.BooleanYES if py else NSMain.BooleanNO  # c_byte's
 
 
 def bytes2NS(py):
-    '''Create an L{NSData} instance from Python C{bytes}.
+    '''Create an C{NSData} instance from Python C{bytes}.
 
        @param py: The value (C{bytes}).
 
-       @return: The ObjC instance (L{NSData}).
+       @return: The ObjC instance (C{NSData}).
 
        @raise RuntimeError: If C{len} vs C{count} assertion failed.
     '''
@@ -73,7 +73,7 @@ def dict2NS(py, frozen=False):
        @param py: The value (C{dict}).
        @keyword frozen: Immutable (C{bool}), mutable otherwise.
 
-       @return: The ObjC instance (L{NSDictionary} or L{NSMutableDictionary}).
+       @return: The ObjC instance (C{NSDictionary} or C{NSMutableDictionary}).
 
        @raise RuntimeError: If C{len} vs C{count} assertion failed.
     '''
@@ -89,11 +89,11 @@ def dict2NS(py, frozen=False):
 
 
 def frozenset2NS(py):
-    '''Create an (immutable) L{NSSet} instance from a Python C{frozenset}.
+    '''Create an (immutable) C{NSSet} instance from a Python C{frozenset}.
 
        @param py: The value (C{frozenset}).
 
-       @return: The ObjC instance (L{NSSet}).
+       @return: The ObjC instance (C{NSSet}).
 
        @raise RuntimeError: If C{len} vs C{count} assertion failed.
     '''
@@ -102,11 +102,11 @@ def frozenset2NS(py):
 
 
 def generator2NS(py):
-    '''Create an L{NSArray} instance from a Python C{generator}.
+    '''Create an C{NSArray} instance from a Python C{generator}.
 
        @param py: The value (C{generator}).
 
-       @return: The ObjC instance (L{NSArray}).
+       @return: The ObjC instance (C{NSArray}).
 
        @raise RuntimeError: If C{len} vs C{count} assertion failed.
     '''
@@ -114,11 +114,11 @@ def generator2NS(py):
 
 
 def int2NS(py):
-    '''Create an L{NSNumber} instance from a Python C{int} or C{long}.
+    '''Create an C{NSNumber} instance from a Python C{int} or C{long}.
 
        @param py: The value (C{int} or C{long}).
 
-       @return: The ObjC instance (L{NSInt}, L{NSLong}, or L{NSLongLong}).
+       @return: The ObjC instance (C{NSInt}, C{NSLong}, or C{NSLongLong}).
 
        @raise TypeError: If C{py} not an C{int} or C{long}.
     '''
@@ -133,11 +133,11 @@ def int2NS(py):
 
 
 def list2NS(py):
-    '''Create an L{NSMutableArray} instance from a Python C{list}.
+    '''Create an C{NSMutableArray} instance from a Python C{list}.
 
        @param py: The value (C{list}).
 
-       @return: The ObjC instance (L{NSMutableArray}).
+       @return: The ObjC instance (C{NSMutableArray}).
 
        @raise RuntimeError: If C{len} vs C{count} assertion failed.
     '''
@@ -145,11 +145,11 @@ def list2NS(py):
 
 
 def map2NS(py):
-    '''Create an L{NSArray} instance from a Python C{map}.
+    '''Create an C{NSArray} instance from a Python C{map}.
 
        @param py: The value (C{map}).
 
-       @return: The ObjC instance (L{NSArray}).
+       @return: The ObjC instance (C{NSArray}).
 
        @raise RuntimeError: If C{len} vs C{count} assertion failed.
     '''
@@ -157,11 +157,11 @@ def map2NS(py):
 
 
 def None2NS(py):
-    '''Return the L{NSNull} singleton for Python's C{None}.
+    '''Return the C{NSNull} singleton for Python's C{None}.
 
        @param py: The value (C{None}).
 
-       @return: The singleton (L{NSNull}).
+       @return: The singleton (C{NSNull}).
 
        @raise ValueError: If I{py} is not C{None}.
     '''
@@ -171,11 +171,11 @@ def None2NS(py):
 
 
 def range2NS(py):
-    '''Create an L{NSArray} instance from a Python C{range}.
+    '''Create an C{NSArray} instance from a Python C{range}.
 
        @param py: The value (C{range}).
 
-       @return: The ObjC instance (L{NSArray}).
+       @return: The ObjC instance (C{NSArray}).
 
        @raise RuntimeError: If C{len} vs C{count} assertion failed.
     '''
@@ -183,11 +183,11 @@ def range2NS(py):
 
 
 def set2NS(py):
-    '''Create an L{NSMutableSet} instance from a Python C{set}.
+    '''Create an C{NSMutableSet} instance from a Python C{set}.
 
        @param py: The value (C{set}).
 
-       @return: The ObjC instance (L{NSMutableSet}).
+       @return: The ObjC instance (C{NSMutableSet}).
 
        @raise RuntimeError: If C{len} vs C{count} assertion failed.
     '''
@@ -195,21 +195,21 @@ def set2NS(py):
 
 
 def str2NS(py):
-    '''Create an L{NSStr} instance from a Python C{str}.
+    '''Create an C{NSStr} instance from a Python C{str}.
 
        @param py: The value (C{str}).
 
-       @return: The ObjC instance (L{NSStr}).
+       @return: The ObjC instance (C{NSStr}).
     '''
     return NSStr(py)
 
 
 def tuple2NS(py):
-    '''Create an immutable L{NSArray} instance from a Python C{tuple}.
+    '''Create an immutable C{NSArray} instance from a Python C{tuple}.
 
        @param py: The value (C{tuple}).
 
-       @return: The ObjC instance (L{NSArray}).
+       @return: The ObjC instance (C{NSArray}).
 
        @raise RuntimeError: If C{len} vs C{count} assertion failed.
     '''
@@ -218,25 +218,25 @@ def tuple2NS(py):
 
 
 def unicode2NS(py):
-    '''Create an L{NSStr} instance from a Python C{unicode} string.
+    '''Create an C{NSStr} instance from a Python C{unicode} string.
 
        @param py: The value (C{unicode}).
 
-       @return: The ObjC instance (L{NSStr}).
+       @return: The ObjC instance (C{NSStr}).
     '''
     return NSStr(py.encode(DEFAULT_UNICODE))  # .stringWithUTF8String_
 
 
 def url2NS(py, url2=None):
-    '''Create an L{NSURL} instance from a Python string.
+    '''Create an C{NSURL} instance from a Python string.
 
        @param py: The URL (C{str} or C{unicode}).
        @keyword url2: Optionally, relative to this URL (C{str} or C{unicode}).
 
-       @return: The ObjC instance (L{NSURL}).
+       @return: The ObjC instance (C{NSURL}).
 
        @see: U{URL<http://Developer.Apple.com/documentation/foundation/url>}
-             for parsing an L{NSURL}.
+             for parsing an C{NSURL}.
     '''
     ns = release(NSStr(py))
     if ':' in bytes2str(py):

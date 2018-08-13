@@ -3,7 +3,7 @@
 
 # License at the end of this file.
 
-'''Type L{Font}, etc., wrapping ObjC L{NSFont}.
+'''Type L{Font}, etc., wrapping ObjC C{NSFont}.
 
 @var Fonts:     Pre-defined system fonts (L{Font}).
 @var FontTrait: Font traits (C{mask}).
@@ -18,7 +18,7 @@ from oslibs  import NSFontBoldMask, NSFontItalicMask, \
                     NSFontNarrowMask, NSFontPosterMask, \
                     NSFontSmallCapsMask, NSFontSansSerifClass, \
                     NSFontUnboldMask, NSFontUnitalicMask
-from runtime import isInstanceOf, release
+from runtime import isObjCInstanceOf, release
 from strs    import Str
 from utils   import bytes2str, _ByteStrs, _Constants, _exports, \
                     flint, _Ints, isinstanceOf, _Singletons, _Types
@@ -142,7 +142,7 @@ def _weightin(weight):
 
 
 class Font(_Type0):
-    '''Python C{Font} Type, wrapping ObjC L{NSFont}.
+    '''Python C{Font} Type, wrapping ObjC C{NSFont}.
     '''
     _family = ''
     _height = 0
@@ -156,7 +156,7 @@ class Font(_Type0):
 
            @param family_or_font: Generic font name (C{str}, L{Str}, L{NSStr})
                                   like "Times" or "Helvetica" or a L{Font},
-                                  L{NSFont} or L{NSFontDescriptor} instance.
+                                  C{NSFont} or C{NSFontDescriptor} instance.
            @keyword size: Desired point size (C{int}), zero for any.
            @keyword traits: Desired font traits (C{str} or C{FontTrait}C{s mask}).
            @keyword weigth: Desired book weight (C{int}) in range 0..15, where
@@ -173,7 +173,7 @@ class Font(_Type0):
            @note: The new L{Font} may not exhibit the desired I{traits}
                   and I{weight}.  The I{weight} is ignored if I{traits}
                   include C{FontTrait.Bold}, both I{traits} and I{weight}
-                  are ignored if I{family_or_font} is L{NSFontDescriptor}.
+                  are ignored if I{family_or_font} is C{NSFontDescriptor}.
 
            @see: Function L{fontsof} to obtain all available fonts of
                  a particular font family.
@@ -184,11 +184,11 @@ class Font(_Type0):
             ns, py = release(NSStr(family_or_font)), bytes2str(family_or_font)
         elif isinstance(family_or_font, NSStr):
             ns, py = family_or_font, nsString2str(family_or_font)
-#       elif isInstanceOf(family_or_font, NSFontDescriptor):
+#       elif isObjCInstanceOf(family_or_font, NSFontDescriptor):
             # <http://Developer.Apple.com/documentation/appkit/nsfont/1525386-init>
             # ignore traits and weight
 #           ns, py = NSFont.alloc().init_(family_or_font, size), None
-        elif isInstanceOf(family_or_font, NSFont, name='family_or_font'):
+        elif isObjCInstanceOf(family_or_font, NSFont, name='family_or_font'):
             ns, py = family_or_font, None
             if size == 0:
                 size = ns.pointSize()
@@ -486,7 +486,7 @@ class Font(_Type0):
         if self.isVertical:
             return self
         f = self.NS.vertical()
-        if f and isInstanceOf(f, NSFont):
+        if f and isObjCInstanceOf(f, NSFont):
             return Font(f)
         return None
 
@@ -756,7 +756,7 @@ if __name__ == '__main__':
 
     _allisting(__all__, locals(), __version__, __file__)
 
-_ = '''
+    _ = '''
 
  fonts.__all__ = tuple(
    fonts.Font is <class .Font>,
@@ -797,7 +797,7 @@ _ = '''
  )[11]
  fonts.__version__ = '18.07.15'
 '''
-del _
+    del _
 
 # MIT License <http://OpenSource.org/licenses/MIT>
 #

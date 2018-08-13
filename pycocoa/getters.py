@@ -14,7 +14,16 @@ from oslibs  import libobjc  # get_lib
 from utils   import bytes2str, Cache2, _exports, isinstanceOf, missing, \
                     name2objc, str2bytes
 
-__version__ = '18.07.25'
+import itertools
+_iter_chain   = itertools.chain.from_iterable
+_iter_product = itertools.product
+try:
+    _iter_zip = itertools.izip_longest  # Python 2
+except AttributeError:
+    _iter_zip = itertools.zip_longest  # Python 3+
+del itertools
+
+__version__ = '18.08.06'
 
 _c_func_t_cache = {}
 _SEL_t_cache = Cache2(limit2=128)
@@ -355,6 +364,40 @@ def get_selector(name_):
         sel = libobjc.sel_registerName(name2objc(name_)) or None
         _SEL_t_cache[name_] = sel
     return sel
+
+
+def get_selectorname_permutations(name_, leading=False):
+    '''Yield all permutations of a Python-style selector name.
+
+       @param name_: The selector name with underscores (C{str}).
+       @keyword leading: In-/exclude leading underscores in I{name_}
+                         permutations (C{bool}), default C{False}
+                         meaning exclude.
+
+       @return: The selector name (C{str}) for each underscore and
+                colon permutation.
+
+       @note: Only the underscores in I{name_} are permuted, any
+              colons in I{name_} remain unchanged.
+    '''
+    yield name_  # original, first
+
+    if leading:  # include
+        s = name_.split('_')
+    else:  # exclude
+        n = name_.lstrip('_')
+        s = n.split('_')
+        p = len(name_) - len(n)
+        if p > 0:
+            s[0] = name_[:p] + s[0]
+
+    n = len(s) - 1
+    if n > 0:
+        for p in _iter_product('_:', repeat=n):
+            # <http://StackOverflow.com/questions/952914>
+            n = ''.join(_iter_chain(_iter_zip(s, p, fillvalue='')))
+            if n != name_:
+                yield n
 
 
 def get_selectornameof(sel):

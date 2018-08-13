@@ -48,7 +48,8 @@ C{cd} to directory C{PyCocoa-} and type C{python setup.py install}.  To
 run the PyCocoa tests, type C{python setup.py test} before installation.
 
 Some alternatives to PyCocoa are (a) U{PyObjC<http://PyPI.org/project/pyobjc>},
-the most comprehensive Python to Objective-C bridge, (b)
+the most comprehensive Python to Objective-C bridge (and included in
+U{macOS' Python<http://WikiPedia.org/wiki/PyObjC#History>}), (b)
 U{Rubicon-ObjC<http://PyPI.org/project/rubicon-objc>} for Python 3.5+,
 taking advantage of Python's new
 U{typing<http://Docs.Python.org/3/library/typing.html>} annotations and (c)
@@ -117,7 +118,7 @@ POSSIBILITY OF SUCH DAMAGE.}
 from os.path import abspath, dirname
 import sys
 
-__version__ = '18.08.04'
+__version__ = '18.08.09'
 
 p = sys.platform
 if not p.startswith('darwin'):

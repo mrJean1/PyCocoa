@@ -49,7 +49,7 @@ class Str(str, _Type0):  # str, first to maintain str behavior
 
 
 class StrAttd(Str, _Type0):
-    '''Python C{str} Type, wrapping (immutable) ObjC L{NSAttributedString}.
+    '''Python C{str} Type, wrapping (immutable) ObjC C{NSAttributedString}.
     '''
     _attachment      = None
     _backgroundColor = None

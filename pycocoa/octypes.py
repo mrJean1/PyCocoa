@@ -8,7 +8,7 @@
 Names starting with C{c_} are C{ctypes}, names ending with C{_t}
 are ObjC types defined in terms of a C{ctypes} C{c_} type.
 
-@var Array_t:                ObjC L{NSArray} ctype.
+@var Array_t:                ObjC C{NSArray} ctype.
 @var CFIndex_t:              ObjC C{CFIndex} ctype.
 @var CFStringEncoding_t:     ObjC C{CFStringEncoding} ctype.
 @var CGBitmapInfo_t:         ObjC C{CGBitmapInfo} ctype.
@@ -19,17 +19,17 @@ are ObjC types defined in terms of a C{ctypes} C{c_} type.
 @var CTFontSymbolicTraits_t: Objc C{CTFontSymbolicTraits} ctype.
 @var CGGlyph_t:              ObjC C{CGGlyph} ctype.
 @var Data_t:                 ObjC C{CFDataRef} ctype.
-@var Dictionary_t:           ObjC L{NSDictionary} ctype.
+@var Dictionary_t:           ObjC C{NSDictionary} ctype.
 @var NSDoubl_t:              ObjC C{CFDataRef} ctype.
 @var NSExceptionHandler_t:   ObjC C{NSExceptionHandler} ctype.
-@var NSFloat_t:              ObjC L{NSFloat} ctype.
+@var NSFloat_t:              ObjC C{NSFloat} ctype.
 @var NSInteger_t:            ObjC C{NSInteger} ctype.
 @var NSTimeInterval_t:       ObjC C{NSTimeInterval} ctype.
 @var NSUInteger_t:           ObjC C{NSUInteger} ctype.
 @var NumberType_t:           ObjC C{NSNumberType} ctype.
-@var Number_t:               ObjC L{NSNumber} ctype.
+@var Number_t:               ObjC C{NSNumber} ctype.
 @var OptionFlags_t:          ObjC C{CFOptionFlags} ctype.
-@var Set_t:                  ObjC L{NSSet} ctype.
+@var Set_t:                  ObjC C{NSSet} ctype.
 @var String_t:               ObjC C{CFStringRef} ctype.
 @var TimeInterval_t:         ObjC C{CFTimeInterval} ctype.
 @var TypeID_t:               ObjC C{CFTypeID} ctype.
@@ -157,7 +157,7 @@ class Allocator_t(ObjC_t):  # Id_t
     pass
 
 
-Array_t = c_void_p  # ObjC L{NSArray} ctype
+Array_t = c_void_p  # ObjC C{NSArray} ctype
 
 
 class Block_t(ObjC_t):
@@ -173,7 +173,7 @@ class BOOL_t(c_bool):
 
 
 Data_t       = c_void_p  # ObjC C{CFDataRef} ctype
-Dictionary_t = c_void_p  # ObjC L{NSDictionary} ctype
+Dictionary_t = c_void_p  # ObjC C{NSDictionary} ctype
 
 
 class Id_t(ObjC_t):
@@ -208,7 +208,7 @@ class Method_t(ObjC_t):
     pass
 
 
-Number_t      = c_void_p  # ObjC L{NSNumber} ctype
+Number_t      = c_void_p  # ObjC C{NSNumber} ctype
 NumberType_t  = c_ulong   # c_uint32
 OptionFlags_t = c_ulong   # ObjC C{CFOptionFlags} ctype
 
@@ -249,7 +249,7 @@ class SEL_t(ObjC_t):
         return self._name
 
 
-Set_t    = c_void_p  # ObjC L{NSset} ctype
+Set_t    = c_void_p  # ObjC C{NSset} ctype
 String_t = c_void_p  # ObjC C{CFStringRef} ctype
 
 
@@ -334,7 +334,7 @@ NSFloat_t  = c_float   # always 32-bit float
 
 # NSRange.h
 class NSRange_t(c_struct_t):
-    '''ObjC C{struct} with fields C{loc[ation]} and C{len[gth]} (both L{NSUInteger_t}).
+    '''ObjC C{struct} with fields C{loc[ation]} and C{len[gth]} (both C{NSUInteger_t}).
     '''
     _fields_ = ('location', NSUInteger_t), ('length', NSUInteger_t)
 
@@ -389,49 +389,49 @@ class NSRect4_t(NSRect_t):
 
     @property
     def bottom(self):
-        '''Get the bottom y coordinate (float).
+        '''Get the bottom y coordinate (C{float}).
         '''
         return self.y
 
     @property
     def height(self):
-        '''Get the height (float).
+        '''Get the height (C{float}).
         '''
         return self.size.height
 
     @property
     def left(self):
-        '''Get the lower x coordinate (float).
+        '''Get the lower x coordinate (C{float}).
         '''
         return self.x
 
     @property
     def right(self):
-        '''Get the upper x coordinate (float).
+        '''Get the upper x coordinate (C{float}).
         '''
         return self.x + self.width
 
     @property
     def top(self):
-        '''Get the upper y coordinate (float).
+        '''Get the upper y coordinate (C{float}).
         '''
         return self.y + self.heigth
 
     @property
     def width(self):
-        '''Get the width (float).
+        '''Get the width (C{float}).
         '''
         return self.size.width
 
     @property
     def x(self):
-        '''Get the x coordinate (float).
+        '''Get the x coordinate (C{float}).
         '''
         return self.origin.x
 
     @property
     def y(self):
-        '''Get the y coordinate (float).
+        '''Get the y coordinate (C{float}).
         '''
         return self.origin.y
 
@@ -487,9 +487,9 @@ def ctype2encoding(ctype, dflt=b'?'):
     '''Return the type encoding for a given C{ctypes} type.
 
        @param ctype: The type (C{ctypes}).
-       @keyword dflt: Default encoding (bytes).
+       @keyword dflt: Default encoding (C{bytes}).
 
-       @return: The type encoding (bytes).
+       @return: The type encoding (C{bytes}).
     '''
     return _ctype2encoding.get(ctype, dflt)
 
@@ -553,9 +553,9 @@ def emcoding2ctype(code, dflt=missing, name='type'):
     '''Return the C{ctypes} type for a single ObjC type encoding
        code for a I{method} result or I{method} argument.
 
-       @param code: The type encoding (bytes).
+       @param code: The type encoding (C{bytes}).
        @keyword dflt: Default result (C{ctype}).
-       @keyword name: Name of the method (str).
+       @keyword name: Name of the method (C{str}).
 
        @return: The C{ctype} (C{ctypes}).
 
@@ -572,9 +572,9 @@ def emcoding2ctype(code, dflt=missing, name='type'):
 def encoding2ctype(code, dflt=missing, name='type'):  # MCCABE 20
     '''Return the C{ctypes} type for a single ObjC type encoding code.
 
-       @param code: The type encoding (bytes).
+       @param code: The type encoding (C{bytes}).
        @keyword dflt: Default encoding (C{ctype}).
-       @keyword name: Name of the type (str).
+       @keyword name: Name of the type (C{str}).
 
        @return: The C{ctype} (C{ctypes}).
 

@@ -8,7 +8,7 @@
 # all imports listed explicitly to help PyChecker
 from nstypes import NSMutableArray
 from pytypes import list2NS, py2NS
-from runtime import isInstanceOf
+from runtime import isObjCInstanceOf
 from tuples  import _at, Tuple
 from utils   import missing, _Types
 
@@ -22,18 +22,18 @@ __version__ = '18.06.28'
 
 
 class List(Tuple):
-    '''Python C{list} Type, wrapping an ObjC L{NSMutableArray}.
+    '''Python C{list} Type, wrapping an ObjC C{NSMutableArray}.
     '''
     _type = list
 
     def __init__(self, ns_list=[]):
-        '''New L{List} from a C{list}, L{List}, L{Tuple} or L{NSMutableArray}.
+        '''New L{List} from a C{list}, L{List}, L{Tuple} or C{NSMutableArray}.
         '''
         if isinstance(ns_list, list):
             self.NS = list2NS(ns_list)
         elif isinstance(ns_list, (List, Tuple)):
             self.NS = ns_list.NS.mutableCopy()  # PYCHOK safe
-        elif isInstanceOf(ns_list, NSMutableArray, name='ns_list'):
+        elif isObjCInstanceOf(ns_list, NSMutableArray, name='ns_list'):
             self.NS = ns_list
 
     def __setitem__(self, index, value):

@@ -4,7 +4,7 @@
 # License at the end of this file.
 
 '''Types L{AutoResize}, L{Window}, L{MediaWindow}, L{Screen},
-L{WindowStyle}, wrapping ObjC L{NSWindow}, etc.
+L{WindowStyle}, wrapping ObjC C{NSWindow}, etc.
 
 @var AutoResize:  Window resize options (C{mask}).
 @var BezelStyle:  Bezel kinds (C{enum}).
@@ -26,13 +26,14 @@ from oslibs   import NO, NSBackingStoreBuffered, \
                      NSWindowStyleMaskTitled, \
                      NSWindowStyleMaskUsual, \
                      NSWindowStyleMaskUtilityWindow, YES
-from runtime  import isInstanceOf, ObjCClass, ObjCInstance, \
+from runtime  import isObjCInstanceOf, ObjCClass, ObjCInstance, \
                      ObjCSubclass, release, retain, send_super_init
 from utils    import aspect_ratio, bytes2str, _Constants, _exports, \
-                     _Globals, isinstanceOf, _text_title2, _Types
+                     _Globals, isinstanceOf, _Python3, _text_title2, \
+                     _Types
 # from enum   import Enum
 
-__version__ = '18.08.04'
+__version__ = '18.08.08'
 
 _Cascade = NSPoint_t(25, 25)  # PYCHOK false
 
@@ -135,7 +136,7 @@ class Screen(Rect):
 
 
 class Window(_Type2):
-    '''Basic window Python Type, wrapping ObjC L{NSWindow}.
+    '''Basic window Python Type, wrapping ObjC C{NSWindow}.
     '''
     _auto     = False
     _frame    = None
@@ -268,6 +269,12 @@ class Window(_Type2):
         return True if self.NS.isVisible() else False
 
     @property
+    def isPrintable(self):
+        '''Get this window's printable state (C{bool}).
+        '''
+        return True if self.PMview else False
+
+    @property
     def isZoomed(self):
         '''Get this window's zoomed state (C{bool}).
         '''
@@ -292,7 +299,7 @@ class Window(_Type2):
         '''Set this window's view (C{NSView...}).
         '''
         if not isNone(ns_view):
-            isInstanceOf(ns_view, NSScrollView, NSView, name='ns_view')
+            isObjCInstanceOf(ns_view, NSScrollView, NSView, name='ns_view')
             self.NS.setContentView_(ns_view)
         self._NSview = ns_view
 
@@ -306,7 +313,7 @@ class Window(_Type2):
     def PMview(self, ns_view):
         '''Set this window's print view (C{NSView...}).
         '''
-        if isInstanceOf(ns_view, NSImageView, NSTableView, NSTextView, NSView):
+        if ns_view and isObjCInstanceOf(ns_view, NSImageView, NSTableView, NSTextView, NSView):
             self._PMview = ns_view
         else:
             self._PMview = None
@@ -471,8 +478,9 @@ class MediaWindow(Window):
         # for an alternate NSView object with protocol VLCOpenGLVideoViewEmbedding
         # <http://StackOverflow.com/questions/11562587/create-nsview-directly-from-code>
         # <http://GitHub.com/ariabuckles/pyobjc-framework-Cocoa/blob/master/Examples/AppKit/DotView/DotView.py>
-        self.NSview = NSView.alloc().initWithFrame_(self.frame.NS)
-        # self.PMview = self.NSview  # prints an empty box or crashes on Python 2
+        self.NSview = v = NSView.alloc().initWithFrame_(self.frame.NS)
+        # XXX printView(VLC, toPDF=...) crashes on Python 2, an empty box on Python 3
+        self.PMview = v if _Python3 else None
 
 
 class TextWindow(Window):
@@ -541,7 +549,7 @@ class TextWindow(Window):
 
 
 class _NSWindowDelegate(object):
-    '''An ObjC-callable C{NSDelegate} class to handle L{NSWindow} events
+    '''An ObjC-callable C{NSDelegate} class to handle C{NSWindow} events
        as L{Window}.window..._ and L{App}.window..._ callback calls.
 
        @see: The C{_NSApplicationDelegate} for more C{NSDelegate} details.
@@ -579,14 +587,14 @@ class _NSWindowDelegate(object):
 
     @_ObjC.method('v@')
     def windowDidBecomeKey_(self, ns_notification):
-        '''ObjC callback to handle L{NSWindow} events.
+        '''ObjC callback to handle C{NSWindow} events.
         '''
         self._ns2w(ns_notification)
         self.window.windowKey_(True)
 
     @_ObjC.method('v@')
     def windowDidBecomeMain_(self, ns_notification):
-        '''ObjC callback to handle L{NSWindow} events.
+        '''ObjC callback to handle C{NSWindow} events.
         '''
         self._ns2w(ns_notification)
         self.window.windowMain_(True)
@@ -595,14 +603,14 @@ class _NSWindowDelegate(object):
 
     @_ObjC.method('v@')
     def windowDidResignKey_(self, ns_notification):
-        '''ObjC callback to handle L{NSWindow} events.
+        '''ObjC callback to handle C{NSWindow} events.
         '''
         self._ns2w(ns_notification)
         self.window.windowKey_(False)
 
     @_ObjC.method('v@')
     def windowDidResignMain_(self, ns_notification):
-        '''ObjC callback to handle L{NSWindow} events.
+        '''ObjC callback to handle C{NSWindow} events.
         '''
         self._ns2w(ns_notification)
         self.window.windowMain_(False)
@@ -611,14 +619,14 @@ class _NSWindowDelegate(object):
 
     @_ObjC.method('v@')
     def windowDidResize_(self, ns_notification):
-        '''ObjC callback to handle L{NSWindow} events.
+        '''ObjC callback to handle C{NSWindow} events.
         '''
         self._ns2w(ns_notification)
         self.window.windowResize_()
 
     @_ObjC.method('v@')
     def windowPrint_(self, ns_notification):
-        '''ObjC callback to handle L{NSWindow} events.
+        '''ObjC callback to handle C{NSWindow} events.
         '''
         self._ns2w(ns_notification)
         self.window.windowPrint_()
@@ -626,7 +634,7 @@ class _NSWindowDelegate(object):
 
     @_ObjC.method('B@')
     def windowShouldClose_(self, ns_notification):
-        '''ObjC callback to handle L{NSWindow} events.
+        '''ObjC callback to handle C{NSWindow} events.
         '''
         self._ns2w(ns_notification)
         ok = self.window.windowCloseOK_()
@@ -634,7 +642,7 @@ class _NSWindowDelegate(object):
 
     @_ObjC.method('B@')
     def windowShouldZoom_toFrame_(self, ns_frame):
-        '''ObjC callback to handle L{NSWindow} events.
+        '''ObjC callback to handle C{NSWindow} events.
         '''
         # <http://Developer.Apple.com/documentation/appkit/
         #       nswindowdelegate/1419533-windowshouldzoom>
@@ -643,7 +651,7 @@ class _NSWindowDelegate(object):
 
     @_ObjC.method('v@')
     def windowWillClose_(self, ns_notification):
-        '''ObjC callback to handle L{NSWindow} events.
+        '''ObjC callback to handle C{NSWindow} events.
         '''
         # set the window's delegate to the app's to
         # make method .windowWillClose_ work, see
@@ -668,8 +676,8 @@ NSWindowDelegate = ObjCClass('_NSWindowDelegate')
 
 
 def ns2Window(ns):
-    '''Get the L{Window} instance for an ObjC L{NSWindow} or
-       L{NSNotification} instance.
+    '''Get the L{Window} instance for an ObjC C{NSWindow} or
+       C{NSNotification} instance.
 
        @param ns: The ObjC instance (C{NS...}).
 
@@ -681,9 +689,9 @@ def ns2Window(ns):
 
        @raise TypeError: Invalid I{ns} type.
     '''
-    if isInstanceOf(ns, NSWindow):
+    if isObjCInstanceOf(ns, NSWindow):
         u = ns.uniqueID()
-    elif isInstanceOf(ns, NSConcreteNotification, NSNotification, ns='ns'):
+    elif isObjCInstanceOf(ns, NSConcreteNotification, NSNotification, ns='ns'):
         u = ns.object().uniqueID()
     try:
         w = _Globals.Windows[u]

@@ -109,13 +109,13 @@ class Rect(_Type0):
 
     @property
     def height(self):
-        '''Get the height (float).
+        '''Get the height (C{float}).
         '''
         return self.NS.size.height
 
     @height.setter  # PYCHOK property.setter
     def height(self, height):
-        '''Set the height (float).
+        '''Set the height (C{float}).
         '''
         if height < 0:
             height = -height

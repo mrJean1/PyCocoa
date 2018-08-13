@@ -30,7 +30,7 @@ def _at(inst, index):
 
 
 class Tuple(_Type0):  # note, List subclasses Tuple
-    '''Python C{tuple} Type, wrapping an immutable ObjC L{NSArray}.
+    '''Python C{tuple} Type, wrapping an immutable ObjC C{NSArray}.
     '''
     _type = tuple
 

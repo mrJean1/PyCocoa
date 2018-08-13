@@ -36,7 +36,7 @@ from utils   import bytes2str, _ByteStrs, _Constants, _exports, \
                     isinstanceOf, lambda1, missing,  name2py, \
                     printf, property2, str2bytes
 
-__version__ = '18.08.01'
+__version__ = '18.08.06'
 
 # <http://Developer.Apple.com/documentation/objectivec/
 #         objc_associationpolicy?language=objc>
@@ -382,8 +382,9 @@ class ObjCClass(_ObjCBase):
 
     def _cache_method(self, name, Class, cache, getter):
         # get and cache a class or instance method
+        # XXX get_selector_permutations(name2py(name))?
         method = getter(self._ptr, get_selector(name))
-        # XXX add a check that .alloc() is called
+        # XXX add a check that .alloc() was called
         # before .init() for any I{NSDelegate} class
         # printf('%s.%s', self.name, name)
         if method and method.value:
@@ -1100,12 +1101,12 @@ def isImmutable(objc, mutableClass, immutableClass, name='ns'):
     '''
     # check for the NSMutable- class first, since the mutable
     # classes seem to be sub-class of the immutable one
-    if isInstanceOf(objc, mutableClass):
+    if isObjCInstanceOf(objc, mutableClass):
         raise TypeError('classof(%s) is mutable: %r' % (name, objc))
-    return isInstanceOf(objc, immutableClass, name=name) is immutableClass
+    return isObjCInstanceOf(objc, immutableClass, name=name) is immutableClass
 
 
-def isInstanceOf(objc, *Classes, **name_missing):
+def isObjCInstanceOf(objc, *Classes, **name_missing):
     '''Check whether an ObjC object is an instance of some ObjC class.
 
        @param objc: The instance to check (L{ObjCInstance} or C{c_void_p}).

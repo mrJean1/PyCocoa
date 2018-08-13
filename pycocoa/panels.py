@@ -15,8 +15,8 @@ from nstypes import NSAlert, NSError, NSFont, NSMain, \
                     NSNotificationCenter, NSOpenPanel, NSSavePanel, \
                     NSStr, nsString2str, nsTextView
 from pytypes import dict2NS, py2NS, url2NS
-from oslibs  import NSCancelButton, NSOKButton, YES
-from runtime import isInstanceOf, release
+from oslibs  import NO, NSCancelButton, NSOKButton, YES
+from runtime import isObjCInstanceOf, release
 # from strs  import StrAttd
 from utils   import _Constants, _Strs, _text_title2, _Types
 
@@ -40,7 +40,7 @@ __all__ = ('AlertPanel', 'AlertStyle',
            'PanelButton',
            'SavePanel',
            'TextPanel')
-__version__ = '18.08.04'
+__version__ = '18.08.08'
 
 
 class AlertStyle(_Constants):  # Enum?
@@ -59,7 +59,7 @@ _AlertStyleStr = {AlertStyle.Critical: 'Critical ',
 
 
 class AlertPanel(_Type2):
-    '''Python Type to show an alert, wrapping ObjC L{NSAlert}.
+    '''Python Type to show an alert, wrapping ObjC C{NSAlert}.
     '''
     _cancel   = False
     _info     = ''
@@ -229,7 +229,7 @@ class BrowserPanel(_Type2):
 
 
 class ErrorPanel(AlertPanel):
-    '''Python Type to show an L{NSError} alert, wrapping ObjC L{NSAlert}.
+    '''Python Type to show an C{NSError} alert, wrapping ObjC C{NSAlert}.
     '''
 
     def __init__(self, title='Error'):
@@ -242,7 +242,7 @@ class ErrorPanel(AlertPanel):
     def show(self, ns_error, timeout=None):  # PYCHOK expected
         '''Show the error.
 
-           @param ns_error: Error information (L{NSError}).
+           @param ns_error: Error information (C{NSError}).
            @keyword timeout: Optional time limit (C{float}).
 
            @return: TBD.
@@ -252,7 +252,7 @@ class ErrorPanel(AlertPanel):
         # <http://Developer.Apple.com/documentation/
         #       appkit/nsalert/1531823-alertwitherror>
         # <http://Developer.Apple.com/documentation/foundation/nserror>
-        if isInstanceOf(ns_error, NSError, name='ns_error'):
+        if isObjCInstanceOf(ns_error, NSError, name='ns_error'):
             ns = NSAlert.alloc().alertWithError_(ns_error)
             r = _runModal(ns, timeout)
             ns.release()
@@ -262,7 +262,7 @@ class ErrorPanel(AlertPanel):
 
 
 class OpenPanel(_Type2):
-    '''Python Type to select a file, wrapping ObjC L{NSOpenPanel}.
+    '''Python Type to select a file, wrapping ObjC C{NSOpenPanel}.
     '''
 
     def __init__(self, title=''):
@@ -300,21 +300,21 @@ class OpenPanel(_Type2):
             raise NotImplementedError('multiple %s' % (multiple,))
 
         ns = NSOpenPanel.openPanel()
-#       ns.setTitleHidden_(bool(False))  # "does nothing now"
+#       ns.setTitleHidden_(NO)  # "does nothing now"
 
-        ns.setResolvesAliases_(bool(aliases))
-        ns.setCanChooseDirectories_(bool(dirs))
-        ns.setCanChooseFiles_(bool(files))
-        ns.setShowsHiddenFiles_(bool(hidden))
-        # ns.setCanSelectHiddenExtension_(bool(hidden))
-        ns.setExtensionHidden_(bool(hidexts))
+        ns.setResolvesAliases_(YES if aliases else NO)
+        ns.setCanChooseDirectories_(YES if dirs else NO)
+        ns.setCanChooseFiles_(YES if files else NO)
+        ns.setShowsHiddenFiles_(YES if hidden else NO)
+        # ns.setCanSelectHiddenExtension_(YES if hidden else NO)
+        ns.setExtensionHidden_(YES if hidexts else NO)
 
         # ns.setRequiredFileType_(NSStr)
         if filetypes:  # an NSArray of file extension NSStr[ing]s without the '.'
             ns.setAllowedFileTypes_(py2NS(t.lstrip('.') for t in filetypes))
 
-        ns.setAllowsOtherFileTypes_(bool(otherOK))
-        ns.setTreatsFilePackagesAsDirectories_(bool(packages))
+        ns.setAllowsOtherFileTypes_(YES if otherOK else NO)
+        ns.setTreatsFilePackagesAsDirectories_(YES if packages else NO)
 
         if prompt:
             ns.setPrompt_(release(NSStr(prompt)))
@@ -332,7 +332,7 @@ class OpenPanel(_Type2):
             # mimick NSOpenPanel.setAllowedFileTypes_
             if path.lower().endswith(filetypes):
                 break
-        ns.release()
+        # ns.release()  # XXX crashes Cancel, pick
         return path
 
 
@@ -380,7 +380,7 @@ def _runModal(ns, timeout=None):
 # <http://PseudoFish.com/showing-a-nssavepanel-as-a-sheet.html>
 
 class SavePanel(_Type2):
-    '''Python Type to save a file, wrapping ObjC L{NSSavePanel}.
+    '''Python Type to save a file, wrapping ObjC C{NSSavePanel}.
     '''
     def __init__(self, title=''):
         '''New L{SavePanel}, a file save dialog.
@@ -428,14 +428,14 @@ class SavePanel(_Type2):
             ns.setRequiredFileType_(release(NSStr(filetype.lstrip('.'))))
             hidexts = False
 
-        ns.setShowsHiddenFiles_(bool(hidden))
+        ns.setShowsHiddenFiles_(YES if hidden else NO)
         # ns.setCanSelectHiddenExtension_(bool(hidden))
-        ns.setExtensionHidden_(bool(hidexts))
+        ns.setExtensionHidden_(YES if hidexts else NO)
 
         if label:
             ns.setNameFieldLabel_(release(NSStr(label)))
 
-        ns.setTreatsFilePackagesAsDirectories_(bool(packages))
+        ns.setTreatsFilePackagesAsDirectories_(YES if packages else NO)
 
         if prompt:
             ns.setPrompt_(release(NSStr(prompt)))
@@ -459,7 +459,7 @@ class SavePanel(_Type2):
 
 
 class TextPanel(AlertPanel):
-    '''Scrollable text panel Python Type, wrapping ObjC L{NSAlert}.
+    '''Scrollable text panel Python Type, wrapping ObjC C{NSAlert}.
     '''
     def __init__(self, title='Text Panel'):
         '''Create a L{TextPanel}.

@@ -22,10 +22,10 @@ from octypes import Array_t, BOOL_t, c_struct_t, Dictionary_t, Id_t, \
 from oslibs  import cfNumber2bool, cfString, cfString2str, cfURL2str, \
                     _csignature, _free_memory, get_lib_framework, \
                     libCF, YES
-from runtime import isInstanceOf, send_message, _Xargs
-from utils   import _exports, isinstanceOf, _Strs, zfstr
+from runtime import isObjCInstanceOf, send_message, _Xargs
+from utils   import _exports, isinstanceOf, _Strs, zfstr, _Types
 
-__version__ = '18.08.04'
+__version__ = '18.08.06'
 
 libPC = None  # loaded on-demand
 kPMServerLocal = None
@@ -85,7 +85,7 @@ class PrintError(ValueError):  # SystemError
 
 
 def _nsPrinter(name, pm):
-    '''(INTERNAL) New L{NSPrinter} instance.
+    '''(INTERNAL) New C{NSPrinter} instance.
     '''
     if isinstanceOf(pm, PMPrinter_t, name='pm'):  # NSStr(name)
         ns = send_message('NSPrinter', 'alloc', restype=Id_t)
@@ -423,7 +423,7 @@ class Printer(_PM_Type0):
             pm = name_ns_pm
             ns = _nsPrinter(cfString2str(libPC.PMPrinterGetName(pm)), pm)
 
-        elif isInstanceOf(name_ns_pm, NSPrinter, name='name_ns_pm'):
+        elif isObjCInstanceOf(name_ns_pm, NSPrinter, name='name_ns_pm'):
             ns = name_ns_pm
             # special method name due to leading underscore
             pm = send_message(ns, '_printer', restype=PMPrinter_t)
@@ -563,9 +563,9 @@ class Printer(_PM_Type0):
 
            @raise TypeError: Invalid I{PMview}.
         '''
-        if PMview and isInstanceOf(PMview, NSImageView,
-                                           NSTableView,
-                                           NSTextView, name='PMview'):
+        if PMview and isObjCInstanceOf(PMview, NSImageView,
+                                               NSTableView,
+                                               NSTextView, name='PMview'):
             pi = NSMain.PrintInfo
             if not self.isDefault:
                 pi = NSPrintInfo.alloc().initWithDictionary_(pi.dictionary())
@@ -880,6 +880,10 @@ kPMErrors = dict(
 # End of list
 #   kPMLastErrorCodeToMakeMaintenanceOfThisListEasier = -9799
 
+_Types.Paper        = Paper
+_Types.PaperCustom  = PaperCustom
+_Types.PaperMargins = PaperMargins
+_Types.Printer      = Printer
 
 # filter locals() for .__init__.py
 __all__ = _exports(locals(), 'get_libPC', 'get_resolutions',

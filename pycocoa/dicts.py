@@ -10,7 +10,7 @@ from bases   import _Type0
 from nstypes import isNone, NSDictionary, nsIter2, \
                     NSMutableDictionary, ns2Type
 from pytypes import py2NS, type2NS
-from runtime import isImmutable, isInstanceOf, ObjCClass, ObjCInstance
+from runtime import isImmutable, isObjCInstanceOf, ObjCClass, ObjCInstance
 from utils   import isinstanceOf, missing, _Types
 
 __all__ = ('Dict',
@@ -45,7 +45,7 @@ def _dict_kwds(args, kwds, name):
 
 
 class FrozenDict(_Type0):
-    '''Python immutable C{dict} Type, wrapping an (immutable) ObjC L{NSDictionary}.
+    '''Python immutable C{dict} Type, wrapping an (immutable) ObjC C{NSDictionary}.
     '''
     def __init__(self, *ns_dict, **kwds):
         '''New immutable L{FrozenDict}, like C{dict.__init__}.
@@ -168,7 +168,7 @@ class FrozenDict(_Type0):
 
 
 class Dict(FrozenDict):
-    '''Python C{dict} Type, wrapping an ObjC L{NSMutableDictionary}.
+    '''Python C{dict} Type, wrapping an ObjC C{NSMutableDictionary}.
     '''
     __iter__ = FrozenDict.keys
 
@@ -183,7 +183,7 @@ class Dict(FrozenDict):
             self.NS = ns_dict.NS
         elif isinstance(ns_dict, FrozenDict):
             self.NS = ns_dict.NS.mutableCopy()  # XXX flat copy only?
-        elif isInstanceOf(ns_dict, NSMutableDictionary, name=Dict.__name__):
+        elif isObjCInstanceOf(ns_dict, NSMutableDictionary, name=Dict.__name__):
             self.NS = ns_dict
 
         if kwds:
@@ -256,7 +256,7 @@ class Dict(FrozenDict):
         if other:
             if isinstanceOf(other, Dict, FrozenDict):
                 self.NS.addEntriesFromDictionary_(other.NS)
-            elif isInstanceOf(other, NSMutableDictionary, NSDictionary):
+            elif isObjCInstanceOf(other, NSMutableDictionary, NSDictionary):
                 self.NS.addEntriesFromDictionary_(other)
             elif isinstanceOf(other, dict, name='other'):
                 for k, v in other.items():

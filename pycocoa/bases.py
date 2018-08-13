@@ -12,7 +12,7 @@ from runtime import ObjCInstance, release
 from utils   import bytes2str, isinstanceOf, type2strepr
 
 __all__ = ()
-__version__ = '18.06.28'
+__version__ = '18.08.09'
 
 
 class _Type0(object):
@@ -100,7 +100,7 @@ class _Type1(_Type0):
 class _Type2(_Type1):
     '''(INTERNAL) Basic Type with properties app, delegate, NS, tag and title.
     '''
-    _tag   = None
+    _tag   = None  # 1-origin
     _title = None
 
     def __str__(self):
@@ -108,21 +108,25 @@ class _Type2(_Type1):
 
     @property
     def tag(self):
-        '''Get the (L{Item}, ...) tag.
+        '''Get the (L{Item}, L{ItemSeparator}, L{Menu}, ...) tag.
         '''
         try:
-            return self.NS.tag()
+            self._tag = int(self.NS.tag())
         except AttributeError:
-            return self._tag
+            pass
+        return self._tag
 
     @tag.setter  # PYCHOK property.setter
     def tag(self, tag):
-        '''Set the (L{Item}, ...) tag (int).
+        '''Set the (L{Item}, ...) tag (C{int} 1-origin !).
         '''
         if tag not in (None, NSMain.Null):
             try:
-                self.NS.setTag_(int(tag))
-                self._tag = tag
+                i = int(tag)
+                if not i:  # zero tag invalid
+                    raise ValueError('no such %s.%s: %r' % (self, 'tag', tag))
+                self._tag = i
+                self.NS.setTag_(i)
             except AttributeError:
                 pass
 
@@ -141,7 +145,7 @@ class _Type2(_Type1):
                 self.NS.setTitle_(title)
             except AttributeError:  # no NSApplication.setTitle_
                 pass
-            self._title = nsString2str(title)
+            title = nsString2str(title)
         else:
             try:
                 t = NSStr(title)
@@ -149,7 +153,7 @@ class _Type2(_Type1):
                 release(t)
             except AttributeError:  # no NSApplication.setTitle_
                 t.release()
-            self._title = bytes2str(title)
+        self._title = bytes2str(title)
 
 
 if __name__ == '__main__':

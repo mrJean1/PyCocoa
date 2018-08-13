@@ -3,11 +3,17 @@
 
 # License at the end of this file.
 
-'''(INTERNAL) Utility functions, constants, etc.
+'''Utility functions, constants, internals, etc.
 
 @var missing: Missing keyword argument value.
 '''
-__version__ = '18.08.01'
+__version__ = '18.08.09'
+
+import sys
+_Python_ = sys.version.split()[0]  # PYCHOK internal
+_Python2 = sys.version_info.major < 3  # PYCHOK internal
+_Python3 = sys.version_info.major > 2  # PYCHOK internal
+del sys
 
 try:  # all imports listed explicitly to help PyChecker
     from math import gcd  # Python 3+
@@ -120,30 +126,34 @@ class _Singletons(_MutableConstants):
 class _Types(_MutableConstants):
     '''Python Types, to avoid circular imports.
     '''
-    AlertPanel  = None  # set by .panels.py
-    App         = None  # set by .apps.py
-    Dict        = None  # set by .dicts.py
-    ErrorPanel  = None  # set by .panels.py
-    Font        = None  # sef by .fonts.py
-    FrozenDict  = None  # set by .dicts.py
-    FrozenSet   = None  # set by .sets.py
-    Item        = None  # set by .menus.py
-    List        = None  # set by .lists.py
-    MediaWindow = None  # set by .windows.py
-    Menu        = None  # set by .menus.py
-    MenuBar     = None  # set by .menus.py
-    OpenPanel   = None  # set by .panels.py
-    SavePanel   = None  # set by .panels.py
-    Set         = None  # set by .sets.py
-    Separator   = None  # set by .menus.py
-    Str         = None  # set by .strs.py
-    StrAttd     = None  # set by .strs.py
-    Table       = None  # set by .tables.py
-    TableWindow = None  # set by .tables.py
-    TextPanel   = None  # set by .panels.py
-    TextWindow  = None  # set by .windows.py
-    Tuple       = None  # set by .tuples.py
-    Window      = None  # set by .windows.py
+    AlertPanel    = None  # set by .panels.py
+    App           = None  # set by .apps.py
+    Dict          = None  # set by .dicts.py
+    ErrorPanel    = None  # set by .panels.py
+    Font          = None  # sef by .fonts.py
+    FrozenDict    = None  # set by .dicts.py
+    FrozenSet     = None  # set by .sets.py
+    Item          = None  # set by .menus.py
+    List          = None  # set by .lists.py
+    MediaWindow   = None  # set by .windows.py
+    Menu          = None  # set by .menus.py
+    MenuBar       = None  # set by .menus.py
+    OpenPanel     = None  # set by .panels.py
+    Paper         = None  # set by .printer.py
+    PaperCustom   = None  # set by .printer.py
+    PaperMargins  = None  # set by .printer.py
+    Printer       = None  # set by .printer.py
+    SavePanel     = None  # set by .panels.py
+    Set           = None  # set by .sets.py
+    ItemSeparator = None  # set by .menus.py
+    Str           = None  # set by .strs.py
+    StrAttd       = None  # set by .strs.py
+    Table         = None  # set by .tables.py
+    TableWindow   = None  # set by .tables.py
+    TextPanel     = None  # set by .panels.py
+    TextWindow    = None  # set by .windows.py
+    Tuple         = None  # set by .tuples.py
+    Window        = None  # set by .windows.py
 
 
 _Types = _Types()  # freeze
@@ -580,7 +590,7 @@ def isinstanceOf(inst, *classes, **name_missing):
        @raise TypeError: If I{inst} does not match any of the I{classes},
                          but iff keyword I{name='...'} is provided.
 
-       @see: Function L{isInstanceOf} for checking ObjC instances.
+       @see: Function L{isObjCInstanceOf} for checking ObjC instances.
     '''
     if isinstance(inst, classes):
         return inst.__class__
@@ -658,6 +668,23 @@ def printf(fmt, *args, **kwds):  # argv0='', nl=0, nt=0
     nl = '\n' * kwds.get('nl', 0)
     nt = '\n' * kwds.get('nt', 0)
     print('%s%s %s%s' % (nl, a, t, nt))
+
+
+def properties(inst):
+    '''All property names and values.
+
+       @param inst: An instance (C{any}).
+
+       @return: The properties (C{dict}).
+    '''
+    pd = {}
+    for a in dir(inst):
+        if type(getattr(inst.__class__, a)) is property:
+            try:
+                pd[a] = getattr(inst, a)
+            except Exception as x:
+                pd[a] = repr(x)
+    return pd
 
 
 def property2(inst, name):
@@ -781,7 +808,8 @@ def zSIstr(size, B='B', K=1024):
 __all__ = _exports(locals(), 'aspect_ratio', 'Cache2', 'clip',
                              'DEFAULT_UNICODE', 'flint', 'isinstanceOf',
                              'gcd', 'iterbytes', 'lambda1', 'missing',
-                             'printf', 'property2', 'type2strepr',
+                             'printf', 'properties', 'property2',
+                             'type2strepr',
                    starts=('bytes', 'inst', 'name2', 'str', 'z'))
 
 if __name__ == '__main__':

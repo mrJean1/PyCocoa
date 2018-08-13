@@ -34,10 +34,11 @@ or GitHub_, ``unzip`` the downloaded file, ``cd`` to directory
 tests, type ``python setup.py test`` before installation.
 
 Some alternatives to PyCocoa are (a) PyObjC_, the most comprehensive Python
-to Objective-C bridge, (b) `Rubicon-ObjC`_ for Python 3.5+, taking advantage
-of Python's new typing_ annotations and (c) PyGUI_ for macOS_.
+to Objective-C bridge (and included in `macOS' Python`_), (b) `Rubicon-ObjC`_
+for Python 3.5+, taking advantage of Python's new typing_ annotations and
+(c) PyGUI_ for macOS_.
 
-*Last updated: Aug 04, 2018.*
+*Last updated: Aug 09, 2018.*
 
 .. _checked: http://GitHub.com/ActiveState/code/tree/master/recipes/Python/546532_PyChecker_postprocessor
 .. _cocoa-python: http://GitHub.com/phillip-nguyen/cocoa-python
@@ -49,6 +50,7 @@ of Python's new typing_ annotations and (c) PyGUI_ for macOS_.
 .. _GitHub: http://GitHub.com/mrJean1/PyCocoa
 .. _Intel(R) Python: http://Software.Intel.com/en-us/distribution-for-python
 .. _macOS: http://WikiPedia.org/wiki/MacOS
+.. _macOS' Python: http://WikiPedia.org/wiki/PyObjC#History
 .. _McCabe: http://PyPI.org/project/mccabe
 .. _MIT License: http://OpenSource.org/licenses/MIT
 .. _New BSD License: http://OpenSource.org/licenses/BSD-3-Clause

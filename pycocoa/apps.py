@@ -7,12 +7,13 @@
 '''
 # all imports listed explicitly to help PyChecker
 from bases   import _Type2
-from menus   import _menuItemHandler_name, Menu, MenuBar, ns2Item
+from menus   import _callMenuItem_name, _handleMenuItem_name, Item, \
+                    ItemSeparator, Menu, MenuBar, ns2Item
 from nstypes import NSApplication, nsBundleRename, \
                     NSConcreteNotification, NSMain, NSNotification, \
                     nsOf, NSStr
 # from oslibs  import YES
-from runtime import isInstanceOf, ObjCClass, ObjCInstance, \
+from runtime import isObjCInstanceOf, ObjCClass, ObjCInstance, \
                     _ObjC_log_totals, ObjCSubclass, release, retain, \
                     send_super_init
 from utils   import _Globals, bytes2str, isinstanceOf, printf, _Types
@@ -25,11 +26,11 @@ __all__ = ('App',
            'Tile',
            'app_title',
            'ns2App')
-__version__ = '18.08.04'
+__version__ = '18.08.09'
 
 
 class App(_Type2):
-    '''Python C{App} Type, wrapping an ObjC L{NSApplication}.
+    '''Python C{App} Type, wrapping an ObjC C{NSApplication}.
     '''
     _badge      = None
     _isUp       = None
@@ -76,20 +77,19 @@ class App(_Type2):
 
         if self._menubar is None:
             # create the menu bar, once
-            self._menubar = MenuBar(self)
-
-            m = Menu(self.title)
-            m.append(
-                m.item('Full ' + 'Screen', key='f', ctrl=True),  # Ctrl-Cmd-F, Esc to exit
-                m.separator(),
-                m.item('Hide ' + self.title, 'menuHide_', key='h'),  # Cmd-H, implied
-                m.item('Hide Others', key='h', alt=True),  # Alt-Cmd-H
-                m.item('Show All'),  # no key
-                m.separator(),
-                m.item('Quit ' + self.title, 'menuTerminate_', key='q'),  # Cmd-Q
+            b = MenuBar(self)
+            m = Menu(title=self.title)
+            m.append(  # note key modifier cmd=True is the default
+                Item('Full ' + 'Screen', key='f', ctrl=True),  # Ctrl-Cmd-F, Esc to exit
+                ItemSeparator(),
+                Item('Hide ' + self.title, self.menuHide_, key='h'),  # Cmd-H
+                Item('Hide Others', self.menuOther_, key='h', alt=True),  # Alt-Cmd-H
+                ItemSeparator(),
+                Item('Quit ' + self.title, self.menuTerminate_, key='q'),  # Cmd-Q
             )
-            self._menubar.append(m)
-            self._menubar.main(self)
+            b.append(m)
+            b.main(app=self)
+            self._menubar = b
 
         self._menubar.append(menu)
 
@@ -190,7 +190,7 @@ class App(_Type2):
     def run(self, timeout=None):
         '''Run this app (never returns).
 
-           @keyword timeout: Run time limit in seconds (float).
+           @keyword timeout: Run time limit in seconds (C{float}).
 
            @note: Although I{run} never returns, any Python threads
            started earlier continue to run concurrently.
@@ -244,15 +244,12 @@ class App(_Type2):
         '''
         self.hide(True)
 
-    def menuHideOthers_(self, item):  # PYCHOK expected
-        '''Callback for C{Hide Other} menu I{item}.
+    def menuOther_(self, item):  # PYCHOK expected
+        '''Callback for C{Hide/Show Other} menu I{item}.
         '''
-        self.hideOther(True)
-
-    def menuShowAll_(self, item):  # PYCHOK expected
-        '''Callback for C{Show All} menu I{item}.
-        '''
-        self.hideOther(False)
+        h = item.title.startswith('Hide')
+        self.hideOther(h)
+        item.title = 'Show All' if h else 'Hide Others'
 
     def menuTerminate_(self, item):  # PYCHOK expected
         '''Callback for C{Quit} menu I{item}.
@@ -278,17 +275,24 @@ class App(_Type2):
         '''Callback I{window} becomes/resigns C{Key}.
         '''
         if window:
-            self._keyWindow = self._lastWindow = window
+            self.windowLast_(window)
+            self._keyWindow = window
         else:
             self._keyWindow = None
 #       if self._menubar:
 #           self._menubar.NS.update()
 
+    def windowLast_(self, window):
+        '''Callback I{window} becomes C{Key} or C{Main}.
+        '''
+        self._lastWindow = window
+
     def windowMain_(self, window):
         '''Callback I{window} becomes/resigns C{Main}.
         '''
         if window:
-            self._mainWindow = self._lastWindow = window
+            self.windowLast_(window)
+            self._mainWindow = window
         else:
             self._mainWindow = None
 
@@ -321,8 +325,8 @@ class App(_Type2):
 
 
 class _NSApplicationDelegate(object):
-    '''An ObjC-callable I{NSDelegate} class to handle L{NSApplication},
-       L{NSMenu} and L{NSWindow} events as calls to Python
+    '''An ObjC-callable I{NSDelegate} class to handle C{NSApplication},
+       C{NSMenu} and C{NSWindow} events as calls to Python
        L{App}C{.app..._}, L{App}C{.menu..._} respectively
        L{App}C{.window..._} callback methods.
     '''
@@ -390,7 +394,7 @@ class _NSApplicationDelegate(object):
 
     @_ObjC.method('v@')
     def applicationDidFinishLaunching_(self, ns_notification):
-        '''ObjC callback to handle L{NSApplication} event.
+        '''ObjC callback to handle C{NSApplication} event.
         '''
         self.app._isUp = True
         self.app.appLaunched_(ns2App(ns_notification))
@@ -435,8 +439,27 @@ class _NSApplicationDelegate(object):
 #       pass
 
     @_ObjC.method('v@')
-    def menuItemHandler_(self, ns_item):
-        '''ObjC callback to handle and dispatch L{NSMenuItem}
+    def callMenuItem_(self, ns_item):
+        '''ObjC callback to directly call the action for C{NSMenuItem}
+           clicks and shortcuts.
+
+           Unhandled clicks, shortcuts and dispatch errors are
+           silently ignored, unless L{App} C{raiser} keyword
+           argument was C{True}.
+        '''
+        item = ns2Item(ns_item)
+        act = item._action
+        try:
+            act(item)
+        except Exception:
+            if _Globals.raiser:
+                printf('%s(%r): callable %r ...',
+                       _callMenuItem_name, item, act)
+                raise
+
+    @_ObjC.method('v@')
+    def handleMenuItem_(self, ns_item):
+        '''ObjC callback to handle and dispatch C{NSMenuItem}
            clicks and shortcuts.
 
            All clicks and shortcuts are dispatched to the I{action}
@@ -458,19 +481,32 @@ class _NSApplicationDelegate(object):
                 except Exception:
                     if _Globals.raiser:
                         printf('%s(%r): %r method %s ...',
-                               _menuItemHandler_name, i, t, act)
+                               _handleMenuItem_name, i, t, act)
                         raise
         else:
             if _Globals.raiser:
                 raise RuntimeError('%s(%r): %s' % ('unhandled', item, act))
 
+    @_ObjC.method('B@')
+    def validateMenuItem_(self, ns_item):
+        '''ObjC callback to supply the C{NSMenuItem.isEnabled()} state.
+        '''
+        # <http://StackOverflow.com/questions/4870141/
+        #       menu-item-is-enabled-but-still-grayed-out>
+        # <http://Developer.Apple.com/library/archive/documentation/Cocoa/
+        #       Conceptual/MenuList/Articles/EnablingMenuItems.html>
+        # <http://Developer.Apple.com/library/archive/documentation/Cocoa/
+        #       Conceptual/MenuList/Articles/EnablingMenuItems.html>
+        return ns_item.isEnabled()  # == ns2Item().isEnabled
 
-assert (_NSApplicationDelegate.menuItemHandler_.name == _menuItemHandler_name), _menuItemHandler_name
+
+assert(_NSApplicationDelegate.callMenuItem_.name   == _callMenuItem_name), _callMenuItem_name
+assert(_NSApplicationDelegate.handleMenuItem_.name == _handleMenuItem_name), _handleMenuItem_name
 NSApplicationDelegate = ObjCClass('_NSApplicationDelegate')
 
 
 class Tile(_Type2):
-    '''Dock tile for an L{App}, wrapping an ObjC L{NSDockTile}.
+    '''Dock tile for an L{App}, wrapping an ObjC C{NSDockTile}.
     '''
     _label = ''
 
@@ -508,8 +544,8 @@ def app_title(title):
 
 
 def ns2App(ns):
-    '''Get the L{App} instance from an L{NSApplication} or an
-       L{NSNotification} instance.
+    '''Get the L{App} instance from an C{NSApplication} or an
+       C{NSNotification} instance.
 
        @param ns: The ObjC instance (C{NS...}).
 
@@ -519,9 +555,9 @@ def ns2App(ns):
 
        @raise TypeError: Invalid I{ns} type.
     '''
-    if isInstanceOf(ns, NSApplication):
+    if isObjCInstanceOf(ns, NSApplication):
         pass
-    elif isInstanceOf(ns, NSConcreteNotification, NSNotification, ns='ns'):
+    elif isObjCInstanceOf(ns, NSConcreteNotification, NSNotification, ns='ns'):
         ns = ns.object()
     if ns == _Globals.App.NS:
         return _Globals.App

@@ -419,9 +419,9 @@ _csignature(libCF.CFURLGetTypeID, TypeID_t)
 def cfURLResolveAlias(alias):
     '''Resolve a macOS file alias.
 
-       @param alias: The alias file (L{NSURL}).
+       @param alias: The alias file (C{NSURL}).
 
-       @return: The alias' target (L{NSURL}) or C{None}.
+       @return: The alias' target (C{NSURL}) or C{None}.
     '''
     ns = libCF.CFURLCreateBookmarkDataFromFile(kCFAllocatorDefault, cast(alias, URL_t), 0) or None
     if ns:

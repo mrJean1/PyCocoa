@@ -3,7 +3,7 @@
 
 # License at the end of this file.
 
-'''Types L{Table} and L{TableWindow}, wrapping ObjC C{NSTableView}, L{NSWindow}.
+'''Types L{Table} and L{TableWindow}, wrapping ObjC C{NSTableView}, C{NSWindow}.
 '''
 # <http://StackOverflow.com/questions/15519296/pyobjc-crashes-by-using-nstableview>
 # <http://GitHub.com/versluis/Mac-TableViewCode/tree/master/Mac%20TableViewCode>
@@ -20,7 +20,7 @@ from oslibs   import NSTableViewSolidHorizontalGridLineMask, \
                      NSTextAlignmentCenter, NSTextAlignmentJustified, \
                      NSTextAlignmentLeft, NSTextAlignmentNatural, \
                      NSTextAlignmentRight, YES
-from runtime  import isInstanceOf, ObjCClass, ObjCInstance, \
+from runtime  import isObjCInstanceOf, ObjCClass, ObjCInstance, \
                      ObjCSubclass, release, retain, send_super_init
 from utils    import _Globals, isinstanceOf, _Types
 from windows  import Screen, Window, WindowStyle
@@ -82,7 +82,7 @@ def closeTables():
 
 
 class Table(_Type2):
-    '''Python rows and columns {Table} Type, wrapping an ObjC L{NSTableView}.
+    '''Python rows and columns {Table} Type, wrapping an ObjC C{NSTableView}.
     '''
     _Fonts   = None
     _headers = ()
@@ -200,7 +200,7 @@ class Table(_Type2):
 
 class _NSTableViewDelegate(object):
     '''An ObjC-callable I{NSDelegate} class, conforming to ObjC
-       protocols L{NSTableViewDelegate} and L{NSTableViewDataSource}.
+       protocols C{NSTableViewDelegate} and C{NSTableViewDataSource}.
 
        @see: The C{_NSApplicationDelegate} for more I{NSDelegate} details.
     '''
@@ -210,7 +210,7 @@ class _NSTableViewDelegate(object):
 
     @_ObjC.method('@PPP')
     def init(self, cols, rows, id2i):
-        '''Initialize the allocated L{NSTableViewDelegate}.
+        '''Initialize the allocated C{NSTableViewDelegate}.
 
            @note: I{MUST} be called as C{.alloc().init(...)}.
         '''
@@ -327,7 +327,7 @@ class TableWindow(Window):
         self._table = table
 
         tbl = getattr(table, 'NS', None)
-        isInstanceOf(tbl, NSTableView, name='table')
+        isObjCInstanceOf(tbl, NSTableView, name='table')
 
         # <http://Developer.Apple.com/documentation/appkit/nswindow>
         n = tbl.dataSource().numberOfRowsInTableView_(tbl)

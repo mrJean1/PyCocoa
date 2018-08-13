@@ -73,7 +73,8 @@ bases._Type0 --+
 </pre>
 
 <hr />
-<p>Python <code>MenuBar</code> Type, wrapping ObjC NSMenu.</p>
+<p>Python <a href="pycocoa.menus.MenuBar-class.html" 
+  class="link">MenuBar</a> Type, wrapping ObjC <code>NSMenu</code>.</p>
 
 <!-- ==================== INSTANCE METHODS ==================== -->
 <a name="section-InstanceMethods"></a>
@@ -109,7 +110,7 @@ bases._Type0 --+
       <table width="100%" cellpadding="0" cellspacing="0" border="0">
         <tr>
           <td><span class="summary-sig"><a name="__len__"></a><span class="summary-sig-name">__len__</span>(<span class="summary-sig-arg">self</span>)</span><br />
-      Return the number of menus in this menu bar.</td>
+      Return the number of menus in this menu bar (<code>int</code>).</td>
           <td align="right" valign="top">
             
             
@@ -143,6 +144,24 @@ bases._Type0 --+
     </td><td class="summary">
       <table width="100%" cellpadding="0" cellspacing="0" border="0">
         <tr>
+          <td><span class="summary-sig"><a href="pycocoa.menus.MenuBar-class.html#__getitem__" class="summary-sig-name">__getitem__</a>(<span class="summary-sig-arg">self</span>,
+        <span class="summary-sig-arg">index</span>)</span><br />
+      Yield one or several menus by index, by slice or by title.</td>
+          <td align="right" valign="top">
+            
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
           <td><span class="summary-sig"><a href="pycocoa.menus.MenuBar-class.html#main" class="summary-sig-name">main</a>(<span class="summary-sig-arg">self</span>,
         <span class="summary-sig-arg">app</span>=<span class="summary-sig-default">None</span>)</span><br />
       Make this menu bar the app's main menu.</td>
@@ -161,9 +180,27 @@ bases._Type0 --+
     </td><td class="summary">
       <table width="100%" cellpadding="0" cellspacing="0" border="0">
         <tr>
-          <td><span class="summary-sig"><a name="menus"></a><span class="summary-sig-name">menus</span>(<span class="summary-sig-arg">self</span>)</span><br />
-      Yield each menu of this menu bar (<a 
-      href="pycocoa.menus.Menu-class.html" class="link">Menu</a>).</td>
+          <td><span class="summary-sig"><a href="pycocoa.menus.MenuBar-class.html#menu" class="summary-sig-name">menu</a>(<span class="summary-sig-arg">self</span>,
+        <span class="summary-sig-arg">title</span>=<span class="summary-sig-default"><code class="variable-quote">'</code><code class="variable-string"></code><code class="variable-quote">'</code></span>,
+        <span class="summary-sig-arg">dflt</span>=<span class="summary-sig-default">None</span>)</span><br />
+      Find a menu by title.</td>
+          <td align="right" valign="top">
+            
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a href="pycocoa.menus.MenuBar-class.html#menus" class="summary-sig-name">menus</a>(<span class="summary-sig-arg">self</span>)</span><br />
+      Yield the menus of this menu bar.</td>
           <td align="right" valign="top">
             
             
@@ -210,7 +247,7 @@ bases._Type0 --+
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
         <a href="pycocoa.menus.MenuBar-class.html#height" class="summary-name">height</a><br />
-      Get this menu bar's height (float).
+      Get this menu bar's height (<code>float</code>).
     </td>
   </tr>
   <tr>
@@ -306,6 +343,39 @@ bases._Type0 --+
   </dl>
 </td></tr></table>
 </div>
+<a name="__getitem__"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">__getitem__</span>(<span class="sig-arg">self</span>,
+        <span class="sig-arg">index</span>)</span>
+    <br /><em class="fname">(Indexing operator)</em>
+  </h3>
+  </td><td align="right" valign="top"
+    >&nbsp;
+    </td>
+  </tr></table>
+  
+  <p>Yield one or several menus by index, by slice or by title.</p>
+  <dl class="fields">
+    <dt>Parameters:</dt>
+    <dd><ul class="nomargin-top">
+        <li><strong class="pname"><code>index</code></strong> - Index (<code>int</code>, <code>str</code> or <code>slice</code>).</li>
+    </ul></dd>
+    <dt>Returns:</dt>
+        <dd>Each menu (<a href="pycocoa.menus.Menu-class.html" 
+          class="link">Menu</a>).</dd>
+    <dt>Raises:</dt>
+    <dd><ul class="nomargin-top">
+        <li><code><strong class='fraise'>IndexError</strong></code> - If <i>index</i> out of range or if no menu titled <i>index</i> 
+        exists.</li>
+    </ul></dd>
+  </dl>
+</td></tr></table>
+</div>
 <a name="main"></a>
 <div>
 <table class="details" border="1" cellpadding="3"
@@ -337,6 +407,62 @@ bases._Type0 --+
   </dl>
 </td></tr></table>
 </div>
+<a name="menu"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">menu</span>(<span class="sig-arg">self</span>,
+        <span class="sig-arg">title</span>=<span class="sig-default"><code class="variable-quote">'</code><code class="variable-string"></code><code class="variable-quote">'</code></span>,
+        <span class="sig-arg">dflt</span>=<span class="sig-default">None</span>)</span>
+  </h3>
+  </td><td align="right" valign="top"
+    >&nbsp;
+    </td>
+  </tr></table>
+  
+  <p>Find a menu by title.</p>
+  <dl class="fields">
+    <dt>Parameters:</dt>
+    <dd><ul class="nomargin-top">
+        <li><strong class="pname"><code>title</code></strong> - The menu title to match (<code>str</code>).</li>
+        <li><strong class="pname"><code>dflt</code></strong> - Optional, default return value.</li>
+    </ul></dd>
+    <dt>Returns:</dt>
+        <dd>The first matching menu (<a href="pycocoa.menus.Menu-class.html" 
+          class="link">Menu</a>) or <i>dflt</i> if no <i>title</i> match 
+          found.</dd>
+    <dt>Raises:</dt>
+    <dd><ul class="nomargin-top">
+        <li><code><strong class='fraise'>ValueError</strong></code> - No <i>dflt</i> provided and no <i>title</i> match.</li>
+    </ul></dd>
+  </dl>
+</td></tr></table>
+</div>
+<a name="menus"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">menus</span>(<span class="sig-arg">self</span>)</span>
+  </h3>
+  </td><td align="right" valign="top"
+    >&nbsp;
+    </td>
+  </tr></table>
+  
+  <p>Yield the menus of this menu bar.</p>
+  <dl class="fields">
+    <dt>Returns:</dt>
+        <dd>Each menu (<a href="pycocoa.menus.Menu-class.html" 
+          class="link">Menu</a>).</dd>
+  </dl>
+</td></tr></table>
+</div>
 <br />
 <!-- ==================== PROPERTY DETAILS ==================== -->
 <a name="section-PropertyDetails"></a>
@@ -353,11 +479,11 @@ bases._Type0 --+
        cellspacing="0" width="100%" bgcolor="white">
 <tr><td>
   <h3 class="epydoc">height</h3>
-  <p>Get this menu bar's height (float).</p>
+  <p>Get this menu bar's height (<code>float</code>).</p>
   <dl class="fields">
     <dt>Get Method:</dt>
     <dd class="value"><span class="summary-sig">height(<span class="summary-sig-arg">self</span>)</span>
-        - Get this menu bar's height (float).
+        - Get this menu bar's height (<code>float</code>).
     </dd>
   </dl>
 </td></tr></table>
@@ -394,7 +520,7 @@ bases._Type0 --+
 <table border="0" cellpadding="0" cellspacing="0" width="100%%">
   <tr>
     <td align="left" class="footer">
-    Generated by Epydoc 3.0.1 on Mon Aug  6 13:28:40 2018
+    Generated by Epydoc 3.0.1 on Sun Aug 12 21:20:49 2018
     </td>
     <td align="right" class="footer">
       <a target="mainFrame" href="http://epydoc.sourceforge.net"
