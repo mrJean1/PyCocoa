@@ -14,10 +14,11 @@ from nstypes import NSArray, NSData, NSDecimal, NSDictionary, \
                     NSSet, NSStr, NSURL
 from oslibs  import libCF
 from runtime import ObjCInstance, release
-from types   import GeneratorType as _generator
-from utils   import bytes2str, clip, DEFAULT_UNICODE, _exports, _Ints
+from types   import GeneratorType as _Generator
+from utils   import bytes2str, _ByteStrs, clip, DEFAULT_UNICODE, \
+                    _exports, _Ints, isinstanceOf
 
-__version__ = '18.08.02'
+__version__ = '18.08.14'
 
 
 def _iter2NS(ns, py, getCount):
@@ -38,6 +39,20 @@ def _len2NS(py, ns, getCount):
         t = (ns.objc_classname, m, clip(repr(py)), n)
         raise RuntimeError('%s[%s] vs %s[%s]' % t)
     return ns
+
+
+def _list2NS(py):
+    '''(INTERNAL) Create an C{NSMutableArray} instance from a
+       type-checked Python C{list} or C{tuple}.
+    '''
+    return _iter2NS(NSMutableArray.array(), py, libCF.CFArrayGetCount)
+
+
+def _set2NS(py):
+    '''(INTERNAL) Create an C{NSMutableSet} instance from a
+       type-checke Python C{set} or C{frozenset}.
+    '''
+    return _iter2NS(NSMutableSet.set(), py, libCF.CFSetGetCount)
 
 
 def bool2NS(py):
@@ -63,8 +78,9 @@ def bytes2NS(py):
     def _NSData_length(ns):  # XXX lambda ns: ns.length()
         return ns.length()
 
-    return _len2NS(py, NSData.dataWithBytes_length_(py, len(py)),
-                      _NSData_length)
+    if isinstanceOf(py, *_ByteStrs, name='py'):
+        return _len2NS(py, NSData.dataWithBytes_length_(py, len(py)),
+                          _NSData_length)
 
 
 def dict2NS(py, frozen=False):
@@ -79,13 +95,27 @@ def dict2NS(py, frozen=False):
     '''
     # http://Developer.Apple.com/library/content/documentation/Cocoa/
     #        Conceptual/Collections/Articles/Dictionaries.html
-    ns = NSMutableDictionary.dictionary()
-    for k, v in py.get('iteritems', py.items)():
-        ns.setObject_forKey_(py2NS(v), py2NS(k))
-    ns = _len2NS(py, ns, libCF.CFDictionaryGetCount)
-    if frozen:
-        ns = NSDictionary.alloc().initWithDictionary_(ns)
-    return ns
+    if isinstanceOf(py, dict, name='py'):
+        ns = NSMutableDictionary.dictionary()
+        for k, v in py.get('iteritems', py.items)():
+            ns.setObject_forKey_(py2NS(v), py2NS(k))
+        ns = _len2NS(py, ns, libCF.CFDictionaryGetCount)
+        if frozen:
+            ns = NSDictionary.alloc().initWithDictionary_(ns)
+        return ns
+
+
+def float2NS(py):
+    '''Create an C{NSNumber} instance from a Python C{float} or C{int}.
+
+       @param py: The value (C{float} or C{int}).
+
+       @return: The ObjC instance (C{NSDouble}).
+
+       @raise TypeError: If C{py} not a C{float} or C{int}.
+    '''
+    if isinstanceOf(py, float, *_Ints, name='py'):
+        return NSDouble(float(py))
 
 
 def frozenset2NS(py):
@@ -97,8 +127,9 @@ def frozenset2NS(py):
 
        @raise RuntimeError: If C{len} vs C{count} assertion failed.
     '''
-    return _len2NS(py, NSSet.alloc().initWithSet_(set2NS(py)),
-                       libCF.CFSetGetCount)
+    if isinstanceOf(py, frozenset, set, name='py'):
+        return _len2NS(py, NSSet.alloc().initWithSet_(_set2NS(py)),
+                           libCF.CFSetGetCount)
 
 
 def generator2NS(py):
@@ -110,7 +141,8 @@ def generator2NS(py):
 
        @raise RuntimeError: If C{len} vs C{count} assertion failed.
     '''
-    return tuple2NS(tuple(py))
+    if isinstanceOf(py, _Generator, name='py'):
+        return tuple2NS(tuple(py))
 
 
 def int2NS(py):
@@ -122,14 +154,13 @@ def int2NS(py):
 
        @raise TypeError: If C{py} not an C{int} or C{long}.
     '''
-    if isinstance(py, _Ints):
+    if isinstanceOf(py, _Ints, name='py'):
         if abs(py) < 1 << 31:
             return NSInt(py)
         elif abs(py) < 1 << 63:
             return NSLong(py)
         else:
             return NSLongLong(py)
-    raise TypeError('%s not %s: %r' % ('py', 'int', py))
 
 
 def list2NS(py):
@@ -141,7 +172,8 @@ def list2NS(py):
 
        @raise RuntimeError: If C{len} vs C{count} assertion failed.
     '''
-    return _iter2NS(NSMutableArray.array(), py, libCF.CFArrayGetCount)
+    if isinstanceOf(py, list, name='py'):
+        return _list2NS(py)
 
 
 def map2NS(py):
@@ -153,6 +185,7 @@ def map2NS(py):
 
        @raise RuntimeError: If C{len} vs C{count} assertion failed.
     '''
+    # XXX isinstanceOf(py, map, name='py')
     return tuple2NS(tuple(py))
 
 
@@ -167,7 +200,7 @@ def None2NS(py):
     '''
     if py is None:
         return NSMain.Null
-    raise ValueError('%s not %s: %r' % ('py', 'None', py))
+    raise ValueError('invalid %s: %r, not %s' % ('py', py, 'None'))
 
 
 def range2NS(py):
@@ -179,6 +212,7 @@ def range2NS(py):
 
        @raise RuntimeError: If C{len} vs C{count} assertion failed.
     '''
+    # XXX isinstanceOf(py, range, name='py')
     return tuple2NS(tuple(py))
 
 
@@ -191,7 +225,8 @@ def set2NS(py):
 
        @raise RuntimeError: If C{len} vs C{count} assertion failed.
     '''
-    return _iter2NS(NSMutableSet.set(), py, libCF.CFSetGetCount)
+    if isinstanceOf(py, set, name='py'):
+        return _set2NS(py)
 
 
 def str2NS(py):
@@ -213,8 +248,9 @@ def tuple2NS(py):
 
        @raise RuntimeError: If C{len} vs C{count} assertion failed.
     '''
-    return _len2NS(py, NSArray.alloc().initWithArray_(list2NS(py)),
-                       libCF.CFArrayGetCount)
+    if isinstanceOf(py, tuple, list, name='py'):
+        return _len2NS(py, NSArray.alloc().initWithArray_(_list2NS(py)),
+                           libCF.CFArrayGetCount)
 
 
 def unicode2NS(py):
@@ -256,11 +292,11 @@ _py2NS = {bool:       bool2NS,
           dict:       dict2NS,
           float:      NSDouble,
           frozenset:  frozenset2NS,
-         _generator:  generator2NS,
+         _Generator:  generator2NS,
           int:        int2NS,
-          list:       list2NS,
-          set:        set2NS,
+          list:      _list2NS,
           range:      range2NS,
+          set:       _set2NS,
           str:        str2NS,
           tuple:      tuple2NS,
           type(None): None2NS}

@@ -7,7 +7,7 @@
 
 @var missing: Missing keyword argument value.
 '''
-__version__ = '18.08.09'
+__version__ = '18.08.16'
 
 import sys
 _Python_ = sys.version.split()[0]  # PYCHOK internal
@@ -25,6 +25,23 @@ except ImportError:
             while b:
                 a, b = b, (a % b)
             return a
+
+
+def property_RO(method):
+    '''Decorator for C{Read_Only} property.
+
+       @param method: The callable to be decorated as property.
+
+       @note: Like standard Python C{property} without a C{property.setter}
+              with a more descriptive error message when set.
+    '''
+    def Read_Only(self, ignored):
+        '''Throws an C{AttributeError}, always.
+        '''
+        raise AttributeError('Read_Only property: %s.%s = %r' %
+                             (self, method.__name__, ignored))
+
+    return property(method, Read_Only, None, method.__doc__ or 'N/A')
 
 
 class _MutableConstants(object):
@@ -94,13 +111,15 @@ class _Constants(_MutableConstants):
 class _Globals(object):
     '''(INTERNAL) Some PyCocoa globals
     '''
-    App      = None  # set by .apps.App.__init__, not an NSApplication!
+    App      = None       # set by .apps.App.__init__, not an NSApplication!
     argv0    = 'PyCocoa'  # set by .nstypes.nsBundleRename and _allisting
-    Items    = {}  # set by .menus.Item.__init__, gotten by .menus.ns2Item
-    raiser   = False  # set by .apps.App.__init__
-    Tables   = []  # set by .tables.TableWindow.__init__
-    Windows  = {}  # set by .windows.Window.__init__
-    Xhandler = None  # set by .nstype.nsUncaughtExceptionHandler
+    Items    = {}         # set by .menus.Item.__init__, gotten by .menus.ns2Item
+    MenuBar  = None       # set by .menus.MenuBar.__init__
+#   Menus    = {}         # set by .menus._Menu_Type2._initM
+    raiser   = False      # set by .apps.App.__init__
+    Tables   = []         # set by .tables.TableWindow.__init__
+    Windows  = {}         # set by .windows.Window.__init__
+    Xhandler = None       # set by .nstype.nsUncaughtExceptionHandler
 
 
 class _Singletons(_MutableConstants):
@@ -159,6 +178,22 @@ class _Types(_MutableConstants):
 _Types = _Types()  # freeze
 
 
+def _TypeError(name, inst, func, classes=()):
+    '''(INTERNAL) Format a TypeError for func(inst, *classes).
+    '''
+    if classes:
+        c = [getattr(c, '__name__', str(c)) for c in classes]
+        c = ', '.join([''] + c)
+    else:
+        c = ''
+
+    if name:
+        t = 'not %s(%s%s): %r' % (func.__name__, name, c, inst)
+    else:
+        t = 'invalid %s(%r, %s)' % (func.__name__, inst, c)
+    return TypeError(t)
+
+
 class Cache2(dict):
     '''Two-level cache implemented by two C{dict}s, a primary
        level-1 C{dict} and a secondary level-2 C{dict}.
@@ -205,7 +240,7 @@ class Cache2(dict):
             self._dict2[key] = value
             # print(len(self), len(self._dict2))
 
-    @property
+    @property_RO
     def dict2(self):
         '''Get the secondary level-2 C{dict}.
         '''
@@ -226,7 +261,7 @@ class Cache2(dict):
         except KeyError:
             return default
 
-    @property
+    @property_RO
     def limit2(self):
         '''Get the secondary level-2 C{dict} size limit (C{int} or C{None}).
         '''
@@ -289,8 +324,11 @@ class missing(object):
     def __ne__(self, unused):  # avoid '!=' comparison
         raise SyntaxError("use 'is not %s'" % (self,))
 
+    def __repr__(self):
+        return missing.__class__.__name__
+
     def __str__(self):
-        return 'missing'
+        return missing.__class__.__name__
 
 
 DEFAULT_UNICODE = 'utf-8'    # default Python encoding
@@ -306,6 +344,7 @@ def aspect_ratio(width, height):
        @return: 2-Tuple (width, height) as (C{int}, C{int}) or C{None}.
 
        @example:
+
        >>> aspect_ratio(10, 15)
        (2, 3)
        >>> aspect_ratio(10.0, 15)
@@ -344,11 +383,12 @@ try:  # MCCABE 23
         '''
         return 'b%r' % (bytestr,)
 
-    def bytes2str(bytestr, dflt=missing):
+    def bytes2str(bytestr, dflt=missing, name=''):
         '''Convert C{bytes}/C{unicode} to C{str} if needed.
 
            @param bytestr: C{bytes}, C{str} or C{unicode}.
            @keyword dflt: Optional, default return value.
+           @keyword name: Optional name of I{bytestr} argument.
 
            @return: C{str} or I{dflt}.
 
@@ -362,17 +402,18 @@ try:  # MCCABE 23
             # return str(bytestr, DEFAULT_UNICODE)
             return bytestr.decode(DEFAULT_UNICODE)
         elif dflt is missing:
-            raise TypeError('%s: %r' % ('bytes2str', bytestr))
+            raise _TypeError(name, bytestr, bytes2str)
         return dflt
 
-    # iter(bytes) yields a 1-char str/byte in Python 2-
+    # iter(bytes) yields a 1-charsstr/byte in Python 2-
     iterbytes = iter
 
-    def str2bytes(bytestr, dflt=missing):
+    def str2bytes(bytestr, dflt=missing, name=''):
         '''Convert C{str} to C{bytes}/C{unicode} if needed.
 
            @param bytestr: C{bytes}, C{str} or C{unicode}.
            @keyword dflt: Optional, default return value.
+           @keyword name: Optional name of I{bytestr} argument.
 
            @return: C{bytes} or I{dflt}.
 
@@ -385,7 +426,7 @@ try:  # MCCABE 23
         elif isinstance(bytestr, _Bytes):
             return bytestr.encode(DEFAULT_UNICODE)
         elif dflt is missing:
-            raise TypeError('%s: %r' % ('str2bytes', bytestr))
+            raise _TypeError(name, bytestr, str2bytes)
         return dflt
 
 except NameError:  # Python 3+
@@ -395,11 +436,12 @@ except NameError:  # Python 3+
 
     bytes2repr = repr  # produces always b'...'
 
-    def bytes2str(bytestr, dflt=missing):  # PYCHOK expected
+    def bytes2str(bytestr, dflt=missing, name=''):  # PYCHOK expected
         '''Convert C{bytes} to C{str} if needed.
 
            @param bytestr: C{str} or C{bytes}.
            @keyword dflt: Optional, default return value.
+           @keyword name: Optional name of I{bytestr} argument.
 
            @return: C{str} or I{dflt}.
 
@@ -411,7 +453,7 @@ except NameError:  # Python 3+
         elif isinstance(bytestr, _Bytes):
             return bytestr.decode(DEFAULT_UNICODE)
         elif dflt is missing:
-            raise TypeError('%s: %r' % ('bytes2str', bytestr))
+            raise _TypeError(name, bytestr, bytes2str)
         return dflt
 
     # iter(bytes) yields an int in Python 3+
@@ -426,11 +468,12 @@ except NameError:  # Python 3+
         assert isinstance(b, bytes), 'iterbytes failed'
     del b
 
-    def str2bytes(bytestr, dflt=missing):  # PYCHOK expected
+    def str2bytes(bytestr, dflt=missing, name=''):  # PYCHOK expected
         '''Convert C{str} to C{bytes} if needed.
 
            @param bytestr: Original C{bytes} or C{str}.
            @keyword dflt: Optional, default return value.
+           @keyword name: Optional name of I{bytestr} argument.
 
            @return: C{bytes} or I{dflt}.
 
@@ -442,7 +485,7 @@ except NameError:  # Python 3+
         elif isinstance(bytestr, _Strs):
             return bytes(bytestr, DEFAULT_UNICODE)
         elif dflt is missing:
-            raise TypeError('%s: %r' % ('str2bytes', bytestr))
+            raise _TypeError(name, bytestr, str2bytes)
         return dflt
 
 _ByteStrs = _Bytes + _Strs  # bytes and/or str types
@@ -599,8 +642,7 @@ def isinstanceOf(inst, *classes, **name_missing):
     if name is missing:
         return None
 
-    t = ', '.join(getattr(c, '__name__', str(c)) for c in classes)
-    raise TypeError('%s not %s: %r' % (name, t, inst))
+    raise _TypeError(name, inst, isinstanceOf, classes)
 
 
 def lambda1(arg):
@@ -650,7 +692,7 @@ def name2pymethod(name_):
     '''
     m = name2py(name_)
     if not (m and m.replace('_', '').isalnum()):
-        raise ValueError('%s invalid: %r' % ('name_', name_))
+        raise ValueError('invalid %s: %r' % ('name_', name_))
     return m
 
 
@@ -808,9 +850,8 @@ def zSIstr(size, B='B', K=1024):
 __all__ = _exports(locals(), 'aspect_ratio', 'Cache2', 'clip',
                              'DEFAULT_UNICODE', 'flint', 'isinstanceOf',
                              'gcd', 'iterbytes', 'lambda1', 'missing',
-                             'printf', 'properties', 'property2',
-                             'type2strepr',
-                   starts=('bytes', 'inst', 'name2', 'str', 'z'))
+                             'printf', 'type2strepr',
+                   starts=('bytes', 'inst', 'name2', 'propert', 'str', 'z'))
 
 if __name__ == '__main__':
 

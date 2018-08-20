@@ -51,9 +51,9 @@ from platform import machine  # as machine
 
 # from getters import get_selectornameof
 from utils import bytes2str, _exports, inst2strepr, iterbytes, \
-                  missing, str2bytes
+                  missing, property_RO, str2bytes
 
-__version__ = '18.06.30'
+__version__ = '18.08.14'
 
 z = sizeof(c_void_p)
 if z == 4:
@@ -227,26 +227,26 @@ class RunLoop_t(Id_t):
 
 class SEL_t(ObjC_t):
     '''ObjC C{SELector/cmd} type, encoding C{b':'}.
-   '''
-    _name = None
-#   def __new__(cls, name=None):
-#       self = libobjc.sel_registerName(str2bytes(name))
+    '''
+    _name_ = None
+#   def __new__(cls, name_=None):
+#       self = libobjc.sel_registerName(str2bytes(name_))
 #       return self
 
     def __repr__(self):
         return '<%s(%s)>' % (self.__class__.__name__, self)
 
     def __str__(self):
-        return 'None' if self.value is None else bytes2str(self.name)
+        return 'None' if self.value is None else bytes2str(self.name_)
 
-    @property
-    def name(self):
-        if self._name is None:
+    @property_RO
+    def name_(self):
+        if self._name_ is None:
             if self.value is None:
                 raise ValueError('Null %r' % (self,))
             from getters import get_selectornameof
-            self._name = get_selectornameof(self)
-        return self._name
+            self._name_ = get_selectornameof(self) or 'SEL_t'
+        return self._name_
 
 
 Set_t    = c_void_p  # ObjC C{NSset} ctype
@@ -387,49 +387,49 @@ class NSRect4_t(NSRect_t):
     def __str__(self):
         return inst2strepr(self, str, 'x', 'y', 'width', 'height')
 
-    @property
+    @property_RO
     def bottom(self):
         '''Get the bottom y coordinate (C{float}).
         '''
         return self.y
 
-    @property
+    @property_RO
     def height(self):
         '''Get the height (C{float}).
         '''
         return self.size.height
 
-    @property
+    @property_RO
     def left(self):
         '''Get the lower x coordinate (C{float}).
         '''
         return self.x
 
-    @property
+    @property_RO
     def right(self):
         '''Get the upper x coordinate (C{float}).
         '''
         return self.x + self.width
 
-    @property
+    @property_RO
     def top(self):
         '''Get the upper y coordinate (C{float}).
         '''
         return self.y + self.heigth
 
-    @property
+    @property_RO
     def width(self):
         '''Get the width (C{float}).
         '''
         return self.size.width
 
-    @property
+    @property_RO
     def x(self):
         '''Get the x coordinate (C{float}).
         '''
         return self.origin.x
 
-    @property
+    @property_RO
     def y(self):
         '''Get the y coordinate (C{float}).
         '''

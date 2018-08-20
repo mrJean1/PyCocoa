@@ -21,9 +21,10 @@ from oslibs  import NSFontBoldMask, NSFontItalicMask, \
 from runtime import isObjCInstanceOf, release
 from strs    import Str
 from utils   import bytes2str, _ByteStrs, _Constants, _exports, \
-                    flint, _Ints, isinstanceOf, _Singletons, _Types
+                    flint, _Ints, isinstanceOf, property_RO, \
+                    _Singletons, _Types
 
-__version__ = '18.07.15'
+__version__ = '18.08.14'
 
 # <http://Developer.Apple.com/documentation/appkit/nsfont.weight>
 # _NSFontWeigthHeavy      = 13 ?
@@ -211,7 +212,7 @@ class Font(_Type0):
                 self._size   = flint(size)
                 raise FontError('no such %s: %s' % ('font', self._argstr()))
 
-        self.NS = ns
+        self._NS = ns  # _RO
         # <http://Developer.Apple.com/library/content/documentation/
         #  TextFonts/Conceptual/CocoaTextArchitecture/FontHandling/FontHandling.html>
         self._family = nsString2str(ns.familyName())
@@ -248,138 +249,138 @@ class Font(_Type0):
     def _isTrait(self, mask):
         return True if (self._traits & mask) else False
 
-    @property
+    @property_RO
     def count(self):
         '''Get the number of glyphs (C{int}).
         '''
         return self.NS.numberOfGlyphs()
 
-    @property
+    @property_RO
     def family(self):
         '''Get the font C{family} name (C{str}).
         '''
         return self._family
 
-    @property
+    @property_RO
     def height(self):
         '''Get the C{line} height (C{float} or C{int}).
 
-           @note: The C{height} is the sum of the tallest
-                  ascender, tallest descender and leading.
+           @note: The C{line} height is the sum of the tallest
+                  ascender, tallest descender and leading heights.
         '''
         # <http://Developer.Apple.com/library/content/documentation/
         #       Cocoa/Conceptual/TextLayout/Tasks/StringHeight.html>
         return self._height
 
-    @property
+    @property_RO
     def heightAscender(self):
         '''Get the C{ascender} height (C{float}).
         '''
         return self.NS.ascender()
 
-    @property
+    @property_RO
     def heightCap(self):
         '''Get the C{cap} height (C{float} or C{int}).
         '''
         return flint(self.NS.capHeight())
 
-    @property
+    @property_RO
     def heightDescender(self):
         '''Get the C{descender} height (C{float}).
         '''
         return self.NS.descender()
 
-    @property
+    @property_RO
     def heightLeading(self):
         '''Get the C{leading} height (C{float} or C{int}).
         '''
         return flint(self.NS.leading())
 
-    @property
+    @property_RO
     def heightUnderline(self):
         '''Get the C{underline} position (C{float}).
         '''
         return self.NS.underlinePosition()
 
-    @property
+    @property_RO
     def heightX(self):
         '''Get the C{x} height (C{float} or C{int}).
         '''
         return flint(self.NS.xHeight())
 
-    @property
+    @property_RO
     def isBold(self):
         '''Get the B{Bold} trait (C{bool}).
         '''
         return self._isTrait(NSFontBoldMask)
 
-    @property
+    @property_RO
     def isCompressed(self):
         '''Get the C{Compressed} trait (C{bool}).
         '''
         return self._isTrait(NSFontCompressedMask)
 
-    @property
+    @property_RO
     def isCondensed(self):
         '''Get the C{Condensed} trait (C{bool}).
         '''
         return self._isTrait(NSFontCondensedMask)
 
-    @property
+    @property_RO
     def isExpanded(self):
         '''Get the C{Expanded} trait (C{bool}).
         '''
         return self._isTrait(NSFontExpandedMask)
 
-    @property
+    @property_RO
     def isItalic(self):
         '''Get the I{Italic} trait (C{bool}).
         '''
         return self._isTrait(NSFontItalicMask)
 
-    @property
+    @property_RO
     def isMonoSpace(self):
         '''Get the C{MonoSpace} trait (C{bool}).
         '''
         return self._isTrait(NSFontMonoSpaceMask)
 
-    @property
+    @property_RO
     def isNarrow(self):
         '''Get the C{Narrow} trait (C{bool}).
         '''
         return self._isTrait(NSFontNarrowMask)
 
-    @property
+    @property_RO
     def isPoster(self):
         '''Get the C{Poster} trait (C{bool}).
         '''
         return self._isTrait(NSFontPosterMask)
 
-    @property
+    @property_RO
     def isSansSerif(self):
         '''Get the C{SansSerif} "trait" (C{bool}).
         '''
         return self._isTrait(NSFontSansSerifClass)
 
-    @property
+    @property_RO
     def isSmallCaps(self):
         '''Get the C{SmallCaps} trait (C{bool}).
         '''
         return self._isTrait(NSFontSmallCapsMask)
 
-    @property
+    @property_RO
     def isUnBold(self):
         '''Get the C{UnBold} "trait" (C{bool}).
         '''
         return self._isTrait(NSFontUnboldMask)
 
-    @property
+    @property_RO
     def isUnItalic(self):
         '''Get the C{UnItalic} "trait" (C{bool}).
         '''
         return self._isTrait(NSFontUnitalicMask)
 
-    @property
+    @property_RO
     def isVertical(self):
         '''Get the C{Vertical} "trait" (C{bool}).
         '''
@@ -397,8 +398,15 @@ class Font(_Type0):
         '''
         self._name = bytes2str(name)
 
-#   @property
+    @property_RO
+    def NS(self):
+        '''Get the ObjC instance (C{NSFont}).
+        '''
+        return self._NS
+
+#   @property_RO
 #   def NSfontDescriptor(self):
+#       '''Get the C{FontDecriptor} (C{NSDescriptor?}).
 #       return self.NS.fontDescriptor()
 
     def resize(self, size):
@@ -420,7 +428,7 @@ class Font(_Type0):
         return Font(ns or self.family, size=size, traits=self.traits,
                                                   weight=self.weight)
 
-    @property
+    @property_RO
     def size(self):
         '''Get the C{point size} of the font (C{float} or C{int}).
         '''
@@ -452,13 +460,13 @@ class Font(_Type0):
         '''
         return self.resize(self.size + points)
 
-    @property
+    @property_RO
     def slant(self):
         '''Get the italic angle (C{float}, C{int} or C{None}).
         '''
         return flint(self.NS.italicAngle()) if self.NS else None
 
-    @property
+    @property_RO
     def traits(self):
         '''Get all font traits (C{FontTrait}s mask).
         '''
@@ -479,7 +487,7 @@ class Font(_Type0):
             ts |= _traitsin(t)
         return Font(self.NS, traits=ts)
 
-    @property
+    @property_RO
     def vertical(self):
         '''Get the C{vertical} version of this font (L{Font} or C{None}).
         '''
@@ -490,7 +498,7 @@ class Font(_Type0):
             return Font(f)
         return None
 
-    @property
+    @property_RO
     def weight(self):
         '''Get the book C{weight} of the font (C{int} or C{None}).
         '''
@@ -531,7 +539,7 @@ class _Fonts(_Singletons):
     _TableHeader = None
     _Title       = None
 
-    @property
+    @property_RO
     def App(self):
         '''Get the C{UserFont}.
         '''
@@ -539,7 +547,7 @@ class _Fonts(_Singletons):
             _Fonts._App = Font(NSFont.userFontOfSize_(0))
         return self._App
 
-    @property
+    @property_RO
     def Bold(self):
         '''Get the C{BoldFont}.
         '''
@@ -547,7 +555,7 @@ class _Fonts(_Singletons):
             _Fonts._Bold = Font(NSFont.boldSystemFontOfSize_(0))
         return self._Bold
 
-    @property
+    @property_RO
     def BoldItalic(self):
         '''Get the C{BoldItalicFont}.
         '''
@@ -555,7 +563,7 @@ class _Fonts(_Singletons):
             _Fonts._BoldItalic = Font(NSFont.boldSystemFontOfSize_(0)).traitsup(FontTrait.Italic)
         return self._BoldItalic
 
-    @property
+    @property_RO
     def Italic(self):
         '''Get the C{ItalicFont}.
         '''
@@ -563,7 +571,7 @@ class _Fonts(_Singletons):
             _Fonts._Italic = Font(NSFont.systemFontOfSize_(0)).traitsup(FontTrait.Italic)
         return self._Italic
 
-    @property
+    @property_RO
     def Label(self):
         '''Get the C{LabelFont}.
         '''
@@ -571,7 +579,7 @@ class _Fonts(_Singletons):
             _Fonts._Label = Font(NSFont.labelFontOfSize_(0))
         return self._Label
 
-    @property
+    @property_RO
     def Menu(self):
         '''Get the C{MenuFont}.
         '''
@@ -579,7 +587,7 @@ class _Fonts(_Singletons):
             _Fonts._Menu = Font(NSFont.menuFontOfSize_(0))
         return self._Menu
 
-    @property
+    @property_RO
     def MenuBar(self):
         '''Get the C{MenuBarFont}.
         '''
@@ -587,7 +595,7 @@ class _Fonts(_Singletons):
             _Fonts._MenuBar = Font(NSFont.menuBarFontOfSize_(0))
         return self._MenuBar
 
-    @property
+    @property_RO
     def Message(self):
         '''Get the C{MessageFont}.
         '''
@@ -595,7 +603,7 @@ class _Fonts(_Singletons):
             _Fonts._Message = Font(NSFont.messageFontOfSize_(0))
         return self._Message
 
-    @property
+    @property_RO
     def MonoSpace(self):
         '''Get the C{MonoSpaceFont}.
         '''
@@ -603,7 +611,7 @@ class _Fonts(_Singletons):
             _Fonts._MonoSpace = Font(NSFont.userFixedPitchFontOfSize_(0))
         return self._MonoSpace
 
-    @property
+    @property_RO
     def Palette(self):
         '''Get the C{PaletteFont}.
         '''
@@ -611,7 +619,7 @@ class _Fonts(_Singletons):
             _Fonts._Palette = Font(NSFont.paletteFontOfSize_(0))
         return self._Palette
 
-    @property
+    @property_RO
     def System(self):
         '''Get the C{SystemFont}.
         '''
@@ -619,7 +627,7 @@ class _Fonts(_Singletons):
             _Fonts._System = Font(NSFont.systemFontOfSize_(0))
         return self._System
 
-    @property
+    @property_RO
     def TableData(self):
         '''Get the C{TableDataFont}.
         '''
@@ -627,7 +635,7 @@ class _Fonts(_Singletons):
             _Fonts._TableData = Font(NSMain.TableColumn.dataCell().font())
         return self._TableData
 
-    @property
+    @property_RO
     def TableHeader(self):
         '''Get the C{TableHeaderFont}.
         '''
@@ -635,7 +643,7 @@ class _Fonts(_Singletons):
             _Fonts._TableHeader = Font(NSMain.TableColumn.headerCell().font())
         return self._TableHeader
 
-    @property
+    @property_RO
     def Title(self):
         '''Get the C{TitleFont}.
         '''

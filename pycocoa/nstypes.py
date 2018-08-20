@@ -20,11 +20,11 @@ from runtime import isObjCInstanceOf, ObjCClass, ObjCInstance, release, \
                     retain, send_message, _Xargs
 from utils   import bytes2str, _ByteStrs, clip, _exports, _Globals, \
                     isinstanceOf, iterbytes, lambda1, missing, \
-                    _Singletons, _Types  # printf
+                    property_RO, _Singletons, _Types  # printf
 
 from os import linesep, path as os_path
 
-__version__ = '18.08.02'
+__version__ = '18.08.14'
 
 # some commonly used Foundation and Cocoa classes, described here
 # <http://OMZ-Software.com/pythonista/docs/ios/objc_util.html>
@@ -150,17 +150,17 @@ class NSDecimal(ObjCInstance):
     def __str__(self):
         return '%s(%s)' % (self.objc_classname, self.value)
 
-    @property
+    @property_RO
     def double(self):
         '''Get this L{NSDecimal} as a Python C{float}.
         '''
         return self.doubleValue()  # PYCHOK expected
 
-#   @property
+#   @property_RO
 #   def objc_classname(self):
 #       return self.__class__.__name__
 
-    @property
+    @property_RO
     def value(self):
         '''Get this L{NSDecimal} as a Python C{Decimal}.
         '''
@@ -191,7 +191,7 @@ class _NSMain(_Singletons):
 
     # all globals are properties to delay instantiation
 
-    @property
+    @property_RO
     def Application(self):
         '''Get the C{NSApplication.sharedApplication}.
         '''
@@ -199,7 +199,7 @@ class _NSMain(_Singletons):
             _NSMain._Application = retain(NSApplication.sharedApplication())
         return self._Application
 
-    @property
+    @property_RO
     def BooleanNO(self):
         '''Get C{NSBoolean(NO)}.
         '''
@@ -207,7 +207,7 @@ class _NSMain(_Singletons):
             _NSMain._BooleanNO = retain(NSBoolean(NO))
         return self._BooleanNO
 
-    @property
+    @property_RO
     def BooleanYES(self):
         '''Get C{NSBoolean(YES)}.
         '''
@@ -215,7 +215,7 @@ class _NSMain(_Singletons):
             _NSMain._BooleanYES = retain(NSBoolean(YES))
         return self._BooleanYES
 
-    @property
+    @property_RO
     def Bundle(self):
         '''Get the C{NSBundle.mainBundle}.
         '''
@@ -223,7 +223,7 @@ class _NSMain(_Singletons):
             _NSMain._Bundle = retain(NSBundle.mainBundle())
         return self._Bundle
 
-    @property
+    @property_RO
     def BundleName(self):
         '''Get the C{NS/CFBundleName}.
         '''
@@ -231,7 +231,7 @@ class _NSMain(_Singletons):
             _NSMain._BundleName = retain(NSStr('CFBundleName'))
         return self._BundleName
 
-    @property
+    @property_RO
     def FontManager(self):
         '''Get the C{NSFontManager.sharedFontManager}.
         '''
@@ -239,7 +239,7 @@ class _NSMain(_Singletons):
             _NSMain._FontManager = retain(NSFontManager.sharedFontManager())
         return self._FontManager
 
-    @property
+    @property_RO
     def LayoutManager(self):
         '''Get the C{NSLayoutManager}.
         '''
@@ -247,19 +247,19 @@ class _NSMain(_Singletons):
             _NSMain._LayoutManager = retain(NSLayoutManager.alloc().init())
         return self._LayoutManager
 
-    @property
+    @property_RO
     def nil(self):
         '''Get C{NSnil}.
         '''
         return self._nil
 
-    @property
+    @property_RO
     def NO_false(self):
         '''Get C{NSfalse/NO}.
         '''
         return self._NO_false
 
-    @property
+    @property_RO
     def Null(self):
         '''Get the C{NSNull}.
         '''
@@ -267,7 +267,7 @@ class _NSMain(_Singletons):
             _NSMain._Null = retain(NSNull.alloc().init())
         return self._Null
 
-    @property
+    @property_RO
     def PrintInfo(self):
         '''Get the C{NSPrintInfo}.
         '''
@@ -275,7 +275,7 @@ class _NSMain(_Singletons):
             _NSMain._PrintInfo = retain(NSPrintInfo.sharedPrintInfo())
         return self._PrintInfo
 
-    @property
+    @property_RO
     def Screen(self):
         '''Get the C{NSScreen.mainScreen}.
         '''
@@ -283,7 +283,7 @@ class _NSMain(_Singletons):
             _NSMain._Screen = retain(NSScreen.alloc().init().mainScreen())
         return self._Screen
 
-    @property
+    @property_RO
     def ScreenFrame(self):
         '''Get the C{NSScreen.mainScreen.frame}.
         '''
@@ -291,7 +291,7 @@ class _NSMain(_Singletons):
             _NSMain._ScreenFrame = self.Screen.frame()  # NSRect_t
         return self._ScreenFrame
 
-    @property
+    @property_RO
     def ScreenSize(self):
         '''Get the C{NSScreen.mainScreen.frame.size}.
         '''
@@ -299,7 +299,7 @@ class _NSMain(_Singletons):
             _NSMain._ScreenSize = self.ScreenFrame.size  # NSSize_t
         return self._ScreenSize
 
-    @property
+    @property_RO
     def TableColumn(self):
         '''Get a blank C{NSTableColumn}.
         '''
@@ -307,7 +307,7 @@ class _NSMain(_Singletons):
             _NSMain._TableColumn = retain(NSTableColumn.alloc().init())
         return self._TableColumn
 
-    @property
+    @property_RO
     def YES_true(self):
         '''Get C{NStrue/YES}.
         '''
@@ -340,13 +340,13 @@ class NSStr(ObjCInstance):
     def __str__(self):
         return '%s(%r)' % (self.objc_classname, clip(self.value))
 
-#   @property
+#   @property_RO
 #   def objc_classname(self):
 #       '''Get the ObjC class name (C{str}).
 #       '''
 #       return self.__class__.__name__
 
-    @property
+    @property_RO
     def value(self):
         '''Get the original string value (C{str}).
         '''

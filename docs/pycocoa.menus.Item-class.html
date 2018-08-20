@@ -75,8 +75,8 @@ bases._Type0 --+
 </pre>
 
 <hr />
-<p>Python menu <code>Item</code> Type, wrapping ObjC 
-  <code>NSMenuItem</code>.</p>
+<p>Python menu <a href="pycocoa.menus.Item-class.html" 
+  class="link">Item</a> Type, wrapping ObjC <code>NSMenuItem</code>.</p>
 
 <!-- ==================== INSTANCE METHODS ==================== -->
 <a name="section-InstanceMethods"></a>
@@ -179,7 +179,8 @@ bases._Type0 --+
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
         <a href="pycocoa.menus.Item-class.html#action" class="summary-name">action</a><br />
-      Get the <i>action</i> name (<code>str</code>).
+      Get the item's <code>action</code> (<code>str</code> or Python 
+      <code>callable</code>).
     </td>
   </tr>
 <tr>
@@ -187,7 +188,8 @@ bases._Type0 --+
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
         <a href="pycocoa.menus.Item-class.html#allowsKeyWhenHidden" class="summary-name">allowsKeyWhenHidden</a><br />
-      Get the item's <i>allows</i> property (<code>bool</code>).
+      Get the item's <code>allowsKeysWhenHidden</code> property 
+      (<code>bool</code>).
     </td>
   </tr>
 <tr>
@@ -195,7 +197,8 @@ bases._Type0 --+
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
         <a href="pycocoa.menus.Item-class.html#alt" class="summary-name">alt</a><br />
-      Get the <i>alt</i> or <i>option</i> key modifier (<code>bool</code>).
+      Get the <code>alt</code> or <code>option</code> key modifier 
+      (<code>bool</code>).
     </td>
   </tr>
 <tr>
@@ -203,7 +206,7 @@ bases._Type0 --+
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
         <a href="pycocoa.menus.Item-class.html#cmd" class="summary-name">cmd</a><br />
-      Get the <i>command</i> key modifier (<code>bool</code>).
+      Get the <code>command</code> key modifier (<code>bool</code>).
     </td>
   </tr>
 <tr>
@@ -211,7 +214,7 @@ bases._Type0 --+
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
         <a href="pycocoa.menus.Item-class.html#ctrl" class="summary-name">ctrl</a><br />
-      Get the <i>control</i> key modifier (<code>bool</code>).
+      Get the <code>control</code> key modifier (<code>bool</code>).
     </td>
   </tr>
 <tr>
@@ -219,8 +222,9 @@ bases._Type0 --+
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
         <a href="pycocoa.menus.Item-class.html#font" class="summary-name">font</a><br />
-      Get the item's <i>font</i> (<a href="pycocoa.fonts.Font-class.html" 
-      class="link">Font</a>) or <code>None</code>.
+      Get the item's <code>font</code> (<a 
+      href="pycocoa.fonts.Font-class.html" class="link">Font</a>) or 
+      <code>None</code>.
     </td>
   </tr>
 <tr>
@@ -228,7 +232,7 @@ bases._Type0 --+
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
         <a href="pycocoa.menus.Item-class.html#hasSubmenu" class="summary-name">hasSubmenu</a><br />
-      Has this item's a <i>submenu</i> (<code>bool</code>).
+      Has this item a <code>submenu</code> (<code>bool</code>).
     </td>
   </tr>
 <tr>
@@ -236,7 +240,7 @@ bases._Type0 --+
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
         <a href="pycocoa.menus.Item-class.html#indentationLevel" class="summary-name">indentationLevel</a><br />
-      Get the item's <i>indentation</i> (<code>int</code>).
+      Get the item's <code>indentation</code> (<code>int</code>).
     </td>
   </tr>
 <tr>
@@ -244,7 +248,7 @@ bases._Type0 --+
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
         <a href="pycocoa.menus.Item-class.html#isAlternate" class="summary-name">isAlternate</a><br />
-      Get the item's <i>Altenate</i> property (<code>bool</code>).
+      Get the item's <code>Alternate</code> property (<code>bool</code>).
     </td>
   </tr>
 <tr>
@@ -252,7 +256,7 @@ bases._Type0 --+
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
         <a href="pycocoa.menus.Item-class.html#isEnabled" class="summary-name">isEnabled</a><br />
-      Get the item's <i>Enabled</i> property (<code>bool</code>).
+      Get the item's <code>Enabled</code> property (<code>bool</code>).
     </td>
   </tr>
 <tr>
@@ -260,7 +264,7 @@ bases._Type0 --+
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
         <a href="pycocoa.menus.Item-class.html#isHidden" class="summary-name">isHidden</a><br />
-      Get the item's <i>Hidden</i> property (<code>bool</code>).
+      Get the item's <code>Hidden</code> property (<code>bool</code>).
     </td>
   </tr>
 <tr>
@@ -268,7 +272,8 @@ bases._Type0 --+
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
         <a href="pycocoa.menus.Item-class.html#isHighlighted" class="summary-name">isHighlighted</a><br />
-      Get the item's <i>Highlighted</i> property (<code>bool</code>).
+      Get the item's <code>isHighlighted</code> property 
+      (<code>bool</code>).
     </td>
   </tr>
 <tr>
@@ -276,7 +281,7 @@ bases._Type0 --+
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
         <a href="pycocoa.menus.Item-class.html#keyEquivalent" class="summary-name">keyEquivalent</a><br />
-      Get the item's shortcut key (<code>str</code>).
+      Get the item's shortcut <code>key</code> (<code>str</code>).
     </td>
   </tr>
 <tr>
@@ -284,7 +289,7 @@ bases._Type0 --+
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
         <a href="pycocoa.menus.Item-class.html#key" class="summary-name">key</a><br />
-      Get the item's shortcut key (<code>str</code>).
+      Get the item's shortcut <code>key</code> (<code>str</code>).
     </td>
   </tr>
 <tr>
@@ -292,7 +297,8 @@ bases._Type0 --+
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
         <a href="pycocoa.menus.Item-class.html#keyEquivalentModifiers" class="summary-name">keyEquivalentModifiers</a><br />
-      Get the item's shortcut key modifiers (<code>dict</code>).
+      Get the item's shortcut key <code>modifiers</code> 
+      (<code>dict</code>), see <code>Item.__init__</code>.
     </td>
   </tr>
 <tr>
@@ -300,7 +306,8 @@ bases._Type0 --+
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
         <a href="pycocoa.menus.Item-class.html#keyModifiers" class="summary-name">keyModifiers</a><br />
-      Get the item's shortcut key modifiers (<code>dict</code>).
+      Get the item's shortcut key <code>modifiers</code> 
+      (<code>dict</code>), see <code>Item.__init__</code>.
     </td>
   </tr>
 <tr>
@@ -316,18 +323,8 @@ bases._Type0 --+
     <td width="15%" align="right" valign="top" class="summary">
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
-        <a href="pycocoa.menus.Item-class.html#parent" class="summary-name">parent</a><br />
-      Get a <i>submenu</i> item's parent item (<a 
-      href="pycocoa.menus.Item-class.html" class="link">Item</a>) or 
-      <code>None</code>.
-    </td>
-  </tr>
-<tr>
-    <td width="15%" align="right" valign="top" class="summary">
-      <span class="summary-type">&nbsp;</span>
-    </td><td class="summary">
         <a href="pycocoa.menus.Item-class.html#shift" class="summary-name">shift</a><br />
-      Get the <i>shift</i> key modifier (<code>bool</code>).
+      Get the <code>shift</code> key modifier (<code>bool</code>).
     </td>
   </tr>
 <tr>
@@ -335,7 +332,7 @@ bases._Type0 --+
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
         <a href="pycocoa.menus.Item-class.html#state" class="summary-name">state</a><br />
-      Get the item's <i>state</i> (<code>int</code>).
+      Get the item's <code>state</code> (<code>int</code>).
     </td>
   </tr>
 <tr>
@@ -343,7 +340,7 @@ bases._Type0 --+
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
         <a href="pycocoa.menus.Item-class.html#subMenu" class="summary-name">subMenu</a><br />
-      Get the item's <i>submenu</i> (<code>Menu</code>) or 
+      Get the item's <code>submenu</code> (<code>Menu</code>) or 
       <code>None</code>.
     </td>
   </tr>
@@ -351,18 +348,27 @@ bases._Type0 --+
     <td width="15%" align="right" valign="top" class="summary">
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
+        <a href="pycocoa.menus.Item-class.html#tag" class="summary-name">tag</a><br />
+      Get the <a href="pycocoa.menus.Item-class.html" class="link">Item</a>
+      tag (<code>int</code>) or <code>None</code>.
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
         <a href="pycocoa.menus.Item-class.html#toolTip" class="summary-name">toolTip</a><br />
-      Get the item's <i>toolTip</i> (<code>str</code>) or <code>''</code>.
+      Get the item's <code>toolTip</code> (<code>str</code>) or 
+      <code>''</code>.
     </td>
   </tr>
   <tr>
     <td colspan="2" class="summary">
     <p class="indent-wrapped-lines"><b>Inherited from <code>_Item_Type2</code></b>:
       <code>isSeparator</code>,
-      <code>nsMenu</code>
+      <code>parent</code>
       </p>
     <p class="indent-wrapped-lines"><b>Inherited from <code>bases._Type2</code></b>:
-      <code>tag</code>,
       <code>title</code>
       </p>
     <p class="indent-wrapped-lines"><b>Inherited from <code>bases._Type1</code></b>:
@@ -416,38 +422,45 @@ bases._Type0 --+
   <dl class="fields">
     <dt>Parameters:</dt>
     <dd><ul class="nomargin-top">
-        <li><strong class="pname"><code>title</code></strong> - Item title (<code>str</code>).</li>
-        <li><strong class="pname"><code>action</code></strong> - Callback method (<code>str ending with ':' or _'</code>, 
-          <code>callable</code> or <code>SEL_t</code>) or 
-          <code>None</code>, see note.</li>
+        <li><strong class="pname"><code>title</code></strong> - The item's title (<code>str</code>).</li>
+        <li><strong class="pname"><code>action</code></strong> - Callback name (<code>str</code> ending with ':' or '_'), a Python
+          <code>callable</code>, an ObjC <code>selector</code> 
+          (<code>SEL_t</code>) or <code>None</code>, see <b>Notes</b>.</li>
         <li><strong class="pname"><code>key</code></strong> - The shortcut key, if any (<code>str</code> or 
           <code>bytes</code>).</li>
-        <li><strong class="pname"><code>alt</code></strong> - Hold <code>alt</code> or <code>option</code> down with <i>key</i>
-          (bool).</li>
-        <li><strong class="pname"><code>cmd</code></strong> - Hold <code>command</code> down with <i>key</i> (bool).</li>
-        <li><strong class="pname"><code>cntl</code></strong> - Hold <code>control</code> down with <i>key</i> (bool).</li>
-        <li><strong class="pname"><code>shift</code></strong> - Hold <code>shift</code> down with <i>key</i> (bool).</li>
-        <li><strong class="pname"><code>props</code></strong> - Optional, settable <a href="pycocoa.menus.Item-class.html" 
+        <li><strong class="pname"><code>alt</code></strong> - Hold <code>alt</code> or <code>option</code> key down with 
+          <i>key</i> (bool).</li>
+        <li><strong class="pname"><code>cmd</code></strong> - Hold <code>command</code> key down with <i>key</i> (bool).</li>
+        <li><strong class="pname"><code>cntl</code></strong> - Hold <code>control</code> key down with <i>key</i> (bool).</li>
+        <li><strong class="pname"><code>shift</code></strong> - Hold <code>shift</code> key down with <i>key</i> (bool).</li>
+        <li><strong class="pname"><code>props</code></strong> - Additional, settable <a href="pycocoa.menus.Item-class.html" 
           class="link">Item</a> <i>property=value</i> pairs.</li>
     </ul></dd>
     <dt>Raises:</dt>
     <dd><ul class="nomargin-top">
-        <li><code><strong class='fraise'>TypeError</strong></code> - Callable <i>action</i> not a method or function.</li>
-        <li><code><strong class='fraise'>ValueError</strong></code> - Invalid <i>action</i> or <i>title</i> for <code>None</code> 
+        <li><code><strong class='fraise'>TypeError</strong></code> - Invalid <i>action</i> or invalid Python <code>callable</code> 
+        <i>action</i> or <code>callable</code> signature, see <b>Notes</b>.</li>
+        <li><code><strong class='fraise'>ValueError</strong></code> - Invalid <i>action</i> or invalid <i>title</i> for <code>None</code>
         <i>action</i>.</li>
     </ul></dd>
     <dt>Overrides:
         object.__init__
     </dt>
   </dl>
-<div class="fields">      <p><strong>Note:</strong>
-        A <code>None</code> <i>action</i> is set to the 
-        <i>menu.&lt;title&gt;</i> with spaces and dots removed, see 
-        function <a href="pycocoa.menus-module.html#title2action" 
-        class="link">title2action</a>. A callable <i>action</i> must be a 
-        (bound) Python method with signature <code>(self, item, ...)</code>
-        or a Python function with signature <code>(item, ...)</code>.
-      </p>
+<div class="fields">      <strong>Notes:</strong>
+      <ul class="nomargin-top">
+        <li>
+        A <code>None</code> <i>action</i> is set to the method name 
+        <code>menu&lt;title&gt;_</code>, see function <a 
+        href="pycocoa.menus-module.html#title2action" 
+        class="link">title2action</a>.
+        </li>
+        <li>
+        A Python <code>callable</code> <i>action</i> must be a (bound) 
+        Python method with signature <code>(self, item, ...)</code> or a 
+        Python function with signature <code>(item, ...)</code>.
+        </li>
+      </ul>
 </div></td></tr></table>
 </div>
 <a name="__str__"></a>
@@ -490,11 +503,19 @@ bases._Type0 --+
        cellspacing="0" width="100%" bgcolor="white">
 <tr><td>
   <h3 class="epydoc">action</h3>
-  <p>Get the <i>action</i> name (<code>str</code>).</p>
+  <p>Get the item's <code>action</code> (<code>str</code> or Python 
+  <code>callable</code>).</p>
   <dl class="fields">
     <dt>Get Method:</dt>
     <dd class="value"><span class="summary-sig">action(<span class="summary-sig-arg">self</span>)</span>
-        - Get the <i>action</i> name (<code>str</code>).
+        - Get the item's <code>action</code> (<code>str</code> or Python 
+<code>callable</code>).
+    </dd>
+    <dt>Set Method:</dt>
+    <dd class="value"><span class="summary-sig">action(<span class="summary-sig-arg">self</span>,
+        <span class="summary-sig-arg">action</span>)</span>
+        - Set the item's <code>action</code> (<code>str</code> or Python 
+<code>callable</code>), see <code>Item.__init__</code> <b>Notes</b>.
     </dd>
   </dl>
 </td></tr></table>
@@ -505,16 +526,19 @@ bases._Type0 --+
        cellspacing="0" width="100%" bgcolor="white">
 <tr><td>
   <h3 class="epydoc">allowsKeyWhenHidden</h3>
-  <p>Get the item's <i>allows</i> property (<code>bool</code>).</p>
+  <p>Get the item's <code>allowsKeysWhenHidden</code> property 
+  (<code>bool</code>).</p>
   <dl class="fields">
     <dt>Get Method:</dt>
     <dd class="value"><span class="summary-sig">allowsKeyWhenHidden(<span class="summary-sig-arg">self</span>)</span>
-        - Get the item's <i>allows</i> property (<code>bool</code>).
+        - Get the item's <code>allowsKeysWhenHidden</code> property 
+(<code>bool</code>).
     </dd>
     <dt>Set Method:</dt>
     <dd class="value"><span class="summary-sig">allowsKeyWhenHidden(<span class="summary-sig-arg">self</span>,
         <span class="summary-sig-arg">allows</span>)</span>
-        - Set the item's <i>allows</i> property (<code>bool</code>).
+        - Set the item's <code>allowsKeysWhenHidden</code> property 
+(<code>bool</code>).
     </dd>
   </dl>
 </td></tr></table>
@@ -525,12 +549,18 @@ bases._Type0 --+
        cellspacing="0" width="100%" bgcolor="white">
 <tr><td>
   <h3 class="epydoc">alt</h3>
-  <p>Get the <i>alt</i> or <i>option</i> key modifier 
+  <p>Get the <code>alt</code> or <code>option</code> key modifier 
   (<code>bool</code>).</p>
   <dl class="fields">
     <dt>Get Method:</dt>
     <dd class="value"><span class="summary-sig">alt(<span class="summary-sig-arg">self</span>)</span>
-        - Get the <i>alt</i> or <i>option</i> key modifier (<code>bool</code>).
+        - Get the <code>alt</code> or <code>option</code> key modifier 
+(<code>bool</code>).
+    </dd>
+    <dt>Set Method:</dt>
+    <dd class="value"><span class="summary-sig">Read_Only(<span class="summary-sig-arg">self</span>,
+        <span class="summary-sig-arg">ignored</span>)</span>
+        - Throws an <code>AttributeError</code>, always.
     </dd>
   </dl>
 </td></tr></table>
@@ -541,11 +571,16 @@ bases._Type0 --+
        cellspacing="0" width="100%" bgcolor="white">
 <tr><td>
   <h3 class="epydoc">cmd</h3>
-  <p>Get the <i>command</i> key modifier (<code>bool</code>).</p>
+  <p>Get the <code>command</code> key modifier (<code>bool</code>).</p>
   <dl class="fields">
     <dt>Get Method:</dt>
     <dd class="value"><span class="summary-sig">cmd(<span class="summary-sig-arg">self</span>)</span>
-        - Get the <i>command</i> key modifier (<code>bool</code>).
+        - Get the <code>command</code> key modifier (<code>bool</code>).
+    </dd>
+    <dt>Set Method:</dt>
+    <dd class="value"><span class="summary-sig">Read_Only(<span class="summary-sig-arg">self</span>,
+        <span class="summary-sig-arg">ignored</span>)</span>
+        - Throws an <code>AttributeError</code>, always.
     </dd>
   </dl>
 </td></tr></table>
@@ -556,11 +591,16 @@ bases._Type0 --+
        cellspacing="0" width="100%" bgcolor="white">
 <tr><td>
   <h3 class="epydoc">ctrl</h3>
-  <p>Get the <i>control</i> key modifier (<code>bool</code>).</p>
+  <p>Get the <code>control</code> key modifier (<code>bool</code>).</p>
   <dl class="fields">
     <dt>Get Method:</dt>
     <dd class="value"><span class="summary-sig">ctrl(<span class="summary-sig-arg">self</span>)</span>
-        - Get the <i>control</i> key modifier (<code>bool</code>).
+        - Get the <code>control</code> key modifier (<code>bool</code>).
+    </dd>
+    <dt>Set Method:</dt>
+    <dd class="value"><span class="summary-sig">Read_Only(<span class="summary-sig-arg">self</span>,
+        <span class="summary-sig-arg">ignored</span>)</span>
+        - Throws an <code>AttributeError</code>, always.
     </dd>
   </dl>
 </td></tr></table>
@@ -571,18 +611,19 @@ bases._Type0 --+
        cellspacing="0" width="100%" bgcolor="white">
 <tr><td>
   <h3 class="epydoc">font</h3>
-  <p>Get the item's <i>font</i> (<a href="pycocoa.fonts.Font-class.html" 
-  class="link">Font</a>) or <code>None</code>.</p>
+  <p>Get the item's <code>font</code> (<a 
+  href="pycocoa.fonts.Font-class.html" class="link">Font</a>) or 
+  <code>None</code>.</p>
   <dl class="fields">
     <dt>Get Method:</dt>
     <dd class="value"><span class="summary-sig">font(<span class="summary-sig-arg">self</span>)</span>
-        - Get the item's <i>font</i> (<a href="pycocoa.fonts.Font-class.html" 
+        - Get the item's <code>font</code> (<a href="pycocoa.fonts.Font-class.html" 
 class="link">Font</a>) or <code>None</code>.
     </dd>
     <dt>Set Method:</dt>
     <dd class="value"><span class="summary-sig">font(<span class="summary-sig-arg">self</span>,
         <span class="summary-sig-arg">font</span>)</span>
-        - Set the item's <i>font</i> (<a href="pycocoa.fonts.Font-class.html" 
+        - Set the item's <code>font</code> (<a href="pycocoa.fonts.Font-class.html" 
 class="link">Font</a>).
     </dd>
   </dl>
@@ -594,11 +635,16 @@ class="link">Font</a>).
        cellspacing="0" width="100%" bgcolor="white">
 <tr><td>
   <h3 class="epydoc">hasSubmenu</h3>
-  <p>Has this item's a <i>submenu</i> (<code>bool</code>).</p>
+  <p>Has this item a <code>submenu</code> (<code>bool</code>).</p>
   <dl class="fields">
     <dt>Get Method:</dt>
     <dd class="value"><span class="summary-sig">hasSubmenu(<span class="summary-sig-arg">self</span>)</span>
-        - Has this item's a <i>submenu</i> (<code>bool</code>).
+        - Has this item a <code>submenu</code> (<code>bool</code>).
+    </dd>
+    <dt>Set Method:</dt>
+    <dd class="value"><span class="summary-sig">Read_Only(<span class="summary-sig-arg">self</span>,
+        <span class="summary-sig-arg">ignored</span>)</span>
+        - Throws an <code>AttributeError</code>, always.
     </dd>
   </dl>
 </td></tr></table>
@@ -609,16 +655,16 @@ class="link">Font</a>).
        cellspacing="0" width="100%" bgcolor="white">
 <tr><td>
   <h3 class="epydoc">indentationLevel</h3>
-  <p>Get the item's <i>indentation</i> (<code>int</code>).</p>
+  <p>Get the item's <code>indentation</code> (<code>int</code>).</p>
   <dl class="fields">
     <dt>Get Method:</dt>
     <dd class="value"><span class="summary-sig">indentationLevel(<span class="summary-sig-arg">self</span>)</span>
-        - Get the item's <i>indentation</i> (<code>int</code>).
+        - Get the item's <code>indentation</code> (<code>int</code>).
     </dd>
     <dt>Set Method:</dt>
     <dd class="value"><span class="summary-sig">indentationLevel(<span class="summary-sig-arg">self</span>,
         <span class="summary-sig-arg">indent</span>)</span>
-        - Set the item's <i>indentation</i> (<code>int</code>).
+        - Set the item's <code>indentation</code> (<code>int</code>).
     </dd>
   </dl>
 </td></tr></table>
@@ -629,16 +675,17 @@ class="link">Font</a>).
        cellspacing="0" width="100%" bgcolor="white">
 <tr><td>
   <h3 class="epydoc">isAlternate</h3>
-  <p>Get the item's <i>Altenate</i> property (<code>bool</code>).</p>
+  <p>Get the item's <code>Alternate</code> property 
+  (<code>bool</code>).</p>
   <dl class="fields">
     <dt>Get Method:</dt>
     <dd class="value"><span class="summary-sig">isAlternate(<span class="summary-sig-arg">self</span>)</span>
-        - Get the item's <i>Altenate</i> property (<code>bool</code>).
+        - Get the item's <code>Alternate</code> property (<code>bool</code>).
     </dd>
     <dt>Set Method:</dt>
     <dd class="value"><span class="summary-sig">isAlternate(<span class="summary-sig-arg">self</span>,
         <span class="summary-sig-arg">alternate</span>)</span>
-        - Set the item's <i>Altenate</i> property (<code>bool</code>).
+        - Set the item's <code>Alternate</code> property (<code>bool</code>).
     </dd>
   </dl>
 </td></tr></table>
@@ -649,16 +696,16 @@ class="link">Font</a>).
        cellspacing="0" width="100%" bgcolor="white">
 <tr><td>
   <h3 class="epydoc">isEnabled</h3>
-  <p>Get the item's <i>Enabled</i> property (<code>bool</code>).</p>
+  <p>Get the item's <code>Enabled</code> property (<code>bool</code>).</p>
   <dl class="fields">
     <dt>Get Method:</dt>
     <dd class="value"><span class="summary-sig">isEnabled(<span class="summary-sig-arg">self</span>)</span>
-        - Get the item's <i>Enabled</i> property (<code>bool</code>).
+        - Get the item's <code>Enabled</code> property (<code>bool</code>).
     </dd>
     <dt>Set Method:</dt>
     <dd class="value"><span class="summary-sig">isEnabled(<span class="summary-sig-arg">self</span>,
         <span class="summary-sig-arg">enable</span>)</span>
-        - Set the item's <i>Enabled</i> property (<code>bool</code>).
+        - Set the item's <code>Enabled</code> property (<code>bool</code>).
     </dd>
   </dl>
 </td></tr></table>
@@ -669,16 +716,16 @@ class="link">Font</a>).
        cellspacing="0" width="100%" bgcolor="white">
 <tr><td>
   <h3 class="epydoc">isHidden</h3>
-  <p>Get the item's <i>Hidden</i> property (<code>bool</code>).</p>
+  <p>Get the item's <code>Hidden</code> property (<code>bool</code>).</p>
   <dl class="fields">
     <dt>Get Method:</dt>
     <dd class="value"><span class="summary-sig">isHidden(<span class="summary-sig-arg">self</span>)</span>
-        - Get the item's <i>Hidden</i> property (<code>bool</code>).
+        - Get the item's <code>Hidden</code> property (<code>bool</code>).
     </dd>
     <dt>Set Method:</dt>
     <dd class="value"><span class="summary-sig">isHidden(<span class="summary-sig-arg">self</span>,
         <span class="summary-sig-arg">hidden</span>)</span>
-        - Set the item's <i>Hidden</i> property (<code>bool</code>).
+        - Set the item's <code>Hidden</code> property (<code>bool</code>).
     </dd>
   </dl>
 </td></tr></table>
@@ -689,11 +736,17 @@ class="link">Font</a>).
        cellspacing="0" width="100%" bgcolor="white">
 <tr><td>
   <h3 class="epydoc">isHighlighted</h3>
-  <p>Get the item's <i>Highlighted</i> property (<code>bool</code>).</p>
+  <p>Get the item's <code>isHighlighted</code> property 
+  (<code>bool</code>).</p>
   <dl class="fields">
     <dt>Get Method:</dt>
     <dd class="value"><span class="summary-sig">isHighlighted(<span class="summary-sig-arg">self</span>)</span>
-        - Get the item's <i>Highlighted</i> property (<code>bool</code>).
+        - Get the item's <code>isHighlighted</code> property (<code>bool</code>).
+    </dd>
+    <dt>Set Method:</dt>
+    <dd class="value"><span class="summary-sig">Read_Only(<span class="summary-sig-arg">self</span>,
+        <span class="summary-sig-arg">ignored</span>)</span>
+        - Throws an <code>AttributeError</code>, always.
     </dd>
   </dl>
 </td></tr></table>
@@ -704,11 +757,11 @@ class="link">Font</a>).
        cellspacing="0" width="100%" bgcolor="white">
 <tr><td>
   <h3 class="epydoc">keyEquivalent</h3>
-  <p>Get the item's shortcut key (<code>str</code>).</p>
+  <p>Get the item's shortcut <code>key</code> (<code>str</code>).</p>
   <dl class="fields">
     <dt>Get Method:</dt>
     <dd class="value"><span class="summary-sig">key(<span class="summary-sig-arg">self</span>)</span>
-        - Get the item's shortcut key (<code>str</code>).
+        - Get the item's shortcut <code>key</code> (<code>str</code>).
     </dd>
   </dl>
 </td></tr></table>
@@ -719,16 +772,16 @@ class="link">Font</a>).
        cellspacing="0" width="100%" bgcolor="white">
 <tr><td>
   <h3 class="epydoc">key</h3>
-  <p>Get the item's shortcut key (<code>str</code>).</p>
+  <p>Get the item's shortcut <code>key</code> (<code>str</code>).</p>
   <dl class="fields">
     <dt>Get Method:</dt>
     <dd class="value"><span class="summary-sig">key(<span class="summary-sig-arg">self</span>)</span>
-        - Get the item's shortcut key (<code>str</code>).
+        - Get the item's shortcut <code>key</code> (<code>str</code>).
     </dd>
     <dt>Set Method:</dt>
     <dd class="value"><span class="summary-sig">key(<span class="summary-sig-arg">self</span>,
         <span class="summary-sig-arg">key</span>)</span>
-        - Set the item's shortcut key (<code>str</code>).
+        - Set the item's shortcut <code>key</code> (<code>str</code>).
     </dd>
   </dl>
 </td></tr></table>
@@ -739,11 +792,13 @@ class="link">Font</a>).
        cellspacing="0" width="100%" bgcolor="white">
 <tr><td>
   <h3 class="epydoc">keyEquivalentModifiers</h3>
-  <p>Get the item's shortcut key modifiers (<code>dict</code>).</p>
+  <p>Get the item's shortcut key <code>modifiers</code> 
+  (<code>dict</code>), see <code>Item.__init__</code>.</p>
   <dl class="fields">
     <dt>Get Method:</dt>
     <dd class="value"><span class="summary-sig">keyModifiers(<span class="summary-sig-arg">self</span>)</span>
-        - Get the item's shortcut key modifiers (<code>dict</code>).
+        - Get the item's shortcut key <code>modifiers</code> (<code>dict</code>), see
+<code>Item.__init__</code>.
     </dd>
   </dl>
 </td></tr></table>
@@ -754,16 +809,19 @@ class="link">Font</a>).
        cellspacing="0" width="100%" bgcolor="white">
 <tr><td>
   <h3 class="epydoc">keyModifiers</h3>
-  <p>Get the item's shortcut key modifiers (<code>dict</code>).</p>
+  <p>Get the item's shortcut key <code>modifiers</code> 
+  (<code>dict</code>), see <code>Item.__init__</code>.</p>
   <dl class="fields">
     <dt>Get Method:</dt>
     <dd class="value"><span class="summary-sig">keyModifiers(<span class="summary-sig-arg">self</span>)</span>
-        - Get the item's shortcut key modifiers (<code>dict</code>).
+        - Get the item's shortcut key <code>modifiers</code> (<code>dict</code>), see
+<code>Item.__init__</code>.
     </dd>
     <dt>Set Method:</dt>
     <dd class="value"><span class="summary-sig">keyModifiers(<span class="summary-sig-arg">self</span>,
         <span class="summary-sig-arg">modifiers</span>)</span>
-        - Get/set the item's shortcut key modifiers (<code>dict</code>).
+        - Set the item's shortcut key <code>modifiers</code> (<code>dict</code>), see
+<code>Item.__init__</code>.
     </dd>
   </dl>
 </td></tr></table>
@@ -783,28 +841,9 @@ class="link">Font</a>).
 default target, <code>_NSApplicationDelegate</code>.
     </dd>
     <dt>Set Method:</dt>
-    <dd class="value"><span class="summary-sig">nsTarget(<span class="summary-sig-arg">self</span>,
-        <span class="summary-sig-arg">ns_target</span>)</span>
-        - Set the item's <i>target</i> (<code>NS...</code>).
-    </dd>
-  </dl>
-</td></tr></table>
-</div>
-<a name="parent"></a>
-<div>
-<table class="details" border="1" cellpadding="3"
-       cellspacing="0" width="100%" bgcolor="white">
-<tr><td>
-  <h3 class="epydoc">parent</h3>
-  <p>Get a <i>submenu</i> item's parent item (<a 
-  href="pycocoa.menus.Item-class.html" class="link">Item</a>) or 
-  <code>None</code>.</p>
-  <dl class="fields">
-    <dt>Get Method:</dt>
-    <dd class="value"><span class="summary-sig">parent(<span class="summary-sig-arg">self</span>)</span>
-        - Get a <i>submenu</i> item's parent item (<a 
-href="pycocoa.menus.Item-class.html" class="link">Item</a>) or 
-<code>None</code>.
+    <dd class="value"><span class="summary-sig">Read_Only(<span class="summary-sig-arg">self</span>,
+        <span class="summary-sig-arg">ignored</span>)</span>
+        - Throws an <code>AttributeError</code>, always.
     </dd>
   </dl>
 </td></tr></table>
@@ -815,11 +854,16 @@ href="pycocoa.menus.Item-class.html" class="link">Item</a>) or
        cellspacing="0" width="100%" bgcolor="white">
 <tr><td>
   <h3 class="epydoc">shift</h3>
-  <p>Get the <i>shift</i> key modifier (<code>bool</code>).</p>
+  <p>Get the <code>shift</code> key modifier (<code>bool</code>).</p>
   <dl class="fields">
     <dt>Get Method:</dt>
     <dd class="value"><span class="summary-sig">shift(<span class="summary-sig-arg">self</span>)</span>
-        - Get the <i>shift</i> key modifier (<code>bool</code>).
+        - Get the <code>shift</code> key modifier (<code>bool</code>).
+    </dd>
+    <dt>Set Method:</dt>
+    <dd class="value"><span class="summary-sig">Read_Only(<span class="summary-sig-arg">self</span>,
+        <span class="summary-sig-arg">ignored</span>)</span>
+        - Throws an <code>AttributeError</code>, always.
     </dd>
   </dl>
 </td></tr></table>
@@ -830,16 +874,16 @@ href="pycocoa.menus.Item-class.html" class="link">Item</a>) or
        cellspacing="0" width="100%" bgcolor="white">
 <tr><td>
   <h3 class="epydoc">state</h3>
-  <p>Get the item's <i>state</i> (<code>int</code>).</p>
+  <p>Get the item's <code>state</code> (<code>int</code>).</p>
   <dl class="fields">
     <dt>Get Method:</dt>
     <dd class="value"><span class="summary-sig">state(<span class="summary-sig-arg">self</span>)</span>
-        - Get the item's <i>state</i> (<code>int</code>).
+        - Get the item's <code>state</code> (<code>int</code>).
     </dd>
     <dt>Set Method:</dt>
     <dd class="value"><span class="summary-sig">state(<span class="summary-sig-arg">self</span>,
         <span class="summary-sig-arg">state</span>)</span>
-        - Set the item's <i>state</i> (<code>int</code>).
+        - Set the item's <code>state</code> (<code>int</code>).
     </dd>
   </dl>
 </td></tr></table>
@@ -850,18 +894,42 @@ href="pycocoa.menus.Item-class.html" class="link">Item</a>) or
        cellspacing="0" width="100%" bgcolor="white">
 <tr><td>
   <h3 class="epydoc">subMenu</h3>
-  <p>Get the item's <i>submenu</i> (<code>Menu</code>) or 
+  <p>Get the item's <code>submenu</code> (<code>Menu</code>) or 
   <code>None</code>.</p>
   <dl class="fields">
     <dt>Get Method:</dt>
     <dd class="value"><span class="summary-sig">subMenu(<span class="summary-sig-arg">self</span>)</span>
-        - Get the item's <i>submenu</i> (<code>Menu</code>) or <code>None</code>.
+        - Get the item's <code>submenu</code> (<code>Menu</code>) or 
+<code>None</code>.
     </dd>
     <dt>Set Method:</dt>
     <dd class="value"><span class="summary-sig">subMenu(<span class="summary-sig-arg">self</span>,
         <span class="summary-sig-arg">submenu</span>)</span>
-        - Set the item's <i>submenu</i> (<a href="pycocoa.menus.Menu-class.html" 
-class="link">Menu</a>).
+        - Set the item's <code>submenu</code> (<a 
+href="pycocoa.menus.Menu-class.html" class="link">Menu</a>).
+    </dd>
+  </dl>
+</td></tr></table>
+</div>
+<a name="tag"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <h3 class="epydoc">tag</h3>
+  <p>Get the <a href="pycocoa.menus.Item-class.html" class="link">Item</a> 
+  tag (<code>int</code>) or <code>None</code>.</p>
+  <dl class="fields">
+    <dt>Get Method:</dt>
+    <dd class="value"><span class="summary-sig">tag(<span class="summary-sig-arg">self</span>)</span>
+        - Get the <a href="pycocoa.menus.Item-class.html" class="link">Item</a> tag 
+(<code>int</code>) or <code>None</code>.
+    </dd>
+    <dt>Set Method:</dt>
+    <dd class="value"><span class="summary-sig">tag(<span class="summary-sig-arg">self</span>,
+        <span class="summary-sig-arg">tag</span>)</span>
+        - Set the <a href="pycocoa.menus.Item-class.html" class="link">Item</a> tag 
+(<code>int</code>).
     </dd>
   </dl>
 </td></tr></table>
@@ -872,17 +940,17 @@ class="link">Menu</a>).
        cellspacing="0" width="100%" bgcolor="white">
 <tr><td>
   <h3 class="epydoc">toolTip</h3>
-  <p>Get the item's <i>toolTip</i> (<code>str</code>) or 
+  <p>Get the item's <code>toolTip</code> (<code>str</code>) or 
   <code>''</code>.</p>
   <dl class="fields">
     <dt>Get Method:</dt>
     <dd class="value"><span class="summary-sig">toolTip(<span class="summary-sig-arg">self</span>)</span>
-        - Get the item's <i>toolTip</i> (<code>str</code>) or <code>''</code>.
+        - Get the item's <code>toolTip</code> (<code>str</code>) or <code>''</code>.
     </dd>
     <dt>Set Method:</dt>
     <dd class="value"><span class="summary-sig">toolTip(<span class="summary-sig-arg">self</span>,
         <span class="summary-sig-arg">tip</span>)</span>
-        - Set the item's <i>toolTip</i> (<code>str</code>).
+        - Set the item's <code>toolTip</code> (<code>str</code>).
     </dd>
   </dl>
 </td></tr></table>
@@ -919,7 +987,7 @@ class="link">Menu</a>).
 <table border="0" cellpadding="0" cellspacing="0" width="100%%">
   <tr>
     <td align="left" class="footer">
-    Generated by Epydoc 3.0.1 on Sun Aug 12 21:20:49 2018
+    Generated by Epydoc 3.0.1 on Mon Aug 20 13:46:43 2018
     </td>
     <td align="right" class="footer">
       <a target="mainFrame" href="http://epydoc.sourceforge.net"

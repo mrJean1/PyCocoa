@@ -6,19 +6,19 @@
 '''(INTERNAL) Base classes for Python C{Types}.
 '''
 # all imports listed explicitly to help PyChecker
-from nstypes import isNone, NSMain, NSStr, nsString2str
+from nstypes import isNone, NSStr, nsString2str
 from octypes import c_struct_t, ObjC_t
 from runtime import ObjCInstance, release
 from utils   import bytes2str, isinstanceOf, type2strepr
 
 __all__ = ()
-__version__ = '18.08.09'
+__version__ = '18.08.15'
 
 
 class _Type0(object):
     '''(INTERNAL) The base Type, just property NS.
     '''
-    _NS  = None  # NSMain.Null
+    _NS = None  # NSMain.Null
 
     def __init__(self, *args, **kwds):
         # ignore __init__ from __new__, like Item
@@ -38,28 +38,28 @@ class _Type0(object):
 
     @property
     def NS(self):
-        '''Get the C{NS...} instance.
+        '''Get the ObjC instance (C{NS...}).
         '''
-        return self._NS
+        return self._NS  # non _RO
 
     @NS.setter  # PYCHOK property.setter
     def NS(self, ns):
-        '''Set the C{NS...} instance.
+        '''Set the ObjC instance (C{NS...}).
         '''
         if not isNone(ns):  # see also .nstypes.nsOf
             isinstanceOf(ns, ObjCInstance, c_struct_t, ObjC_t, name='ns')
-        elif not isNone(self.NS):
+        elif isinstanceOf(self.NS, ObjCInstance):
             # self.NS.release()
             pass
         self._NS = ns
 
     @property
     def NSDelegate(self):  # to catch typos
-        raise AttributeError('use %r not %r' % ('NSdelegate', 'NSD-'))
+        raise AttributeError('use %r not %r' % ('NSd-', 'NSD-'))
 
     @NSDelegate.setter  # PYCHOK property.setter
     def NSDelegate(self, unused):
-        raise AttributeError('use %r not %r' % ('NSdelegate', 'NSD-'))
+        raise AttributeError('use %r not %r' % ('NSd-e', 'NSD-'))
 
 
 class _Type1(_Type0):
@@ -84,9 +84,12 @@ class _Type1(_Type0):
 
     @property
     def NSdelegate(self):
-        '''Get the class' delegate.
+        '''Get the class' delegate (C{NS...}) or C{None}.
         '''
-        return self.NS.delegate()
+        try:
+            return self.NS.delegate() or None
+        except AttributeError:
+            return None
 
     @NSdelegate.setter  # PYCHOK property.setter
     def NSdelegate(self, delegate):
@@ -100,35 +103,10 @@ class _Type1(_Type0):
 class _Type2(_Type1):
     '''(INTERNAL) Basic Type with properties app, delegate, NS, tag and title.
     '''
-    _tag   = None  # 1-origin
     _title = None
 
     def __str__(self):
         return '%s(%r)' % (self.__class__.__name__, self._title)
-
-    @property
-    def tag(self):
-        '''Get the (L{Item}, L{ItemSeparator}, L{Menu}, ...) tag.
-        '''
-        try:
-            self._tag = int(self.NS.tag())
-        except AttributeError:
-            pass
-        return self._tag
-
-    @tag.setter  # PYCHOK property.setter
-    def tag(self, tag):
-        '''Set the (L{Item}, ...) tag (C{int} 1-origin !).
-        '''
-        if tag not in (None, NSMain.Null):
-            try:
-                i = int(tag)
-                if not i:  # zero tag invalid
-                    raise ValueError('no such %s.%s: %r' % (self, 'tag', tag))
-                self._tag = i
-                self.NS.setTag_(i)
-            except AttributeError:
-                pass
 
     @property
     def title(self):

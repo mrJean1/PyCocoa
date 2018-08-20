@@ -63,7 +63,7 @@
 
 <hr />
 <div class="fields">      <p><strong>Version:</strong>
-        18.08.09
+        18.08.16
       </p>
 </div><!-- ==================== CLASSES ==================== -->
 <a name="section-Classes"></a>
@@ -116,6 +116,23 @@
     </td><td class="summary">
       <table width="100%" cellpadding="0" cellspacing="0" border="0">
         <tr>
+          <td><span class="summary-sig"><a href="pycocoa.utils-module.html#property_RO" class="summary-sig-name">property_RO</a>(<span class="summary-sig-arg">method</span>)</span><br />
+      Decorator for <code>Read_Only</code> property.</td>
+          <td align="right" valign="top">
+            
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
           <td><span class="summary-sig"><a href="pycocoa.utils-module.html#aspect_ratio" class="summary-sig-name">aspect_ratio</a>(<span class="summary-sig-arg">width</span>,
         <span class="summary-sig-arg">height</span>)</span><br />
       Compute the smallest, integer aspect ratio.</td>
@@ -153,7 +170,8 @@
       <table width="100%" cellpadding="0" cellspacing="0" border="0">
         <tr>
           <td><span class="summary-sig"><a href="pycocoa.utils-module.html#bytes2str" class="summary-sig-name">bytes2str</a>(<span class="summary-sig-arg">bytestr</span>,
-        <span class="summary-sig-arg">dflt</span>=<span class="summary-sig-default">missing()</span>)</span><br />
+        <span class="summary-sig-arg">dflt</span>=<span class="summary-sig-default">missing</span>,
+        <span class="summary-sig-arg">name</span>=<span class="summary-sig-default"><code class="variable-quote">'</code><code class="variable-string"></code><code class="variable-quote">'</code></span>)</span><br />
       Convert <code>bytes</code>/<code>unicode</code> to <code>str</code> 
       if needed.</td>
           <td align="right" valign="top">
@@ -189,7 +207,8 @@
       <table width="100%" cellpadding="0" cellspacing="0" border="0">
         <tr>
           <td><span class="summary-sig"><a href="pycocoa.utils-module.html#str2bytes" class="summary-sig-name">str2bytes</a>(<span class="summary-sig-arg">bytestr</span>,
-        <span class="summary-sig-arg">dflt</span>=<span class="summary-sig-default">missing()</span>)</span><br />
+        <span class="summary-sig-arg">dflt</span>=<span class="summary-sig-default">missing</span>,
+        <span class="summary-sig-arg">name</span>=<span class="summary-sig-default"><code class="variable-quote">'</code><code class="variable-string"></code><code class="variable-quote">'</code></span>)</span><br />
       Convert <code>str</code> to <code>bytes</code>/<code>unicode</code> 
       if needed.</td>
           <td align="right" valign="top">
@@ -492,7 +511,7 @@
     <td width="15%" align="right" valign="top" class="summary">
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
-        <a name="missing"></a><span class="summary-name">missing</span> = <code title="missing()">missing()</code><br />
+        <a name="missing"></a><span class="summary-name">missing</span> = <code title="missing">missing</code><br />
       Missing keyword argument value.
     </td>
   </tr>
@@ -528,6 +547,34 @@
   </dl>
 </td></tr></table>
 </div>
+<a name="property_RO"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">property_RO</span>(<span class="sig-arg">method</span>)</span>
+  </h3>
+  </td><td align="right" valign="top"
+    >&nbsp;
+    </td>
+  </tr></table>
+  
+  <p>Decorator for <code>Read_Only</code> property.</p>
+  <dl class="fields">
+    <dt>Parameters:</dt>
+    <dd><ul class="nomargin-top">
+        <li><strong class="pname"><code>method</code></strong> - The callable to be decorated as property.</li>
+    </ul></dd>
+  </dl>
+<div class="fields">      <p><strong>Note:</strong>
+        Like standard Python <code>property</code> without a 
+        <code>property.setter</code> with a more descriptive error message 
+        when set.
+      </p>
+</div></td></tr></table>
+</div>
 <a name="aspect_ratio"></a>
 <div>
 <table class="details" border="1" cellpadding="3"
@@ -555,10 +602,19 @@
           or <code>None</code>.</dd>
   </dl>
 <div class="fields">      <p><strong>Example:</strong>
-        &gt;&gt;&gt; aspect_ratio(10, 15) (2, 3) &gt;&gt;&gt; 
-        aspect_ratio(10.0, 15) (2, 3) &gt;&gt;&gt; aspect_ratio(10, -15) 
-        (-2, 3) &gt;&gt;&gt; aspect_ratio(-10, -15) (2, 3) &gt;&gt;&gt; 
-        aspect_ratio(10.5, 15) (7, 10) &gt;&gt;&gt; aspect_ratio(0, 15) ()
+        <pre class="py-doctest">
+<span class="py-prompt">&gt;&gt;&gt; </span>aspect_ratio(10, 15)
+<span class="py-output">(2, 3)</span>
+<span class="py-output"></span><span class="py-prompt">&gt;&gt;&gt; </span>aspect_ratio(10.0, 15)
+<span class="py-output">(2, 3)</span>
+<span class="py-output"></span><span class="py-prompt">&gt;&gt;&gt; </span>aspect_ratio(10, -15)
+<span class="py-output">(-2, 3)</span>
+<span class="py-output"></span><span class="py-prompt">&gt;&gt;&gt; </span>aspect_ratio(-10, -15)
+<span class="py-output">(2, 3)</span>
+<span class="py-output"></span><span class="py-prompt">&gt;&gt;&gt; </span>aspect_ratio(10.5, 15)
+<span class="py-output">(7, 10)</span>
+<span class="py-output"></span><span class="py-prompt">&gt;&gt;&gt; </span>aspect_ratio(0, 15)
+<span class="py-output">()</span></pre>
       </p>
 </div></td></tr></table>
 </div>
@@ -596,7 +652,8 @@
   <table width="100%" cellpadding="0" cellspacing="0" border="0">
   <tr valign="top"><td>
   <h3 class="epydoc"><span class="sig"><span class="sig-name">bytes2str</span>(<span class="sig-arg">bytestr</span>,
-        <span class="sig-arg">dflt</span>=<span class="sig-default">missing()</span>)</span>
+        <span class="sig-arg">dflt</span>=<span class="sig-default">missing</span>,
+        <span class="sig-arg">name</span>=<span class="sig-default"><code class="variable-quote">'</code><code class="variable-string"></code><code class="variable-quote">'</code></span>)</span>
   </h3>
   </td><td align="right" valign="top"
     >&nbsp;
@@ -610,6 +667,7 @@
     <dd><ul class="nomargin-top">
         <li><strong class="pname"><code>bytestr</code></strong> - <code>bytes</code>, <code>str</code> or <code>unicode</code>.</li>
         <li><strong class="pname"><code>dflt</code></strong> - Optional, default return value.</li>
+        <li><strong class="pname"><code>name</code></strong> - Optional name of <i>bytestr</i> argument.</li>
     </ul></dd>
     <dt>Returns:</dt>
         <dd><code>str</code> or <i>dflt</i>.</dd>
@@ -652,7 +710,8 @@
   <table width="100%" cellpadding="0" cellspacing="0" border="0">
   <tr valign="top"><td>
   <h3 class="epydoc"><span class="sig"><span class="sig-name">str2bytes</span>(<span class="sig-arg">bytestr</span>,
-        <span class="sig-arg">dflt</span>=<span class="sig-default">missing()</span>)</span>
+        <span class="sig-arg">dflt</span>=<span class="sig-default">missing</span>,
+        <span class="sig-arg">name</span>=<span class="sig-default"><code class="variable-quote">'</code><code class="variable-string"></code><code class="variable-quote">'</code></span>)</span>
   </h3>
   </td><td align="right" valign="top"
     >&nbsp;
@@ -666,6 +725,7 @@
     <dd><ul class="nomargin-top">
         <li><strong class="pname"><code>bytestr</code></strong> - <code>bytes</code>, <code>str</code> or <code>unicode</code>.</li>
         <li><strong class="pname"><code>dflt</code></strong> - Optional, default return value.</li>
+        <li><strong class="pname"><code>name</code></strong> - Optional name of <i>bytestr</i> argument.</li>
     </ul></dd>
     <dt>Returns:</dt>
         <dd><code>bytes</code> or <i>dflt</i>.</dd>
@@ -1086,7 +1146,7 @@
 <table border="0" cellpadding="0" cellspacing="0" width="100%%">
   <tr>
     <td align="left" class="footer">
-    Generated by Epydoc 3.0.1 on Sun Aug 12 21:20:49 2018
+    Generated by Epydoc 3.0.1 on Mon Aug 20 13:46:42 2018
     </td>
     <td align="right" class="footer">
       <a target="mainFrame" href="http://epydoc.sourceforge.net"

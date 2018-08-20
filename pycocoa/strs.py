@@ -10,10 +10,10 @@ from bases   import _Type0
 from nstypes import NSAttributedString, NSConstantString, \
                     NSStr, NSString, nsString2str
 from pytypes import dict2NS, str2NS
-from utils   import isinstanceOf, _Strs, _Types
+from utils   import isinstanceOf, property_RO, _Strs, _Types
 
 __all__ = ('Str', 'StrAttd')
-__version__ = '18.06.28'
+__version__ = '18.08.14'
 
 
 class Str(str, _Type0):  # str, first to maintain str behavior
@@ -31,7 +31,7 @@ class Str(str, _Type0):  # str, first to maintain str behavior
             ns, py = ns_str, nsString2str(ns_str)
 
         self = super(Str, cls).__new__(cls, py)
-        self._NS = ns  # immutable
+        self._NS = ns  # _RO
         return self
 
     def copy(self, *ranged):
@@ -47,6 +47,12 @@ class Str(str, _Type0):  # str, first to maintain str behavior
             s = self
         return self.__class__(s)
 
+    @property_RO
+    def NS(self):
+        '''Get the ObjC instance (C{NSString}).
+        '''
+        return self._NS
+
 
 class StrAttd(Str, _Type0):
     '''Python C{str} Type, wrapping (immutable) ObjC C{NSAttributedString}.
@@ -60,7 +66,6 @@ class StrAttd(Str, _Type0):
     _ligature        = None  # Ligature.Std, .Min or .All
     _link            = None
     _paragraphStyle  = None
-    _Str_NS          = None
     _superscript     = 0
     _underlineStyle  = 0  # Underline.None, .Single, .StrikeThrough, .Word
 
@@ -68,7 +73,6 @@ class StrAttd(Str, _Type0):
     #       Cocoa/Conceptual/AttributedStrings/Articles/standardAttributes.html>
     def __new__(cls, ns_str='', **attrs):
         self = Str.__new__(cls, ns_str)
-        self._Str_NS = self._NS
         for a, v in attrs.items():
             setattr(self, a, v)
         return self
@@ -189,11 +193,14 @@ class StrAttd(Str, _Type0):
     def link(self, link):
         self._link = link  # Id_t None
 
-    @property
+    @property_RO
     def NS(self):
-        ns_attrs = dict2NS({}, frozen=True)
-        return NSAttributedString.alloc(). \
-               initWithString_attributes_(self._Str_NS, ns_attrs)
+        '''Get the ObjC instance (C{NSAttributedString}).
+        '''
+        # self._NS == Str._NS
+        ns = dict2NS({}, frozen=True)
+        return NSAttributedString.alloc().initWithString_attributes_(
+                                          self._NS, ns)
 
     @property
     def paragraphStyle(self):

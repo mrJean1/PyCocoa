@@ -6,29 +6,32 @@
 '''Types L{Item}, L{ItemSeparator}, L{Menu} and L{MenuBar}, wrapping ObjC C{NSMenuItem} and C{NSMenu}.
 '''
 # all imports listed explicitly to help PyChecker
-from bases   import _Type2
-from fonts   import Font
-from getters import get_selector, get_selectornameof
-from nstypes import NSMenu, NSMenuItem, nsOf, NSStr, nsString2str
-from pytypes import int2NS
-from octypes import SEL_t
-from oslibs  import NO, NSAlternateKeyMask, NSCommandKeyMask, \
-                    NSControlKeyMask, NSShiftKeyMask, YES  # PYCHOK expected
-from runtime import isObjCInstanceOf, ObjCInstance
-from utils   import bytes2str, _ByteStrs, _Globals, _Ints, isinstanceOf, \
-                    missing, name2pymethod, printf, property2, _Types
+from bases    import _Type2
+from fonts    import Font
+from geometry import Size
+from getters  import get_selector, get_selectornameof
+from nstypes  import isNone, NSMenu, NSMenuItem, nsOf, NSStr, nsString2str
+from pytypes  import int2NS
+from octypes  import SEL_t
+from oslibs   import NO, NSAlternateKeyMask, NSCommandKeyMask, \
+                     NSControlKeyMask, NSShiftKeyMask, YES  # PYCHOK expected
+from runtime  import isObjCInstanceOf  # , ObjCInstance
+from utils    import bytes2str, _ByteStrs, _Globals, _Ints, \
+                     isinstanceOf, missing, name2pymethod, printf, \
+                     property2, property_RO, _Strs, _Types
 
-from inspect import isfunction, ismethod
 try:
     from inspect import getfullargspec as getargspec  # Python 3+
 except ImportError:
     from inspect import getargspec  # Python 2
+from inspect import isfunction, ismethod
+# from types import FunctionType, MethodType
 
 __all__ = ('Item', 'ItemSeparator',
            'Menu', 'MenuBar',
            'ns2Item',
            'title2action')
-__version__ = '18.08.09'
+__version__ = '18.08.16'
 
 # Method _NSApplicationDelegate.handleMenuItem_ in .apps.py
 # is the handler ('selector') for all menu items specified
@@ -50,76 +53,89 @@ _Modifiers2 = (('Alt',   NSAlternateKeyMask),
                ('Shift', NSShiftKeyMask))  # or NSAlphaShiftKeyMask?
 
 
-def _finder(inst, title, action, dflt, items, kind):
-    '''(INTERNAL) Handle menu.item, menuBar.menu lookup.
+def _bindM(inst, parent):
+    '''(INTERNAL) Bind item or menu to parent menu, menu bar or item.
     '''
-    if title:
-        t = bytes2str(title)
-        for item in items:
-            if item.title.startswith(t):
-                return item
-    elif action:
-        a = bytes2str(action)
-        for item in items:
-            if item.action.startswith(a):
-                return item
-    if dflt is missing:
-        raise ValueError('no such %s.%s: %r' % (inst, kind, title or action))
-    return dflt
+    # check that the item or menu is not already bound to (a 'child' of)
+    # a menu or menu bar (ObjC's properties like parent, supermenu,
+    # hasSubmenu, owner, etc. are non-trivial and rather inconsistent)
+    # <http://Developer.Apple.com/documentation/appkit/nsmenu/1518204-supermenu>
+    # <http://Developer.Apple.com/documentation/appkit/nsmenuitem/1514817-hassubmenu>
+    # <http://Developer.Apple.com/documentation/appkit/nsmenuitem/1514845-submenu>
+    if inst.parent:
+        raise ValueError('%r bound to: %r' % (inst, inst.parent))
+    inst._parent = parent
 
 
-def _indexer(inst, index, items, bytitle):
-    '''(INTERNAL) Handle menu[], menuBar[] indexing.
+def _modifiedMask2(mask, kwds):
+    '''(INTERNAL) Update modifier mask.
     '''
-    try:
-        if isinstance(index, _Ints):
-            if 0 <= index < len(items):
-                return items[index]
-        elif isinstance(index, slice):
-            return [items[i] for i in range(*index.indices(len(items)))]
-        elif isinstance(index, _ByteStrs):
-            i = bytitle(title=index, dflt=None)
-            if i:
-                return i
-    except (IndexError, TypeError, ValueError):
-        pass
-    raise IndexError('no such %s index [%r]' % (inst, index))
+    # kwds = kwds.copy()
+    for M, ns in _Modifiers2:
+        m = kwds.pop(M, kwds.pop(M.lower(), missing))
+        if m is missing:
+            if not kwds:
+                break
+        elif m:  # set mask
+            mask |= ns
+        elif (mask & ns):  # clear
+            mask -= ns
+    return mask, kwds  # mask and "leftovers"
+
+
+def _nsMenuItem(inst, sel=0, key=''):
+    '''(INTERNAL) New menu item or new menu bar menu item.
+    '''
+    # <http://Developer.Apple.com/documentation/appkit/
+    #       nsmenuitem/1514858-initwithtitle>
+    ns = NSMenuItem.alloc().initWithTitle_action_keyEquivalent_(
+                            NSStr(inst.title), sel, NSStr(key or ''))
+    r = int2NS(id(inst))
+    _Globals.Items[r] = inst  # see ns2Item() below
+    ns.setRepresentedObject_(r)
+    return ns
+
+
+def _setTag(inst, tag, ns=None):
+    '''(INTERNAL) Check and set the tag.
+    '''
+    if isinstanceOf(tag, _Ints, name='tag'):
+        if not tag:  # XXX zero tag invalid
+            raise ValueError('invalid %s: %r' % ('tag', tag))
+        inst._tag = tag
+        if ns:
+            ns.setTag_(tag)
 
 
 class _Item_Type2(_Type2):
     '''(INTERNAL) Base class for L{Item} and L{ItemSeparator}.
     '''
     _isSeparator = False
+    _parent      = None  # see _Menu_Type2._validM
 
-    @property
-    def nsMenu(self):
-        '''Get the I{menu} owning this item (C{NSMenu}) or C{None}.
-        '''
-        return self.NS.menu()
-
-    @nsMenu.setter  # PYCHOK property.setter
-    def nsMenu(self, ns_menu):
-        '''Set the I{menu} owning this item (C{NSMenu} or L{Menu}).
-        '''
-        if isinstanceOf(ns_menu, Menu):
-            ns_menu = ns_menu.NS  # PYCHOK getattr(self, 'NS')...
-        if ns_menu:
-            self.NS.setMenu_(ns_menu)
-
-    @property
+    @property_RO
     def isSeparator(self):
         '''Is this a menu item (C{False}) or a menu item separator (C{True})?.
         '''
         return self._isSeparator  # isinstance(self, ItemSeparator)
 
+    @property_RO
+    def parent(self):
+        '''Get the item's I{parent} (L{Menu} or L{MenuBar}) or C{None}.
+        '''
+        # like self.NS.parentItem() but for all Item, ItemSeparator,
+        # Menu and MenuBar types, not only for NSItem like ObjC
+        return self._parent  # see _Menu_Type2._validM
+
 
 class Item(_Item_Type2):
-    '''Python menu C{Item} Type, wrapping ObjC C{NSMenuItem}.
+    '''Python menu L{Item} Type, wrapping ObjC C{NSMenuItem}.
     '''
     _action  = _handleMenuItem_name
-    _mask    = 0
+    _mask    = 0  # used in Menu.item below
     _SEL_    = _HANDLE_
-    _subMenu = None  # see also Item.hasSubmenu
+    _subMenu = None
+    _tag     = 0
 
     def __init__(self, title, action=None, key='',  # MCCABE 13
                                            alt=False,
@@ -128,26 +144,29 @@ class Item(_Item_Type2):
                                          shift=False, **props):
         '''New menu L{Item}.
 
-           @param title: Item title (C{str}).
-           @keyword action: Callback method (C{str ending with ':' or _'},
-                            C{callable} or C{SEL_t}) or C{None}, see note.
+           @param title: The item's title (C{str}).
+           @keyword action: Callback name (C{str} ending with ':' or '_'),
+                            a Python C{callable}, an ObjC C{selector}
+                            (C{SEL_t}) or C{None}, see B{Notes}.
            @keyword key: The shortcut key, if any (C{str} or C{bytes}).
-           @keyword alt: Hold C{alt} or C{option} down with I{key} (bool).
-           @keyword cmd: Hold C{command} down with I{key} (bool).
-           @keyword cntl: Hold C{control} down with I{key} (bool).
-           @keyword shift: Hold C{shift} down with I{key} (bool).
-           @keyword props: Optional, settable L{Item} I{property=value} pairs.
+           @keyword alt: Hold C{alt} or C{option} key down with I{key} (bool).
+           @keyword cmd: Hold C{command} key down with I{key} (bool).
+           @keyword cntl: Hold C{control} key down with I{key} (bool).
+           @keyword shift: Hold C{shift} key down with I{key} (bool).
+           @keyword props: Additional, settable L{Item} I{property=value} pairs.
 
-           @raise TypeError: Callable I{action} not a method or function.
+           @raise TypeError: Invalid I{action} or invalid Python C{callable}
+                             I{action} or C{callable} signature, see B{Notes}.
 
-           @raise ValueError: Invalid I{action} or I{title} for
+           @raise ValueError: Invalid I{action} or invalid I{title} for
                               C{None} I{action}.
 
-           @note: A C{None} I{action} is set to the I{menu.<title>} with
-                  spaces and dots removed, see function L{title2action}.
-                  A callable I{action} must be a (bound) Python method
-                  with signature C{(self, item, ...)} or a Python
-                  function with signature C{(item, ...)}.
+           @note: A C{None} I{action} is set to the method name C{menu<title>_},
+                    see function L{title2action}.
+
+           @note: A Python C{callable} I{action} must be a (bound) Python method
+                  with signature C{(self, item, ...)} or a Python function with
+                  signature C{(item, ...)}.
         '''
         self.title = title
 
@@ -156,9 +175,6 @@ class Item(_Item_Type2):
             a = title2action(self.title)
         elif callable(action):
             a = action  # bound method(self, item) or function(item)
-            if not ((ismethod(a)   and len(getargspec(a).args) > 1) or
-                    (isfunction(a) and len(getargspec(a).args) > 0)):
-                raise TypeError('invalid %s: %r' % ('action', action))
             self._SEL_ = _CALL_
         elif isinstanceOf(action, SEL_t):  # or isObjCInstanceOf(sel, NSSelector)
             self._SEL_ = action
@@ -167,12 +183,9 @@ class Item(_Item_Type2):
             a = name2pymethod(action)
             if a[-1:] not in ':_':
                 raise ValueError('invalid %s: %r' % ('action', action))
-        self._action = a
+        self.action = a  # double checked in .action.setter below
 
-        # <http://Developer.Apple.com/documentation/appkit/
-        #       nsmenuitem/1514858-initwithtitle>
-        self.NS = NSMenuItem.alloc().initWithTitle_action_keyEquivalent_(
-                             NSStr(self.title), self._SEL_, NSStr(key or ''))
+        self.NS = _nsMenuItem(self, self._SEL_, key)
         if key:  # allow capitalized Modifiers
             self._keyModifiers(Alt=alt, Cmd=cmd, Ctrl=ctrl, Shift=shift)
             if props:
@@ -185,8 +198,8 @@ class Item(_Item_Type2):
                 if s and callable(s):
                     s(self, v)
                 else:
-                    g = 'non-settable' if g else 'invalid'
-                    raise NameError('%s %s property: %r' % (g,
+                    g = 'read-only' if g else 'invalid'
+                    raise NameError('%s %s property: %s' % (g,
                                         self.__class__.__name__, p))
             except Exception as x:
                 if _Globals.raiser:
@@ -194,10 +207,6 @@ class Item(_Item_Type2):
                     printf('%s: %s(title=%r, ..., %s=%r) ...', x,
                                 self.__class__.__name__, self.title, p, v)
                     raise
-
-        r = int2NS(id(self))  # XXX use item.tag?
-        _Globals.Items[r] = self
-        self.NS.setRepresentedObject_(r)
 
     def __str__(self):
         k = '+'.join([M for M, ns in _Modifiers2 if (self._mask & ns)]
@@ -226,84 +235,96 @@ class Item(_Item_Type2):
 
     @property
     def action(self):
-        '''Get the I{action} name (C{str}).
+        '''Get the item's C{action} (C{str} or Python C{callable}).
         '''
         return self._action
 
+    @action.setter  # PYCHOK property.setter
+    def action(self, action):
+        '''Set the item's C{action} (C{str} or Python C{callable}), see C{Item.__init__} B{Notes}.
+        '''
+        # type(action) in (types.FunctionType, types.MethodType ...
+        if (isinstanceOf(action, _Strs) or
+           (ismethod(action)   and len(getargspec(action).args) > 1) or
+           (isfunction(action) and len(getargspec(action).args) > 0)):
+            self._action = action
+        else:
+            raise TypeError('invalid %s: %r' % ('action', action))
+
     @property
     def allowsKeyWhenHidden(self):
-        '''Get the item's I{allows} property (C{bool}).
+        '''Get the item's C{allowsKeysWhenHidden} property (C{bool}).
         '''
         return bool(self.NS.allowsKeyEquivalentWhenHidden())
 
     @allowsKeyWhenHidden.setter  # PYCHOK property.setter
     def allowsKeyWhenHidden(self, allows):
-        '''Set the item's I{allows} property (C{bool}).
+        '''Set the item's C{allowsKeysWhenHidden} property (C{bool}).
         '''
         b = bool(allows)
         if b != self.allowsKeyWhenHidden:
             self.NS.setAllowsKeyEquivalentWhenHidden_(YES if b else NO)
 
-    @property
+    @property_RO
     def alt(self):
-        '''Get the I{alt} or I{option} key modifier (C{bool}).
+        '''Get the C{alt} or C{option} key modifier (C{bool}).
         '''
         return bool(self._mask & NSAlternateKeyMask)
 
-    @property
+    @property_RO
     def cmd(self):
-        '''Get the I{command} key modifier (C{bool}).
+        '''Get the C{command} key modifier (C{bool}).
         '''
         return bool(self._mask & NSCommandKeyMask)
 
-    @property
+    @property_RO
     def ctrl(self):
-        '''Get the I{control} key modifier (C{bool}).
+        '''Get the C{control} key modifier (C{bool}).
         '''
         return bool(self._mask & NSControlKeyMask)
 
     @property
     def font(self):
-        '''Get the item's I{font} (L{Font}) or C{None}.
+        '''Get the item's C{font} (L{Font}) or C{None}.
         '''
         ns = self.NS.font()
         return Font(ns) if ns else None
 
     @font.setter  # PYCHOK property.setter
     def font(self, font):
-        '''Set the item's I{font} (L{Font}).
+        '''Set the item's C{font} (L{Font}).
         '''
         if isinstanceOf(font, Font, name='font') and font != self.font:
             self.NS.setFont_(font.NS)
 
-    @property
+    @property_RO
     def hasSubmenu(self):
-        '''Has this item's a I{submenu} (C{bool}).
+        '''Has this item a C{submenu} (C{bool}).
         '''
         return True if self.NS.hasSubmenu() else False
 
 #   @property
 #   def image(self):
-#       '''Get the item's I{image} (L{Image}).
+#       '''Get the item's C{image} (L{Image}).
 #       '''
 #       return Image(self.NS.image())
 
 #   @image.setter  # PYCHOK property.setter
 #   def image(self, image):
-#       '''Set the item's I{image} (L{Image}).
+#       '''Set the item's C{image} (L{Image}).
 #       '''
 #       if isinstanceOf(image, Image, name='image') and image != self.image:
 #           self.NS.setImage_(image.NS)
 
     @property
     def indentationLevel(self):
-        '''Get the item's I{indentation} (C{int}).
+        '''Get the item's C{indentation} (C{int}).
         '''
         return int(self.NS.indentationLevel())
 
     @indentationLevel.setter  # PYCHOK property.setter
     def indentationLevel(self, indent):
-        '''Set the item's I{indentation} (C{int}).
+        '''Set the item's C{indentation} (C{int}).
         '''
         if isinstanceOf(indent, _Ints, name='indent') and indent != self.indentationLevel:
             if not 0 <= indent < 16:
@@ -312,13 +333,13 @@ class Item(_Item_Type2):
 
     @property
     def isAlternate(self):
-        '''Get the item's I{Altenate} property (C{bool}).
+        '''Get the item's C{Alternate} property (C{bool}).
         '''
         return bool(self.NS.isAlternate())
 
     @isAlternate.setter  # PYCHOK property.setter
     def isAlternate(self, alternate):
-        '''Set the item's I{Altenate} property (C{bool}).
+        '''Set the item's C{Alternate} property (C{bool}).
         '''
         b = bool(alternate)
         if b != self.isAlternate:
@@ -326,13 +347,13 @@ class Item(_Item_Type2):
 
     @property
     def isEnabled(self):
-        '''Get the item's I{Enabled} property (C{bool}).
+        '''Get the item's C{Enabled} property (C{bool}).
         '''
         return bool(self.NS.isEnabled())
 
     @isEnabled.setter  # PYCHOK property.setter
     def isEnabled(self, enable):
-        '''Set the item's I{Enabled} property (C{bool}).
+        '''Set the item's C{Enabled} property (C{bool}).
         '''
         b = bool(enable)
         if b != self.isEnabled:
@@ -340,27 +361,27 @@ class Item(_Item_Type2):
 
     @property
     def isHidden(self):
-        '''Get the item's I{Hidden} property (C{bool}).
+        '''Get the item's C{Hidden} property (C{bool}).
         '''
         return bool(self.NS.isHidden())
 
     @isHidden.setter  # PYCHOK property.setter
     def isHidden(self, hidden):
-        '''Set the item's I{Hidden} property (C{bool}).
+        '''Set the item's C{Hidden} property (C{bool}).
         '''
         b = bool(hidden)
         if b != self.isHidden:
             self.NS.setHidden_(YES if b else NO)
 
-    @property
+    @property_RO
     def isHighlighted(self):
-        '''Get the item's I{Highlighted} property (C{bool}).
+        '''Get the item's C{isHighlighted} property (C{bool}).
         '''
         return bool(self.NS.isHighlighted())
 
     @property
     def key(self):
-        '''Get the item's shortcut key (C{str}).
+        '''Get the item's shortcut C{key} (C{str}).
         '''
         return nsString2str(self.NS.keyEquivalent())
 
@@ -368,14 +389,14 @@ class Item(_Item_Type2):
 
     @key.setter  # PYCHOK property.setter
     def key(self, key):
-        '''Set the item's shortcut key (C{str}).
+        '''Set the item's shortcut C{key} (C{str}).
         '''
-        if isinstanceOf(key, _ByteStrs, name='key') and key != self.key:
+        if bytes2str(key, name='key') != self.key:
             self.NS.setKeyEquivalent_(NSStr(key))
 
     @property
     def keyModifiers(self):
-        '''Get the item's shortcut key modifiers (C{dict}).
+        '''Get the item's shortcut key C{modifiers} (C{dict}), see C{Item.__init__}.
         '''
         return dict((M.lower(), bool(self._mask & ns)) for M, ns in _Modifiers2)
 
@@ -383,13 +404,9 @@ class Item(_Item_Type2):
 
     @keyModifiers.setter  # PYCHOK property.setter
     def keyModifiers(self, modifiers):
-        '''Get/set the item's shortcut key modifiers (C{dict}).
+        '''Set the item's shortcut key C{modifiers} (C{dict}), see C{Item.__init__}.
 
-           @keyword alt: Hold C{alt} or C{option} down with I{key} (bool).
-           @keyword cmd: Hold C{command} down with I{key} (bool).
-           @keyword cntl: Hold C{control} down with I{key} (bool).
-           @keyword shift: Hold C{shift} down with I{key} (bool).
-           @keyword modifiers: Optional, additional I{modifier=}C{bool} pairs.
+           @keyword modifiers: One or more C{key} I{modifier=}C{bool} pairs (C{dict}).
 
            @return: Previous modifiers (C{dict}).
 
@@ -399,137 +416,143 @@ class Item(_Item_Type2):
         d = self._keyModifiers(**modifiers)
         if d:
             self._mask = m  # restore
-            raise KeyError(', '.join('%s=%r' % t for t in sorted(d.items())))
+            raise KeyError('%s(%s)' % (self,
+                           ', '.join('%s=%r' % _ for _ in sorted(d.items()))))
 
     def _keyModifiers(self, **kwds):
         '''(INTERNAL) Set the item's shortcut key modifiers.
         '''
-        mask = self._mask
-        for M, ns in _Modifiers2:
-            m = kwds.pop(M, kwds.pop(M.lower(), missing))
-            if m is missing:
-                pass
-            elif m:  # set mask
-                mask |= ns
-            elif (mask & ns):  # clear
-                mask -= ns
+        mask, kwds = _modifiedMask2(self._mask, kwds)
 
         if mask != self._mask:
             self.NS.setKeyEquivalentModifierMask_(mask)
             self._mask = mask
 
-        return kwds  # return leftover
+        return kwds  # "leftovers"
 
 #   @property
 #   def mixedStateImage(self):
-#       '''Get the item's mixed-state I{image} (L{Image}).
+#       '''Get the item's mixed-state C{image} (L{Image}).
 #       '''
 #       return Image(self.NS.mixedStateImage())
 #
 #   @mixedStateImage.setter  # PYCHOK property.setter
 #   def mixedStateImage(self, image):
-#       '''Set the item's mixed-state I{image} (L{Image}).
+#       '''Set the item's mixed-state C{image} (L{Image}).
 #       '''
 #       if isinstanceOf(image, Image, name='image') and image != self.mixedStateImage:
 #           self.NS.setMixedStateImage_(image.NS)
 
 #   @property
 #   def offStateImage(self):
-#       '''Get the item's off-state I{image} (L{Image}).
+#       '''Get the item's off-state C{image} (L{Image}).
 #       '''
 #       return Image(self.NS.offStateImage())
 #
 #   @offStateImage.setter  # PYCHOK property.setter
 #   def offStateImage(self, image):
-#       '''Set the item's off-state I{image} (L{Image}).
+#       '''Set the item's off-state C{image} (L{Image}).
 #       '''
 #       if isinstanceOf(image, Image, name='image') and image != self.offStateImage:
 #           self.NS.setOffStateImage_(image.NS)
 
 #   @property
 #   def onStateImage(self):
-#       '''Get the item's on-state I{image} (L{Image}).
+#       '''Get the item's on-state C{image} (L{Image}).
 #       '''
 #       return Image(self.NS.onStateImage())
 #
 #   @onStateImage.setter  # PYCHOK property.setter
 #   def onStateImage(self, image):
-#       '''Set the item's on-state I{image} (L{Image}).
+#       '''Set the item's on-state C{image} (L{Image}).
 #       '''
 #       if isinstanceOf(image, Image, name='image') and image != self.onStateImage:
 #           self.NS.setOnStateImage_(image.NS)
 
-    @property
+    @property_RO
     def nsTarget(self):
         '''Get the item's target (C{NS...}) or C{None} for
         the default target, C{_NSApplicationDelegate}.
         '''
         return self.NS.target()
 
-    @nsTarget.setter  # PYCHOK property.setter
-    def nsTarget(self, ns_target):
-        '''Set the item's I{target} (C{NS...}).
-        '''
-        if isinstanceOf(ns_target, ObjCInstance, name='ns_target'):
-            self.NS.setTarget_(ns_target.NS)
+#   @nsTarget.setter  # PYCHOK property.setter
+#   def nsTarget(self, ns_target):
+#       '''Set the item's C{target} (C{NS...}).
+#       '''
+#       if isinstanceOf(ns_target, ObjCInstance, name='ns_target'):
+#           self.NS.setTarget_(ns_target)
 
-    @property
-    def parent(self):
-        '''Get a I{submenu} item's parent item (L{Item}) or C{None}.
-        '''
-        ns = self.NS.parentItem()
-        return ns2Item(ns) if ns else None
-
-    @property
+    @property_RO
     def shift(self):
-        '''Get the I{shift} key modifier (C{bool}).
+        '''Get the C{shift} key modifier (C{bool}).
         '''
         return bool(self._mask & NSShiftKeyMask)
 
     @property
     def state(self):
-        '''Get the item's I{state} (C{int}).
+        '''Get the item's C{state} (C{int}).
         '''
         return int(self.NS.state())
 
     @state.setter  # PYCHOK property.setter
     def state(self, state):
-        '''Set the item's I{state} (C{int}).
+        '''Set the item's C{state} (C{int}).
         '''
         if isinstanceOf(state, _Ints, name='state') and state != self.state:
             self.NS.setState_(state)
 
     @property
     def subMenu(self):
-        '''Get the item's I{submenu} (C{Menu}) or C{None}.
+        '''Get the item's C{submenu} (C{Menu}) or C{None}.
         '''
         return self._subMenu
 
     @subMenu.setter  # PYCHOK property.setter
     def subMenu(self, submenu):
-        '''Set the item's I{submenu} (L{Menu}).
+        '''Set the item's C{submenu} (L{Menu}).
         '''
-        if isinstanceOf(submenu, Menu, name='submenu') and submenu != self.subMenu:
-            self.NS.setSubmenu_(submenu.NS)
+        if isNone(submenu):
+            m = self.subMenu
+            if m:
+                m._parent = None
+            self.NS.setSubmenu_(0)
+            self._subMenu = None
+
+        elif isinstanceOf(submenu, Menu, name='submenu') and submenu != self.subMenu:
+            _bindM(submenu, self)
+            self.NS.setSubmenu_(nsOf(submenu))
             self._subMenu = submenu
 
     @property
+    def tag(self):
+        '''Get the L{Item} tag (C{int}) or C{None}.
+        '''
+        return self._tag
+
+    @tag.setter  # PYCHOK property.setter
+    def tag(self, tag):
+        '''Set the L{Item} tag (C{int}).
+        '''
+        _setTag(self, tag, self.NS)
+
+    @property
     def toolTip(self):
-        '''Get the item's I{toolTip} (C{str}) or C{''}.
+        '''Get the item's C{toolTip} (C{str}) or C{''}.
         '''
         ns = self.NS.toolTip()
         return nsString2str(ns) if ns else ''
 
     @toolTip.setter  # PYCHOK property.setter
     def toolTip(self, tip):
-        '''Set the item's I{toolTip} (C{str}).
+        '''Set the item's C{toolTip} (C{str}).
         '''
-        if isinstanceOf(tip, _ByteStrs, name='tip') and tip != self.toolTip:
+        if bytes2str(tip, name='tip') != self.toolTip:
             self.NS.setToolTip_(NSStr(tip))
 
 
 class ItemSeparator(_Item_Type2):
-    '''Python menu C{ItemSeparator} Type, wrapping ObjC C{NSMenuItem.separatorItem}.
+    '''Python menu L{ItemSeparator} Type, wrapping ObjC C{NSMenuItem.separatorItem}.
     '''
     _isSeparator = True
 
@@ -538,64 +561,438 @@ class ItemSeparator(_Item_Type2):
         '''
         self.NS = NSMenuItem.separatorItem()  # XXX can't be singleton
 
+    @property_RO
+    def action(self):
+        '''Get the separator's C{action} (C{None} always).
+        '''
+        return None
 
-class Menu(_Type2):
+    @property_RO
+    def tag(self):
+        '''Get the separator's C{tag} (C{0} always).
+        '''
+        return 0
+
+
+# % python -m test.list_methods NSMenu
+
+# attachedMenu @16@0:8 (Id_t, Id_t, SEL_t)
+# setTearOffMenuRepresentation: v24@0:8@16 (None, Id_t, SEL_t, Id_t)
+# sizeToFit v16@0:8 (None, Id_t, SEL_t)                   XXX add?
+# storyboard @16@0:8 (Id_t, Id_t, SEL_t)                  XXX add?
+# tearOffMenuRepresentation @16@0:8 (Id_t, Id_t, SEL_t)
+# update v16@0:8 (None, Id_t, SEL_t)                      XXX add?
+# ...
+# 502 NSMenu methods total (2, 4040)
+
+class _Menu_Type2(_Type2):
+    '''(INTERNAL) Base class for L{Menu} and L{MenuBar}.
+    '''
+    _listM  = []  # see ._initM()
+    _nameM  = 'n/a'
+    _parent = None  # see _Menu_Type2._validM
+    _tagNr  = 0  # for L{Item}s only
+
+    def __contains__(self, inst):
+        return inst in self._listM
+
+    def __len__(self):
+        n = len(self._listM)
+        self._assertM(n, self.NS.numberOfItems())
+        return n
+
+    def _alistM2(self, *atypes):
+        for inst in self._listM:
+            a = inst.action
+            if a and isinstance(a, atypes):
+                yield a, inst
+
+    def _appendM(self, inst):
+        ns, m = self._validM(inst), len(self) + 1
+        self.NS.addItem_(ns)
+        self._listM.append(inst)
+        self._tagM(inst, ns)
+        self._assertM(len(self), m)
+
+    def _assertM(self, n, m):
+        if n != m:
+            raise RuntimeError('len(%s) %r vs %r' % (self, n, m))
+
+    def _findM(self, title, action, tag, dflt):  # MCCABE 15
+        # find item or menu
+        if title:
+            t = bytes2str(title, name='title')
+            for inst in self._listM('title'):
+                if inst.title.startswith(t):
+                    return inst
+            t = '%s=%r' % ('title', title)
+
+        elif action:
+            if isinstance(action, _ByteStrs):
+                t = bytes2str(action)
+                for a, inst in self._alistM2(type(t)):
+                    if a.startswith(t):
+                        return inst
+            elif callable(action):
+                for a, inst in self._alistM2(type(action)):
+                    if a == action:
+                        return inst
+            t = '%s=%r' % ('action', action)
+
+        elif isinstance(tag, _Ints):
+            # only L{Item}s have non-zero tags
+            for inst in self._listM:
+                if inst.tag == tag:
+                    return inst
+            t = '%s=%r' % ('tag', tag)
+
+        else:
+            t = ''
+
+        if dflt is missing:
+            raise ValueError('no such %s.%s(%s)' % (self, self._nameM, t))
+        return dflt
+
+    def _getiteM(self, index, bytitle=None):
+        try:
+            if isinstance(index, slice):
+                return [self._listM[i] for i in range(*index.indices(len(self)))]
+            elif bytitle and isinstance(index, _ByteStrs):
+                inst = bytitle(title=index, dflt=None)
+                if inst:
+                    return inst
+            else:
+                return self._listM[self._indexM(index)]
+        except (IndexError, TypeError, ValueError):
+            pass
+        raise IndexError('invalid %s[%r]' % (self, index))
+
+    def _indexM(self, index):
+        if isinstance(index, _Ints):
+            i = index
+            if i < 0:  # allow neg index ...
+                i += len(self)
+            # ... but not out of range, like list.append
+            if 0 <= i < len(self):
+                return i
+        raise IndexError('invalid %s: %r' ('index', index))
+
+    def _initM(self):
+        self._listM = []
+        self.NS = NSMenu.alloc().init()
+
+    def _insertM(self, index, insts, *Types):
+        i = self._indexM(index)
+        for inst in reversed(insts):
+            if isinstanceOf(inst, *Types, name=self._nameM):
+                ns, m = self._validM(inst), len(self) + 1
+                self.NS.insertItem_atIndex_(ns, i)
+                self._listM.insert(i, inst)
+                self._tagM(inst, ns)
+                self._assertM(len(self), m)
+
+    def _popM(self, index):
+        try:
+            i, m = self._indexM(index), len(self) - 1
+            inst = self._listM.pop(i)
+            inst._parent = None
+            self.NS.removeItemAtIndex_(i)
+            self._assertM(len(self), m)
+            return inst
+        except (IndexError, TypeError):
+            raise IndexError('%s.%s(%r)' % (self, 'pop', index))
+
+    def _removeM(self, insts, *Types):
+        for inst in insts:
+            if isinstanceOf(inst, *Types, name=self._nameM):
+                try:
+                    self._popM(self._listM.index(inst))
+                except (IndexError, ValueError):
+                    raise ValueError('%s.%s(%s)' % (self, 'remove', inst))
+
+    def _tagM(self, inst, ns):
+        # only L{Item} tags are settable
+        if isinstance(inst, (Item, Menu)):
+            if inst.tag:
+                pass  # preset
+            else:
+                _Menu_Type2._tagNr += 1
+                inst.tag = _Menu_Type2._tagNr
+            ns.setTag_(inst.tag)  # always an NSMenuItem
+        elif not isinstance(inst, ItemSeparator):
+            raise RuntimeError('set %s.%s in %s' % (inst, 'tag', self))
+
+    def _validM(self, inst):
+        if inst in self._listM:
+            raise ValueError('duplicate %s %s: %r' % (self, self._nameM, inst))
+        _bindM(inst, self)
+        if isinstance(inst, Menu):
+            inst._NSiMI = ns = _nsMenuItem(inst)
+            ns.setSubmenu_(nsOf(inst))
+        else:
+            ns = nsOf(inst)
+        return ns
+
+    @property_RO
+    def action(self):
+        '''Get the menu[Bar]'s C{action} (C{None} always).
+        '''
+        return None
+
+    @property
+    def autoEnables(self):
+        '''Get the menu's C{autoEnablesItems} property (C{bool}).
+        '''
+        return True if self.NS.autoenablesItems() else False
+
+    @autoEnables.setter  # PYCHOK property.setter
+    def autoEnables(self, enable):
+        '''Set the menu's C{autoEnablesItems} property (C{bool}).
+        '''
+        b = bool(enable)
+        if b != self.autoEnables:
+            self.NS.setAutoenablesItems_(YES if b else NO)
+
+    @property_RO
+    def isAttached(self):
+        '''Get the menu's C{isAttached} property (C{bool}).
+        '''
+        return True if self.NS.isAttached() else False
+
+    @property_RO
+    def isTornOff(self):
+        '''Get the menu's C{isTornOff} property (C{bool}).
+        '''
+        return True if self.NS.isTornOff() else False
+
+    @property
+    def minWidth(self):
+        '''Get the menu bar's C{minimumWidth} property (C{float} screen coordinates).
+        '''
+        return float(self.NS.minimumWidth())
+
+    @minWidth.setter  # PYCHOK property.setter
+    def minWidth(self, width):
+        '''set the menu bar's C{minimumWidth} property (C{float} screen coordinates).
+        '''
+        if isinstanceOf(width, float, *_Ints, name='width'):
+            self.NS.setMinimumWidth_(float(width))
+
+    @property_RO
+    def parent(self):
+        '''Get the menu[Bar]'s C{parent} (L{Item}, L{Menu} or L{MenuBar}) or C{None}.
+        '''
+        return self._parent
+
+    def removeAll(self):
+        '''Clear this menu or menu bar.
+        '''
+        while self._listM:
+            self._popM(0)
+
+    @property
+    def showsState(self):
+        '''Get the menu's C{showsStateColumn} property (C{bool}).
+        '''
+        return True if self.NS.showsStateColumn() else False
+
+    @showsState.setter  # PYCHOK property.setter
+    def showsState(self, enable):
+        '''Set the menu's C{showsStateColumn} property (C{bool}).
+        '''
+        b = bool(enable)
+        if b != self.showsState:
+            self.NS.setShowsStateColumn_(YES if b else NO)
+
+    @property
+    def size(self):
+        '''Get the menu bar's C{size} property (L{Size} screen coordinates).
+        '''
+        return self.NS.size()
+
+    @size.setter  # PYCHOK property.setter
+    def size(self, size):
+        '''set the menu bar's C{size} property (L{Size} screen coordinates).
+        '''
+        self.NS.setSize_(Size(size).NS)
+
+    @property_RO
+    def tags(self):
+        '''Get the number of C{tag}s issued so far (C{int}).
+        '''
+        return _Menu_Type2._tagNr
+
+
+class Menu(_Menu_Type2):
     '''Python L{Menu} Type, wrapping ObjC C{NSMenu}.
     '''
-    _items = []
+    _nameM = 'item'  # instances held
+    _NSiMI =  None   # intermediate NSMenuItem, holding the NSMenu
+    _tag   =  0
 
     def __init__(self, title):
         '''New L{Menu}.
 
            @param title: The menu title (C{str}).
         '''
-        self._items = []
-        self.NS = NSMenu.alloc().init()
+        self._initM()
         self.title = title  # sets self.NS...Title_
-
-    def __len__(self):
-        return len(self._items)  # self.NS.numberOfItems()
 
     def append(self, *items):
         '''Add one or more items or separators to this menu.
 
            @param items: The items (L{Item} or L{ItemSeparator}) to add.
+
+           @raise TypeError: If an I{item} not L{Item} nor L{ItemSeparator}.
         '''
         for item in items:
             if isinstanceOf(item, Item, ItemSeparator, name='item'):
-                self._items.append(item)
-                item.tag = len(self._items)  # default .tag
-                self.NS.addItem_(nsOf(item))
+                self._appendM(item)
 
-#   def click(self):
-#       self.NS.performActionForItemAtIndex_(...)
+    def click(self, item, highlight=False):
+        '''Mimick clicking a menu item.
+
+           @param item: The item to click (L{Item}).
+           @keyword highlight: Highlight the clicked item (C{bool}).
+
+           @raise ValueError: If I{item} is not part of this menu.
+        '''
+        if isinstanceOf(item, Item, name='item'):
+            i = self._listM.find(item)
+            if not 0 <= i < len(self):
+                raise ValueError('invalid %s: %r' % ('item', item))
+            if highlight:
+                self.NS._performActionWithHighlightingForItemAtIndex_(i)  # leading _!
+            else:
+                self.NS.performActionForItemAtIndex_(i)
+
+    def clickKey(self, key, highlight=False, **modifiers):
+        '''Mimick clicking a menu item by the shortcut key, see C{Item.__init__}.
+
+           @param key: The shortcut key (C{str}).
+           @keyword modifiers: Optional, key I{modifier=}C{bool} pairs.
+           @keyword highlight: Highlight the clicked item (C{bool}).
+
+           @raise KeyError: If I{key} with I{modifiers} is not a
+                            shortcut of this menu.
+        '''
+        # self.NS.performKeyEquivalent_(e) too tricky
+        self.click(self.item(key=key, dflt=missing, **modifiers), highlight=highlight)
 
     def __getitem__(self, index):
-        '''Yield an or several items by index, by slice or by title.
+        '''Return the item at index or with title or several by slice.
 
-           @param index: Index (C{int}, C{str} or C{slice}).
+           @param index: The index (C{int}, C{str} or C{slice}).
 
-           @return: Each item (L{Item} or L{ItemSeparator}).
+           @return: The item (L{Item} or L{ItemSeparator}) or items.
 
            @raise IndexError: If I{index} out of range or if no item
                               titled I{index} exists.
         '''
-        return _indexer(self, index, self._items, self.item)
+        return self._getiteM(index, self.item)
 
-    def item(self, title='', action='', dflt=missing):
-        '''Find an item by title or by action.
-
-           @keyword title: Item title to match (C{str}).
-           @keyword action: Item action to match (C{str}).
-           @keyword dflt: Optional, default return value.
-
-           @return: The first matching item (L{Item}) or I{dflt}
-                    if no I{title} or I{action} match found.
-
-           @raise ValueError: No I{dflt} provided and no I{title} or
-                              I{action} match.
+    @property_RO
+    def highlightedItem(self):
+        '''Get the menu's C{highlightedItem} property (C{Item} or C{None}).
         '''
-        return _finder(self, title, action, dflt, self.items(), 'item')
+        ns = self.NS.highlightedItem()
+        return ns2Item(ns) if ns else None
+
+    @property_RO
+    def isVisible(self):
+        '''Get the menu's C{isVisible} property (C{bool}) or C{None}.
+        '''
+        try:  # mimick, not an NSMenu property
+            return self.superMenu.isVisible
+        except AttributeError:
+            return None
+
+    def insert(self, index, *items):
+        '''Insert one or more items or separators into this menu.
+
+           @param index: Insert items before this index (C{int}).
+           @param items: The items (L{Item} or L{ItemSeparator}) to insert.
+
+           @raise IndexError: If I{index} out of range.
+
+           @raise TypeError: If I{index} not C{int} or an I{item} not
+                             L{Item} nor L{ItemSeparator}.
+        '''
+        self._insertM(index, items, Item, ItemSeparator)
+
+    @property
+    def isEnabled(self):
+        '''Get the menu's C{Enabled} property (C{bool}).
+        '''
+        return bool(self._NSiMI and self._NSiMI.isEnabled())
+
+    @isEnabled.setter  # PYCHOK property.setter
+    def isEnabled(self, enable):
+        '''Set the menu's C{Enabled} property (C{bool}).
+        '''
+        b = bool(enable)
+        if b != self.isEnabled and self._NSiMI:
+            self._NSiMI.setEnabled_(YES if b else NO)
+
+    @property
+    def isHidden(self):
+        '''Get the menu's C{Hidden} property (C{bool}).
+        '''
+        return bool(self._NSiMI and self._NSiMI.isHidden())
+
+    @isHidden.setter  # PYCHOK property.setter
+    def isHidden(self, hidden):
+        '''Set the menu's C{Hidden} property (C{bool}).
+        '''
+        b = bool(hidden)
+        if b != self.isHidden and self._NSiMI:
+            self._NSiMI.setHidden_(YES if b else NO)
+
+    @property_RO
+    def isHighlighted(self):
+        '''Get the menu's C{isHighlighted} property (C{bool}).
+        '''
+        return bool(self._NSiMI and self._NSiMI.isHighlighted())
+
+    def item(self, title='', action=None, tag=None, dflt=missing, key='', **modifiers):
+        '''Find an item by title, by action, by tag or by key.
+
+           @keyword title: The item title to match (C{str}).
+           @keyword action: The item action to match (C{str} or C{callable}).
+           @keyword tag: The item tag to match (C{unsigned int}).
+           @keyword dflt: Optional, default return value.
+           @keyword key: The item shortcut key to match (C{str}).
+           @keyword modifiers: Optional, key I{modifier=}C{bool} pairs, see C{Item.__init__}.
+
+           @return: The first matching item (L{Item}) or I{dflt} if
+                    no I{title}, I{action}, I{key} or I{tag} match found.
+
+           @raise ValueError: No I{dflt} provided and no I{title},
+                              I{action} nor I{tag} match.
+        '''
+        def _raise(Error, prefix, kwds):
+            t = [('key', key)] + sorted(kwds.items())
+            raise Error('%s%s.item(%s)' % (prefix, self,
+                        ', '.join('%s=%r' % _ for _ in t)))
+
+        if key:  # find by key and modifiers
+            m, d = _modifiedMask2(0, modifiers)
+            if d:  # can't have leftovers
+                _raise(ValueError, '', d)
+
+            k = bytes2str(key)
+            for item in self.items():  # non-separators
+                if item._mask == m and item.key == k:
+                    return item
+
+            if dflt is missing:
+                _raise(KeyError, 'no such ', modifiers)
+            return dflt
+
+        elif modifiers:  # can't have modifiers
+            _raise(ValueError, '', modifiers)
+
+        return self._findM(title, action, tag, dflt)
 
     def items(self, separators=False):
         '''Yield the items in this menu.
@@ -606,17 +1003,77 @@ class Menu(_Type2):
            @return: Each L{Item} or L{ItemSeparator}.
         '''
         y = bool(separators)
-        for item in self._items:
+        for item in self._listM:
             if y or not item.isSeparator:
                 yield item
+
+    @property_RO
+    def nsMenuItem(self):
+        '''Get the menu's intermediate (C{NSMenuItem}) or C{None} if
+        the menu hasn't been added or inserted into a L{MenuBar}.
+        '''
+        ns = self._NSiMI
+        if ns:
+            m = ns2Item(ns)
+            if m is not self:  # or m.NS != ns.subMenu()
+                raise RuntimeError('%s(%s): %r' % ('ns2Item', self, m))
+        return ns or None
+
+    def pop(self, index=-1):
+        '''Remove an item by index.
+
+           @keyword index: The item's index (C{int}) or default,
+                           the last item.
+
+           @return: The removed item (L{Item}).
+
+           @raise IndexError: Invalid I{index}.
+
+           @raise TypeError: Invalid I{index}.
+        '''
+        return self._popM(index)
+
+    def remove(self, *items):
+        '''Remove one or more items from this menu.
+
+           @param items: The items to remove (C{Item}).
+
+           @raise TypeError: Invalid I{item}.
+
+           @raise ValueError: If I{item} not present.
+        '''
+        return self._removeM(items, Item, ItemSeparator)
+
+    def separator(self, index=missing):
+        '''Add or insert an item separator.
+
+           @keyword index: Insert separator before this index (C{int})
+                           or default, append separator.
+        '''
+        if index is missing:
+            self._appendM(ItemSeparator())
+        else:
+            self._insertM(index, (ItemSeparator(),), ItemSeparator)
+
+    @property
+    def tag(self):
+        '''Get the L{Menu} tag (C{int}).
+        '''
+        return self._tag
+
+    @tag.setter  # PYCHOK property.setter
+    def tag(self, tag):
+        '''Set the L{Menu} tag (C{int}).
+        '''
+        _setTag(self, tag, self._NSiMI)
 
 
 # <http://Developer.Apple.com/library/content/qa/qa1420/_index.html
 #      #//apple_ref/doc/uid/DTS10004127>
-class MenuBar(_Type2):
+class MenuBar(_Menu_Type2):
     '''Python L{MenuBar} Type, wrapping ObjC C{NSMenu}.
     '''
-    _menus = []
+    _nameM = 'menu'  # instances held
 
     def __init__(self, app=None):
         '''New L{MenuBar}.
@@ -627,18 +1084,14 @@ class MenuBar(_Type2):
 
            @see: Method L{MenuBar}C{.main}.
         '''
-        self._menus = []
-        self.NS = NSMenu.alloc().init()
+        self._initM()
         if app:  # type checked in app.setter
             self.app = app
             # XXX do not change self.NS...Title
             self._title = app.title
             # self.main(app)  # XXX trashes menu bar
-
-    def __len__(self):
-        '''Return the number of menus in this menu bar (C{int}).
-        '''
-        return len(self._menus)  # self.NS.numberOfItems()
+        if not _Globals.MenuBar:
+            _Globals.MenuBar = self
 
     def append(self, *menus):
         '''Add one or more sub-menus to this menu bar.
@@ -646,32 +1099,60 @@ class MenuBar(_Type2):
            @param menus: The menus to add (L{Menu}).
         '''
         for menu in menus:
-            isinstanceOf(menu, Menu, name='menu')
-            self._menus.append(menu)
-            menu.tag = len(self._menus)  # default .tag
-            # ns = NSMenuItem.alloc().init(); ns.setTitle(NSStr(menu.title))
-            ns = NSMenuItem.alloc().initWithTitle_action_keyEquivalent_(
-                                    NSStr(menu.title), 0, NSStr(''))
-            ns.setSubmenu_(menu.NS)
-            self.NS.addItem_(ns)
+            if isinstanceOf(menu, Menu, name='menu'):
+                self._appendM(menu)
 
     def __getitem__(self, index):
-        '''Yield one or several menus by index, by slice or by title.
+        '''Return the menu at index or with title or several by slice.
 
-           @param index: Index (C{int}, C{str} or C{slice}).
+           @param index: The index (C{int}, C{str} or C{slice}).
 
-           @return: Each menu (L{Menu}).
+           @return: The menu (L{Menu}) or menus.
 
            @raise IndexError: If I{index} out of range or if no menu
                               titled I{index} exists.
         '''
-        return _indexer(self, index, self._menus, self.menu)
+        return self._getiteM(index, self.menu)
 
-    @property
+    @property_RO
     def height(self):
         '''Get this menu bar's height (C{float}).
         '''
         return self.NS.menuBarHeight()
+
+    @property_RO
+    def highlightedMenu(self):
+        '''Get the menu's C{highlightedMenu} property (C{Menu} or C{None}).
+        '''
+        ns = self.NS.highlightedItem()
+        return ns2Item(ns) if ns else None
+
+    @property
+    def isVisible(self):
+        '''Get the menu bar's C{menuBarVisible} property (C{bool}).
+        '''
+        return bool(self.NS.menuBarVisible())
+
+    @isVisible.setter  # PYCHOK property.setter
+    def isVisible(self, visible):
+        '''Set the menu bar's C{menuBarVisible} property (C{bool}).
+        '''
+        b = bool(visible)
+        if b != self.isVisible:
+            self.NS.setMenuBarVisible_(YES if b else NO)
+
+    def insert(self, index, *menus):
+        '''Insert one or more menus into this menu bar.
+
+           @param index: Insert menus before this index (C{int}).
+           @param menus: The menus (L{Menu}) to insert.
+
+           @raise IndexError: If I{index} out of range.
+
+           @raise TypeError: If I{index} not C{int} or a I{menu} not
+                             L{Menu}.
+        '''
+        self._insertM(index, menus, Menu)
 
     def main(self, app=None):
         '''Make this menu bar the app's main menu.
@@ -690,7 +1171,7 @@ class MenuBar(_Type2):
                 self._title = self.app.title
             self.app.NS.setMainMenu_(self.NS)
 
-    def menu(self, title='', dflt=None):
+    def menu(self, title='', dflt=missing):
         '''Find a menu by title.
 
            @keyword title: The menu title to match (C{str}).
@@ -701,41 +1182,79 @@ class MenuBar(_Type2):
 
            @raise ValueError: No I{dflt} provided and no I{title} match.
         '''
-        return _finder(self, title, '', dflt, self.menus(), 'menu')
+        return self._findM(title, None, None, dflt)
 
     def menus(self):
         '''Yield the menus of this menu bar.
 
            @return: Each menu (L{Menu}).
         '''
-        for menu in self._menus:
+        for menu in self._listM:
             yield menu
+
+    def pop(self, index=-1):
+        '''Remove a menu by index.
+
+           @keyword index: The menu's index (C{int}) or default,
+                           the last menu.
+
+           @return: The removed menu (L{Menu}).
+
+           @raise IndexError: Invalid I{index}.
+
+           @raise TypeError: Invalid I{index}.
+        '''
+        return self._popM(index)
+
+    def remove(self, *menus):
+        '''Remove one or several menus from this menu bar.
+
+           @param menus: The menus to remove (C{Menu}).
+
+           @raise TypeError: Invalid I{menu}.
+
+           @raise ValueError: If I{menu} not present.
+        '''
+        return self._removeM(menus, Menu)
+
+    @property_RO
+    def tag(self):
+        '''Get the L{MenuBar} C{tag} (C{None} always).
+        '''
+        return None  # XXX or ... raise AttributeError?
 
 
 def ns2Item(ns):
-    '''Get the L{Item} instance for an C{NSMenuItem}.
+    '''Get the Python instance for an C{NSMenuItem}.
 
        @param ns: The ObjC instance (C{NSMenuItem}).
 
-       @return: The item instance (L{Item}).
+       @return: The instance (L{Item} or L{Menu}).
 
        @raise TypeError: Invalid I{ns} type.
+
+       @note: A L{Menu} instance is returned if I{ns} was an
+              intermediate C{NSMenuItem}, created internally
+              to append or insert a L{Menu} to a L{MenuBar}.
     '''
     if isObjCInstanceOf(ns, NSMenuItem, name='ns'):
         return _Globals.Items[ns.representedObject()]
 
 
 def title2action(title):
-    '''Convert a menu item title to a valid callback method name.
+    '''Convert a menu item C{title} to a Python callback method name.
 
        @param title: The item's title (C{str}).
 
-       @return: Name for the callback method (C{str}).
+       @return: Name for the Python callback method (C{str}),
+                C{menuI{title}_} with all non-alphanumeric characters
+                except colon and underscore removed from the I{title}.
 
-       @raise ValueError: Invalid method name for this I{title}.
+       @raise ValueError: If I{title} can not be converted.
     '''
-    t = title.rstrip().rstrip('.').strip()
-    return name2pymethod('menu' + ''.join(t.split()) + '_')
+    t = ''.join(_ for _ in bytes2str(title).strip().rstrip('.')
+                        if _.isalnum() or _ in '_:')
+    return name2pymethod('menu' + t + '_')
 
 
 _Types.Item          = Item
@@ -749,27 +1268,59 @@ if __name__ == '__main__':
 
     _allisting(__all__, locals(), __version__, __file__)
 
-    i = Item('Quit', 'menuTerminate_', key='q')
-    print('\n%s properties:' % (i,))
-    for p, v in sorted(properties(i).items()):
-        print('  %s = %r' % (p, v))
+    bar  = MenuBar()
+    menu = Menu('Test')
+    item = Item('Quit', 'menuTerminate_', key='q')
 
-    _ = '''
+    menu.append(item)
+    bar.append(menu)
+
+    assert len(bar) == 1, len(bar)
+    assert len(menu) == 1, len(menu)
+    assert menu in bar, (menu, bar)
+    assert item in menu, (item, menu)
+    assert menu.parent is bar, menu.parent
+    assert item.parent is menu, item.parent
+
+    for x in (item, menu, bar):
+        print('\n%s properties:' % (x,))
+        for p, v in sorted(properties(x).items()):
+            print('  %s = %r' % (p, v))
+
+    bar.remove(menu)
+    menu.remove(item)
+
+    assert len(bar) == 0, len(bar)
+    assert len(menu) == 0, len(menu)
+    assert menu not in bar, (menu, bar)
+    assert item not in menu, (item, menu)
+    assert menu.parent is None, menu.parent
+    assert item.parent is None, item.parent
+
+    assert item.subMenu is None, item.subMenu
+
+    item.subMenu = menu
+    assert item.subMenu is menu, item.subMenu
+
+    item.subMenu = None
+    assert item.subMenu is None, item.subMenu
+
+_ = '''
 
  menus.__all__ = tuple(
    menus.Item is <class .Item>,
    menus.ItemSeparator is <class .ItemSeparator>,
    menus.Menu is <class .Menu>,
    menus.MenuBar is <class .MenuBar>,
-   menus.ns2Item is <function .ns2Item at 0x10713f5f0>,
-   menus.title2action is <function .title2action at 0x107142f50>,
+   menus.ns2Item is <function .ns2Item at 0x10c781320>,
+   menus.title2action is <function .title2action at 0x10c789050>,
  )[6]
- menus.__version__ = '18.08.09'
+ menus.__version__ = '18.08.15'
 
 Item('Quit', 'menuTerminate_', Cmd+Q) properties:
-  NS = <ObjCInstance(NSMenuItem(<Id_t at 0x1040e4b90>) of 0x7fce19450af0) at 0x1040fee90>
-  NSDelegate = 'AttributeError("use \'NSdelegate\' not \'NSD-\'",)'
-  NSdelegate = 'AttributeError("no \'delegate\' [class]method or property: NSMenuItem(<Id_t at 0x1040e4b90>) of 0x7fce19450af0",)'
+  NS = <ObjCInstance(NSMenuItem(<Id_t at 0x10c798170>) of 0x7fce5449c590) at 0x10c78e490>
+  NSDelegate = 'AttributeError("use \'NSd-\' not \'NSD-\'",)'
+  NSdelegate = None
   action = 'menuTerminate_'
   allowsKeyWhenHidden = False
   alt = False
@@ -788,17 +1339,58 @@ Item('Quit', 'menuTerminate_', Cmd+Q) properties:
   keyEquivalent = 'q'
   keyEquivalentModifiers = {'shift': False, 'alt': False, 'cmd': True, 'ctrl': False}
   keyModifiers = {'shift': False, 'alt': False, 'cmd': True, 'ctrl': False}
-  nsMenu = None
   nsTarget = None
-  parent = None
+  parent = Menu('Test') at 0x10c78e1d0
   shift = False
   state = 0
   subMenu = None
-  tag = 0
+  tag = 1
   title = 'Quit'
   toolTip = ''
+
+Menu('Test') properties:
+  NS = <ObjCInstance(NSMenu(<Id_t at 0x10c790560>) of 0x7fce54499bc0) at 0x10c78e290>
+  NSDelegate = 'AttributeError("use \'NSd-\' not \'NSD-\'",)'
+  NSdelegate = None
+  action = None
+  app = None
+  autoEnables = True
+  highlightedItem = None
+  isAttached = False
+  isEnabled = True
+  isHidden = False
+  isHighlighted = False
+  isTornOff = False
+  isVisible = None
+  minWidth = 0.0
+  parent = MenuBar(None) at 0x10c786ed0
+  showsState = True
+  size = <NSSize_t(width=100.0, height=29.0) at 0x10c7af5f0>
+  tag = 2
+  tags = 2
+  title = 'Test'
+
+MenuBar(None) properties:
+  NS = <ObjCInstance(NSMenu(<Id_t at 0x10c719b00>) of 0x7fce54499580) at 0x10c78e110>
+  NSDelegate = 'AttributeError("use \'NSd-\' not \'NSD-\'",)'
+  NSdelegate = None
+  action = None
+  app = None
+  autoEnables = True
+  height = 0.0
+  highlightedMenu = None
+  isAttached = False
+  isTornOff = False
+  isVisible = True
+  minWidth = 0.0
+  parent = None
+  showsState = True
+  size = <NSSize_t(width=107.0, height=29.0) at 0x10c7af950>
+  tag = None
+  tags = 2
+  title = None
 '''
-    del _
+del _
 
 # MIT License <http://OpenSource.org/licenses/MIT>
 #

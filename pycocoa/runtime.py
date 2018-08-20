@@ -33,10 +33,10 @@ from octypes import __i386__, __LP64__, c_struct_t, c_void, \
                     TypeCodeError
 from oslibs  import cfString2str, _csignature, libobjc
 from utils   import bytes2str, _ByteStrs, _Constants, _exports, \
-                    isinstanceOf, lambda1, missing,  name2py, \
-                    printf, property2, str2bytes
+                    isinstanceOf, lambda1, missing,  name2py, printf, \
+                    property2, property_RO, str2bytes, _TypeError
 
-__version__ = '18.08.06'
+__version__ = '18.08.14'
 
 # <http://Developer.Apple.com/documentation/objectivec/
 #         objc_associationpolicy?language=objc>
@@ -113,7 +113,7 @@ def _objc_cast(objc):
         return cast(objc, Id_t)
 #   elif isinstance(objc, _Strs):
 #       return cast(get_class(objc), Id_t)
-    raise TypeError('%s invalid: %r' % ('objc', objc))
+    raise TypeError('invalid %s: %r' % ('objc', objc))
 
 
 def _ObjC_log(inst, what, T, *args):  # B, C, I, M, S
@@ -214,7 +214,7 @@ class _ObjCBase(object):
     def __repr__(self):
         return '<%s(%s) at %#x>' % (self.__class__.__name__, self, id(self))
 
-    @property
+    @property_RO
     def description(self):
         '''Return this ObjC's description, first line of C{__doc__}.
         '''
@@ -255,25 +255,25 @@ class ObjCBoundMethod(_ObjCBase):
         _ObjC_log(self, 'call', 'B', *args)
         return self._method(self._inst, self._objc_id, *args)
 
-    @property
+    @property_RO
     def inst(self):
         '''Get the C{ObjCInstance} or C{ObjCClass}.
         '''
         return self._inst
 
-    @property
+    @property_RO
     def method(self):
         '''Get the method (C{ObjC[Class]Method}).
         '''
         return self._method
 
-    @property
+    @property_RO
     def name(self):
         '''Get the method's name (C{str}).
         '''
         return self._method.name
 
-    @property
+    @property_RO
     def objc_id(self):
         '''Get the ObjC instance (C{Class_t} or L{ObjCSubclass}).
         '''
@@ -440,13 +440,13 @@ class ObjCClass(_ObjCBase):
             return self._cache_method(name, ObjCMethod,
                    self._methods, libobjc.class_getInstanceMethod)
 
-    @property
+    @property_RO
     def name(self):
         '''Get the ObjC class name (C{str}).
         '''
         return bytes2str(self._name)
 
-    @property
+    @property_RO
     def ptr(self):
         '''Get the ObjC class (L{Class_t}).
         '''
@@ -454,7 +454,7 @@ class ObjCClass(_ObjCBase):
 
     NS = ptr
 
-    @property
+    @property_RO
     def Type(self):
         '''Get the Python Type for this ObjC class (C{class} or C{None}).
         '''
@@ -582,13 +582,13 @@ class ObjCInstance(_ObjCBase):
     def __str__(self):
         return '%s(%r) of %#x' % (self.objc_classname, self.ptr, self.ptr.value)
 
-    @property
+    @property_RO
     def objc_class(self):
         '''Get this instance' ObjC class (L{ObjCClass}).
         '''
         return self._objc_class
 
-    @property
+    @property_RO
     def objc_classname(self):
         '''Get this instance' ObjC class name (C{str}).
         '''
@@ -597,7 +597,7 @@ class ObjCInstance(_ObjCBase):
     # XXX name property clashes with NSPrinter.NS.name()
     name = objc_classname  # for C{ObjCMethod.__call__}
 
-    @property
+    @property_RO
     def objc_description(self):
         '''Get this instance' ObjC description (C{str}).
         '''
@@ -607,7 +607,7 @@ class ObjCInstance(_ObjCBase):
         # d.release()
         return s
 
-    @property
+    @property_RO
     def ptr(self):
         '''Get this instance' ObjC object (L{Id_t}).
         '''
@@ -628,7 +628,7 @@ class ObjCInstance(_ObjCBase):
         '''
         return set_ivar(self._objc_ptr, name, value, ctype=ctype)
 
-    @property
+    @property_RO
     def Type(self):
         '''Get the Python Type for this instance' ObjC class (C{class}).
         '''
@@ -652,9 +652,8 @@ class ObjCConstant(ObjCInstance):
            @param name: The constant's name (C{str} or C{bytes}).
            @keyword const_t: C type (C{ObjC_t} or other C{ctypes}_t).
         '''
-        if isinstanceOf(name, _ByteStrs, name='name'):
-            o = const_t.in_dll(dylib, name)
-            return super(ObjCConstant, cls).__new__(cls, o)
+        o = const_t.in_dll(dylib, bytes2str(name, name='name'))
+        return super(ObjCConstant, cls).__new__(cls, o)
 
 
 class ObjCMethod(_ObjCBase):
@@ -742,25 +741,25 @@ class ObjCMethod(_ObjCBase):
         return '%s(%s) %s %s' % (self.name, _c_tstr(*self.argtypes),
                          _c_tstr(self.restype), bytes2str(self.encoding))
 
-    @property
+    @property_RO
     def argtypes(self):
         '''Get this method's argument types (C{ctypes}[]).
         '''
         return self._argtypes
 
-    @property
+    @property_RO
     def encoding(self):
         '''Get this method's encoding (C{bytes}).
         '''
         return self._encoding
 
-    @property
+    @property_RO
     def name(self):
         '''Get this method's C{Sel/cmd} name (C{str}).
         '''
         return name2py(self._name)
 
-    @property
+    @property_RO
     def restype(self):
         '''Get this method's result type (C{ctype}).
         '''
@@ -940,19 +939,19 @@ class ObjCSubclass(_ObjCBase):
             return objc_method
         return decorator
 
-    @property
+    @property_RO
     def name(self):
         '''Get the name of this ObjC sub-class (C{str}).
         '''
         return bytes2str(self._name)
 
-    @property
+    @property_RO
     def obj_class(self):
         '''Get the ObjC class.
         '''
         return self._obj_class
 
-    @property
+    @property_RO
     def obj_metaclass(self):
         '''Get the ObjC metaclass, or None if un-registered.
         '''
@@ -1149,8 +1148,7 @@ def isObjCInstanceOf(objc, *Classes, **name_missing):
     if name is missing:
         return None
 
-    t = ', '.join(getattr(c, 'name', getattr(c, '__name__', str(c))) for c in Classes)
-    raise TypeError('%s not %s: %r' % (name, t, objc))
+    raise _TypeError(name, objc, isObjCInstanceOf, Classes)
 
 
 def isMetaClass(objc):

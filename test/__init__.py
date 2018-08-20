@@ -73,7 +73,7 @@ from time import sleep
 from testsuite import TestSuite  # PYCHOK for setup.py
 
 __all__ = ('terminating',)
-__version__ = '18.08.04'
+__version__ = '18.08.12'
 
 
 def terminating(app, timeout):
@@ -90,7 +90,7 @@ def terminating(app, timeout):
         terminate = app.terminate_
         secs = float(timeout) + 0.5
     except AttributeError:
-        raise ValueError('%s invalid: %r' % ('app', app))
+        raise ValueError('invalid %s: %r' % ('app', app))
     except ValueError:
         return
 

@@ -18,7 +18,7 @@ from pytypes import dict2NS, py2NS, url2NS
 from oslibs  import NO, NSCancelButton, NSOKButton, YES
 from runtime import isObjCInstanceOf, release
 # from strs  import StrAttd
-from utils   import _Constants, _Strs, _text_title2, _Types
+from utils   import _Constants, property_RO, _Strs, _text_title2, _Types
 
 from os import linesep
 from threading import Thread
@@ -40,7 +40,7 @@ __all__ = ('AlertPanel', 'AlertStyle',
            'PanelButton',
            'SavePanel',
            'TextPanel')
-__version__ = '18.08.08'
+__version__ = '18.08.14'
 
 
 class AlertStyle(_Constants):  # Enum?
@@ -88,7 +88,7 @@ class AlertPanel(_Type2):
         '''
         if info and isinstance(info, _Strs):
             if len(info) > 50 or linesep in info:
-                raise ValueError('%s invalid: %r' % ('info', info))
+                raise ValueError('invalid %s: %r' % ('info', info))
             self._info = info
 
         self._ok = ok if isinstance(ok, _Strs) else 'OK'
@@ -168,7 +168,7 @@ class AlertPanel(_Type2):
         else:
             r = PanelButton.Suppressed
 
-        ns.release()
+        # ns.release()  # XXX may crash
         return r
 
 
@@ -198,7 +198,7 @@ class BrowserPanel(_Type2):
             self.NS = NSNotificationCenter.defaultCenter()
         self.title = title or name or 'default'
 
-    @property
+    @property_RO
     def browser(self):
         '''Get the browser instance (C{browser type}).
         '''
@@ -255,7 +255,7 @@ class ErrorPanel(AlertPanel):
         if isObjCInstanceOf(ns_error, NSError, name='ns_error'):
             ns = NSAlert.alloc().alertWithError_(ns_error)
             r = _runModal(ns, timeout)
-            ns.release()
+            # ns.release()  # XXX may crash
         else:
             r = PanelButton.Error
         return r
@@ -332,7 +332,7 @@ class OpenPanel(_Type2):
             # mimick NSOpenPanel.setAllowedFileTypes_
             if path.lower().endswith(filetypes):
                 break
-        # ns.release()  # XXX crashes Cancel, pick
+        # ns.release()  # XXX crashes Cancel pick
         return path
 
 
@@ -454,7 +454,7 @@ class SavePanel(_Type2):
             elif r == NSCancelButton:
                 r = dflt
                 break
-        ns.release()
+        # ns.release()  # XXX may crash on Cancel
         return r
 
 

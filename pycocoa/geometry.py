@@ -8,12 +8,12 @@
 # all imports listed explicitly to help PyChecker
 from bases   import _Type0
 from octypes import NSPoint_t, NSRect_t, NSRect4_t, NSSize_t
-from utils   import isinstanceOf
+from utils   import isinstanceOf, property_RO
 
 __all__ = ('Point', 'Point2',
            'Rect', 'Rect4',
            'Size', 'Size2')
-__version__ = '18.06.28'
+__version__ = '18.08.14'
 
 
 class Point(_Type0):
@@ -34,7 +34,7 @@ class Point(_Type0):
     def point(self, point):
         if isinstance(point, (tuple, list)):
             if len(point) != 2:
-                raise ValueError('%s invalid: %r' % ('point', point))
+                raise ValueError('invalid %s: %r' % ('point', point))
             self.NS = NSPoint_t(*point)
         elif isinstance(point, Point):
             self.NS = point.NS
@@ -94,14 +94,14 @@ class Rect(_Type0):
             if len(rect) == 2:  # assume (w, h)
                 rect = (self._x, self._y) + tuple(rect)
             elif len(rect) != 4:
-                raise ValueError('%s invalid: %r' % ('rect', rect))
+                raise ValueError('invalid %s: %r' % ('rect', rect))
             self.NS = NSRect4_t(*rect)
         elif isinstance(rect, Rect):
             self.NS = rect.NS
         elif isinstanceOf(rect, NSRect_t, name='rect'):
             self.NS = rect
 
-    @property
+    @property_RO
     def bottom(self):
         '''Get the lower y coordinate (C{float} or C{int}).
         '''
@@ -122,7 +122,7 @@ class Rect(_Type0):
             self.y -= height
         self.NS.size.height = height
 
-    @property
+    @property_RO
     def left(self):
         '''Get the lower x coordinate (C{float} or C{int}).
         '''
@@ -141,7 +141,7 @@ class Rect(_Type0):
         origin = Point(origin)
         self.x, self.y = origin.x, origin.y
 
-    @property
+    @property_RO
     def right(self):
         '''Get the upper x coordinate (C{float} or C{int}).
         '''
@@ -160,7 +160,7 @@ class Rect(_Type0):
         size = Size(size)
         self.width, self.height = size.width, size.height
 
-    @property
+    @property_RO
     def top(self):
         '''Get the upper y coordinate (C{float} or C{int}).
         '''
@@ -235,7 +235,7 @@ class Size(_Type0):
         '''
         if isinstance(size, (tuple, list)):
             if len(size) != 2:
-                raise ValueError('%s invalid: %r' % ('size', size))
+                raise ValueError('invalid %s: %r' % ('size', size))
             self.NS = NSSize_t(*size)
         elif isinstance(size, Size):
             self.NS = size.NS

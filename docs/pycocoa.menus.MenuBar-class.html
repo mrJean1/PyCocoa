@@ -61,15 +61,17 @@
 <!-- ==================== CLASS DESCRIPTION ==================== -->
 <h1 class="epydoc">Class MenuBar</h1><p class="nomargin-top"></p>
 <pre class="base-tree">
-  object --+            
-           |            
-bases._Type0 --+        
-               |        
-    bases._Type1 --+    
-                   |    
-        bases._Type2 --+
-                       |
-                      <strong class="uidshort">MenuBar</strong>
+  object --+                
+           |                
+bases._Type0 --+            
+               |            
+    bases._Type1 --+        
+                   |        
+        bases._Type2 --+    
+                       |    
+             _Menu_Type2 --+
+                           |
+                          <strong class="uidshort">MenuBar</strong>
 </pre>
 
 <hr />
@@ -109,23 +111,6 @@ bases._Type0 --+
     </td><td class="summary">
       <table width="100%" cellpadding="0" cellspacing="0" border="0">
         <tr>
-          <td><span class="summary-sig"><a name="__len__"></a><span class="summary-sig-name">__len__</span>(<span class="summary-sig-arg">self</span>)</span><br />
-      Return the number of menus in this menu bar (<code>int</code>).</td>
-          <td align="right" valign="top">
-            
-            
-          </td>
-        </tr>
-      </table>
-      
-    </td>
-  </tr>
-<tr>
-    <td width="15%" align="right" valign="top" class="summary">
-      <span class="summary-type">&nbsp;</span>
-    </td><td class="summary">
-      <table width="100%" cellpadding="0" cellspacing="0" border="0">
-        <tr>
           <td><span class="summary-sig"><a href="pycocoa.menus.MenuBar-class.html#append" class="summary-sig-name">append</a>(<span class="summary-sig-arg">self</span>,
         <span class="summary-sig-arg">*menus</span>)</span><br />
       Add one or more sub-menus to this menu bar.</td>
@@ -146,7 +131,26 @@ bases._Type0 --+
         <tr>
           <td><span class="summary-sig"><a href="pycocoa.menus.MenuBar-class.html#__getitem__" class="summary-sig-name">__getitem__</a>(<span class="summary-sig-arg">self</span>,
         <span class="summary-sig-arg">index</span>)</span><br />
-      Yield one or several menus by index, by slice or by title.</td>
+      Return the menu at index or with title or several by slice.</td>
+          <td align="right" valign="top">
+            
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a href="pycocoa.menus.MenuBar-class.html#insert" class="summary-sig-name">insert</a>(<span class="summary-sig-arg">self</span>,
+        <span class="summary-sig-arg">index</span>,
+        <span class="summary-sig-arg">*menus</span>)</span><br />
+      Insert one or more menus into this menu bar.</td>
           <td align="right" valign="top">
             
             
@@ -182,7 +186,7 @@ bases._Type0 --+
         <tr>
           <td><span class="summary-sig"><a href="pycocoa.menus.MenuBar-class.html#menu" class="summary-sig-name">menu</a>(<span class="summary-sig-arg">self</span>,
         <span class="summary-sig-arg">title</span>=<span class="summary-sig-default"><code class="variable-quote">'</code><code class="variable-string"></code><code class="variable-quote">'</code></span>,
-        <span class="summary-sig-arg">dflt</span>=<span class="summary-sig-default">None</span>)</span><br />
+        <span class="summary-sig-arg">dflt</span>=<span class="summary-sig-default">missing</span>)</span><br />
       Find a menu by title.</td>
           <td align="right" valign="top">
             
@@ -210,8 +214,49 @@ bases._Type0 --+
       
     </td>
   </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a href="pycocoa.menus.MenuBar-class.html#pop" class="summary-sig-name">pop</a>(<span class="summary-sig-arg">self</span>,
+        <span class="summary-sig-arg">index</span>=<span class="summary-sig-default">-1</span>)</span><br />
+      Remove a menu by index.</td>
+          <td align="right" valign="top">
+            
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a href="pycocoa.menus.MenuBar-class.html#remove" class="summary-sig-name">remove</a>(<span class="summary-sig-arg">self</span>,
+        <span class="summary-sig-arg">*menus</span>)</span><br />
+      Remove one or several menus from this menu bar.</td>
+          <td align="right" valign="top">
+            
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
   <tr>
     <td colspan="2" class="summary">
+    <p class="indent-wrapped-lines"><b>Inherited from <code>_Menu_Type2</code></b>:
+      <code>__contains__</code>,
+      <code>__len__</code>,
+      <code>removeAll</code>
+      </p>
     <p class="indent-wrapped-lines"><b>Inherited from <code>bases._Type2</code></b>:
       <code>__str__</code>
       </p>
@@ -250,10 +295,47 @@ bases._Type0 --+
       Get this menu bar's height (<code>float</code>).
     </td>
   </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="pycocoa.menus.MenuBar-class.html#highlightedMenu" class="summary-name">highlightedMenu</a><br />
+      Get the menu's <code>highlightedMenu</code> property 
+      (<code>Menu</code> or <code>None</code>).
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="pycocoa.menus.MenuBar-class.html#isVisible" class="summary-name">isVisible</a><br />
+      Get the menu bar's <code>menuBarVisible</code> property 
+      (<code>bool</code>).
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="pycocoa.menus.MenuBar-class.html#tag" class="summary-name">tag</a><br />
+      Get the <a href="pycocoa.menus.MenuBar-class.html" 
+      class="link">MenuBar</a> <code>tag</code> (<code>None</code> always).
+    </td>
+  </tr>
   <tr>
     <td colspan="2" class="summary">
+    <p class="indent-wrapped-lines"><b>Inherited from <code>_Menu_Type2</code></b>:
+      <code>action</code>,
+      <code>autoEnables</code>,
+      <code>isAttached</code>,
+      <code>isTornOff</code>,
+      <code>minWidth</code>,
+      <code>parent</code>,
+      <code>showsState</code>,
+      <code>size</code>,
+      <code>tags</code>
+      </p>
     <p class="indent-wrapped-lines"><b>Inherited from <code>bases._Type2</code></b>:
-      <code>tag</code>,
       <code>title</code>
       </p>
     <p class="indent-wrapped-lines"><b>Inherited from <code>bases._Type1</code></b>:
@@ -359,19 +441,53 @@ bases._Type0 --+
     </td>
   </tr></table>
   
-  <p>Yield one or several menus by index, by slice or by title.</p>
+  <p>Return the menu at index or with title or several by slice.</p>
   <dl class="fields">
     <dt>Parameters:</dt>
     <dd><ul class="nomargin-top">
-        <li><strong class="pname"><code>index</code></strong> - Index (<code>int</code>, <code>str</code> or <code>slice</code>).</li>
+        <li><strong class="pname"><code>index</code></strong> - The index (<code>int</code>, <code>str</code> or 
+          <code>slice</code>).</li>
     </ul></dd>
     <dt>Returns:</dt>
-        <dd>Each menu (<a href="pycocoa.menus.Menu-class.html" 
-          class="link">Menu</a>).</dd>
+        <dd>The menu (<a href="pycocoa.menus.Menu-class.html" 
+          class="link">Menu</a>) or menus.</dd>
     <dt>Raises:</dt>
     <dd><ul class="nomargin-top">
         <li><code><strong class='fraise'>IndexError</strong></code> - If <i>index</i> out of range or if no menu titled <i>index</i> 
         exists.</li>
+    </ul></dd>
+  </dl>
+</td></tr></table>
+</div>
+<a name="insert"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">insert</span>(<span class="sig-arg">self</span>,
+        <span class="sig-arg">index</span>,
+        <span class="sig-arg">*menus</span>)</span>
+  </h3>
+  </td><td align="right" valign="top"
+    >&nbsp;
+    </td>
+  </tr></table>
+  
+  <p>Insert one or more menus into this menu bar.</p>
+  <dl class="fields">
+    <dt>Parameters:</dt>
+    <dd><ul class="nomargin-top">
+        <li><strong class="pname"><code>index</code></strong> - Insert menus before this index (<code>int</code>).</li>
+        <li><strong class="pname"><code>menus</code></strong> - The menus (<a href="pycocoa.menus.Menu-class.html" 
+          class="link">Menu</a>) to insert.</li>
+    </ul></dd>
+    <dt>Raises:</dt>
+    <dd><ul class="nomargin-top">
+        <li><code><strong class='fraise'>IndexError</strong></code> - If <i>index</i> out of range.</li>
+        <li><code><strong class='fraise'>TypeError</strong></code> - If <i>index</i> not <code>int</code> or a <i>menu</i> not <a 
+        href="pycocoa.menus.Menu-class.html" class="link">Menu</a>.</li>
     </ul></dd>
   </dl>
 </td></tr></table>
@@ -416,7 +532,7 @@ bases._Type0 --+
   <tr valign="top"><td>
   <h3 class="epydoc"><span class="sig"><span class="sig-name">menu</span>(<span class="sig-arg">self</span>,
         <span class="sig-arg">title</span>=<span class="sig-default"><code class="variable-quote">'</code><code class="variable-string"></code><code class="variable-quote">'</code></span>,
-        <span class="sig-arg">dflt</span>=<span class="sig-default">None</span>)</span>
+        <span class="sig-arg">dflt</span>=<span class="sig-default">missing</span>)</span>
   </h3>
   </td><td align="right" valign="top"
     >&nbsp;
@@ -463,6 +579,67 @@ bases._Type0 --+
   </dl>
 </td></tr></table>
 </div>
+<a name="pop"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">pop</span>(<span class="sig-arg">self</span>,
+        <span class="sig-arg">index</span>=<span class="sig-default">-1</span>)</span>
+  </h3>
+  </td><td align="right" valign="top"
+    >&nbsp;
+    </td>
+  </tr></table>
+  
+  <p>Remove a menu by index.</p>
+  <dl class="fields">
+    <dt>Parameters:</dt>
+    <dd><ul class="nomargin-top">
+        <li><strong class="pname"><code>index</code></strong> - The menu's index (<code>int</code>) or default, the last menu.</li>
+    </ul></dd>
+    <dt>Returns:</dt>
+        <dd>The removed menu (<a href="pycocoa.menus.Menu-class.html" 
+          class="link">Menu</a>).</dd>
+    <dt>Raises:</dt>
+    <dd><ul class="nomargin-top">
+        <li><code><strong class='fraise'>IndexError</strong></code> - Invalid <i>index</i>.</li>
+        <li><code><strong class='fraise'>TypeError</strong></code> - Invalid <i>index</i>.</li>
+    </ul></dd>
+  </dl>
+</td></tr></table>
+</div>
+<a name="remove"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">remove</span>(<span class="sig-arg">self</span>,
+        <span class="sig-arg">*menus</span>)</span>
+  </h3>
+  </td><td align="right" valign="top"
+    >&nbsp;
+    </td>
+  </tr></table>
+  
+  <p>Remove one or several menus from this menu bar.</p>
+  <dl class="fields">
+    <dt>Parameters:</dt>
+    <dd><ul class="nomargin-top">
+        <li><strong class="pname"><code>menus</code></strong> - The menus to remove (<code>Menu</code>).</li>
+    </ul></dd>
+    <dt>Raises:</dt>
+    <dd><ul class="nomargin-top">
+        <li><code><strong class='fraise'>TypeError</strong></code> - Invalid <i>menu</i>.</li>
+        <li><code><strong class='fraise'>ValueError</strong></code> - If <i>menu</i> not present.</li>
+    </ul></dd>
+  </dl>
+</td></tr></table>
+</div>
 <br />
 <!-- ==================== PROPERTY DETAILS ==================== -->
 <a name="section-PropertyDetails"></a>
@@ -484,6 +661,78 @@ bases._Type0 --+
     <dt>Get Method:</dt>
     <dd class="value"><span class="summary-sig">height(<span class="summary-sig-arg">self</span>)</span>
         - Get this menu bar's height (<code>float</code>).
+    </dd>
+    <dt>Set Method:</dt>
+    <dd class="value"><span class="summary-sig">Read_Only(<span class="summary-sig-arg">self</span>,
+        <span class="summary-sig-arg">ignored</span>)</span>
+        - Throws an <code>AttributeError</code>, always.
+    </dd>
+  </dl>
+</td></tr></table>
+</div>
+<a name="highlightedMenu"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <h3 class="epydoc">highlightedMenu</h3>
+  <p>Get the menu's <code>highlightedMenu</code> property 
+  (<code>Menu</code> or <code>None</code>).</p>
+  <dl class="fields">
+    <dt>Get Method:</dt>
+    <dd class="value"><span class="summary-sig">highlightedMenu(<span class="summary-sig-arg">self</span>)</span>
+        - Get the menu's <code>highlightedMenu</code> property (<code>Menu</code> or 
+<code>None</code>).
+    </dd>
+    <dt>Set Method:</dt>
+    <dd class="value"><span class="summary-sig">Read_Only(<span class="summary-sig-arg">self</span>,
+        <span class="summary-sig-arg">ignored</span>)</span>
+        - Throws an <code>AttributeError</code>, always.
+    </dd>
+  </dl>
+</td></tr></table>
+</div>
+<a name="isVisible"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <h3 class="epydoc">isVisible</h3>
+  <p>Get the menu bar's <code>menuBarVisible</code> property 
+  (<code>bool</code>).</p>
+  <dl class="fields">
+    <dt>Get Method:</dt>
+    <dd class="value"><span class="summary-sig">isVisible(<span class="summary-sig-arg">self</span>)</span>
+        - Get the menu bar's <code>menuBarVisible</code> property 
+(<code>bool</code>).
+    </dd>
+    <dt>Set Method:</dt>
+    <dd class="value"><span class="summary-sig">isVisible(<span class="summary-sig-arg">self</span>,
+        <span class="summary-sig-arg">visible</span>)</span>
+        - Set the menu bar's <code>menuBarVisible</code> property 
+(<code>bool</code>).
+    </dd>
+  </dl>
+</td></tr></table>
+</div>
+<a name="tag"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <h3 class="epydoc">tag</h3>
+  <p>Get the <a href="pycocoa.menus.MenuBar-class.html" 
+  class="link">MenuBar</a> <code>tag</code> (<code>None</code> always).</p>
+  <dl class="fields">
+    <dt>Get Method:</dt>
+    <dd class="value"><span class="summary-sig">tag(<span class="summary-sig-arg">self</span>)</span>
+        - Get the <a href="pycocoa.menus.MenuBar-class.html" class="link">MenuBar</a>
+<code>tag</code> (<code>None</code> always).
+    </dd>
+    <dt>Set Method:</dt>
+    <dd class="value"><span class="summary-sig">Read_Only(<span class="summary-sig-arg">self</span>,
+        <span class="summary-sig-arg">ignored</span>)</span>
+        - Throws an <code>AttributeError</code>, always.
     </dd>
   </dl>
 </td></tr></table>
@@ -520,7 +769,7 @@ bases._Type0 --+
 <table border="0" cellpadding="0" cellspacing="0" width="100%%">
   <tr>
     <td align="left" class="footer">
-    Generated by Epydoc 3.0.1 on Sun Aug 12 21:20:49 2018
+    Generated by Epydoc 3.0.1 on Mon Aug 20 13:46:43 2018
     </td>
     <td align="right" class="footer">
       <a target="mainFrame" href="http://epydoc.sourceforge.net"

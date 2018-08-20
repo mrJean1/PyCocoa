@@ -16,7 +16,8 @@ from nstypes import NSApplication, nsBundleRename, \
 from runtime import isObjCInstanceOf, ObjCClass, ObjCInstance, \
                     _ObjC_log_totals, ObjCSubclass, release, retain, \
                     send_super_init
-from utils   import _Globals, bytes2str, isinstanceOf, printf, _Types
+from utils   import _Globals, bytes2str, isinstanceOf, printf, \
+                    property_RO, _Types
 
 from threading import Thread
 from time import sleep
@@ -26,7 +27,7 @@ __all__ = ('App',
            'Tile',
            'app_title',
            'ns2App')
-__version__ = '18.08.09'
+__version__ = '18.08.14'
 
 
 class App(_Type2):
@@ -77,7 +78,7 @@ class App(_Type2):
 
         if self._menubar is None:
             # create the menu bar, once
-            b = MenuBar(self)
+            b = MenuBar(app=self)
             m = Menu(title=self.title)
             m.append(  # note key modifier cmd=True is the default
                 Item('Full ' + 'Screen', key='f', ctrl=True),  # Ctrl-Cmd-F, Esc to exit
@@ -93,7 +94,7 @@ class App(_Type2):
 
         self._menubar.append(menu)
 
-    @property
+    @property_RO
     def badge(self):
         '''Get this app's dock tile/badge (L{Tile}).
         '''
@@ -133,43 +134,43 @@ class App(_Type2):
         else:
             self.NS.unhideAllApplications_(self.NS)
 
-    @property
+    @property_RO
     def isHidden(self):
         '''Get this app's hidden state (C{bool}).
         '''
         return True if self.NS.isHidden() else False
 
-    @property
+    @property_RO
     def isRunning(self):
         '''Get this app's running state (C{bool}).
         '''
         return True if self.NS.isRunning() else False
 
-    @property
+    @property_RO
     def isUp(self):
         '''Get this app's launched state (C{bool}).
         '''
         return self._isUp
 
-    @property
+    @property_RO
     def keyWindow(self):
         '''Get this app's key window (L{Window}) or C{None}.
         '''
         return self._keyWindow
 
-    @property
+    @property_RO
     def lastWindow(self):
         '''Get this app's most recent key or main window (L{Window}).
         '''
         return self._lastWindow
 
-    @property
+    @property_RO
     def mainWindow(self):
         '''Get this app's main window (L{Window}) or C{None}.
         '''
         return self._mainWindow
 
-    @property
+    @property_RO
     def menubar(self):
         '''Get this app's menu bar (L{MenuBar}).
         '''
@@ -256,13 +257,12 @@ class App(_Type2):
         '''
         self.terminate()
 
-    def windowClose_(self, window):
+    def windowClose_(self, window):  # PYCHOK expected
         '''Closing I{window} callback.
         '''
-        if self.keyWindow is window:
-            self._keyWindow = None
-        if self.mainWindow is window:
-            self._mainWindow = None
+        self.windowKey_(None)
+        # self.windowLast_(None)
+        self.windowMain_(None)
 
     def windowCloseOK_(self, window):  # PYCHOK expected
         '''Is it OK? to close I{window} callback.
@@ -274,11 +274,7 @@ class App(_Type2):
     def windowKey_(self, window):
         '''Callback I{window} becomes/resigns C{Key}.
         '''
-        if window:
-            self.windowLast_(window)
-            self._keyWindow = window
-        else:
-            self._keyWindow = None
+        self._keyWindow = self._window_None(window)
 #       if self._menubar:
 #           self._menubar.NS.update()
 
@@ -290,11 +286,7 @@ class App(_Type2):
     def windowMain_(self, window):
         '''Callback I{window} becomes/resigns C{Main}.
         '''
-        if window:
-            self.windowLast_(window)
-            self._mainWindow = window
-        else:
-            self._mainWindow = None
+        self._mainWindow = self._window_None(window)
 
     def windowPrint_(self, window):  # PYCHOK expected
         '''Print I{window} callback.
@@ -315,6 +307,15 @@ class App(_Type2):
         '''
         return True
 
+    def _window_None(self, window):
+        '''(INTERNAL) windowKey and -Main helper.
+        '''
+        if window:
+            if window is not self._lastWindow:
+                self.windowLast_(window)
+            return window
+        else:
+            return None
 
 # <http://Developer.Apple.com/library/content/samplecode/
 #       CocoaTipsAndTricks/Listings/ExceptionReporting_ExceptionReportingAppDelegate_m.html>

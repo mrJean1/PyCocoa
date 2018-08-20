@@ -410,6 +410,14 @@ bases._Type0 --+
     <td width="15%" align="right" valign="top" class="summary">
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
+        <a href="pycocoa.fonts.Font-class.html#NS" class="summary-name">NS</a><br />
+      Get the ObjC instance (<code>NSFont</code>).
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
         <a href="pycocoa.fonts.Font-class.html#size" class="summary-name">size</a><br />
       Get the <code>point size</code> of the font (<code>float</code> or 
       <code>int</code>).
@@ -454,7 +462,6 @@ bases._Type0 --+
   <tr>
     <td colspan="2" class="summary">
     <p class="indent-wrapped-lines"><b>Inherited from <code>bases._Type0</code></b>:
-      <code>NS</code>,
       <code>NSDelegate</code>
       </p>
     <p class="indent-wrapped-lines"><b>Inherited from <code>object</code></b>:
@@ -701,6 +708,11 @@ bases._Type0 --+
     <dd class="value"><span class="summary-sig">count(<span class="summary-sig-arg">self</span>)</span>
         - Get the number of glyphs (<code>int</code>).
     </dd>
+    <dt>Set Method:</dt>
+    <dd class="value"><span class="summary-sig">Read_Only(<span class="summary-sig-arg">self</span>,
+        <span class="summary-sig-arg">ignored</span>)</span>
+        - Throws an <code>AttributeError</code>, always.
+    </dd>
   </dl>
 </td></tr></table>
 </div>
@@ -715,6 +727,11 @@ bases._Type0 --+
     <dt>Get Method:</dt>
     <dd class="value"><span class="summary-sig">family(<span class="summary-sig-arg">self</span>)</span>
         - Get the font <code>family</code> name (<code>str</code>).
+    </dd>
+    <dt>Set Method:</dt>
+    <dd class="value"><span class="summary-sig">Read_Only(<span class="summary-sig-arg">self</span>,
+        <span class="summary-sig-arg">ignored</span>)</span>
+        - Throws an <code>AttributeError</code>, always.
     </dd>
   </dl>
 </td></tr></table>
@@ -732,10 +749,15 @@ bases._Type0 --+
     <dd class="value"><span class="summary-sig">height(<span class="summary-sig-arg">self</span>)</span>
         - Get the <code>line</code> height (<code>float</code> or <code>int</code>).
     </dd>
+    <dt>Set Method:</dt>
+    <dd class="value"><span class="summary-sig">Read_Only(<span class="summary-sig-arg">self</span>,
+        <span class="summary-sig-arg">ignored</span>)</span>
+        - Throws an <code>AttributeError</code>, always.
+    </dd>
   </dl>
 <div class="fields">      <p><strong>Note:</strong>
-        The <code>height</code> is the sum of the tallest ascender, tallest
-        descender and leading.
+        The <code>line</code> height is the sum of the tallest ascender, 
+        tallest descender and leading heights.
       </p>
 </div></td></tr></table>
 </div>
@@ -750,6 +772,11 @@ bases._Type0 --+
     <dt>Get Method:</dt>
     <dd class="value"><span class="summary-sig">heightAscender(<span class="summary-sig-arg">self</span>)</span>
         - Get the <code>ascender</code> height (<code>float</code>).
+    </dd>
+    <dt>Set Method:</dt>
+    <dd class="value"><span class="summary-sig">Read_Only(<span class="summary-sig-arg">self</span>,
+        <span class="summary-sig-arg">ignored</span>)</span>
+        - Throws an <code>AttributeError</code>, always.
     </dd>
   </dl>
 </td></tr></table>
@@ -767,6 +794,11 @@ bases._Type0 --+
     <dd class="value"><span class="summary-sig">heightCap(<span class="summary-sig-arg">self</span>)</span>
         - Get the <code>cap</code> height (<code>float</code> or <code>int</code>).
     </dd>
+    <dt>Set Method:</dt>
+    <dd class="value"><span class="summary-sig">Read_Only(<span class="summary-sig-arg">self</span>,
+        <span class="summary-sig-arg">ignored</span>)</span>
+        - Throws an <code>AttributeError</code>, always.
+    </dd>
   </dl>
 </td></tr></table>
 </div>
@@ -781,6 +813,11 @@ bases._Type0 --+
     <dt>Get Method:</dt>
     <dd class="value"><span class="summary-sig">heightDescender(<span class="summary-sig-arg">self</span>)</span>
         - Get the <code>descender</code> height (<code>float</code>).
+    </dd>
+    <dt>Set Method:</dt>
+    <dd class="value"><span class="summary-sig">Read_Only(<span class="summary-sig-arg">self</span>,
+        <span class="summary-sig-arg">ignored</span>)</span>
+        - Throws an <code>AttributeError</code>, always.
     </dd>
   </dl>
 </td></tr></table>
@@ -799,6 +836,11 @@ bases._Type0 --+
         - Get the <code>leading</code> height (<code>float</code> or 
 <code>int</code>).
     </dd>
+    <dt>Set Method:</dt>
+    <dd class="value"><span class="summary-sig">Read_Only(<span class="summary-sig-arg">self</span>,
+        <span class="summary-sig-arg">ignored</span>)</span>
+        - Throws an <code>AttributeError</code>, always.
+    </dd>
   </dl>
 </td></tr></table>
 </div>
@@ -813,6 +855,11 @@ bases._Type0 --+
     <dt>Get Method:</dt>
     <dd class="value"><span class="summary-sig">heightUnderline(<span class="summary-sig-arg">self</span>)</span>
         - Get the <code>underline</code> position (<code>float</code>).
+    </dd>
+    <dt>Set Method:</dt>
+    <dd class="value"><span class="summary-sig">Read_Only(<span class="summary-sig-arg">self</span>,
+        <span class="summary-sig-arg">ignored</span>)</span>
+        - Throws an <code>AttributeError</code>, always.
     </dd>
   </dl>
 </td></tr></table>
@@ -830,6 +877,11 @@ bases._Type0 --+
     <dd class="value"><span class="summary-sig">heightX(<span class="summary-sig-arg">self</span>)</span>
         - Get the <code>x</code> height (<code>float</code> or <code>int</code>).
     </dd>
+    <dt>Set Method:</dt>
+    <dd class="value"><span class="summary-sig">Read_Only(<span class="summary-sig-arg">self</span>,
+        <span class="summary-sig-arg">ignored</span>)</span>
+        - Throws an <code>AttributeError</code>, always.
+    </dd>
   </dl>
 </td></tr></table>
 </div>
@@ -844,6 +896,11 @@ bases._Type0 --+
     <dt>Get Method:</dt>
     <dd class="value"><span class="summary-sig">isBold(<span class="summary-sig-arg">self</span>)</span>
         - Get the <b>Bold</b> trait (<code>bool</code>).
+    </dd>
+    <dt>Set Method:</dt>
+    <dd class="value"><span class="summary-sig">Read_Only(<span class="summary-sig-arg">self</span>,
+        <span class="summary-sig-arg">ignored</span>)</span>
+        - Throws an <code>AttributeError</code>, always.
     </dd>
   </dl>
 </td></tr></table>
@@ -860,6 +917,11 @@ bases._Type0 --+
     <dd class="value"><span class="summary-sig">isCompressed(<span class="summary-sig-arg">self</span>)</span>
         - Get the <code>Compressed</code> trait (<code>bool</code>).
     </dd>
+    <dt>Set Method:</dt>
+    <dd class="value"><span class="summary-sig">Read_Only(<span class="summary-sig-arg">self</span>,
+        <span class="summary-sig-arg">ignored</span>)</span>
+        - Throws an <code>AttributeError</code>, always.
+    </dd>
   </dl>
 </td></tr></table>
 </div>
@@ -874,6 +936,11 @@ bases._Type0 --+
     <dt>Get Method:</dt>
     <dd class="value"><span class="summary-sig">isCondensed(<span class="summary-sig-arg">self</span>)</span>
         - Get the <code>Condensed</code> trait (<code>bool</code>).
+    </dd>
+    <dt>Set Method:</dt>
+    <dd class="value"><span class="summary-sig">Read_Only(<span class="summary-sig-arg">self</span>,
+        <span class="summary-sig-arg">ignored</span>)</span>
+        - Throws an <code>AttributeError</code>, always.
     </dd>
   </dl>
 </td></tr></table>
@@ -890,6 +957,11 @@ bases._Type0 --+
     <dd class="value"><span class="summary-sig">isExpanded(<span class="summary-sig-arg">self</span>)</span>
         - Get the <code>Expanded</code> trait (<code>bool</code>).
     </dd>
+    <dt>Set Method:</dt>
+    <dd class="value"><span class="summary-sig">Read_Only(<span class="summary-sig-arg">self</span>,
+        <span class="summary-sig-arg">ignored</span>)</span>
+        - Throws an <code>AttributeError</code>, always.
+    </dd>
   </dl>
 </td></tr></table>
 </div>
@@ -904,6 +976,11 @@ bases._Type0 --+
     <dt>Get Method:</dt>
     <dd class="value"><span class="summary-sig">isItalic(<span class="summary-sig-arg">self</span>)</span>
         - Get the <i>Italic</i> trait (<code>bool</code>).
+    </dd>
+    <dt>Set Method:</dt>
+    <dd class="value"><span class="summary-sig">Read_Only(<span class="summary-sig-arg">self</span>,
+        <span class="summary-sig-arg">ignored</span>)</span>
+        - Throws an <code>AttributeError</code>, always.
     </dd>
   </dl>
 </td></tr></table>
@@ -920,6 +997,11 @@ bases._Type0 --+
     <dd class="value"><span class="summary-sig">isMonoSpace(<span class="summary-sig-arg">self</span>)</span>
         - Get the <code>MonoSpace</code> trait (<code>bool</code>).
     </dd>
+    <dt>Set Method:</dt>
+    <dd class="value"><span class="summary-sig">Read_Only(<span class="summary-sig-arg">self</span>,
+        <span class="summary-sig-arg">ignored</span>)</span>
+        - Throws an <code>AttributeError</code>, always.
+    </dd>
   </dl>
 </td></tr></table>
 </div>
@@ -935,6 +1017,11 @@ bases._Type0 --+
     <dd class="value"><span class="summary-sig">isNarrow(<span class="summary-sig-arg">self</span>)</span>
         - Get the <code>Narrow</code> trait (<code>bool</code>).
     </dd>
+    <dt>Set Method:</dt>
+    <dd class="value"><span class="summary-sig">Read_Only(<span class="summary-sig-arg">self</span>,
+        <span class="summary-sig-arg">ignored</span>)</span>
+        - Throws an <code>AttributeError</code>, always.
+    </dd>
   </dl>
 </td></tr></table>
 </div>
@@ -949,6 +1036,11 @@ bases._Type0 --+
     <dt>Get Method:</dt>
     <dd class="value"><span class="summary-sig">isPoster(<span class="summary-sig-arg">self</span>)</span>
         - Get the <code>Poster</code> trait (<code>bool</code>).
+    </dd>
+    <dt>Set Method:</dt>
+    <dd class="value"><span class="summary-sig">Read_Only(<span class="summary-sig-arg">self</span>,
+        <span class="summary-sig-arg">ignored</span>)</span>
+        - Throws an <code>AttributeError</code>, always.
     </dd>
   </dl>
 </td></tr></table>
@@ -966,6 +1058,11 @@ bases._Type0 --+
     <dd class="value"><span class="summary-sig">isSansSerif(<span class="summary-sig-arg">self</span>)</span>
         - Get the <code>SansSerif</code> &quot;trait&quot; (<code>bool</code>).
     </dd>
+    <dt>Set Method:</dt>
+    <dd class="value"><span class="summary-sig">Read_Only(<span class="summary-sig-arg">self</span>,
+        <span class="summary-sig-arg">ignored</span>)</span>
+        - Throws an <code>AttributeError</code>, always.
+    </dd>
   </dl>
 </td></tr></table>
 </div>
@@ -981,6 +1078,11 @@ bases._Type0 --+
     <dd class="value"><span class="summary-sig">isSmallCaps(<span class="summary-sig-arg">self</span>)</span>
         - Get the <code>SmallCaps</code> trait (<code>bool</code>).
     </dd>
+    <dt>Set Method:</dt>
+    <dd class="value"><span class="summary-sig">Read_Only(<span class="summary-sig-arg">self</span>,
+        <span class="summary-sig-arg">ignored</span>)</span>
+        - Throws an <code>AttributeError</code>, always.
+    </dd>
   </dl>
 </td></tr></table>
 </div>
@@ -995,6 +1097,11 @@ bases._Type0 --+
     <dt>Get Method:</dt>
     <dd class="value"><span class="summary-sig">isUnBold(<span class="summary-sig-arg">self</span>)</span>
         - Get the <code>UnBold</code> &quot;trait&quot; (<code>bool</code>).
+    </dd>
+    <dt>Set Method:</dt>
+    <dd class="value"><span class="summary-sig">Read_Only(<span class="summary-sig-arg">self</span>,
+        <span class="summary-sig-arg">ignored</span>)</span>
+        - Throws an <code>AttributeError</code>, always.
     </dd>
   </dl>
 </td></tr></table>
@@ -1012,6 +1119,11 @@ bases._Type0 --+
     <dd class="value"><span class="summary-sig">isUnItalic(<span class="summary-sig-arg">self</span>)</span>
         - Get the <code>UnItalic</code> &quot;trait&quot; (<code>bool</code>).
     </dd>
+    <dt>Set Method:</dt>
+    <dd class="value"><span class="summary-sig">Read_Only(<span class="summary-sig-arg">self</span>,
+        <span class="summary-sig-arg">ignored</span>)</span>
+        - Throws an <code>AttributeError</code>, always.
+    </dd>
   </dl>
 </td></tr></table>
 </div>
@@ -1027,6 +1139,11 @@ bases._Type0 --+
     <dt>Get Method:</dt>
     <dd class="value"><span class="summary-sig">isVertical(<span class="summary-sig-arg">self</span>)</span>
         - Get the <code>Vertical</code> &quot;trait&quot; (<code>bool</code>).
+    </dd>
+    <dt>Set Method:</dt>
+    <dd class="value"><span class="summary-sig">Read_Only(<span class="summary-sig-arg">self</span>,
+        <span class="summary-sig-arg">ignored</span>)</span>
+        - Throws an <code>AttributeError</code>, always.
     </dd>
   </dl>
 </td></tr></table>
@@ -1051,6 +1168,26 @@ bases._Type0 --+
   </dl>
 </td></tr></table>
 </div>
+<a name="NS"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <h3 class="epydoc">NS</h3>
+  <p>Get the ObjC instance (<code>NSFont</code>).</p>
+  <dl class="fields">
+    <dt>Get Method:</dt>
+    <dd class="value"><span class="summary-sig">NS(<span class="summary-sig-arg">self</span>)</span>
+        - Get the ObjC instance (<code>NSFont</code>).
+    </dd>
+    <dt>Set Method:</dt>
+    <dd class="value"><span class="summary-sig">Read_Only(<span class="summary-sig-arg">self</span>,
+        <span class="summary-sig-arg">ignored</span>)</span>
+        - Throws an <code>AttributeError</code>, always.
+    </dd>
+  </dl>
+</td></tr></table>
+</div>
 <a name="size"></a>
 <div>
 <table class="details" border="1" cellpadding="3"
@@ -1064,6 +1201,11 @@ bases._Type0 --+
     <dd class="value"><span class="summary-sig">size(<span class="summary-sig-arg">self</span>)</span>
         - Get the <code>point size</code> of the font (<code>float</code> or 
 <code>int</code>).
+    </dd>
+    <dt>Set Method:</dt>
+    <dd class="value"><span class="summary-sig">Read_Only(<span class="summary-sig-arg">self</span>,
+        <span class="summary-sig-arg">ignored</span>)</span>
+        - Throws an <code>AttributeError</code>, always.
     </dd>
   </dl>
 </td></tr></table>
@@ -1082,6 +1224,11 @@ bases._Type0 --+
         - Get the italic angle (<code>float</code>, <code>int</code> or 
 <code>None</code>).
     </dd>
+    <dt>Set Method:</dt>
+    <dd class="value"><span class="summary-sig">Read_Only(<span class="summary-sig-arg">self</span>,
+        <span class="summary-sig-arg">ignored</span>)</span>
+        - Throws an <code>AttributeError</code>, always.
+    </dd>
   </dl>
 </td></tr></table>
 </div>
@@ -1096,6 +1243,11 @@ bases._Type0 --+
     <dt>Get Method:</dt>
     <dd class="value"><span class="summary-sig">traits(<span class="summary-sig-arg">self</span>)</span>
         - Get all font traits (<code>FontTrait</code>s mask).
+    </dd>
+    <dt>Set Method:</dt>
+    <dd class="value"><span class="summary-sig">Read_Only(<span class="summary-sig-arg">self</span>,
+        <span class="summary-sig-arg">ignored</span>)</span>
+        - Throws an <code>AttributeError</code>, always.
     </dd>
   </dl>
 </td></tr></table>
@@ -1116,6 +1268,11 @@ bases._Type0 --+
 href="pycocoa.fonts.Font-class.html" class="link">Font</a> or 
 <code>None</code>).
     </dd>
+    <dt>Set Method:</dt>
+    <dd class="value"><span class="summary-sig">Read_Only(<span class="summary-sig-arg">self</span>,
+        <span class="summary-sig-arg">ignored</span>)</span>
+        - Throws an <code>AttributeError</code>, always.
+    </dd>
   </dl>
 </td></tr></table>
 </div>
@@ -1132,6 +1289,11 @@ href="pycocoa.fonts.Font-class.html" class="link">Font</a> or
     <dd class="value"><span class="summary-sig">weight(<span class="summary-sig-arg">self</span>)</span>
         - Get the book <code>weight</code> of the font (<code>int</code> or 
 <code>None</code>).
+    </dd>
+    <dt>Set Method:</dt>
+    <dd class="value"><span class="summary-sig">Read_Only(<span class="summary-sig-arg">self</span>,
+        <span class="summary-sig-arg">ignored</span>)</span>
+        - Throws an <code>AttributeError</code>, always.
     </dd>
   </dl>
 </td></tr></table>
@@ -1168,7 +1330,7 @@ href="pycocoa.fonts.Font-class.html" class="link">Font</a> or
 <table border="0" cellpadding="0" cellspacing="0" width="100%%">
   <tr>
     <td align="left" class="footer">
-    Generated by Epydoc 3.0.1 on Sun Aug 12 21:20:49 2018
+    Generated by Epydoc 3.0.1 on Mon Aug 20 13:46:43 2018
     </td>
     <td align="right" class="footer">
       <a target="mainFrame" href="http://epydoc.sourceforge.net"

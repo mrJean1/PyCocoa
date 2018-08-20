@@ -29,11 +29,11 @@ from oslibs   import NO, NSBackingStoreBuffered, \
 from runtime  import isObjCInstanceOf, ObjCClass, ObjCInstance, \
                      ObjCSubclass, release, retain, send_super_init
 from utils    import aspect_ratio, bytes2str, _Constants, _exports, \
-                     _Globals, isinstanceOf, _Python3, _text_title2, \
-                     _Types
+                     _Globals, isinstanceOf, property_RO, _Python3, \
+                     _text_title2, _Types
 # from enum   import Enum
 
-__version__ = '18.08.08'
+__version__ = '18.08.14'
 
 _Cascade = NSPoint_t(25, 25)  # PYCHOK false
 
@@ -131,7 +131,7 @@ class Screen(Rect):
             c = min(max(0, cascade), min(f.size.width, f.size.height))
             f = f.origin.x + c, f.origin.y + c, w, h
         elif fraction < 0 or fraction > 1:
-            raise ValueError('%s invalid: %.2f' % ('fraction', fraction))
+            raise ValueError('invalid %s: %.2f' % ('fraction', fraction))
         self.rect = f
 
 
@@ -200,7 +200,7 @@ class Window(_Type2):
         self.NS.cascadeTopLeftFromPoint_(_Cascade)
         _Cascade.x += 25
 
-    @property
+    @property_RO
     def frame(self):
         '''Get this window's frame (L{Rect}).
         '''
@@ -238,43 +238,43 @@ class Window(_Type2):
         elif self.isHidden:
             self.NS.deminiaturize_(self.NS)
 
-    @property
+    @property_RO
     def isFull(self):
         '''Get this window's full screen state (C{bool}).
         '''
         return True if self.NS.isInFullScreenMode() else False
 
-    @property
+    @property_RO
     def isHidden(self):
         '''Get this window's hidden state (C{bool}).
         '''
         return True if self.NS.isMiniaturized() else False
 
-    @property
+    @property_RO
     def isKey(self):
         '''Get this window's C{Key} state (C{bool}).
         '''
         return self._isKey  # self.NS.isKeyWindow()
 
-    @property
+    @property_RO
     def isMain(self):
         '''Get this window's C{Main} state (C{bool}).
         '''
         return self._isMain  # self.NS.isMainWindow()
 
-    @property
+    @property_RO
     def isVisible(self):
         '''Get this window's visible state (C{bool}).
         '''
         return True if self.NS.isVisible() else False
 
-    @property
+    @property_RO
     def isPrintable(self):
         '''Get this window's printable state (C{bool}).
         '''
         return True if self.PMview else False
 
-    @property
+    @property_RO
     def isZoomed(self):
         '''Get this window's zoomed state (C{bool}).
         '''
@@ -341,7 +341,7 @@ class Window(_Type2):
             else:  # NSSize_t
                 r = ratio.width, ratio.height
         except (AttributeError, ValueError):
-            raise WindowError('%s invalid: %r' % ('ratio', ratio))
+            raise WindowError('invalid %s: %r' % ('ratio', ratio))
 
         r = aspect_ratio(*r)
         if r:
@@ -598,8 +598,8 @@ class _NSWindowDelegate(object):
         '''
         self._ns2w(ns_notification)
         self.window.windowMain_(True)
-#       if self.isFull:
-#           NSMenu.setMenuBarVisible_(False)  # hide
+#       if self.isFull and _Globals.MenuBar:
+#           _Globals.MenuBar.isVisible = False  # hide
 
     @_ObjC.method('v@')
     def windowDidResignKey_(self, ns_notification):
@@ -614,8 +614,8 @@ class _NSWindowDelegate(object):
         '''
         self._ns2w(ns_notification)
         self.window.windowMain_(False)
-#       if self.isFull:
-#           NSMenu.setMenuBarVisible_(True)  # show
+#       if self.isFull and _Globals.MenuBar:
+#           _Globals.MenuBar.isVisible = True  # show
 
     @_ObjC.method('v@')
     def windowDidResize_(self, ns_notification):

@@ -23,9 +23,10 @@ from oslibs  import cfNumber2bool, cfString, cfString2str, cfURL2str, \
                     _csignature, _free_memory, get_lib_framework, \
                     libCF, YES
 from runtime import isObjCInstanceOf, send_message, _Xargs
-from utils   import _exports, isinstanceOf, _Strs, zfstr, _Types
+from utils   import _exports, isinstanceOf, property_RO, _Strs, \
+                    zfstr, _Types
 
-__version__ = '18.08.06'
+__version__ = '18.08.14'
 
 libPC = None  # loaded on-demand
 kPMServerLocal = None
@@ -202,7 +203,7 @@ class _PM_Type0(_Type0):
             self._libPCcall(libPC_func, byref(u))
         return cfURL2str(u)
 
-    @property
+    @property_RO
     def PM(self):
         '''Get the ObjC C{PMobject}.
         '''
@@ -250,19 +251,19 @@ class Paper(_PM_Type0):
             pm = name_pm
         _PM_Type0.__init__(self, pm)
 
-    @property
+    @property_RO
     def height(self):
         '''Get the paper height in I{points} (C{float}).
         '''
         return self._2float(libPC.PMPaperGetHeight)
 
-    @property
+    @property_RO
     def ID(self):
         '''Get the paper IDentifier (C{str}).
         '''
         return self._2str(libPC.PMPaperGetID)
 
-    @property
+    @property_RO
     def isCustom(self):
         '''True if this is a custom paper (C{bool}).
         '''
@@ -279,13 +280,13 @@ class Paper(_PM_Type0):
             pm = printer.PM
         return self._2str(libPC.PMPaperCreateLocalizedName, pm)
 
-    @property
+    @property_RO
     def margins(self):
         '''Get the paper margins (L{PaperMargins}).
         '''
         return PaperMargins(self._2rect(libPC.PMPaperGetMargins))
 
-    @property
+    @property_RO
     def name(self):
         '''Get the paper name (C{str}).
         '''
@@ -293,13 +294,13 @@ class Paper(_PM_Type0):
             self._name = self._2str(libPC.PMPaperGetName)
         return self._name
 
-    @property
+    @property_RO
     def PPD(self):
         '''Get the paper's PPD name (C{URL}).
         '''
         return self._2str(libPC.PMPaperGetPPDPaperName)
 
-    @property
+    @property_RO
     def printer(self):
         '''Get the printer corresponding to this paper (C{Printer}) or C{None}.
         '''
@@ -309,19 +310,19 @@ class Paper(_PM_Type0):
                 return p
         return None
 
-    @property
+    @property_RO
     def size2inch(self):
         '''Get 2-tuple (width, height) in I{inch} (C{float}s).
         '''
         return self.width / self._ppi, self.height / self._ppi
 
-    @property
+    @property_RO
     def size2mm(self):
         '''Get 2-tuple (width, height) in I{millimeter} (C{float}s).
         '''
         return self.width / self._ppmm, self.height / self._ppmm
 
-    @property
+    @property_RO
     def width(self):
         '''Get the paper width in I{points} (C{float}).
         '''
@@ -386,7 +387,7 @@ class PaperMargins(PMRect_t):
 
         self._PM = self
 
-    @property
+    @property_RO
     def PM(self):
         return self._PM
 
@@ -429,9 +430,9 @@ class Printer(_PM_Type0):
             pm = send_message(ns, '_printer', restype=PMPrinter_t)
 
         _PM_Type0.__init__(self, pm)
-        self.NS = ns
+        self._NS = ns  # _RO
 
-    @property
+    @property_RO
     def description(self):
         '''Get printer description (C{json}).
         '''
@@ -439,25 +440,25 @@ class Printer(_PM_Type0):
         d = send_message(self.NS, 'description', restype=Id_t)
         return ns2py(d)
 
-    @property
+    @property_RO
     def deviceDescription(self):
         '''Get the C{NSDevice} description (C{dict}).
         '''
         return ns2py(self.NS.deviceDescription())
 
-    @property
+    @property_RO
     def deviceURI(self):
         '''Get the printer device (C{URI}).
         '''
         return self._2ustr(libPC.PMPrinterCopyDeviceURI)
 
-    @property
+    @property_RO
     def ID(self):
         '''Get the printer IDentifier (C{str}).
         '''
         return cfString2str(libPC.PMPrinterGetID(self.PM))
 
-    @property
+    @property_RO
     def isColor(self):
         '''Is printer color (C{bool}).
         '''
@@ -465,37 +466,37 @@ class Printer(_PM_Type0):
                        'color' in self.name.lower() or
                        'color' in self.makemodel.lower()) else False
 
-    @property
+    @property_RO
     def isDefault(self):
         '''Is this the default printer (C{bool}).
         '''
         return True if libPC.PMPrinterIsDefault(self.PM) else False
 
-    @property
+    @property_RO
     def isRemote(self):
         '''Is this a remote printer (C{bool}).
         '''
         return self._2bool(libPC.PMPrinterIsRemote)
 
-#   @property
+#   @property_RO
 #   def localname(self):
 #       '''Get the printer's localized name (C{str}).
 #       '''
 #       return cfString2str(libPC.PMPrinterGetName(self.PM))
 
-    @property
+    @property_RO
     def location(self):
         '''Get the printer location (C{str}).
         '''
         return cfString2str(libPC.PMPrinterGetLocation(self.PM))
 
-    @property
+    @property_RO
     def makemodel(self):
         '''Get the printer make and model (C{str}).
         '''
         return self._2str(libPC.PMPrinterGetMakeAndModelName)
 
-    @property
+    @property_RO
     def name(self):
         '''Get the printer name (C{str}).
         '''
@@ -503,26 +504,32 @@ class Printer(_PM_Type0):
             self._name = cfString2str(libPC.PMPrinterGetName(self.PM))
         return self._name
 
-    @property
+    @property_RO
+    def NS(self):
+        '''Get the ObjC instance (C{NSPrinter}).
+        '''
+        return self._NS
+
+    @property_RO
     def papers(self):
         '''Yield each paper available (L{Paper}).
         '''
         return get_papers(self)
 
-    @property
+    @property_RO
     def PPD(self):
         '''Get the printer PPD description (C{URL}).
         '''
         return self._2ustr(libPC.PMPrinterCopyDescriptionURL,
                                         kPMPPDDescriptionType)
 
-    @property
+    @property_RO
     def psCapable(self):
         '''Is the printer PostScript capable (C{bool}).
         '''
         return True if libPC.PMPrinterIsPostScriptCapable(self.PM) else False
 
-    @property
+    @property_RO
     def psLevel(self):
         '''Get the printer's PostScript language level (C{int}).
         '''
@@ -589,7 +596,7 @@ class Printer(_PM_Type0):
         else:
             return None
 
-    @property
+    @property_RO
     def resolution(self):
         '''Get the highest (horizontal, vertical) resolution supported by this printer (C{float}s, dots-per-inch).
         '''

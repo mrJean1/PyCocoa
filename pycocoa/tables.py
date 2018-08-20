@@ -22,13 +22,13 @@ from oslibs   import NSTableViewSolidHorizontalGridLineMask, \
                      NSTextAlignmentRight, YES
 from runtime  import isObjCInstanceOf, ObjCClass, ObjCInstance, \
                      ObjCSubclass, release, retain, send_super_init
-from utils    import _Globals, isinstanceOf, _Types
+from utils    import _Globals, isinstanceOf, property_RO, _Types
 from windows  import Screen, Window, WindowStyle
 
 __all__ = ('NSTableViewDelegate',
            'Table', 'TableWindow',
            'closeTables')
-__version__ = '18.08.04'
+__version__ = '18.08.14'
 
 _Alignment = dict(center=NSTextAlignmentCenter,
                justified=NSTextAlignmentJustified,
@@ -68,7 +68,7 @@ def _format(header, col):
                 # col.sizeToFit()  # fits width of headerCell text!
                 col.setWidth_(float(f))
         except (IndexError, TypeError, ValueError):
-            raise ValueError('%s invalid: %s' % ('header', header))
+            raise ValueError('invalid %s: %s' % ('header', header))
     return t.pop()
 
 
@@ -106,7 +106,7 @@ class Table(_Type2):
         self._rows    = []
 
     def _release(self):
-        # release all NSStr-s
+        # release all NSStr-s and NS-s
         while self._rows:
             for s in (self._rows.pop() or ()):
                 if isinstance(s, NSStr) and s is not _NS.BlankCell:
@@ -148,7 +148,7 @@ class Table(_Type2):
 
         cols = []
         high = 0
-        id2i = {}
+        id2i = {}  # map col.identifier to col number
         wide = f.width  # == v.frame().size.width
         # <http://Developer.Apple.com/documentation/appkit/nstablecolumn>
         for i, h in enumerate(self._headers):
@@ -220,7 +220,7 @@ class _NSTableViewDelegate(object):
         self = ObjCInstance(send_super_init(self))
         self.cols = cols  # column headers/titles
         self.rows = rows
-        self.id2i = id2i  # map col.identifier to number
+        self.id2i = id2i  # map col.identifier to col number
         # self.id_s = NSStr(str(id(self)))
         return self
 
@@ -346,7 +346,7 @@ class TableWindow(Window):
                                           excl=WindowStyle.Miniaturizable,
                                           auto=True)  # XXX False?
         self.NSview = sv = NSScrollView.alloc().initWithFrame_(f)
-        self.PMview = tbl  # printable view
+        self.PMview = tbl  # printable view, scrollview isn't
 
         sv.setDocumentView_(tbl)
         sv.setHasVerticalScroller_(YES)
@@ -357,7 +357,7 @@ class TableWindow(Window):
 
         _Globals.Tables.append(self)
 
-    @property
+    @property_RO
     def table(self):
         '''Get the table (L{Table}).
         '''
