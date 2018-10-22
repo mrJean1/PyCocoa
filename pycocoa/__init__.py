@@ -25,11 +25,11 @@ and I{simple_VLCplayer.py} require installation of the U{VLC App
 corresponding U{Python-VLC<http://PyPI.org/project/python-vlc>} binding.
 
 The tests and examples have only been run with 64-bit Python 2.7.15 and
-3.7.0 using U{Python-VLC<http://PyPI.org/project/python-vlc>} 2.2.8, 3.0.1
-and 3.0.3 (with the compatible U{VLC App<http://www.VideoLan.org/vlc>}),
-but only on macOS 10.13.5 or 10.13.6 High Sierra.  PyCocoa has I{not been
-tested} on iOS nor with 32-bit Python and I{does not work} with
-U{PyPy<http://PyPy.org>} nor with U{Intel(R) Python
+3.7.1 using U{Python-VLC<http://PyPI.org/project/python-vlc>} 2.2.8, 3.0.1,
+3.0.3 and 3.0.4 (with the compatible U{VLC App<http://www.VideoLan.org/vlc>})
+and only on macOS 10.13.5 or 10.13.6 High Sierra or 10.14.0 Mojave.  PyCocoa
+has I{not been tested} on iOS nor with 32-bit Python and I{does not work}
+with U{PyPy<http://PyPy.org>} nor with U{Intel(R) Python
 <http://Software.Intel.com/en-us/distribution-for-python>}.
 
 All PyCocoa source code has been statically
@@ -38,10 +38,10 @@ with U{PyChecker<http://PyPI.org/project/pychecker>},
 U{PyFlakes<http://PyPI.org/project/pyflakes>},
 U{PyCodeStyle<http://PyPI.org/project/pycodestyle>} (formerly Pep8) and
 U{McCabe<http://PyPI.org/project/mccabe>} using 64-bit Python 2.7.15 and with
-U{Flake8<http://PyPI.org/project/flake8>} using 64-bit Python 3.7.0.
+U{Flake8<http://PyPI.org/project/flake8>} using 64-bit Python 3.7.1.
 
 To install PyCocoa, type C{pip install PyCocoa} or C{easy_install PyCocoa}
-in a terminal window.  Alternatively, download C{PyCocoa-X.Y.Z} from
+in a terminal window.  Alternatively, download C{PyCocoa-y.m.d.zip} from
 U{PyPI<http://PyPI.org/project/PyCocoa>} or
 U{GitHub<http://GitHub.com/mrJean1/PyCocoa>}, C{unzip} the downloaded file,
 C{cd} to directory C{PyCocoa-} and type C{python setup.py install}.  To
@@ -118,7 +118,7 @@ POSSIBILITY OF SUCH DAMAGE.}
 from os.path import abspath, dirname
 import sys
 
-__version__ = '18.08.16'
+__version__ = '18.10.22'
 
 p = sys.platform
 if not p.startswith('darwin'):
