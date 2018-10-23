@@ -1361,6 +1361,7 @@ pycocoa.fonts.Font.count	pycocoa.fonts.Font-class.html#count
 pycocoa.fonts.Font.isExpanded	pycocoa.fonts.Font-class.html#isExpanded
 pycocoa.fonts.Font.name	pycocoa.fonts.Font-class.html#name
 pycocoa.fonts.Font.isVertical	pycocoa.fonts.Font-class.html#isVertical
+pycocoa.fonts.Font.heightBaseline	pycocoa.fonts.Font-class.html#heightBaseline
 pycocoa.fonts.Font.isCompressed	pycocoa.fonts.Font-class.html#isCompressed
 pycocoa.fonts.Font.isUnBold	pycocoa.fonts.Font-class.html#isUnBold
 pycocoa.fonts.Font.isNarrow	pycocoa.fonts.Font-class.html#isNarrow

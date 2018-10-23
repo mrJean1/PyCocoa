@@ -24,7 +24,7 @@ from utils   import bytes2str, _ByteStrs, _Constants, _exports, \
                     flint, _Ints, isinstanceOf, property_RO, \
                     _Singletons, _Types
 
-__version__ = '18.08.14'
+__version__ = '18.10.23'
 
 # <http://Developer.Apple.com/documentation/appkit/nsfont.weight>
 # _NSFontWeigthHeavy      = 13 ?
@@ -279,6 +279,12 @@ class Font(_Type0):
         return self.NS.ascender()
 
     @property_RO
+    def heightBaseline(self):
+        '''Get the C{baseline} offset (C{float} or C{int}).
+        '''
+        return flint(NSMain.LayoutManager.defaultBaselineOffsetForFont_(self.NS))
+
+    @property_RO
     def heightCap(self):
         '''Get the C{cap} height (C{float} or C{int}).
         '''
@@ -384,7 +390,10 @@ class Font(_Type0):
     def isVertical(self):
         '''Get the C{Vertical} "trait" (C{bool}).
         '''
-        return (True if self.NS.isVertical() else False) if self.NS else None
+        if self.NS:
+            return True if self.NS.isVertical() else False
+        else:
+            return None
 
     @property
     def name(self):

@@ -38,7 +38,7 @@ to Objective-C bridge (and included in `macOS' Python`_), (b) `Rubicon-ObjC`_
 for Python 3.5+, taking advantage of Python's new typing_ annotations and
 (c) PyGUI_ for macOS_.
 
-*Last updated: Oct 22, 2018.*
+*Last updated: Oct 23, 2018.*
 
 .. _checked: http://GitHub.com/ActiveState/code/tree/master/recipes/Python/546532_PyChecker_postprocessor
 .. _cocoa-python: http://GitHub.com/phillip-nguyen/cocoa-python

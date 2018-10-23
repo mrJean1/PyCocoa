@@ -28,7 +28,7 @@ from windows  import Screen, Window, WindowStyle
 __all__ = ('NSTableViewDelegate',
            'Table', 'TableWindow',
            'closeTables')
-__version__ = '18.08.14'
+__version__ = '18.10.23'
 
 _Alignment = dict(center=NSTextAlignmentCenter,
                justified=NSTextAlignmentJustified,
@@ -165,13 +165,14 @@ class Table(_Type2):
             c.setTitle_(release(NSStr(h)))  # == c.headerCell().setStringValue_(NSStr(h))
             # <http://Developer.Apple.com/documentation/uikit/nstextalignment>
             v.addTableColumn_(c)
-            high = max(high, Font(c.dataCell().font()).height)
+            # increase row height 1-2 points to show (bold) descenders
+            high = max(high, Font(c.dataCell().font()).height + 2)
             wide -= c.width()
 
         if wide > 0:  # stretch last col to frame edge
             c.setWidth_(float(wide + c.width()))
         if high > v.rowHeight():  # adjust the row height
-            v.setRowHeight_(high + 1)
+            v.setRowHeight_(high)
 
         # <http://Developer.Apple.com/library/content/documentation/
         #         Cocoa/Conceptual/TableView/VisualAttributes/VisualAttributes.html>
