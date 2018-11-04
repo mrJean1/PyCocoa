@@ -28,7 +28,7 @@ from windows  import Screen, Window, WindowStyle
 __all__ = ('NSTableViewDelegate',
            'Table', 'TableWindow',
            'closeTables')
-__version__ = '18.10.23'
+__version__ = '18.11.02'
 
 _Alignment = dict(center=NSTextAlignmentCenter,
                justified=NSTextAlignmentJustified,
@@ -155,7 +155,7 @@ class Table(_Type2):
             # note, the identifier MUST be an NSStr (to avoid warnings)
             t = retain(NSStr(str(i)))
             c = NSTableColumn.alloc().initWithIdentifier_(t)
-            # simply map col.identifier to int, instead of frequent and
+            # simply map col.identifier to I{int}, instead of frequent,
             # costly int(nsString2str(col.identifier())) conversions in
             # _NSTableViewDelegate.tableView_objectValueForTableColumn_row_
             id2i[c.identifier()] = i
@@ -227,12 +227,12 @@ class _NSTableViewDelegate(object):
 
     @_ObjC.method('i@')
     def numberOfColumnsInTableView_(self, table):
-        # table is the NSTableView created above,
+        # table is the NSTableView created above
         return len(self.cols)
 
     @_ObjC.method('i@')
     def numberOfRowsInTableView_(self, table):
-        # table is the NSTableView created above,
+        # table is the NSTableView created above
         return len(self.rows)
 
     # XXX never called, NSCell_ vs NSView-based NSTableView?

@@ -7,7 +7,7 @@
 
 @var missing: Missing keyword argument value.
 '''
-__version__ = '18.08.16'
+__version__ = '18.11.02'
 
 import sys
 _Python_ = sys.version.split()[0]  # PYCHOK internal
@@ -55,7 +55,7 @@ class _MutableConstants(object):
     def _strepr(self, fmt):
         c = self.__class__.__name__.lstrip('_')
         j = ',\n%s.' % (' ' * len(c),)
-        t = j.join(fmt(*t) for t in sorted(self.items()))
+        t = j.join(fmt(*t) for t in sortuples(self.items()))
         return '%s.%s' % (c, t)
 
     def __repr__(self):
@@ -71,12 +71,27 @@ class _MutableConstants(object):
             return n
         return self._strepr(_fmt)
 
+    def get(self, name, *dflt):
+        return getattr(self, name, *dflt)
+
     def items(self):
         '''Yield 2-tuple (name, value) for each constant.
         '''
+        for n in self.keys():
+            yield n, getattr(self, n)
+
+    def keys(self):
+        '''Yield each constant name.
+        '''
         for n in dir(self):
             if n[:1].isupper():
-                yield n, getattr(self, n)
+                yield n
+
+    def values(self):
+        '''Yield each constant value.
+        '''
+        for n in self.keys():
+            yield getattr(self, n)
 
 
 class _Constants(_MutableConstants):
@@ -749,6 +764,14 @@ def property2(inst, name):
     return None, None
 
 
+def sortuples(iterable):  # sort tuples
+    '''Sort tuples alphabetically, case-insensitive.
+    '''
+    def _tup(tup):
+        return tup[0].upper()
+    return sorted(iterable, key=_tup)
+
+
 def _text_title2(text_or_file, title=''):
     '''(INTERNAL) Return 2-tuple (title, text).
     '''
@@ -850,7 +873,7 @@ def zSIstr(size, B='B', K=1024):
 __all__ = _exports(locals(), 'aspect_ratio', 'Cache2', 'clip',
                              'DEFAULT_UNICODE', 'flint', 'isinstanceOf',
                              'gcd', 'iterbytes', 'lambda1', 'missing',
-                             'printf', 'type2strepr',
+                             'printf', 'sortuples', 'type2strepr',
                    starts=('bytes', 'inst', 'name2', 'propert', 'str', 'z'))
 
 if __name__ == '__main__':

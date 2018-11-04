@@ -11,8 +11,8 @@
 from decimal import Decimal as _Decimal
 from ctypes  import ArgumentError, byref, cast, c_byte, CFUNCTYPE, c_void_p
 from getters import get_selector
-from octypes import Array_t, Class_t, c_struct_t, Id_t, NSRect4_t, \
-                    ObjC_t, SEL_t, Set_t
+from octypes import Array_t, Class_t, c_struct_t, Id_t, NSPoint_t, \
+                    NSRect4_t, ObjC_t, SEL_t, Set_t
 from oslibs  import cfNumber2bool, cfNumber2num, cfString, cfString2str, \
                     cfURLResolveAlias, libAppKit, libCF, libFoundation, \
                     libobjc, NO, NSExceptionHandler_t, YES
@@ -24,7 +24,7 @@ from utils   import bytes2str, _ByteStrs, clip, _exports, _Globals, \
 
 from os import linesep, path as os_path
 
-__version__ = '18.08.14'
+__version__ = '18.11.02'
 
 # some commonly used Foundation and Cocoa classes, described here
 # <http://OMZ-Software.com/pythonista/docs/ios/objc_util.html>
@@ -184,8 +184,6 @@ class _NSMain(_Singletons):
     _Null          = None
     _PrintInfo     = None
     _Screen        = None
-    _ScreenFrame   = None
-    _ScreenSize    = None
     _TableColumn   = None
     _YES_true      = YES  # c_byte
 
@@ -284,20 +282,63 @@ class _NSMain(_Singletons):
         return self._Screen
 
     @property_RO
-    def ScreenFrame(self):
-        '''Get the C{NSScreen.mainScreen.frame}.
+    def ScreenBottomLeft(self):
+        '''Get the C{NSScreen.mainScreen.frame} lower left corner as C{NSPoint_t}.
         '''
-        if self._ScreenFrame is None:
-            _NSMain._ScreenFrame = self.Screen.frame()  # NSRect_t
-        return self._ScreenFrame
+        return self.ScreenFrame.origin
+
+    @property_RO
+    def ScreenBottomRight(self):
+        '''Get the C{NSScreen.mainScreen.frame} lower right corner as C{NSPoint_t}.
+        '''
+        f = self.ScreenFrame
+        return NSPoint_t(f.size.width, f.origin.y)
+
+    def ScreenCascade(self, fraction=0.1):
+        '''Return a screen point off the upper left corner.
+
+           @param fraction: Cascade off the upper left corner (C{float}).
+
+           @return: The screen point (C{NSPoint_t}).
+        '''
+        p = self.ScreenTopLeft
+        if 0 < fraction <= 1:
+            z = self.ScreenSize
+            p = NSPoint_t(p.x + fraction * z.width, p.y - fraction * z.height)
+        return p
+
+    @property_RO
+    def ScreenCenter(self):
+        '''Get the C{NSScreen.mainScreen.frame} center as C{NSPoint_t}.
+        '''
+        z = self.ScreenSize
+        return NSPoint_t(z.width / 2, z.height / 2)
+
+    @property_RO
+    def ScreenFrame(self):
+        '''Get the C{NSScreen.mainScreen.frame} as C{NSRect_t}.
+        '''
+        return self.Screen.frame()
 
     @property_RO
     def ScreenSize(self):
-        '''Get the C{NSScreen.mainScreen.frame.size}.
+        '''Get the C{NSScreen.mainScreen.frame.size} as C{NSSize_t}.
         '''
-        if self._ScreenSize is None:
-            _NSMain._ScreenSize = self.ScreenFrame.size  # NSSize_t
-        return self._ScreenSize
+        return self.ScreenFrame.size
+
+    @property_RO
+    def ScreenTopLeft(self):
+        '''Get the C{NSScreen.mainScreen.frame} upper left corner as C{NSPoint_t}.
+        '''
+        f = self.ScreenFrame
+        return NSPoint_t(f.origin.x, f.size.height)
+
+    @property_RO
+    def ScreenTopRight(self):
+        '''Get the C{NSScreen.mainScreen.frame} upper right corner as C{NSPoint_t}.
+        '''
+        f = self.ScreenFrame
+        return NSPoint_t(f.size.width, f.origin.y)
 
     @property_RO
     def TableColumn(self):

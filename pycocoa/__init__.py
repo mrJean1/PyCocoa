@@ -25,8 +25,8 @@ and I{simple_VLCplayer.py} require installation of the U{VLC App
 corresponding U{Python-VLC<http://PyPI.org/project/python-vlc>} binding.
 
 The tests and examples have only been run with 64-bit Python 2.7.15 and
-3.7.1 using U{Python-VLC<http://PyPI.org/project/python-vlc>} 2.2.8, 3.0.1,
-3.0.3 and 3.0.4 (with the compatible U{VLC App<http://www.VideoLan.org/vlc>})
+3.7.1 using U{Python-VLC<http://PyPI.org/project/python-vlc>} 2.2.8, 3.0.2
+and 3.0.4 (with the compatible U{VLC App<http://www.VideoLan.org/vlc>})
 and only on macOS 10.13.5 or 10.13.6 High Sierra or 10.14.0 Mojave.  PyCocoa
 has I{not been tested} on iOS nor with 32-bit Python and I{does not work}
 with U{PyPy<http://PyPy.org>} nor with U{Intel(R) Python
@@ -118,7 +118,7 @@ POSSIBILITY OF SUCH DAMAGE.}
 from os.path import abspath, dirname
 import sys
 
-__version__ = '18.10.23'
+__version__ = '18.11.02'
 
 p = sys.platform
 if not p.startswith('darwin'):

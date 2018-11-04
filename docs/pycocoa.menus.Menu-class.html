@@ -168,9 +168,63 @@ bases._Type0 --+
     </td><td class="summary">
       <table width="100%" cellpadding="0" cellspacing="0" border="0">
         <tr>
+          <td><span class="summary-sig"><a href="pycocoa.menus.Menu-class.html#find" class="summary-sig-name">find</a>(<span class="summary-sig-arg">self</span>,
+        <span class="summary-sig-arg">item</span>)</span><br />
+      Return the index of a menu item in this menu.</td>
+          <td align="right" valign="top">
+            
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
           <td><span class="summary-sig"><a href="pycocoa.menus.Menu-class.html#__getitem__" class="summary-sig-name">__getitem__</a>(<span class="summary-sig-arg">self</span>,
         <span class="summary-sig-arg">index</span>)</span><br />
       Return the item at index or with title or several by slice.</td>
+          <td align="right" valign="top">
+            
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a href="pycocoa.menus.Menu-class.html#highlight" class="summary-sig-name">highlight</a>(<span class="summary-sig-arg">self</span>,
+        <span class="summary-sig-arg">item</span>)</span><br />
+      Highlight a menu item.</td>
+          <td align="right" valign="top">
+            
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a href="pycocoa.menus.Menu-class.html#index" class="summary-sig-name">index</a>(<span class="summary-sig-arg">self</span>,
+        <span class="summary-sig-arg">item</span>)</span><br />
+      Return the index of an item in this menu.</td>
           <td align="right" valign="top">
             
             
@@ -249,6 +303,24 @@ bases._Type0 --+
           <td><span class="summary-sig"><a href="pycocoa.menus.Menu-class.html#pop" class="summary-sig-name">pop</a>(<span class="summary-sig-arg">self</span>,
         <span class="summary-sig-arg">index</span>=<span class="summary-sig-default">-1</span>)</span><br />
       Remove an item by index.</td>
+          <td align="right" valign="top">
+            
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a href="pycocoa.menus.Menu-class.html#popUp" class="summary-sig-name">popUp</a>(<span class="summary-sig-arg">self</span>,
+        <span class="summary-sig-arg">fraction</span>=<span class="summary-sig-default">0.1</span>)</span><br />
+      Show this menu on the screen.</td>
           <td align="right" valign="top">
             
             
@@ -486,7 +558,7 @@ bases._Type0 --+
     </ul></dd>
     <dt>Raises:</dt>
     <dd><ul class="nomargin-top">
-        <li><code><strong class='fraise'>TypeError</strong></code> - If an <i>item</i> not <a href="pycocoa.menus.Item-class.html" 
+        <li><code><strong class='fraise'>TypeError</strong></code> - An <i>item</i> is not <a href="pycocoa.menus.Item-class.html" 
         class="link">Item</a> nor <a 
         href="pycocoa.menus.ItemSeparator-class.html" 
         class="link">ItemSeparator</a>.</li>
@@ -520,7 +592,7 @@ bases._Type0 --+
     </ul></dd>
     <dt>Raises:</dt>
     <dd><ul class="nomargin-top">
-        <li><code><strong class='fraise'>ValueError</strong></code> - If <i>item</i> is not part of this menu.</li>
+        <li><code><strong class='fraise'>ValueError</strong></code> - No <i>item</i> in this menu.</li>
     </ul></dd>
   </dl>
 </td></tr></table>
@@ -558,6 +630,33 @@ bases._Type0 --+
   </dl>
 </td></tr></table>
 </div>
+<a name="find"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">find</span>(<span class="sig-arg">self</span>,
+        <span class="sig-arg">item</span>)</span>
+  </h3>
+  </td><td align="right" valign="top"
+    >&nbsp;
+    </td>
+  </tr></table>
+  
+  <p>Return the index of a menu item in this menu.</p>
+  <dl class="fields">
+    <dt>Parameters:</dt>
+    <dd><ul class="nomargin-top">
+        <li><strong class="pname"><code>item</code></strong> - The item to locate (<a href="pycocoa.menus.Item-class.html" 
+          class="link">Item</a>).</li>
+    </ul></dd>
+    <dt>Returns:</dt>
+        <dd>The index (<code>int</code>) or <code>-1</code> if not found.</dd>
+  </dl>
+</td></tr></table>
+</div>
 <a name="__getitem__"></a>
 <div>
 <table class="details" border="1" cellpadding="3"
@@ -590,6 +689,68 @@ bases._Type0 --+
     <dd><ul class="nomargin-top">
         <li><code><strong class='fraise'>IndexError</strong></code> - If <i>index</i> out of range or if no item titled <i>index</i> 
         exists.</li>
+    </ul></dd>
+  </dl>
+</td></tr></table>
+</div>
+<a name="highlight"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">highlight</span>(<span class="sig-arg">self</span>,
+        <span class="sig-arg">item</span>)</span>
+  </h3>
+  </td><td align="right" valign="top"
+    >&nbsp;
+    </td>
+  </tr></table>
+  
+  <p>Highlight a menu item.</p>
+  <dl class="fields">
+    <dt>Parameters:</dt>
+    <dd><ul class="nomargin-top">
+        <li><strong class="pname"><code>item</code></strong> - The item to hightlight (<a href="pycocoa.menus.Item-class.html" 
+          class="link">Item</a>).</li>
+    </ul></dd>
+    <dt>Raises:</dt>
+    <dd><ul class="nomargin-top">
+        <li><code><strong class='fraise'>ValueError</strong></code> - No <i>item</i> in this menu.</li>
+    </ul></dd>
+  </dl>
+</td></tr></table>
+</div>
+<a name="index"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">index</span>(<span class="sig-arg">self</span>,
+        <span class="sig-arg">item</span>)</span>
+  </h3>
+  </td><td align="right" valign="top"
+    >&nbsp;
+    </td>
+  </tr></table>
+  
+  <p>Return the index of an item in this menu.</p>
+  <dl class="fields">
+    <dt>Parameters:</dt>
+    <dd><ul class="nomargin-top">
+        <li><strong class="pname"><code>item</code></strong> - The item to locate (<a href="pycocoa.menus.Item-class.html" 
+          class="link">Item</a> or <a 
+          href="pycocoa.menus.ItemSeparator-class.html" 
+          class="link">ItemSeparator</a>).</li>
+    </ul></dd>
+    <dt>Returns:</dt>
+        <dd>Index (<code>int</code>).</dd>
+    <dt>Raises:</dt>
+    <dd><ul class="nomargin-top">
+        <li><code><strong class='fraise'>ValueError</strong></code> - If <i>item</i> not found.</li>
     </ul></dd>
   </dl>
 </td></tr></table>
@@ -736,6 +897,33 @@ bases._Type0 --+
         <li><code><strong class='fraise'>IndexError</strong></code> - Invalid <i>index</i>.</li>
         <li><code><strong class='fraise'>TypeError</strong></code> - Invalid <i>index</i>.</li>
     </ul></dd>
+  </dl>
+</td></tr></table>
+</div>
+<a name="popUp"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">popUp</span>(<span class="sig-arg">self</span>,
+        <span class="sig-arg">fraction</span>=<span class="sig-default">0.1</span>)</span>
+  </h3>
+  </td><td align="right" valign="top"
+    >&nbsp;
+    </td>
+  </tr></table>
+  
+  <p>Show this menu on the screen.</p>
+  <dl class="fields">
+    <dt>Parameters:</dt>
+    <dd><ul class="nomargin-top">
+        <li><strong class="pname"><code>fraction</code></strong> - Cascade off the upper left corner (<code>float</code>).</li>
+    </ul></dd>
+    <dt>Returns:</dt>
+        <dd><code>True</code> if an item was selected, <code>False</code> 
+          otherwise.</dd>
   </dl>
 </td></tr></table>
 </div>
@@ -987,7 +1175,7 @@ href="pycocoa.menus.MenuBar-class.html" class="link">MenuBar</a>.
 <table border="0" cellpadding="0" cellspacing="0" width="100%%">
   <tr>
     <td align="left" class="footer">
-    Generated by Epydoc 3.0.1 on Tue Oct 23 13:16:18 2018
+    Generated by Epydoc 3.0.1 on Sun Nov  4 17:39:20 2018
     </td>
     <td align="right" class="footer">
       <a target="mainFrame" href="http://epydoc.sourceforge.net"

@@ -43,7 +43,7 @@ except ImportError:  # XXX Pythonista/iOS
         return None
 import os.path as os_path
 
-__version__ = '18.08.02'
+__version__ = '18.11.02'
 _leaked2    = []  # leaked memory, 2-tuples (ptr, size)
 _libs_cache = {}  # loaded libraries, by name
 
@@ -503,6 +503,25 @@ NSBeginFunctionKey    = 0xF72A
 NSEndFunctionKey      = 0xF72B
 NSPageUpFunctionKey   = 0xF72C
 NSPageDownFunctionKey = 0xF72D
+
+# <http://Developer.Apple.com/documentation/appkit/
+#         nstext/1540619-common_unicode_characters>
+NSBackspaceCharacter          = 0x0008
+NSBackTabCharacter            = 0x0019
+NSBellCharacter               = 0x0007  # BEL
+NSCancelCharacter             = 0x0018  # CAN
+NSCarriageReturnCharacter     = 0x000D
+NSDeleteCharacter             = 0x007F
+NSEnterCharacter              = 0x0003
+NSEscapeCharacter             = 0x001B  # ESC
+NSFormFeedCharacter           = 0x000C
+NSLineSeparatorCharacter      = 0x2028
+NSNewlineCharacter            = 0x000A
+NSNullCharacter               = 0x0000  # NUL
+NSParagraphSeparatorCharacter = 0x2029
+NSSpaceCharacter              = 0x0020  # SP
+NSTabCharacter                = 0x0009
+NSVerticalTabCharacter        = 0x000B  # VT
 
 # /System/Library/Frameworks/AppKit.framework/Headers/NSGraphics.h
 NSBackingStoreRetained    = 0

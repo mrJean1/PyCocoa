@@ -5,13 +5,9 @@
 
 # List all loaded Objective-C classes.
 
-from pycocoa import get_classes, leaked2
+from pycocoa import get_classes, leaked2, sortuples
 
-__version__ = '18.06.28'
-
-
-def _up(t2):
-    return t2[0].upper()
+__version__ = '18.11.02'
 
 
 if __name__ == '__main__':
@@ -23,7 +19,7 @@ if __name__ == '__main__':
 
     n, prefs = 0, sys.argv[1:]
 
-    for name, _ in sorted(get_classes(*prefs), key=_up):
+    for name, _ in sortuples(get_classes(*prefs)):
         n += 1
         print(name)
 

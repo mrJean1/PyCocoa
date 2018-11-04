@@ -59,7 +59,7 @@ class _Type0(object):
 
     @NSDelegate.setter  # PYCHOK property.setter
     def NSDelegate(self, unused):
-        raise AttributeError('use %r not %r' % ('NSd-e', 'NSD-'))
+        raise AttributeError('use %r not %r' % ('NSd-', 'NSD-'))
 
 
 class _Type1(_Type0):

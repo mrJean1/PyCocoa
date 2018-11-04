@@ -3,13 +3,9 @@
 
 # List all the instance variables of an Objective-C class.
 
-from pycocoa import get_class, get_ivar, get_ivars, leaked2
+from pycocoa import get_class, get_ivar, get_ivars, leaked2, sortuples
 
-__version__ = '18.06.28'
-
-
-def _up(t4):
-    return t4[0].upper()
+__version__ = '18.11.02'
 
 
 if __name__ == '__main__':
@@ -23,7 +19,7 @@ if __name__ == '__main__':
     clstr, prefs = sys.argv[1], sys.argv[2:]
 
     cls, n = get_class(clstr), 0
-    for name, encoding, ctype, _ in sorted(get_ivars(cls, *prefs), key=_up):
+    for name, encoding, ctype, _ in sortuples(get_ivars(cls, *prefs)):
         n += 1
         value = get_ivar(cls, name, ctype)
         t = getattr(ctype, '__name__', ctype)

@@ -45,7 +45,7 @@ def create_menu(name='', app=None):
     appMenu.addItem_(hideItem)
 
     otherItem = NSMenuItem.alloc().initWithTitle_action_keyEquivalent_(
-               NSStr('Hide Others'), get_selector('hideOtherApplications:'), NSStr('h'))
+                NSStr('Hide Others'), get_selector('hideOtherApplications:'), NSStr('h'))
     otherItem.setKeyEquivalentModifierMask_(NSAlternateKeyMask)  # Alt-Cmd-H
     appMenu.addItem_(otherItem)
 

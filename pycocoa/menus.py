@@ -3,22 +3,31 @@
 
 # License at the end of this file.
 
-'''Types L{Item}, L{ItemSeparator}, L{Menu} and L{MenuBar}, wrapping ObjC C{NSMenuItem} and C{NSMenu}.
+'''Types L{Item}, L{ItemSeparator}, L{Menu} and L{MenuBar},
+wrapping ObjC C{NSMenuItem} and C{NSMenu} and L{Keys}.
+
+@var Keys: Menu L{Item} shortcut keys (C{chr}).
 '''
 # all imports listed explicitly to help PyChecker
 from bases    import _Type2
 from fonts    import Font
 from geometry import Size
 from getters  import get_selector, get_selectornameof
-from nstypes  import isNone, NSMenu, NSMenuItem, nsOf, NSStr, nsString2str
+from nstypes  import isNone, NSMain, NSMenu, NSMenuItem, nsOf, \
+                     NSStr, nsString2str
 from pytypes  import int2NS
 from octypes  import SEL_t
-from oslibs   import NO, NSAlternateKeyMask, NSCommandKeyMask, \
-                     NSControlKeyMask, NSShiftKeyMask, YES  # PYCHOK expected
+from oslibs   import NO, NSAlternateKeyMask, NSBackspaceCharacter, \
+                     NSCarriageReturnCharacter, NSCommandKeyMask, \
+                     NSControlKeyMask, NSDeleteCharacter, \
+                     NSEnterCharacter, NSEscapeCharacter, \
+                     NSFormFeedCharacter, NSNewlineCharacter, \
+                     NSShiftKeyMask, NSSpaceCharacter, NSTabCharacter, \
+                     NSVerticalTabCharacter, YES  # PYCHOK expected
 from runtime  import isObjCInstanceOf  # , ObjCInstance
-from utils    import bytes2str, _ByteStrs, _Globals, _Ints, \
-                     isinstanceOf, missing, name2pymethod, printf, \
-                     property2, property_RO, _Strs, _Types
+from utils    import bytes2str, _ByteStrs, _Constants, _Globals, \
+                     _Ints, isinstanceOf, missing, name2pymethod, \
+                     printf, property2, property_RO, _Strs, _Types
 
 try:
     from inspect import getfullargspec as getargspec  # Python 3+
@@ -28,10 +37,11 @@ from inspect import isfunction, ismethod
 # from types import FunctionType, MethodType
 
 __all__ = ('Item', 'ItemSeparator',
+           'Keys',
            'Menu', 'MenuBar',
            'ns2Item',
            'title2action')
-__version__ = '18.08.16'
+__version__ = '18.11.02'
 
 # Method _NSApplicationDelegate.handleMenuItem_ in .apps.py
 # is the handler ('selector') for all menu items specified
@@ -51,14 +61,15 @@ _Modifiers2 = (('Alt',   NSAlternateKeyMask),
                ('Cmd',   NSCommandKeyMask),
                ('Ctrl',  NSControlKeyMask),
                ('Shift', NSShiftKeyMask))  # or NSAlphaShiftKeyMask?
+_NoKey = NSStr('')
 
 
 def _bindM(inst, parent):
     '''(INTERNAL) Bind item or menu to parent menu, menu bar or item.
     '''
     # check that the item or menu is not already bound to (a 'child' of)
-    # a menu or menu bar (ObjC's properties like parent, supermenu,
-    # hasSubmenu, owner, etc. are non-trivial and rather inconsistent)
+    # a menu or menu bar (ObjC's properties like hasSubmenu, owner,
+    # parent, supermenu, etc. are non-trivial and rather inconsistent)
     # <http://Developer.Apple.com/documentation/appkit/nsmenu/1518204-supermenu>
     # <http://Developer.Apple.com/documentation/appkit/nsmenuitem/1514817-hassubmenu>
     # <http://Developer.Apple.com/documentation/appkit/nsmenuitem/1514845-submenu>
@@ -83,13 +94,28 @@ def _modifiedMask2(mask, kwds):
     return mask, kwds  # mask and "leftovers"
 
 
-def _nsMenuItem(inst, sel=0, key=''):
+def _nsKey2(key):
+    '''(INTERNAL) Check a shortcut key.
+    '''
+    if not key:
+        return _NoKey, ''
+    k = bytes2str(key, name='key')
+    if len(k) == 1 and 32 < ord(k[0]) < 127:  # k.isprintable() and not k.ispace()
+        return NSStr(k), k
+    u = k.upper()
+    for n, v in Keys.items():
+        if k in (n, v) or u in (n.upper(), v):
+            return NSStr(v), n
+    raise ValueError('invalid %s: %r' % ('key', key))
+
+
+def _nsMenuItem(inst, sel=0, nskey=_NoKey):
     '''(INTERNAL) New menu item or new menu bar menu item.
     '''
     # <http://Developer.Apple.com/documentation/appkit/
     #       nsmenuitem/1514858-initwithtitle>
     ns = NSMenuItem.alloc().initWithTitle_action_keyEquivalent_(
-                            NSStr(inst.title), sel, NSStr(key or ''))
+                            NSStr(inst.title), sel, nskey)
     r = int2NS(id(inst))
     _Globals.Items[r] = inst  # see ns2Item() below
     ns.setRepresentedObject_(r)
@@ -132,6 +158,7 @@ class Item(_Item_Type2):
     '''Python menu L{Item} Type, wrapping ObjC C{NSMenuItem}.
     '''
     _action  = _handleMenuItem_name
+    _key     = ''
     _mask    = 0  # used in Menu.item below
     _SEL_    = _HANDLE_
     _subMenu = None
@@ -148,7 +175,7 @@ class Item(_Item_Type2):
            @keyword action: Callback name (C{str} ending with ':' or '_'),
                             a Python C{callable}, an ObjC C{selector}
                             (C{SEL_t}) or C{None}, see B{Notes}.
-           @keyword key: The shortcut key, if any (C{str} or C{bytes}).
+           @keyword key: The shortcut key, if any (C{str}, C{bytes} or a L{Keys}).
            @keyword alt: Hold C{alt} or C{option} key down with I{key} (bool).
            @keyword cmd: Hold C{command} key down with I{key} (bool).
            @keyword cntl: Hold C{control} key down with I{key} (bool).
@@ -185,8 +212,10 @@ class Item(_Item_Type2):
                 raise ValueError('invalid %s: %r' % ('action', action))
         self.action = a  # double checked in .action.setter below
 
-        self.NS = _nsMenuItem(self, self._SEL_, key)
+        ns, key = _nsKey2(key)
+        self.NS = _nsMenuItem(self, self._SEL_, ns)
         if key:  # allow capitalized Modifiers
+            self._key = key
             self._keyModifiers(Alt=alt, Cmd=cmd, Ctrl=ctrl, Shift=shift)
             if props:
                 props = self._keyModifiers(**props)
@@ -210,7 +239,7 @@ class Item(_Item_Type2):
 
     def __str__(self):
         k = '+'.join([M for M, ns in _Modifiers2 if (self._mask & ns)]
-                   + [self.key.upper()])
+                   + [self.key])
         return '%s(%r, %r, %s)' % (self.__class__.__name__,
                                    self.title, self.action, k)
 
@@ -383,16 +412,29 @@ class Item(_Item_Type2):
     def key(self):
         '''Get the item's shortcut C{key} (C{str}).
         '''
-        return nsString2str(self.NS.keyEquivalent())
-
-    keyEquivalent = key
+        return self._key  # nsString2str(self.NS.keyEquivalent())
 
     @key.setter  # PYCHOK property.setter
     def key(self, key):
         '''Set the item's shortcut C{key} (C{str}).
         '''
-        if bytes2str(key, name='key') != self.key:
-            self.NS.setKeyEquivalent_(NSStr(key))
+        ns, key = _nsKey2(key)
+        if key != self.key:
+            self.NS.setKeyEquivalent_(ns)
+            self._key = key
+
+    @property
+    def keyEquivalent(self):
+        '''Get the ObjC item's shortcut C{keyEquivalent} (C{str}).
+        '''
+        return nsString2str(self.NS.keyEquivalent())
+
+    @keyEquivalent.setter  # PYCHOK property.setter
+    def keyEquivalent(self, key):
+        '''Set the ObjC item's shortcut C{keyEquivalent} (C{str}).
+        '''
+        ns = NSStr(bytes2str(key, name='key'))
+        self.NS.setKeyEquivalent_(ns)
 
     @property
     def keyModifiers(self):
@@ -574,6 +616,29 @@ class ItemSeparator(_Item_Type2):
         return 0
 
 
+class Keys(_Constants):
+    '''Menu L{Item} shortcut keys (C{chr}).
+    '''
+    Backspace      = BS  = chr(NSBackspaceCharacter)  # del prev <x]
+    CarriageReturn = CR  = chr(NSCarriageReturnCharacter)
+    Delete         = DEL = chr(NSDeleteCharacter)  # del next [x>
+    Enter          = ETX = chr(NSEnterCharacter)
+    Escape         = ESC = chr(NSEscapeCharacter)
+    FormFeed       = FF  = chr(NSFormFeedCharacter)
+    LineFeed       = LF  = chr(NSNewlineCharacter)
+    Newline        = NL  = chr(NSNewlineCharacter)
+    Space          = SP  = chr(NSSpaceCharacter)
+    Tab            = HT  = chr(NSTabCharacter)
+
+    def __repr__(self):
+        def _fmt(n, v):
+            return '%s=%s' % (n, hex(ord(v)))
+        return self._strepr(_fmt)
+
+
+Keys = Keys()  # overwrite class on purpose
+
+
 # % python -m test.list_methods NSMenu
 
 # attachedMenu @16@0:8 (Id_t, Id_t, SEL_t)
@@ -601,22 +666,32 @@ class _Menu_Type2(_Type2):
         self._assertM(n, self.NS.numberOfItems())
         return n
 
-    def _alistM2(self, *atypes):
+    def _alistM2(self, *classes):
         for inst in self._listM:
             a = inst.action
-            if a and isinstance(a, atypes):
+            if a and isinstance(a, classes):
                 yield a, inst
 
-    def _appendM(self, inst):
-        ns, m = self._validM(inst), len(self) + 1
-        self.NS.addItem_(ns)
-        self._listM.append(inst)
-        self._tagM(inst, ns)
-        self._assertM(len(self), m)
+    def _appendM(self, insts, *classes):
+        for inst in insts:
+            if isinstanceOf(inst, *classes, name=self._nameM):
+                ns, m = self._validM(inst), len(self) + 1
+                self.NS.addItem_(ns)
+                self._listM.append(inst)
+                self._tagM(inst, ns)
+                self._assertM(len(self), m)
 
     def _assertM(self, n, m):
         if n != m:
             raise RuntimeError('len(%s) %r vs %r' % (self, n, m))
+
+    def _find(self, inst, *classes):
+        if isinstanceOf(inst, *classes, name=self._nameM):
+            try:
+                return self._listM.index(inst)
+            except ValueError:
+                pass
+        return -1
 
     def _findM(self, title, action, tag, dflt):  # MCCABE 15
         # find item or menu
@@ -667,6 +742,14 @@ class _Menu_Type2(_Type2):
             pass
         raise IndexError('invalid %s[%r]' % (self, index))
 
+    def _index(self, inst, *classes):
+        if isinstanceOf(inst, *classes, name=self._nameM):
+            try:
+                return self._listM.index(inst)
+            except ValueError:
+                pass
+        raise ValueError('invalid %s: %r' % (self._nameM, inst))
+
     def _indexM(self, index):
         if isinstance(index, _Ints):
             i = index
@@ -675,16 +758,16 @@ class _Menu_Type2(_Type2):
             # ... but not out of range, like list.append
             if 0 <= i < len(self):
                 return i
-        raise IndexError('invalid %s: %r' ('index', index))
+        raise IndexError('invalid %s: %r' % ('index', index))
 
     def _initM(self):
         self._listM = []
         self.NS = NSMenu.alloc().init()
 
-    def _insertM(self, index, insts, *Types):
+    def _insertM(self, index, insts, *classes):
         i = self._indexM(index)
         for inst in reversed(insts):
-            if isinstanceOf(inst, *Types, name=self._nameM):
+            if isinstanceOf(inst, *classes, name=self._nameM):
                 ns, m = self._validM(inst), len(self) + 1
                 self.NS.insertItem_atIndex_(ns, i)
                 self._listM.insert(i, inst)
@@ -702,9 +785,9 @@ class _Menu_Type2(_Type2):
         except (IndexError, TypeError):
             raise IndexError('%s.%s(%r)' % (self, 'pop', index))
 
-    def _removeM(self, insts, *Types):
+    def _removeM(self, insts, *classes):
         for inst in insts:
-            if isinstanceOf(inst, *Types, name=self._nameM):
+            if isinstanceOf(inst, *classes, name=self._nameM):
                 try:
                     self._popM(self._listM.index(inst))
                 except (IndexError, ValueError):
@@ -843,11 +926,9 @@ class Menu(_Menu_Type2):
 
            @param items: The items (L{Item} or L{ItemSeparator}) to add.
 
-           @raise TypeError: If an I{item} not L{Item} nor L{ItemSeparator}.
+           @raise TypeError: An I{item} is not L{Item} nor L{ItemSeparator}.
         '''
-        for item in items:
-            if isinstanceOf(item, Item, ItemSeparator, name='item'):
-                self._appendM(item)
+        self._appendM(items, Item, ItemSeparator)
 
     def click(self, item, highlight=False):
         '''Mimick clicking a menu item.
@@ -855,16 +936,34 @@ class Menu(_Menu_Type2):
            @param item: The item to click (L{Item}).
            @keyword highlight: Highlight the clicked item (C{bool}).
 
-           @raise ValueError: If I{item} is not part of this menu.
+           @raise ValueError: No I{item} in this menu.
         '''
-        if isinstanceOf(item, Item, name='item'):
-            i = self._listM.find(item)
-            if not 0 <= i < len(self):
-                raise ValueError('invalid %s: %r' % ('item', item))
-            if highlight:
-                self.NS._performActionWithHighlightingForItemAtIndex_(i)  # leading _!
-            else:
-                self.NS.performActionForItemAtIndex_(i)
+#       i = self._index(item, Item)
+#       assert self.NS.itemAtIndex_(i) is item.NS
+#       if highlight:  # XXX does not exist?
+#           self.NS._performActionWithHighlightingForItemAtIndex_(i)  # leading _!
+#       else:  # XXX causes segfault, threading?
+#           self.NS.performActionForItemAtIndex_(i)
+
+        # mimick behavior of performAction...ForItemAtIndex_
+        # <http://Stackoverflow.com/questions/31989979/
+        #         nsmenu-highlight-specific-nsmenuitem>
+        if highlight:
+            self.highlight(item)
+        else:
+            self._index(item, Item)
+        # see _NSApplicationDelegate...
+        if item._SEL_ is _CALL_:  # .callMenuItem_
+            item._action(item)
+        else:  # if item._SEL_ is _HANDLE_:  # .handleMenuItem_
+            raise NotImplementedError('%s(%s)' % ('click', item))
+        if highlight:
+            # <http://Stackoverflow.com/questions/6169930/
+            #         remove-highlight-from-nsmenuitem-after-click>
+            # for item in (item, self):  # XXX segfaults
+                h = item.isHidden  # un-highlight by ...
+                item.isHidden = True  # ... hiding or removing and
+                item.isHidden = h  # ... un-hiding or re-inserting
 
     def clickKey(self, key, highlight=False, **modifiers):
         '''Mimick clicking a menu item by the shortcut key, see C{Item.__init__}.
@@ -876,8 +975,18 @@ class Menu(_Menu_Type2):
            @raise KeyError: If I{key} with I{modifiers} is not a
                             shortcut of this menu.
         '''
-        # self.NS.performKeyEquivalent_(e) too tricky
-        self.click(self.item(key=key, dflt=missing, **modifiers), highlight=highlight)
+        # XXX self.NS.performKeyEquivalent_(e) is too tricky
+        item = self.item(key=key, dflt=missing, **modifiers)
+        self.click(item, highlight=highlight)
+
+    def find(self, item):
+        '''Return the index of a menu item in this menu.
+
+           @param item: The item to locate (L{Item}).
+
+           @return: The index (C{int}) or C{-1} if not found.
+        '''
+        return self._find(item, Item, ItemSeparator)
 
     def __getitem__(self, index):
         '''Return the item at index or with title or several by slice.
@@ -891,12 +1000,35 @@ class Menu(_Menu_Type2):
         '''
         return self._getiteM(index, self.item)
 
+    def highlight(self, item):
+        '''Highlight a menu item.
+
+           @param item: The item to hightlight (L{Item}).
+
+           @raise ValueError: No I{item} in this menu.
+        '''
+        self._index(item, Item)
+        self.NS.highlightItem_(item.NS)
+#       if self._parent:  # highlight this very menu also
+#           self._parent.highlight(self)
+
     @property_RO
     def highlightedItem(self):
         '''Get the menu's C{highlightedItem} property (C{Item} or C{None}).
         '''
         ns = self.NS.highlightedItem()
         return ns2Item(ns) if ns else None
+
+    def index(self, item):
+        '''Return the index of an item in this menu.
+
+           @param item: The item to locate (L{Item} or L{ItemSeparator}).
+
+           @return: Index (C{int}).
+
+           @raise ValueError: If I{item} not found.
+        '''
+        return self._index(item, Item, ItemSeparator)
 
     @property_RO
     def isVisible(self):
@@ -946,6 +1078,7 @@ class Menu(_Menu_Type2):
         '''
         b = bool(hidden)
         if b != self.isHidden and self._NSiMI:
+            print(b)
             self._NSiMI.setHidden_(YES if b else NO)
 
     @property_RO
@@ -980,10 +1113,13 @@ class Menu(_Menu_Type2):
             if d:  # can't have leftovers
                 _raise(ValueError, '', d)
 
-            k = bytes2str(key)
-            for item in self.items():  # non-separators
-                if item._mask == m and item.key == k:
-                    return item
+            try:
+                _, k = _nsKey2(bytes2str(key))
+                for item in self.items():  # non-separators
+                    if item._mask == m and item.key == k:
+                        return item
+            except ValueError:
+                pass
 
             if dflt is missing:
                 _raise(KeyError, 'no such ', modifiers)
@@ -1032,6 +1168,17 @@ class Menu(_Menu_Type2):
            @raise TypeError: Invalid I{index}.
         '''
         return self._popM(index)
+
+    def popUp(self, fraction=0.1):
+        '''Show this menu on the screen.
+
+           @param fraction: Cascade off the upper left corner (C{float}).
+
+           @return: C{True} if an item was selected, C{False} otherwise.
+        '''
+        p = NSMain.ScreenCascade(fraction)
+        t = self.NS.popUpMenuPositioningItem_atLocation_inView_(NSMain.nil, p, NSMain.nil)
+        return bool(t)
 
     def remove(self, *items):
         '''Remove one or more items from this menu.
@@ -1098,9 +1245,16 @@ class MenuBar(_Menu_Type2):
 
            @param menus: The menus to add (L{Menu}).
         '''
-        for menu in menus:
-            if isinstanceOf(menu, Menu, name='menu'):
-                self._appendM(menu)
+        self._appendM(menus, Menu)
+
+    def find(self, menu):
+        '''Return the index of a menu in this menu bar.
+
+           @param menu: The menu to locate (L{Menu}).
+
+           @return: The index (C{int}) or -1 if not found.
+        '''
+        return self._find(menu, Menu)
 
     def __getitem__(self, index):
         '''Return the menu at index or with title or several by slice.
@@ -1120,12 +1274,34 @@ class MenuBar(_Menu_Type2):
         '''
         return self.NS.menuBarHeight()
 
+    def highlight(self, menu):
+        '''Highlight a menu.
+
+           @param menu: The menu to hightlight (L{Menu}).
+
+           @raise ValueError: No I{menu} in this menu bar.
+        '''
+        _ = self._index(menu, Menu)  # PYCHOK expected
+        if menu._NSiMI:
+            self.NS.highlightItem_(menu._NSiMI)
+
     @property_RO
     def highlightedMenu(self):
         '''Get the menu's C{highlightedMenu} property (C{Menu} or C{None}).
         '''
         ns = self.NS.highlightedItem()
         return ns2Item(ns) if ns else None
+
+    def index(self, menu):
+        '''Return the index of a menu in this menu bar.
+
+           @param menu: The menu to locate (L{Menu}).
+
+           @return: The index (C{int}).
+
+           @raise ValueError: If I{menu} not found.
+        '''
+        return self._index(menu, Menu)
 
     @property
     def isVisible(self):
@@ -1224,6 +1400,13 @@ class MenuBar(_Menu_Type2):
         return None  # XXX or ... raise AttributeError?
 
 
+# TODO StatusBar & -Item
+# <http://Developer.Apple.com/library/archive/documentation/
+#         Cocoa/Conceptual/StatusBar/Tasks/creatingitems.html>
+# class StatusBar():
+#    pass
+
+
 def ns2Item(ns):
     '''Get the Python instance for an C{NSMenuItem}.
 
@@ -1246,9 +1429,10 @@ def title2action(title):
 
        @param title: The item's title (C{str}).
 
-       @return: Name for the Python callback method (C{str}),
-                C{menuI{title}_} with all non-alphanumeric characters
-                except colon and underscore removed from the I{title}.
+       @return: Name for the Python callback method (C{str}), the
+                I{title} with all non-alphanumeric characters except
+                colon and underscore removed, with prefixed C{"menu"}
+                and suffix C{"_"} added.
 
        @raise ValueError: If I{title} can not be converted.
     '''

@@ -27,7 +27,7 @@ __all__ = ('App',
            'Tile',
            'app_title',
            'ns2App')
-__version__ = '18.08.14'
+__version__ = '18.11.02'
 
 
 class App(_Type2):

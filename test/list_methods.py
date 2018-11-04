@@ -5,13 +5,9 @@
 
 # List all methods of an Objective-C class.
 
-from pycocoa import get_class, get_methods, leaked2
+from pycocoa import get_class, get_methods, leaked2, sortuples
 
-__version__ = '18.06.28'
-
-
-def _up(t4):
-    return t4[0].upper()
+__version__ = '18.11.02'
 
 
 if __name__ == '__main__':
@@ -25,7 +21,7 @@ if __name__ == '__main__':
     clstr, prefs = sys.argv[1], sys.argv[2:]
 
     cls, n = get_class(clstr), 0
-    for name, encoding, rargtypes, _ in sorted(get_methods(cls, *prefs), key=_up):
+    for name, encoding, rargtypes, _ in sortuples(get_methods(cls, *prefs)):
         n += 1
         rargtypes = [getattr(rarg, '__name__', rarg) for rarg in rargtypes]
         print('%s %s (%s)' % (name, encoding, ', '.join(map(str, rargtypes))))
