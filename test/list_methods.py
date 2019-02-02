@@ -7,7 +7,7 @@
 
 from pycocoa import get_class, get_methods, leaked2, sortuples
 
-__version__ = '18.11.02'
+__version__ = '18.11.06'
 
 
 if __name__ == '__main__':
@@ -21,6 +21,9 @@ if __name__ == '__main__':
     clstr, prefs = sys.argv[1], sys.argv[2:]
 
     cls, n = get_class(clstr), 0
+    if cls is None:  # and clstr.endswith('Delegate')
+        import pycocoa  # PYCHOK expected
+        cls = pycocoa.__dict__.get(clstr, cls)  # inlieu of __import__ ...
     for name, encoding, rargtypes, _ in sortuples(get_methods(cls, *prefs)):
         n += 1
         rargtypes = [getattr(rarg, '__name__', rarg) for rarg in rargtypes]

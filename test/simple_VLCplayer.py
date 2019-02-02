@@ -26,7 +26,7 @@ from pycocoa import get_selector, NSAlternateKeyMask, NSApplication, \
                     __version__ as __PyCocoa__  # PYCHOK false
 
 __all__  = ('appVLC',)
-__version__ = '18.08.04'
+__version__ = '19.01.31'
 
 _macOS  = platform.mac_ver()[0:3:2]  # PYCHOK false
 _Python = sys.version.split()[0], platform.architecture()[0]  # PYCHOK false
@@ -163,11 +163,10 @@ class _Delegate_Implementation(object):
             _printf('media: %s', _b2str(m.get_mrl()))
             _printf('state: %s', p.get_state())
             _printf('track/count: %s/%s', p.video_get_track(), p.video_get_track_count())
-            _printf('time/duration: %s/%s', p.get_time(), m.get_duration())
-            f = p.get_position()
-            _printf('position: %.6f (%.2f%%)', f, f * 100)
+            _printf('time/duration: %s/%s ms', p.get_time(), m.get_duration())
+            _printf('position/length: %.2f%%/%s ms', p.get_position() * 100.0, p.get_length())
             f = p.get_fps()
-            _printf('fps: %.6f (%.3f ms)', f, _mspf(f))
+            _printf('fps: %.3f (%.3f ms)', f, _mspf(f))
             _printf('rate: %s', p.get_rate())
 
             w, h = p.video_get_size(0)

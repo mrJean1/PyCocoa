@@ -27,7 +27,7 @@ __all__ = ('App',
            'Tile',
            'app_title',
            'ns2App')
-__version__ = '18.11.02'
+__version__ = '18.11.06'
 
 
 class App(_Type2):
@@ -66,6 +66,26 @@ class App(_Type2):
             super(App, self).__init__(**kwds)
 
         self.NSdelegate = retain(NSApplicationDelegate.alloc().init(self))
+
+    def activate(self, active, force=True):
+        '''Active or de-activate this app.
+
+           @param active: Activate or de-activate (C{bool}).
+           @keyword force: Activate regardless (C{bool}), otheriwse
+                           only activate if no other app is active
+
+           @return: Previous C{isActive} value (C{bool}).
+
+           @see: U{activate(ignoringOtherApps flag: Bool)
+                 <http://Developer.Apple.com/documentation/appkit/
+                 nsapplication/1428468-activate>}.
+        '''
+        a = self.isActive
+        if a and not active:
+            self.NS.deactivate()
+        elif active and not a:
+            self.NS.activateIgnoringOtherApps_(force)
+        return a
 
     def append(self, menu):
         '''Add a menu to this app's menu bar.
@@ -115,14 +135,22 @@ class App(_Type2):
             self.NS.exitFullScreenMode_(self.NS)
 
     def hide(self, hide):
-        '''Hide or show this app's main window.
+        '''Hide or show this app's windows.
 
            @param hide: Hide or show (C{bool}).
+
+           @return: Previous C{isHidden} value (C{bool}).
+
+           @see: U{unhideWithoutActivation
+                 <http://Developer.Apple.com/documentation/appkit/
+                 nsapplication/1428566-unhidewithoutactivation>}.
         '''
-        if hide:
-            self.NS.hide_(self.NS)
-        elif self.isHidden:
+        h = self.isHidden
+        if h and not hide:
             self.NS.unhide_(self.NS)
+        elif hide and not h:
+            self.NS.hide_(self.NS)
+        return h
 
     def hideOther(self, hide):
         '''Hide other or show all apps's windows.
@@ -133,6 +161,12 @@ class App(_Type2):
             self.NS.hideOtherApplications_(self.NS)
         else:
             self.NS.unhideAllApplications_(self.NS)
+
+    @property_RO
+    def isActive(self):
+        '''Get this app's active state (C{bool}).
+        '''
+        return True if self.NS.isActive() else False
 
     @property_RO
     def isHidden(self):
@@ -364,10 +398,13 @@ class _NSApplicationDelegate(object):
     #       HelloCocoa/HelloCocoa>, etc.
 
 #   @_ObjC.method('v@')
-#   def applicationDidBecomeActive_(self, ui_application):
-#       '''Restart any tasks that were paused (or not yet started) while the
-#          application was inactive. If the application was previously in the
-#          background, optionally refresh the user interface.
+#   def applicationDidBecomeActive_(self, ns_notification):
+#       '''Sent by the default notification center immediately after
+#          the application becomes active.
+#
+#          Restart any tasks that were paused (or not yet started) while
+#          the application was inactive.  If the application was previously
+#          in the background, optionally refresh the user interface.
 #       '''
 #       pass
 
@@ -406,29 +443,35 @@ class _NSApplicationDelegate(object):
 #       '''
 #       return YES
 
+#   @_ObjC.method('v@')
+#   def applicationDidResignActive_(self, ns_notification):
+#       '''Sent by the default notification center immediately after
+#          the application is deactivated.
+#       '''
+#       pass
+
 #   @_ObjC.method('Bv@')
 #   def applicationShouldTerminateAfterLastWindowClosed_(self, ns_application):
 #       return YES
 
+    # <https://developer.apple.com/documentation/uikit/
+    #          uiapplicationdelegate/1623076-applicationwillenterforeground>
 #   @_ObjC.method('v@')
 #   def applicationWillEnterForeground_(self, ui_application):
 #       '''Called as part of the transition from the background to the
-#          inactive state; here you can undo many of the changes made
-#          on entering the background.
+#          active state.  You can use this method to undo many of the
+#          changes you made to your app upon entering the background.
+#
+#          The call to this method is invariably followed by a call to
+#          the applicationDidBecomeActive method, which then moves the
+#          app from the inactive to the active state.
 #       '''
 #       pass
 
 #   @_ObjC.method('v@')
-#   def applicationWillResignActive_(self, ui_application):
-#       '''Sent when the application is about to move from active to
-#          inactive state.  This can occur for certain types of temporary
-#          interruptions (such as an incoming phone call or SMS message)
-#          or when the user quits the application and it begins the
-#          transition to the background state.
-#
-# 	       Use this method to pause ongoing tasks, disable timers, and
-# 	       throttle down OpenGL ES frame rates. Games should use this
-# 	       method to pause the game.
+#   def applicationWillResignActive_(self, ns_notification):
+#       '''Sent by the default notification center immediately before
+#          the application is deactivated.
 #       '''
 #       pass
 

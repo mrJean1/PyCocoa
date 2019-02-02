@@ -3,8 +3,8 @@
 PyCocoa
 =======
 
-A basic, partial, ctypes_-based Python binding to the macOS_ Objective-C
-Cocoa runtime and several other macOS_ libraries.
+A basic, ctypes_-based Python binding to the macOS_ Objective-C Cocoa
+runtime and several other macOS_ libraries.
 
 This is package `cocoa-python`_ by *Phillip Nguyen (C) 2011*, modified,
 extended, tested, documented and published with permission under both
@@ -18,14 +18,14 @@ Examples `cocoavlc.py`_ and *simple_VLCplayer.py* require installation of
 the `VLC App`_ and the corresponding `Python-VLC`_ binding.
 
 The tests and examples have only been run with 64-bit Python 2.7.15 and
-3.7.1 using `Python-VLC`_ 2.2.8, 3.0.2 and 3.0.4 (with the compatible
-`VLC App`_) and only on macOS 10.13.5 or 10.13.6 High Sierra or 10.14.0
-Mojave.  PyCocoa has *not been tested* on iOS nor with 32-bit Python and
+3.7.2 using `Python-VLC`_ 2.2.8, 3.0.2 and 3.0.4 (with the compatible
+`VLC App`_) and only on macOS 10.13.6 High Sierra or 10.14.0 Mojave.
+PyCocoa has *not been tested* on iOS nor with 32-bit Python and
 *does not work* with PyPy_ nor with `Intel(R) Python`_.
 
 All PyCocoa source code has been statically checked_ with PyChecker_,
 PyFlakes_, PyCodeStyle_ (formerly Pep8) and McCabe_ using 64-bit Python
-2.7.15 and with Flake8_ using 64-bit Python 3.7.1.
+2.7.15 and with Flake8_ using 64-bit Python 3.7.2.
 
 To install PyCocoa, type ``pip install PyCocoa`` or ``easy_install PyCocoa``
 in a terminal window.  Alternatively, download ``PyCocoa-y.m.d.zip`` from
@@ -38,7 +38,7 @@ to Objective-C bridge (and included in `macOS' Python`_), (b) `Rubicon-ObjC`_
 for Python 3.5+, taking advantage of Python's new typing_ annotations and
 (c) PyGUI_ for macOS_.
 
-*Last updated: Nov 02, 2018.*
+*Last updated: Jan 31, 2019.*
 
 .. image:: https://Img.Shields.io/pypi/pyversions/PyCocoa.svg?label=Python
    :target: http://PyPI.org/project/PyCocoa

@@ -110,6 +110,25 @@ bases._Type0 --+
     </td><td class="summary">
       <table width="100%" cellpadding="0" cellspacing="0" border="0">
         <tr>
+          <td><span class="summary-sig"><a href="pycocoa.apps.App-class.html#activate" class="summary-sig-name">activate</a>(<span class="summary-sig-arg">self</span>,
+        <span class="summary-sig-arg">active</span>,
+        <span class="summary-sig-arg">force</span>=<span class="summary-sig-default">True</span>)</span><br />
+      Active or de-activate this app.</td>
+          <td align="right" valign="top">
+            
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
           <td><span class="summary-sig"><a href="pycocoa.apps.App-class.html#append" class="summary-sig-name">append</a>(<span class="summary-sig-arg">self</span>,
         <span class="summary-sig-arg">menu</span>)</span><br />
       Add a menu to this app's menu bar.</td>
@@ -148,7 +167,7 @@ bases._Type0 --+
         <tr>
           <td><span class="summary-sig"><a href="pycocoa.apps.App-class.html#hide" class="summary-sig-name">hide</a>(<span class="summary-sig-arg">self</span>,
         <span class="summary-sig-arg">hide</span>)</span><br />
-      Hide or show this app's main window.</td>
+      Hide or show this app's windows.</td>
           <td align="right" valign="top">
             
             
@@ -491,6 +510,14 @@ bases._Type0 --+
     <td width="15%" align="right" valign="top" class="summary">
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
+        <a href="pycocoa.apps.App-class.html#isActive" class="summary-name">isActive</a><br />
+      Get this app's active state (<code>bool</code>).
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
         <a href="pycocoa.apps.App-class.html#isHidden" class="summary-name">isHidden</a><br />
       Get this app's hidden state (<code>bool</code>).
     </td>
@@ -622,6 +649,40 @@ bases._Type0 --+
   </dl>
 </td></tr></table>
 </div>
+<a name="activate"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">activate</span>(<span class="sig-arg">self</span>,
+        <span class="sig-arg">active</span>,
+        <span class="sig-arg">force</span>=<span class="sig-default">True</span>)</span>
+  </h3>
+  </td><td align="right" valign="top"
+    >&nbsp;
+    </td>
+  </tr></table>
+  
+  <p>Active or de-activate this app.</p>
+  <dl class="fields">
+    <dt>Parameters:</dt>
+    <dd><ul class="nomargin-top">
+        <li><strong class="pname"><code>active</code></strong> - Activate or de-activate (<code>bool</code>).</li>
+        <li><strong class="pname"><code>force</code></strong> - Activate regardless (<code>bool</code>), otheriwse only activate 
+          if no other app is active</li>
+    </ul></dd>
+    <dt>Returns:</dt>
+        <dd>Previous <code>isActive</code> value (<code>bool</code>).</dd>
+  </dl>
+<div class="fields">      <p><strong>See Also:</strong>
+        <a 
+        href="http://Developer.Apple.com/documentation/appkit/nsapplication/1428468-activate"
+        target="_top">activate(ignoringOtherApps flag: Bool)</a>.
+      </p>
+</div></td></tr></table>
+</div>
 <a name="append"></a>
 <div>
 <table class="details" border="1" cellpadding="3"
@@ -689,14 +750,21 @@ bases._Type0 --+
     </td>
   </tr></table>
   
-  <p>Hide or show this app's main window.</p>
+  <p>Hide or show this app's windows.</p>
   <dl class="fields">
     <dt>Parameters:</dt>
     <dd><ul class="nomargin-top">
         <li><strong class="pname"><code>hide</code></strong> - Hide or show (<code>bool</code>).</li>
     </ul></dd>
+    <dt>Returns:</dt>
+        <dd>Previous <code>isHidden</code> value (<code>bool</code>).</dd>
   </dl>
-</td></tr></table>
+<div class="fields">      <p><strong>See Also:</strong>
+        <a 
+        href="http://Developer.Apple.com/documentation/appkit/nsapplication/1428566-unhidewithoutactivation"
+        target="_top">unhideWithoutActivation</a>.
+      </p>
+</div></td></tr></table>
 </div>
 <a name="hideOther"></a>
 <div>
@@ -823,6 +891,26 @@ bases._Type0 --+
     <dd class="value"><span class="summary-sig">badge(<span class="summary-sig-arg">self</span>)</span>
         - Get this app's dock tile/badge (<a href="pycocoa.apps.Tile-class.html" 
 class="link">Tile</a>).
+    </dd>
+    <dt>Set Method:</dt>
+    <dd class="value"><span class="summary-sig">Read_Only(<span class="summary-sig-arg">self</span>,
+        <span class="summary-sig-arg">ignored</span>)</span>
+        - Throws an <code>AttributeError</code>, always.
+    </dd>
+  </dl>
+</td></tr></table>
+</div>
+<a name="isActive"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <h3 class="epydoc">isActive</h3>
+  <p>Get this app's active state (<code>bool</code>).</p>
+  <dl class="fields">
+    <dt>Get Method:</dt>
+    <dd class="value"><span class="summary-sig">isActive(<span class="summary-sig-arg">self</span>)</span>
+        - Get this app's active state (<code>bool</code>).
     </dd>
     <dt>Set Method:</dt>
     <dd class="value"><span class="summary-sig">Read_Only(<span class="summary-sig-arg">self</span>,
@@ -1033,7 +1121,7 @@ class="link">MenuBar</a>).
 <table border="0" cellpadding="0" cellspacing="0" width="100%%">
   <tr>
     <td align="left" class="footer">
-    Generated by Epydoc 3.0.1 on Sun Nov  4 17:39:20 2018
+    Generated by Epydoc 3.0.1 on Fri Feb  1 13:42:04 2019
     </td>
     <td align="right" class="footer">
       <a target="mainFrame" href="http://epydoc.sourceforge.net"

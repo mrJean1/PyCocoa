@@ -3,15 +3,15 @@
 
 # Originally <http://GitHub.com/phillip-nguyen/cocoa-python>
 
-u'''A basic, partial, U{ctypes
-<http://Docs.Python.org/2.7/library/ctypes.html>}-based Python binding to
-the I{macOS} Objective-C Cocoa runtime and several other I{macOS} libraries.
+u'''A basic, U{ctypes<http://Docs.Python.org/2.7/library/ctypes.html>}-based
+Python binding to the I{macOS} Objective-C Cocoa runtime and several other
+I{macOS} libraries.
 
 This is the U{cocoa-python<http://GitHub.com/phillip-nguyen/cocoa-python>}
 package by I{Phillip Nguyen (C) 2011}, modified, extended, tested,
-documented and published with permission under both the
-U{MIT License<http://OpenSource.org/licenses/MIT>} and the original
-U{New BSD License<http://OpenSource.org/licenses/BSD-3-Clause>}.
+documented and published with permission under both the U{MIT License
+<http://OpenSource.org/licenses/MIT>} and the original U{New BSD License
+<http://OpenSource.org/licenses/BSD-3-Clause>}.
 
 In addition to the U{pycocoa<http://PyPI.org/project/PyCocoa>} package,
 the distribution files contain several tests, some examples and the
@@ -25,20 +25,20 @@ and I{simple_VLCplayer.py} require installation of the U{VLC App
 corresponding U{Python-VLC<http://PyPI.org/project/python-vlc>} binding.
 
 The tests and examples have only been run with 64-bit Python 2.7.15 and
-3.7.1 using U{Python-VLC<http://PyPI.org/project/python-vlc>} 2.2.8, 3.0.2
+3.7.2 using U{Python-VLC<http://PyPI.org/project/python-vlc>} 2.2.8, 3.0.2
 and 3.0.4 (with the compatible U{VLC App<http://www.VideoLan.org/vlc>})
-and only on macOS 10.13.5 or 10.13.6 High Sierra or 10.14.0 Mojave.  PyCocoa
-has I{not been tested} on iOS nor with 32-bit Python and I{does not work}
+and only on macOS 10.13.6 High Sierra or 10.14.0 Mojave.  PyCocoa has
+I{not been tested} on iOS nor with 32-bit Python and I{does not work}
 with U{PyPy<http://PyPy.org>} nor with U{Intel(R) Python
 <http://Software.Intel.com/en-us/distribution-for-python>}.
 
-All PyCocoa source code has been statically
-U{checked<http://GitHub.com/ActiveState/code/tree/master/recipes/Python/546532_PyChecker_postprocessor>}
+All PyCocoa source code has been statically U{checked
+<http://GitHub.com/ActiveState/code/tree/master/recipes/Python/546532_PyChecker_postprocessor>}
 with U{PyChecker<http://PyPI.org/project/pychecker>},
 U{PyFlakes<http://PyPI.org/project/pyflakes>},
 U{PyCodeStyle<http://PyPI.org/project/pycodestyle>} (formerly Pep8) and
 U{McCabe<http://PyPI.org/project/mccabe>} using 64-bit Python 2.7.15 and with
-U{Flake8<http://PyPI.org/project/flake8>} using 64-bit Python 3.7.1.
+U{Flake8<http://PyPI.org/project/flake8>} using 64-bit Python 3.7.2.
 
 To install PyCocoa, type C{pip install PyCocoa} or C{easy_install PyCocoa}
 in a terminal window.  Alternatively, download C{PyCocoa-y.m.d.zip} from
@@ -118,7 +118,7 @@ POSSIBILITY OF SUCH DAMAGE.}
 from os.path import abspath, dirname
 import sys
 
-__version__ = '18.11.02'
+__version__ = '19.01.31'
 
 p = sys.platform
 if not p.startswith('darwin'):

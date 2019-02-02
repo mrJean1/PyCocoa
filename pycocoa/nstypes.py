@@ -24,7 +24,7 @@ from utils   import bytes2str, _ByteStrs, clip, _exports, _Globals, \
 
 from os import linesep, path as os_path
 
-__version__ = '18.11.02'
+__version__ = '18.11.06'
 
 # some commonly used Foundation and Cocoa classes, described here
 # <http://OMZ-Software.com/pythonista/docs/ios/objc_util.html>
@@ -377,6 +377,15 @@ class NSStr(ObjCInstance):
         # create in a singleton for each string value,
         # retaining strings seems to help singletons.
         return self if len(ustr) > 1 else retain(self)
+
+    def __eq__(self, other):
+        return isinstance(other, NSStr) and self.str == other.str
+
+    def __hash__(self):  # XXX needed for .__eq__ and .__ne__
+        return hash(self.str)
+
+    def __ne__(self, other):
+        return not self.__eq__(other)
 
     def __str__(self):
         return '%s(%r)' % (self.objc_classname, clip(self.value))

@@ -58,8 +58,7 @@
 </table>
 <!-- ==================== PACKAGE DESCRIPTION ==================== -->
 <h1 class="epydoc">Package pycocoa</h1><p class="nomargin-top"></p>
-<p>A basic, partial, <a 
-  href="http://Docs.Python.org/2.7/library/ctypes.html" 
+<p>A basic, <a href="http://Docs.Python.org/2.7/library/ctypes.html" 
   target="_top">ctypes</a>-based Python binding to the <i>macOS</i> 
   Objective-C Cocoa runtime and several other <i>macOS</i> libraries.</p>
   <p>This is the <a href="http://GitHub.com/phillip-nguyen/cocoa-python" 
@@ -85,13 +84,13 @@
   href="http://PyPI.org/project/python-vlc" target="_top">Python-VLC</a> 
   binding.</p>
   <p>The tests and examples have only been run with 64-bit Python 2.7.15 
-  and 3.7.1 using <a href="http://PyPI.org/project/python-vlc" 
+  and 3.7.2 using <a href="http://PyPI.org/project/python-vlc" 
   target="_top">Python-VLC</a> 2.2.8, 3.0.2 and 3.0.4 (with the compatible 
   <a href="http://www.VideoLan.org/vlc" target="_top">VLC App</a>) and only
-  on macOS 10.13.5 or 10.13.6 High Sierra or 10.14.0 Mojave.  PyCocoa has 
-  <i>not been tested</i> on iOS nor with 32-bit Python and <i>does not 
-  work</i> with <a href="http://PyPy.org" target="_top">PyPy</a> nor with 
-  <a href="http://Software.Intel.com/en-us/distribution-for-python" 
+  on macOS 10.13.6 High Sierra or 10.14.0 Mojave.  PyCocoa has <i>not been 
+  tested</i> on iOS nor with 32-bit Python and <i>does not work</i> with <a
+  href="http://PyPy.org" target="_top">PyPy</a> nor with <a 
+  href="http://Software.Intel.com/en-us/distribution-for-python" 
   target="_top">Intel(R) Python</a>.</p>
   <p>All PyCocoa source code has been statically <a 
   href="http://GitHub.com/ActiveState/code/tree/master/recipes/Python/546532_PyChecker_postprocessor"
@@ -102,7 +101,7 @@
   (formerly Pep8) and <a href="http://PyPI.org/project/mccabe" 
   target="_top">McCabe</a> using 64-bit Python 2.7.15 and with <a 
   href="http://PyPI.org/project/flake8" target="_top">Flake8</a> using 
-  64-bit Python 3.7.1.</p>
+  64-bit Python 3.7.2.</p>
   <p>To install PyCocoa, type <code>pip install PyCocoa</code> or 
   <code>easy_install PyCocoa</code> in a terminal window.  Alternatively, 
   download <code>PyCocoa-y.m.d.zip</code> from <a 
@@ -174,7 +173,7 @@
 
 <hr />
 <div class="fields">      <p><strong>Version:</strong>
-        18.11.02
+        19.01.31
       </p>
 </div><!-- ==================== SUBMODULES ==================== -->
 <a name="section-Submodules"></a>
@@ -3667,15 +3666,15 @@ mUIFont', size=13, traits='Italic', weight=5),
     <td width="15%" align="right" valign="top" class="summary">
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
-        <a href="pycocoa-module.html#Keys" class="summary-name">Keys</a> = <code title="Keys.Backspace=0x8,
+        <a href="pycocoa-module.html#Keys" class="summary-name">Keys</a> = <code title="Keys.ACK=0x6,
+    .Acknowledge=0x6,
+    .BackSpace=0x8,
+    .BackTab=0x19,
+    .BEL=0x7,
+    .Bell=0x7,
     .BS=0x8,
-    .CarriageReturn=0xd,
-    .CR=0xd,
-    .DEL=0x7f,
-    .Delete=0x7f,
-    .Enter=0x3,
-    .ESC=0x1b,
-...">Keys.Backspace=0<code class="variable-ellipsis">...</code></code>
+    .BT=0x19,
+...">Keys.ACK=0<code class="variable-ellipsis">...</code></code>
     </td>
   </tr>
 <tr>
@@ -3683,6 +3682,13 @@ mUIFont', size=13, traits='Italic', weight=5),
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
         <a name="NO"></a><span class="summary-name">NO</span> = <code title="False">False</code>
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a name="NSAcknowledgeCharacter"></a><span class="summary-name">NSAcknowledgeCharacter</span> = <code title="6">6</code>
     </td>
   </tr>
 <tr>
@@ -3759,14 +3765,14 @@ mUIFont', size=13, traits='Italic', weight=5),
     <td width="15%" align="right" valign="top" class="summary">
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
-        <a name="NSApplicationDidHideNotification"></a><span class="summary-name">NSApplicationDidHideNotification</span> = <code title="c_void_p(140735367548864)">c_void_p(140735367548864)</code>
+        <a name="NSApplicationDidHideNotification"></a><span class="summary-name">NSApplicationDidHideNotification</span> = <code title="c_void_p(140735981486016)">c_void_p(140735981486016)</code>
     </td>
   </tr>
 <tr>
     <td width="15%" align="right" valign="top" class="summary">
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
-        <a name="NSApplicationDidUnhideNotification"></a><span class="summary-name">NSApplicationDidUnhideNotification</span> = <code title="c_void_p(140735367548960)">c_void_p(140735367548960)</code>
+        <a name="NSApplicationDidUnhideNotification"></a><span class="summary-name">NSApplicationDidUnhideNotification</span> = <code title="c_void_p(140735981486112)">c_void_p(140735981486112)</code>
     </td>
   </tr>
 <tr>
@@ -3829,6 +3835,13 @@ mUIFont', size=13, traits='Italic', weight=5),
     <td width="15%" align="right" valign="top" class="summary">
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
+        <a name="NSBackSpaceCharacter"></a><span class="summary-name">NSBackSpaceCharacter</span> = <code title="8">8</code>
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
         <a name="NSBackTabCharacter"></a><span class="summary-name">NSBackTabCharacter</span> = <code title="25">25</code>
     </td>
   </tr>
@@ -3851,20 +3864,6 @@ mUIFont', size=13, traits='Italic', weight=5),
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
         <a name="NSBackingStoreRetained"></a><span class="summary-name">NSBackingStoreRetained</span> = <code title="0">0</code>
-    </td>
-  </tr>
-<tr>
-    <td width="15%" align="right" valign="top" class="summary">
-      <span class="summary-type">&nbsp;</span>
-    </td><td class="summary">
-        <a name="NSBackspaceCharacter"></a><span class="summary-name">NSBackspaceCharacter</span> = <code title="8">8</code>
-    </td>
-  </tr>
-<tr>
-    <td width="15%" align="right" valign="top" class="summary">
-      <span class="summary-type">&nbsp;</span>
-    </td><td class="summary">
-        <a name="NSBeginFunctionKey"></a><span class="summary-name">NSBeginFunctionKey</span> = <code title="63274">63274</code>
     </td>
   </tr>
 <tr>
@@ -3927,6 +3926,13 @@ mUIFont', size=13, traits='Italic', weight=5),
     <td width="15%" align="right" valign="top" class="summary">
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
+        <a name="NSClearLineFunctionKey"></a><span class="summary-name">NSClearLineFunctionKey</span> = <code title="63289">63289</code>
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
         <a name="NSColor"></a><span class="summary-name">NSColor</span> = <code title="ObjCClass('NSColor')">ObjCClass('NSColor')</code>
     </td>
   </tr>
@@ -3969,6 +3975,13 @@ mUIFont', size=13, traits='Italic', weight=5),
     <td width="15%" align="right" valign="top" class="summary">
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
+        <a name="NSDataLineEscapeCharacter"></a><span class="summary-name">NSDataLineEscapeCharacter</span> = <code title="16">16</code>
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
         <a name="NSDecimalNumber"></a><span class="summary-name">NSDecimalNumber</span> = <code title="ObjCClass('NSDecimalNumber')">ObjCClass('NSDecimalNumber')</code>
     </td>
   </tr>
@@ -3976,7 +3989,7 @@ mUIFont', size=13, traits='Italic', weight=5),
     <td width="15%" align="right" valign="top" class="summary">
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
-        <a name="NSDefaultRunLoopMode"></a><span class="summary-name">NSDefaultRunLoopMode</span> = <code title="c_void_p(140735376728440)">c_void_p(140735376728440)</code>
+        <a name="NSDefaultRunLoopMode"></a><span class="summary-name">NSDefaultRunLoopMode</span> = <code title="c_void_p(140735990665592)">c_void_p(140735990665592)</code>
     </td>
   </tr>
 <tr>
@@ -3991,6 +4004,34 @@ mUIFont', size=13, traits='Italic', weight=5),
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
         <a name="NSDeleteFunctionKey"></a><span class="summary-name">NSDeleteFunctionKey</span> = <code title="63272">63272</code>
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a name="NSDeviceControl1Character"></a><span class="summary-name">NSDeviceControl1Character</span> = <code title="17">17</code>
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a name="NSDeviceControl2Character"></a><span class="summary-name">NSDeviceControl2Character</span> = <code title="19">19</code>
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a name="NSDeviceControl3Character"></a><span class="summary-name">NSDeviceControl3Character</span> = <code title="19">19</code>
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a name="NSDeviceControl4Character"></a><span class="summary-name">NSDeviceControl4Character</span> = <code title="20">20</code>
     </td>
   </tr>
 <tr>
@@ -4018,7 +4059,49 @@ mUIFont', size=13, traits='Italic', weight=5),
     <td width="15%" align="right" valign="top" class="summary">
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
+        <a name="NSDownArrowFunctionKey"></a><span class="summary-name">NSDownArrowFunctionKey</span> = <code title="63233">63233</code>
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
         <a name="NSEndFunctionKey"></a><span class="summary-name">NSEndFunctionKey</span> = <code title="63275">63275</code>
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a name="NSEndOfMediumCharacter"></a><span class="summary-name">NSEndOfMediumCharacter</span> = <code title="25">25</code>
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a name="NSEndOfTextCharacter"></a><span class="summary-name">NSEndOfTextCharacter</span> = <code title="3">3</code>
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a name="NSEndOfTransmitBlockCharacter"></a><span class="summary-name">NSEndOfTransmitBlockCharacter</span> = <code title="23">23</code>
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a name="NSEndOfTransmitCharacter"></a><span class="summary-name">NSEndOfTransmitCharacter</span> = <code title="4">4</code>
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a name="NSEnquiryCharacter"></a><span class="summary-name">NSEnquiryCharacter</span> = <code title="5">5</code>
     </td>
   </tr>
 <tr>
@@ -4053,7 +4136,7 @@ mUIFont', size=13, traits='Italic', weight=5),
     <td width="15%" align="right" valign="top" class="summary">
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
-        <a name="NSEventTrackingRunLoopMode"></a><span class="summary-name">NSEventTrackingRunLoopMode</span> = <code title="c_void_p(140735367543552)">c_void_p(140735367543552)</code>
+        <a name="NSEventTrackingRunLoopMode"></a><span class="summary-name">NSEventTrackingRunLoopMode</span> = <code title="c_void_p(140735981480704)">c_void_p(140735981480704)</code>
     </td>
   </tr>
 <tr>
@@ -4061,6 +4144,20 @@ mUIFont', size=13, traits='Italic', weight=5),
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
         <a name="NSException"></a><span class="summary-name">NSException</span> = <code title="ObjCClass('NSException')">ObjCClass('NSException')</code>
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a name="NSF19FunctionKey"></a><span class="summary-name">NSF19FunctionKey</span> = <code title="63254">63254</code>
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a name="NSF1FunctionKey"></a><span class="summary-name">NSF1FunctionKey</span> = <code title="63236">63236</code>
     </td>
   </tr>
 <tr>
@@ -4075,6 +4172,13 @@ mUIFont', size=13, traits='Italic', weight=5),
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
         <a name="NSFileHandlingPanelOKButton"></a><span class="summary-name">NSFileHandlingPanelOKButton</span> = <code title="1">1</code>
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a name="NSFileSeparatorCharacter"></a><span class="summary-name">NSFileSeparatorCharacter</span> = <code title="28">28</code>
     </td>
   </tr>
 <tr>
@@ -4340,6 +4444,20 @@ mUIFont', size=13, traits='Italic', weight=5),
     <td width="15%" align="right" valign="top" class="summary">
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
+        <a name="NSGroupSeparatorCharacter"></a><span class="summary-name">NSGroupSeparatorCharacter</span> = <code title="29">29</code>
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a name="NSHelpFunctionKey"></a><span class="summary-name">NSHelpFunctionKey</span> = <code title="63302">63302</code>
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
         <a name="NSHelpKeyMask"></a><span class="summary-name">NSHelpKeyMask</span> = <code title="4194304">4194304</code>
     </td>
   </tr>
@@ -4354,6 +4472,13 @@ mUIFont', size=13, traits='Italic', weight=5),
     <td width="15%" align="right" valign="top" class="summary">
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
+        <a name="NSHorizontalTabCharacter"></a><span class="summary-name">NSHorizontalTabCharacter</span> = <code title="9">9</code>
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
         <a name="NSImage"></a><span class="summary-name">NSImage</span> = <code title="ObjCClass('NSImage')">ObjCClass('NSImage')</code>
     </td>
   </tr>
@@ -4362,13 +4487,6 @@ mUIFont', size=13, traits='Italic', weight=5),
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
         <a name="NSImageView"></a><span class="summary-name">NSImageView</span> = <code title="ObjCClass('NSImageView')">ObjCClass('NSImageView')</code>
-    </td>
-  </tr>
-<tr>
-    <td width="15%" align="right" valign="top" class="summary">
-      <span class="summary-type">&nbsp;</span>
-    </td><td class="summary">
-        <a name="NSInsertFunctionKey"></a><span class="summary-name">NSInsertFunctionKey</span> = <code title="63271">63271</code>
     </td>
   </tr>
 <tr>
@@ -4424,7 +4542,21 @@ mUIFont', size=13, traits='Italic', weight=5),
     <td width="15%" align="right" valign="top" class="summary">
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
+        <a name="NSLeftArrowFunctionKey"></a><span class="summary-name">NSLeftArrowFunctionKey</span> = <code title="63234">63234</code>
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
         <a name="NSLeftTextAlignment"></a><span class="summary-name">NSLeftTextAlignment</span> = <code title="0">0</code>
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a name="NSLineFeedCharacter"></a><span class="summary-name">NSLineFeedCharacter</span> = <code title="10">10</code>
     </td>
   </tr>
 <tr>
@@ -4452,15 +4584,15 @@ mUIFont', size=13, traits='Italic', weight=5),
     <td width="15%" align="right" valign="top" class="summary">
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
-        <a href="pycocoa-module.html#NSMain" class="summary-name">NSMain</a> = <code title="NSMain.Application=NSApplication(&lt;Id_t at 0x10d58bdd0&gt;) of 0x7f8418d3b\
-4a0,
-      .BooleanNO=NSBoolean(&lt;Id_t at 0x10d58b710&gt;) of 0x7fff823283f8,
-      .BooleanYES=NSBoolean(&lt;Id_t at 0x10d582dd0&gt;) of 0x7fff823283e8,
-      .Bundle=NSBundle(&lt;Id_t at 0x10d58e170&gt;) of 0x7f84166743e0,
+        <a href="pycocoa-module.html#NSMain" class="summary-name">NSMain</a> = <code title="NSMain.Application=NSApplication(&lt;Id_t at 0x10ce2dc20&gt;) of 0x7fdd2c22f\
+2c0,
+      .BooleanNO=NSBoolean(&lt;Id_t at 0x10ce2d200&gt;) of 0x7fffa6ca7438,
+      .BooleanYES=NSBoolean(&lt;Id_t at 0x10ce2d4d0&gt;) of 0x7fffa6ca7428,
+      .Bundle=NSBundle(&lt;Id_t at 0x10c9a1710&gt;) of 0x7fdd29eeb1a0,
       .BundleName=NSConstantString('CFBundleName'),
-      .FontManager=NSFontManager(&lt;Id_t at 0x10d2ae5f0&gt;) of 0x7f8418bf8\
-250,
-...">NSMain.Application=NSApplication(&lt;Id_t at 0x10d58bdd0<code class="variable-ellipsis">...</code></code>
+      .FontManager=NSFontManager(&lt;Id_t at 0x10c989680&gt;) of 0x7fdd2c608\
+990,
+...">NSMain.Application=NSApplication(&lt;Id_t at 0x10ce2dc20<code class="variable-ellipsis">...</code></code>
     </td>
   </tr>
 <tr>
@@ -4523,7 +4655,14 @@ mUIFont', size=13, traits='Italic', weight=5),
     <td width="15%" align="right" valign="top" class="summary">
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
-        <a name="NSNewlineCharacter"></a><span class="summary-name">NSNewlineCharacter</span> = <code title="10">10</code>
+        <a name="NSNegativeAcknowledgeCharacter"></a><span class="summary-name">NSNegativeAcknowledgeCharacter</span> = <code title="21">21</code>
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a name="NSNewLineCharacter"></a><span class="summary-name">NSNewLineCharacter</span> = <code title="10">10</code>
     </td>
   </tr>
 <tr>
@@ -4677,7 +4816,21 @@ mUIFont', size=13, traits='Italic', weight=5),
     <td width="15%" align="right" valign="top" class="summary">
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
+        <a name="NSRecordSeparatorCharacter"></a><span class="summary-name">NSRecordSeparatorCharacter</span> = <code title="30">30</code>
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
         <a name="NSRectEncoding"></a><span class="summary-name">NSRectEncoding</span> = <code title="'{CGRect={CGPoint=dd}{CGSize=dd}}'"><code class="variable-quote">'</code><code class="variable-string">{CGRect={CGPoint=dd}{CGSize=dd}}</code><code class="variable-quote">'</code></code>
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a name="NSRightArrowFunctionKey"></a><span class="summary-name">NSRightArrowFunctionKey</span> = <code title="63235">63235</code>
     </td>
   </tr>
 <tr>
@@ -4719,7 +4872,21 @@ mUIFont', size=13, traits='Italic', weight=5),
     <td width="15%" align="right" valign="top" class="summary">
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
+        <a name="NSShiftInCharacter"></a><span class="summary-name">NSShiftInCharacter</span> = <code title="15">15</code>
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
         <a name="NSShiftKeyMask"></a><span class="summary-name">NSShiftKeyMask</span> = <code title="131072">131072</code>
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a name="NSShiftOutCharacter"></a><span class="summary-name">NSShiftOutCharacter</span> = <code title="14">14</code>
     </td>
   </tr>
 <tr>
@@ -4747,6 +4914,20 @@ mUIFont', size=13, traits='Italic', weight=5),
     <td width="15%" align="right" valign="top" class="summary">
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
+        <a name="NSStartOfHeadingCharacter"></a><span class="summary-name">NSStartOfHeadingCharacter</span> = <code title="1">1</code>
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a name="NSStartOfTextCharacter"></a><span class="summary-name">NSStartOfTextCharacter</span> = <code title="2">2</code>
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
         <a name="NSStatusBar"></a><span class="summary-name">NSStatusBar</span> = <code title="ObjCClass('NSStatusBar')">ObjCClass('NSStatusBar')</code>
     </td>
   </tr>
@@ -4755,6 +4936,20 @@ mUIFont', size=13, traits='Italic', weight=5),
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
         <a name="NSString"></a><span class="summary-name">NSString</span> = <code title="ObjCClass('NSString')">ObjCClass('NSString')</code>
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a name="NSSubstituteCharacter"></a><span class="summary-name">NSSubstituteCharacter</span> = <code title="26">26</code>
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a name="NSSynchronousIdleCharacter"></a><span class="summary-name">NSSynchronousIdleCharacter</span> = <code title="22">22</code>
     </td>
   </tr>
 <tr>
@@ -4923,6 +5118,20 @@ mUIFont', size=13, traits='Italic', weight=5),
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
         <a name="NSURL"></a><span class="summary-name">NSURL</span> = <code title="ObjCClass('NSURL')">ObjCClass('NSURL')</code>
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a name="NSUnitSeparatorCharacter"></a><span class="summary-name">NSUnitSeparatorCharacter</span> = <code title="31">31</code>
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a name="NSUpArrowFunctionKey"></a><span class="summary-name">NSUpArrowFunctionKey</span> = <code title="63232">63232</code>
     </td>
   </tr>
 <tr>
@@ -5115,8 +5324,8 @@ mUIFont', size=13, traits='Italic', weight=5),
     <td width="15%" align="right" valign="top" class="summary">
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
-        <a href="pycocoa-module.html#libAppKit" class="summary-name">libAppKit</a> = <code title="&lt;CDLL '/System/Library/Frameworks/AppKit.framework/AppKit', handle 7f8\
-41657c360 at 10924c450&gt;">&lt;CDLL '/System/Library/Frameworks/AppKit.framework<code class="variable-ellipsis">...</code></code>
+        <a href="pycocoa-module.html#libAppKit" class="summary-name">libAppKit</a> = <code title="&lt;CDLL '/System/Library/Frameworks/AppKit.framework/AppKit', handle 7fd\
+d29f0af40 at 1089acb50&gt;">&lt;CDLL '/System/Library/Frameworks/AppKit.framework<code class="variable-ellipsis">...</code></code>
     </td>
   </tr>
 <tr>
@@ -5124,7 +5333,7 @@ mUIFont', size=13, traits='Italic', weight=5),
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
         <a href="pycocoa-module.html#libCF" class="summary-name">libCF</a> = <code title="&lt;CDLL '/System/Library/Frameworks/CoreFoundation.framework/CoreFoundat\
-ion', handle 109dd3800 at 1092f6510&gt;">&lt;CDLL '/System/Library/Frameworks/CoreFoundation.frame<code class="variable-ellipsis">...</code></code>
+ion', handle 112f7f800 at 108a66650&gt;">&lt;CDLL '/System/Library/Frameworks/CoreFoundation.frame<code class="variable-ellipsis">...</code></code>
     </td>
   </tr>
 <tr>
@@ -5132,7 +5341,7 @@ ion', handle 109dd3800 at 1092f6510&gt;">&lt;CDLL '/System/Library/Frameworks/Co
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
         <a href="pycocoa-module.html#libCT" class="summary-name">libCT</a> = <code title="&lt;CDLL '/System/Library/Frameworks/CoreText.framework/CoreText', handle\
- 7f841657e3e0 at 1092575d0&gt;">&lt;CDLL '/System/Library/Frameworks/CoreText.framework/C<code class="variable-ellipsis">...</code></code>
+ 7fdd29e99810 at 1089b9cd0&gt;">&lt;CDLL '/System/Library/Frameworks/CoreText.framework/C<code class="variable-ellipsis">...</code></code>
     </td>
   </tr>
 <tr>
@@ -5140,7 +5349,7 @@ ion', handle 109dd3800 at 1092f6510&gt;">&lt;CDLL '/System/Library/Frameworks/Co
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
         <a href="pycocoa-module.html#libFoundation" class="summary-name">libFoundation</a> = <code title="&lt;CDLL '/System/Library/Frameworks/Foundation.framework/Foundation', ha\
-ndle 7f841657d2c0 at 109257c10&gt;">&lt;CDLL '/System/Library/Frameworks/Foundation.f<code class="variable-ellipsis">...</code></code>
+ndle 7fdd29d07f70 at 1089ca350&gt;">&lt;CDLL '/System/Library/Frameworks/Foundation.f<code class="variable-ellipsis">...</code></code>
     </td>
   </tr>
 <tr>
@@ -5155,15 +5364,15 @@ ndle 7f841657d2c0 at 109257c10&gt;">&lt;CDLL '/System/Library/Frameworks/Foundat
     <td width="15%" align="right" valign="top" class="summary">
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
-        <a href="pycocoa-module.html#libobjc" class="summary-name">libobjc</a> = <code title="&lt;CDLL '/usr/lib/libobjc.dylib', handle 109dd5680 at 109257a50&gt;">&lt;CDLL '/usr/lib/libobjc.dylib', handle 109dd5680 at <code class="variable-ellipsis">...</code></code>
+        <a href="pycocoa-module.html#libobjc" class="summary-name">libobjc</a> = <code title="&lt;CDLL '/usr/lib/libobjc.dylib', handle 112f81680 at 1089ca190&gt;">&lt;CDLL '/usr/lib/libobjc.dylib', handle 112f81680 at <code class="variable-ellipsis">...</code></code>
     </td>
   </tr>
 <tr>
     <td width="15%" align="right" valign="top" class="summary">
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
-        <a href="pycocoa-module.html#libquartz" class="summary-name">libquartz</a> = <code title="&lt;CDLL '/System/Library/Frameworks/quartz.framework/quartz', handle 7f8\
-4165845e0 at 10924c690&gt;">&lt;CDLL '/System/Library/Frameworks/quartz.framework<code class="variable-ellipsis">...</code></code>
+        <a href="pycocoa-module.html#libquartz" class="summary-name">libquartz</a> = <code title="&lt;CDLL '/System/Library/Frameworks/quartz.framework/quartz', handle 7fd\
+d29d0e5a0 at 1089acd90&gt;">&lt;CDLL '/System/Library/Frameworks/quartz.framework<code class="variable-ellipsis">...</code></code>
     </td>
   </tr>
 <tr>
@@ -9386,14 +9595,14 @@ mUIFont', size=13, traits='Italic', weight=5),
   <dl class="fields">
     <dt>Value:</dt>
       <dd><table><tr><td><pre class="variable">
-Keys.Backspace=0x8,
+Keys.ACK=0x6,
+    .Acknowledge=0x6,
+    .BackSpace=0x8,
+    .BackTab=0x19,
+    .BEL=0x7,
+    .Bell=0x7,
     .BS=0x8,
-    .CarriageReturn=0xd,
-    .CR=0xd,
-    .DEL=0x7f,
-    .Delete=0x7f,
-    .Enter=0x3,
-    .ESC=0x1b,
+    .BT=0x19,
 <code class="variable-ellipsis">...</code>
 </pre></td></tr></table>
 </dd>
@@ -9412,14 +9621,14 @@ Keys.Backspace=0x8,
   <dl class="fields">
     <dt>Value:</dt>
       <dd><table><tr><td><pre class="variable">
-NSMain.Application=NSApplication(&lt;Id_t at 0x10d58bdd0&gt;) of 0x7f8418d3b<span class="variable-linewrap"><img src="crarr.png" alt="\" /></span>
-4a0,
-      .BooleanNO=NSBoolean(&lt;Id_t at 0x10d58b710&gt;) of 0x7fff823283f8,
-      .BooleanYES=NSBoolean(&lt;Id_t at 0x10d582dd0&gt;) of 0x7fff823283e8,
-      .Bundle=NSBundle(&lt;Id_t at 0x10d58e170&gt;) of 0x7f84166743e0,
+NSMain.Application=NSApplication(&lt;Id_t at 0x10ce2dc20&gt;) of 0x7fdd2c22f<span class="variable-linewrap"><img src="crarr.png" alt="\" /></span>
+2c0,
+      .BooleanNO=NSBoolean(&lt;Id_t at 0x10ce2d200&gt;) of 0x7fffa6ca7438,
+      .BooleanYES=NSBoolean(&lt;Id_t at 0x10ce2d4d0&gt;) of 0x7fffa6ca7428,
+      .Bundle=NSBundle(&lt;Id_t at 0x10c9a1710&gt;) of 0x7fdd29eeb1a0,
       .BundleName=NSConstantString('CFBundleName'),
-      .FontManager=NSFontManager(&lt;Id_t at 0x10d2ae5f0&gt;) of 0x7f8418bf8<span class="variable-linewrap"><img src="crarr.png" alt="\" /></span>
-250,
+      .FontManager=NSFontManager(&lt;Id_t at 0x10c989680&gt;) of 0x7fdd2c608<span class="variable-linewrap"><img src="crarr.png" alt="\" /></span>
+990,
 <code class="variable-ellipsis">...</code>
 </pre></td></tr></table>
 </dd>
@@ -9503,8 +9712,8 @@ WindowStyle.Closable=1&lt;&lt;1,
   <dl class="fields">
     <dt>Value:</dt>
       <dd><table><tr><td><pre class="variable">
-&lt;CDLL '/System/Library/Frameworks/AppKit.framework/AppKit', handle 7f8<span class="variable-linewrap"><img src="crarr.png" alt="\" /></span>
-41657c360 at 10924c450&gt;
+&lt;CDLL '/System/Library/Frameworks/AppKit.framework/AppKit', handle 7fd<span class="variable-linewrap"><img src="crarr.png" alt="\" /></span>
+d29f0af40 at 1089acb50&gt;
 </pre></td></tr></table>
 </dd>
   </dl>
@@ -9523,7 +9732,7 @@ WindowStyle.Closable=1&lt;&lt;1,
     <dt>Value:</dt>
       <dd><table><tr><td><pre class="variable">
 &lt;CDLL '/System/Library/Frameworks/CoreFoundation.framework/CoreFoundat<span class="variable-linewrap"><img src="crarr.png" alt="\" /></span>
-ion', handle 109dd3800 at 1092f6510&gt;
+ion', handle 112f7f800 at 108a66650&gt;
 </pre></td></tr></table>
 </dd>
   </dl>
@@ -9542,7 +9751,7 @@ ion', handle 109dd3800 at 1092f6510&gt;
     <dt>Value:</dt>
       <dd><table><tr><td><pre class="variable">
 &lt;CDLL '/System/Library/Frameworks/CoreText.framework/CoreText', handle<span class="variable-linewrap"><img src="crarr.png" alt="\" /></span>
- 7f841657e3e0 at 1092575d0&gt;
+ 7fdd29e99810 at 1089b9cd0&gt;
 </pre></td></tr></table>
 </dd>
   </dl>
@@ -9561,7 +9770,7 @@ ion', handle 109dd3800 at 1092f6510&gt;
     <dt>Value:</dt>
       <dd><table><tr><td><pre class="variable">
 &lt;CDLL '/System/Library/Frameworks/Foundation.framework/Foundation', ha<span class="variable-linewrap"><img src="crarr.png" alt="\" /></span>
-ndle 7f841657d2c0 at 109257c10&gt;
+ndle 7fdd29d07f70 at 1089ca350&gt;
 </pre></td></tr></table>
 </dd>
   </dl>
@@ -9579,7 +9788,7 @@ ndle 7f841657d2c0 at 109257c10&gt;
   <dl class="fields">
     <dt>Value:</dt>
       <dd><table><tr><td><pre class="variable">
-&lt;CDLL '/usr/lib/libobjc.dylib', handle 109dd5680 at 109257a50&gt;
+&lt;CDLL '/usr/lib/libobjc.dylib', handle 112f81680 at 1089ca190&gt;
 </pre></td></tr></table>
 </dd>
   </dl>
@@ -9597,8 +9806,8 @@ ndle 7f841657d2c0 at 109257c10&gt;
   <dl class="fields">
     <dt>Value:</dt>
       <dd><table><tr><td><pre class="variable">
-&lt;CDLL '/System/Library/Frameworks/quartz.framework/quartz', handle 7f8<span class="variable-linewrap"><img src="crarr.png" alt="\" /></span>
-4165845e0 at 10924c690&gt;
+&lt;CDLL '/System/Library/Frameworks/quartz.framework/quartz', handle 7fd<span class="variable-linewrap"><img src="crarr.png" alt="\" /></span>
+d29d0e5a0 at 1089acd90&gt;
 </pre></td></tr></table>
 </dd>
   </dl>
@@ -9636,7 +9845,7 @@ ndle 7f841657d2c0 at 109257c10&gt;
 <table border="0" cellpadding="0" cellspacing="0" width="100%%">
   <tr>
     <td align="left" class="footer">
-    Generated by Epydoc 3.0.1 on Sun Nov  4 17:39:20 2018
+    Generated by Epydoc 3.0.1 on Fri Feb  1 13:42:03 2019
     </td>
     <td align="right" class="footer">
       <a target="mainFrame" href="http://epydoc.sourceforge.net"

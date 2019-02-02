@@ -17,13 +17,26 @@ from nstypes  import isNone, NSMain, NSMenu, NSMenuItem, nsOf, \
                      NSStr, nsString2str
 from pytypes  import int2NS
 from octypes  import SEL_t
-from oslibs   import NO, NSAlternateKeyMask, NSBackspaceCharacter, \
-                     NSCarriageReturnCharacter, NSCommandKeyMask, \
-                     NSControlKeyMask, NSDeleteCharacter, \
+from oslibs   import NO, NSAlternateKeyMask, NSCommandKeyMask, \
+                     NSControlKeyMask, NSShiftKeyMask, YES  # PYCHOK expected
+from oslibs   import NSAcknowledgeCharacter, NSBackSpaceCharacter, \
+                     NSBackTabCharacter, NSBellCharacter, NSCancelCharacter, \
+                     NSCarriageReturnCharacter, NSDataLineEscapeCharacter, \
+                     NSDeleteCharacter, NSDeviceControl1Character, \
+                     NSDeviceControl2Character, NSDeviceControl3Character, \
+                     NSDeviceControl4Character, NSEndOfMediumCharacter, \
+                     NSEndOfTextCharacter, NSEndOfTransmitCharacter, \
+                     NSEndOfTransmitBlockCharacter, NSEnquiryCharacter, \
                      NSEnterCharacter, NSEscapeCharacter, \
-                     NSFormFeedCharacter, NSNewlineCharacter, \
-                     NSShiftKeyMask, NSSpaceCharacter, NSTabCharacter, \
-                     NSVerticalTabCharacter, YES  # PYCHOK expected
+                     NSFileSeparatorCharacter, NSFormFeedCharacter, \
+                     NSGroupSeparatorCharacter, NSHorizontalTabCharacter, \
+                     NSLineFeedCharacter, NSNegativeAcknowledgeCharacter, \
+                     NSNewLineCharacter, NSRecordSeparatorCharacter, \
+                     NSShiftInCharacter, NSShiftOutCharacter, \
+                     NSSpaceCharacter, NSStartOfHeadingCharacter, \
+                     NSStartOfTextCharacter, NSSubstituteCharacter, \
+                     NSSynchronousIdleCharacter, NSTabCharacter, \
+                     NSUnitSeparatorCharacter, NSVerticalTabCharacter
 from runtime  import isObjCInstanceOf  # , ObjCInstance
 from utils    import bytes2str, _ByteStrs, _Constants, _Globals, \
                      _Ints, isinstanceOf, missing, name2pymethod, \
@@ -41,7 +54,7 @@ __all__ = ('Item', 'ItemSeparator',
            'Menu', 'MenuBar',
            'ns2Item',
            'title2action')
-__version__ = '18.11.02'
+__version__ = '18.11.06'
 
 # Method _NSApplicationDelegate.handleMenuItem_ in .apps.py
 # is the handler ('selector') for all menu items specified
@@ -416,7 +429,7 @@ class Item(_Item_Type2):
 
     @key.setter  # PYCHOK property.setter
     def key(self, key):
-        '''Set the item's shortcut C{key} (C{str}).
+        '''Set the item's shortcut C{key} and {keyEquivalent} (C{str}).
         '''
         ns, key = _nsKey2(key)
         if key != self.key:
@@ -619,16 +632,44 @@ class ItemSeparator(_Item_Type2):
 class Keys(_Constants):
     '''Menu L{Item} shortcut keys (C{chr}).
     '''
-    Backspace      = BS  = chr(NSBackspaceCharacter)  # del prev <x]
-    CarriageReturn = CR  = chr(NSCarriageReturnCharacter)
-    Delete         = DEL = chr(NSDeleteCharacter)  # del next [x>
-    Enter          = ETX = chr(NSEnterCharacter)
-    Escape         = ESC = chr(NSEscapeCharacter)
-    FormFeed       = FF  = chr(NSFormFeedCharacter)
-    LineFeed       = LF  = chr(NSNewlineCharacter)
-    Newline        = NL  = chr(NSNewlineCharacter)
-    Space          = SP  = chr(NSSpaceCharacter)
-    Tab            = HT  = chr(NSTabCharacter)
+    BackSpace           = BS  = chr(NSBackSpaceCharacter)  # Cmd+delete <x]
+    BackTab             = BT  = chr(NSBackTabCharacter)
+    Cancel              = CAN = chr(NSCancelCharacter)
+    CarriageReturn      = CR  = chr(NSCarriageReturnCharacter)
+    Delete              = DEL = chr(NSDeleteCharacter)  # Cmd+delete [x>
+    Enter               = ETX = chr(NSEnterCharacter)
+    Escape              = ESC = chr(NSEscapeCharacter)
+    FormFeed            = FF  = chr(NSFormFeedCharacter)  # Cmd+page down
+    NewLine             = NL  = chr(NSNewLineCharacter)
+    Tab                 = HT  = chr(NSTabCharacter)
+
+    Acknowledge         = ACK = chr(NSAcknowledgeCharacter)
+    Bell                = BEL = chr(NSBellCharacter)
+    DataLineEscape      = DLE = chr(NSDataLineEscapeCharacter)
+    DeviceControl1      = DC1 = chr(NSDeviceControl1Character)
+    DeviceControl2      = DC2 = chr(NSDeviceControl2Character)
+    DeviceControl3      = DC3 = chr(NSDeviceControl3Character)
+    DeviceControl4      = DC4 = chr(NSDeviceControl4Character)
+    EndOfMedium         = EM  = chr(NSEndOfMediumCharacter)
+    EndOfText           = ETX = chr(NSEndOfTextCharacter)
+    EndOfTransmit       = EOT = chr(NSEndOfTransmitCharacter)  # Cmd+end
+    EndOfTransmitBlock  = ETB = chr(NSEndOfTransmitBlockCharacter)
+    Enquiry             = ENQ = chr(NSEnquiryCharacter)
+    FileSeparator       = FS  = chr(NSFileSeparatorCharacter)
+    GroupSeparator      = GS  = chr(NSGroupSeparatorCharacter)
+    HorizontalTab       = HT  = chr(NSHorizontalTabCharacter)
+    LineFeed            = LF  = chr(NSLineFeedCharacter)
+    NegativeAcknowledge = NAK = chr(NSNegativeAcknowledgeCharacter)
+    RecordSeparator     = RS  = chr(NSRecordSeparatorCharacter)
+    ShiftIn             = SI  = chr(NSShiftInCharacter)
+    ShiftOut            = SO  = chr(NSShiftOutCharacter)
+    Space               = SP  = chr(NSSpaceCharacter)
+    StartOfHeading      = SOH = chr(NSStartOfHeadingCharacter)
+    StartOfText         = STX = chr(NSStartOfTextCharacter)
+    SynchronousIdle     = SYN = chr(NSSynchronousIdleCharacter)
+    Substitute          = SUB = chr(NSSubstituteCharacter)
+    UnitSeparator       = US  = chr(NSUnitSeparatorCharacter)
+    VerticalTab         = VT  = chr(NSVerticalTabCharacter)
 
     def __repr__(self):
         def _fmt(n, v):

@@ -43,7 +43,7 @@ except ImportError:  # XXX Pythonista/iOS
         return None
 import os.path as os_path
 
-__version__ = '18.11.02'
+__version__ = '19.01.31'
 _leaked2    = []  # leaked memory, 2-tuples (ptr, size)
 _libs_cache = {}  # loaded libraries, by name
 
@@ -479,7 +479,8 @@ NSFileHandlingPanelOKButton     = NSOKButton     = 1
 # NSFileHandlingPanelDiskButton      = 7
 # NSFileHandlingPanelDiskEjectButton = 8
 
-# /System/Library/Frameworks/AppKit.framework/Headers/NSEvent.h
+# <http://GitHub.com/gnustep/libs-gui/blob/master/Headers/AppKit/NSEvent.h
+# <http://Developer.Apple.com/documentation/appkit/nsevent/1535851-function-key_unicodes>
 NSAnyEventMask = 0xFFFFFFFF     # NSUIntegerMax
 
 NSKeyDown            = 10
@@ -496,32 +497,66 @@ NSNumericPadKeyMask = 1 << 21
 NSHelpKeyMask       = 1 << 22
 NSFunctionKeyMask   = 1 << 23
 
-NSInsertFunctionKey   = 0xF727
-NSDeleteFunctionKey   = 0xF728
-NSHomeFunctionKey     = 0xF729
-NSBeginFunctionKey    = 0xF72A
-NSEndFunctionKey      = 0xF72B
-NSPageUpFunctionKey   = 0xF72C
-NSPageDownFunctionKey = 0xF72D
+NSUpArrowFunctionKey    = 0xF700  # 0x7E
+NSDownArrowFunctionKey  = 0xF701  # 0x7D
+NSLeftArrowFunctionKey  = 0xF702  # 0x7B
+NSRightArrowFunctionKey = 0XF703  # 0x7C
+NSF1FunctionKey         = 0xF704  # 0x7A
+# etc. for NSF2..NSF19
+NSF19FunctionKey        = 0xF716  # 0x50
+# NSInsertFunctionKey   = 0xF727  # not on macs
+NSDeleteFunctionKey     = 0xF728  # 0x75 forward delete [x>
+NSHomeFunctionKey       = 0xF729  # 0x73
+# NSBeginFunctionKey    = 0xF72A  # not on macs
+NSEndFunctionKey        = 0xF72B  # 0x77
+NSPageUpFunctionKey     = 0xF72C  # 0x74
+NSPageDownFunctionKey   = 0xF72D  # 0x79
+NSClearLineFunctionKey  = 0xF739  # 0x47 clear/num lock
+NSHelpFunctionKey       = 0xF746
 
 # <http://Developer.Apple.com/documentation/appkit/
 #         nstext/1540619-common_unicode_characters>
-NSBackspaceCharacter          = 0x0008
-NSBackTabCharacter            = 0x0019
-NSBellCharacter               = 0x0007  # BEL
-NSCancelCharacter             = 0x0018  # CAN
-NSCarriageReturnCharacter     = 0x000D
-NSDeleteCharacter             = 0x007F
-NSEnterCharacter              = 0x0003
-NSEscapeCharacter             = 0x001B  # ESC
-NSFormFeedCharacter           = 0x000C
-NSLineSeparatorCharacter      = 0x2028
-NSNewlineCharacter            = 0x000A
-NSNullCharacter               = 0x0000  # NUL
-NSParagraphSeparatorCharacter = 0x2029
-NSSpaceCharacter              = 0x0020  # SP
-NSTabCharacter                = 0x0009
-NSVerticalTabCharacter        = 0x000B  # VT
+# plus all ASCII ctrl+Alpha characters
+NSNullCharacter                = 0x0000  # NUL Ctrl+@
+NSStartOfHeadingCharacter      = 0x0001  # SOH Ctrl+A
+NSStartOfTextCharacter         = 0x0002  # STX Ctrl+B
+NSEnterCharacter               = 0x0003  # ETX
+NSEndOfTextCharacter           = 0x0003  # ETX Ctrl+C
+NSEndOfTransmitCharacter       = 0x0004  # EOT Ctrl+D
+NSEnquiryCharacter             = 0x0005  # ENQ Ctrl+E
+NSAcknowledgeCharacter         = 0x0006  # ACK Ctrl+F
+NSBellCharacter                = 0x0007  # BEL Ctrl+G
+NSBackSpaceCharacter           = 0x0008  # BS  Ctrl+H
+NSTabCharacter                 = 0x0009  # HT  Ctrl+I
+NSHorizontalTabCharacter       = 0x0009  # HT  Ctrl+I
+NSNewLineCharacter             = 0x000A  # NL  Ctrl+J
+NSLineFeedCharacter            = 0x000A  # LF  Ctrl+J
+NSVerticalTabCharacter         = 0x000B  # VT  Ctrl+K
+NSFormFeedCharacter            = 0x000C  # FF  Ctrl+L
+NSCarriageReturnCharacter      = 0x000D  # CR  Ctrl+M
+NSShiftOutCharacter            = 0x000E  # SO  Ctrl+N
+NSShiftInCharacter             = 0x000F  # SI  Ctrl+O
+NSDataLineEscapeCharacter      = 0x0010  # DLE Ctrl+P
+NSDeviceControl1Character      = 0x0011  # DC1 Ctrl+Q
+NSDeviceControl2Character      = 0x0013  # DC2 Ctrl+R
+NSDeviceControl3Character      = 0x0013  # DC3 Ctrl+S
+NSDeviceControl4Character      = 0x0014  # DC4 Ctrl+T
+NSNegativeAcknowledgeCharacter = 0x0015  # NAK Ctrl+U
+NSSynchronousIdleCharacter     = 0x0016  # SYN Ctrl+V
+NSEndOfTransmitBlockCharacter  = 0x0017  # ETB Ctrl+W
+NSCancelCharacter              = 0x0018  # CAN Ctrl+X
+NSBackTabCharacter             = 0x0019  # BT  Ctrl+Y
+NSEndOfMediumCharacter         = 0x0019  # EM  Ctrl+Y
+NSSubstituteCharacter          = 0x001A  # SUB Ctrl+Z
+NSEscapeCharacter              = 0x001B  # ESC Ctrl+[
+NSFileSeparatorCharacter       = 0x001C  # FS  Ctrl+\
+NSGroupSeparatorCharacter      = 0x001D  # GS  Ctrl+]
+NSRecordSeparatorCharacter     = 0x001E  # RS  Ctrl+^
+NSUnitSeparatorCharacter       = 0x001F  # US  Ctrl+_
+NSSpaceCharacter               = 0x0020  # SP
+NSLineSeparatorCharacter       = 0x2028
+NSParagraphSeparatorCharacter  = 0x2029
+NSDeleteCharacter              = 0x007F  # 0x75?
 
 # /System/Library/Frameworks/AppKit.framework/Headers/NSGraphics.h
 NSBackingStoreRetained    = 0
