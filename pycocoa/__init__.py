@@ -24,9 +24,9 @@ and I{simple_VLCplayer.py} require installation of the U{VLC App
 <http://www.VideoLan.org/vlc/download-macosx.html>} for I{macOS} and the
 corresponding U{Python-VLC<http://PyPI.org/project/python-vlc>} binding.
 
-The tests and examples have only been run with 64-bit Python 2.7.15 and
-3.7.2 using U{Python-VLC<http://PyPI.org/project/python-vlc>} 2.2.8, 3.0.2
-and 3.0.4 (with the compatible U{VLC App<http://www.VideoLan.org/vlc>})
+The tests and examples have only been run with 64-bit Python 2.7.16 and
+3.7.32 using U{Python-VLC<http://PyPI.org/project/python-vlc>} 2.2.8, 3.0.2,
+3.0.4 and 3.0.6(with the compatible U{VLC App<http://www.VideoLan.org/vlc>})
 and only on macOS 10.13.6 High Sierra or 10.14.0 Mojave.  PyCocoa has
 I{not been tested} on iOS nor with 32-bit Python and I{does not work}
 with U{PyPy<http://PyPy.org>} nor with U{Intel(R) Python
@@ -37,8 +37,8 @@ All PyCocoa source code has been statically U{checked
 with U{PyChecker<http://PyPI.org/project/pychecker>},
 U{PyFlakes<http://PyPI.org/project/pyflakes>},
 U{PyCodeStyle<http://PyPI.org/project/pycodestyle>} (formerly Pep8) and
-U{McCabe<http://PyPI.org/project/mccabe>} using 64-bit Python 2.7.15 and with
-U{Flake8<http://PyPI.org/project/flake8>} using 64-bit Python 3.7.2.
+U{McCabe<http://PyPI.org/project/mccabe>} using 64-bit Python 2.7.16 and with
+U{Flake8<http://PyPI.org/project/flake8>} using 64-bit Python 3.7.3.
 
 To install PyCocoa, type C{pip install PyCocoa} or C{easy_install PyCocoa}
 in a terminal window.  Alternatively, download C{PyCocoa-y.m.d.zip} from
@@ -57,7 +57,7 @@ U{PyGUI<http://CoSC.Canterbury.AC.NZ/greg.ewing/python_gui>} for I{macOS}.
 
 __
 
-U{Copyright (C) 2017-2018 -- mrJean1 at Gmail dot com
+U{Copyright (C) 2017-2019 -- mrJean1 at Gmail dot com
 <http://OpenSource.org/licenses/MIT>}
 
 C{Permission is hereby granted, free of charge, to any person obtaining a
@@ -118,7 +118,7 @@ POSSIBILITY OF SUCH DAMAGE.}
 from os.path import abspath, dirname
 import sys
 
-__version__ = '19.01.31'
+__version__ = '19.03.31'
 
 p = sys.platform
 if not p.startswith('darwin'):
