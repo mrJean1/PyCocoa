@@ -8,26 +8,26 @@
 @var NSMain: Global C{NS...} singletons (C{const}).
 '''
 # all imports listed explicitly to help PyChecker
-from decimal import Decimal as _Decimal
-from ctypes  import ArgumentError, byref, cast, c_byte, CFUNCTYPE, c_void_p
-from getters import get_selector
-from octypes import Array_t, Class_t, c_struct_t, Id_t, NSPoint_t, \
-                    NSRect4_t, ObjC_t, SEL_t, Set_t
-from oslibs  import cfNumber2bool, cfNumber2num, cfString, cfString2str, \
-                    cfURLResolveAlias, libAppKit, libCF, libFoundation, \
-                    libobjc, NO, NSExceptionHandler_t, YES
-from runtime import isObjCInstanceOf, ObjCClass, ObjCInstance, release, \
-                    retain, send_message, _Xargs
-from utils   import bytes2str, _ByteStrs, clip, _exports, _Globals, \
-                    isinstanceOf, iterbytes, lambda1, missing, \
-                    property_RO, _Singletons, _Types  # printf
+from pycocoa.getters import get_selector
+from pycocoa.octypes import Array_t, Class_t, c_struct_t, Id_t, NSPoint_t, \
+                            NSRect4_t, ObjC_t, SEL_t, Set_t
+from pycocoa.oslibs  import cfNumber2bool, cfNumber2num, cfString, cfString2str, \
+                            cfURLResolveAlias, libAppKit, libCF, libFoundation, \
+                            libobjc, NO, NSExceptionHandler_t, YES
+from pycocoa.runtime import isObjCInstanceOf, ObjCClass, ObjCInstance, release, \
+                            retain, send_message, _Xargs
+from pycocoa.utils   import bytes2str, _ByteStrs, clip, _exports, _Globals, \
+                            isinstanceOf, iterbytes, lambda1, missing, \
+                            property_RO, _Singletons, _Types  # printf
 
+from ctypes  import ArgumentError, byref, cast, c_byte, CFUNCTYPE, c_void_p
+from decimal import Decimal as _Decimal
 from os import linesep, path as os_path
 
-__version__ = '18.11.06'
+__version__ = '19.07.21'
 
 # some commonly used Foundation and Cocoa classes, described here
-# <http://OMZ-Software.com/pythonista/docs/ios/objc_util.html>
+# <https://OMZ-Software.com/pythonista/docs/ios/objc_util.html>
 
 # NS... classes marked ** have Python versions, like NSStr, for
 # for use by runtime.isObjCInstanceOf repectively utils.isinstanceOf
@@ -423,8 +423,8 @@ def isAlias(path):
        @return: The alias' target (C{str}) or C{None} if I{path}
                 isn't a macOS alias.
 
-       @see: U{mac-alias<http://GitHub.com/al45tair/mac_alias>} and
-             U{here<http://StackOverflow.com/questions/21150169>}.
+       @see: U{mac-alias<https://GitHub.com/al45tair/mac_alias>} and
+             U{here<https://StackOverflow.com/questions/21150169>}.
     '''
     if isinstance(path, _ByteStrs):
         path = release(NSStr(path))
@@ -520,8 +520,8 @@ def nsBundleRename(ns_title, match='Python'):
     if t:
         _Globals.argv0 = bytes2str(t)
 
-    # <http://Developer.Apple.com/documentation/
-    #       foundation/nsbundle/1495012-bundlewithpath>
+    # <https://Developer.Apple.com/documentation/
+    #        foundation/nsbundle/1495012-bundlewithpath>
     # ns = NSBundle.bundleWithPath_(os.path.abspath(match))
     p, ns = None, NSMain.Bundle
     if ns:
@@ -575,7 +575,7 @@ def nsDictionary2dict(ns, ctype_keys=c_void_p, ctype_vals=c_void_p):  # XXX an N
 
        @return: The dict (C{dict}).
     '''
-    # <http://Developer.Apple.com/documentation/corefoundation/cfdictionary-rum>
+    # <https://Developer.Apple.com/documentation/corefoundation/cfdictionary-rum>
     n = libCF.CFDictionaryGetCount(ns)
     keys = (ctype_keys * n)()
     vals = (ctype_vals * n)()
@@ -765,8 +765,8 @@ def nsTextSize3(text, ns_font=None):
 def nsTextView(text, ns_font):
     '''Return an C{NSTextView} for the given text string.
     '''
-    # <http://Developer.Apple.com/documentation/appkit/
-    #       nsalert/1530575-accessoryview>
+    # <https://Developer.Apple.com/documentation/appkit/
+    #        nsalert/1530575-accessoryview>
     w, h, n = nsTextSize3(text, ns_font=ns_font)
     if n > 50:
         r = NSRect4_t(0, 0, max(300, w), min(800, h))
@@ -803,8 +803,8 @@ def nsThrow(ns_exception):
 
        @param ns_exception: The exception to raise (C{NSException}).
     '''
-    # <http://Developer.Apple.com/library/archive/documentation/
-    #       Cocoa/Conceptual/Exceptions/Tasks/RaisingExceptions.html>
+    # <https://Developer.Apple.com/library/archive/documentation/
+    #        Cocoa/Conceptual/Exceptions/Tasks/RaisingExceptions.html>
 
     # can't use ns_exception.raise() since 'raise' is reserved
     # in Python; see also .runtime.ObjCInstance.__getattr__
@@ -837,7 +837,7 @@ def nsURL2str(ns):
        @return: The URL as string (C{str}).
     '''
     if isObjCInstanceOf(ns, NSURL, name='ns'):
-        # <http://NSHipster.com/nsurl>
+        # <https://NSHipster.com/nsurl>
         return nsString2str(ns.absoluteString())
 
 
@@ -886,7 +886,7 @@ def ns2py(ns, dflt=missing):  # XXX an NSObject method?
         - NSStr            -> str
 
        @see: U{Converting values between Python and Objective-C
-              <http://PythonHosted.org/pyobjc/core/typemapping.html>}
+              <https://PythonHosted.org/pyobjc/core/typemapping.html>}
     '''
     if ns is None:  # isNone(ns)
         return None
@@ -970,11 +970,11 @@ __all__ = _exports(locals(), 'at', 'isAlias', 'isLink', 'isNone',
 
 if __name__ == '__main__':
 
-    from utils import _allisting
+    from pycocoa.utils import _allisting
 
     _allisting(__all__, locals(), __version__, __file__)
 
-# MIT License <http://OpenSource.org/licenses/MIT>
+# MIT License <https://OpenSource.org/licenses/MIT>
 #
 # Copyright (C) 2017-2019 -- mrJean1 at Gmail dot com
 #
@@ -996,7 +996,7 @@ if __name__ == '__main__':
 # ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
 # OTHER DEALINGS IN THE SOFTWARE.
 
-# Originally <http://GitHub.com/phillip-nguyen/cocoa-python>
+# Originally <https://GitHub.com/phillip-nguyen/cocoa-python>
 
 # objective-ctypes
 #

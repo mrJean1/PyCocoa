@@ -6,14 +6,14 @@
 '''Type L{Str}, wrapping ObjC C{NSStr[ing]}.
 '''
 # all imports listed explicitly to help PyChecker
-from bases   import _Type0
-from nstypes import NSAttributedString, NSConstantString, \
-                    NSStr, NSString, nsString2str
-from pytypes import dict2NS, str2NS
-from utils   import isinstanceOf, property_RO, _Strs, _Types
+from pycocoa.bases   import _Type0
+from pycocoa.nstypes import NSAttributedString, NSConstantString, \
+                            NSStr, NSString, nsString2str
+from pycocoa.pytypes import dict2NS, str2NS
+from pycocoa.utils   import isinstanceOf, property_RO, _Strs, _Types
 
 __all__ = ('Str', 'StrAttd')
-__version__ = '18.08.14'
+__version__ = '19.07.21'
 
 
 class Str(str, _Type0):  # str, first to maintain str behavior
@@ -69,8 +69,8 @@ class StrAttd(Str, _Type0):
     _superscript     = 0
     _underlineStyle  = 0  # Underline.None, .Single, .StrikeThrough, .Word
 
-    # <http://Developer.Apple.com/library/content/documentation/
-    #       Cocoa/Conceptual/AttributedStrings/Articles/standardAttributes.html>
+    # <https://Developer.Apple.com/library/content/documentation/
+    #        Cocoa/Conceptual/AttributedStrings/Articles/standardAttributes.html>
     def __new__(cls, ns_str='', **attrs):
         self = Str.__new__(cls, ns_str)
         for a, v in attrs.items():
@@ -210,8 +210,8 @@ class StrAttd(Str, _Type0):
 
     @paragraphStyle.setter  # PYCHOK property.setter
     def paragraphStyle(self, paragraphStyle):
-        # <http://Developer.Apple.com/documentation/appkit/
-        #       nsparagraphstyle/1532681-defaultparagraphstyle>
+        # <https://Developer.Apple.com/documentation/appkit/
+        #        nsparagraphstyle/1532681-defaultparagraphstyle>
         self._paragraphStyle = paragraphStyle  # .defaultParagraphStyle
 
     @property
@@ -255,11 +255,11 @@ NSConstantString._Type = NSString._Type = NSStr._Type = _Types.Str     = Str
 
 if __name__ == '__main__':
 
-    from utils import _allisting
+    from pycocoa.utils import _allisting
 
     _allisting(__all__, locals(), __version__, __file__)
 
-# MIT License <http://OpenSource.org/licenses/MIT>
+# MIT License <https://OpenSource.org/licenses/MIT>
 #
 # Copyright (C) 2017-2019 -- mrJean1 at Gmail dot com
 #

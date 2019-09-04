@@ -6,13 +6,13 @@
 '''(INTERNAL) Base classes for Python C{Types}.
 '''
 # all imports listed explicitly to help PyChecker
-from nstypes import isNone, NSStr, nsString2str
-from octypes import c_struct_t, ObjC_t
-from runtime import ObjCInstance, release
-from utils   import bytes2str, isinstanceOf, type2strepr
+from pycocoa.nstypes import isNone, NSStr, nsString2str
+from pycocoa.octypes import c_struct_t, ObjC_t
+from pycocoa.runtime import ObjCInstance, release
+from pycocoa.utils   import bytes2str, isinstanceOf, type2strepr
 
 __all__ = ()
-__version__ = '18.08.15'
+__version__ = '19.07.21'
 
 
 class _Type0(object):
@@ -78,7 +78,7 @@ class _Type1(_Type0):
         '''Set the app.
         '''
         if app not in (None,):
-            from apps import App
+            from pycocoa.apps import App
             isinstanceOf(app, App, name='app')
         self._app = app
 
@@ -136,11 +136,11 @@ class _Type2(_Type1):
 
 if __name__ == '__main__':
 
-    from utils import _allisting
+    from pycocoa.utils import _allisting
 
     _allisting(__all__, locals(), __version__, __file__)
 
-# MIT License <http://OpenSource.org/licenses/MIT>
+# MIT License <https://OpenSource.org/licenses/MIT>
 #
 # Copyright (C) 2017-2019 -- mrJean1 at Gmail dot com
 #

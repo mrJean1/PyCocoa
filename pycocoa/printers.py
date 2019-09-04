@@ -1,7 +1,7 @@
 
 # -*- coding: utf-8 -*-
 
-# Originally <http://Gist.GitHub.com/pudquick/68707b07c8c2772337cfd6397e399d3f>
+# Originally <https://Gist.GitHub.com/pudquick/68707b07c8c2772337cfd6397e399d3f>
 
 '''Types L{Printer}, L{Paper}, L{PaperCustom} and L{PaperMargins},
 wrapping ObjC C{NSPrinter}, C{PMPrinter}, C{PMPaper} respectively
@@ -9,24 +9,24 @@ C{PMPaperMargins} plus several C{get_...} print functions.
 
 @var libPC: The macOS C{PrintCore} framework library (C{ctypes.CDLL}) or C{None}.
 '''
-import os
+from pycocoa.bases   import _Type0
+from pycocoa.nstypes import nsDictionary2dict, NSImageView, NSMain, \
+                            NSPrinter, NSPrintInfo, NSPrintOperation, \
+                            ns2py, NSStr, NSTableView, NSTextView
+from pycocoa.octypes import Array_t, BOOL_t, c_struct_t, Dictionary_t, \
+                            Id_t, ObjC_t, String_t, URL_t
+from pycocoa.oslibs  import cfNumber2bool, cfString, cfString2str, \
+                            cfURL2str, _csignature, _free_memory, \
+                            get_lib_framework, libCF, YES
+from pycocoa.runtime import isObjCInstanceOf, send_message, _Xargs
+from pycocoa.utils   import _exports, isinstanceOf, property_RO, \
+                            _Strs, zfstr, _Types
 
-from bases   import _Type0
 from ctypes  import ArgumentError, byref, cast, c_char_p, c_double, \
                     c_int, c_void_p, POINTER, sizeof
-from nstypes import nsDictionary2dict, NSImageView, NSMain, NSPrinter, \
-                    NSPrintInfo, NSPrintOperation, ns2py, NSStr, \
-                    NSTableView, NSTextView
-from octypes import Array_t, BOOL_t, c_struct_t, Dictionary_t, Id_t, \
-                    ObjC_t, String_t, URL_t
-from oslibs  import cfNumber2bool, cfString, cfString2str, cfURL2str, \
-                    _csignature, _free_memory, get_lib_framework, \
-                    libCF, YES
-from runtime import isObjCInstanceOf, send_message, _Xargs
-from utils   import _exports, isinstanceOf, property_RO, _Strs, \
-                    zfstr, _Types
+import os
 
-__version__ = '18.08.14'
+__version__ = '19.07.21'
 
 libPC = None  # loaded on-demand
 kPMServerLocal = None
@@ -34,8 +34,8 @@ kPMPPDDescriptionType = cfString('PMPPDDescriptionType')  # PYCHOK false
 noErr = 0  # aka noErr
 
 
-# <http://Developer.Apple.com/documentation/applicationservices/core_printing>
-# <http://Developer.Apple.com/documentation/kernel/osstatus>
+# <https://Developer.Apple.com/documentation/applicationservices/core_printing>
+# <https://Developer.Apple.com/documentation/kernel/osstatus>
 class OSStatus_t(c_int):  # 32-bit or NSInteger_t == Int_t
     '''Return code type.
     '''
@@ -225,11 +225,11 @@ class Paper(_PM_Type0):
 
        @note: Paper sizes are measured in I{points}.
     '''
-    # <http://Gist.GitHub.com/lv10/8547663#file-gistfile1-m>
-    # <http://Developer.Apple.com/documentation/applicationservices/core_printing>
+    # <https://Gist.GitHub.com/lv10/8547663#file-gistfile1-m>
+    # <https://Developer.Apple.com/documentation/applicationservices/core_printing>
     _name = None
     _PM_t = PMPaper_t
-    # <http://WikiPedia.org/wiki/Point_(typography)>
+    # <https://WikiPedia.org/wiki/Point_(typography)>
     _ppi  = 72  # points / inch
     _ppmm = 72 / 25.4  # points / millimeter
 
@@ -546,8 +546,8 @@ class Printer(_PM_Type0):
 #
 #            @raise PrintError: If I{toPDF} file exists.
 #         '''
-#         # <http://StackOverflow.com/questions/6452144/
-#         #       how-to-make-a-print-dialog-with-preview-for-printing-an-image-file>
+#         # <https://StackOverflow.com/questions/6452144/
+#         #        how-to-make-a-print-dialog-with-preview-for-printing-an-image-file>
 #         if not os.access(image, os.R_OK):
 #             raise PrintError('no such %s: %r' % ('image file', image))
 #         im = NSImage.alloc().initWithContentsOfFile_(NSStr(image))
@@ -581,13 +581,13 @@ class Printer(_PM_Type0):
             if toPDF:
                 if os.access(toPDF, os.F_OK):
                     raise PrintError('%s exists: %r' % ('PDF file', toPDF))
-                # <http://Developer.Apple.com/documentation/appkit/
-                #       nsprintoperation/1534130-pdfoperationwithview>
+                # <https://Developer.Apple.com/documentation/appkit/
+                #        nsprintoperation/1534130-pdfoperationwithview>
                 po = NSPrintOperation.PDFOperationWithView_insideRect_toPath_printInfo_(
                                       PMview, PMview.frame(), NSStr(toPDF), pi)
             else:
-                # <http://StackOverflow.com/questions/6452144/
-                #       how-to-make-a-print-dialog-with-preview-for-printing-an-image-file>
+                # <https://StackOverflow.com/questions/6452144/
+                #        how-to-make-a-print-dialog-with-preview-for-printing-an-image-file>
                 po = NSPrintOperation.printOperationWithView_printInfo_(PMview, pi)
 
             if not wait:
@@ -681,7 +681,7 @@ def get_papers(*printers):
        @return: Each paper (L{Paper}).
     '''
     for r in _printers(printers):
-        # <http://Gist.GitHub.com/lv10/8547663#file-gistfile1-m>
+        # <https://Gist.GitHub.com/lv10/8547663#file-gistfile1-m>
         for p in r._2tuple(libPC.PMPrinterGetPaperList, PMPaper_t):
             yield Paper(p)
 
@@ -760,10 +760,10 @@ class _StatusError(PrintError):
         PrintError.__init__(self, '%s (%s) %s' % (k, sts, name))
 
 
-# <http://www.OSStatus.com/search/results?platform=all&framework=all&search=0>
-# <http://GitHub.com/phracker/MacOSX-SDKs/blob/master/MacOSX10.5.sdk/
-#       System/Library/Frameworks/ApplicationServices.framework/Versions/
-#       A/Frameworks/PrintCore.framework/Versions/A/Headers/PMErrors.h>
+# <https://www.OSStatus.com/search/results?platform=all&framework=all&search=0>
+# <https://GitHub.com/phracker/MacOSX-SDKs/blob/master/MacOSX10.5.sdk/
+#        System/Library/Frameworks/ApplicationServices.framework/Versions/
+#        A/Frameworks/PrintCore.framework/Versions/A/Headers/PMErrors.h>
 # Contains: Mac OS X Printing Manager Error Codes.
 # Copyright: 2001-2006 by Apple Computer, Inc., all rights reserved
 kPMErrors = dict(
@@ -984,7 +984,7 @@ paper: Paper('A4')...
 '''
     del _
 
-# MIT License <http://OpenSource.org/licenses/MIT>
+# MIT License <https://OpenSource.org/licenses/MIT>
 #
 # Copyright (C) 2017-2019 -- mrJean1 at Gmail dot com
 #
@@ -1006,4 +1006,4 @@ paper: Paper('A4')...
 # ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
 # OTHER DEALINGS IN THE SOFTWARE.
 
-# Originally <http://Gist.GitHub.com/pudquick/68707b07c8c2772337cfd6397e399d3f>
+# Originally <https://Gist.GitHub.com/pudquick/68707b07c8c2772337cfd6397e399d3f>

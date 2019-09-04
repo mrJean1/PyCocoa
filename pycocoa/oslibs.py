@@ -17,25 +17,25 @@
 
 '''
 # all imports listed explicitly to help PyChecker
-from ctypes  import byref, cast, cdll, c_buffer, c_byte, c_char, c_char_p, \
-                    c_double, c_float, \
-                    c_int, c_int8, c_int16, c_int32, c_int64, \
-                    CFUNCTYPE, c_long, c_longlong, c_short, c_size_t, \
-                    c_uint, c_uint8, c_uint32, c_void_p, \
-                    POINTER, sizeof  # c_ubyte, string_at
-from octypes import Allocator_t, Array_t, BOOL_t, CFIndex_t, \
-                    CFRange_t, CGBitmapInfo_t, CGDirectDisplayID_t, \
-                    CGError_t, CGFloat_t, CGGlyph_t, CGPoint_t, \
-                    CGRect_t, CGSize_t, Class_t, c_ptrdiff_t, \
-                    CTFontOrientation_t, CTFontSymbolicTraits_t, \
-                    c_void, Data_t, Dictionary_t, Id_t, IMP_t, Ivar_t, \
-                    Method_t, Number_t, NumberType_t, TypeID_t, \
-                    NSInteger_t, NSRect_t, objc_method_description_t, \
-                    objc_property_t, objc_property_attribute_t, \
-                    Protocol_t, SEL_t, Set_t, String_t, \
-                    TypeRef_t, UniChar_t, URL_t
-from utils   import bytes2str, _exports, str2bytes
+from pycocoa.octypes import Allocator_t, Array_t, BOOL_t, CFIndex_t, \
+                            CFRange_t, CGBitmapInfo_t, CGDirectDisplayID_t, \
+                            CGError_t, CGFloat_t, CGGlyph_t, CGPoint_t, \
+                            CGRect_t, CGSize_t, Class_t, c_ptrdiff_t, \
+                            CTFontOrientation_t, CTFontSymbolicTraits_t, \
+                            c_void, Data_t, Dictionary_t, Id_t, IMP_t, \
+                            Ivar_t, Method_t, Number_t, NumberType_t, \
+                            TypeID_t, NSInteger_t, NSRect_t, \
+                            objc_method_description_t, objc_property_t, \
+                            objc_property_attribute_t, Protocol_t, \
+                            SEL_t, Set_t, String_t, TypeRef_t, \
+                            UniChar_t, URL_t
+from pycocoa.utils   import bytes2str, _exports, str2bytes
 
+from ctypes  import byref, cast, cdll, c_buffer, c_byte, c_char, \
+                    c_char_p, c_double, c_float, c_int, c_int8, c_int16, \
+                    c_int32, c_int64, CFUNCTYPE, c_long, c_longlong, \
+                    c_short, c_size_t, c_uint, c_uint8, c_uint32, \
+                    c_void_p, POINTER, sizeof  # c_ubyte, string_at
 try:
     from ctypes.util import find_library as _find_lib
 except ImportError:  # XXX Pythonista/iOS
@@ -43,7 +43,7 @@ except ImportError:  # XXX Pythonista/iOS
         return None
 import os.path as os_path
 
-__version__ = '19.01.31'
+__version__ = '19.07.21'
 _leaked2    = []  # leaked memory, 2-tuples (ptr, size)
 _libs_cache = {}  # loaded libraries, by name
 
@@ -161,7 +161,7 @@ def get_lib_framework(name, services='ApplicationServices', version=''):
 
 
 # get function free(void *ptr) from the C runtime
-# (see <http://GitHub.com/oaubert/python-vlc>, the
+# (see <https://GitHub.com/oaubert/python-vlc>, the
 # Python binding for VLC in folder generated/*/vlc.py)
 _libc = get_lib('c')
 if _libc:  # macOS, linux, etc.
@@ -198,13 +198,13 @@ def _strdup(result, *unused):  # func, args
 libCF = get_lib('CoreFoundation')
 
 # see also framework_constants_via_ctypes.py and -_pyobjc.py
-# <http://Gist.GitHub.com/pudquick/8f65bb9b306f91eafdcc> and
-# <http://Gist.GitHub.com/pudquick/ac8f22326f095ed2690e>
+# <https://Gist.GitHub.com/pudquick/8f65bb9b306f91eafdcc> and
+# <https://Gist.GitHub.com/pudquick/ac8f22326f095ed2690e>
 kCFAllocatorDefault   = Allocator_t.in_dll(libCF, 'kCFAllocatorDefault')  # XXX or NULL
 kCFRunLoopDefaultMode =    c_void_p.in_dll(libCF, 'kCFRunLoopDefaultMode')
 
-# <http://Developer.Apple.com/documentation/corefoundation/
-#         cfstringbuiltinencodings?language=objc>
+# <https://Developer.Apple.com/documentation/corefoundation/
+#          cfstringbuiltinencodings?language=objc>
 kCFStringEncodingISOLatin1     = 0x0201
 kCFStringEncodingMacRoman      = 0
 kCFStringEncodingASCII         = 0x0600
@@ -223,10 +223,10 @@ CFStringEncoding = kCFStringEncodingUTF8  # or -UTF16
 CFStringEncoding_t = c_uint32  # a ctype
 
 _csignature(libCF.CFArrayAppendValue, Array_t, c_void_p)
-# <http://Developer.Apple.com/documentation/corefoundation/1388741-cfarraycreate?language=objc>
+# <https://Developer.Apple.com/documentation/corefoundation/1388741-cfarraycreate?language=objc>
 _csignature(libCF.CFArrayCreate, Array_t, Allocator_t, c_void_p, CFIndex_t, c_void_p)
-# <http://Developer.Apple.com/library/content/documentation/CoreFoundation/
-#         Conceptual/CFStrings/Articles/ComparingAndSearching.html>
+# <https://Developer.Apple.com/library/content/documentation/CoreFoundation/
+#          Conceptual/CFStrings/Articles/ComparingAndSearching.html>
 _csignature(libCF.CFArrayCreateMutable, Array_t, Allocator_t, CFIndex_t, c_void_p)
 _csignature(libCF.CFArrayGetCount, CFIndex_t, Array_t)
 _csignature(libCF.CFArrayGetTypeID, TypeID_t)
@@ -241,10 +241,10 @@ _csignature(libCF.CFDataGetBytes, c_void, Data_t, CFRange_t, c_void_p)
 _csignature(libCF.CFDataGetLength, CFIndex_t, Data_t)
 _csignature(libCF.CFDataGetTypeID, TypeID_t)
 
-# <http://Developer.Apple.com/documentation/corefoundation/cfdictionary-rum>
-# <http://Developer.Apple.com/library/content/documentation/CoreFoundation/
-#         Conceptual/CFMemoryMgmt/Concepts/Ownership.html>
-# <http://Developer.Apple.com/documentation/corefoundation/1516777-cfdictionaryaddvalue>
+# <https://Developer.Apple.com/documentation/corefoundation/cfdictionary-rum>
+# <https://Developer.Apple.com/library/content/documentation/CoreFoundation/
+#          Conceptual/CFMemoryMgmt/Concepts/Ownership.html>
+# <https://Developer.Apple.com/documentation/corefoundation/1516777-cfdictionaryaddvalue>
 _csignature(libCF.CFDictionaryAddValue, c_void, Dictionary_t, c_void_p, c_void_p)  # (d, key, val)
 _csignature(libCF.CFDictionaryContainsKey, BOOL_t, Dictionary_t, c_void_p)
 _csignature(libCF.CFDictionaryContainsValue, BOOL_t, Dictionary_t, c_void_p)
@@ -270,7 +270,7 @@ _csignature(libCF.CFNumberGetType, NumberType_t, Number_t)
 _csignature(libCF.CFNumberGetTypeID, TypeID_t)
 _csignature(libCF.CFNumberGetValue, BOOL_t, Number_t, NumberType_t, c_void_p)  # (n, TypeID, *n)
 
-# <http://GitHub.com/opensource-apple/CF/blob/master/CFNumber.h>
+# <https://GitHub.com/opensource-apple/CF/blob/master/CFNumber.h>
 kCFNumberSInt8Type     = 1
 kCFNumberSInt16Type    = 2
 kCFNumberSInt32Type    = 3
@@ -400,7 +400,7 @@ _csignature(libCF.CFStringGetTypeID, TypeID_t)
 
 # CFDataRef CFURLCreateBookmarkDataFromFile(CFAllocatorRef allocator, CFURLRef fileURL, CFErrorRef *errorRef)
 _csignature(libCF.CFURLCreateBookmarkDataFromFile, Data_t, Allocator_t, URL_t, c_void_p)
-# <http://Developer.Apple.com/documentation/corefoundation/cfurlbookmarkresolutionoptions>
+# <https://Developer.Apple.com/documentation/corefoundation/cfurlbookmarkresolutionoptions>
 kCFURLBookmarkResolutionWithoutMountingMask = 1 <<  9
 kCFURLBookmarkResolutionWithoutUIMask       = 1 <<  8
 kCFURLBookmarkResolutionWithSecurityScope   = 1 << 10
@@ -408,14 +408,14 @@ kCFURLBookmarkResolutionWithSecurityScope   = 1 << 10
 #          CFURLBookmarkResolutionOptions options, CFURLRef relativeToURL,
 #          CFArrayRef resourcePropertiesToInclude, Boolean *isStale, CFErrorRef *error)
 _csignature(libCF.CFURLCreateByResolvingBookmarkData, URL_t, Allocator_t, Data_t, c_uint, URL_t, c_void_p, BOOL_t, c_void_p)
-# <http://Developer.Apple.com/documentation/corefoundation/1542826-cfurlgetstring>
+# <https://Developer.Apple.com/documentation/corefoundation/1542826-cfurlgetstring>
 _csignature(libCF.CFURLGetString, String_t, URL_t)
 _csignature(libCF.CFURLGetTypeID, TypeID_t)
 
 
-# <http://GitHub.com/al45tair/mac_alias>
-# <http://StackOverflow.com/questions/21150169>
-# <http://MichaelLynn.GitHub.io/2015/10/24/apples-bookmarkdata-exposed>
+# <https://GitHub.com/al45tair/mac_alias>
+# <https://StackOverflow.com/questions/21150169>
+# <https://MichaelLynn.GitHub.io/2015/10/24/apples-bookmarkdata-exposed>
 def cfURLResolveAlias(alias):
     '''Resolve a macOS file alias.
 
@@ -462,12 +462,12 @@ NSApplicationActivationPolicyRegular    = 0
 NSApplicationActivationPolicyAccessory  = 1
 NSApplicationActivationPolicyProhibited = 2
 
-# <http://Developer.Apple.com/documentation/exceptionhandling/nsexceptionhandler>
+# <https://Developer.Apple.com/documentation/exceptionhandling/nsexceptionhandler>
 NSExceptionHandler_t = CFUNCTYPE(None, c_void_p)
 _csignature(libAppKit.NSSetUncaughtExceptionHandler, None, NSExceptionHandler_t)
 
-# <http://GitHub.com/gnustep/libs-gui/blob/master/Headers/AppKit/NSPanel.h>
-# <http://GitHub.com/gnustep/libs-gui/blob/master/Headers/AppKit/NSSavePanel.h>
+# <https://GitHub.com/gnustep/libs-gui/blob/master/Headers/AppKit/NSPanel.h>
+# <https://GitHub.com/gnustep/libs-gui/blob/master/Headers/AppKit/NSSavePanel.h>
 NSFileHandlingPanelCancelButton = NSCancelButton = 0
 NSFileHandlingPanelOKButton     = NSOKButton     = 1
 # original enum, assumed values from here down
@@ -479,8 +479,8 @@ NSFileHandlingPanelOKButton     = NSOKButton     = 1
 # NSFileHandlingPanelDiskButton      = 7
 # NSFileHandlingPanelDiskEjectButton = 8
 
-# <http://GitHub.com/gnustep/libs-gui/blob/master/Headers/AppKit/NSEvent.h
-# <http://Developer.Apple.com/documentation/appkit/nsevent/1535851-function-key_unicodes>
+# <https://GitHub.com/gnustep/libs-gui/blob/master/Headers/AppKit/NSEvent.h
+# <https://Developer.Apple.com/documentation/appkit/nsevent/1535851-function-key_unicodes>
 NSAnyEventMask = 0xFFFFFFFF     # NSUIntegerMax
 
 NSKeyDown            = 10
@@ -514,8 +514,8 @@ NSPageDownFunctionKey   = 0xF72D  # 0x79
 NSClearLineFunctionKey  = 0xF739  # 0x47 clear/num lock
 NSHelpFunctionKey       = 0xF746
 
-# <http://Developer.Apple.com/documentation/appkit/
-#         nstext/1540619-common_unicode_characters>
+# <https://Developer.Apple.com/documentation/appkit/
+#          nstext/1540619-common_unicode_characters>
 # plus all ASCII ctrl+Alpha characters
 NSNullCharacter                = 0x0000  # NUL Ctrl+@
 NSStartOfHeadingCharacter      = 0x0001  # SOH Ctrl+A
@@ -563,14 +563,14 @@ NSBackingStoreRetained    = 0
 NSBackingStoreNonretained = 1
 NSBackingStoreBuffered    = 2
 
-# <http://GitHub.com/gnustep/libs-gui/blob/master/Headers/AppKit/NSTableView.h>
+# <https://GitHub.com/gnustep/libs-gui/blob/master/Headers/AppKit/NSTableView.h>
 NSTableViewGridNone                     = 0
 NSTableViewSolidVerticalGridLineMask    = 1 << 0
 NSTableViewSolidHorizontalGridLineMask  = 1 << 1
 NSTableViewDashedHorizontalGridLineMask = 1 << 3
 # NSTableViewVerticalGridLineMask?
 
-# <http://GitHub.com/gnustep/libs-gui/blob/master/Headers/AppKit/NSText.h>
+# <https://GitHub.com/gnustep/libs-gui/blob/master/Headers/AppKit/NSText.h>
 NSTextAlignmentLeft      = NSLeftTextAlignment      = 0
 NSTextAlignmentRight     = NSRightTextAlignment     = 1
 NSTextAlignmentCenter    = NSCenterTextAlignment    = 2
@@ -627,14 +627,14 @@ NSTrackingActiveInActiveApp     = 0x40
 #
 # NSOpenGLCPSwapInterval           = 222
 
-# <http://StackOverflow.com/questions/24024723/swift-using-
+# <https://StackOverflow.com/questions/24024723/swift-using-
 #  nsstatusbar-statusitemwithlength-and-nsvariablestatusitemlength>
 NSSquareStatusItemLength   = -2
 NSVariableStatusItemLength = -1
 
 # /System/Library/Frameworks/AppKit.framework/Headers/NSWindow.h
-# <http://Developer.Apple.com/documentation/appkit/nswindowstylemask>
-# <http://Developer.Apple.com/documentation/appkit/constants>
+# <https://Developer.Apple.com/documentation/appkit/nswindowstylemask>
+# <https://Developer.Apple.com/documentation/appkit/constants>
 # note, Deprecated -Mask's are marked with D? or commented out
 # note, Previously, NSWindowStyleMaskXyz was named NSXyzWindowMask
 # NSWindowStyleMaskBorderless             = 0  # D?
@@ -644,7 +644,7 @@ NSWindowStyleMaskMiniaturizable           = 1 << 2
 NSWindowStyleMaskResizable                = 1 << 3
 # /System/Library/Frameworks/AppKit.framework/Headers/NSPanel.h
 NSWindowStyleMaskUtilityWindow            = 1 << 4  # D?
-# <http://GitHub.com/gnustep/libs-gui/blob/master/Headers/AppKit/NSWindow.h>
+# <https://GitHub.com/gnustep/libs-gui/blob/master/Headers/AppKit/NSWindow.h>
 # NSWindowStyleMaskDocModalWindow         = 1 << 6  # D?
 # NSWindowStyleMaskNonactivatingPanel     = 1 << 7  # D?
 # NSWindowStyleMaskTexturedBackground     = 1 << 8  # D?
@@ -658,7 +658,7 @@ NSWindowStyleMaskUtilityWindow            = 1 << 4  # D?
 NSWindowStyleMaskUsual = NSWindowStyleMaskClosable  | NSWindowStyleMaskMiniaturizable \
                        | NSWindowStyleMaskResizable | NSWindowStyleMaskTitled
 
-# <http://GitHub.com/gnustep/libs-gui/blob/master/Headers/AppKit/NSWindow.h>
+# <https://GitHub.com/gnustep/libs-gui/blob/master/Headers/AppKit/NSWindow.h>
 NSWindowCloseButton        = 0
 NSWindowMiniaturizeButton  = 1
 NSWindowZoomButton         = 2
@@ -666,7 +666,7 @@ NSWindowToolbarButton      = 3
 NSWindowDocumentIconButton = 4
 # typedef NSUInteger NSWindowButton
 
-# <http://Developer.Apple.com/documentation/appkit/1473652-nsrectfill>
+# <https://Developer.Apple.com/documentation/appkit/1473652-nsrectfill>
 _csignature(libAppKit.NSRectFill, c_void, POINTER(NSRect_t))
 
 # QUARTZ / COREGRAPHICS
@@ -769,9 +769,9 @@ kCTFontClassMaskShift = 28
 # The top 4 bits is used to describe appearance of the font while the lower
 # 28 bits for typeface.  The font appearance information represented by the
 # upper 4 bits can be used for stylistic font matching.
-# <http://Developer.Apple.com/documentation/appkit/nsfontmanager/font_traits>
-# <http://Developer.Apple.com/documentation/appkit/nsfonttraitmask>
-# <http://GitHub.com/tijme/reverse-engineering/blob/master/Billy%20Ellis%20ARM%20Explotation/
+# <https://Developer.Apple.com/documentation/appkit/nsfontmanager/font_traits>
+# <https://Developer.Apple.com/documentation/appkit/nsfonttraitmask>
+# <https://GitHub.com/tijme/reverse-engineering/blob/master/Billy%20Ellis%20ARM%20Explotation/
 #  iPhoneOS9.3.sdk/System/Library/Frameworks/CoreText.framework/Headers/CTFontTraits.h>
 NSFontItalicMask      = kCTFontTraitItalic      = 1 << 0
 NSFontBoldMask        = kCTFontTraitBold        = 1 << 1
@@ -795,7 +795,7 @@ NSFontUnitalicMask                              = 1 << 24  # 0x01000000
 # the OpenType 'OS/2' table.  The class values are bundled in the upper
 # 4 bits of the CTFontSymbolicTraits and can be obtained via the
 # kCTFontClassMaskTrait.
-# <http://Developer.Apple.com/documentation/appkit/nsfontfamilyclass>
+# <https://Developer.Apple.com/documentation/appkit/nsfontfamilyclass>
 kCTFontClassUnknown             = NSFontUnknownClass            =  0 << kCTFontClassMaskShift
 kCTFontClassOldStyleSerifs      = NSFontOldStyleSerifsClass     =  1 << kCTFontClassMaskShift
 kCTFontClassTransitionalSerifs  = NSFontTransitionalSerifsClass =  2 << kCTFontClassMaskShift
@@ -913,7 +913,7 @@ _csignature(libobjc.ivar_getTypeEncoding, c_char_p, Ivar_t)
 _csignature_str(libobjc.method_copyArgumentType, c_char_p, Method_t, c_uint)
 # char *method_copyReturnType(Method_t method).
 # You must free() the returned string, but can't despite the documentation
-# http://Developer.Apple.com/documentation/objectivec/1418777-method_copyreturntype
+# https://Developer.Apple.com/documentation/objectivec/1418777-method_copyreturntype
 _csignature(libobjc.method_copyReturnType, c_char_p, Method_t)
 # void method_exchangeImplementations(Method_t m1, Method_t m2)
 _csignature(libobjc.method_exchangeImplementations, c_void, Method_t, Method_t)
@@ -1049,11 +1049,11 @@ __all__ = _exports(locals(), 'leaked2', 'NO', 'YES',
 
 if __name__ == '__main__':
 
-    from utils import _allisting
+    from pycocoa.utils import _allisting
 
     _allisting(__all__, locals(), __version__, __file__)
 
-# MIT License <http://OpenSource.org/licenses/MIT>
+# MIT License <https://OpenSource.org/licenses/MIT>
 #
 # Copyright (C) 2017-2019 -- mrJean1 at Gmail dot com
 #
@@ -1075,7 +1075,7 @@ if __name__ == '__main__':
 # ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
 # OTHER DEALINGS IN THE SOFTWARE.
 
-# Originally <http://GitHub.com/phillip-nguyen/cocoa-python>
+# Originally <https://GitHub.com/phillip-nguyen/cocoa-python>
 
 # objective-ctypes
 #

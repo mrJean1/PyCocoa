@@ -6,16 +6,16 @@
 '''Type L{Tuple}, wrapping (immutable) ObjC C{NSArray}.
 '''
 # all imports listed explicitly to help PyChecker
-from bases   import _Type0
-from octypes import NSNotFound, NSRange_t
-from oslibs  import libCF
-from nstypes import ns2Type, NSArray, nsIter2, NSMutableArray
-from pytypes import py2NS, tuple2NS
-from runtime import isImmutable
-from utils   import isinstanceOf, _Ints, _Types
+from pycocoa.bases   import _Type0
+from pycocoa.octypes import NSNotFound, NSRange_t
+from pycocoa.oslibs  import libCF
+from pycocoa.nstypes import ns2Type, NSArray, nsIter2, NSMutableArray
+from pycocoa.pytypes import py2NS, tuple2NS
+from pycocoa.runtime import isImmutable
+from pycocoa.utils   import isinstanceOf, _Ints, _Types
 
 __all__ = ('Tuple',)
-__version__ = '18.06.28'
+__version__ = '19.07.21'
 
 
 def _at(inst, index):
@@ -95,7 +95,7 @@ class Tuple(_Type0):  # note, List subclasses Tuple
     def __len__(self):
         '''Return the number of items.
         '''
-        # can't use self.NS.count()  <http://Developer.Apple.com//
+        # can't use self.NS.count() <https://Developer.Apple.com//
         # documentation/foundation/nsarray/1409982-count>
         return libCF.CFArrayGetCount(self.NS)
 
@@ -191,11 +191,11 @@ NSArray._Type = _Types.Tuple = Tuple
 
 if __name__ == '__main__':
 
-    from utils import _allisting
+    from pycocoa.utils import _allisting
 
     _allisting(__all__, locals(), __version__, __file__)
 
-# MIT License <http://OpenSource.org/licenses/MIT>
+# MIT License <https://OpenSource.org/licenses/MIT>
 #
 # Copyright (C) 2017-2019 -- mrJean1 at Gmail dot com
 #

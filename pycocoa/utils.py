@@ -7,7 +7,7 @@
 
 @var missing: Missing keyword argument value.
 '''
-__version__ = '18.11.02'
+__version__ = '19.08.31'
 
 import sys
 _Python_ = sys.version.split()[0]  # PYCHOK internal
@@ -27,10 +27,34 @@ except ImportError:
             return a
 
 
-def property_RO(method):
-    '''Decorator for C{Read_Only} property.
+class module_property_RO(object):
+    '''Decorator for a C{Read-Only} module property.
 
-       @param method: The callable to be decorated as property.
+       @example:
+
+         >>> @module_property_RO
+         >>> def mp():  # no args
+         >>>     return ro  # singleton or other
+
+       @see: U{Module Properties | the Proxy Pattern
+             <http://jtushman.GitHub.io/blog/2014/05/02/module-properties/>}.
+    '''
+    def __init__(self, func):
+        '''New L{module_property_RO}.
+
+           @param func: Function to be decorated as C{property}
+                        (C{callable, invoked without args}).
+        '''
+        self._func = func
+
+    def __getattr__(self, name):
+        return getattr(self._func(), name)
+
+
+def property_RO(method):
+    '''Decorator for C{Read_Only} class/instance property.
+
+       @param method: The callable to be decorated as C{property}.
 
        @note: Like standard Python C{property} without a C{property.setter}
               with a more descriptive error message when set.
@@ -856,7 +880,10 @@ def zSIstr(size, B='B', K=1024):
     '''
     z, si, k = float(size), '', float(K)
     if z > k:
-        for si in iter('KMGTPE'):
+        # Science Mag, vol 363, issue 6428, p 681, Feb 15, 2019
+        # "Metric prefixes sought for extremely large numbers",
+        # Ronna 10^27 and Quecca 10^30
+        for si in iter('KMGTPEZYRQ'):
             z /= k
             if z < k:
                 if k == 1024.0:
@@ -873,14 +900,15 @@ def zSIstr(size, B='B', K=1024):
 __all__ = _exports(locals(), 'aspect_ratio', 'Cache2', 'clip',
                              'DEFAULT_UNICODE', 'flint', 'isinstanceOf',
                              'gcd', 'iterbytes', 'lambda1', 'missing',
-                             'printf', 'sortuples', 'type2strepr',
+                             'module_property_RO', 'printf',
+                             'sortuples', 'type2strepr',
                    starts=('bytes', 'inst', 'name2', 'propert', 'str', 'z'))
 
 if __name__ == '__main__':
 
     _allisting(__all__, locals(), __version__, __file__)
 
-# MIT License <http://OpenSource.org/licenses/MIT>
+# MIT License <https://OpenSource.org/licenses/MIT>
 #
 # Copyright (C) 2017-2019 -- mrJean1 at Gmail dot com
 #
@@ -902,7 +930,7 @@ if __name__ == '__main__':
 # ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
 # OTHER DEALINGS IN THE SOFTWARE.
 
-# Originally <http://GitHub.com/phillip-nguyen/cocoa-python>
+# Originally <https://GitHub.com/phillip-nguyen/cocoa-python>
 
 # objective-ctypes
 #

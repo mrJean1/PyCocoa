@@ -18,14 +18,14 @@ Examples `cocoavlc.py`_ and *simple_VLCplayer.py* require installation of
 the `VLC App`_ and the corresponding `Python-VLC`_ binding.
 
 The tests and examples have only been run with 64-bit Python 2.7.16 and
-3.7.3 using `Python-VLC`_ 2.2.8, 3.0.2, 3.0.4 and 3.0.6 (with the compatible
-`VLC App`_) and only on macOS 10.13.6 High Sierra or 10.14.0 Mojave.
-PyCocoa has *not been tested* on iOS nor with 32-bit Python and
+3.7.4 using `Python-VLC`_ 2.2.8, 3.0.2, 3.0.4, 3.0.6 and 3.0.7 (with the
+compatible `VLC App`_) and only on macOS 10.13.6 High Sierra or 10.14.6
+Mojave.  PyCocoa has *not been tested* on iOS nor with 32-bit Python and
 *does not work* with PyPy_ nor with `Intel(R) Python`_.
 
 All PyCocoa source code has been statically checked_ with PyChecker_,
 PyFlakes_, PyCodeStyle_ (formerly Pep8) and McCabe_ using 64-bit Python
-2.7.16 and with Flake8_ using 64-bit Python 3.7.3.
+2.7.16 and with Flake8_ using 64-bit Python 3.7.4.
 
 To install PyCocoa, type ``pip install PyCocoa`` or ``easy_install PyCocoa``
 in a terminal window.  Alternatively, download ``PyCocoa-y.m.d.zip`` from
@@ -35,10 +35,10 @@ tests, type ``python setup.py test`` before installation.
 
 Some alternatives to PyCocoa are (a) PyObjC_, the most comprehensive Python
 to Objective-C bridge (and included in `macOS' Python`_), (b) `Rubicon-ObjC`_
-for Python 3.5+, taking advantage of Python's new typing_ annotations and
-(c) PyGUI_ for macOS_.
+for Python 3.5+, taking advantage of Python's new typing_ annotations, (c)
+wxPython_ and (d) PyGUI_ for macOS_.
 
-*Last updated: Mar 31, 2019.*
+*Last updated: Aug 31, 2019.*
 
 .. image:: https://Img.Shields.io/pypi/pyversions/PyCocoa.svg?label=Python
    :target: http://PyPI.org/project/PyCocoa
@@ -49,32 +49,33 @@ for Python 3.5+, taking advantage of Python's new typing_ annotations and
 .. image:: https://Img.Shields.io/pypi/l/PyCocoa.svg
    :target: http://PyPI.org/project/PyCocoa
 
-.. _checked: http://GitHub.com/ActiveState/code/tree/master/recipes/Python/546532_PyChecker_postprocessor
-.. _cocoa-python: http://GitHub.com/phillip-nguyen/cocoa-python
-.. _cocoavlc.py: http://GitHub.com/oaubert/python-vlc/tree/master/examples
-.. _ctypes: http://Docs.Python.org/2.7/library/ctypes.html
-.. _documentation: http://mrJean1.GitHub.io/PyCocoa
-.. _Epydoc: http://PyPI.org/project/epydoc
-.. _Flake8: http://PyPI.org/project/flake8
-.. _GitHub: http://GitHub.com/mrJean1/PyCocoa
-.. _Intel(R) Python: http://Software.Intel.com/en-us/distribution-for-python
-.. _macOS: http://WikiPedia.org/wiki/MacOS
-.. _macOS' Python: http://WikiPedia.org/wiki/PyObjC#History
-.. _McCabe: http://PyPI.org/project/mccabe
-.. _MIT License: http://OpenSource.org/licenses/MIT
-.. _New BSD License: http://OpenSource.org/licenses/BSD-3-Clause
-.. _PyChecker: http://PyPI.org/project/pychecker
-.. _pycocoa: http://PyPI.org/project/PyCocoa
-.. _PyCodeStyle: http://PyPI.org/project/pycodestyle
-.. _PyFlakes: http://PyPI.org/project/pyflakes
-.. _PyGUI: http://CoSC.Canterbury.AC.NZ/greg.ewing/python_gui
-.. _PyObjC: http://PyPI.org/project/pyobjc
-.. _PyPI: http://PyPI.org/project/PyCocoa
-.. _PyPy: http://PyPy.org
-.. _Rubicon-ObjC: http://PyPI.org/project/rubicon-objc
-.. _typing: http://Docs.Python.org/3/library/typing.html
-.. _Python-VLC: http://PyPI.org/project/python-vlc
-.. _VLC App: http://www.VideoLan.org/vlc/download-macosx.html
+.. _checked: https://GitHub.com/ActiveState/code/tree/master/recipes/Python/546532_PyChecker_postprocessor
+.. _cocoa-python: https://GitHub.com/phillip-nguyen/cocoa-python
+.. _cocoavlc.py: https://GitHub.com/oaubert/python-vlc/tree/master/examples
+.. _ctypes: https://Docs.Python.org/2.7/library/ctypes.html
+.. _documentation: https://mrJean1.GitHub.io/PyCocoa
+.. _Epydoc: https://PyPI.org/project/epydoc
+.. _Flake8: https://PyPI.org/project/flake8
+.. _GitHub: https://GitHub.com/mrJean1/PyCocoa
+.. _Intel(R) Python: https://Software.Intel.com/en-us/distribution-for-python
+.. _macOS: https://WikiPedia.org/wiki/MacOS
+.. _macOS' Python: https://WikiPedia.org/wiki/PyObjC#History
+.. _McCabe: https://PyPI.org/project/mccabe
+.. _MIT License: https://OpenSource.org/licenses/MIT
+.. _New BSD License: https://OpenSource.org/licenses/BSD-3-Clause
+.. _PyChecker: https://PyPI.org/project/pychecker
+.. _pycocoa: https://PyPI.org/project/PyCocoa
+.. _PyCodeStyle: https://PyPI.org/project/pycodestyle
+.. _PyFlakes: https://PyPI.org/project/pyflakes
+.. _PyGUI: https://CoSC.Canterbury.AC.NZ/greg.ewing/python_gui
+.. _PyObjC: https://PyPI.org/project/pyobjc
+.. _PyPI: https://PyPI.org/project/PyCocoa
+.. _PyPy: https://PyPy.org
+.. _Rubicon-ObjC: https://PyPI.org/project/rubicon-objc
+.. _typing: https://Docs.Python.org/3/library/typing.html
+.. _Python-VLC: https://PyPI.org/project/python-vlc
+.. _VLC App: https://www.VideoLan.org/vlc/download-macosx.html
+.. _wxPython: https://wxPython.org/pages/overview/index.html
 
 
 ``Copyright (C) 2017-2019 -- mrJean1 at Gmail dot com``

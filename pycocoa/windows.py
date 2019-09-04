@@ -12,39 +12,40 @@ L{WindowStyle}, wrapping ObjC C{NSWindow}, etc.
 @var WindowStyle: Window styles (C{mask}).
 '''
 # all imports listed explicitly to help PyChecker
-from bases    import _Type2
-from geometry import Rect
-from nstypes  import isNone, NSConcreteNotification, NSFont, \
-                     NSImageView, NSMain, NSNotification, NSScrollView, \
-                     NSStr, NSTableView, nsTextSize3, NSTextView, \
-                     NSView, NSWindow
-from octypes  import NSIntegerMax, NSPoint_t, NSSize_t
-from oslibs   import NO, NSBackingStoreBuffered, \
-                     NSWindowStyleMaskClosable, \
-                     NSWindowStyleMaskMiniaturizable, \
-                     NSWindowStyleMaskResizable, \
-                     NSWindowStyleMaskTitled, \
-                     NSWindowStyleMaskUsual, \
-                     NSWindowStyleMaskUtilityWindow, YES
-from runtime  import isObjCInstanceOf, ObjCClass, ObjCInstance, \
-                     ObjCSubclass, release, retain, send_super_init
-from utils    import aspect_ratio, bytes2str, _Constants, _exports, \
-                     _Globals, isinstanceOf, property_RO, _Python3, \
-                     _text_title2, _Types
+from pycocoa.bases    import _Type2
+from pycocoa.geometry import Rect
+from pycocoa.nstypes  import isNone, NSConcreteNotification, NSFont, \
+                             NSImageView, NSMain, NSNotification, \
+                             NSScrollView, NSStr, NSTableView, \
+                             nsTextSize3, NSTextView, NSView, NSWindow
+from pycocoa.octypes  import NSIntegerMax, NSPoint_t, NSSize_t
+from pycocoa.oslibs   import NO, NSBackingStoreBuffered, \
+                             NSWindowStyleMaskClosable, \
+                             NSWindowStyleMaskMiniaturizable, \
+                             NSWindowStyleMaskResizable, \
+                             NSWindowStyleMaskTitled, \
+                             NSWindowStyleMaskUsual, \
+                             NSWindowStyleMaskUtilityWindow, YES
+from pycocoa.runtime  import isObjCInstanceOf, ObjCDelegate, ObjCInstance, \
+                             ObjCSubclass, release, retain, send_super_init
+from pycocoa.utils    import aspect_ratio, bytes2str, _Constants, _exports, \
+                             _Globals, isinstanceOf, module_property_RO, \
+                             property_RO, _Python3, _text_title2, _Types
+
 # from enum   import Enum
 
-__version__ = '18.08.14'
+__version__ = '19.08.31'
 
 _Cascade = NSPoint_t(25, 25)  # PYCHOK false
 
 
 class AutoResizeError(ValueError):
-    '''AutoResize option error.
+    '''C{AutoResize} option error.
     '''
     pass
 
 
-# <http://Developer.Apple.com/documentation/appkit/nsautoresizingmaskoptions>
+# <https://Developer.Apple.com/documentation/appkit/nsautoresizingmaskoptions>
 class AutoResize(_Constants):  # Enum?
     '''AutoResize options (C{mask}, wrapping C{NSAutoresizingMaskOptions}).
     '''
@@ -57,8 +58,7 @@ class AutoResize(_Constants):  # Enum?
     Sizable       = 18  # NSViewHeightSizable | NSViewWidthSizable
     WidthSizable  =  2  # NSViewWidthSizable
 
-
-AutoResize = AutoResize()  # AutoResize options
+AutoResize = AutoResize()  # PYCHOK AutoResize options
 
 
 def autoResizes(*options):
@@ -76,7 +76,7 @@ def autoResizes(*options):
     raise AutoResizeError('invalid %s: %s' % ('option', e))
 
 
-# <http://Developer.Apple.com/documentation/appkit/nsbezelstyle>
+# <https://Developer.Apple.com/documentation/appkit/nsbezelstyle>
 class BezelStyle(_Constants):  # Enum?
     '''Bezel style constants (C{int}).
     '''
@@ -94,11 +94,10 @@ class BezelStyle(_Constants):  # Enum?
     TexturedRounded   = 11  # NSBezelStyleTexturedRounded
     TexturedSquare    =  8  # NSTexturedSquareBezelStyle
 
+BezelStyle = BezelStyle()  # PYCHOK bezel style constants
 
-BezelStyle = BezelStyle()  # bezel style constants
 
-
-# <http://Developer.Apple.com/documentation/appkit/nsbordertype>
+# <https://Developer.Apple.com/documentation/appkit/nsbordertype>
 class Border(_Constants):  # Enum?
     '''Border type constants (C{int}).
     '''
@@ -107,8 +106,7 @@ class Border(_Constants):  # Enum?
     Line   = 1  # NSLineBorder
     No     = 0  # NSNoBorder
 
-
-Border = Border()  # border type constants
+Border = Border()  # PYCHOK border type constants
 
 
 class Screen(Rect):
@@ -184,6 +182,7 @@ class Window(_Type2):
         if auto:
             self.NS.setReleasedWhenClosed_(YES)
             self._auto = True
+
         self.NSdelegate = retain(NSWindowDelegate.alloc().init(self))
 
     def close(self):
@@ -356,7 +355,7 @@ class Window(_Type2):
         if zoom is None or (zoom and not self.isZoomed) \
                         or (self.isZoomed and not zoom):
             # click the "zoom box", toggles the zoom state
-            # <http://Developer.Apple.com/documentation/appkit/nswindow/1419513-zoom>
+            # <https://Developer.Apple.com/documentation/appkit/nswindow/1419513-zoom>
             self.NS.performZoom_(self.NS)  # XXX self.delegate
 
     # Callback methods from NSWindowDelegate, to be overloaded as needed.
@@ -476,8 +475,8 @@ class MediaWindow(Window):
         super(MediaWindow, self).__init__(title=title, frame=Screen(fraction), **kwds)
         # create the drawable_nsobject NSView for vlc.py, see vlc.MediaPlayer.set_nsobject()
         # for an alternate NSView object with protocol VLCOpenGLVideoViewEmbedding
-        # <http://StackOverflow.com/questions/11562587/create-nsview-directly-from-code>
-        # <http://GitHub.com/ariabuckles/pyobjc-framework-Cocoa/blob/master/Examples/AppKit/DotView/DotView.py>
+        # <https://StackOverflow.com/questions/11562587/create-nsview-directly-from-code>
+        # <https://GitHub.com/ariabuckles/pyobjc-framework-Cocoa/blob/master/Examples/AppKit/DotView/DotView.py>
         self.NSview = v = NSView.alloc().initWithFrame_(self.frame.NS)
         # XXX printView(VLC, toPDF=...) crashes on Python 2, an empty box on Python 3
         self.PMview = v if _Python3 else None
@@ -503,10 +502,10 @@ class TextWindow(Window):
         else:
             f = font.NS
         w, _, _ = nsTextSize3(text, f)
-        # <http://Developer.Apple.com/library/content/documentation/
-        #       Cocoa/Conceptual/TextUILayer/Tasks/CreateTextViewProg.html>
-        # <http://Developer.Apple.com/library/content/documentation/
-        #       Cocoa/Conceptual/TextUILayer/Tasks/TextInScrollView.html>
+        # <https://Developer.Apple.com/library/content/documentation/
+        #        Cocoa/Conceptual/TextUILayer/Tasks/CreateTextViewProg.html>
+        # <https://Developer.Apple.com/library/content/documentation/
+        #        Cocoa/Conceptual/TextUILayer/Tasks/TextInScrollView.html>
         ns = self.NS
         cr = ns.contentView().frame()
         hs = w > cr.size.width
@@ -554,7 +553,7 @@ class _NSWindowDelegate(object):
 
        @see: The C{_NSApplicationDelegate} for more C{NSDelegate} details.
     '''
-    _ObjC = ObjCSubclass('NSObject', '_NSWindowDelegate')
+    _ObjC = ObjCSubclass('NSObject', '_NSWindowDelegate', register=False)  # defer
 
     @_ObjC.method('@P')
     def init(self, window):
@@ -644,8 +643,8 @@ class _NSWindowDelegate(object):
     def windowShouldZoom_toFrame_(self, ns_frame):
         '''ObjC callback to handle C{NSWindow} events.
         '''
-        # <http://Developer.Apple.com/documentation/appkit/
-        #       nswindowdelegate/1419533-windowshouldzoom>
+        # <https://Developer.Apple.com/documentation/appkit/
+        #        nswindowdelegate/1419533-windowshouldzoom>
         ok = self.window.windowZoomOK_(Rect(ns_frame))
         return YES if ok else NO
 
@@ -655,14 +654,14 @@ class _NSWindowDelegate(object):
         '''
         # set the window's delegate to the app's to
         # make method .windowWillClose_ work, see
-        # <http://Gist.GitHub.com/kaloprominat/6105220>
+        # <https://Gist.GitHub.com/kaloprominat/6105220>
         self._ns2w(ns_notification)
         self.window.windowClose_()
 
 #   @_ObjC.method('@@@')
 #   def windowWillResize_toSize_(self, ns_window, ns_size):
-        # <http://Developer.Apple.com/documentation/appkit/
-        #       nswindowdelegate/1419292-windowwillresize>
+        # <https://Developer.Apple.com/documentation/appkit/
+        #        nswindowdelegate/1419292-windowwillresize>
 #       self._ns2w(ns_window)
 #       return ns_size
 
@@ -672,7 +671,11 @@ class _NSWindowDelegate(object):
 #       return NSMain.Null
 
 
-NSWindowDelegate = ObjCClass('_NSWindowDelegate')
+@module_property_RO
+def NSWindowDelegate():
+    '''The L{ObjCClass}C{(_NSWindowDelegate.__name__)}.
+    '''
+    return ObjCDelegate(_NSWindowDelegate)
 
 
 def ns2Window(ns):
@@ -709,17 +712,16 @@ _Types.TextWindow              = TextWindow
 
 # filter locals() for .__init__.py
 __all__ = _exports(locals(), 'BezelStyle', 'Border', 'MediaWindow',
-                             'ns2Window', 'NSWindowDelegate',
-                             'Screen', 'TextWindow',
-                   starts=('AutoResize', 'autoResizes', 'Window', 'window'))
+                             'NSWindowDelegate', 'Screen', 'TextWindow',
+                   starts=('AutoResize', 'autoResizes', 'ns', 'Window', 'window'))
 
 if __name__ == '__main__':
 
-    from utils import _allisting
+    from pycocoa.utils import _allisting
 
     _allisting(__all__, locals(), __version__, __file__)
 
-# MIT License <http://OpenSource.org/licenses/MIT>
+# MIT License <https://OpenSource.org/licenses/MIT>
 #
 # Copyright (C) 2017-2019 -- mrJean1 at Gmail dot com
 #

@@ -37,6 +37,10 @@ are ObjC types defined in terms of a C{ctypes} C{c_} type.
 @var unichar_t:              Unicode C{wchar} ctype.
 '''
 # all imports listed explicitly to help PyChecker
+# from pycocoa.getters import get_selectornameof
+from pycocoa.utils import bytes2str, _exports, inst2strepr, iterbytes, \
+                  missing, property_RO, str2bytes
+
 from ctypes import c_bool, c_byte, c_char, c_char_p, c_double, \
                    c_float, c_int, c_int32, c_int64, c_long, \
                    c_longlong, c_short, c_ubyte, c_uint, c_uint16, \
@@ -49,11 +53,7 @@ except ImportError:
     c_void = None
 from platform import machine  # as machine
 
-# from getters import get_selectornameof
-from utils import bytes2str, _exports, inst2strepr, iterbytes, \
-                  missing, property_RO, str2bytes
-
-__version__ = '18.08.14'
+__version__ = '19.07.21'
 
 z = sizeof(c_void_p)
 if z == 4:
@@ -244,7 +244,7 @@ class SEL_t(ObjC_t):
         if self._name_ is None:
             if self.value is None:
                 raise ValueError('Null %r' % (self,))
-            from getters import get_selectornameof
+            from pycocoa.getters import get_selectornameof
             self._name_ = get_selectornameof(self) or 'SEL_t'
         return self._name_
 
@@ -300,7 +300,7 @@ class VoidPtr_t(ObjC_t):
     pass
 
 
-# <http://StackOverflow.com/questions/41502199/
+# <https://StackOverflow.com/questions/41502199/
 #  how-to-decipher-objc-method-description-from-protocol-method-description-list>
 class objc_method_description_t(c_struct_t):
     '''ObjC C{struct} with fields C{name} and C{types} (C{SEL_t}, C{c_char_p}).
@@ -746,10 +746,10 @@ def split_encoding(encoding):  # MCCABE 18
               C{bitfield} C{"name"b1}, C{struct} items C{E{lb}CGsize="width"d"heigth"dE{rb}},
               C{union} items, etc. and all such C{"name"} prefixes are ignored.
 
-       @see: U{Type Encodings<http://Developer.Apple.com/library/content/documentation/
+       @see: U{Type Encodings<https://Developer.Apple.com/library/content/documentation/
              Cocoa/Conceptual/ObjCRuntimeGuide/Articles/ocrtTypeEncodings.html>},
-             U{NSHipster Type Encodings<http://NSHipster.com/type-encodings>} and
-             U{Digits in type encoding<http://StackOverflow.com/questions/11527385/
+             U{NSHipster Type Encodings<https://NSHipster.com/type-encodings>} and
+             U{Digits in type encoding<https://StackOverflow.com/questions/11527385/
              how-are-the-digits-in-objc-method-type-encoding-calculated>}.
     '''
     code   = []
@@ -823,7 +823,7 @@ __all__ = _exports(locals(), 'PyObjectEncoding', 'TypeCodeError', 'c_void',
 
 if __name__ == '__main__':
 
-    from utils import _allisting, bytes2repr, _Globals, printf
+    from pycocoa.utils import _allisting, bytes2repr, _Globals, printf
 
     _Globals.argv0 = ''
 
@@ -935,7 +935,7 @@ _ = '''
 '''
 del _
 
-# MIT License <http://OpenSource.org/licenses/MIT>
+# MIT License <https://OpenSource.org/licenses/MIT>
 #
 # Copyright (C) 2017-2019 -- mrJean1 at Gmail dot com
 #
@@ -957,7 +957,7 @@ del _
 # ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
 # OTHER DEALINGS IN THE SOFTWARE.
 
-# Originally <http://GitHub.com/phillip-nguyen/cocoa-python>
+# Originally <https://GitHub.com/phillip-nguyen/cocoa-python>
 
 # objective-ctypes
 #

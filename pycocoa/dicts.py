@@ -6,16 +6,17 @@
 '''Types L{FrozenDict} and L{Dict}, wrapping ObjC C{NS[Mutable]Dictionary}.
 '''
 # all imports listed explicitly to help PyChecker
-from bases   import _Type0
-from nstypes import isNone, NSDictionary, nsIter2, \
-                    NSMutableDictionary, ns2Type
-from pytypes import py2NS, type2NS
-from runtime import isImmutable, isObjCInstanceOf, ObjCClass, ObjCInstance
-from utils   import isinstanceOf, missing, _Types
+from pycocoa.bases   import _Type0
+from pycocoa.nstypes import isNone, NSDictionary, nsIter2, \
+                            NSMutableDictionary, ns2Type
+from pycocoa.pytypes import py2NS, type2NS
+from pycocoa.runtime import isImmutable, isObjCInstanceOf, \
+                            ObjCClass, ObjCInstance
+from pycocoa.utils   import isinstanceOf, missing, _Types
 
 __all__ = ('Dict',
            'FrozenDict')
-__version__ = '18.08.04'
+__version__ = '19.07.21'
 
 
 def _dict_cmp(dict1, dict2):
@@ -93,8 +94,8 @@ class FrozenDict(_Type0):
     def __len__(self):
         '''Return the length, like C{dict.__len__}.
         '''
-        # <http://Developer.Apple.com/documentation/foundation/
-        #         nsdictionary/1409628-count>
+        # <https://Developer.Apple.com/documentation/foundation/
+        #          nsdictionary/1409628-count>
         return self.NS.count()
 
     def __ne__(self, other):
@@ -250,7 +251,7 @@ class Dict(FrozenDict):
 
            @raise TypeError: Invalid type of I{other}.
 
-           @see: <http://Docs.Python.org/3/library/stdtypes.html#dict.update>
+           @see: <https://Docs.Python.org/3/library/stdtypes.html#dict.update>
         '''
         other, kwds = _dict_kwds(other, kwds, 'other')
         if other:
@@ -270,11 +271,11 @@ NSMutableDictionary._Type = _Types.Dict       = Dict
 
 if __name__ == '__main__':
 
-    from utils import _allisting
+    from pycocoa.utils import _allisting
 
     _allisting(__all__, locals(), __version__, __file__)
 
-# MIT License <http://OpenSource.org/licenses/MIT>
+# MIT License <https://OpenSource.org/licenses/MIT>
 #
 # Copyright (C) 2017-2019 -- mrJean1 at Gmail dot com
 #

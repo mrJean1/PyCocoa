@@ -6,15 +6,15 @@
 '''Types L{FrozenSet} and L{Set}, wrapping ObjC C{NS[Mutable]Set}.
 '''
 # all imports listed explicitly to help PyChecker
-from bases   import _Type0
-from nstypes import ns2py, NSMutableSet, nsSet2set, NSSet
-from pytypes import frozenset2NS, set2NS
-from runtime import isImmutable, isObjCInstanceOf, ObjCInstance
-from utils   import property_RO, _Types
+from pycocoa.bases   import _Type0
+from pycocoa.nstypes import ns2py, NSMutableSet, nsSet2set, NSSet
+from pycocoa.pytypes import frozenset2NS, set2NS
+from pycocoa.runtime import isImmutable, isObjCInstanceOf, ObjCInstance
+from pycocoa.utils   import property_RO, _Types
 
 __all__ = ('FrozenSet',
            'Set')
-__version__ = '18.08.14'
+__version__ = '19.07.21'
 
 
 if True:  # MCCABE 71
@@ -319,11 +319,11 @@ NSMutableSet._Type = _Types.Set       = Set
 
 if __name__ == '__main__':
 
-    from utils import _allisting
+    from pycocoa.utils import _allisting
 
     _allisting(__all__, locals(), __version__, __file__)
 
-# MIT License <http://OpenSource.org/licenses/MIT>
+# MIT License <https://OpenSource.org/licenses/MIT>
 #
 # Copyright (C) 2017-2019 -- mrJean1 at Gmail dot com
 #

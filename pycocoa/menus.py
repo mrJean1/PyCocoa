@@ -9,38 +9,38 @@ wrapping ObjC C{NSMenuItem} and C{NSMenu} and L{Keys}.
 @var Keys: Menu L{Item} shortcut keys (C{chr}).
 '''
 # all imports listed explicitly to help PyChecker
-from bases    import _Type2
-from fonts    import Font
-from geometry import Size
-from getters  import get_selector, get_selectornameof
-from nstypes  import isNone, NSMain, NSMenu, NSMenuItem, nsOf, \
-                     NSStr, nsString2str
-from pytypes  import int2NS
-from octypes  import SEL_t
-from oslibs   import NO, NSAlternateKeyMask, NSCommandKeyMask, \
-                     NSControlKeyMask, NSShiftKeyMask, YES  # PYCHOK expected
-from oslibs   import NSAcknowledgeCharacter, NSBackSpaceCharacter, \
-                     NSBackTabCharacter, NSBellCharacter, NSCancelCharacter, \
-                     NSCarriageReturnCharacter, NSDataLineEscapeCharacter, \
-                     NSDeleteCharacter, NSDeviceControl1Character, \
-                     NSDeviceControl2Character, NSDeviceControl3Character, \
-                     NSDeviceControl4Character, NSEndOfMediumCharacter, \
-                     NSEndOfTextCharacter, NSEndOfTransmitCharacter, \
-                     NSEndOfTransmitBlockCharacter, NSEnquiryCharacter, \
-                     NSEnterCharacter, NSEscapeCharacter, \
-                     NSFileSeparatorCharacter, NSFormFeedCharacter, \
-                     NSGroupSeparatorCharacter, NSHorizontalTabCharacter, \
-                     NSLineFeedCharacter, NSNegativeAcknowledgeCharacter, \
-                     NSNewLineCharacter, NSRecordSeparatorCharacter, \
-                     NSShiftInCharacter, NSShiftOutCharacter, \
-                     NSSpaceCharacter, NSStartOfHeadingCharacter, \
-                     NSStartOfTextCharacter, NSSubstituteCharacter, \
-                     NSSynchronousIdleCharacter, NSTabCharacter, \
-                     NSUnitSeparatorCharacter, NSVerticalTabCharacter
-from runtime  import isObjCInstanceOf  # , ObjCInstance
-from utils    import bytes2str, _ByteStrs, _Constants, _Globals, \
-                     _Ints, isinstanceOf, missing, name2pymethod, \
-                     printf, property2, property_RO, _Strs, _Types
+from pycocoa.bases    import _Type2
+from pycocoa.fonts    import Font
+from pycocoa.geometry import Size
+from pycocoa.getters  import get_selector, get_selectornameof
+from pycocoa.nstypes  import isNone, NSMain, NSMenu, NSMenuItem, nsOf, \
+                             NSStr, nsString2str
+from pycocoa.pytypes  import int2NS
+from pycocoa.octypes  import SEL_t
+from pycocoa.oslibs   import NO, NSAlternateKeyMask, NSCommandKeyMask, \
+                             NSControlKeyMask, NSShiftKeyMask, YES  # PYCHOK expected
+from pycocoa.oslibs   import NSAcknowledgeCharacter, NSBackSpaceCharacter, \
+                             NSBackTabCharacter, NSBellCharacter, \
+                             NSCancelCharacter, NSCarriageReturnCharacter, \
+                             NSDataLineEscapeCharacter, NSDeleteCharacter, \
+                             NSDeviceControl1Character, NSDeviceControl2Character, \
+                             NSDeviceControl3Character, NSDeviceControl4Character, \
+                             NSEndOfMediumCharacter, NSEndOfTextCharacter, \
+                             NSEndOfTransmitCharacter, NSEndOfTransmitBlockCharacter, \
+                             NSEnquiryCharacter, NSEnterCharacter, NSEscapeCharacter, \
+                             NSFileSeparatorCharacter, NSFormFeedCharacter, \
+                             NSGroupSeparatorCharacter, NSHorizontalTabCharacter, \
+                             NSLineFeedCharacter, NSNegativeAcknowledgeCharacter, \
+                             NSNewLineCharacter, NSRecordSeparatorCharacter, \
+                             NSShiftInCharacter, NSShiftOutCharacter, \
+                             NSSpaceCharacter, NSStartOfHeadingCharacter, \
+                             NSStartOfTextCharacter, NSSubstituteCharacter, \
+                             NSSynchronousIdleCharacter, NSTabCharacter, \
+                             NSUnitSeparatorCharacter, NSVerticalTabCharacter
+from pycocoa.runtime  import isObjCInstanceOf  # , ObjCInstance
+from pycocoa.utils    import bytes2str, _ByteStrs, _Constants, _Globals, \
+                             _Ints, isinstanceOf, missing, name2pymethod, \
+                             printf, property2, property_RO, _Strs, _Types
 
 try:
     from inspect import getfullargspec as getargspec  # Python 3+
@@ -54,7 +54,7 @@ __all__ = ('Item', 'ItemSeparator',
            'Menu', 'MenuBar',
            'ns2Item',
            'title2action')
-__version__ = '18.11.06'
+__version__ = '19.07.21'
 
 # Method _NSApplicationDelegate.handleMenuItem_ in .apps.py
 # is the handler ('selector') for all menu items specified
@@ -83,9 +83,9 @@ def _bindM(inst, parent):
     # check that the item or menu is not already bound to (a 'child' of)
     # a menu or menu bar (ObjC's properties like hasSubmenu, owner,
     # parent, supermenu, etc. are non-trivial and rather inconsistent)
-    # <http://Developer.Apple.com/documentation/appkit/nsmenu/1518204-supermenu>
-    # <http://Developer.Apple.com/documentation/appkit/nsmenuitem/1514817-hassubmenu>
-    # <http://Developer.Apple.com/documentation/appkit/nsmenuitem/1514845-submenu>
+    # <https://Developer.Apple.com/documentation/appkit/nsmenu/1518204-supermenu>
+    # <https://Developer.Apple.com/documentation/appkit/nsmenuitem/1514817-hassubmenu>
+    # <https://Developer.Apple.com/documentation/appkit/nsmenuitem/1514845-submenu>
     if inst.parent:
         raise ValueError('%r bound to: %r' % (inst, inst.parent))
     inst._parent = parent
@@ -125,8 +125,8 @@ def _nsKey2(key):
 def _nsMenuItem(inst, sel=0, nskey=_NoKey):
     '''(INTERNAL) New menu item or new menu bar menu item.
     '''
-    # <http://Developer.Apple.com/documentation/appkit/
-    #       nsmenuitem/1514858-initwithtitle>
+    # <https://Developer.Apple.com/documentation/appkit/
+    #        nsmenuitem/1514858-initwithtitle>
     ns = NSMenuItem.alloc().initWithTitle_action_keyEquivalent_(
                             NSStr(inst.title), sel, nskey)
     r = int2NS(id(inst))
@@ -987,8 +987,8 @@ class Menu(_Menu_Type2):
 #           self.NS.performActionForItemAtIndex_(i)
 
         # mimick behavior of performAction...ForItemAtIndex_
-        # <http://Stackoverflow.com/questions/31989979/
-        #         nsmenu-highlight-specific-nsmenuitem>
+        # <https://Stackoverflow.com/questions/31989979/
+        #          nsmenu-highlight-specific-nsmenuitem>
         if highlight:
             self.highlight(item)
         else:
@@ -999,10 +999,10 @@ class Menu(_Menu_Type2):
         else:  # if item._SEL_ is _HANDLE_:  # .handleMenuItem_
             raise NotImplementedError('%s(%s)' % ('click', item))
         if highlight:
-            # <http://Stackoverflow.com/questions/6169930/
-            #         remove-highlight-from-nsmenuitem-after-click>
+            # <https://Stackoverflow.com/questions/6169930/
+            #        remove-highlight-from-nsmenuitem-after-click>
             # for item in (item, self):  # XXX segfaults
-                h = item.isHidden  # un-highlight by ...
+                h = item.isHidden  # PYCHOK un-highlight by ...
                 item.isHidden = True  # ... hiding or removing and
                 item.isHidden = h  # ... un-hiding or re-inserting
 
@@ -1256,8 +1256,8 @@ class Menu(_Menu_Type2):
         _setTag(self, tag, self._NSiMI)
 
 
-# <http://Developer.Apple.com/library/content/qa/qa1420/_index.html
-#      #//apple_ref/doc/uid/DTS10004127>
+# <https://Developer.Apple.com/library/content/qa/qa1420/_index.html
+#       #//apple_ref/doc/uid/DTS10004127>
 class MenuBar(_Menu_Type2):
     '''Python L{MenuBar} Type, wrapping ObjC C{NSMenu}.
     '''
@@ -1442,8 +1442,8 @@ class MenuBar(_Menu_Type2):
 
 
 # TODO StatusBar & -Item
-# <http://Developer.Apple.com/library/archive/documentation/
-#         Cocoa/Conceptual/StatusBar/Tasks/creatingitems.html>
+# <https://Developer.Apple.com/library/archive/documentation/
+#          Cocoa/Conceptual/StatusBar/Tasks/creatingitems.html>
 # class StatusBar():
 #    pass
 
@@ -1489,7 +1489,7 @@ _Types.MenuBar       = MenuBar
 
 if __name__ == '__main__':
 
-    from utils import _allisting, properties
+    from pycocoa.utils import _allisting, properties
 
     _allisting(__all__, locals(), __version__, __file__)
 
@@ -1617,7 +1617,7 @@ MenuBar(None) properties:
 '''
 del _
 
-# MIT License <http://OpenSource.org/licenses/MIT>
+# MIT License <https://OpenSource.org/licenses/MIT>
 #
 # Copyright (C) 2017-2019 -- mrJean1 at Gmail dot com
 #

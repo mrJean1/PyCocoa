@@ -6,11 +6,11 @@
 '''Type L{List}, wrapping ObjC C{NSMutableArray}.
 '''
 # all imports listed explicitly to help PyChecker
-from nstypes import NSMutableArray
-from pytypes import list2NS, py2NS
-from runtime import isObjCInstanceOf
-from tuples  import _at, Tuple
-from utils   import missing, _Types
+from pycocoa.nstypes import NSMutableArray
+from pycocoa.pytypes import list2NS, py2NS
+from pycocoa.runtime import isObjCInstanceOf
+from pycocoa.tuples  import _at, Tuple
+from pycocoa.utils   import missing, _Types
 
 try:
     from itertools import zip_longest
@@ -18,7 +18,7 @@ except ImportError:  # Python 2-
     from itertools import izip_longest as zip_longest
 
 __all__ = ('List',)
-__version__ = '18.06.28'
+__version__ = '19.07.21'
 
 
 class List(Tuple):
@@ -123,11 +123,11 @@ NSMutableArray._Type = _Types.List = List
 
 if __name__ == '__main__':
 
-    from utils import _allisting
+    from pycocoa.utils import _allisting
 
     _allisting(__all__, locals(), __version__, __file__)
 
-# MIT License <http://OpenSource.org/licenses/MIT>
+# MIT License <https://OpenSource.org/licenses/MIT>
 #
 # Copyright (C) 2017-2019 -- mrJean1 at Gmail dot com
 #

@@ -6,14 +6,14 @@
 '''C{get_...} functions to obtain ObjC classes, methods, protocols, etc.
 '''
 # all imports listed explicitly to help PyChecker
-from ctypes  import ArgumentError, byref, c_uint, cast, CFUNCTYPE
-from octypes import emcoding2ctype, encoding2ctype, \
-                    Class_t, Id_t, IMP_t, Ivar_t, Protocol_t, SEL_t, \
-                    split_encoding
-from oslibs  import libobjc  # get_lib
-from utils   import bytes2str, Cache2, _exports, isinstanceOf, missing, \
-                    name2objc, str2bytes
+from pycocoa.octypes import emcoding2ctype, encoding2ctype, \
+                            Class_t, Id_t, IMP_t, Ivar_t, Protocol_t, \
+                            SEL_t, split_encoding
+from pycocoa.oslibs  import libobjc  # get_lib
+from pycocoa.utils   import bytes2str, Cache2, _exports, isinstanceOf, \
+                            missing, name2objc, str2bytes
 
+from ctypes import ArgumentError, byref, c_uint, cast, CFUNCTYPE
 import itertools
 _iter_chain   = itertools.chain.from_iterable
 _iter_product = itertools.product
@@ -23,7 +23,7 @@ except AttributeError:
     _iter_zip = itertools.zip_longest  # Python 3+
 del itertools
 
-__version__ = '18.08.06'
+__version__ = '19.07.21'
 
 _c_func_t_cache = {}
 _SEL_t_cache = Cache2(limit2=128)
@@ -292,7 +292,7 @@ def get_properties(clas_or_proto, *prefixes):
            - t<encoding> = Old-style type encoding
            - W = Weak reference (__weak)
 
-       @see: U{Property Attributes<http://Developer.Apple.com/library/content/documentation/
+       @see: U{Property Attributes<https://Developer.Apple.com/library/content/documentation/
              Cocoa/Conceptual/ObjCRuntimeGuide/Articles/ocrtPropertyIntrospection.html>}.
     '''
     n = c_uint()
@@ -394,7 +394,7 @@ def get_selectorname_permutations(name_, leading=False):
     n = len(s) - 1
     if n > 0:
         for p in _iter_product('_:', repeat=n):
-            # <http://StackOverflow.com/questions/952914>
+            # <https://StackOverflow.com/questions/952914>
             n = ''.join(_iter_chain(_iter_zip(s, p, fillvalue='')))
             if n != name_:
                 yield n
@@ -457,11 +457,11 @@ __all__ = _exports(locals(), starts='get_')
 
 if __name__ == '__main__':
 
-    from utils import _allisting
+    from pycocoa.utils import _allisting
 
     _allisting(__all__, locals(), __version__, __file__)
 
-# MIT License <http://OpenSource.org/licenses/MIT>
+# MIT License <https://OpenSource.org/licenses/MIT>
 #
 # Copyright (C) 2017-2019 -- mrJean1 at Gmail dot com
 #
@@ -483,7 +483,7 @@ if __name__ == '__main__':
 # ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
 # OTHER DEALINGS IN THE SOFTWARE.
 
-# Originally <http://GitHub.com/phillip-nguyen/cocoa-python>
+# Originally <https://GitHub.com/phillip-nguyen/cocoa-python>
 
 # objective-ctypes
 #

@@ -6,14 +6,14 @@
 '''Types L{Point}, L{Rect} and L{Size}, wrapping ObjC C{NSPoint_t}, L{NSRect_t}, C{NSSize_t}.
 '''
 # all imports listed explicitly to help PyChecker
-from bases   import _Type0
-from octypes import NSPoint_t, NSRect_t, NSRect4_t, NSSize_t
-from utils   import isinstanceOf, property_RO
+from pycocoa.bases   import _Type0
+from pycocoa.octypes import NSPoint_t, NSRect_t, NSRect4_t, NSSize_t
+from pycocoa.utils   import isinstanceOf, property_RO
 
 __all__ = ('Point', 'Point2',
            'Rect', 'Rect4',
            'Size', 'Size2')
-__version__ = '18.08.14'
+__version__ = '19.07.21'
 
 
 class Point(_Type0):
@@ -278,11 +278,11 @@ class Size2(Size):
 
 if __name__ == '__main__':
 
-    from utils import _allisting
+    from pycocoa.utils import _allisting
 
     _allisting(__all__, locals(), __version__, __file__)
 
-# MIT License <http://OpenSource.org/licenses/MIT>
+# MIT License <https://OpenSource.org/licenses/MIT>
 #
 # Copyright (C) 2017-2019 -- mrJean1 at Gmail dot com
 #

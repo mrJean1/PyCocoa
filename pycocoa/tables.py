@@ -5,30 +5,31 @@
 
 '''Types L{Table} and L{TableWindow}, wrapping ObjC C{NSTableView}, C{NSWindow}.
 '''
-# <http://StackOverflow.com/questions/15519296/pyobjc-crashes-by-using-nstableview>
-# <http://GitHub.com/versluis/Mac-TableViewCode/tree/master/Mac%20TableViewCode>
+# <https://StackOverflow.com/questions/15519296/pyobjc-crashes-by-using-nstableview>
+# <https://GitHub.com/versluis/Mac-TableViewCode/tree/master/Mac%20TableViewCode>
 
 # all imports listed explicitly to help PyChecker
-from bases    import _Type2
-from fonts    import Font
-from geometry import Rect4
-from nstypes  import NSMain, NSScrollView, NSStr, NSTableColumn, \
-                     NSTableView  # isNone, NSTextField
-from octypes  import NSSize_t
-from oslibs   import NSTableViewSolidHorizontalGridLineMask, \
-                     NSTableViewSolidVerticalGridLineMask, \
-                     NSTextAlignmentCenter, NSTextAlignmentJustified, \
-                     NSTextAlignmentLeft, NSTextAlignmentNatural, \
-                     NSTextAlignmentRight, YES
-from runtime  import isObjCInstanceOf, ObjCClass, ObjCInstance, \
-                     ObjCSubclass, release, retain, send_super_init
-from utils    import _Globals, isinstanceOf, property_RO, _Types
-from windows  import Screen, Window, WindowStyle
+from pycocoa.bases    import _Type2
+from pycocoa.fonts    import Font
+from pycocoa.geometry import Rect4
+from pycocoa.nstypes  import NSMain, NSScrollView, NSStr, NSTableColumn, \
+                             NSTableView  # isNone, NSTextField
+from pycocoa.octypes  import NSSize_t
+from pycocoa.oslibs   import NSTableViewSolidHorizontalGridLineMask, \
+                             NSTableViewSolidVerticalGridLineMask, \
+                             NSTextAlignmentCenter, NSTextAlignmentJustified, \
+                             NSTextAlignmentLeft, NSTextAlignmentNatural, \
+                             NSTextAlignmentRight, YES
+from pycocoa.runtime  import isObjCInstanceOf, ObjCDelegate, ObjCInstance, \
+                             ObjCSubclass, release, retain, send_super_init
+from pycocoa.utils    import _Globals, isinstanceOf, module_property_RO, \
+                             property_RO, _Types
+from pycocoa.windows  import Screen, Window, WindowStyle
 
 __all__ = ('NSTableViewDelegate',
            'Table', 'TableWindow',
            'closeTables')
-__version__ = '18.11.02'
+__version__ = '19.08.31'
 
 _Alignment = dict(center=NSTextAlignmentCenter,
                justified=NSTextAlignmentJustified,
@@ -150,7 +151,7 @@ class Table(_Type2):
         high = 0
         id2i = {}  # map col.identifier to col number
         wide = f.width  # == v.frame().size.width
-        # <http://Developer.Apple.com/documentation/appkit/nstablecolumn>
+        # <https://Developer.Apple.com/documentation/appkit/nstablecolumn>
         for i, h in enumerate(self._headers):
             # note, the identifier MUST be an NSStr (to avoid warnings)
             t = retain(NSStr(str(i)))
@@ -159,11 +160,11 @@ class Table(_Type2):
             # costly int(nsString2str(col.identifier())) conversions in
             # _NSTableViewDelegate.tableView_objectValueForTableColumn_row_
             id2i[c.identifier()] = i
-            # <http://Developer.Apple.com/documentation/appkit/nscell>
+            # <https://Developer.Apple.com/documentation/appkit/nscell>
             h = _format(h, c)
             cols.append(h)
             c.setTitle_(release(NSStr(h)))  # == c.headerCell().setStringValue_(NSStr(h))
-            # <http://Developer.Apple.com/documentation/uikit/nstextalignment>
+            # <https://Developer.Apple.com/documentation/uikit/nstextalignment>
             v.addTableColumn_(c)
             # increase row height 1-2 points to show (bold) descenders
             high = max(high, Font(c.dataCell().font()).height + 2)
@@ -174,8 +175,8 @@ class Table(_Type2):
         if high > v.rowHeight():  # adjust the row height
             v.setRowHeight_(high)
 
-        # <http://Developer.Apple.com/library/content/documentation/
-        #         Cocoa/Conceptual/TableView/VisualAttributes/VisualAttributes.html>
+        # <https://Developer.Apple.com/library/content/documentation/
+        #        Cocoa/Conceptual/TableView/VisualAttributes/VisualAttributes.html>
         v.setGridStyleMask_(NSTableViewSolidHorizontalGridLineMask |
                             NSTableViewSolidVerticalGridLineMask)
 #       v.setDrawsGrid_(YES)  # XXX obsolete, not needed
@@ -205,9 +206,9 @@ class _NSTableViewDelegate(object):
 
        @see: The C{_NSApplicationDelegate} for more I{NSDelegate} details.
     '''
-    # <http://Developer.Apple.com/documentation/appkit/nstableviewdatasource>
-    # <http://Developer.Apple.com/documentation/appkit/nstableviewdelegate>
-    _ObjC = ObjCSubclass('NSObject', '_NSTableViewDelegate')
+    # <https://Developer.Apple.com/documentation/appkit/nstableviewdatasource>
+    # <https://Developer.Apple.com/documentation/appkit/nstableviewdelegate>
+    _ObjC = ObjCSubclass('NSObject', '_NSTableViewDelegate', register=False)  # defer
 
     @_ObjC.method('@PPP')
     def init(self, cols, rows, id2i):
@@ -239,7 +240,7 @@ class _NSTableViewDelegate(object):
 #   @_ObjC.method('v@@i')
 #   def tableView_didAddRowView_forRow_(self, table, view, row):
         # table is the NSTableView created in Table.display above,
-        # <http://Developer.Apple.com/library/content/releasenotes/AppKit/RN-AppKit/index.html>
+        # <https://Developer.Apple.com/library/content/releasenotes/AppKit/RN-AppKit/index.html>
 #       print('row %s height %s' % (row, view.fittingSize.height))
 
     @_ObjC.method('@@@i')  # using '*@@i' crashes **)
@@ -252,9 +253,9 @@ class _NSTableViewDelegate(object):
             r = self.rows[row]
             if r in (None, ()):
                 # XXX reduce the height of row separator?
-                # <http://Developer.Apple.com/library/content/samplecode/
-                #       CocoaTipsAndTricks/Listings/TableViewVariableRowHeights_
-                #       TableViewVariableRowHeightsAppDelegate_m.html>
+                # <https://Developer.Apple.com/library/content/samplecode/
+                #        CocoaTipsAndTricks/Listings/TableViewVariableRowHeights_
+                #        TableViewVariableRowHeightsAppDelegate_m.html>
                 return _NS.BlankCell
             c = self.id2i[col.identifier()]
             # **) return an NSStr, always
@@ -268,16 +269,16 @@ class _NSTableViewDelegate(object):
 #   def tableView_rowViewForRow_(self, table, row):
         # table is the NSTableView created in Table.display,
         # return an NSTableRowView to use for the given row
-        # <http://Developer.Apple.com/documentation/appkit/nstableviewdelegate/1532417-tableview>
+        # <https://Developer.Apple.com/documentation/appkit/nstableviewdelegate/1532417-tableview>
 #       return NSMain.nil  # means, use the default NSView
 
 #   @_ObjC.method('@@@i')
 #   def tableView_viewForTableColumn_row_(self, table, col, row):
         # table is the NSTableView created in Table.display above,
         # return a configurable NSTextField for this col and row
-        # <http://Developer.Apple.com/documentation/appkit/nstableviewdelegate/1527449-tableview>
-        # <http://Developer.Apple.com/library/content/documentation/Cocoa/Conceptual/TableView/
-        #       PopulatingView-TablesProgrammatically/PopulatingView-TablesProgrammatically.html>
+        # <https://Developer.Apple.com/documentation/appkit/nstableviewdelegate/1527449-tableview>
+        # <https://Developer.Apple.com/library/content/documentation/Cocoa/Conceptual/TableView/
+        #        PopulatingView-TablesProgrammatically/PopulatingView-TablesProgrammatically.html>
 #       r = self.rows[row]
 #       if r is _NS.Separator:
 #           tf = NSMain.nil  # means, do not show
@@ -291,7 +292,7 @@ class _NSTableViewDelegate(object):
 #       return tf
 
 #   def tableView_viewForTableColumn_row_(self, table, col, row):  # perhaps from this Swift code?
-        # <http://StackOverflow.com/questions/36634559/osx-view-based-nstableview-font-change>
+        # <https://StackOverflow.com/questions/36634559/osx-view-based-nstableview-font-change>
 #   func tableView(tableView: NSTableView, viewForTableColumn tableColumn: NSTableColumn?, row: Int) -> NSView? {
 #       let cellView = tableView.makeViewWithIdentifier("myTableViewCell", owner: self) as! NSTableCellView
 #       let textField = cellView.textField!
@@ -304,11 +305,13 @@ class _NSTableViewDelegate(object):
 #       return cellView }
 
 
-NSTableViewDelegate = ObjCClass('_NSTableViewDelegate',  # the actual class
-#                                'NSTableViewDelegate',  # protocol, ...
-                                 'NSTableViewDataSource')
-# XXX or NSTableViewDelegate.add_protocol('NSTableViewDelegate')
-#   plus NSTableViewDelegate.add_protocol('NSTableViewDataSource')
+@module_property_RO
+def NSTableViewDelegate():
+    '''The L{ObjCClass}C{(_NSTableViewDelegate.__name__)}.
+    '''
+    return ObjCDelegate(_NSTableViewDelegate,
+#                       'NSTableViewDelegate',  # protocol, ...
+                        'NSTableViewDataSource')
 
 
 class TableWindow(Window):
@@ -330,7 +333,7 @@ class TableWindow(Window):
         tbl = getattr(table, 'NS', None)
         isObjCInstanceOf(tbl, NSTableView, name='table')
 
-        # <http://Developer.Apple.com/documentation/appkit/nswindow>
+        # <https://Developer.Apple.com/documentation/appkit/nswindow>
         n = tbl.dataSource().numberOfRowsInTableView_(tbl)
         # approximate height of the table content, also to
         # .setContentMaxSize_ of the window in self.limit
@@ -381,11 +384,11 @@ _Types.TableWindow               = TableWindow
 
 if __name__ == '__main__':
 
-    from utils import _allisting
+    from pycocoa.utils import _allisting
 
     _allisting(__all__, locals(), __version__, __file__)
 
-# MIT License <http://OpenSource.org/licenses/MIT>
+# MIT License <https://OpenSource.org/licenses/MIT>
 #
 # Copyright (C) 2017-2019 -- mrJean1 at Gmail dot com
 #

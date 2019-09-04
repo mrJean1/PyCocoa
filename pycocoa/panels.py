@@ -10,15 +10,17 @@
 
 '''
 # all imports listed explicitly to help PyChecker
-from bases   import _Type2
-from nstypes import NSAlert, NSError, NSFont, NSMain, \
-                    NSNotificationCenter, NSOpenPanel, NSSavePanel, \
-                    NSStr, nsString2str, nsTextView
-from pytypes import dict2NS, py2NS, url2NS
-from oslibs  import NO, NSCancelButton, NSOKButton, YES
-from runtime import isObjCInstanceOf, release
+from pycocoa.bases   import _Type2
+from pycocoa.nstypes import NSAlert, NSError, NSFont, NSMain, \
+                            NSNotificationCenter, NSOpenPanel, \
+                            NSSavePanel, NSStr, nsString2str, \
+                            nsTextView
+from pycocoa.pytypes import dict2NS, py2NS, url2NS
+from pycocoa.oslibs  import NO, NSCancelButton, NSOKButton, YES
+from pycocoa.runtime import isObjCInstanceOf, release
 # from strs  import StrAttd
-from utils   import _Constants, property_RO, _Strs, _text_title2, _Types
+from pycocoa.utils   import _Constants, property_RO, _Strs, \
+                            _text_title2, _Types
 
 from os import linesep
 from threading import Thread
@@ -32,7 +34,6 @@ try:
 except ImportError:
     _Browser, _BrowserError = None, ImportError
 
-
 __all__ = ('AlertPanel', 'AlertStyle',
            'BrowserPanel',
            'ErrorPanel',
@@ -40,7 +41,7 @@ __all__ = ('AlertPanel', 'AlertStyle',
            'PanelButton',
            'SavePanel',
            'TextPanel')
-__version__ = '18.08.14'
+__version__ = '19.07.21'
 
 
 class AlertStyle(_Constants):  # Enum?
@@ -122,14 +123,14 @@ class AlertPanel(_Type2):
                     if no button was clicked before the I{timeout}
                     expired.
         '''
-        # <http://Developer.Apple.com/documentation/appkit/nsalert>
+        # <https://Developer.Apple.com/documentation/appkit/nsalert>
         ns = NSAlert.alloc().init()
         ns.setAlertStyle_(self._style)
         ns.setMessageText_(release(NSStr(self.title)))
 
         if self._info:
-            # <http://Developer.Apple.com/library/content/documentation/
-            #       Cocoa/Conceptual/Strings/Articles/stringsParagraphBreaks.html>
+            # <https://Developer.Apple.com/library/content/documentation/
+            #        Cocoa/Conceptual/Strings/Articles/stringsParagraphBreaks.html>
             ns.setInformativeText_(NSStr(self._info))
 
         ns.addButtonWithTitle_(release(NSStr(self._ok)))
@@ -145,8 +146,8 @@ class AlertPanel(_Type2):
             s = 'Do not show this %sAlert again' % (s,)
             ns.suppressionButton().setTitle_(release(NSStr(s)))
 
-        # <http://Developer.Apple.com/library/content/documentation/
-        #       Cocoa/Conceptual/Dialog/Tasks/DisplayAlertHelp.html>
+        # <https://Developer.Apple.com/library/content/documentation/
+        #        Cocoa/Conceptual/Dialog/Tasks/DisplayAlertHelp.html>
         # ns.showsHelp_(YES)
         # ns.helpAnchor_(HTML?)
 
@@ -155,8 +156,8 @@ class AlertPanel(_Type2):
                                  if font is None else font.NS)
             ns.setAccessoryView_(t)
 
-        # <http://Developer.Apple.com/documentation/appkit/
-        #       nsalert/1535196-showssuppressionbutton>
+        # <https://Developer.Apple.com/documentation/appkit/
+        #        nsalert/1535196-showssuppressionbutton>
         if self._suppress is None:
             r = _runModal(ns, timeout)
         elif self._suppress is False:
@@ -185,10 +186,10 @@ class BrowserPanel(_Type2):
 
           @raise ValueError: No browser type I{name}.
 
-          @see: U{Browser types<http://Docs.Python.org/3.6/library/webbrowser.html>}.
+          @see: U{Browser types<https://Docs.Python.org/3.6/library/webbrowser.html>}.
         '''
-        # <http://Developer.Apple.com/documentation/
-        #       foundation/nsnotificationcenter>
+        # <https://Developer.Apple.com/documentation/
+        #        foundation/nsnotificationcenter>
         if _Browser:
             try:
                 self._browser = _Browser(name)
@@ -249,9 +250,9 @@ class ErrorPanel(AlertPanel):
 
            @raise TypeError: Invalid I{ns_error}.
         '''
-        # <http://Developer.Apple.com/documentation/
-        #       appkit/nsalert/1531823-alertwitherror>
-        # <http://Developer.Apple.com/documentation/foundation/nserror>
+        # <https://Developer.Apple.com/documentation/
+        #        appkit/nsalert/1531823-alertwitherror>
+        # <https://Developer.Apple.com/documentation/foundation/nserror>
         if isObjCInstanceOf(ns_error, NSError, name='ns_error'):
             ns = NSAlert.alloc().alertWithError_(ns_error)
             r = _runModal(ns, timeout)
@@ -321,8 +322,8 @@ class OpenPanel(_Type2):
 
         while True:
             # ns.orderFrontRegardless()  # only flashes
-            # <http://Developer.Apple.com/documentation/
-            #       appkit/nssavepanel/1525357-runmodal>
+            # <https://Developer.Apple.com/documentation/
+            #        appkit/nssavepanel/1525357-runmodal>
             if ns.runModal() == NSCancelButton:  # runModalForTypes_
                 path = dflt  # nothing selected
                 break
@@ -367,8 +368,8 @@ def _runModal(ns, timeout=None):
         t = Thread(target=_stopModal)
         t.start()
     # NSAlert buttons values are 1000, 1001 and 1002
-    # <http://Developer.Apple.com/documentation/appkit/
-    #       nsapplication.modalresponse>
+    # <https://Developer.Apple.com/documentation/appkit/
+    #        nsapplication.modalresponse>
     r = ns.runModal()
     return {1000: PanelButton.OK,  # alertFirstButtonReturn
             1001: PanelButton.Cancel,  # alertSecondButtonReturn
@@ -376,8 +377,8 @@ def _runModal(ns, timeout=None):
             1003: PanelButton.TimedOut}.get(r, PanelButton.Error)
 
 
-# <http://PseudoFish.com/p/saving-a-file-using-nssavepanel.html>
-# <http://PseudoFish.com/showing-a-nssavepanel-as-a-sheet.html>
+# <https://PseudoFish.com/p/saving-a-file-using-nssavepanel.html>
+# <https://PseudoFish.com/showing-a-nssavepanel-as-a-sheet.html>
 
 class SavePanel(_Type2):
     '''Python Type to save a file, wrapping ObjC C{NSSavePanel}.
@@ -507,11 +508,11 @@ _Types.TextPanel  = TextPanel
 
 if __name__ == '__main__':
 
-    from utils import _allisting
+    from pycocoa.utils import _allisting
 
     _allisting(__all__, locals(), __version__, __file__)
 
-# MIT License <http://OpenSource.org/licenses/MIT>
+# MIT License <https://OpenSource.org/licenses/MIT>
 #
 # Copyright (C) 2017-2019 -- mrJean1 at Gmail dot com
 #

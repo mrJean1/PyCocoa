@@ -9,24 +9,24 @@
 @var FontTrait: Font traits (C{mask}).
 '''
 # all imports listed explicitly to help PyChecker
-from bases   import _Type0
-from nstypes import isNone, NSFont, nsIter, nsIter2, NSMain, \
-                    NSStr, nsString2str
-from oslibs  import NSFontBoldMask, NSFontItalicMask, \
-                    NSFontCompressedMask, NSFontCondensedMask, \
-                    NSFontExpandedMask, NSFontMonoSpaceMask, \
-                    NSFontNarrowMask, NSFontPosterMask, \
-                    NSFontSmallCapsMask, NSFontSansSerifClass, \
-                    NSFontUnboldMask, NSFontUnitalicMask
-from runtime import isObjCInstanceOf, release
-from strs    import Str
-from utils   import bytes2str, _ByteStrs, _Constants, _exports, \
-                    flint, _Ints, isinstanceOf, property_RO, \
-                    _Singletons, _Types
+from pycocoa.bases   import _Type0
+from pycocoa.nstypes import isNone, NSFont, nsIter, nsIter2, NSMain, \
+                            NSStr, nsString2str
+from pycocoa.oslibs  import NSFontBoldMask, NSFontItalicMask, \
+                            NSFontCompressedMask, NSFontCondensedMask, \
+                            NSFontExpandedMask, NSFontMonoSpaceMask, \
+                            NSFontNarrowMask, NSFontPosterMask, \
+                            NSFontSmallCapsMask, NSFontSansSerifClass, \
+                            NSFontUnboldMask, NSFontUnitalicMask
+from pycocoa.runtime import isObjCInstanceOf, release
+from pycocoa.strs    import Str
+from pycocoa.utils   import bytes2str, _ByteStrs, _Constants, _exports, \
+                            flint, _Ints, isinstanceOf, property_RO, \
+                            _Singletons, _Types
 
-__version__ = '18.10.23'
+__version__ = '19.07.21'
 
-# <http://Developer.Apple.com/documentation/appkit/nsfont.weight>
+# <https://Developer.Apple.com/documentation/appkit/nsfont.weight>
 # _NSFontWeigthHeavy      = 13 ?
 # _NSFontWeigthBlack      = 11 ?
 # _NSFontWeigthBold       =  9
@@ -186,7 +186,7 @@ class Font(_Type0):
         elif isinstance(family_or_font, NSStr):
             ns, py = family_or_font, nsString2str(family_or_font)
 #       elif isObjCInstanceOf(family_or_font, NSFontDescriptor):
-            # <http://Developer.Apple.com/documentation/appkit/nsfont/1525386-init>
+            # <https://Developer.Apple.com/documentation/appkit/nsfont/1525386-init>
             # ignore traits and weight
 #           ns, py = NSFont.alloc().init_(family_or_font, size), None
         elif isObjCInstanceOf(family_or_font, NSFont, name='family_or_font'):
@@ -201,8 +201,8 @@ class Font(_Type0):
                 py = nsString2str(ns)
 
         if py is not None:
-            # <http://Developer.Apple.com/documentation/appkit/
-            #       nsfontmanager/1462332-fontwithfamily>
+            # <https://Developer.Apple.com/documentation/appkit/
+            #        nsfontmanager/1462332-fontwithfamily>
             self._traits = _traitsin(traits)
             self._weight = _weightin(weight)
             ns = NSMain.FontManager.fontWithFamily_traits_weight_size_(
@@ -213,7 +213,7 @@ class Font(_Type0):
                 raise FontError('no such %s: %s' % ('font', self._argstr()))
 
         self._NS = ns  # _RO
-        # <http://Developer.Apple.com/library/content/documentation/
+        # <https://Developer.Apple.com/library/content/documentation/
         #  TextFonts/Conceptual/CocoaTextArchitecture/FontHandling/FontHandling.html>
         self._family = nsString2str(ns.familyName())
         self._height = flint(NSMain.LayoutManager.defaultLineHeightForFont_(ns) + 1)
@@ -268,8 +268,8 @@ class Font(_Type0):
            @note: The C{line} height is the sum of the tallest
                   ascender, tallest descender and leading heights.
         '''
-        # <http://Developer.Apple.com/library/content/documentation/
-        #       Cocoa/Conceptual/TextLayout/Tasks/StringHeight.html>
+        # <https://Developer.Apple.com/library/content/documentation/
+        #        Cocoa/Conceptual/TextLayout/Tasks/StringHeight.html>
         return self._height
 
     @property_RO
@@ -671,8 +671,8 @@ def fontfamilies(*prefixes):
 
        @return: Each font family name (C{str}).
     '''
-    # <http://Developer.Apple.com/documentation/appkit/
-    #       nsfontmanager/1462323-availablefontfamilies>
+    # <https://Developer.Apple.com/documentation/appkit/
+    #        nsfontmanager/1462323-availablefontfamilies>
     for ns in nsIter(NSMain.FontManager.availableFontFamilies()):
         f = nsString2str(ns)
         if f.startswith(prefixes or f):
@@ -686,8 +686,8 @@ def fontnamesof(family):
 
        @return: The name (C{str}) of each font.
     '''
-    # <http://Developer.Apple.com/documentation/appkit/
-    #       nsfontmanager/1462316-availablemembers>
+    # <https://Developer.Apple.com/documentation/appkit/
+    #        nsfontmanager/1462316-availablemembers>
     for ns in nsIter(_nsFontsOf(family)):
         yield nsString2str(ns.objectAtIndex_(0))
 
@@ -707,8 +707,8 @@ def fontsof(family, size=0, weight=None):
         lw, hw = 0, 15
     else:
         lw = hw = _weightin(weight)
-    # <http://Developer.Apple.com/documentation/appkit/
-    #       nsfontmanager/1462316-availablemembers>
+    # <https://Developer.Apple.com/documentation/appkit/
+    #        nsfontmanager/1462316-availablemembers>
     for (n, m, w, t), _ in nsIter2(_nsFontsOf(family)):
         # each item is [name, trait-like attributes, weight, traits]
         if lw <= w <= hw:
@@ -729,8 +729,8 @@ def fontsof4(family):
        @return: 4-Tuple (name, attributes, weight, traits) of (C{str},
                 C{str}, C{int}, C{int}) for each font.
     '''
-    # <http://Developer.Apple.com/documentation/appkit/
-    #       nsfontmanager/1462316-availablemembers>
+    # <https://Developer.Apple.com/documentation/appkit/
+    #        nsfontmanager/1462316-availablemembers>
     for t4, _ in nsIter2(_nsFontsOf(family)):
         # each item is [name, trait-like attributes, weight, traits]
         yield tuple(t4)
@@ -769,7 +769,7 @@ __all__ = _exports(locals(), starts=('Font', 'font'))
 
 if __name__ == '__main__':
 
-    from utils import _allisting
+    from pycocoa.utils import _allisting
 
     _allisting(__all__, locals(), __version__, __file__)
 
@@ -816,7 +816,7 @@ if __name__ == '__main__':
 '''
     del _
 
-# MIT License <http://OpenSource.org/licenses/MIT>
+# MIT License <https://OpenSource.org/licenses/MIT>
 #
 # Copyright (C) 2017-2019 -- mrJean1 at Gmail dot com
 #

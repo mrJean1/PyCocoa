@@ -6,19 +6,20 @@
 '''Conversions from C{NS...} ObjC instances to Python.
 '''
 # all imports listed explicitly to help PyChecker
-from decimal import Decimal as _Decimal
-from ctypes  import c_void_p
-from nstypes import NSArray, NSData, NSDecimal, NSDictionary, \
-                    NSDouble, NSInt, NSLong, NSLongLong, NSMain, \
-                    NSMutableArray, NSMutableDictionary, NSMutableSet, \
-                    NSSet, NSStr, NSURL
-from oslibs  import libCF
-from runtime import ObjCInstance, release
-from types   import GeneratorType as _Generator
-from utils   import bytes2str, _ByteStrs, clip, DEFAULT_UNICODE, \
-                    _exports, _Ints, isinstanceOf
+from pycocoa.nstypes import NSArray, NSData, NSDecimal, NSDictionary, \
+                            NSDouble, NSInt, NSLong, NSLongLong, \
+                            NSMain, NSMutableArray, NSMutableDictionary, \
+                            NSMutableSet, NSSet, NSStr, NSURL
+from pycocoa.oslibs  import libCF
+from pycocoa.runtime import ObjCInstance, release
+from pycocoa.utils   import bytes2str, _ByteStrs, clip, DEFAULT_UNICODE, \
+                           _exports, _Ints, isinstanceOf
 
-__version__ = '18.08.14'
+from ctypes  import c_void_p
+from decimal import Decimal as _Decimal
+from types   import GeneratorType as _Generator
+
+__version__ = '19.07.21'
 
 
 def _iter2NS(ns, py, getCount):
@@ -93,8 +94,8 @@ def dict2NS(py, frozen=False):
 
        @raise RuntimeError: If C{len} vs C{count} assertion failed.
     '''
-    # http://Developer.Apple.com/library/content/documentation/Cocoa/
-    #        Conceptual/Collections/Articles/Dictionaries.html
+    # https://Developer.Apple.com/library/content/documentation/Cocoa/
+    #         Conceptual/Collections/Articles/Dictionaries.html
     if isinstanceOf(py, dict, name='py'):
         ns = NSMutableDictionary.dictionary()
         for k, v in py.get('iteritems', py.items)():
@@ -271,7 +272,7 @@ def url2NS(py, url2=None):
 
        @return: The ObjC instance (C{NSURL}).
 
-       @see: U{URL<http://Developer.Apple.com/documentation/foundation/url>}
+       @see: U{URL<https://Developer.Apple.com/documentation/foundation/url>}
              for parsing an C{NSURL}.
     '''
     ns = release(NSStr(py))
@@ -338,7 +339,7 @@ def py2NS(py):
         - unicode   -> NSStr, immutable
 
        @see: U{Converting values between Python and Objective-C
-              <http://PythonHosted.org/pyobjc/core/typemapping.html>}
+              <https://PythonHosted.org/pyobjc/core/typemapping.html>}
     '''
     try:
         return py.NS
@@ -386,11 +387,11 @@ __all__ = _exports(locals(),
 
 if __name__ == '__main__':
 
-    from utils import _allisting
+    from pycocoa.utils import _allisting
 
     _allisting(__all__, locals(), __version__, __file__)
 
-# MIT License <http://OpenSource.org/licenses/MIT>
+# MIT License <https://OpenSource.org/licenses/MIT>
 #
 # Copyright (C) 2017-2019 -- mrJean1 at Gmail dot com
 #
@@ -412,7 +413,7 @@ if __name__ == '__main__':
 # ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
 # OTHER DEALINGS IN THE SOFTWARE.
 
-# Originally <http://GitHub.com/phillip-nguyen/cocoa-python>
+# Originally <https://GitHub.com/phillip-nguyen/cocoa-python>
 
 # objective-ctypes
 #

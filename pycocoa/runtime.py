@@ -5,41 +5,49 @@
 
 # Some Objective-C references and introductions:
 #
-# 1. <http://Developer.Apple.com/library/content/documentation/Cocoa/Conceptual/
+# 1. <https://Developer.Apple.com/library/content/documentation/Cocoa/Conceptual/
 # ProgrammingWithObjectiveC/Introduction/Introduction.html#//apple_ref/doc/uid/TP40011210>
 #
-# 2. <http://Developer.Apple.com/library/content/documentation/Cocoa/Conceptual/
+# 2. <https://Developer.Apple.com/library/content/documentation/Cocoa/Conceptual/
 # ObjCRuntimeGuide/Introduction/Introduction.html#//apple_ref/doc/uid/TP40008048-CH1-SW1>
 #
-# 3. <http://Developer.Apple.com/library/content/documentation/Cocoa/Conceptual/
+# 3. <https://Developer.Apple.com/library/content/documentation/Cocoa/Conceptual/
 # MemoryMgmt/Articles/MemoryMgmt.html#//apple_ref/doc/uid/10000011i>
 #
 # 4. Several Objective-C/C header files are also available at
-# <http://GitHub.com/gnustep/libs-gui/tree/master/Headers>
+# <https://GitHub.com/gnustep/libs-gui/tree/master/Headers>
 
 '''Classes C{ObjCClass}, C{ObjCInstance}, C{ObjCMethod}, C{ObjCSubclass}, etc.
 '''
 # all imports listed explicitly to help PyChecker
-from ctypes  import alignment, ArgumentError, byref, cast, c_buffer, \
-                    c_char_p, c_double, c_float, CFUNCTYPE, c_longdouble, \
-                    c_uint, c_void_p, POINTER, sizeof
-from getters import _ivar_ctype, get_c_func_t, get_class, get_classname, \
-                    get_classof, get_ivar, get_metaclass, get_protocol, \
-                    get_selector, get_superclassof
-from octypes import __i386__, __LP64__, c_struct_t, c_void, \
-                    ctype2encoding, emcoding2ctype, encoding2ctype, \
-                    Class_t, Id_t, IMP_t, Ivar_t, objc_super_t, \
-                    objc_super_t_ptr, ObjC_t, SEL_t, split_emcoding2, \
-                    TypeCodeError
-from oslibs  import cfString2str, _csignature, libobjc
-from utils   import bytes2str, _ByteStrs, _Constants, _exports, \
-                    isinstanceOf, lambda1, missing,  name2py, printf, \
-                    property2, property_RO, str2bytes, _TypeError
+from pycocoa.getters import _ivar_ctype, get_c_func_t, get_class, \
+                            get_classname, get_classof, get_ivar, \
+                            get_metaclass, get_protocol, get_selector, \
+                            get_superclassof
+from pycocoa.octypes import __i386__, __LP64__, c_struct_t, c_void, \
+                            ctype2encoding, emcoding2ctype, \
+                            encoding2ctype, Class_t, Id_t, IMP_t, \
+                            Ivar_t, objc_super_t, objc_super_t_ptr, \
+                            ObjC_t, SEL_t, split_emcoding2, \
+                            TypeCodeError
+from pycocoa.oslibs  import cfString2str, _csignature, libobjc
+from pycocoa.utils   import bytes2str, _ByteStrs, _Constants, _exports, \
+                            isinstanceOf, lambda1, missing,  name2py, \
+                            printf, property2, property_RO, str2bytes, \
+                            _TypeError
 
-__version__ = '18.08.14'
+from ctypes import alignment, ArgumentError, byref, cast, c_buffer, \
+                   c_char_p, c_double, c_float, CFUNCTYPE, c_longdouble, \
+                   c_uint, c_void_p, POINTER  # XXX , sizeof removed
+#                  # to avoid segfault in PyChecker, by forcing an
+#                  # NameError in function add_ivar below and class
+#                  # _NSDeallocObserver.  sizeof is imported at the
+#                  # very end of this module.
 
-# <http://Developer.Apple.com/documentation/objectivec/
-#         objc_associationpolicy?language=objc>
+__version__ = '19.08.31'
+
+# <https://Developer.Apple.com/documentation/objectivec/
+#        objc_associationpolicy?language=objc>
 OBJC_ASSOCIATION_COPY             = 0x303  # 01403
 OBJC_ASSOCIATION_COPY_NONATOMIC   = 3
 OBJC_ASSOCIATION_RETAIN           = 0x301  # 01401
@@ -51,8 +59,8 @@ _objc_msgSend_stret      = 'objc_msgSend_stret'
 _objc_msgSendSuper       = 'objc_msgSendSuper'
 _objc_msgSendSuper_stret = 'objc_msgSendSuper_stret'
 
-# <http://Developer.Apple.com/documentation/objectivec/
-#         1441499-object_getinstancevariable>
+# <https://Developer.Apple.com/documentation/objectivec/
+#        1441499-object_getinstancevariable>
 _object_setInstanceVariable = 'object_setInstanceVariable'
 
 import os
@@ -105,7 +113,7 @@ def _obj_and_name(name_or_obj, getter):
 def _objc_cast(objc):
     '''(INTERNAL) Re-cast an ObjC C{send_message/_super} instance.
     '''
-    # from PyBee/Rubicon-Objc <http://GitHub.com/pybee/rubicon-objc>
+    # from PyBee/Rubicon-Objc <https://GitHub.com/pybee/rubicon-objc>
     objc = getattr(objc, '_as_parameter_', objc)
     if isinstance(objc, Id_t):
         return objc
@@ -286,7 +294,7 @@ class ObjCBoundClassMethod(ObjCBoundMethod):
     '''
     # __slots__ must be repeated in sub-classes, see "Problems with
     # __slots__" in Luciano Ramalho, "Fluent Python", page 276+,
-    # O'Reilly, 2016, also at <http://Books.Google.ie/books?
+    # O'Reilly, 2016, also at <https://Books.Google.ie/books?
     # id=bIZHCgAAQBAJ&lpg=PP1&dq=fluent%20python&pg=PT364#
     # v=onepage&q=“Problems%20with%20__slots__”&f=false>
     __slots__ = ObjCBoundMethod.__slots__
@@ -310,8 +318,8 @@ class ObjCClass(_ObjCBase):
     _objc_cache = {}
 
     def __new__(cls, name_or_ptr, *protocols):
-        '''Create a new ObjCClass instance or return a previously
-           created instance for the given ObjC class.
+        '''Create a new L{ObjCClass} instance or return a previously
+           created instance for the given ObjC class name or ptr.
 
            @param name_or_ptr: Either the name of or a pointer to the
                                class to retrieve (C{str} or L{Class_t}).
@@ -459,6 +467,36 @@ class ObjCClass(_ObjCBase):
         '''Get the Python Type for this ObjC class (C{class} or C{None}).
         '''
         return self._Type
+
+
+class ObjCDelegate(ObjCClass):
+    '''Register the C{_NS_Delegate._ObjC} (sub)class and
+       create an L{ObjCClass}C{(_NS_Delegate.__name__)}.
+
+       @note: L{ObjCDelegate} instances are singletons,
+              I{intentionally}.
+    '''
+    def __new__(cls, _NS_Delegate, *protocols):
+        '''New L{ObjCDelegate} for class B{C{_NS_Delegate}}.
+
+           @param _NS_Delegate: A private Python class intended as an
+                                L{ObjCDelegate} with class attribute
+                                C{._ObjC}, an I{un-}registered
+                                L{ObjCSubclass}.
+           @param protocols: None, one or more protocol to add
+                             (C{str}s or L{Protocol_t} instances).
+        '''
+        n = _NS_Delegate.__name__
+        # classes cached in parent _objc_cache
+        if n not in ObjCClass._objc_cache:
+            if not _NS_Delegate._ObjC.isregistered:
+                _NS_Delegate._ObjC.register()
+                # catch class and naming mistakes
+                if not n.startswith('_NS'):
+                    raise TypeError('%s(%s) non-%s' % (ObjCDelegate.__name__, n, 'private'))
+                elif not n.endswith('Delegate'):
+                    raise TypeError('%s(%s) non-%s' % (ObjCDelegate.__name__, n, 'Delegate'))
+        return ObjCClass.__new__(cls, n, *protocols)
 
 
 class ObjCInstance(_ObjCBase):
@@ -916,6 +954,12 @@ class ObjCSubclass(_ObjCBase):
             return objc_classmethod
         return decorator
 
+    @property_RO
+    def isregistered(self):
+        '''Check whether the (sub)class is registered (C{bool}).
+        '''
+        return True if self._objc_metaclass else False
+
     def method(self, encoding):
         '''Decorator for instance methods.
 
@@ -1010,7 +1054,14 @@ def add_ivar(clas, name, ctype):
     except TypeError:
         raise TypeCodeError('%s %s type invalid: %r' % ('type', name, ctype))
 
-    return bool(libobjc.class_addIvar(clas, str2bytes(name), sizeof(ctype),
+    try:
+        z = sizeof(ctype)
+        print(name, ctype, z)
+    except NameError:
+        if ctype is not Id_t:
+            raise
+        z = 8
+    return bool(libobjc.class_addIvar(clas, str2bytes(name), z,
                                             alignment(ctype), code))
 
 
@@ -1213,7 +1264,7 @@ def retain(objc):
     return objc
 
 
-# <http://www.SealieSoftware.com/blog/archive/2008/11/16/objc_explain_objc_msgSend_fpret.html>
+# <https://www.SealieSoftware.com/blog/archive/2008/11/16/objc_explain_objc_msgSend_fpret.html>
 # def x86_should_use_fpret(restype):
 #     '''Determine if objc_msgSend_fpret is required to return a floating point type.
 #     '''
@@ -1225,9 +1276,9 @@ def retain(objc):
 #         return True
 #     return False
 
-# <http://www.SealieSoftware.com/blog/archive/2008/10/30/objc_explain_objc_msgSend_stret.html>
+# <https://www.SealieSoftware.com/blog/archive/2008/10/30/objc_explain_objc_msgSend_stret.html>
 # <XXXX://www.x86-64.org/documentation/abi-0.99.pdf> (pp.17-23) executive summary, lost?
-# <http://StackOverflow.com/questions/18133812/where-is-the-x86-64-system-v-abi-documented>
+# <https://StackOverflow.com/questions/18133812/where-is-the-x86-64-system-v-abi-documented>
 # def x86_should_use_stret(restype):
 #     '''Try to figure out when a return type will be passed on stack.
 #     '''
@@ -1303,7 +1354,7 @@ def send_message(objc, sel_name_, *args, **resargtypes):
     return result
 
 
-# http://StackOverflow.com/questions/3095360/what-exactly-is-super-in-objective-c
+# https://StackOverflow.com/questions/3095360/what-exactly-is-super-in-objective-c
 def send_super(objc, sel_name_, *args, **resargtypes):
     '''Send message to the super-class of an ObjC object.
 
@@ -1425,6 +1476,7 @@ class _NSDeallocObserver(object):  # XXX (_ObjCBase):
        the C{SEL/cmd} C{SEL_t}, see L{ObjCSubclass}C{.rawmethod}.
     '''
     _ObjC = ObjCSubclass('NSObject', '_NSDeallocObserver',  # .__name__
+                                       register=False,  # defer
                                    **{_Ivar1.name: _Ivar1.c_t})  # ivar
 #   ... instead of, previously:
 #   _ObjC = ObjCSubclass('NSObject', '_NSDeallocObserver', register=False)
@@ -1465,6 +1517,10 @@ def _nsDeallocObserver(objc_ptr_value):
               L{ObjCInstance}C{._objc_cache_}, effectively destroying
               the L{ObjCInstance}.
     '''
+    # only .register(), don't use ObjCDelegate
+    if not _NSDeallocObserver._ObjC.isregistered:
+        _NSDeallocObserver._ObjC.register()
+
     nso = send_message(_NSDeallocObserver.__name__, 'alloc',
                         restype=Id_t)  # argtypes=[]
     nso = send_message(nso, 'initWithObject_', objc_ptr_value,
@@ -1485,7 +1541,7 @@ def _nsDeallocObserver(objc_ptr_value):
 def _nsDeallocObserverIvar1():
     '''(INTERNAL) Check that C{_NSDeallocObserver} has exactly one C{ivar}.
     '''
-    from getters import get_ivars
+    from pycocoa.getters import get_ivars
 
     i = None
     for n, _, c, i in get_ivars(get_class(_NSDeallocObserver.__name__)):
@@ -1496,8 +1552,10 @@ def _nsDeallocObserverIvar1():
         raise AssertionError('%s %s: %r %s' % ('missing', 'ivar',
                              _Ivar1.name, _Ivar1.c_t))
 
-_nsDeallocObserverIvar1()  # PYCHOK expected
-del _nsDeallocObserverIvar1
+
+from ctypes import sizeof
+# _nsDeallocObserverIvar1()  # PYCHOK expected
+# del _nsDeallocObserverIvar1  # PYCHOK expected
 
 # filter locals() for .__init__.py
 __all__ = _exports(locals(), 'libobjc', 'release', 'register_subclass', 'retain',
@@ -1505,11 +1563,11 @@ __all__ = _exports(locals(), 'libobjc', 'release', 'register_subclass', 'retain'
 
 if __name__ == '__main__':
 
-    from utils import _allisting
+    from pycocoa.utils import _allisting
 
     _allisting(__all__, locals(), __version__, __file__)
 
-# MIT License <http://OpenSource.org/licenses/MIT>
+# MIT License <https://OpenSource.org/licenses/MIT>
 #
 # Copyright (C) 2017-2019 -- mrJean1 at Gmail dot com
 #
@@ -1531,7 +1589,7 @@ if __name__ == '__main__':
 # ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
 # OTHER DEALINGS IN THE SOFTWARE.
 
-# Originally <http://GitHub.com/phillip-nguyen/cocoa-python>
+# Originally <https://GitHub.com/phillip-nguyen/cocoa-python>
 
 # objective-ctypes
 #

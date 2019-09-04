@@ -6,18 +6,18 @@
 '''Types L{App} and L{Tile}, wrapping ObjC C{NSApplication} and C{NSDocktile}.
 '''
 # all imports listed explicitly to help PyChecker
-from bases   import _Type2
-from menus   import _callMenuItem_name, _handleMenuItem_name, Item, \
-                    ItemSeparator, Menu, MenuBar, ns2Item
-from nstypes import NSApplication, nsBundleRename, \
-                    NSConcreteNotification, NSMain, NSNotification, \
-                    nsOf, NSStr
-# from oslibs  import YES
-from runtime import isObjCInstanceOf, ObjCClass, ObjCInstance, \
-                    _ObjC_log_totals, ObjCSubclass, release, retain, \
-                    send_super_init
-from utils   import _Globals, bytes2str, isinstanceOf, printf, \
-                    property_RO, _Types
+from pycocoa.bases   import _Type2
+from pycocoa.menus   import _callMenuItem_name, _handleMenuItem_name, \
+                            Item, ItemSeparator, Menu, MenuBar, ns2Item
+from pycocoa.nstypes import NSApplication, nsBundleRename, \
+                            NSConcreteNotification, NSMain, \
+                            NSNotification, nsOf, NSStr
+# from pycocoa.oslibs  import YES
+from pycocoa.runtime import isObjCInstanceOf, ObjCDelegate, ObjCInstance, \
+                            _ObjC_log_totals, ObjCSubclass, release, retain, \
+                            send_super_init
+from pycocoa.utils   import _Globals, bytes2str, isinstanceOf, \
+                             module_property_RO, printf, property_RO, _Types
 
 from threading import Thread
 from time import sleep
@@ -27,7 +27,7 @@ __all__ = ('App',
            'Tile',
            'app_title',
            'ns2App')
-__version__ = '18.11.06'
+__version__ = '19.08.31'
 
 
 class App(_Type2):
@@ -77,7 +77,7 @@ class App(_Type2):
            @return: Previous C{isActive} value (C{bool}).
 
            @see: U{activate(ignoringOtherApps flag: Bool)
-                 <http://Developer.Apple.com/documentation/appkit/
+                 <https://Developer.Apple.com/documentation/appkit/
                  nsapplication/1428468-activate>}.
         '''
         a = self.isActive
@@ -118,8 +118,8 @@ class App(_Type2):
     def badge(self):
         '''Get this app's dock tile/badge (L{Tile}).
         '''
-        # <http://Developer.Apple.com/documentation/appkit/nsdocktile>
-        # <http://Developer.Apple.com/documentation/appkit/nsapplication>
+        # <https://Developer.Apple.com/documentation/appkit/nsdocktile>
+        # <https://Developer.Apple.com/documentation/appkit/nsapplication>
         if self._badge is None:
             self._badge = Tile(self)
         return self._badge
@@ -142,7 +142,7 @@ class App(_Type2):
            @return: Previous C{isHidden} value (C{bool}).
 
            @see: U{unhideWithoutActivation
-                 <http://Developer.Apple.com/documentation/appkit/
+                 <https://Developer.Apple.com/documentation/appkit/
                  nsapplication/1428566-unhidewithoutactivation>}.
         '''
         h = self.isHidden
@@ -252,8 +252,8 @@ class App(_Type2):
         '''Terminate this app (never returns).
         '''
         _ObjC_log_totals()
-        # <http://Developer.Apple.com/documentation/
-        #       appkit/nsapplication/1428417-terminate>
+        # <https://Developer.Apple.com/documentation/
+        #        appkit/nsapplication/1428417-terminate>
         self.NS.terminate_(self.NS)
 
     # Callback methods for Window instances,
@@ -265,8 +265,8 @@ class App(_Type2):
 
 #   def appStop_(self, sender=None):
         # Stop this app's event loop.
-        # <http://Developer.Apple.com/documentation/
-        #       appkit/nsapplication/1428473-stop>
+        # <https://Developer.Apple.com/documentation/
+        #        appkit/nsapplication/1428473-stop>
 #       self.NS.stop_(nsOf(sender or self))
 
     def menuFullScreen_(self, item):  # PYCHOK expected
@@ -351,12 +351,12 @@ class App(_Type2):
         else:
             return None
 
-# <http://Developer.Apple.com/library/content/samplecode/
-#       CocoaTipsAndTricks/Listings/ExceptionReporting_ExceptionReportingAppDelegate_m.html>
-# <http://Developer.Apple.com/library/content/samplecode/
-#       CocoaTipsAndTricks/Listings/ExceptionReporting_main_m.html>
-# <http://Developer.Apple.com/library/content/samplecode/
-#       CocoaTipsAndTricks/Listings/ExceptionReporting_MyApplication_m.html>
+# <https://Developer.Apple.com/library/content/samplecode/
+#        CocoaTipsAndTricks/Listings/ExceptionReporting_ExceptionReportingAppDelegate_m.html>
+# <https://Developer.Apple.com/library/content/samplecode/
+#        CocoaTipsAndTricks/Listings/ExceptionReporting_main_m.html>
+# <https://Developer.Apple.com/library/content/samplecode/
+#        CocoaTipsAndTricks/Listings/ExceptionReporting_MyApplication_m.html>
 
 
 class _NSApplicationDelegate(object):
@@ -367,10 +367,10 @@ class _NSApplicationDelegate(object):
     '''
     # Cobbled together from the pycocoa.ObjCSubclass.__doc__,
     # pycocoa.runtime._NSDeallocObserver and PyObjC examples:
-    # <http://TaoOfMac.com/space/blog/2007/04/22/1745> and
-    # <http://StackOverflow.com/questions/24024723/swift-using-
-    #       nsstatusbar-statusitemwithlength-and-nsvariablestatusitemlength>
-    _ObjC = ObjCSubclass('NSObject', '_NSApplicationDelegate')
+    # <https://TaoOfMac.com/space/blog/2007/04/22/1745> and
+    # <https://StackOverflow.com/questions/24024723/swift-using-
+    #        nsstatusbar-statusitemwithlength-and-nsvariablestatusitemlength>
+    _ObjC = ObjCSubclass('NSObject', '_NSApplicationDelegate', register=False)  # defer
 
     # The _ObjC.method(signature) decorator specifies the signature
     # of a Python method in Objective-C type encoding to make the
@@ -392,10 +392,10 @@ class _NSApplicationDelegate(object):
         self.app = app
         return self
 
-    # <http://GitHub.com/thesecretlab/LearningCocoa4thEd/tree/master/
-    #       AwesomeGrid/AwesomeGrid>,
-    # <http://GitHub.com/thesecretlab/LearningCocoa4thEd/tree/master/
-    #       HelloCocoa/HelloCocoa>, etc.
+    # <https://GitHub.com/thesecretlab/LearningCocoa4thEd/tree/master/
+    #        AwesomeGrid/AwesomeGrid>,
+    # <https://GitHub.com/thesecretlab/LearningCocoa4thEd/tree/master/
+    #        HelloCocoa/HelloCocoa>, etc.
 
 #   @_ObjC.method('v@')
 #   def applicationDidBecomeActive_(self, ns_notification):
@@ -408,8 +408,8 @@ class _NSApplicationDelegate(object):
 #       '''
 #       pass
 
-    # <http://GitHub.com/thesecretlab/LearningCocoa4thEd/tree/master/
-    #       AppNapping/AppNapping>
+    # <https://GitHub.com/thesecretlab/LearningCocoa4thEd/tree/master/
+    #        AppNapping/AppNapping>
 #   @_ObjC.method('v@')
 #   def applicationDidChangeOcclusionState_(self, ns_notification):
 #       if ([NSApp occlusionState] & NSApplicationOcclusionStateVisible)
@@ -535,18 +535,24 @@ class _NSApplicationDelegate(object):
     def validateMenuItem_(self, ns_item):
         '''ObjC callback to supply the C{NSMenuItem.isEnabled()} state.
         '''
-        # <http://StackOverflow.com/questions/4870141/
-        #       menu-item-is-enabled-but-still-grayed-out>
-        # <http://Developer.Apple.com/library/archive/documentation/Cocoa/
-        #       Conceptual/MenuList/Articles/EnablingMenuItems.html>
-        # <http://Developer.Apple.com/library/archive/documentation/Cocoa/
-        #       Conceptual/MenuList/Articles/EnablingMenuItems.html>
+        # <https://StackOverflow.com/questions/4870141/
+        #        menu-item-is-enabled-but-still-grayed-out>
+        # <https://Developer.Apple.com/library/archive/documentation/Cocoa/
+        #        Conceptual/MenuList/Articles/EnablingMenuItems.html>
+        # <https://Developer.Apple.com/library/archive/documentation/Cocoa/
+        #        Conceptual/MenuList/Articles/EnablingMenuItems.html>
         return ns_item.isEnabled()  # == ns2Item().isEnabled
 
 
 assert(_NSApplicationDelegate.callMenuItem_.name   == _callMenuItem_name), _callMenuItem_name
 assert(_NSApplicationDelegate.handleMenuItem_.name == _handleMenuItem_name), _handleMenuItem_name
-NSApplicationDelegate = ObjCClass('_NSApplicationDelegate')
+
+
+@module_property_RO
+def NSApplicationDelegate():
+    '''The L{ObjCClass}C{(_NSApplicationDelegate.__name__)}.
+    '''
+    return ObjCDelegate(_NSApplicationDelegate)
 
 
 class Tile(_Type2):
@@ -612,11 +618,11 @@ NSApplication._Type = _Types.App = App
 
 if __name__ == '__main__':
 
-    from utils import _allisting
+    from pycocoa.utils import _allisting
 
     _allisting(__all__, locals(), __version__, __file__)
 
-# MIT License <http://OpenSource.org/licenses/MIT>
+# MIT License <https://OpenSource.org/licenses/MIT>
 #
 # Copyright (C) 2017-2019 -- mrJean1 at Gmail dot com
 #
