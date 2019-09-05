@@ -20,7 +20,7 @@ __version__ = '19.07.21'
 
 def _at(inst, index):
     if not isinstance(index, _Ints):
-        raise TypeError('%s not an %s: %r' (inst, 'index', index))
+        raise TypeError('%s not an %s: %r' % (inst, 'index', index))
     i, n = index, len(inst)
     if i < 0:
         i += n

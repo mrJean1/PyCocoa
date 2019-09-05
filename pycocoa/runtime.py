@@ -486,17 +486,20 @@ class ObjCDelegate(ObjCClass):
            @param protocols: None, one or more protocol to add
                              (C{str}s or L{Protocol_t} instances).
         '''
-        n = _NS_Delegate.__name__
-        # classes cached in parent _objc_cache
-        if n not in ObjCClass._objc_cache:
-            if not _NS_Delegate._ObjC.isregistered:
-                _NS_Delegate._ObjC.register()
+        name = _NS_Delegate.__name__
+        # IbjCDelegate classes cached in parent _objc_cache
+        if name not in ObjCClass._objc_cache:
+            _ObjC = _NS_Delegate._ObjC
+            if not isinstance(_ObjC, ObjCSubclass):
+                raise TypeError('%s.%s not %s' % (name, '_ObjC', ObjCSubclass.__name__))
+            if not _ObjC.isregistered:
+                _ObjC.register()
                 # catch class and naming mistakes
-                if not n.startswith('_NS'):
-                    raise TypeError('%s(%s) non-%s' % (ObjCDelegate.__name__, n, 'private'))
-                elif not n.endswith('Delegate'):
-                    raise TypeError('%s(%s) non-%s' % (ObjCDelegate.__name__, n, 'Delegate'))
-        return ObjCClass.__new__(cls, n, *protocols)
+                if not name.startswith('_NS'):
+                    raise TypeError('%s not %s' % (name, 'private'))
+                elif not name.endswith('Delegate'):
+                    raise TypeError('%s not %s' % (name, 'Delegate'))
+        return ObjCClass.__new__(cls, name, *protocols)
 
 
 class ObjCInstance(_ObjCBase):

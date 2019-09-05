@@ -30,15 +30,15 @@ PyFlakes_, PyCodeStyle_ (formerly Pep8) and McCabe_ using 64-bit Python
 To install PyCocoa, type ``pip install PyCocoa`` or ``easy_install PyCocoa``
 in a terminal window.  Alternatively, download ``PyCocoa-y.m.d.zip`` from
 PyPI_ or GitHub_, ``unzip`` the downloaded file, ``cd`` to directory
-``PyCocoa-`` and type ``python setup.py install``.  To run all PyCocoa
+``PyCocoa-y.m.d`` and type ``python setup.py install``.  To run all PyCocoa
 tests, type ``python setup.py test`` before installation.
 
 Some alternatives to PyCocoa are (a) PyObjC_, the most comprehensive Python
 to Objective-C bridge (and included in `macOS' Python`_), (b) `Rubicon-ObjC`_
 for Python 3.5+, taking advantage of Python's new typing_ annotations, (c)
-wxPython_ and (d) PyGUI_ for macOS_.
+PyGUI_ for macOS_ and (d) wxPython_.
 
-*Last updated: Aug 31, 2019.*
+*Last updated: Sep 04, 2019.*
 
 .. image:: https://Img.Shields.io/pypi/pyversions/PyCocoa.svg?label=Python
    :target: http://PyPI.org/project/PyCocoa

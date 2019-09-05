@@ -44,7 +44,7 @@ To install PyCocoa, type C{pip install PyCocoa} or C{easy_install PyCocoa}
 in a terminal window.  Alternatively, download C{PyCocoa-y.m.d.zip} from
 U{PyPI<https://PyPI.org/project/PyCocoa>} or
 U{GitHub<https://GitHub.com/mrJean1/PyCocoa>}, C{unzip} the downloaded file,
-C{cd} to directory C{PyCocoa-} and type C{python setup.py install}.  To
+C{cd} to directory C{PyCocoa-y.m.d} and type C{python setup.py install}.  To
 run the PyCocoa tests, type C{python setup.py test} before installation.
 
 Some alternatives to PyCocoa are (a) U{PyObjC<https://PyPI.org/project/pyobjc>},
@@ -53,7 +53,8 @@ U{macOS' Python<https://WikiPedia.org/wiki/PyObjC#History>}), (b)
 U{Rubicon-ObjC<https://PyPI.org/project/rubicon-objc>} for Python 3.5+,
 taking advantage of Python's new
 U{typing<https://Docs.Python.org/3/library/typing.html>} annotations and (c)
-U{PyGUI<https://CoSC.Canterbury.AC.NZ/greg.ewing/python_gui>} for I{macOS}.
+U{PyGUI<https://CoSC.Canterbury.AC.NZ/greg.ewing/python_gui>} for I{macOS}
+and (d) U{wxPython<https://wxPython.org/pages/overview/index.html>}.
 
 __
 
@@ -118,7 +119,7 @@ POSSIBILITY OF SUCH DAMAGE.}
 from os.path import abspath, dirname
 import sys
 
-__version__ = '19.08.31'
+__version__ = '19.09.04'
 
 p = sys.platform
 if not p.startswith('darwin'):
