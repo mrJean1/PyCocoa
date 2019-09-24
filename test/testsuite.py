@@ -8,7 +8,7 @@ import sys
 import unittest
 
 __all__ = ('TestSuite',)
-__version__ = '18.11.02'
+__version__ = '19.09.23'
 
 _python_exe = sys.executable
 
@@ -71,7 +71,7 @@ class TestSuite(unittest.TestCase):
         self._run('simple_table 2')
 
 #   def test_simple_VLCplayer(self):
-#       self._run('simple_VLCplayer <secs> <video_file_name>')
+#       self._run('simple_VLCplayer <video_file_name>')
 
     def test_simple_window(self):
         self._run('simple_window 1')

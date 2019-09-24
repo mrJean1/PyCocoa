@@ -10,9 +10,9 @@
 from pycocoa import NSAlternateKeyMask, NSApplication, NSAutoreleasePool, \
                     NSBackingStoreBuffered, NSControlKeyMask, NSMakeRect, \
                     NSMenu, NSMenuItem, NSStr, NSWindowStyleMaskUsual, \
-                    NSWindow, get_selector
+                    NSWindow, get_selector, terminating
 
-__version__ = '18.04.09'
+__version__ = '19.09.23'
 
 
 def create_window(title=''):
@@ -84,9 +84,6 @@ if __name__ == '__main__':
     import sys
 
     app = application()
-
     if len(sys.argv) > 1:
-        from test import terminating
         terminating(app, sys.argv.pop(1))
-
     app.run()  # never returns

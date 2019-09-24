@@ -58,46 +58,17 @@
 # run each of the examples as a module, like
 
 # % python -m test.<example_module_name> [arg] ...
-from os.path import abspath, dirname
+import os
 import sys
 
-d = dirname(abspath(__file__))
+d = os.path.dirname(os.path.abspath(__file__))
 # extend sys.path ... Python 3+ ModuleNotFoundError
 if d not in sys.path:
     sys.path.insert(0, d)
-del d
 
-from threading import Thread
-from time import sleep
+del d, os, sys
 
 from testsuite import TestSuite  # PYCHOK for setup.py
 
-__all__ = ('terminating',)
-__version__ = '18.08.12'
-
-
-def terminating(app, timeout):
-    '''Set up a separate thread to terminate an NSApplication
-    by calling the C{.terminate_} method after the given time
-    has elapsed.
-
-    Similarly, the NSWindow could be closed, provided the
-    NSWindow or NSApplication C{Delegate} instance includes the
-    C{.windowWillClose_} method which in turn terminates the
-    NSApplication's C{.terminate_} method.
-    '''
-    try:
-        terminate = app.terminate_
-        secs = float(timeout) + 0.5
-    except AttributeError:
-        raise ValueError('invalid %s: %r' % ('app', app))
-    except ValueError:
-        return
-
-    def _terminating():
-        sleep(secs)
-        # <http://Developer.Apple.com/documentation/appkit/nsapplication/1428417-terminate>
-        terminate(app)
-
-    t = Thread(target=_terminating)
-    t.start()
+__all__ = ()
+__version__ = '19.09.23'

@@ -372,6 +372,7 @@ pycocoa.isClass	pycocoa-module.html#isClass
 pycocoa.NSFlagsChanged	pycocoa-module.html#NSFlagsChanged
 pycocoa.NSApplicationDidHideNotification	pycocoa-module.html#NSApplicationDidHideNotification
 pycocoa.add_subclass	pycocoa-module.html#add_subclass
+pycocoa.terminating	pycocoa-module.html#terminating
 pycocoa.split_encoding	pycocoa-module.html#split_encoding
 pycocoa.NSFontNonStandardCharacterSetMask	pycocoa-module.html#NSFontNonStandardCharacterSetMask
 pycocoa.NSMutableString	pycocoa-module.html#NSMutableString
@@ -1214,6 +1215,7 @@ pycocoa.utils._Python3	pycocoa.utils-module.html#_Python3
 pycocoa.utils._Python2	pycocoa.utils-module.html#_Python2
 pycocoa.utils.property_RO	pycocoa.utils-module.html#property_RO
 pycocoa.utils.__package__	pycocoa.utils-module.html#__package__
+pycocoa.utils.terminating	pycocoa.utils-module.html#terminating
 pycocoa.utils.inst2strepr	pycocoa.utils-module.html#inst2strepr
 pycocoa.utils._Types	pycocoa.utils-module.html#_Types
 pycocoa.utils._TypeError	pycocoa.utils-module.html#_TypeError

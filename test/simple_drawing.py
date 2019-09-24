@@ -10,10 +10,10 @@ from pycocoa import NSApplication, NSBackingStoreBuffered, \
                     NSBezierPath, NSColor, NSMakeRect, NSPoint_t, \
                     NSStr, NSWindow, NSWindowStyleMaskUsual, \
                     PyObjectEncoding, ObjCClass, ObjCInstance, \
-                    ObjCSubclass, send_super
+                    ObjCSubclass, send_super, terminating
 from pycocoa.oslibs import libAppKit
 
-__version__ = '18.04.23'
+__version__ = '19.09.23'
 
 NSRectFill = libAppKit.NSRectFill
 
@@ -97,13 +97,7 @@ def main(timeout=None):
     window.orderFrontRegardless()
 
     # set up the timeout
-    if timeout is not None:
-        try:  # PyCocoa/test
-            from test import terminating
-            terminating(app, timeout)
-        except ImportError:
-            pass
-
+    terminating(app, timeout)
     app.run()
 #   print('Done')
 

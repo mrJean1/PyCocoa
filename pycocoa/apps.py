@@ -27,7 +27,7 @@ __all__ = ('App',
            'Tile',
            'app_title',
            'ns2App')
-__version__ = '19.08.31'
+__version__ = '19.09.23'
 
 
 class App(_Type2):
@@ -230,21 +230,20 @@ class App(_Type2):
            @note: Although I{run} never returns, any Python threads
            started earlier continue to run concurrently.
         '''
-        if timeout is not None:
+        if timeout:
             try:
-                secs = float(timeout or 0)
+                s = float(timeout or 0)
             except ValueError:
-                secs = 0
+                s = 0
 
-            if secs > 0:
-                self._timeout = secs
+            if s > 0:
+                self._timeout = s
 
-                def _terminate():
-                    sleep(secs + 0.5)
+                def _t():
+                    sleep(s + 0.5)
                     self.terminate()
 
-                t = Thread(target=_terminate)
-                t.start()
+                Thread(target=_t).start()
 
         self.NS.run()
 

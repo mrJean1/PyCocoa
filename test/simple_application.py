@@ -16,9 +16,9 @@ import time
 from pycocoa import get_selector, NSApplication, NSAutoreleasePool, \
                     NSMenu, NSMenuItem, NSStatusBar, NSStr, \
                     PyObjectEncoding, ObjCClass, ObjCInstance, \
-                    ObjCSubclass, send_super
+                    ObjCSubclass, send_super, terminating
 
-__version__ = '18.05.25'
+__version__ = '19.09.23'
 
 # <http://StackOverflow.com/questions/24024723/swift-using-
 #  nsstatusbar-statusitemwithlength-and-nsvariablestatusitemlength>
@@ -111,13 +111,7 @@ def main(timeout=None):
     t.start()
 
     # set up the timeout
-    if timeout is not None:
-        try:  # PyCocoa/test
-            from test import terminating
-            terminating(app, timeout)
-        except ImportError:
-            pass
-
+    terminating(app, timeout)
     # let her rip!-)
     app.run()  # AppHelper.runEventLoop()
 

@@ -7,24 +7,13 @@
 
 @var missing: Missing keyword argument value.
 '''
-__version__ = '19.08.31'
+__version__ = '19.09.23'
 
 import sys
 _Python_ = sys.version.split()[0]  # PYCHOK internal
 _Python2 = sys.version_info.major < 3  # PYCHOK internal
 _Python3 = sys.version_info.major > 2  # PYCHOK internal
 del sys
-
-try:  # all imports listed explicitly to help PyChecker
-    from math import gcd  # Python 3+
-except ImportError:
-    try:
-        from fractions import gcd  # Python 2-
-    except ImportError:
-        def gcd(a, b):
-            while b:
-                a, b = b, (a % b)
-            return a
 
 
 class module_property_RO(object):
@@ -151,7 +140,7 @@ class _Globals(object):
     '''(INTERNAL) Some PyCocoa globals
     '''
     App      = None       # set by .apps.App.__init__, not an NSApplication!
-    argv0    = 'PyCocoa'  # set by .nstypes.nsBundleRename and _allisting
+    argv0    = 'PyCocoa'  # set by .nstypes.nsBundleRename, _allisting, test/simple_VLCplayer
     Items    = {}         # set by .menus.Item.__init__, gotten by .menus.ns2Item
     MenuBar  = None       # set by .menus.MenuBar.__init__
 #   Menus    = {}         # set by .menus._Menu_Type2._initM
@@ -237,12 +226,12 @@ class Cache2(dict):
     '''Two-level cache implemented by two C{dict}s, a primary
        level-1 C{dict} and a secondary level-2 C{dict}.
 
-       Frequently gotten key-value items are elevated into this,
-       the primary level-1 C{dict}.  Newly created key-value pairs
-       are entered into the secondary level-2 C{dict}.
+       Newly created key-value pairs are entered into the
+       secondary C{dict}.  Repeatedly gotten key-value items
+       are elevated from the secondadry to the primary C{dict}.
 
-       The secondary level-2 C{dict} can optionally be limited in
-       size to avoid excessive growth.
+       The secondary C{dict} can optionally be limited in size
+       to avoid excessive growth.
     '''
     def __init__(self, limit2=None):
         '''New L{Cache2}, optionally limited in size.
@@ -627,6 +616,22 @@ def flint(f):
     return f
 
 
+try:  # all imports listed explicitly to help PyChecker
+    from math import gcd  # Python 3+
+except ImportError:
+    try:
+        from fractions import gcd  # Python 2-
+    except ImportError:
+
+        def gcd(a, b):
+            a, b = abs(a), abs(b)
+            if a < b:
+                a, b = b, a
+            while b:
+                a, b = b, (a % b)
+            return a
+
+
 def inst2strepr(inst, strepr, *attrs):
     '''Convert an instance's attributes, maintaining the order.
 
@@ -796,6 +801,39 @@ def sortuples(iterable):  # sort tuples
     return sorted(iterable, key=_tup)
 
 
+def terminating(app, timeout=None):
+    '''Set up a separate thread to terminate an NSApplication
+       by calling the C{.terminate_} method after the given
+       timeout has elapsed.
+
+       @return: Timeout in seconds (C{float}) or C{None}.
+
+       @note: Similarly, the NSWindow could be closed, provided
+              the NSWindow or NSApplication C{Delegate} instance
+              includes the C{.windowWillClose_} method which in
+              turn terminates the NSApplication's C{.terminate_}
+              method.
+    '''
+    try:
+        s = float(timeout)
+        t = app.terminate_
+    except AttributeError:
+        raise ValueError('invalid %s: %r' % ('app', app))
+    except (TypeError, ValueError):
+        return None
+
+    def _t():
+        from time import sleep
+        sleep(s + 0.5)
+        # <http://Developer.Apple.com/documentation/appkit/nsapplication/1428417-terminate>
+        t(app)
+
+    from threading import Thread
+    Thread(target=_t).start()
+
+    return s
+
+
 def _text_title2(text_or_file, title=''):
     '''(INTERNAL) Return 2-tuple (title, text).
     '''
@@ -901,7 +939,7 @@ __all__ = _exports(locals(), 'aspect_ratio', 'Cache2', 'clip',
                              'DEFAULT_UNICODE', 'flint', 'isinstanceOf',
                              'gcd', 'iterbytes', 'lambda1', 'missing',
                              'module_property_RO', 'printf',
-                             'sortuples', 'type2strepr',
+                             'sortuples', 'terminating', 'type2strepr',
                    starts=('bytes', 'inst', 'name2', 'propert', 'str', 'z'))
 
 if __name__ == '__main__':

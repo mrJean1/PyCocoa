@@ -7,10 +7,11 @@
 # using only fundamental Objective-C send_message calls.
 
 # all imports listed explicitly to help PyChecker
-from pycocoa import NSBackingStoreBuffered, NSMakeRect, NSStr, \
-                    NSWindowStyleMaskUsual, send_message
+from pycocoa import NSApplication, NSBackingStoreBuffered, \
+                    NSMakeRect, NSStr, NSWindowStyleMaskUsual, \
+                    send_message, terminating
 
-__version__ = '18.04.09'
+__version__ = '19.09.23'
 
 
 def create_window():
@@ -32,7 +33,8 @@ def create_autorelease_pool():
 
 
 def application():
-    app = send_message('NSApplication', 'sharedApplication')
+    # app = send_message('NSApplication', 'sharedApplication')
+    app = NSApplication.sharedApplication()
     create_autorelease_pool()
     create_window()
     return app
@@ -43,19 +45,6 @@ if __name__ == '__main__':
     import sys
 
     app = application()
-
     if len(sys.argv) > 1:
-        from threading import Thread
-        from time import sleep
-
-        def _terminating():
-            try:
-                sleep(float(sys.argv[1]) + 0.5)
-            except ValueError:
-                return
-            send_message(app, 'terminate:')
-
-        t = Thread(target=_terminating)
-        t.start()
-
+        terminating(app, sys.argv[1])
     send_message(app, 'run')  # never returns

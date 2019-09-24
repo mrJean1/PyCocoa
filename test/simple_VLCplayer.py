@@ -3,61 +3,38 @@
 
 # License at the end of this file.  This file has been superseded
 # by an other, more comprehensive VLC player example cocoavlc.py
-# <http://GitHub.com/oaubert/python-vlc/tree/master/examples>
+# <https://GitHub.com/oaubert/python-vlc/tree/master/examples>
 
 import os
-import platform
+import platform  # PYCHOK false
 import sys
 
-try:
-    import vlc
-except ImportError:
-    raise ImportError('no %s module (%s)' % ('vlc.py',
-                      '<http://PyPI.org/project/python-vlc>'))
+_Name = os.path.basename(__file__)
+if not sys.platform.startswith('darwin'):
+    raise ImportError('%s only supported on %s' % (_Name, 'macOS'))
 
 # the imports listed explicitly to help PyChecker
-from pycocoa import get_selector, NSAlternateKeyMask, NSApplication, \
-                    NSBackingStoreBuffered, NSCommandKeyMask, \
-                    NSControlKeyMask, NSMenu, NSMenuItem, NSRect4_t, \
-                    NSScreen, NSSize_t, NSShiftKeyMask, NSStr, \
-                    NSView, NSWindow, NSWindowStyleMaskUsual, \
-                    ObjCClass, ObjCInstance, ObjCSubclass, \
-                    PyObjectEncoding, send_super, \
+from pycocoa import gcd, get_selector, NSAlternateKeyMask, \
+                    NSApplication, NSBackingStoreBuffered, \
+                    nsBundleRename, NSCommandKeyMask, \
+                    NSControlKeyMask, NSMenu, NSMenuItem, \
+                    NSRect4_t, NSScreen, NSShiftKeyMask, \
+                    NSSize_t, NSStr, NSView, NSWindow, \
+                    NSWindowStyleMaskUsual, ObjCClass, \
+                    ObjCInstance, ObjCSubclass, printf, \
+                    PyObjectEncoding, send_super, terminating, \
                     __version__ as __PyCocoa__  # PYCHOK false
 
-__all__  = ('appVLC',)
-__version__ = '19.01.31'
+from pycocoa.utils import _Globals
+_Globals.argv0 = _Name  # for printf
 
-_macOS  = platform.mac_ver()[0:3:2]  # PYCHOK false
-_Python = sys.version.split()[0], platform.architecture()[0]  # PYCHOK false
-_Title  = _argv0 = os.path.basename(__file__)
-
-_b2str = vlc.bytes_to_str
-_str2b = vlc.str_to_bytes
-
-try:
-    from math import gcd  # Python 3+
-except ImportError:
-    try:
-        from fractions import gcd  # Python 2-
-    except ImportError:
-        def gcd(a, b):
-            while b:
-                a, b = b, (a % b)
-            return a
+__all__  = ('simpleVLCplay',)
+__version__ = '19.09.23'
 
 
 def _mspf(fps):
     # convert frames per second to frame length in millisecs
     return 1000.0 / (fps or 25)
-
-
-def _printf(fmt, *args, **kwds):  # nl=0, nt=0
-    # formatted print
-    t = (fmt % args) if args else fmt
-    nl = '\n' * kwds.get('nl', 0)
-    nt = '\n' * kwds.get('nt', 0)
-    print('%s%s %s%s' % (nl, _argv0, t, nt))
 
 
 class _Delegate_Implementation(object):
@@ -68,60 +45,51 @@ class _Delegate_Implementation(object):
     # -nsstatusbar-statusitemwithlength-and-nsvariablestatusitemlength>
     _Delegate = ObjCSubclass('NSObject', '_Delegate')
 
-    # the _Delegate.method(signature) decorator specfies the
+    # The _Delegate.method(signature) decorator specfies the
     # signature of a Python method in Objective-C type encoding
-    # to make the Python method callable from Objective-C.
+    # and makes the Python method callable from Objective-C.
 
     # This is rather ugly, especially since the decorator is
     # also required for (private) methods called only from
-    # Python, like method .badgelabel, ._rate and ._zoom below.
+    # Python.
 
     # See pycocoa.runtime.split_encoding for type encoding:
     # first is return value, then the method args, no need to
     # include @: for self and the Objective-C selector/cmd.
-    @_Delegate.method(b'@' + PyObjectEncoding * 3)
-    def init(self, app, title, video):
+    @_Delegate.method(b'@' + PyObjectEncoding * 4)
+    def init(self, app, player, title, video):
         self = ObjCInstance(send_super(self, 'init'))
 #       self = ObjCInstance(send_message('NSObject', 'alloc'))
         self.app    = app
-        self.player = vlc.MediaPlayer(video)
+        self.NSitem = None  # Play/Pause toggle
+        self.player = player
         self.ratio  = 2
-        self.scale  = 1
-        self.title  = title
-        self.video  = video  # file name in window banner
+        self.title  = title  # app name, top-level menu title
+        self.video  = video  # window banner
         self.window = None
+        nsBundleRename(NSStr(title))  # top-level menu title
         return self
 
-    @_Delegate.method('v@')
+    @_Delegate.method('v@')  # void, ObjC
     def applicationDidFinishLaunching_(self, notification):
 
         # the player needs an NSView object
         self.window, view = _Window2(title=self.video or self.title)
         # set the window's delegate to the app's to
         # make method .windowWillClose_ work, see
-        # <http://Gist.GitHub.com/kaloprominat/6105220>
+        # <https://Gist.GitHub.com/kaloprominat/6105220>
         self.window.setDelegate_(self)
+        # pass viewable to VLC player
+        self.player.set_nsobject(view)
 
-        # Create the main menu.
-        menu = NSMenu.alloc().init()
-
+        menu = NSMenu.alloc().init()  # create main menu
         menu.addItem_(_MenuItem('Full ' + 'Screen', 'enterFullScreenMode:', 'f', ctrl=True))  # Ctrl-Cmd-F, Esc to exit
+        menu.addItem_(_MenuItem('Info', 'info:', 'i'))
 
-        if self.player:  # setup player view and menu
-            self.player.set_nsobject(view)
-
-            menu.addItem_(_MenuItemSeparator())
-            menu.addItem_(_MenuItem('Play', 'play:', 'p'))
-            menu.addItem_(_MenuItem('Pause', 'pause:', 's'))
-            menu.addItem_(_MenuItem('Rewind', 'rewind:', 'r'))
-            menu.addItem_(_MenuItemSeparator())
-            menu.addItem_(_MenuItem('Faster', 'faster:', '>', shift=True))
-            menu.addItem_(_MenuItem('Slower', 'slower:', '<', shift=True))
-            menu.addItem_(_MenuItem('Zoom In', 'zoomIn:', '+'))
-            menu.addItem_(_MenuItem('Zoom Out', 'zoomOut:', '-'))
-            menu.addItem_(_MenuItemSeparator())
-            menu.addItem_(_MenuItem('Info', 'info:', 'i'))
-            menu.addItem_(_MenuItem('Close Windows', 'windowWillClose:', 'w'))
+        menu.addItem_(_MenuItemSeparator())
+        self.NSitem = _MenuItem('Pause', 'toggle:', 'p', ctrl=True)  # Ctrl-Cmd-P
+        menu.addItem_(self.NSitem)
+        menu.addItem_(_MenuItem('Rewind', 'rewind:', 'r', ctrl=True))  # Ctrl-Cmd-R
 
         menu.addItem_(_MenuItemSeparator())
         menu.addItem_(_MenuItem('Hide ' + self.title, 'hide:', 'h'))  # Cmd-H, implied
@@ -138,64 +106,72 @@ class _Delegate_Implementation(object):
         menuBar.addItem_(subMenu)
         self.app.setMainMenu_(menuBar)
 
-        self.play_(None)
+        self.player.play()
         # adjust the contents' aspect ratio
         self.windowDidResize_(None)
 
     @_Delegate.method('v@')
     def info_(self, notification):
         try:
-            self.pause_(notification)
             p = self.player
+            if p.is_playing():
+                p.pause()
             m = p.get_media()
+            v = sys.modules[p.__class__.__module__]  # import vlc
+            b = v.bytes_to_str
 
             # print Python, vlc, libVLC, media info
-            _printf('PyCocoa %s (%s)', __PyCocoa__, __version__, nl=1)
-            _printf('python %s', ' '.join(_Python))
-            _printf('macOS %s', ' '.join(_macOS))
+            printf('PyCocoa %s (%s)', __PyCocoa__, __version__, nl=1)
+            printf('Python %s %s', sys.version.split()[0], platform.architecture()[0])
+            printf('macOS %s', ' '.join(platform.mac_ver()[0:3:2]), nt=1)
 
-            _printf('vlc.py %s (%#x)', vlc.__version__, vlc.hex_version())
-            _printf('built: %s', vlc.build_date)
+            printf('vlc.py %s (%#x)', v.__version__, v.hex_version())
+            printf('built: %s', v.build_date)
 
-            _printf('libVLC %s (%#x)', _b2str(vlc.libvlc_get_version()), vlc.libvlc_hex_version())
-            _printf('libVLC %s', _b2str(vlc.libvlc_get_compiler()), nt=1)
+            printf('libVLC %s (%#x)', b(v.libvlc_get_version()), v.libvlc_hex_version())
+            printf('libVLC %s', b(v.libvlc_get_compiler()), nt=1)
 
-            _printf('media: %s', _b2str(m.get_mrl()))
-            _printf('state: %s', p.get_state())
-            _printf('track/count: %s/%s', p.video_get_track(), p.video_get_track_count())
-            _printf('time/duration: %s/%s ms', p.get_time(), m.get_duration())
-            _printf('position/length: %.2f%%/%s ms', p.get_position() * 100.0, p.get_length())
+            printf('media: %s', b(m.get_mrl()))
+            printf('state: %s', p.get_state())
+
+            printf('track/count: %s/%s', p.video_get_track(), p.video_get_track_count())
+            printf('time/duration: %s/%s ms', p.get_time(), m.get_duration())
+            printf('position/length: %.2f%%/%s ms', p.get_position() * 100.0, p.get_length())
             f = p.get_fps()
-            _printf('fps: %.3f (%.3f ms)', f, _mspf(f))
-            _printf('rate: %s', p.get_rate())
+            printf('fps: %.3f (%.3f ms)', f, _mspf(f))
+            printf('rate: %s', p.get_rate())
 
             w, h = p.video_get_size(0)
+            printf('video size: %sx%s', w, h)  # num=0
             r = gcd(w, h) or ''
             if r and w and h:
                 r = ' (%s:%s)' % (w // r, h // r)
-            _printf('video size: %sx%s%s', w, h, r)  # num=0
-            _printf('aspect ratio: %s', p.video_get_aspect_ratio())
-            _printf('scale: %.3f (%.3f)', p.video_get_scale(), self.scale)
-            _printf('window: %r', p.get_hwnd(), nt=1)
+            printf('aspect ratio: %s%s', p.video_get_aspect_ratio(), r)
+
+            printf('scale: %.3f', p.video_get_scale())
+            o = p.get_nsobject()  # for macOS only
+            printf('nsobject: %r (%#x)', o, o, nt=1)
         except Exception as x:
-            _printf('%r', x, nl=1, nt=1)
-
-    @_Delegate.method('v@')
-    def pause_(self, notification):
-        # note, .pause() pauses and un-pauses the video,
-        # .stop() stops the video and blanks the window
-        if self.player.is_playing():
-            self.player.pause()
-
-    @_Delegate.method('v@')
-    def play_(self, notification):
-        self.player.play()
+            printf('%r', x, nl=1, nt=1)
 
     @_Delegate.method('v@')
     def rewind_(self, notification):
         self.player.set_position(0.0)
         # can't re-play once at the end
         # self.player.play()
+
+    @_Delegate.method('v@')
+    def toggle_(self, notification):
+        # toggle between Pause and Play
+        if self.player.is_playing():
+            # note, .pause() pauses and un-pauses the video,
+            # .stop() stops the video and blanks the window
+            self.player.pause()
+            t = 'Play'
+        else:
+            self.player.play()
+            t = 'Pause'
+        self.NSitem.setTitle_(NSStr(t))
 
     @_Delegate.method('v@')
     def windowDidResize_(self, notification):
@@ -215,43 +191,16 @@ class _Delegate_Implementation(object):
     def windowWillClose_(self, notification):
         self.app.terminate_(self)  # or NSApp()...
 
-    @_Delegate.method('v@')
-    def faster_(self, notification):
-        self._rate(2.0)
-
-    @_Delegate.method('v@')
-    def slower_(self, notification):
-        self._rate(0.5)
-
-    @_Delegate.method(b'v' + PyObjectEncoding)
-    def _rate(self, factor):  # called from ObjC method
-        r = self.player.get_rate() * factor
-        if 0.2 < r < 10.0:
-            self.player.set_rate(r)
-
-    @_Delegate.method('v@')
-    def zoomIn_(self, notification):
-        self._zoom(1.25)
-
-    @_Delegate.method('v@')
-    def zoomOut_(self, notification):
-        self._zoom(0.80)
-
-    @_Delegate.method(b'v' + PyObjectEncoding)
-    def _zoom(self, factor):  # called from ObjC method
-        self.scale *= factor
-        self.player.video_set_scale(self.scale)
-
 
 _Delegate = ObjCClass('_Delegate')  # the actual class
 
 
 def _MenuItem(label, action=None, key='', alt=False, cmd=True, ctrl=False, shift=False):
-    '''New menu item with action and optional shortcut key.
+    '''New NS menu item with action and optional shortcut key.
     '''
     # <http://Developer.Apple.com/documentation/appkit/nsmenuitem/1514858-initwithtitle>
-    item = NSMenuItem.alloc().initWithTitle_action_keyEquivalent_(
-           NSStr(label), get_selector(action), NSStr(key))
+    ns = NSMenuItem.alloc().initWithTitle_action_keyEquivalent_(
+         NSStr(label), get_selector(action), NSStr(key))
     if key:
         mask = 0
         if alt:
@@ -263,8 +212,8 @@ def _MenuItem(label, action=None, key='', alt=False, cmd=True, ctrl=False, shift
         if shift:
             mask |= NSShiftKeyMask  # NSAlphaShiftKeyMask
         if mask:
-            item.setKeyEquivalentModifierMask_(mask)
-    return item
+            ns.setKeyEquivalentModifierMask_(mask)
+    return ns
 
 
 def _MenuItemSeparator():
@@ -273,8 +222,8 @@ def _MenuItemSeparator():
     return NSMenuItem.separatorItem()
 
 
-def _Window2(title=_Title, fraction=0.5):
-    '''Create the main window and the drawable view.
+def _Window2(title=_Name, fraction=0.5):
+    '''Create the main NS window and the drawable NS view.
     '''
     frame = NSScreen.alloc().init().mainScreen().frame()
     if 0.1 < fraction < 1.0:
@@ -304,30 +253,37 @@ def _Window2(title=_Title, fraction=0.5):
     return window, view
 
 
-def appVLC(title=_Title, video='', timeout=None):
-    '''Create the application and start the VLC player,
-       before calling app.run() to start the application.
+def simpleVLCplay(player, title=_Name, video='', timeout=None):
+    '''Create a minimal NS application, drawable window and basic menu
+       for the given VLC player (with media) and start the player.
+
+       @note: This function never returns, but the VLC player and
+              other Python thread(s) do run.
     '''
+    if not player:
+        raise ValueError('%s invalid: %r' % ('player', player))
+
     app = NSApplication.sharedApplication()
 #   pool = NSAutoreleasePool.alloc().init()  # created by NSApplication
-
-    dlg = _Delegate.alloc().init(app, title, video)
+    dlg = _Delegate.alloc().init(
+                    app,
+                    player,
+                    title or _Name,
+                    video or os.path.basename(player.get_media().get_mrl()))
     app.setDelegate_(dlg)
-
-    if timeout is not None:
-        try:
-            from test import terminating
-            terminating(app, timeout)
-        except (ImportError, ValueError):
-            pass
-
-    return app
+    terminating(app, timeout)
+    app.run()  # never returns
 
 
 if __name__ == '__main__':
 
-    _argv0 = os.path.basename(sys.argv[0])  # _Title
+    try:
+        import vlc  # PYCHOK used
+    except ImportError:
+        raise ImportError('no %s module (%s)' % ('vlc.py',
+                          '<https://PyPI.org/project/python-vlc>'))
 
+    _Globals.argv0 = _name = os.path.basename(sys.argv[0])
     _timeout = None
 
     args = sys.argv[1:]
@@ -335,21 +291,24 @@ if __name__ == '__main__':
         o = args.pop(0)
         t = o.lower()
         if t in ('-h', '--help'):
-            _printf('usage:  [-h|--help]  [-timeout <secs>]  %s',
-                    '<video_file_name>')
+            printf('usage:  [-h|--help]  [-name "%s"]  [-timeout <secs>]  %s',
+                   _name, '<video_file_name>')
             sys.exit(0)
-        elif '-timeout'.startswith(t) and len(t) > 1 and args:
+        elif args and len(t) > 1 and '-name'.startswith(t):
+            _name = args.pop(0)
+        elif args and len(t) > 1 and '-timeout'.startswith(t):
             _timeout = args.pop(0)
         else:
-            _printf('invalid option: %s', o)
+            printf('invalid option: %s', o)
             sys.exit(1)
 
     if not args:
-        _printf('missing %s', '<video_file_name>')
+        printf('missing %s', '<video_file_name>')
         sys.exit(1)
 
-    app = appVLC(title=_argv0, video=args.pop(0), timeout=_timeout)
-    app.run()  # never returns, but Python thread(s) run
+    # create a VLC player to play a video
+    p = vlc.MediaPlayer(args.pop(0))
+    simpleVLCplay(p, title=_name, timeout=_timeout)  # never returns
 
 # MIT License <http://OpenSource.org/licenses/MIT>
 #
