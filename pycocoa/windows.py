@@ -34,7 +34,7 @@ from pycocoa.utils    import aspect_ratio, bytes2str, _Constants, _exports, \
 
 # from enum   import Enum
 
-__version__ = '19.08.31'
+__version__ = '19.09.27'
 
 _Cascade = NSPoint_t(25, 25)  # PYCHOK false
 
@@ -345,7 +345,7 @@ class Window(_Type2):
         r = aspect_ratio(*r)
         if r:
             self._ratio = r
-            self.NS.setContentAspectRatio_(NSSize_t(r[0], r[1]))
+            self.NS.setContentAspectRatio_(NSSize_t(*r))
 
     def zoom(self, zoom):
         '''Toggle, zoom or un-zoom this window.
@@ -723,7 +723,7 @@ if __name__ == '__main__':
 
 # MIT License <https://OpenSource.org/licenses/MIT>
 #
-# Copyright (C) 2017-2019 -- mrJean1 at Gmail dot com
+# Copyright (C) 2017-2020 -- mrJean1 at Gmail -- All Rights Reserved.
 #
 # Permission is hereby granted, free of charge, to any person obtaining a
 # copy of this software and associated documentation files (the "Software"),

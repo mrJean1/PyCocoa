@@ -5,34 +5,51 @@
 # by an other, more comprehensive VLC player example cocoavlc.py
 # <https://GitHub.com/oaubert/python-vlc/tree/master/examples>
 
-import os
-import platform  # PYCHOK false
+# This VLC player has only been tested with VLC 2.2.6, 2.2.8, 3.0.1,
+# 3.0.2, 3.0.4, 3.0.6 and 3.0.7 and the compatible vlc.py Python-VLC
+# <https://PyPI.org/project/Python-VLC> binding using 64-bit Python
+# 2.7.14, 2.7.15, 2.7.16, 3.6.4, 3.6.5, 3.7.0, 3.7.1, 3.7.2, 3.7.3
+# and/or 3.7.4 on macOS 10.13.4, 10.13.5 and 10.13.6 High Sierra or
+# 10.14.6 Mojave.  This player does not work with PyPy nor with
+# Intel(R) Python and has not been tested on iOS.
+
+from os.path import basename
+from platform import architecture, mac_ver  # PYCHOK false
 import sys
 
-_Name = os.path.basename(__file__)
+_argv0 = basename(__file__)
 if not sys.platform.startswith('darwin'):
-    raise ImportError('%s only supported on %s' % (_Name, 'macOS'))
+    raise ImportError('%s only supported on %s' % (_argv0, 'macOS'))
+
+class _ImportError(ImportError):  # PYCHOK expected
+    def __init__(self, package, PyPI):
+        PyPI = '<https://PyPI.org/project/%s>' % (PyPI,)
+        t = 'no module %s, see %s' % (package, PyPI)
+        ImportError.__init__(self, t)
+
+try:  # PYCHOK expected
+    from pycocoa.utils import _Globals
+    _Globals.argv0 = _argv0  # for printf
+except ImportError:
+    raise _ImportError('pycocoa', 'PyCocoa')
 
 # the imports listed explicitly to help PyChecker
-from pycocoa import gcd, get_selector, NSAlternateKeyMask, \
-                    NSApplication, NSBackingStoreBuffered, \
-                    nsBundleRename, NSCommandKeyMask, \
-                    NSControlKeyMask, NSMenu, NSMenuItem, \
-                    NSRect4_t, NSScreen, NSShiftKeyMask, \
-                    NSSize_t, NSStr, NSView, NSWindow, \
-                    NSWindowStyleMaskUsual, ObjCClass, \
-                    ObjCInstance, ObjCSubclass, printf, \
-                    PyObjectEncoding, send_super, terminating, \
-                    __version__ as __PyCocoa__  # PYCHOK false
-
-from pycocoa.utils import _Globals
-_Globals.argv0 = _Name  # for printf
+from pycocoa import aspect_ratio, gcd, get_selector, \
+                    NSAlternateKeyMask, NSApplication, \
+                    NSBackingStoreBuffered, nsBundleRename, \
+                    NSCommandKeyMask, NSControlKeyMask, \
+                    NSMenu, NSMenuItem, NSRect4_t, \
+                    NSScreen, NSShiftKeyMask, NSSize_t, NSStr, \
+                    NSView, NSWindow, NSWindowStyleMaskUsual, \
+                    ObjCClass, ObjCInstance, ObjCSubclass, \
+                    printf, PyObjectEncoding, send_super, \
+                    terminating, __version__ as __PyCocoa__  # PYCHOK false
 
 __all__  = ('simpleVLCplay',)
-__version__ = '19.09.23'
+__version__ = '19.09.27'
 
 
-def _mspf(fps):
+def mspf(fps):
     # convert frames per second to frame length in millisecs
     return 1000.0 / (fps or 25)
 
@@ -40,8 +57,8 @@ def _mspf(fps):
 class _Delegate_Implementation(object):
     # Cobbled together from the pycocoa.ObjCSubClass.__doc__,
     # pycocoa.runtime._DeallocObserver and PyObjC examples:
-    # <http://TaoOfMac.com/space/blog/2007/04/22/1745> and
-    # <http://StackOverflow.com/questions/24024723/swift-using
+    # <https://TaoOfMac.com/space/blog/2007/04/22/1745> and
+    # <https://StackOverflow.com/questions/24024723/swift-using
     # -nsstatusbar-statusitemwithlength-and-nsvariablestatusitemlength>
     _Delegate = ObjCSubclass('NSObject', '_Delegate')
 
@@ -120,10 +137,11 @@ class _Delegate_Implementation(object):
             v = sys.modules[p.__class__.__module__]  # import vlc
             b = v.bytes_to_str
 
+            printf(__version__, nl=1)
             # print Python, vlc, libVLC, media info
-            printf('PyCocoa %s (%s)', __PyCocoa__, __version__, nl=1)
-            printf('Python %s %s', sys.version.split()[0], platform.architecture()[0])
-            printf('macOS %s', ' '.join(platform.mac_ver()[0:3:2]), nt=1)
+            printf('PyCocoa %s', __PyCocoa__)
+            printf('Python %s %s', sys.version.split()[0], architecture()[0])
+            printf('macOS %s', ' '.join(mac_ver()[0:3:2]), nt=1)
 
             printf('vlc.py %s (%#x)', v.__version__, v.hex_version())
             printf('built: %s', v.build_date)
@@ -138,11 +156,11 @@ class _Delegate_Implementation(object):
             printf('time/duration: %s/%s ms', p.get_time(), m.get_duration())
             printf('position/length: %.2f%%/%s ms', p.get_position() * 100.0, p.get_length())
             f = p.get_fps()
-            printf('fps: %.3f (%.3f ms)', f, _mspf(f))
+            printf('fps: %.3f (%.3f ms)', f, mspf(f))
             printf('rate: %s', p.get_rate())
 
             w, h = p.video_get_size(0)
-            printf('video size: %sx%s', w, h)  # num=0
+            printf('video size: %sx%s', w, h)
             r = gcd(w, h) or ''
             if r and w and h:
                 r = ' (%s:%s)' % (w // r, h // r)
@@ -175,16 +193,14 @@ class _Delegate_Implementation(object):
 
     @_Delegate.method('v@')
     def windowDidResize_(self, notification):
-        if self.window and self.ratio:
+        if self.ratio and self.player and self.window:
             # get and maintain the aspect ratio
             # (the first player.video_get_size()
             #  call returns (0, 0), subsequent
             #  calls return (w, h) correctly)
-            w, h = self.player.video_get_size(0)
-            r = gcd(w, h)
-            if r and w and h:
-                r = NSSize_t(w // r , h // r)
-                self.window.setContentAspectRatio_(r)
+            r = aspect_ratio(*self.player.video_get_size(0))
+            if r:
+                self.window.setContentAspectRatio_(NSSize_t(*r))
                 self.ratio -= 1
 
     @_Delegate.method('v@')
@@ -198,7 +214,7 @@ _Delegate = ObjCClass('_Delegate')  # the actual class
 def _MenuItem(label, action=None, key='', alt=False, cmd=True, ctrl=False, shift=False):
     '''New NS menu item with action and optional shortcut key.
     '''
-    # <http://Developer.Apple.com/documentation/appkit/nsmenuitem/1514858-initwithtitle>
+    # <https://Developer.Apple.com/documentation/appkit/nsmenuitem/1514858-initwithtitle>
     ns = NSMenuItem.alloc().initWithTitle_action_keyEquivalent_(
          NSStr(label), get_selector(action), NSStr(key))
     if key:
@@ -222,7 +238,7 @@ def _MenuItemSeparator():
     return NSMenuItem.separatorItem()
 
 
-def _Window2(title=_Name, fraction=0.5):
+def _Window2(title=_argv0, fraction=0.5):
     '''Create the main NS window and the drawable NS view.
     '''
     frame = NSScreen.alloc().init().mainScreen().frame()
@@ -233,16 +249,16 @@ def _Window2(title=_Name, fraction=0.5):
         frame = NSRect4_t(frame.origin.x + 10, frame.origin.y + 10, w, h)
 
     window = NSWindow.alloc().initWithContentRect_styleMask_backing_defer_(
-                      frame,
-                      NSWindowStyleMaskUsual,  # PYCHOK expected
-                      NSBackingStoreBuffered,
-                      False)  # or 0
+                              frame,
+                              NSWindowStyleMaskUsual,  # PYCHOK expected
+                              NSBackingStoreBuffered,
+                              False)  # or 0
     window.setTitle_(NSStr(title))
 
     # create the drawable_nsobject NSView for vlc.py, see vlc.MediaPlayer.set_nsobject()
     # for an alternate NSView object with protocol VLCOpenGLVideoViewEmbedding
-    # <http://StackOverflow.com/questions/11562587/create-nsview-directly-from-code>
-    # <http://GitHub.com/ariabuckles/pyobjc-framework-Cocoa/blob/master/Examples/AppKit/DotView/DotView.py>
+    # <https://StackOverflow.com/questions/11562587/create-nsview-directly-from-code>
+    # <https://GitHub.com/ariabuckles/pyobjc-framework-Cocoa/blob/master/Examples/AppKit/DotView/DotView.py>
     view = NSView.alloc().initWithFrame_(frame)
     window.setContentView_(view)
     # force the video/window aspect ratio, adjusted
@@ -253,7 +269,7 @@ def _Window2(title=_Name, fraction=0.5):
     return window, view
 
 
-def simpleVLCplay(player, title=_Name, video='', timeout=None):
+def simpleVLCplay(player, title=_argv0, video='', timeout=None):
     '''Create a minimal NS application, drawable window and basic menu
        for the given VLC player (with media) and start the player.
 
@@ -266,11 +282,12 @@ def simpleVLCplay(player, title=_Name, video='', timeout=None):
     app = NSApplication.sharedApplication()
 #   pool = NSAutoreleasePool.alloc().init()  # created by NSApplication
     dlg = _Delegate.alloc().init(
-                    app,
-                    player,
-                    title or _Name,
-                    video or os.path.basename(player.get_media().get_mrl()))
+                            app,
+                            player,
+                            title or _argv0,
+                            video or basename(player.get_media().get_mrl()))
     app.setDelegate_(dlg)
+
     terminating(app, timeout)
     app.run()  # never returns
 
@@ -280,10 +297,9 @@ if __name__ == '__main__':
     try:
         import vlc  # PYCHOK used
     except ImportError:
-        raise ImportError('no %s module (%s)' % ('vlc.py',
-                          '<https://PyPI.org/project/python-vlc>'))
+        raise _ImportError('vlc', 'Python-VLC')
 
-    _Globals.argv0 = _name = os.path.basename(sys.argv[0])
+    _Globals.argv0 = _name = basename(sys.argv[0])
     _timeout = None
 
     args = sys.argv[1:]
@@ -298,6 +314,15 @@ if __name__ == '__main__':
             _name = args.pop(0)
         elif args and len(t) > 1 and '-timeout'.startswith(t):
             _timeout = args.pop(0)
+        elif t in ('-v', '--version'):
+            print('%s: %s (%s %s)' % (basename(__file__), __version__,
+                                      'pycocoa', __PyCocoa__))
+            try:
+                vlc.print_version()
+                vlc.print_python()
+            except AttributeError:
+                pass
+            sys.exit(0)
         else:
             printf('invalid option: %s', o)
             sys.exit(1)
@@ -306,13 +331,13 @@ if __name__ == '__main__':
         printf('missing %s', '<video_file_name>')
         sys.exit(1)
 
-    # create a VLC player to play a video
+    # create a VLC player and play the video
     p = vlc.MediaPlayer(args.pop(0))
     simpleVLCplay(p, title=_name, timeout=_timeout)  # never returns
 
-# MIT License <http://OpenSource.org/licenses/MIT>
+# MIT License <https://OpenSource.org/licenses/MIT>
 #
-# Copyright (C) 2017-2019 -- mrJean1 at Gmail dot com
+# Copyright (C) 2017-2020 -- mrJean1 at Gmail -- All Rights Reserved.
 #
 # Permission is hereby granted, free of charge, to any person obtaining a
 # copy of this software and associated documentation files (the "Software"),

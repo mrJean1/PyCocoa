@@ -937,7 +937,7 @@ del _
 
 # MIT License <https://OpenSource.org/licenses/MIT>
 #
-# Copyright (C) 2017-2019 -- mrJean1 at Gmail dot com
+# Copyright (C) 2017-2020 -- mrJean1 at Gmail -- All Rights Reserved.
 #
 # Permission is hereby granted, free of charge, to any person obtaining
 # a copy of this software and associated documentation files (the "Software"),
@@ -961,7 +961,7 @@ del _
 
 # objective-ctypes
 #
-# Copyright (C) 2011 Phillip Nguyen -- All rights reserved.
+# Copyright (C) 2011 -- Phillip Nguyen -- All rights reserved.
 #
 # Redistribution and use in source and binary forms, with or without
 # modification, are permitted provided that the following conditions

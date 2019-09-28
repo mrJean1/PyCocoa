@@ -50,16 +50,16 @@ to Objective-C bridge (and included in `macOS' Python`_), (b) `Rubicon-ObjC`_
 for Python 3.5+, taking advantage of Python's new typing_ annotations, (c)
 PyGUI_ for macOS_ and (d) wxPython_.
 
-*Last updated: Sep 23, 2019.*
+*Last updated: Sep 27, 2019.*
 
 .. image:: https://Img.Shields.io/pypi/pyversions/PyCocoa.svg?label=Python
-   :target: http://PyPI.org/project/PyCocoa
+  :target: https://PyPI.org/project/PyCocoa
 .. image:: https://Img.Shields.io/pypi/v/PyCocoa.svg?label=PyPI
-   :target: http://PyPI.org/project/PyCocoa
+  :target: https://PyPI.org/project/PyCocoa
 .. image:: https://Img.Shields.io/pypi/wheel/PyCocoa.svg
-   :target: http://PyPI.org/project/PyCocoa/#files
+  :target: https://PyPI.org/project/PyCocoa/#files
 .. image:: https://Img.Shields.io/pypi/l/PyCocoa.svg
-   :target: http://PyPI.org/project/PyCocoa
+  :target: https://PyPI.org/project/PyCocoa
 
 .. _checked: https://GitHub.com/ActiveState/code/tree/master/recipes/Python/546532_PyChecker_postprocessor
 .. _cocoa-python: https://GitHub.com/phillip-nguyen/cocoa-python
@@ -92,7 +92,7 @@ PyGUI_ for macOS_ and (d) wxPython_.
 Licenses
 ========
 
-``Copyright (C) 2017-2019 -- mrJean1 at Gmail dot com``
+``Copyright (C) 2017-2020 -- mrJean1 at Gmail -- All Rights Reserved.``
 
 ``Permission is hereby granted, free of charge, to any person obtaining a
 copy of this software and associated documentation files (the "Software"),

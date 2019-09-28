@@ -71,8 +71,8 @@ and (d) U{wxPython<https://wxPython.org/pages/overview/index.html>}.
 Licenses
 ========
 
-U{Copyright (C) 2017-2019 -- mrJean1 at Gmail dot com
-<https://OpenSource.org/licenses/MIT>}
+U{Copyright (C) 2017-2020 -- mrJean1 at Gmail -- All Rights Reserved
+<https://OpenSource.org/licenses/MIT>}.
 
 C{Permission is hereby granted, free of charge, to any person obtaining a
 copy of this software and associated documentation files (the "Software"),
@@ -94,8 +94,8 @@ OTHER DEALINGS IN THE SOFTWARE.}
 
 __
 
-U{Copyright (C) 2011 -- Phillip Nguyen -- All Rights Reserved.
-<https://OpenSource.org/licenses/BSD-3-Clause>}
+U{Copyright (C) 2011 -- Phillip Nguyen -- All Rights Reserved
+<https://OpenSource.org/licenses/BSD-3-Clause>}.
 
 C{Redistribution and use in source and binary forms, with or without
 modification, are permitted provided that the following conditions
@@ -132,7 +132,7 @@ POSSIBILITY OF SUCH DAMAGE.}
 from os.path import abspath, dirname
 import sys
 
-__version__ = '19.09.23'
+__version__ = '19.09.27'
 
 p = sys.platform
 if not p.startswith('darwin'):

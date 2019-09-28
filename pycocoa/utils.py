@@ -26,7 +26,7 @@ class module_property_RO(object):
          >>>     return ro  # singleton or other
 
        @see: U{Module Properties | the Proxy Pattern
-             <http://jtushman.GitHub.io/blog/2014/05/02/module-properties/>}.
+             <https://jtushman.GitHub.io/blog/2014/05/02/module-properties/>}.
     '''
     def __init__(self, func):
         '''New L{module_property_RO}.
@@ -825,7 +825,7 @@ def terminating(app, timeout=None):
     def _t():
         from time import sleep
         sleep(s + 0.5)
-        # <http://Developer.Apple.com/documentation/appkit/nsapplication/1428417-terminate>
+        # <https://Developer.Apple.com/documentation/appkit/nsapplication/1428417-terminate>
         t(app)
 
     from threading import Thread
@@ -948,7 +948,7 @@ if __name__ == '__main__':
 
 # MIT License <https://OpenSource.org/licenses/MIT>
 #
-# Copyright (C) 2017-2019 -- mrJean1 at Gmail dot com
+# Copyright (C) 2017-2020 -- mrJean1 at Gmail -- All Rights Reserved.
 #
 # Permission is hereby granted, free of charge, to any person obtaining
 # a copy of this software and associated documentation files (the "Software"),
@@ -972,7 +972,7 @@ if __name__ == '__main__':
 
 # objective-ctypes
 #
-# Copyright (C) 2011 Phillip Nguyen -- All rights reserved.
+# Copyright (C) 2011 -- Phillip Nguyen -- All rights reserved.
 #
 # Redistribution and use in source and binary forms, with or without
 # modification, are permitted provided that the following conditions

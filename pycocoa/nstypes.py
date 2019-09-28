@@ -530,7 +530,7 @@ def nsBundleRename(ns_title, match='Python'):
             p = ns.objectForKey_(NSMain.BundleName) or None
             if p:
                 p = ns2py(p, dflt='') or ''
-                if t and match in ('', None, p):  # can't be empty
+                if t and match in (p, '', None):  # can't be empty
                     ns.setObject_forKey_(ns_title, NSMain.BundleName)
     return p
 
@@ -976,7 +976,7 @@ if __name__ == '__main__':
 
 # MIT License <https://OpenSource.org/licenses/MIT>
 #
-# Copyright (C) 2017-2019 -- mrJean1 at Gmail dot com
+# Copyright (C) 2017-2020 -- mrJean1 at Gmail -- All Rights Reserved.
 #
 # Permission is hereby granted, free of charge, to any person obtaining
 # a copy of this software and associated documentation files (the "Software"),
@@ -1000,7 +1000,7 @@ if __name__ == '__main__':
 
 # objective-ctypes
 #
-# Copyright (C) 2011 Phillip Nguyen -- All rights reserved.
+# Copyright (C) 2011 -- Phillip Nguyen -- All rights reserved.
 #
 # Redistribution and use in source and binary forms, with or without
 # modification, are permitted provided that the following conditions

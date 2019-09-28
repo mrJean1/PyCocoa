@@ -11,18 +11,18 @@
 # python setup.py test
 # python setup.py install
 
-# <http://Packaging.Python.org/key_projects/#setuptools>
-# <http://Packaging.Python.org/distributing/>
-# <http://Docs.Python.org/2/distutils/sourcedist.html>
-# <http://Docs.Python.org/3.6/distutils/sourcedist.html>
-# <http://SetupTools.ReadTheDocs.io/en/latest/setuptools.html#developer-s-guide>
-# <http://SetupTools.ReadTheDocs.io/en/latest/setuptools.html#test-build-package-and-run-a-unittest-suite>
-# <http://ZetCode.com/articles/packageinpython/>
+# <https://Packaging.Python.org/key_projects/#setuptools>
+# <https://Packaging.Python.org/distributing/>
+# <https://Docs.Python.org/2/distutils/sourcedist.html>
+# <https://Docs.Python.org/3.6/distutils/sourcedist.html>
+# <https://SetupTools.ReadTheDocs.io/en/latest/setuptools.html#developer-s-guide>
+# <https://SetupTools.ReadTheDocs.io/en/latest/setuptools.html#test-build-package-and-run-a-unittest-suite>
+# <https://ZetCode.com/articles/packageinpython/>
 
 from setuptools import setup
 
 __all__ = ()
-__version__ = '18.11.02'
+__version__ = '19.09.27'
 
 
 def _c2(*names):
@@ -48,7 +48,7 @@ def _version():
 _KeyWords=('Cocoa', 'cocoa-python', 'cocoavlc', 'ctypes',
            'macOS', 'MacOSX',
            'Objective-C',
-           'PyCocoa', 'python-vlc',
+           'PyCocoa', 'Python-VLC',
            'VLC', 'VLCplayer')
 
 setup(
@@ -58,13 +58,13 @@ setup(
     version=_version(),
 
     author='Jean M. Brouwers',
-    author_email='mrJean1@Gmail.com',  # 'mrJean1 at Gmail dot com'
+    author_email='mrJean1@Gmail.com',  # 'mrJean1 at Gmail'
     maintainer='Jean M. Brouwers',
-    maintainer_email='mrJean1@Gmail.com',  # 'mrJean1 at Gmail dot com'
+    maintainer_email='mrJean1@Gmail.com',  # 'mrJean1 at Gmail'
 
     license='MIT',
     keywords=' '.join(_KeyWords),
-    url='http://GitHub.com/mrJean1/PyCocoa',
+    url='https://GitHub.com/mrJean1/PyCocoa',
 
     long_description=_long_description(),
 
@@ -88,7 +88,7 @@ setup(
         _c2('Topic', 'Scientific/Engineering', 'Human Machine Interfaces'),
     ],
 
-#   download_url='http://GitHub.com/mrJean1/PyCocoa',
+#   download_url='https://GitHub.com/mrJean1/PyCocoa',
 #   entry_points={},
 #   include_package_data=False,
 #   install_requires=[],
