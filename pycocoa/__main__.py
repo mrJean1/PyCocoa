@@ -13,7 +13,7 @@ from pycocoa.runtime import _nsDeallocObserverIvar1
 _nsDeallocObserverIvar1()
 
 __all__ = ()
-__version__ = '19.07.21'
+__version__ = '19.09.28'
 
 # **) MIT License
 #

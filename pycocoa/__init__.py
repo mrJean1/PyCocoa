@@ -40,13 +40,15 @@ C{epydoc --html --no-private --no-source --name=PyCocoa --url=... -v pycocoa}).
 Tests
 =====
 
-The tests and examples have only been run with 64-bit Python 2.7.16 and
-3.7.4 using U{Python-VLC<https://PyPI.org/project/python-vlc>} 2.2.8, 3.0.2,
-3.0.4, 3.0.6 and 3.0.7 (with the compatible U{VLC App<https://www.VideoLan.org/vlc>})
-and only on macOS 10.13.6 High Sierra or 10.14.6 Mojave.  PyCocoa has I{not
-been tested} on iOS nor with 32-bit Python and I{does not work} with U{PyPy
-<https://PyPy.org>} nor with U{Intel(R) Python
+The tests and examples have only been run with 64-bit Python 2.7.17, 3.7.5 and
+3.8.1 using U{Python-VLC<https://PyPI.org/project/python-vlc>} 2.2.8, 3.0.4,
+3.0.6 and 3.0.8 (with the compatible U{VLC App<https://www.VideoLan.org/vlc>})
+on macOS 10.13.6 High Sierra, 10.14.6 Mojave or 10.15.2 Catalina.  PyCocoa has
+I{not been tested} on iOS nor with 32-bit Python and I{does not work} with
+U{PyPy<https://PyPy.org>} nor with U{Intel(R) Python
 <https://Software.Intel.com/en-us/distribution-for-python>}.
+
+PyCocoa has been tested previously with 64-bit Python 2.7.16 and 3.7.4.
 
 Notes
 =====
@@ -56,8 +58,8 @@ All PyCocoa source code has been statically U{checked
 with U{PyChecker<https://PyPI.org/project/pychecker>},
 U{PyFlakes<https://PyPI.org/project/pyflakes>},
 U{PyCodeStyle<https://PyPI.org/project/pycodestyle>} (formerly Pep8) and
-U{McCabe<https://PyPI.org/project/mccabe>} using 64-bit Python 2.7.16 and with
-U{Flake8<https://PyPI.org/project/flake8>} using 64-bit Python 3.7.4.
+U{McCabe<https://PyPI.org/project/mccabe>} using 64-bit Python 2.7.17 and with
+U{Flake8<https://PyPI.org/project/flake8>} using 64-bit Python 3.8.1.
 
 Some alternatives to PyCocoa are (a) U{PyObjC<https://PyPI.org/project/pyobjc>},
 the most comprehensive Python to Objective-C bridge (and included in
@@ -132,7 +134,7 @@ POSSIBILITY OF SUCH DAMAGE.}
 from os.path import abspath, dirname
 import sys
 
-__version__ = '19.09.27'
+__version__ = '20.01.02'
 
 p = sys.platform
 if not p.startswith('darwin'):

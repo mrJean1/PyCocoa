@@ -43,7 +43,7 @@ except ImportError:  # XXX Pythonista/iOS
         return None
 import os.path as os_path
 
-__version__ = '19.07.21'
+__version__ = '19.10.02'
 _leaked2    = []  # leaked memory, 2-tuples (ptr, size)
 _libs_cache = {}  # loaded libraries, by name
 
@@ -623,9 +623,14 @@ NSTrackingActiveInActiveApp     = 0x40
 # NSOpenGLPFARemotePixelBuffer     =  91  # can be used to render offline to a pbuffer
 # NSOpenGLPFAAllowOfflineRenderers =  96  # allow use of offline renderers
 # NSOpenGLPFAAcceleratedCompute    =  97  # choose a hardware accelerated compute device
+# NSOpenGLPFAOpenGLProfile         =  99  # specify an OpenGL Profile to use
 # NSOpenGLPFAVirtualScreenCount    = 128  # number of virtual screens in this format
 #
 # NSOpenGLCPSwapInterval           = 222
+
+# NSOpenGLProfileVersionLegacy     = 0x1000  # choose a Legacy/Pre-OpenGL 3.0 Implementation
+# NSOpenGLProfileVersion3_2Core    = 0x3200  # choose an OpenGL 3.2 Core Implementation
+# NSOpenGLProfileVersion4_1Core    = 0x4100  # choose an OpenGL 4.1 Core Implementation
 
 # <https://StackOverflow.com/questions/24024723/swift-using-
 #  nsstatusbar-statusitemwithlength-and-nsvariablestatusitemlength>

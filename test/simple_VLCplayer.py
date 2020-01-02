@@ -46,7 +46,7 @@ from pycocoa import aspect_ratio, gcd, get_selector, \
                     terminating, __version__ as __PyCocoa__  # PYCHOK false
 
 __all__  = ('simpleVLCplay',)
-__version__ = '19.09.27'
+__version__ = '19.09.28'
 
 
 def mspf(fps):
@@ -70,7 +70,7 @@ class _Delegate_Implementation(object):
     # also required for (private) methods called only from
     # Python.
 
-    # See pycocoa.runtime.split_encoding for type encoding:
+    # See pycocoa.octypes.split_emcoding2 for type encoding:
     # first is return value, then the method args, no need to
     # include @: for self and the Objective-C selector/cmd.
     @_Delegate.method(b'@' + PyObjectEncoding * 4)
