@@ -7,13 +7,12 @@
 '''
 # all imports listed explicitly to help PyChecker
 from pycocoa.bases   import _Type0
+from pycocoa.lazily  import _ALL_LAZY
 from pycocoa.octypes import NSPoint_t, NSRect_t, NSRect4_t, NSSize_t
 from pycocoa.utils   import isinstanceOf, property_RO
 
-__all__ = ('Point', 'Point2',
-           'Rect', 'Rect4',
-           'Size', 'Size2')
-__version__ = '19.07.21'
+__all__ = _ALL_LAZY.geometry
+__version__ = '20.01.08'
 
 
 class Point(_Type0):
@@ -278,9 +277,9 @@ class Size2(Size):
 
 if __name__ == '__main__':
 
-    from pycocoa.utils import _allisting
+    from pycocoa.utils import _all_listing
 
-    _allisting(__all__, locals(), __version__, __file__)
+    _all_listing(__all__, locals())
 
 # MIT License <https://OpenSource.org/licenses/MIT>
 #

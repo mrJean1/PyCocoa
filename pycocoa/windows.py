@@ -14,6 +14,7 @@ L{WindowStyle}, wrapping ObjC C{NSWindow}, etc.
 # all imports listed explicitly to help PyChecker
 from pycocoa.bases    import _Type2
 from pycocoa.geometry import Rect
+from pycocoa.lazily   import _ALL_LAZY
 from pycocoa.nstypes  import isNone, NSConcreteNotification, NSFont, \
                              NSImageView, NSMain, NSNotification, \
                              NSScrollView, NSStr, NSTableView, \
@@ -28,13 +29,14 @@ from pycocoa.oslibs   import NO, NSBackingStoreBuffered, \
                              NSWindowStyleMaskUtilityWindow, YES
 from pycocoa.runtime  import isObjCInstanceOf, ObjCDelegate, ObjCInstance, \
                              ObjCSubclass, release, retain, send_super_init
-from pycocoa.utils    import aspect_ratio, bytes2str, _Constants, _exports, \
+from pycocoa.utils    import aspect_ratio, bytes2str, _Constants, \
                              _Globals, isinstanceOf, module_property_RO, \
                              property_RO, _Python3, _text_title2, _Types
 
 # from enum   import Enum
 
-__version__ = '19.09.27'
+__all__ = _ALL_LAZY.windows
+__version__ = '20.01.08'
 
 _Cascade = NSPoint_t(25, 25)  # PYCHOK false
 
@@ -710,16 +712,65 @@ _Types.Window = NSWindow._Type = Window
 _Types.MediaWindow             = MediaWindow
 _Types.TextWindow              = TextWindow
 
-# filter locals() for .__init__.py
-__all__ = _exports(locals(), 'BezelStyle', 'Border', 'MediaWindow',
-                             'NSWindowDelegate', 'Screen', 'TextWindow',
-                   starts=('AutoResize', 'autoResizes', 'ns', 'Window', 'window'))
-
 if __name__ == '__main__':
 
-    from pycocoa.utils import _allisting
+    from pycocoa.utils import _all_exports, _all_listing
 
-    _allisting(__all__, locals(), __version__, __file__)
+    _all_exports(locals(), 'BezelStyle', 'Border', 'MediaWindow',
+                           'NSWindowDelegate', 'Screen', 'TextWindow',
+                 starts=('AutoResize', 'autoResizes', 'ns', 'Window', 'window'))
+    _all_listing(__all__, locals())
+
+    _ = '''% python3 -m pycocoa.windows
+
+ windows.__all__ = tuple(
+   windows.AutoResize.HeightSizable=1<<4,
+                     .MaxXMargin=1<<2,
+                     .MaxYMargin=1<<5,
+                     .MinXMargin=1,
+                     .MinYMargin=1<<3,
+                     .NotSizable=0,
+                     .Sizable=9<<1,
+                     .WidthSizable=1<<1,
+   windows.AutoResizeError is <class .AutoResizeError>,
+   windows.autoResizes is <function .autoResizes at 0x10bf34ef0>,
+   windows.BezelStyle.Disclosure=5,
+                     .HelpButton=9,
+                     .Inline=15,
+                     .NCircular=7,
+                     .Recessed=13,
+                     .RegularSquare=1<<1,
+                     .Rounded=1,
+                     .RoundedDisclosure=7<<1,
+                     .RoundRect=3<<2,
+                     .ShadowlessSquare=3<<1,
+                     .SmallSquare=5<<1,
+                     .TexturedRounded=11,
+                     .TexturedSquare=1<<3,
+   windows.Border.Bezel=1<<1,
+                 .Groove=3,
+                 .Line=1,
+                 .No=0,
+   windows.MediaWindow is <class .MediaWindow>,
+   windows.ns2Window is <function .ns2Window at 0x10bf40e60>,
+   windows.nsTextSize3 is <function pycocoa.nstypes.nsTextSize3 at 0x10bf34170>,
+   windows.NSWindowDelegate is <pycocoa.utils.module_property_RO object at 0x10bf3ed50>,
+   windows.Screen is <class .Screen>,
+   windows.TextWindow is <class .TextWindow>,
+   windows.Window is <class .Window>,
+   windows.WindowError is <class .WindowError>,
+   windows.WindowStyle.Closable=1<<1,
+                      .Miniaturizable=1<<2,
+                      .Resizable=1<<3,
+                      .Titled=1,
+                      .Typical=15,
+                      .Utility=1<<4,
+   windows.WindowStyleError is <class .WindowStyleError>,
+   windows.windowStyles is <function .windowStyles at 0x10bba3b90>,
+ )[16]
+ windows.version = '20.01.08'
+'''
+    del _
 
 # MIT License <https://OpenSource.org/licenses/MIT>
 #

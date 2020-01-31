@@ -13,6 +13,7 @@ from pycocoa.bases    import _Type2
 from pycocoa.fonts    import Font
 from pycocoa.geometry import Size
 from pycocoa.getters  import get_selector, get_selectornameof
+from pycocoa.lazily   import _ALL_LAZY
 from pycocoa.nstypes  import isNone, NSMain, NSMenu, NSMenuItem, nsOf, \
                              NSStr, nsString2str
 from pycocoa.pytypes  import int2NS
@@ -49,12 +50,8 @@ except ImportError:
 from inspect import isfunction, ismethod
 # from types import FunctionType, MethodType
 
-__all__ = ('Item', 'ItemSeparator',
-           'Keys',
-           'Menu', 'MenuBar',
-           'ns2Item',
-           'title2action')
-__version__ = '19.07.21'
+__all__ = _ALL_LAZY.menus
+__version__ = '20.01.08'
 
 # Method _NSApplicationDelegate.handleMenuItem_ in .apps.py
 # is the handler ('selector') for all menu items specified
@@ -1489,9 +1486,9 @@ _Types.MenuBar       = MenuBar
 
 if __name__ == '__main__':
 
-    from pycocoa.utils import _allisting, properties
+    from pycocoa.utils import _all_listing, properties
 
-    _allisting(__all__, locals(), __version__, __file__)
+    _all_listing(__all__, locals())
 
     bar  = MenuBar()
     menu = Menu('Test')
@@ -1530,21 +1527,93 @@ if __name__ == '__main__':
     item.subMenu = None
     assert item.subMenu is None, item.subMenu
 
-_ = '''
+    _ = '''% python3 -m pycocoa.menus
 
  menus.__all__ = tuple(
    menus.Item is <class .Item>,
    menus.ItemSeparator is <class .ItemSeparator>,
+   menus.Keys.ACK=0x6,
+             .Acknowledge=0x6,
+             .BackSpace=0x8,
+             .BackTab=0x19,
+             .BEL=0x7,
+             .Bell=0x7,
+             .BS=0x8,
+             .BT=0x19,
+             .CAN=0x18,
+             .Cancel=0x18,
+             .CarriageReturn=0xd,
+             .CR=0xd,
+             .DataLineEscape=0x10,
+             .DC1=0x11,
+             .DC2=0x13,
+             .DC3=0x13,
+             .DC4=0x14,
+             .DEL=0x7f,
+             .Delete=0x7f,
+             .DeviceControl1=0x11,
+             .DeviceControl2=0x13,
+             .DeviceControl3=0x13,
+             .DeviceControl4=0x14,
+             .DLE=0x10,
+             .EM=0x19,
+             .EndOfMedium=0x19,
+             .EndOfText=0x3,
+             .EndOfTransmit=0x4,
+             .EndOfTransmitBlock=0x17,
+             .ENQ=0x5,
+             .Enquiry=0x5,
+             .Enter=0x3,
+             .EOT=0x4,
+             .ESC=0x1b,
+             .Escape=0x1b,
+             .ETB=0x17,
+             .ETX=0x3,
+             .FF=0xc,
+             .FileSeparator=0x1c,
+             .FormFeed=0xc,
+             .FS=0x1c,
+             .GroupSeparator=0x1d,
+             .GS=0x1d,
+             .HorizontalTab=0x9,
+             .HT=0x9,
+             .LF=0xa,
+             .LineFeed=0xa,
+             .NAK=0x15,
+             .NegativeAcknowledge=0x15,
+             .NewLine=0xa,
+             .NL=0xa,
+             .RecordSeparator=0x1e,
+             .RS=0x1e,
+             .ShiftIn=0xf,
+             .ShiftOut=0xe,
+             .SI=0xf,
+             .SO=0xe,
+             .SOH=0x1,
+             .SP=0x20,
+             .Space=0x20,
+             .StartOfHeading=0x1,
+             .StartOfText=0x2,
+             .STX=0x2,
+             .SUB=0x1a,
+             .Substitute=0x1a,
+             .SYN=0x16,
+             .SynchronousIdle=0x16,
+             .Tab=0x9,
+             .UnitSeparator=0x1f,
+             .US=0x1f,
+             .VerticalTab=0xb,
+             .VT=0xb,
    menus.Menu is <class .Menu>,
    menus.MenuBar is <class .MenuBar>,
-   menus.ns2Item is <function .ns2Item at 0x10c781320>,
-   menus.title2action is <function .title2action at 0x10c789050>,
- )[6]
- menus.__version__ = '18.08.15'
+   menus.ns2Item is <function .ns2Item at 0x1028f2ef0>,
+   menus.title2action is <function .title2action at 0x1028fdef0>,
+ )[7]
+ menus.version = '20.01.08'
 
-Item('Quit', 'menuTerminate_', Cmd+Q) properties:
-  NS = <ObjCInstance(NSMenuItem(<Id_t at 0x10c798170>) of 0x7fce5449c590) at 0x10c78e490>
-  NSDelegate = 'AttributeError("use \'NSd-\' not \'NSD-\'",)'
+Item('Quit', 'menuTerminate_', Cmd+q) properties:
+  NS = <ObjCInstance(NSMenuItem(<Id_t at 0x102923e60>) of 0x7f956861d2c0) at 0x10292f090>
+  NSDelegate = 'AttributeError("use \'NSd-\' not \'NSD-\'")'
   NSdelegate = None
   action = 'menuTerminate_'
   allowsKeyWhenHidden = False
@@ -1562,10 +1631,10 @@ Item('Quit', 'menuTerminate_', Cmd+Q) properties:
   isSeparator = False
   key = 'q'
   keyEquivalent = 'q'
-  keyEquivalentModifiers = {'shift': False, 'alt': False, 'cmd': True, 'ctrl': False}
-  keyModifiers = {'shift': False, 'alt': False, 'cmd': True, 'ctrl': False}
+  keyEquivalentModifiers = {'alt': False, 'cmd': True, 'ctrl': False, 'shift': False}
+  keyModifiers = {'alt': False, 'cmd': True, 'ctrl': False, 'shift': False}
   nsTarget = None
-  parent = Menu('Test') at 0x10c78e1d0
+  parent = Menu('Test') at 0x102919e10
   shift = False
   state = 0
   subMenu = None
@@ -1574,8 +1643,8 @@ Item('Quit', 'menuTerminate_', Cmd+Q) properties:
   toolTip = ''
 
 Menu('Test') properties:
-  NS = <ObjCInstance(NSMenu(<Id_t at 0x10c790560>) of 0x7fce54499bc0) at 0x10c78e290>
-  NSDelegate = 'AttributeError("use \'NSd-\' not \'NSD-\'",)'
+  NS = <ObjCInstance(NSMenu(<Id_t at 0x10291cf80>) of 0x7f9568522040) at 0x102919c50>
+  NSDelegate = 'AttributeError("use \'NSd-\' not \'NSD-\'")'
   NSdelegate = None
   action = None
   app = None
@@ -1588,16 +1657,17 @@ Menu('Test') properties:
   isTornOff = False
   isVisible = None
   minWidth = 0.0
-  parent = MenuBar(None) at 0x10c786ed0
+  nsMenuItem = <ObjCInstance(NSMenuItem(<Id_t at 0x10292eef0>) of 0x7f9568624b50) at 0x10292f590>
+  parent = MenuBar(None) at 0x101dcc790
   showsState = True
-  size = <NSSize_t(width=100.0, height=29.0) at 0x10c7af5f0>
+  size = <NSSize_t(width=100.0, height=29.0) at 0x102942c20>
   tag = 2
   tags = 2
   title = 'Test'
 
 MenuBar(None) properties:
-  NS = <ObjCInstance(NSMenu(<Id_t at 0x10c719b00>) of 0x7fce54499580) at 0x10c78e110>
-  NSDelegate = 'AttributeError("use \'NSd-\' not \'NSD-\'",)'
+  NS = <ObjCInstance(NSMenu(<Id_t at 0x1028fdf80>) of 0x7f9568439390) at 0x1028fc650>
+  NSDelegate = 'AttributeError("use \'NSd-\' not \'NSD-\'")'
   NSdelegate = None
   action = None
   app = None
@@ -1610,12 +1680,12 @@ MenuBar(None) properties:
   minWidth = 0.0
   parent = None
   showsState = True
-  size = <NSSize_t(width=107.0, height=29.0) at 0x10c7af950>
+  size = <NSSize_t(width=107.0, height=29.0) at 0x102942f80>
   tag = None
   tags = 2
   title = None
 '''
-del _
+    del _
 
 # MIT License <https://OpenSource.org/licenses/MIT>
 #

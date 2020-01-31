@@ -6,6 +6,7 @@
 '''Conversions from C{NS...} ObjC instances to Python.
 '''
 # all imports listed explicitly to help PyChecker
+from pycocoa.lazily  import _ALL_LAZY
 from pycocoa.nstypes import NSArray, NSData, NSDecimal, NSDictionary, \
                             NSDouble, NSInt, NSLong, NSLongLong, \
                             NSMain, NSMutableArray, NSMutableDictionary, \
@@ -13,13 +14,14 @@ from pycocoa.nstypes import NSArray, NSData, NSDecimal, NSDictionary, \
 from pycocoa.oslibs  import libCF
 from pycocoa.runtime import ObjCInstance, release
 from pycocoa.utils   import bytes2str, _ByteStrs, clip, DEFAULT_UNICODE, \
-                           _exports, _Ints, isinstanceOf
+                           _Ints, isinstanceOf
 
 from ctypes  import c_void_p
 from decimal import Decimal as _Decimal
 from types   import GeneratorType as _Generator
 
-__version__ = '19.07.21'
+__all__ = _ALL_LAZY.pytypes
+__version__ = '20.01.08'
 
 
 def _iter2NS(ns, py, getCount):
@@ -381,15 +383,12 @@ def type2NS(py):
         return py2NS(py)
 
 
-# filter locals() for .__init__.py
-__all__ = _exports(locals(),
-                   ends='2NS')
-
 if __name__ == '__main__':
 
-    from pycocoa.utils import _allisting
+    from pycocoa.utils import _all_exports, _all_listing
 
-    _allisting(__all__, locals(), __version__, __file__)
+    _all_exports(locals(), ends='2NS')
+    _all_listing(__all__, locals())
 
 # MIT License <https://OpenSource.org/licenses/MIT>
 #

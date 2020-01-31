@@ -4,18 +4,18 @@
 u'''Print L{pycocoa} version, etc. using C{python -m pycocoa}.
 '''
 
-from pycocoa import __all__, __version__, _locals
-from pycocoa.utils import _allisting  # PYCHOK expected
+from pycocoa import __all__, version, _locals
+from pycocoa.utils import _all_listing  # PYCHOK expected
 
-_allisting(__all__, _locals(), __version__, 'pycocoa')
+_all_listing(__all__, _locals(), version=version, filename='pycocoa')
 
 from pycocoa.runtime import _nsDeallocObserverIvar1
 _nsDeallocObserverIvar1()
 
 __all__ = ()
-__version__ = '19.09.28'
+__version__ = '20.01.08'
 
-# **) MIT License
+# MIT License <https://OpenSource.org/licenses/MIT>
 #
 # Copyright (C) 2018-2019 -- mrJean1 at Gmail -- All Rights Reserved.
 #

@@ -24,6 +24,7 @@ from pycocoa.getters import _ivar_ctype, get_c_func_t, get_class, \
                             get_classname, get_classof, get_ivar, \
                             get_metaclass, get_protocol, get_selector, \
                             get_superclassof
+from pycocoa.lazily  import _ALL_LAZY
 from pycocoa.octypes import __i386__, __LP64__, c_struct_t, c_void, \
                             ctype2encoding, emcoding2ctype, \
                             encoding2ctype, Class_t, Id_t, IMP_t, \
@@ -31,7 +32,7 @@ from pycocoa.octypes import __i386__, __LP64__, c_struct_t, c_void, \
                             ObjC_t, SEL_t, split_emcoding2, \
                             TypeCodeError
 from pycocoa.oslibs  import cfString2str, _csignature, libobjc
-from pycocoa.utils   import bytes2str, _ByteStrs, _Constants, _exports, \
+from pycocoa.utils   import bytes2str, _ByteStrs, _Constants, \
                             isinstanceOf, lambda1, missing,  name2py, \
                             printf, property2, property_RO, str2bytes, \
                             _TypeError
@@ -44,7 +45,8 @@ from ctypes import alignment, ArgumentError, byref, cast, c_buffer, \
 #                  # _NSDeallocObserver.  sizeof is imported at the
 #                  # very end of this module.
 
-__version__ = '19.08.31'
+__all__ = _ALL_LAZY.runtime
+__version__ = '20.01.08'
 
 # <https://Developer.Apple.com/documentation/objectivec/
 #        objc_associationpolicy?language=objc>
@@ -1560,15 +1562,13 @@ from ctypes import sizeof
 # _nsDeallocObserverIvar1()  # PYCHOK expected
 # del _nsDeallocObserverIvar1  # PYCHOK expected
 
-# filter locals() for .__init__.py
-__all__ = _exports(locals(), 'libobjc', 'release', 'register_subclass', 'retain',
-                   starts=('add_', 'is', 'OBJC_', 'ObjC', 'send_', 'set_'))
-
 if __name__ == '__main__':
 
-    from pycocoa.utils import _allisting
+    from pycocoa.utils import _all_exports, _all_listing
 
-    _allisting(__all__, locals(), __version__, __file__)
+    _all_exports(locals(), 'libobjc', 'release', 'register_subclass', 'retain',
+                 starts=('add_', 'is', 'OBJC_', 'ObjC', 'send_', 'set_'))
+    _all_listing(__all__, locals())
 
 # MIT License <https://OpenSource.org/licenses/MIT>
 #

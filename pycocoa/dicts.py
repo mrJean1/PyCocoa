@@ -7,6 +7,7 @@
 '''
 # all imports listed explicitly to help PyChecker
 from pycocoa.bases   import _Type0
+from pycocoa.lazily  import _ALL_LAZY
 from pycocoa.nstypes import isNone, NSDictionary, nsIter2, \
                             NSMutableDictionary, ns2Type
 from pycocoa.pytypes import py2NS, type2NS
@@ -14,9 +15,8 @@ from pycocoa.runtime import isImmutable, isObjCInstanceOf, \
                             ObjCClass, ObjCInstance
 from pycocoa.utils   import isinstanceOf, missing, _Types
 
-__all__ = ('Dict',
-           'FrozenDict')
-__version__ = '19.07.21'
+__all__ = _ALL_LAZY.dicts
+__version__ = '20.01.08'
 
 
 def _dict_cmp(dict1, dict2):
@@ -271,9 +271,9 @@ NSMutableDictionary._Type = _Types.Dict       = Dict
 
 if __name__ == '__main__':
 
-    from pycocoa.utils import _allisting
+    from pycocoa.utils import _all_listing
 
-    _allisting(__all__, locals(), __version__, __file__)
+    _all_listing(__all__, locals())
 
 # MIT License <https://OpenSource.org/licenses/MIT>
 #

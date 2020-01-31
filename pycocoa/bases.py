@@ -6,13 +6,14 @@
 '''(INTERNAL) Base classes for Python C{Types}.
 '''
 # all imports listed explicitly to help PyChecker
+from pycocoa.lazily  import _ALL_LAZY
 from pycocoa.nstypes import isNone, NSStr, nsString2str
 from pycocoa.octypes import c_struct_t, ObjC_t
 from pycocoa.runtime import ObjCInstance, release
 from pycocoa.utils   import bytes2str, isinstanceOf, type2strepr
 
-__all__ = ()
-__version__ = '19.07.21'
+__all__ = _ALL_LAZY.bases
+__version__ = '20.01.08'
 
 
 class _Type0(object):
@@ -136,9 +137,9 @@ class _Type2(_Type1):
 
 if __name__ == '__main__':
 
-    from pycocoa.utils import _allisting
+    from pycocoa.utils import _all_listing
 
-    _allisting(__all__, locals(), __version__, __file__)
+    _all_listing(__all__, locals())
 
 # MIT License <https://OpenSource.org/licenses/MIT>
 #

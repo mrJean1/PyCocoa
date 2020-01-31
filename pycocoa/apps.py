@@ -9,6 +9,7 @@
 from pycocoa.bases   import _Type2
 from pycocoa.menus   import _callMenuItem_name, _handleMenuItem_name, \
                             Item, ItemSeparator, Menu, MenuBar, ns2Item
+from pycocoa.lazily  import _ALL_LAZY
 from pycocoa.nstypes import NSApplication, nsBundleRename, \
                             NSConcreteNotification, NSMain, \
                             NSNotification, nsOf, NSStr
@@ -22,12 +23,8 @@ from pycocoa.utils   import _Globals, bytes2str, isinstanceOf, \
 from threading import Thread
 from time import sleep
 
-__all__ = ('App',
-           'NSApplicationDelegate',
-           'Tile',
-           'app_title',
-           'ns2App')
-__version__ = '19.09.23'
+__all__ = _ALL_LAZY.apps
+__version__ = '20.01.08'
 
 
 class App(_Type2):
@@ -617,9 +614,9 @@ NSApplication._Type = _Types.App = App
 
 if __name__ == '__main__':
 
-    from pycocoa.utils import _allisting
+    from pycocoa.utils import _all_listing
 
-    _allisting(__all__, locals(), __version__, __file__)
+    _all_listing(__all__, locals())
 
 # MIT License <https://OpenSource.org/licenses/MIT>
 #

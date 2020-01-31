@@ -12,6 +12,7 @@
 from pycocoa.bases    import _Type2
 from pycocoa.fonts    import Font
 from pycocoa.geometry import Rect4
+from pycocoa.lazily   import _ALL_LAZY
 from pycocoa.nstypes  import NSMain, NSScrollView, NSStr, NSTableColumn, \
                              NSTableView  # isNone, NSTextField
 from pycocoa.octypes  import NSSize_t
@@ -26,10 +27,8 @@ from pycocoa.utils    import _Globals, isinstanceOf, module_property_RO, \
                              property_RO, _Types
 from pycocoa.windows  import Screen, Window, WindowStyle
 
-__all__ = ('NSTableViewDelegate',
-           'Table', 'TableWindow',
-           'closeTables')
-__version__ = '19.08.31'
+__all__ = _ALL_LAZY.tables
+__version__ = '20.01.08'
 
 _Alignment = dict(center=NSTextAlignmentCenter,
                justified=NSTextAlignmentJustified,
@@ -384,9 +383,9 @@ _Types.TableWindow               = TableWindow
 
 if __name__ == '__main__':
 
-    from pycocoa.utils import _allisting
+    from pycocoa.utils import _all_listing
 
-    _allisting(__all__, locals(), __version__, __file__)
+    _all_listing(__all__, locals())
 
 # MIT License <https://OpenSource.org/licenses/MIT>
 #

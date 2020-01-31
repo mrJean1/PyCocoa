@@ -7,15 +7,14 @@
 '''
 # all imports listed explicitly to help PyChecker
 from pycocoa.bases   import _Type0
+from pycocoa.lazily  import _ALL_LAZY
 from pycocoa.nstypes import ns2py, NSMutableSet, nsSet2set, NSSet
 from pycocoa.pytypes import frozenset2NS, set2NS
 from pycocoa.runtime import isImmutable, isObjCInstanceOf, ObjCInstance
 from pycocoa.utils   import property_RO, _Types
 
-__all__ = ('FrozenSet',
-           'Set')
-__version__ = '19.07.21'
-
+__all__ = _ALL_LAZY.sets
+__version__ = '20.01.08'
 
 if True:  # MCCABE 71
 
@@ -319,9 +318,9 @@ NSMutableSet._Type = _Types.Set       = Set
 
 if __name__ == '__main__':
 
-    from pycocoa.utils import _allisting
+    from pycocoa.utils import _all_listing
 
-    _allisting(__all__, locals(), __version__, __file__)
+    _all_listing(__all__, locals(), __version__, __file__)
 
 # MIT License <https://OpenSource.org/licenses/MIT>
 #

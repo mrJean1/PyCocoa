@@ -11,6 +11,7 @@
 '''
 # all imports listed explicitly to help PyChecker
 from pycocoa.bases   import _Type2
+from pycocoa.lazily  import _ALL_LAZY
 from pycocoa.nstypes import NSAlert, NSError, NSFont, NSMain, \
                             NSNotificationCenter, NSOpenPanel, \
                             NSSavePanel, NSStr, nsString2str, \
@@ -34,14 +35,8 @@ try:
 except ImportError:
     _Browser, _BrowserError = None, ImportError
 
-__all__ = ('AlertPanel', 'AlertStyle',
-           'BrowserPanel',
-           'ErrorPanel',
-           'OpenPanel',
-           'PanelButton',
-           'SavePanel',
-           'TextPanel')
-__version__ = '19.07.21'
+__all__ = _ALL_LAZY.panels
+__version__ = '20.01.08'
 
 
 class AlertStyle(_Constants):  # Enum?
@@ -508,9 +503,33 @@ _Types.TextPanel  = TextPanel
 
 if __name__ == '__main__':
 
-    from pycocoa.utils import _allisting
+    from pycocoa.utils import _all_listing
 
-    _allisting(__all__, locals(), __version__, __file__)
+    _all_listing(__all__, locals())
+
+    _ = '''% python3 -m pycocoa.panels
+
+ panels.__all__ = tuple(
+   panels.AlertPanel is <class .AlertPanel>,
+   panels.AlertStyle.Critical=1<<1,
+                    .Info=1,
+                    .Warning=0,
+   panels.BrowserPanel is <class .BrowserPanel>,
+   panels.ErrorPanel is <class .ErrorPanel>,
+   panels.OpenPanel is <class .OpenPanel>,
+   panels.PanelButton.Cancel=0,
+                     .Close=1,
+                     .Error=-3,
+                     .OK=1,
+                     .Other=1<<1,
+                     .Suppressed=-2,
+                     .TimedOut=-1,
+   panels.SavePanel is <class .SavePanel>,
+   panels.TextPanel is <class .TextPanel>,
+ )[8]
+ panels.version = '20.01.08'
+'''
+    del _
 
 # MIT License <https://OpenSource.org/licenses/MIT>
 #

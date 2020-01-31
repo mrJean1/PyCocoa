@@ -10,6 +10,7 @@ C{PMPaperMargins} plus several C{get_...} print functions.
 @var libPC: The macOS C{PrintCore} framework library (C{ctypes.CDLL}) or C{None}.
 '''
 from pycocoa.bases   import _Type0
+from pycocoa.lazily  import _ALL_LAZY
 from pycocoa.nstypes import nsDictionary2dict, NSImageView, NSMain, \
                             NSPrinter, NSPrintInfo, NSPrintOperation, \
                             ns2py, NSStr, NSTableView, NSTextView
@@ -19,14 +20,15 @@ from pycocoa.oslibs  import cfNumber2bool, cfString, cfString2str, \
                             cfURL2str, _csignature, _free_memory, \
                             get_lib_framework, libCF, YES
 from pycocoa.runtime import isObjCInstanceOf, send_message, _Xargs
-from pycocoa.utils   import _exports, isinstanceOf, property_RO, \
-                            _Strs, zfstr, _Types
+from pycocoa.utils   import isinstanceOf, property_RO, _Strs, zfstr, \
+                           _Types
 
 from ctypes  import ArgumentError, byref, cast, c_char_p, c_double, \
                     c_int, c_void_p, POINTER, sizeof
 import os
 
-__version__ = '19.07.21'
+__all__ = _ALL_LAZY.printers
+__version__ = '20.01.08'
 
 libPC = None  # loaded on-demand
 kPMServerLocal = None
@@ -892,12 +894,13 @@ _Types.PaperCustom  = PaperCustom
 _Types.PaperMargins = PaperMargins
 _Types.Printer      = Printer
 
-# filter locals() for .__init__.py
-__all__ = _exports(locals(), 'get_libPC', 'get_resolutions',
-                             'libPC', 'Printer',
-                   starts=('Paper', 'get_p'))
-
 if __name__ == '__main__':
+
+    from pycocoa.utils import _all_exports
+
+    _all_exports(locals(), 'get_libPC', 'get_resolutions',
+                           'libPC', 'Printer',
+                 starts=('Paper', 'get_p'))
 
     for i, p in enumerate(get_printers()):
         print('%2s %s: ID %r, makemodel %r, URI %r' % (i + 1,
@@ -928,27 +931,27 @@ if __name__ == '__main__':
 
     # get_printer_browser()
 
-    _ = '''
-% python3 pycocoa/printers.py
- 1 Printer('B&W WiFi'): ID 'B_W_WiFi', makemodel 'Brother HL-2270DW CUPS', URI 'dnssd://Brother%20HL-2270DW%20series...'
- 2 Printer('B&W Wired'): ID 'Brother_HL_2270DW_2', makemodel 'Brother HL-2270DW CUPS', URI 'usb://Brother/HL-2270DW%20series...'
- 3 Printer('Color WiFi'): ID 'Color_WiFi', makemodel 'Brother MFC-9340CDW CUPS', URI 'dnssd://Brother%20MFC-9340CDW...'
- 4 Printer('Color Wired'): ID 'Color_Wired', makemodel 'Brother MFC-9340CDW CUPS', URI 'usb://Brother/MFC-9340CDW...'
+    _ = '''% python3 -m pycocoa.printers
 
-default (True) printer: Printer('B&W WiFi')...
- Printer('B&W WiFi').name: 'B&W WiFi'
- Printer('B&W WiFi').ID: 'B_W_WiFi'
- Printer('B&W WiFi').makemodel: 'Brother HL-2270DW CUPS'
- Printer('B&W WiFi').isColor: False
- Printer('B&W WiFi').location: '...)'
- Printer('B&W WiFi').psCapable: True
- Printer('B&W WiFi').psLevel: 3
- Printer('B&W WiFi').isRemote: False
- Printer('B&W WiFi').deviceURI: 'dnssd://Brother%20HL-2270DW%20series...'
- Printer('B&W WiFi').deviceDescription: {'NSDeviceIsPrinter': 'YES'}
- Printer('B&W WiFi').description: '{\n "Device Description" = {\n NSDeviceIsPrinter = YES;\n};\n "Language Level" = 3;\n Name = "B&W WiFi";\n Type = "Brother HL-2270DW CUPS";\n}'
- Printer('B&W WiFi').PPD: 'file:///var/folders/nx/...'
- Printer('B&W WiFi').resolution: (300.0, 300.0)
+ 1 Printer('B&W WiFi'): ID 'B_W_WiFi', makemodel 'Brother HL-2270DW series CUPS', URI 'dnssd://Brother%20HL-2270DW...'
+ 2 Printer('B&W Wired'): ID 'Brother_HL_2270DW_series_2', makemodel 'Brother HL-2270DW series CUPS', URI 'usb://....'
+ 3 Printer('Color WiFi'): ID 'Color_WiFi', makemodel 'Brother MFC-9340CDW CUPS', URI 'dnssd://Brother%20MFC-9340CDW....'
+ 4 Printer('Color Wired'): ID 'Color_Wired', makemodel 'Brother MFC-9340CDW CUPS', URI 'usb://Brother/MFC-9340CDW....'
+
+default (True) printer: Printer('Color WiFi')...
+ Printer('Color WiFi').name: 'Color WiFi'
+ Printer('Color WiFi').ID: 'Color_WiFi'
+ Printer('Color WiFi').makemodel: 'Brother MFC-9340CDW CUPS'
+ Printer('Color WiFi').isColor: True
+ Printer('Color WiFi').location: '....'
+ Printer('Color WiFi').psCapable: True
+ Printer('Color WiFi').psLevel: 3
+ Printer('Color WiFi').isRemote: False
+ Printer('Color WiFi').deviceURI: 'dnssd://Brother%20MFC-9340CDW....'
+ Printer('Color WiFi').deviceDescription: {'NSDeviceIsPrinter': 'YES'}
+ Printer('Color WiFi').description: '{\n    "Device Description" =     {\n        NSDeviceIsPrinter = YES;\n    };\n    "Language Level" = 3;\n    Name = "Color WiFi";\n    Type = "Brother MFC-9340CDW CUPS";\n}'
+ Printer('Color WiFi').PPD: 'file://....'
+ Printer('Color WiFi').resolution: (300.0, 300.0)
 
  1 Paper('A4'): ID 'iso-a4', 595x842 (8.264X11.694)
  2 Paper('US Letter'): ID 'na-letter', 612x792 (8.5X11)
@@ -958,18 +961,14 @@ default (True) printer: Printer('B&W WiFi')...
  6 Paper('A5 Long Edge'): ID 'A5 Long Edge', 595x420 (8.264X5.833)
  7 Paper('A6'): ID 'iso-a6', 297x420 (4.125X5.833)
  8 Paper('B5'): ID 'iso-b5', 499x709 (6.931X9.847)
- 9 Paper('B6'): ID 'iso-b6', 354x499 (4.917X6.931)
-10 Paper('Envelope #10'): ID 'na-number-10-envelope', 297x684 (4.125X9.5)
-11 Paper('Envelope DL'): ID 'iso-designated', 312x624 (4.333X8.667)
-12 Paper('Envelope C5'): ID 'iso-c5', 459x649 (6.375X9.014)
+ 9 Paper('JIS B5'): ID 'jis-b5', 516x729 (7.167X10.125)
+10 Paper('Envelope DL'): ID 'iso-designated', 312x624 (4.333X8.667)
+11 Paper('Envelope C5'): ID 'iso-c5', 459x649 (6.375X9.014)
+12 Paper('Envelope #10'): ID 'na-number-10-envelope', 297x684 (4.125X9.5)
 13 Paper('Envelope Monarch'): ID 'monarch-envelope', 279x540 (3.875X7.5)
 14 Paper('3 x 5'): ID '3 x 5', 216x360 (3X5)
 15 Paper('8.5 x 13'): ID 'Folio', 612x936 (8.5X13)
 16 Paper('Envelope PRC5 Long Edge'): ID 'DL Long Edge', 624x312 (8.667X4.333)
-17 Paper('JIS B5'): ID 'jis-b5', 516x729 (7.167X10.125)
-18 Paper('Postcard'): ID 'Hagaki', 284x419 (3.944X5.819)
-19 Paper('Envelope You4'): ID 'Envelope #4', 298x666 (4.139X9.25)
-20 Paper('Envelope Choukei 3'): ID 'Envelope MAX', 340x666 (4.722X9.25)
 
 paper: Paper('A4')...
  Paper('A4').name: 'A4'
@@ -979,7 +978,7 @@ paper: Paper('A4')...
  Paper('A4').size2inch: (8.26388888888889, 11.694444444444445)
  Paper('A4').size2mm: (209.90277777777774, 297.03888888888883)
  Paper('A4').PPD: 'A4'
- Paper('A4').printer: Printer('B&W WiFi') at 0x110c992e8
+ Paper('A4').printer: Printer('Color WiFi') at 0x107508ad0
  Paper('A4').localname: 'A4'
 '''
     del _

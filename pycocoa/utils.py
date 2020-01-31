@@ -7,13 +7,18 @@
 
 @var missing: Missing keyword argument value.
 '''
-__version__ = '19.09.23'
 
+from pycocoa.lazily import _ALL_LAZY, isLazy, _lazy_import
+
+import os
 import sys
 _Python_ = sys.version.split()[0]  # PYCHOK internal
 _Python2 = sys.version_info.major < 3  # PYCHOK internal
 _Python3 = sys.version_info.major > 2  # PYCHOK internal
 del sys
+
+__all__ = _ALL_LAZY.utils
+__version__ = '20.01.30'
 
 
 class module_property_RO(object):
@@ -202,6 +207,12 @@ class _Types(_MutableConstants):
     Tuple         = None  # set by .tuples.py
     Window        = None  # set by .windows.py
 
+    if _Python3 and isLazy:
+        def __getattribute__(self, name):
+            '''(INTERNAL) Lazily import any missing _Types.
+            '''
+            return _MutableConstants.__getattribute__(self, name) or _lazy_import(name)
+
 
 _Types = _Types()  # freeze
 
@@ -362,40 +373,6 @@ class missing(object):
 DEFAULT_UNICODE = 'utf-8'    # default Python encoding
 missing         = missing()  # private, singleton
 
-
-def aspect_ratio(width, height):
-    '''Compute the smallest, integer aspect ratio.
-
-       @param width: The width (C{float} or C{int}).
-       @param height: The height (C{float} or C{int}).
-
-       @return: 2-Tuple (width, height) as (C{int}, C{int}) or C{None}.
-
-       @example:
-
-       >>> aspect_ratio(10, 15)
-       (2, 3)
-       >>> aspect_ratio(10.0, 15)
-       (2, 3)
-       >>> aspect_ratio(10, -15)
-       (-2, 3)
-       >>> aspect_ratio(-10, -15)
-       (2, 3)
-       >>> aspect_ratio(10.5, 15)
-       (7, 10)
-       >>> aspect_ratio(0, 15)
-       ()
-    '''
-    # video 4:3, 16:9, 21:9 [14:10, 19:10]
-    # photo 1:1, 3:2, 4:3, 5:3, 5:4, 7:5, 16:9,
-    #            2:3  3:4  3:5  4:5  5:7  9:16
-    r = gcd(width, height)
-    if r and width and height:
-        return int(width / r), int(height / r)
-    else:
-        return None
-
-
 try:  # MCCABE 23
 
     # in Python 2- bytes *is* str and bytes.__name__ == 'str'
@@ -519,14 +496,47 @@ except NameError:  # Python 3+
 _ByteStrs = _Bytes + _Strs  # bytes and/or str types
 
 
-def _allisting(alls, localls, version, filename, argv0=''):
+def _all_exports(localls, *names, **starts_ends):  # starts=(), ends=(), not_starts=())
+    '''(INTERNAL) Check and return a tuple of __all__ exported names.
+    '''
+    m = os.path.basename(os.path.splitext(localls['__file__'])[0])
+
+    x = ', '.join(_ for _ in names if _ not in localls)
+    if x:
+        raise NameError('no %s in %s %s()' % (x, m, 'locals'))
+
+    e = starts_ends.pop('ends', ()) or ()
+    n = starts_ends.pop('not_starts', ()) or ()
+    s = starts_ends.pop('starts', ()) or ()
+    if starts_ends:  # should be empty
+        raise ValueError('%s(..., %s) in %s' % ('_exports', ', '.join(
+                         '%s=%r' % t for t in sorted(starts_ends.items())),
+                          m))
+    if e or n or s:
+        names += tuple(_ for _ in localls.keys() if (s and _.startswith(s))
+                                                 or (e and _.endswith(e)
+                                                       and not _.startswith('_'))
+                                                 or (n and not _.startswith(n)))
+
+    lazy = _ALL_LAZY.get(m, ())
+    if lazy:
+        t = ', '.join(a for a in names if a not in lazy)
+        if t:
+            raise NameError('missing %s.%s: %s' % ('lazily', m, t))
+        t = ', '.join(a for a in lazy if a not in names)
+        if t:
+            raise NameError('missing %s.%s: %s' % (m, '__all__', t))
+
+    return names
+
+
+def _all_listing(alls, localls, version='', filename='', argv0=''):
     '''(INTERNAL) Print sorted __all__ names and values.
     '''
-    import os
-
     _Globals.argv0 = argv0
 
-    m = os.path.basename(os.path.splitext(filename)[0])
+    f = filename or localls.get('__file__', 'n/a')
+    m = os.path.basename(os.path.splitext(f)[0])
     printf('%s.%s = %s(', m, '__all__', alls.__class__.__name__, nl=1)
 
     d = i = 0
@@ -561,7 +571,41 @@ def _allisting(alls, localls, version, filename, argv0=''):
     else:
         d = ''
     printf(')[%d]%s', i, d)
-    printf('%s.%s = %r', m, '__version__', version)
+    v = version or localls.get('__version__', 'n/a')  # PYCHOK version
+    printf('%s.%s = %r', m, 'version', v)
+
+
+def aspect_ratio(width, height):
+    '''Compute the smallest, integer aspect ratio.
+
+       @param width: The width (C{float} or C{int}).
+       @param height: The height (C{float} or C{int}).
+
+       @return: 2-Tuple (width, height) as (C{int}, C{int}) or C{None}.
+
+       @example:
+
+       >>> aspect_ratio(10, 15)
+       (2, 3)
+       >>> aspect_ratio(10.0, 15)
+       (2, 3)
+       >>> aspect_ratio(10, -15)
+       (-2, 3)
+       >>> aspect_ratio(-10, -15)
+       (2, 3)
+       >>> aspect_ratio(10.5, 15)
+       (7, 10)
+       >>> aspect_ratio(0, 15)
+       ()
+    '''
+    # video 4:3, 16:9, 21:9 [14:10, 19:10]
+    # photo 1:1, 3:2, 4:3, 5:3, 5:4, 7:5, 16:9,
+    #            2:3  3:4  3:5  4:5  5:7  9:16
+    r = gcd(width, height)
+    if r and width and height:
+        return int(width / r), int(height / r)
+    else:
+        return None
 
 
 def clip(bytestr, limit=50):
@@ -581,28 +625,6 @@ def clip(bytestr, limit=50):
         #   if XXX:
         #       bytestr += t('[' + str(n) + ']')
     return bytestr
-
-
-def _exports(localls, *names, **starts_ends):  # starts=(), ends=(), not_starts=())
-    '''(INTERNAL) Return a tuple of __all__ exported names.
-    '''
-    s = starts_ends.pop('starts', ()) or ()
-    e = starts_ends.pop('ends', ()) or ()
-    n = starts_ends.pop('not_starts', ()) or ()
-    if starts_ends:
-        t = localls['__file__']
-        raise ValueError('%s(..., %s) in %s' % ('_exports', ', '.join(
-                         '%s=%r' % t for t in sorted(starts_ends.items())),
-                          t))
-    t = tuple(_ for _ in localls.keys() if (s and _.startswith(s))
-                                        or (e and _.endswith(e)
-                                              and not _.startswith('_'))
-                                        or (n and not _.startswith(n)))
-    for n in names:
-        if n not in localls:
-            raise NameError('no %r in %s' % (n, 'locals'))
-
-    return t + names
 
 
 def flint(f):
@@ -935,16 +957,15 @@ def zSIstr(size, B='B', K=1024):
     return si
 
 
-__all__ = _exports(locals(), 'aspect_ratio', 'Cache2', 'clip',
-                             'DEFAULT_UNICODE', 'flint', 'isinstanceOf',
-                             'gcd', 'iterbytes', 'lambda1', 'missing',
-                             'module_property_RO', 'printf',
-                             'sortuples', 'terminating', 'type2strepr',
-                   starts=('bytes', 'inst', 'name2', 'propert', 'str', 'z'))
-
 if __name__ == '__main__':
 
-    _allisting(__all__, locals(), __version__, __file__)
+    _all_exports(locals(), 'aspect_ratio', 'Cache2', 'clip',
+                           'DEFAULT_UNICODE', 'flint', 'isinstanceOf',
+                           'gcd', 'iterbytes', 'lambda1', 'missing',
+                           'module_property_RO', 'printf',
+                           'sortuples', 'terminating', 'type2strepr',
+                 starts=('bytes', 'inst', 'name2', 'propert', 'str', 'z'))
+    _all_listing(__all__, locals())
 
 # MIT License <https://OpenSource.org/licenses/MIT>
 #

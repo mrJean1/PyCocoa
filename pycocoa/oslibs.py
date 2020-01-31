@@ -17,6 +17,7 @@
 
 '''
 # all imports listed explicitly to help PyChecker
+from pycocoa.lazily  import _ALL_LAZY
 from pycocoa.octypes import Allocator_t, Array_t, BOOL_t, CFIndex_t, \
                             CFRange_t, CGBitmapInfo_t, CGDirectDisplayID_t, \
                             CGError_t, CGFloat_t, CGGlyph_t, CGPoint_t, \
@@ -29,7 +30,7 @@ from pycocoa.octypes import Allocator_t, Array_t, BOOL_t, CFIndex_t, \
                             objc_property_attribute_t, Protocol_t, \
                             SEL_t, Set_t, String_t, TypeRef_t, \
                             UniChar_t, URL_t
-from pycocoa.utils   import bytes2str, _exports, str2bytes
+from pycocoa.utils   import bytes2str, str2bytes
 
 from ctypes  import byref, cast, cdll, c_buffer, c_byte, c_char, \
                     c_char_p, c_double, c_float, c_int, c_int8, c_int16, \
@@ -43,7 +44,8 @@ except ImportError:  # XXX Pythonista/iOS
         return None
 import os.path as os_path
 
-__version__ = '19.10.02'
+__all__ = _ALL_LAZY.oslibs
+__version__ = '20.01.30'
 _leaked2    = []  # leaked memory, 2-tuples (ptr, size)
 _libs_cache = {}  # loaded libraries, by name
 
@@ -151,8 +153,8 @@ def get_lib_framework(name, services='ApplicationServices', version=''):
         lib = _libs_cache[n_fw]
     except KeyError:
         s_fw = services + '.framework'
-        if version:  # not 'Current'
-            name = os_path.join('Versions', version, name)
+        if version:  # PYCHOK not 'Current'
+            name = os_path.join('Versions', version, name)  # PYCHOK version
         p = os_path.join('System', 'Library', 'Frameworks',
                           s_fw, 'Frameworks', n_fw, name)
         lib = cdll.LoadLibrary(os_path.sep + p)
@@ -1045,18 +1047,184 @@ _csignature(libobjc.sel_registerName, SEL_t, c_char_p)
 # VLC KIT
 # libVLCKit = get_lib('VLCKit')  # XXX not needed
 
-# filter locals() for .__init__.py
-__all__ = _exports(locals(), 'leaked2', 'NO', 'YES',
-                   starts=('get_lib', 'lib', 'NS',
-                         # 'CF', 'CG', 'ct', 'CTF',
-                         # 'kCF', 'kCG', 'kCTF',
-                          ))  # PYCHOK false
-
 if __name__ == '__main__':
 
-    from pycocoa.utils import _allisting
+    from pycocoa.utils import _all_exports, _all_listing
 
-    _allisting(__all__, locals(), __version__, __file__)
+    _all_exports(locals(), 'leaked2', 'NO', 'YES',
+                 starts=('get_lib', 'lib', 'NS',
+                       # 'CF', 'CG', 'ct', 'CTF',
+                       # 'kCF', 'kCG', 'kCTF',
+                       ))  # PYCHOK false
+    _all_listing(__all__, locals())
+
+    _ = '''% python3 -m pycocoa.oslibs
+
+ oslibs.__all__ = tuple(
+   oslibs.get_lib is <function .get_lib at 0x10b49ec20>,
+   oslibs.get_lib_framework is <function .get_lib_framework at 0x10b49ecb0>,
+   oslibs.leaked2 is <function .leaked2 at 0x10b49ed40>,
+   oslibs.libAppKit is <CDLL '/System/Library/Frameworks/AppKit.framework/AppKit', handle 7fa178d1b110 at 0x10b5ca590>,
+   oslibs.libCF is <CDLL '/System/Library/Frameworks/CoreFoundation.framework/CoreFoundation', handle 1154195b8 at 0x10b5c8090>,
+   oslibs.libCT is <CDLL '/System/Library/Frameworks/CoreText.framework/CoreText', handle 7fa178f021d0 at 0x10b6a3c50>,
+   oslibs.libFoundation is <CDLL '/System/Library/Frameworks/Foundation.framework/Foundation', handle 7fa178d10350 at 0x10b6a3e10>,
+   oslibs.libobjc is <CDLL '/usr/lib/libobjc.dylib', handle 115419a48 at 0x10b6a5490>,
+   oslibs.libquartz is <CDLL '/System/Library/Frameworks/quartz.framework/quartz', handle 7fa178c94b80 at 0x10b518e50>,
+   oslibs.NO is False or 0x0,
+   oslibs.NSAcknowledgeCharacter is 6 or 0x6,
+   oslibs.NSAlphaShiftKeyMask is 65536 or 0x10000 or 1 << 16,
+   oslibs.NSAlternateKeyMask is 524288 or 0x80000 or 1 << 19,
+   oslibs.NSAnyEventMask is 4294967295 or 0xFFFFFFFF,
+   oslibs.NSApplicationActivationPolicyAccessory is 1 or 0x1,
+   oslibs.NSApplicationActivationPolicyProhibited is 2 or 0x2,
+   oslibs.NSApplicationActivationPolicyRegular is 0 or 0x0,
+   oslibs.NSApplicationDefined is 15 or 0xF,
+   oslibs.NSApplicationDidHideNotification is c_void_p(140735631458240),
+   oslibs.NSApplicationDidUnhideNotification is c_void_p(140735631458336),
+   oslibs.NSApplicationPresentationDefault is 0 or 0x0,
+   oslibs.NSApplicationPresentationDisableHideApplication is 256 or 0x100 or 1 << 8,
+   oslibs.NSApplicationPresentationDisableProcessSwitching is 32 or 0x20 or 1 << 5,
+   oslibs.NSApplicationPresentationHideDock is 2 or 0x2,
+   oslibs.NSApplicationPresentationHideMenuBar is 8 or 0x8 or 1 << 3,
+   oslibs.NSBackingStoreBuffered is 2 or 0x2,
+   oslibs.NSBackingStoreNonretained is 1 or 0x1,
+   oslibs.NSBackingStoreRetained is 0 or 0x0,
+   oslibs.NSBackSpaceCharacter is 8 or 0x8 or 1 << 3,
+   oslibs.NSBackTabCharacter is 25 or 0x19,
+   oslibs.NSBellCharacter is 7 or 0x7,
+   oslibs.NSCancelButton is 0 or 0x0,
+   oslibs.NSCancelCharacter is 24 or 0x18 or 3 << 3,
+   oslibs.NSCarriageReturnCharacter is 13 or 0xD,
+   oslibs.NSCenterTextAlignment is 2 or 0x2,
+   oslibs.NSClearLineFunctionKey is 63289 or 0xF739,
+   oslibs.NSCommandKeyMask is 1048576 or 0x100000 or 1 << 20,
+   oslibs.NSControlKeyMask is 262144 or 0x40000 or 1 << 18,
+   oslibs.NSDataLineEscapeCharacter is 16 or 0x10 or 1 << 4,
+   oslibs.NSDefaultRunLoopMode is c_void_p(140735640637704),
+   oslibs.NSDeleteCharacter is 127 or 0x7F,
+   oslibs.NSDeleteFunctionKey is 63272 or 0xF728 or 7909 << 3,
+   oslibs.NSDeviceControl1Character is 17 or 0x11,
+   oslibs.NSDeviceControl2Character is 19 or 0x13,
+   oslibs.NSDeviceControl3Character is 19 or 0x13,
+   oslibs.NSDeviceControl4Character is 20 or 0x14,
+   oslibs.NSDownArrowFunctionKey is 63233 or 0xF701,
+   oslibs.NSEndFunctionKey is 63275 or 0xF72B,
+   oslibs.NSEndOfMediumCharacter is 25 or 0x19,
+   oslibs.NSEndOfTextCharacter is 3 or 0x3,
+   oslibs.NSEndOfTransmitBlockCharacter is 23 or 0x17,
+   oslibs.NSEndOfTransmitCharacter is 4 or 0x4,
+   oslibs.NSEnquiryCharacter is 5 or 0x5,
+   oslibs.NSEnterCharacter is 3 or 0x3,
+   oslibs.NSEscapeCharacter is 27 or 0x1B,
+   oslibs.NSEventTrackingRunLoopMode is c_void_p(140735631452928),
+   oslibs.NSExceptionHandler_t is <class ctypes.CFUNCTYPE.<locals>.CFunctionType>,
+   oslibs.NSF19FunctionKey is 63254 or 0xF716,
+   oslibs.NSF1FunctionKey is 63236 or 0xF704,
+   oslibs.NSFileHandlingPanelCancelButton is 0 or 0x0,
+   oslibs.NSFileHandlingPanelOKButton is 1 or 0x1,
+   oslibs.NSFileSeparatorCharacter is 28 or 0x1C,
+   oslibs.NSFlagsChanged is 12 or 0xC,
+   oslibs.NSFontBoldMask is 2 or 0x2,
+   oslibs.NSFontClarendonSerifsClass is 1073741824 or 0x40000000 or 1 << 30,
+   oslibs.NSFontClassMask is 4026531840 or 0xF0000000 or 15 << 28,
+   oslibs.NSFontColorGlyphsMask is 8192 or 0x2000 or 1 << 13,
+   oslibs.NSFontCompositeMask is 16384 or 0x4000 or 1 << 14,
+   oslibs.NSFontCompressedMask is 512 or 0x200 or 1 << 9,
+   oslibs.NSFontCondensedMask is 64 or 0x40 or 1 << 6,
+   oslibs.NSFontExpandedMask is 32 or 0x20 or 1 << 5,
+   oslibs.NSFontFreeformSerifsClass is 1879048192 or 0x70000000 or 7 << 28,
+   oslibs.NSFontItalicMask is 1 or 0x1,
+   oslibs.NSFontModernSerifsClass is 805306368 or 0x30000000 or 3 << 28,
+   oslibs.NSFontMonoSpaceMask is 1024 or 0x400 or 1 << 10,
+   oslibs.NSFontNarrowMask is 16 or 0x10 or 1 << 4,
+   oslibs.NSFontNonStandardCharacterSetMask is 8 or 0x8 or 1 << 3,
+   oslibs.NSFontOldStyleSerifsClass is 268435456 or 0x10000000 or 1 << 28,
+   oslibs.NSFontOrnamentalsClass is 2415919104 or 0x90000000 or 9 << 28,
+   oslibs.NSFontPosterMask is 256 or 0x100 or 1 << 8,
+   oslibs.NSFontSansSerifClass is 2147483648 or 0x80000000 or 1 << 31,
+   oslibs.NSFontScriptsClass is 2684354560 or 0xA0000000 or 5 << 29,
+   oslibs.NSFontSlabSerifsClass is 1342177280 or 0x50000000 or 5 << 28,
+   oslibs.NSFontSmallCapsMask is 128 or 0x80 or 1 << 7,
+   oslibs.NSFontSymbolicClass is 3221225472 or 0xC0000000 or 3 << 30,
+   oslibs.NSFontTransitionalSerifsClass is 536870912 or 0x20000000 or 1 << 29,
+   oslibs.NSFontUIOptimizedMask is 4096 or 0x1000 or 1 << 12,
+   oslibs.NSFontUnboldMask is 4 or 0x4,
+   oslibs.NSFontUnitalicMask is 16777216 or 0x1000000 or 1 << 24,
+   oslibs.NSFontUnknownClass is 0 or 0x0,
+   oslibs.NSFontVerticalMask is 2048 or 0x800 or 1 << 11,
+   oslibs.NSFormFeedCharacter is 12 or 0xC,
+   oslibs.NSFunctionKeyMask is 8388608 or 0x800000 or 1 << 23,
+   oslibs.NSGroupSeparatorCharacter is 29 or 0x1D,
+   oslibs.NSHelpFunctionKey is 63302 or 0xF746,
+   oslibs.NSHelpKeyMask is 4194304 or 0x400000 or 1 << 22,
+   oslibs.NSHomeFunctionKey is 63273 or 0xF729,
+   oslibs.NSHorizontalTabCharacter is 9 or 0x9,
+   oslibs.NSInteger_t is <class ctypes.c_long>,
+   oslibs.NSJustifiedTextAlignment is 3 or 0x3,
+   oslibs.NSKeyDown is 10 or 0xA,
+   oslibs.NSKeyUp is 11 or 0xB,
+   oslibs.NSLeftArrowFunctionKey is 63234 or 0xF702,
+   oslibs.NSLeftTextAlignment is 0 or 0x0,
+   oslibs.NSLineFeedCharacter is 10 or 0xA,
+   oslibs.NSLineSeparatorCharacter is 8232 or 0x2028 or 1029 << 3,
+   oslibs.NSNaturalTextAlignment is 4 or 0x4,
+   oslibs.NSNegativeAcknowledgeCharacter is 21 or 0x15,
+   oslibs.NSNewLineCharacter is 10 or 0xA,
+   oslibs.NSNullCharacter is 0 or 0x0,
+   oslibs.NSNumericPadKeyMask is 2097152 or 0x200000 or 1 << 21,
+   oslibs.NSOKButton is 1 or 0x1,
+   oslibs.NSPageDownFunctionKey is 63277 or 0xF72D,
+   oslibs.NSPageUpFunctionKey is 63276 or 0xF72C,
+   oslibs.NSParagraphSeparatorCharacter is 8233 or 0x2029,
+   oslibs.NSRecordSeparatorCharacter is 30 or 0x1E,
+   oslibs.NSRect_t is <class pycocoa.octypes.NSRect_t>,
+   oslibs.NSRightArrowFunctionKey is 63235 or 0xF703,
+   oslibs.NSRightTextAlignment is 1 or 0x1,
+   oslibs.NSShiftInCharacter is 15 or 0xF,
+   oslibs.NSShiftKeyMask is 131072 or 0x20000 or 1 << 17,
+   oslibs.NSShiftOutCharacter is 14 or 0xE,
+   oslibs.NSSpaceCharacter is 32 or 0x20 or 1 << 5,
+   oslibs.NSSquareStatusItemLength is -2 or 0x-2,
+   oslibs.NSStartOfHeadingCharacter is 1 or 0x1,
+   oslibs.NSStartOfTextCharacter is 2 or 0x2,
+   oslibs.NSSubstituteCharacter is 26 or 0x1A,
+   oslibs.NSSynchronousIdleCharacter is 22 or 0x16,
+   oslibs.NSTabCharacter is 9 or 0x9,
+   oslibs.NSTableViewDashedHorizontalGridLineMask is 8 or 0x8 or 1 << 3,
+   oslibs.NSTableViewGridNone is 0 or 0x0,
+   oslibs.NSTableViewSolidHorizontalGridLineMask is 2 or 0x2,
+   oslibs.NSTableViewSolidVerticalGridLineMask is 1 or 0x1,
+   oslibs.NSTextAlignmentCenter is 2 or 0x2,
+   oslibs.NSTextAlignmentJustified is 3 or 0x3,
+   oslibs.NSTextAlignmentLeft is 0 or 0x0,
+   oslibs.NSTextAlignmentNatural is 4 or 0x4,
+   oslibs.NSTextAlignmentRight is 1 or 0x1,
+   oslibs.NSTextWritingDirectionEmbedding is 0 or 0x0,
+   oslibs.NSTextWritingDirectionOverride is 2 or 0x2,
+   oslibs.NSTrackingActiveInActiveApp is 64 or 0x40 or 1 << 6,
+   oslibs.NSTrackingCursorUpdate is 4 or 0x4,
+   oslibs.NSTrackingMouseEnteredAndExited is 1 or 0x1,
+   oslibs.NSTrackingMouseMoved is 2 or 0x2,
+   oslibs.NSUnitSeparatorCharacter is 31 or 0x1F,
+   oslibs.NSUpArrowFunctionKey is 63232 or 0xF700 or 247 << 8,
+   oslibs.NSVariableStatusItemLength is -1 or 0x-1,
+   oslibs.NSVerticalTabCharacter is 11 or 0xB,
+   oslibs.NSWindowCloseButton is 0 or 0x0,
+   oslibs.NSWindowDocumentIconButton is 4 or 0x4,
+   oslibs.NSWindowMiniaturizeButton is 1 or 0x1,
+   oslibs.NSWindowStyleMaskClosable is 2 or 0x2,
+   oslibs.NSWindowStyleMaskMiniaturizable is 4 or 0x4,
+   oslibs.NSWindowStyleMaskResizable is 8 or 0x8 or 1 << 3,
+   oslibs.NSWindowStyleMaskTitled is 1 or 0x1,
+   oslibs.NSWindowStyleMaskUsual is 15 or 0xF,
+   oslibs.NSWindowStyleMaskUtilityWindow is 16 or 0x10 or 1 << 4,
+   oslibs.NSWindowToolbarButton is 3 or 0x3,
+   oslibs.NSWindowZoomButton is 2 or 0x2,
+   oslibs.YES is True or 0x1,
+ )[160]
+ oslibs.version = '20.01.30'
+'''
+    del _
 
 # MIT License <https://OpenSource.org/licenses/MIT>
 #

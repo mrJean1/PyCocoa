@@ -6,11 +6,12 @@
 '''C{get_...} functions to obtain ObjC classes, methods, protocols, etc.
 '''
 # all imports listed explicitly to help PyChecker
+from pycocoa.lazily  import _ALL_LAZY
 from pycocoa.octypes import emcoding2ctype, encoding2ctype, \
                             Class_t, Id_t, IMP_t, Ivar_t, Protocol_t, \
                             SEL_t, split_encoding
 from pycocoa.oslibs  import libobjc  # get_lib
-from pycocoa.utils   import bytes2str, Cache2, _exports, isinstanceOf, \
+from pycocoa.utils   import bytes2str, Cache2, isinstanceOf, \
                             missing, name2objc, str2bytes
 
 from ctypes import ArgumentError, byref, c_uint, cast, CFUNCTYPE
@@ -23,7 +24,8 @@ except AttributeError:
     _iter_zip = itertools.zip_longest  # Python 3+
 del itertools
 
-__version__ = '19.07.21'
+__all__ = _ALL_LAZY.getters
+__version__ = '20.01.08'
 
 _c_func_t_cache = {}
 _SEL_t_cache = Cache2(limit2=128)
@@ -452,14 +454,41 @@ def get_superclassnameof(objc, dflt=missing):
     return get_classname(get_superclassof(objc), dflt=dflt)
 
 
-# filter locals() for .__init__.py
-__all__ = _exports(locals(), starts='get_')
-
 if __name__ == '__main__':
 
-    from pycocoa.utils import _allisting
+    from pycocoa.utils import _all_exports, _all_listing
 
-    _allisting(__all__, locals(), __version__, __file__)
+    _all_exports(locals(), starts='get_')
+    _all_listing(__all__, locals())
+
+    _ = '''% python3 -m pycocoa.getters
+
+ getters.__all__ = tuple(
+   getters.get_c_func_t is <function .get_c_func_t at 0x109165b00>,
+   getters.get_class is <function .get_class at 0x109161dd0>,
+   getters.get_classes is <function .get_classes at 0x1093a4680>,
+   getters.get_classname is <function .get_classname at 0x1093a4710>,
+   getters.get_classnameof is <function .get_classnameof at 0x1093a47a0>,
+   getters.get_classof is <function .get_classof at 0x1093a4830>,
+   getters.get_inheritance is <function .get_inheritance at 0x1093a49e0>,
+   getters.get_ivar is <function .get_ivar at 0x1093a48c0>,
+   getters.get_ivars is <function .get_ivars at 0x1093a4950>,
+   getters.get_metaclass is <function .get_metaclass at 0x1093a4a70>,
+   getters.get_method is <function .get_method at 0x1093a4b00>,
+   getters.get_methods is <function .get_methods at 0x1093a4b90>,
+   getters.get_properties is <function .get_properties at 0x1093a4c20>,
+   getters.get_protocol is <function .get_protocol at 0x1093a4cb0>,
+   getters.get_protocols is <function .get_protocols at 0x1093a4d40>,
+   getters.get_selector is <function .get_selector at 0x1093a4dd0>,
+   getters.get_selectorname_permutations is <function .get_selectorname_permutations at 0x1093a4e60>,
+   getters.get_selectornameof is <function .get_selectornameof at 0x1093a4ef0>,
+   getters.get_superclass is <function .get_superclass at 0x1093a4f80>,
+   getters.get_superclassnameof is <function .get_superclassnameof at 0x1093c70e0>,
+   getters.get_superclassof is <function .get_superclassof at 0x1093c7050>,
+ )[21]
+ getters.version = '20.01.08'
+'''
+    del _
 
 # MIT License <https://OpenSource.org/licenses/MIT>
 #

@@ -8,7 +8,7 @@ import sys
 import unittest
 
 __all__ = ('TestSuite',)
-__version__ = '19.09.27'
+__version__ = '20.01.07'
 
 _python_exe = sys.executable
 
@@ -85,11 +85,14 @@ class TestSuite(unittest.TestCase):
     def test_Fonts4(self):
         self._run('test_Fonts4')
 
-    def test_NStypes(self):
-        self._run('test_NStypes')
-
     def test_Keys(self):
         self._run('test_Keys 0.5')
+
+    def test_Lazily(self):
+        self._run('test_Lazily')
+
+    def test_NStypes(self):
+        self._run('test_NStypes')
 
     def test_Panels(self):
         self._run('test_Panels 2')

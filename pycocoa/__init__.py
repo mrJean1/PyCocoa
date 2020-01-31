@@ -40,15 +40,17 @@ C{epydoc --html --no-private --no-source --name=PyCocoa --url=... -v pycocoa}).
 Tests
 =====
 
-The tests and examples have only been run with 64-bit Python 2.7.17, 3.7.5 and
-3.8.1 using U{Python-VLC<https://PyPI.org/project/python-vlc>} 2.2.8, 3.0.4,
-3.0.6 and 3.0.8 (with the compatible U{VLC App<https://www.VideoLan.org/vlc>})
-on macOS 10.13.6 High Sierra, 10.14.6 Mojave or 10.15.2 Catalina.  PyCocoa has
-I{not been tested} on iOS nor with 32-bit Python and I{does not work} with
-U{PyPy<https://PyPy.org>} nor with U{Intel(R) Python
-<https://Software.Intel.com/en-us/distribution-for-python>}.
+The tests and examples have only been run with 64-bit Python 3.8.1, 3.7.6, 2.7.17 and
+2.7.16 (bundled with macOS) using U{Python-VLC<https://PyPI.org/project/python-vlc>}
+3.0.8, 3.0.6, 3.0.4 and 2.2.8 (with the compatible U{VLC App<https://www.VideoLan.org/vlc>})
+on macOS 10.13.6 High Sierra, 10.14.6 Mojave or 10.15.2 Catalina.
 
-PyCocoa has been tested previously with 64-bit Python 2.7.16 and 3.7.4.
+With Python 3.8.1 and 3.7.6, the tests run I{with and without} C{lazy import}.
+
+Previously, PyCocoa was tested with 64-bit Python 3.7.5, 3.7.4 and 2.7.16.
+PyCocoa has I{not been tested} on iOS nor with 32-bit Python and I{does not
+work} with U{PyPy<https://PyPy.org>} nor with U{Intel(R) Python
+<https://Software.Intel.com/en-us/distribution-for-python>}.
 
 Notes
 =====
@@ -131,89 +133,144 @@ POSSIBILITY OF SUCH DAMAGE.}
 
 '''
 
-from os.path import abspath, dirname
+from os.path import abspath, basename, dirname
 import sys
-
-__version__ = '20.01.02'
 
 p = sys.platform
 if not p.startswith('darwin'):
     raise NotImplementedError('%s not supported, only %s' % (p, 'macOS'))
 del p
 
-# PyChecker chockes on .import
-d = dirname(abspath(__file__))
-if d not in sys.path:
-    sys.path.insert(0, d)
-del d, abspath, dirname, sys
+# <https://PyInstaller.ReadTheDocs.io/en/stable/runtime-information.html>
+_isfrozen       = getattr(sys, 'frozen', False)
+pycocoa_abspath = dirname(abspath(__file__))  # sys._MEIPASS + '/pycocoa'
+_pycocoa        = __package__ or basename(pycocoa_abspath)
 
-from pycocoa.nstypes import *  # PYCHOK expected
-from pycocoa.octypes import *  # PYCHOK expected
-from pycocoa.oslibs  import *  # PYCHOK expected
-from pycocoa.pytypes import *  # PYCHOK expected
-from pycocoa.runtime import *  # PYCHOK expected
+__version__ = '20.01.30'
+# see setup.py for similar logic
+version = '.'.join(map(str, map(int, __version__.split('.'))))
 
-# Python Type wrappers
-from pycocoa.apps     import *  # PYCHOK expected
-from pycocoa.bases    import *  # PYCHOK expected
-from pycocoa.dicts    import *  # PYCHOK expected
-from pycocoa.fonts    import *  # PYCHOK expected
-from pycocoa.getters  import *  # PYCHOK expected
-from pycocoa.geometry import *  # PYCHOK expected
-from pycocoa.lists    import *  # PYCHOK expected
-from pycocoa.menus    import *  # PYCHOK expected
-from pycocoa.panels   import *  # PYCHOK expected
-from pycocoa.printers import *  # PYCHOK expected
-from pycocoa.sets     import *  # PYCHOK expected
-from pycocoa.strs     import *  # PYCHOK expected
-from pycocoa.tables   import *  # PYCHOK expected
-from pycocoa.tuples   import *  # PYCHOK expected
-from pycocoa.utils    import *  # PYCHOK expected
-from pycocoa.windows  import *  # PYCHOK expected
+if _isfrozen:  # avoid lazy import
+    _lazy_import2 = None
+else:
+    # setting __path__ should ...
+    __path__ = [pycocoa_abspath]
+    try:  # ... make this import work, ...
+        import pycocoa.lazily as _
+    except ImportError:  # ... if it doesn't, extend
+        # sys.path to include this very directory such
+        # that all public and private sub-modules can
+        # be imported (and checked by PyChecker, etc.)
+        sys.path.insert(0, pycocoa_abspath)  # XXX __path__[0]
 
-# if needed, for backward compatibility with cocoa-python:
-# cfarray_to_list               = nsArray2listuple           # PYCHOK expected
-# cfnumber_to_number            = cfNumber2num               # PYCHOK expected
-# cfset_to_set                  = nsSet2set                  # PYCHOK expected
-# CFSTR                         = NSStr                      # PYCHOK expected
-# cfstring_to_string            = cfString2str               # PYCHOK expected
-# cftype_to_value               = ns2py                      # PYCHOK expected
-# create_subclass               = add_subclass               # PYCHOK expected
-# DeallocObserver               = _nsDeallocObserver         # PYCHOK expected
-# get_cfunctype                 = get_c_func_t               # PYCHOK expected
-# get_instance_variable         = get_ivar                   # PYCHOK expected
-# get_NSString                  = NSStr                      # PYCHOK expected
-# get_object_class              = get_classof                # PYCHOK expected
-# get_superclass_of_object      = get_superclassof           # PYCHOK expected
-# objc                          = libobjc                    # PYCHOK expected
-# objc_id                       = Id_t                       # PYCHOK expected
-# OBJC_SUPER                    = objc_super_t               # PYCHOK expected
-# OBJC_SUPER_PTR                = objc_super_t_ptr           # PYCHOK expected
-# ObjCClass.get_class_method    = ObjCClass.get_classmethod  # PYCHOK expected
-# ObjCClass.get_instance_method = ObjCClass.get_method       # PYCHOK expected
-# parse_type_encoding           = split_encoding             # PYCHOK expected
-# set_instance_variable         = set_ivar                   # PYCHOK expected
-# unichar                       = unichar_t                  # PYCHOK expected
-# UniChar                       = UniChar_t                  # PYCHOK expected
+    try:
+        # lazily requires Python 3.7+, see lazily.__doc__
+        from pycocoa.lazily import LazyImportError, _lazy_import2  # PYCHOK expected
+        _, __getattr__ = _lazy_import2(_pycocoa)  # PYCHOK expected
 
-# if needed, previous NS...WindowMask names, deprecated ones are marked with D?
-# NSBorderlessWindowMask             = NSWindowStyleMaskBorderless              # PYCHOK D?
-# NSClosableWindowMask               = NSWindowStyleMaskClosable                # PYCHOK expected
-# NSFullScreenWindowMask             = NSWindowStyleMaskFullScreen              # PYCHOK D?
-# NSFullSizeContentViewWindowMask    = NSWindowStyleMaskFullSizeContentView     # PYCHOK D?
-# NSHUDWindowMask?                   = NSWindowStyleMaskHUDWindow               # PYCHOK D?
-# NSMiniaturizableWindowMask         = NSWindowStyleMaskMiniaturizable          # PYCHOK expected
-# NSMiniWindowMask                   = NSWindowStyleMaskNonactivatingPanel      # PYCHOK D?
-# NSResizableWindowMask              = NSWindowStyleMaskResizable               # PYCHOK expected
-# NSTexturedBackgroundWindowMask     = NSWindowStyleMaskTexturedBackground      # PYCHOK D?
-# NSTitledWindowMask                 = NSWindowStyleMaskTitled                  # PYCHOK D?
-# NSUtilityWindowMask                = NSWindowStyleMaskUtilityWindow           # PYCHOK D?
-# NSUnifiedTitleAndToolbarWindowMask = NSWindowStyleMaskUnifiedTitleAndToolbar  # PYCHOK D?
-# NSUnscaledWindowMask               = NSWindowStyleMaskUnscaled                # PYCHOK D? XXX
+    except (ImportError, LazyImportError, NotImplementedError):
+        _lazy_import2 = None
 
-# filter locals() for .__init__.py
-from pycocoa.utils import _exports  # PYCHOK expected
-__all__ = _exports(locals(), not_starts=('_', 'CFUNCTION', 'c_', 'kC'))
+del abspath, basename, dirname, sys  # exclude from globals(), __all__
+
+if not _lazy_import2:  # import and set __all__
+
+    import pycocoa.nstypes as nstypes  # PYCHOK exported
+    import pycocoa.octypes as octypes  # PYCHOK exported
+    import pycocoa.oslibs  as oslibs   # PYCHOK exported
+    import pycocoa.pytypes as pytypes  # PYCHOK exported
+    import pycocoa.runtime as runtime  # PYCHOK exported
+
+    # Python Type wrappers
+    import pycocoa.apps     as apps      # PYCHOK exported
+    import pycocoa.bases    as bases     # PYCHOK exported
+    import pycocoa.bases    as bases     # PYCHOK exported
+    import pycocoa.bases    as bases     # PYCHOK exported
+    import pycocoa.getters  as getters   # PYCHOK exported
+    import pycocoa.geometry as geometry  # PYCHOK exported
+    import pycocoa.lazily   as lazily    # PYCHOK exported
+    import pycocoa.lists    as lists     # PYCHOK exported
+    import pycocoa.menus    as menus     # PYCHOK exported
+    import pycocoa.panels   as panels    # PYCHOK exported
+    import pycocoa.printers as printers  # PYCHOK exported
+    import pycocoa.sets     as sets      # PYCHOK exported
+    import pycocoa.strs     as strs      # PYCHOK exported
+    import pycocoa.tables   as tables    # PYCHOK exported
+    import pycocoa.tuples   as tuples    # PYCHOK exported
+    import pycocoa.utils    as utils     # PYCHOK exported
+    import pycocoa.windows  as windows   # PYCHOK exported
+
+    # lift all public classes, constants, functions,
+    # etc. (see also David Beazley's talk
+    # <https://DaBeaz.com/modulepackage/index.html>)
+    from pycocoa.nstypes import *  # PYCHOK __all__
+    from pycocoa.octypes import *  # PYCHOK __all__
+    from pycocoa.oslibs  import *  # PYCHOK __all__
+    from pycocoa.pytypes import *  # PYCHOK __all__
+    from pycocoa.runtime import *  # PYCHOK __all__
+
+    # Python Type wrappers
+    from pycocoa.apps     import *  # PYCHOK __all__
+    from pycocoa.bases    import *  # PYCHOK __all__
+    from pycocoa.dicts    import *  # PYCHOK __all__
+    from pycocoa.fonts    import *  # PYCHOK __all__
+    from pycocoa.getters  import *  # PYCHOK __all__
+    from pycocoa.geometry import *  # PYCHOK __all__
+    from pycocoa.lazily   import *  # PYCHOK __all__
+    from pycocoa.lists    import *  # PYCHOK __all__
+    from pycocoa.menus    import *  # PYCHOK __all__
+    from pycocoa.panels   import *  # PYCHOK __all__
+    from pycocoa.printers import *  # PYCHOK __all__
+    from pycocoa.sets     import *  # PYCHOK __all__
+    from pycocoa.strs     import *  # PYCHOK __all__
+    from pycocoa.tables   import *  # PYCHOK __all__
+    from pycocoa.tuples   import *  # PYCHOK __all__
+    from pycocoa.utils    import *  # PYCHOK __all__
+    from pycocoa.windows  import *  # PYCHOK __all__
+
+    # if needed, for backward compatibility with cocoa-python:
+    # cfarray_to_list               = nsArray2listuple           # PYCHOK expected
+    # cfnumber_to_number            = cfNumber2num               # PYCHOK expected
+    # cfset_to_set                  = nsSet2set                  # PYCHOK expected
+    # CFSTR                         = NSStr                      # PYCHOK expected
+    # cfstring_to_string            = cfString2str               # PYCHOK expected
+    # cftype_to_value               = ns2py                      # PYCHOK expected
+    # create_subclass               = add_subclass               # PYCHOK expected
+    # DeallocObserver               = _nsDeallocObserver         # PYCHOK expected
+    # get_cfunctype                 = get_c_func_t               # PYCHOK expected
+    # get_instance_variable         = get_ivar                   # PYCHOK expected
+    # get_NSString                  = NSStr                      # PYCHOK expected
+    # get_object_class              = get_classof                # PYCHOK expected
+    # get_superclass_of_object      = get_superclassof           # PYCHOK expected
+    # objc                          = libobjc                    # PYCHOK expected
+    # objc_id                       = Id_t                       # PYCHOK expected
+    # OBJC_SUPER                    = objc_super_t               # PYCHOK expected
+    # OBJC_SUPER_PTR                = objc_super_t_ptr           # PYCHOK expected
+    # ObjCClass.get_class_method    = ObjCClass.get_classmethod  # PYCHOK expected
+    # ObjCClass.get_instance_method = ObjCClass.get_method       # PYCHOK expected
+    # parse_type_encoding           = split_encoding             # PYCHOK expected
+    # set_instance_variable         = set_ivar                   # PYCHOK expected
+    # unichar                       = unichar_t                  # PYCHOK expected
+    # UniChar                       = UniChar_t                  # PYCHOK expected
+
+    # if needed, previous NS...WindowMask names, deprecated ones are marked with D?
+    # NSBorderlessWindowMask             = NSWindowStyleMaskBorderless              # PYCHOK D?
+    # NSClosableWindowMask               = NSWindowStyleMaskClosable                # PYCHOK expected
+    # NSFullScreenWindowMask             = NSWindowStyleMaskFullScreen              # PYCHOK D?
+    # NSFullSizeContentViewWindowMask    = NSWindowStyleMaskFullSizeContentView     # PYCHOK D?
+    # NSHUDWindowMask?                   = NSWindowStyleMaskHUDWindow               # PYCHOK D?
+    # NSMiniaturizableWindowMask         = NSWindowStyleMaskMiniaturizable          # PYCHOK expected
+    # NSMiniWindowMask                   = NSWindowStyleMaskNonactivatingPanel      # PYCHOK D?
+    # NSResizableWindowMask              = NSWindowStyleMaskResizable               # PYCHOK expected
+    # NSTexturedBackgroundWindowMask     = NSWindowStyleMaskTexturedBackground      # PYCHOK D?
+    # NSTitledWindowMask                 = NSWindowStyleMaskTitled                  # PYCHOK D?
+    # NSUtilityWindowMask                = NSWindowStyleMaskUtilityWindow           # PYCHOK D?
+    # NSUnifiedTitleAndToolbarWindowMask = NSWindowStyleMaskUnifiedTitleAndToolbar  # PYCHOK D?
+    # NSUnscaledWindowMask               = NSWindowStyleMaskUnscaled                # PYCHOK D? XXX
+
+    # filter locals() for .__init__.py
+    from pycocoa.utils import _all_exports  # PYCHOK expected
+    __all__ = _all_exports(locals(), not_starts=('_', 'CFUNCTION', 'c_', 'kC'))
 
 
 def _locals():

@@ -38,8 +38,9 @@ are ObjC types defined in terms of a C{ctypes} C{c_} type.
 '''
 # all imports listed explicitly to help PyChecker
 # from pycocoa.getters import get_selectornameof
-from pycocoa.utils import bytes2str, _exports, inst2strepr, iterbytes, \
-                  missing, property_RO, str2bytes
+from pycocoa.lazily import _ALL_LAZY
+from pycocoa.utils  import bytes2str, inst2strepr, iterbytes, \
+                           missing, property_RO, str2bytes
 
 from ctypes import c_bool, c_byte, c_char, c_char_p, c_double, \
                    c_float, c_int, c_int32, c_int64, c_long, \
@@ -53,7 +54,8 @@ except ImportError:
     c_void = None
 from platform import machine  # as machine
 
-__version__ = '19.07.21'
+__all__ = _ALL_LAZY.octypes
+__version__ = '20.01.08'
 
 z = sizeof(c_void_p)
 if z == 4:
@@ -817,13 +819,14 @@ def split_encoding(encoding):  # MCCABE 18
     return codes
 
 
-__all__ = _exports(locals(), 'PyObjectEncoding', 'TypeCodeError', 'c_void',
-                   starts=('CG', 'CF', 'NS', 'ObjC', 'is', 'split_'),
-                   ends='_t')
-
 if __name__ == '__main__':
 
-    from pycocoa.utils import _allisting, bytes2repr, _Globals, printf
+    from pycocoa.utils import _all_exports, _all_listing, \
+                               bytes2repr, _Globals, printf
+
+    _all_exports(locals(), 'PyObjectEncoding', 'TypeCodeError', 'c_void',
+                 starts=('CG', 'CF', 'NS', 'ObjC', 'is', 'split_'),
+                 ends='_t')
 
     _Globals.argv0 = ''
 
@@ -854,9 +857,9 @@ if __name__ == '__main__':
         if not e.endswith(c):
             printf('  %s: %r != %r', t.__name__, c, e)
 
-    _allisting(__all__, locals(), __version__, __file__)
+    _all_listing(__all__, locals())
 
-_ = '''
+    _ = '''% python3 -m pycocoa.octypes
 
  ctype2encoding ...
     1: Class_t   -> b'#'
@@ -918,22 +921,96 @@ _ = '''
    34: b'{}' -> Struct_t
 
  checking NS...Encoding ...
-   NSRange_t: '=LL}' != '{_NSRange=QQ}'
+   NSRange_t: b'=LL}' != b'{_NSRange=QQ}'
 
  octypes.__all__ = tuple(
    octypes.Allocator_t is <class .Allocator_t>,
    octypes.Array_t is <class ctypes.c_void_p>,
    octypes.Block_t is <class .Block_t>,
    octypes.BOOL_t is <class .BOOL_t>,
-...
+   octypes.c_ptrdiff_t is <class ctypes.c_long>,
+   octypes.c_struct_t is <class .c_struct_t>,
+   octypes.c_void is None,
+   octypes.CFIndex_t is <class ctypes.c_long>,
+   octypes.CFRange_t is <class .CFRange_t>,
+   octypes.CGBitmapInfo_t is <class ctypes.c_uint>,
+   octypes.CGDirectDisplayID_t is <class ctypes.c_uint>,
+   octypes.CGError_t is <class ctypes.c_int>,
+   octypes.CGFloat_t is <class ctypes.c_double>,
+   octypes.CGGlyph_t is <class ctypes.c_ushort>,
+   octypes.CGImageEncoding is b'{CGImage=}',
+   octypes.CGPoint_t is <class .NSPoint_t>,
+   octypes.CGPointEncoding is b'{CGPoint=dd}',
+   octypes.CGRect_t is <class .NSRect_t>,
+   octypes.CGRectEncoding is b'{CGRect={CGPoint=dd}{CGSize=dd}}',
+   octypes.CGSize_t is <class .NSSize_t>,
+   octypes.CGSizeEncoding is b'{CGSize=dd}',
+   octypes.Class_t is <class .Class_t>,
+   octypes.CTFontOrientation_t is <class ctypes.c_uint>,
+   octypes.CTFontSymbolicTraits_t is <class ctypes.c_uint>,
+   octypes.Data_t is <class ctypes.c_void_p>,
+   octypes.Dictionary_t is <class ctypes.c_void_p>,
+   octypes.Id_t is <class .Id_t>,
+   octypes.IMP_t is <class .IMP_t>,
+   octypes.Ivar_t is <class .Ivar_t>,
+   octypes.Method_t is <class .Method_t>,
+   octypes.NSDouble_t is <class ctypes.c_double>,
+   octypes.NSFloat_t is <class ctypes.c_float>,
+   octypes.NSFloatEncoding is b'f',
+   octypes.NSInteger_t is <class ctypes.c_long>,
+   octypes.NSIntegerEncoding is b'l',
+   octypes.NSIntegerMax is 9223372036854775807 or 0x7FFFFFFFFFFFFFFF,
+   octypes.NSMakePoint is <class .NSPoint_t>,
+   octypes.NSMakeRange is <class .NSRange_t>,
+   octypes.NSMakeRect is <class .NSRect4_t>,
+   octypes.NSMakeSize is <class .NSSize_t>,
+   octypes.NSNotFound is 9223372036854775807 or 0x7FFFFFFFFFFFFFFF,
+   octypes.NSPoint_t is <class .NSPoint_t>,
+   octypes.NSPointEncoding is b'{CGPoint=dd}',
+   octypes.NSPointZero is <NSPoint_t(x=0.0, y=0.0) at 0x10ebc7320>,
+   octypes.NSRange_t is <class .NSRange_t>,
+   octypes.NSRangeEncoding is b'{_NSRange=QQ}',
+   octypes.NSRect4_t is <class .NSRect4_t>,
+   octypes.NSRect_t is <class .NSRect_t>,
+   octypes.NSRectEncoding is b'{CGRect={CGPoint=dd}{CGSize=dd}}',
+   octypes.NSSize_t is <class .NSSize_t>,
+   octypes.NSSizeEncoding is b'{CGSize=dd}',
+   octypes.NSTimeInterval_t is <class ctypes.c_double>,
+   octypes.NSUInteger_t is <class ctypes.c_ulong>,
+   octypes.NSUIntegerEncoding is b'L',
+   octypes.NSZoneEncoding is b'{_NSZone=}',
+   octypes.Number_t is <class ctypes.c_void_p>,
+   octypes.NumberType_t is <class ctypes.c_ulong>,
+   octypes.objc_method_description_t is <class .objc_method_description_t>,
+   octypes.objc_property_attribute_t is <class .objc_property_attribute_t>,
+   octypes.objc_property_t is <class .objc_property_t>,
+   octypes.objc_super_t is <class .objc_super_t>,
+   octypes.ObjC_t is <class .ObjC_t>,
+   octypes.OptionFlags_t is <class ctypes.c_ulong>,
+   octypes.Protocol_t is <class .Protocol_t>,
+   octypes.PyObjectEncoding is b'{PyObject=@}',
+   octypes.RunLoop_t is <class .RunLoop_t>,
+   octypes.SEL_t is <class .SEL_t>,
+   octypes.Set_t is <class ctypes.c_void_p>,
+   octypes.split_emcoding2 is <function .split_emcoding2 at 0x10ebd5290>,
+   octypes.split_encoding is <function .split_encoding at 0x10ebd5320>,
+   octypes.String_t is <class ctypes.c_void_p>,
+   octypes.Struct_t is <class .Struct_t>,
+   octypes.TimeInterval_t is <class ctypes.c_double>,
+   octypes.TypeCodeError is <class .TypeCodeError>,
+   octypes.TypeID_t is <class ctypes.c_ulong>,
+   octypes.TypeRef_t is <class .TypeRef_t>,
+   octypes.UniChar_t is <class ctypes.c_ushort>,
+   octypes.unichar_t is <class ctypes.c_wchar>,
    octypes.Union_t is <class .Union_t>,
    octypes.Unknown_t is <class .Unknown_t>,
    octypes.UnknownPtr_t is <class .UnknownPtr_t>,
+   octypes.URL_t is <class .URL_t>,
    octypes.VoidPtr_t is <class .VoidPtr_t>,
- )[82]
- octypes.__version__ = '18.05.17'
+ )[83]
+ octypes.version = '20.01.08'
 '''
-del _
+    del _
 
 # MIT License <https://OpenSource.org/licenses/MIT>
 #

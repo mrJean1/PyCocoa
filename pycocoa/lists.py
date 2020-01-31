@@ -6,6 +6,7 @@
 '''Type L{List}, wrapping ObjC C{NSMutableArray}.
 '''
 # all imports listed explicitly to help PyChecker
+from pycocoa.lazily  import _ALL_LAZY
 from pycocoa.nstypes import NSMutableArray
 from pycocoa.pytypes import list2NS, py2NS
 from pycocoa.runtime import isObjCInstanceOf
@@ -17,8 +18,8 @@ try:
 except ImportError:  # Python 2-
     from itertools import izip_longest as zip_longest
 
-__all__ = ('List',)
-__version__ = '19.07.21'
+__all__ = _ALL_LAZY.lists
+__version__ = '20.01.08'
 
 
 class List(Tuple):
@@ -123,9 +124,9 @@ NSMutableArray._Type = _Types.List = List
 
 if __name__ == '__main__':
 
-    from pycocoa.utils import _allisting
+    from pycocoa.utils import _all_listing
 
-    _allisting(__all__, locals(), __version__, __file__)
+    _all_listing(__all__, locals())
 
 # MIT License <https://OpenSource.org/licenses/MIT>
 #

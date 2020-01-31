@@ -10,6 +10,7 @@
 '''
 # all imports listed explicitly to help PyChecker
 from pycocoa.bases   import _Type0
+from pycocoa.lazily  import _ALL_LAZY
 from pycocoa.nstypes import isNone, NSFont, nsIter, nsIter2, NSMain, \
                             NSStr, nsString2str
 from pycocoa.oslibs  import NSFontBoldMask, NSFontItalicMask, \
@@ -20,11 +21,12 @@ from pycocoa.oslibs  import NSFontBoldMask, NSFontItalicMask, \
                             NSFontUnboldMask, NSFontUnitalicMask
 from pycocoa.runtime import isObjCInstanceOf, release
 from pycocoa.strs    import Str
-from pycocoa.utils   import bytes2str, _ByteStrs, _Constants, _exports, \
-                            flint, _Ints, isinstanceOf, property_RO, \
-                            _Singletons, _Types
+from pycocoa.utils   import bytes2str, _ByteStrs, _Constants, flint, \
+                           _Ints, isinstanceOf, property_RO, \
+                           _Singletons, _Types
 
-__version__ = '19.07.21'
+__all__ = _ALL_LAZY.fonts
+__version__ = '20.01.08'
 
 # <https://Developer.Apple.com/documentation/appkit/nsfont.weight>
 # _NSFontWeigthHeavy      = 13 ?
@@ -764,22 +766,20 @@ def fontTraitstrs(traits):
 
 NSFont._Type = _Types.Font = Font
 
-# filter locals() for .__init__.py
-__all__ = _exports(locals(), starts=('Font', 'font'))
-
 if __name__ == '__main__':
 
-    from pycocoa.utils import _allisting
+    from pycocoa.utils import _all_exports, _all_listing
 
-    _allisting(__all__, locals(), __version__, __file__)
+    _all_exports(locals(), starts=('Font', 'font'))
+    _all_listing(__all__, locals())
 
-    _ = '''
+    _ = '''% python3 -m pycocoa.fonts
 
  fonts.__all__ = tuple(
    fonts.Font is <class .Font>,
    fonts.FontError is <class .FontError>,
-   fonts.fontfamilies is <function .fontfamilies at 0x106b93b18>,
-   fonts.fontnamesof is <function .fontnamesof at 0x106b97488>,
+   fonts.fontfamilies is <function .fontfamilies at 0x10259b150>,
+   fonts.fontnamesof is <function .fontnamesof at 0x102e97350>,
    fonts.Fonts.App=Font(name='Helvetica', family='Helvetica', size=12, weight=5),
               .Bold=Font(name='.AppleSystemUIFontBold', family='.AppleSystemUIFont', size=13, traits='Bold', weight=9),
               .BoldItalic=Font(name='.AppleSystemUIFontEmphasizedItalic', family='.AppleSystemUIFont', size=13, traits='Bold Italic', weight=9),
@@ -794,9 +794,9 @@ if __name__ == '__main__':
               .TableData=Font(name='.AppleSystemUIFont', family='.AppleSystemUIFont', size=13, weight=5),
               .TableHeader=Font(name='.AppleSystemUIFont', family='.AppleSystemUIFont', size=11, weight=5),
               .Title=Font(name='.AppleSystemUIFont', family='.AppleSystemUIFont', size=13, weight=5),
-   fonts.fontsof is <function .fontsof at 0x106b97500>,
-   fonts.fontsof4 is <function .fontsof4 at 0x106b97578>,
-   fonts.FontTrait.Bold=2,
+   fonts.fontsof is <function .fontsof at 0x102e973d0>,
+   fonts.fontsof4 is <function .fontsof4 at 0x102e97450>,
+   fonts.FontTrait.Bold=1<<1,
                   .Compressed=1<<9,
                   .Condensed=1<<6,
                   .Expanded=1<<5,
@@ -809,11 +809,11 @@ if __name__ == '__main__':
                   .UnBold=1<<2,
                   .UnItalic=1<<24,
    fonts.FontTraitError is <class .FontTraitError>,
-   fonts.fontTraits is <function .fontTraits at 0x106b975f0>,
-   fonts.fontTraitstrs is <function .fontTraitstrs at 0x106b97668>,
+   fonts.fontTraits is <function .fontTraits at 0x102e974d0>,
+   fonts.fontTraitstrs is <function .fontTraitstrs at 0x102e97550>,
  )[11]
- fonts.__version__ = '18.07.15'
-'''
+ fonts.version = '20.01.08
+ '''
     del _
 
 # MIT License <https://OpenSource.org/licenses/MIT>

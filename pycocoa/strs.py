@@ -7,13 +7,14 @@
 '''
 # all imports listed explicitly to help PyChecker
 from pycocoa.bases   import _Type0
+from pycocoa.lazily  import _ALL_LAZY
 from pycocoa.nstypes import NSAttributedString, NSConstantString, \
                             NSStr, NSString, nsString2str
 from pycocoa.pytypes import dict2NS, str2NS
 from pycocoa.utils   import isinstanceOf, property_RO, _Strs, _Types
 
-__all__ = ('Str', 'StrAttd')
-__version__ = '19.07.21'
+__all__ = _ALL_LAZY.strs
+__version__ = '20.01.08'
 
 
 class Str(str, _Type0):  # str, first to maintain str behavior
@@ -255,9 +256,9 @@ NSConstantString._Type = NSString._Type = NSStr._Type = _Types.Str     = Str
 
 if __name__ == '__main__':
 
-    from pycocoa.utils import _allisting
+    from pycocoa.utils import _all_listing
 
-    _allisting(__all__, locals(), __version__, __file__)
+    _all_listing(__all__, locals())
 
 # MIT License <https://OpenSource.org/licenses/MIT>
 #
