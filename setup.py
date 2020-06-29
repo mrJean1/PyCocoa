@@ -4,7 +4,8 @@
 # The setuptools script to build, install and test a PyCocoa distribution.
 
 # Tested with 64-bit Python 2.7.14, 2.7.15, 3.6.5 and 3.7.0 (and setuptools
-# 28.8.0) but only on macOS 10.12 Sierra and 10.13 High Sierra.
+# 28.8.0) but only on macOS 10.12 Sierra, 10.13 High Sierra and 10.15.5
+# Catalina.
 
 # python setup.py sdist --formats=gztar,bztar,zip  # ztar,tar
 # python setup.py bdist_wheel --universal  # XXX
@@ -22,7 +23,7 @@
 from setuptools import setup
 
 __all__ = ()
-__version__ = '20.01.02'
+__version__ = '20.06.30'
 
 
 def _c2(*names):
