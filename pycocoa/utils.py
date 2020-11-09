@@ -18,7 +18,7 @@ _Python3 = sys.version_info.major > 2  # PYCHOK internal
 del sys
 
 __all__ = _ALL_LAZY.utils
-__version__ = '20.01.30'
+__version__ = '20.1.08'
 
 
 class module_property_RO(object):

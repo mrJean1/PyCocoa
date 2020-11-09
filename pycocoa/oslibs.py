@@ -560,9 +560,9 @@ NSLineSeparatorCharacter       = 0x2028
 NSParagraphSeparatorCharacter  = 0x2029
 NSDeleteCharacter              = 0x007F  # 0x75?
 
-# /System/Library/Frameworks/AppKit.framework/Headers/NSGraphics.h
-NSBackingStoreRetained    = 0
-NSBackingStoreNonretained = 1
+# <https://Developer.Apple.com/documentation/appkit/nsbackingstoretype>
+NSBackingStoreRetained    = 0  # deprecated
+NSBackingStoreNonretained = 1  # deprecated
 NSBackingStoreBuffered    = 2
 
 # <https://GitHub.com/gnustep/libs-gui/blob/master/Headers/AppKit/NSTableView.h>

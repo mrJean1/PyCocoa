@@ -15,8 +15,8 @@ L{WindowStyle}, wrapping ObjC C{NSWindow}, etc.
 from pycocoa.bases    import _Type2
 from pycocoa.geometry import Rect
 from pycocoa.lazily   import _ALL_LAZY
-from pycocoa.nstypes  import isNone, NSConcreteNotification, NSFont, \
-                             NSImageView, NSMain, NSNotification, \
+from pycocoa.nstypes  import isNone, NSColor, NSConcreteNotification, \
+                             NSFont, NSImageView, NSMain, NSNotification, \
                              NSScrollView, NSStr, NSTableView, \
                              nsTextSize3, NSTextView, NSView, NSWindow
 from pycocoa.octypes  import NSIntegerMax, NSPoint_t, NSSize_t
@@ -29,14 +29,14 @@ from pycocoa.oslibs   import NO, NSBackingStoreBuffered, \
                              NSWindowStyleMaskUtilityWindow, YES
 from pycocoa.runtime  import isObjCInstanceOf, ObjCDelegate, ObjCInstance, \
                              ObjCSubclass, release, retain, send_super_init
-from pycocoa.utils    import aspect_ratio, bytes2str, _Constants, \
-                             _Globals, isinstanceOf, module_property_RO, \
-                             property_RO, _Python3, _text_title2, _Types
+from pycocoa.utils    import aspect_ratio, bytes2str, _Constants, _Globals, \
+                             isinstanceOf, module_property_RO, property_RO, \
+                             _Python3, _text_title2, _Types
 
 # from enum   import Enum
 
 __all__ = _ALL_LAZY.windows
-__version__ = '20.01.08'
+__version__ = '20.11.08'
 
 _Cascade = NSPoint_t(25, 25)  # PYCHOK false
 
@@ -146,19 +146,22 @@ class Window(_Type2):
     _NSview   = None
     _PMview   = None
     _ratio    = ()
+    _untrans  = None
 
-    def __init__(self, title='Main', frame=None, excl=0, auto=False, **kwds):
+    def __init__(self, title='Main', frame=None, excl=0, auto=False, fraction=0.5, **kwds):
         '''Create a new L{Window}.
 
            @keyword title: Window title (C{str}).
            @keyword frame: Window frame (L{Rect}, L{NSRect_t}, L{NSRect4_t}, or None).
            @keyword excl: Window styles to exclude (L{WindowStyle}C{.attribute}).
            @keyword auto: Release window resource when closed (C{bool}).
+           @keyword fraction: Window size as fraction of the screen (C{float}),
+                              defining C{B{frame}} if C{B{frame=None}}.
            @keyword kwds: Optional, additional keyword arguments.
 
            @raise WindowError: Unique C{Id} exists.
         '''
-        self._frame = Screen(0.5) if frame is None else Rect(frame)
+        self._frame = Screen(fraction) if frame is None else Rect(frame)
         self._ratio = self._frame.width, self._frame.height
 
         self.NS = NSWindow.alloc().initWithContentRect_styleMask_backing_defer_(
@@ -176,7 +179,8 @@ class Window(_Type2):
         self._NSuniqID = u = self.NS.uniqueID()
         if u in _Globals.Windows:
             raise WindowError('%s %r exists: %r' % ('.uniqueID', u,  _Globals.Windows[u]))
-        _Globals.Windows[u] = self
+        elif u:
+            _Globals.Windows[u] = self
 
         if _Globals.App and not self.app:
             self.app = _Globals.App
@@ -264,16 +268,16 @@ class Window(_Type2):
         return self._isMain  # self.NS.isMainWindow()
 
     @property_RO
-    def isVisible(self):
-        '''Get this window's visible state (C{bool}).
-        '''
-        return True if self.NS.isVisible() else False
-
-    @property_RO
     def isPrintable(self):
         '''Get this window's printable state (C{bool}).
         '''
         return True if self.PMview else False
+
+    @property_RO
+    def isVisible(self):
+        '''Get this window's visible state (C{bool}).
+        '''
+        return True if self.NS.isVisible() else False
 
     @property_RO
     def isZoomed(self):
@@ -303,6 +307,18 @@ class Window(_Type2):
             isObjCInstanceOf(ns_view, NSScrollView, NSView, name='ns_view')
             self.NS.setContentView_(ns_view)
         self._NSview = ns_view
+
+    @property
+    def opaque(self):
+        '''Get this window's opaque setting (C{bool}).
+        '''
+        return bool(self.NS.isOpaque())
+
+    @opaque.setter  # PYCHOK property.setter
+    def opaque(self, opaque):
+        '''Make this window opaque or not (C{bool}).
+        '''
+        self.NS.setOpaque_(YES if opaque else NO)
 
     @property
     def PMview(self):
@@ -348,6 +364,47 @@ class Window(_Type2):
         if r:
             self._ratio = r
             self.NS.setContentAspectRatio_(NSSize_t(*r))
+
+    @property
+    def transparent(self):
+        '''Has this window been made transparent (C{bool})?
+        '''
+        return self._untrans is not None
+
+    @transparent.setter  # PYCHOK property.setter
+    def transparent(self, transparent):
+        '''Make this window transparent or undo (C{bool}).
+
+           @see: U{Custom<https://www.CocoaWithLove.com/2008/12/drawing-custom-window-on-mac-os-x.html>},
+                 and U{transparent<https://StackoOverflow.com/questions/34531118/
+                 how-can-i-create-a-window-with-transparent-background-with-swift-on-osx>} window
+                 on OS X and U{NSThemeFrame<https://Parmanoir.com/Custom_NSThemeFrame>}.
+        '''
+        def _nset(ns, opaque, shadow, bgColor):
+            ns.setOpaque_(opaque)
+            ns.setHasShadow_(shadow)
+            ns.setBackgroundColor_(bgColor)
+
+        p = self.transparent
+        if transparent and not p:  # make
+            ns = self.NS
+            self._untrans = ns.isOpaque(), ns.hasShadow(), ns.backgroundColor()
+            _nset(ns, NO, NO, NSColor.clearColor())
+        elif p and not transparent:  # undo
+            _nset(self.NS, *self._untrans)
+            self._untrans4 = None
+
+    @property
+    def transparentTitlebar(self):
+        '''Is this window's title bar transparent (C{bool})?
+        '''
+        return True if self.NS.titlebarAppearsTransparent() else False
+
+    @transparentTitlebar.setter  # PYCHOK property.setter
+    def transparentTitlebar(self, transparent):
+        '''Make this window title bar transparent or undo (C{bool}).
+        '''
+        self.NS.setTitlebarAppearsTransparent_(YES if transparent else NO)
 
     def zoom(self, zoom):
         '''Toggle, zoom or un-zoom this window.
@@ -474,7 +531,7 @@ class MediaWindow(Window):
            @keyword fraction: Window size as fraction of the screen (C{float}).
            @keyword kwds: Optional, additional keyword arguments, see L{Window}.
         '''
-        super(MediaWindow, self).__init__(title=title, frame=Screen(fraction), **kwds)
+        super(MediaWindow, self).__init__(title=title, fraction=fraction, **kwds)
         # create the drawable_nsobject NSView for vlc.py, see vlc.MediaPlayer.set_nsobject()
         # for an alternate NSView object with protocol VLCOpenGLVideoViewEmbedding
         # <https://StackOverflow.com/questions/11562587/create-nsview-directly-from-code>
@@ -497,7 +554,7 @@ class TextWindow(Window):
            @keyword kwds: Optional, additional keyword arguments, see L{Window}.
         '''
         text, t = _text_title2(text_or_file, title)
-        super(TextWindow, self).__init__(title=t, frame=Screen(fraction), **kwds)
+        super(TextWindow, self).__init__(title=t, fraction=fraction, **kwds)
 
         if font is None:
             f = NSFont.userFixedPitchFontOfSize_(12)
