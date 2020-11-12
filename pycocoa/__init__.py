@@ -46,9 +46,9 @@ The tests and examples have only been run with 64-bit Python 3.9.0, 3.8.6, 3.7.6
 on macOS 10.15.6 Catalina, 10.14.6 Mojave or 10.13.6 High Sierra.  The tests run
 with and without C{lazy import} in Python 3.9.0, 3.8.6 and 3.7.6.
 
-Previously, PyCocoa was tested with 64-bit Python 3.8.3, 3.8.1, 3.7.5, 3.7.4, 2.7.16
-and 2.7.17.  PyCocoa has I{not been tested} on iOS nor with 32-bit Python and I{does
-not work} with U{PyPy<https://PyPy.org>} nor with U{Intel(R) Python
+Previously, PyCocoa was tested with 64-bit Python 3.8.3, 3.8.1, 3.7.5, 3.7.4,
+2.7.16 and 2.7.17.  PyCocoa has I{not been tested} on iOS nor with 32-bit Python
+and I{does not work} with U{PyPy<https://PyPy.org>} nor with U{Intel(R) Python
 <https://Software.Intel.com/en-us/distribution-for-python>}.
 
 Notes
@@ -138,6 +138,9 @@ import sys
 p = sys.platform
 if not p.startswith('darwin'):
     raise NotImplementedError('%s not supported, only %s' % (p, 'macOS'))
+p = 'PyPy'
+if p in sys.version:
+    raise NotImplementedError('%s not supported, only %s' % (p, 'CPython'))
 del p
 
 # <https://PyInstaller.ReadTheDocs.io/en/stable/runtime-information.html>
@@ -145,7 +148,7 @@ _isfrozen       = getattr(sys, 'frozen', False)
 pycocoa_abspath = dirname(abspath(__file__))  # sys._MEIPASS + '/pycocoa'
 _pycocoa        = __package__ or basename(pycocoa_abspath)
 
-__version__ = '20.11.08'
+__version__ = '20.11.11'
 # see setup.py for similar logic
 version = '.'.join(map(str, map(int, __version__.split('.'))))
 
@@ -184,7 +187,7 @@ if not _lazy_import2:  # import and set __all__
     import pycocoa.apps     as apps      # PYCHOK exported
     import pycocoa.bases    as bases     # PYCHOK exported
     import pycocoa.bases    as bases     # PYCHOK exported
-    import pycocoa.bases    as bases     # PYCHOK exported
+    import pycocoa.colors   as colors    # PYCHOK exported
     import pycocoa.getters  as getters   # PYCHOK exported
     import pycocoa.geometry as geometry  # PYCHOK exported
     import pycocoa.lazily   as lazily    # PYCHOK exported
@@ -211,6 +214,7 @@ if not _lazy_import2:  # import and set __all__
     # Python Type wrappers
     from pycocoa.apps     import *  # PYCHOK __all__
     from pycocoa.bases    import *  # PYCHOK __all__
+    from pycocoa.colors   import *  # PYCHOK __all__
     from pycocoa.dicts    import *  # PYCHOK __all__
     from pycocoa.fonts    import *  # PYCHOK __all__
     from pycocoa.getters  import *  # PYCHOK __all__

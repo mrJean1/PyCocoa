@@ -26,7 +26,7 @@ from decimal import Decimal as _Decimal
 from os import linesep, path as os_path
 
 __all__ = _ALL_LAZY.nstypes
-__version__ = '20.01.08'
+__version__ = '20.11.11'
 
 # some commonly used Foundation and Cocoa classes, described here
 # <https://OMZ-Software.com/pythonista/docs/ios/objc_util.html>
@@ -822,9 +822,8 @@ def nsUncaughtExceptionHandler(handler):
 
        @return: Previously installed handler (C{NSExceptionHandler_t}).
 
-       @note: Faults like C{SIGILL}, C{SIGSEGV}, etc. do
-              not throw uncaught C{NSException}s and will
-              not invoke this I{handler}.
+       @note: Faults like C{SIGILL}, C{SIGSEGV}, etc. do not throw an
+              uncaught C{NSException} and will not invoke the I{handler}.
     '''
     libAppKit.NSSetUncaughtExceptionHandler(NSExceptionHandler_t(handler))
     h, _Globals.Xhandler = _Globals.Xhandler, handler

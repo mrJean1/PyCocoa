@@ -17,7 +17,7 @@
 
 '''
 # all imports listed explicitly to help PyChecker
-from pycocoa.lazily  import _ALL_LAZY
+from pycocoa.lazily import _ALL_LAZY
 from pycocoa.octypes import Allocator_t, Array_t, BOOL_t, CFIndex_t, \
                             CFRange_t, CGBitmapInfo_t, CGDirectDisplayID_t, \
                             CGError_t, CGFloat_t, CGGlyph_t, CGPoint_t, \
@@ -30,13 +30,13 @@ from pycocoa.octypes import Allocator_t, Array_t, BOOL_t, CFIndex_t, \
                             objc_property_attribute_t, Protocol_t, \
                             SEL_t, Set_t, String_t, TypeRef_t, \
                             UniChar_t, URL_t
-from pycocoa.utils   import bytes2str, str2bytes
+from pycocoa.utils import bytes2str, str2bytes
 
-from ctypes  import byref, cast, cdll, c_buffer, c_byte, c_char, \
-                    c_char_p, c_double, c_float, c_int, c_int8, c_int16, \
-                    c_int32, c_int64, CFUNCTYPE, c_long, c_longlong, \
-                    c_short, c_size_t, c_uint, c_uint8, c_uint32, \
-                    c_void_p, POINTER, sizeof  # c_ubyte, string_at
+from ctypes import byref, cast, cdll, c_buffer, c_byte, c_char, \
+                   c_char_p, c_double, c_float, c_int, c_int8, c_int16, \
+                   c_int32, c_int64, CFUNCTYPE, c_long, c_longlong, \
+                   c_short, c_size_t, c_uint, c_uint8, c_uint32, \
+                   c_void_p, POINTER, sizeof  # c_ubyte, string_at
 try:
     from ctypes.util import find_library as _find_lib
 except ImportError:  # XXX Pythonista/iOS
@@ -45,7 +45,7 @@ except ImportError:  # XXX Pythonista/iOS
 import os.path as os_path
 
 __all__ = _ALL_LAZY.oslibs
-__version__ = '20.01.30'
+__version__ = '20.11.11'
 _leaked2    = []  # leaked memory, 2-tuples (ptr, size)
 _libs_cache = {}  # loaded libraries, by name
 
@@ -131,6 +131,14 @@ def get_lib(name):
         lib = cdll.LoadLibrary(_find_lib(name))
         _libs_cache[name] = lib
     return lib
+
+
+def get_libs():
+    '''Return the C{.dylib} libraries loaded so far.
+
+       @return: The libraries cached (C{dict}).
+    '''
+    return _libs_cache.copy()
 
 
 def get_lib_framework(name, services='ApplicationServices', version=''):
@@ -539,9 +547,9 @@ NSCarriageReturnCharacter      = 0x000D  # CR  Ctrl+M
 NSShiftOutCharacter            = 0x000E  # SO  Ctrl+N
 NSShiftInCharacter             = 0x000F  # SI  Ctrl+O
 NSDataLineEscapeCharacter      = 0x0010  # DLE Ctrl+P
-NSDeviceControl1Character      = 0x0011  # DC1 Ctrl+Q
-NSDeviceControl2Character      = 0x0013  # DC2 Ctrl+R
-NSDeviceControl3Character      = 0x0013  # DC3 Ctrl+S
+NSDeviceControl1Character      = 0x0011  # DC1 Ctrl+Q XON
+NSDeviceControl2Character      = 0x0012  # DC2 Ctrl+R
+NSDeviceControl3Character      = 0x0013  # DC3 Ctrl+S XOFF
 NSDeviceControl4Character      = 0x0014  # DC4 Ctrl+T
 NSNegativeAcknowledgeCharacter = 0x0015  # NAK Ctrl+U
 NSSynchronousIdleCharacter     = 0x0016  # SYN Ctrl+V

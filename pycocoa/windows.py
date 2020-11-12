@@ -15,8 +15,8 @@ L{WindowStyle}, wrapping ObjC C{NSWindow}, etc.
 from pycocoa.bases    import _Type2
 from pycocoa.geometry import Rect
 from pycocoa.lazily   import _ALL_LAZY
-from pycocoa.nstypes  import isNone, NSColor, NSConcreteNotification, \
-                             NSFont, NSImageView, NSMain, NSNotification, \
+from pycocoa.nstypes  import isNone, NSConcreteNotification, NSFont, \
+                             NSImageView, NSMain, NSNotification, \
                              NSScrollView, NSStr, NSTableView, \
                              nsTextSize3, NSTextView, NSView, NSWindow
 from pycocoa.octypes  import NSIntegerMax, NSPoint_t, NSSize_t
@@ -36,7 +36,7 @@ from pycocoa.utils    import aspect_ratio, bytes2str, _Constants, _Globals, \
 # from enum   import Enum
 
 __all__ = _ALL_LAZY.windows
-__version__ = '20.11.08'
+__version__ = '20.11.11'
 
 _Cascade = NSPoint_t(25, 25)  # PYCHOK false
 
@@ -190,6 +190,20 @@ class Window(_Type2):
             self._auto = True
 
         self.NSdelegate = retain(NSWindowDelegate.alloc().init(self))
+
+    @property
+    def alpha(self):
+        '''Get this window's alpha value (C{float}).
+        '''
+        return float(self.NS.alphaValue())
+
+    @alpha.setter  # PYCHOK property.setter
+    def alpha(self, alpha):
+        '''Set this window's alpha value (C{float}, 0.0..1.0).
+
+           @see: Properties L{opaque} and L{transparent}.
+        '''
+        self.NS.setAlphaValue_(max(0.0, min(1.0, float(alpha))))
 
     def close(self):
         '''Close this window (by a click of the close button).
@@ -387,9 +401,10 @@ class Window(_Type2):
 
         p = self.transparent
         if transparent and not p:  # make
+            from pycocoa.colors import GrayScaleColors
             ns = self.NS
             self._untrans = ns.isOpaque(), ns.hasShadow(), ns.backgroundColor()
-            _nset(ns, NO, NO, NSColor.clearColor())
+            _nset(ns, NO, NO, GrayScaleColors.Clear)
         elif p and not transparent:  # undo
             _nset(self.NS, *self._untrans)
             self._untrans4 = None

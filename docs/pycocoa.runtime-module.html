@@ -64,7 +64,7 @@
 
 <hr />
 <div class="fields">      <p><strong>Version:</strong>
-        20.01.08
+        20.11.10
       </p>
 </div><!-- ==================== CLASSES ==================== -->
 <a name="section-Classes"></a>
@@ -74,14 +74,6 @@
   <td align="left" colspan="2" class="table-header">
     <span class="table-header">Classes</span></td>
 </tr>
-<tr>
-    <td width="15%" align="right" valign="top" class="summary">
-      <span class="summary-type">&nbsp;</span>
-    </td><td class="summary">
-        <a href="pycocoa.octypes.ObjC_t-class.html" class="summary-name">ObjC_t</a><br />
-      Base type to pretty-print <i>ctypes</i> <code>c_void_p</code>.
-    </td>
-  </tr>
 <tr>
     <td width="15%" align="right" valign="top" class="summary">
       <span class="summary-type">&nbsp;</span>
@@ -171,25 +163,6 @@
   <td align="left" colspan="2" class="table-header">
     <span class="table-header">Functions</span></td>
 </tr>
-<tr>
-    <td width="15%" align="right" valign="top" class="summary">
-      <span class="summary-type">&nbsp;</span>
-    </td><td class="summary">
-      <table width="100%" cellpadding="0" cellspacing="0" border="0">
-        <tr>
-          <td><span class="summary-sig"><a href="pycocoa.runtime-module.html#isinstanceOf" class="summary-sig-name">isinstanceOf</a>(<span class="summary-sig-arg">inst</span>,
-        <span class="summary-sig-arg">*classes</span>,
-        <span class="summary-sig-arg">**name_missing</span>)</span><br />
-      Check a Python instance' class.</td>
-          <td align="right" valign="top">
-            
-            
-          </td>
-        </tr>
-      </table>
-      
-    </td>
-  </tr>
 <tr>
     <td width="15%" align="right" valign="top" class="summary">
       <span class="summary-type">&nbsp;</span>
@@ -480,13 +453,6 @@
     <td width="15%" align="right" valign="top" class="summary">
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
-        <a href="pycocoa.runtime-module.html#libobjc" class="summary-name">libobjc</a> = <code title="&lt;CDLL '/usr/lib/libobjc.dylib', handle 108eef9d0 at 7fecca9cee90&gt;">&lt;CDLL '/usr/lib/libobjc.dylib', handle 108eef9d0 at <code class="variable-ellipsis">...</code></code>
-    </td>
-  </tr>
-<tr>
-    <td width="15%" align="right" valign="top" class="summary">
-      <span class="summary-type">&nbsp;</span>
-    </td><td class="summary">
         <a name="__all__"></a><span class="summary-name">__all__</span> = <code title="_ALL_LAZY.runtime">_ALL_LAZY.runtime</code>
     </td>
   </tr>
@@ -528,44 +494,6 @@
     <span class="table-header">Function Details</span></td>
 </tr>
 </table>
-<a name="isinstanceOf"></a>
-<div>
-<table class="details" border="1" cellpadding="3"
-       cellspacing="0" width="100%" bgcolor="white">
-<tr><td>
-  <table width="100%" cellpadding="0" cellspacing="0" border="0">
-  <tr valign="top"><td>
-  <h3 class="epydoc"><span class="sig"><span class="sig-name">isinstanceOf</span>(<span class="sig-arg">inst</span>,
-        <span class="sig-arg">*classes</span>,
-        <span class="sig-arg">**name_missing</span>)</span>
-  </h3>
-  </td><td align="right" valign="top"
-    >&nbsp;
-    </td>
-  </tr></table>
-  
-  <p>Check a Python instance' class.</p>
-  <dl class="fields">
-    <dt>Parameters:</dt>
-    <dd><ul class="nomargin-top">
-        <li><strong class="pname"><code>inst</code></strong> - The instance to check (<i>any</i>).</li>
-        <li><strong class="pname"><code>classes</code></strong> - One or several classes (<i>all positional</i>).</li>
-        <li><strong class="pname"><code>name</code></strong> - The name of the instance (<code>str</code>).</li>
-    </ul></dd>
-    <dt>Returns:</dt>
-        <dd>The matching <i>class</i> from <i>classes</i>, None otherwise.</dd>
-    <dt>Raises:</dt>
-    <dd><ul class="nomargin-top">
-        <li><code><strong class='fraise'>TypeError</strong></code> - If <i>inst</i> does not match any of the <i>classes</i>, but iff 
-        keyword <i>name='...'</i> is provided.</li>
-    </ul></dd>
-  </dl>
-<div class="fields">      <p><strong>See Also:</strong>
-        Function <a href="pycocoa.runtime-module.html#isObjCInstanceOf" 
-        class="link">isObjCInstanceOf</a> for checking ObjC instances.
-      </p>
-</div></td></tr></table>
-</div>
 <a name="add_ivar"></a>
 <div>
 <table class="details" border="1" cellpadding="3"
@@ -1104,34 +1032,6 @@
 </td></tr></table>
 </div>
 <br />
-<!-- ==================== VARIABLES DETAILS ==================== -->
-<a name="section-VariablesDetails"></a>
-<table class="details" border="1" cellpadding="3"
-       cellspacing="0" width="100%" bgcolor="white">
-<tr bgcolor="#70b0f0" class="table-header">
-  <td align="left" colspan="2" class="table-header">
-    <span class="table-header">Variables Details</span></td>
-</tr>
-</table>
-<a name="libobjc"></a>
-<div>
-<table class="details" border="1" cellpadding="3"
-       cellspacing="0" width="100%" bgcolor="white">
-<tr><td>
-  <h3 class="epydoc">libobjc</h3>
-  
-  <dl class="fields">
-  </dl>
-  <dl class="fields">
-    <dt>Value:</dt>
-      <dd><table><tr><td><pre class="variable">
-&lt;CDLL '/usr/lib/libobjc.dylib', handle 108eef9d0 at 7fecca9cee90&gt;
-</pre></td></tr></table>
-</dd>
-  </dl>
-</td></tr></table>
-</div>
-<br />
 <!-- ==================== NAVIGATION BAR ==================== -->
 <table class="navbar" border="0" width="100%" cellpadding="0"
        bgcolor="#a0c0ff" cellspacing="0">
@@ -1163,7 +1063,7 @@
 <table border="0" cellpadding="0" cellspacing="0" width="100%%">
   <tr>
     <td align="left" class="footer">
-    Generated by Epydoc 3.0.1 on Sun Nov  8 21:23:54 2020
+    Generated by Epydoc 3.0.1 on Wed Nov 11 21:56:39 2020
     </td>
     <td align="right" class="footer">
       <a target="mainFrame" href="http://epydoc.sourceforge.net"

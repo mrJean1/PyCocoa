@@ -1,19 +1,26 @@
 
 # -*- coding: utf-8 -*-
 
-u'''Print L{pycocoa} version, etc. using C{python -m pycocoa}.
+u'''Print L{pycocoa} all public attributes, PyCocoa version, Python
+release, etc. by using C{python -m pycocoa [-all]} from the command line.
 '''
+import sys
 
-from pycocoa import __all__, version, _locals
-from pycocoa.utils import _all_listing  # PYCHOK expected
+from pycocoa import __all__ as _all_, _locals, _pycocoa as _package
+from pycocoa.utils import _all_listing, _all_versions, _Python3  # PYCHOK expected
 
-_all_listing(__all__, _locals(), version=version, filename='pycocoa')
+if _Python3:  # get pygeodesy.__all__ from .lazily
+    from pycocoa import *  # PYCHOK expected
+
+_all_versions(_file_=_package)
+if len(sys.argv) > 1 and '-all'.startswith(sys.argv[-1]):
+    _all_listing(_all_, _locals(), libs=True, _file_=_package)
 
 from pycocoa.runtime import _nsDeallocObserverIvar1
-_nsDeallocObserverIvar1()
+_nsDeallocObserverIvar1()  # check the _NSDeallocObserver class
 
 __all__ = ()
-__version__ = '20.01.08'
+__version__ = '20.11.11'
 
 # MIT License <https://OpenSource.org/licenses/MIT>
 #

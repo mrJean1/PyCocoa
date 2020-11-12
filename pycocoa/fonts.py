@@ -5,7 +5,7 @@
 
 '''Type L{Font}, etc., wrapping ObjC C{NSFont}.
 
-@var Fonts:     Pre-defined system fonts (L{Font}).
+@var Fonts:     Pre-defined system fonts, all L{Font} instances.
 @var FontTrait: Font traits (C{mask}).
 '''
 # all imports listed explicitly to help PyChecker
@@ -26,7 +26,7 @@ from pycocoa.utils   import bytes2str, _ByteStrs, _Constants, flint, \
                            _Singletons, _Types
 
 __all__ = _ALL_LAZY.fonts
-__version__ = '20.01.08'
+__version__ = '20.11.11'
 
 # <https://Developer.Apple.com/documentation/appkit/nsfont.weight>
 # _NSFontWeigthHeavy      = 13 ?

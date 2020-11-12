@@ -46,7 +46,7 @@ from ctypes import alignment, ArgumentError, byref, cast, c_buffer, \
 #                  # very end of this module.
 
 __all__ = _ALL_LAZY.runtime
-__version__ = '20.01.08'
+__version__ = '20.11.10'
 
 # <https://Developer.Apple.com/documentation/objectivec/
 #        objc_associationpolicy?language=objc>
@@ -1061,11 +1061,10 @@ def add_ivar(clas, name, ctype):
 
     try:
         z = sizeof(ctype)
-        print(name, ctype, z)
     except NameError:
         if ctype is not Id_t:
             raise
-        z = 8
+        z = 8  # XXX 4?
     return bool(libobjc.class_addIvar(clas, str2bytes(name), z,
                                             alignment(ctype), code))
 

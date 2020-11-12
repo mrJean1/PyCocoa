@@ -8,7 +8,7 @@ import sys
 import unittest
 
 __all__ = ('TestSuite',)
-__version__ = '20.01.07'
+__version__ = '20.11.10'
 
 _python_exe = sys.executable
 
@@ -75,6 +75,9 @@ class TestSuite(unittest.TestCase):
 
     def test_simple_window(self):
         self._run('simple_window 1')
+
+    def test_Colors(self):
+        self._run('test_Colors')
 
     def test_Dicts(self):
         self._run('test_Dicts')

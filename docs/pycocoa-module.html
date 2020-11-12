@@ -187,7 +187,7 @@
 
 <hr />
 <div class="fields">      <p><strong>Version:</strong>
-        20.11.08
+        20.11.11
       </p>
 </div><!-- ==================== SUBMODULES ==================== -->
 <a name="section-Submodules"></a>
@@ -199,13 +199,46 @@
 </tr>
   <tr><td class="summary">
   <ul class="nomargin">
-    <li class="private"> <strong class="uidlink"><a href="pycocoa.__main__-module.html">pycocoa.__main__</a></strong>: <em class="summary">Print <a href="pycocoa-module.html" class="link">pycocoa</a> 
-        version, etc.</em>    </li>
+    <li class="private"> <strong class="uidlink"><a href="pycocoa.__main__-module.html">pycocoa.__main__</a></strong>: <em class="summary">Print <a href="pycocoa-module.html" class="link">pycocoa</a> all 
+        public attributes, PyCocoa version, Python release, etc.</em>    </li>
     <li> <strong class="uidlink"><a href="pycocoa.apps-module.html">pycocoa.apps</a></strong>: <em class="summary">Types <a href="pycocoa.apps.App-class.html" class="link">App</a> 
         and <a href="pycocoa.apps.Tile-class.html" class="link">Tile</a>, 
         wrapping ObjC <code>NSApplication</code> and 
         <code>NSDocktile</code>.</em>    </li>
     <li> <strong class="uidlink"><a href="pycocoa.bases-module.html">pycocoa.bases</a></strong>: <em class="summary">(INTERNAL) Base classes for Python <code>Types</code>.</em>    </li>
+    <li> <strong class="uidlink"><a href="pycocoa.colors-module.html">pycocoa.colors</a></strong>: <em class="summary">Types <a href="pycocoa.colors.Color-class.html" 
+        class="link">Color</a>, <a 
+        href="pycocoa.colors.ColorError-class.html" 
+        class="link">ColorError</a>, <a 
+        href="pycocoa.colors.CMYColor-class.html" 
+        class="link">CMYColor</a>, <a 
+        href="pycocoa.colors.GrayScaleColor-class.html" 
+        class="link">GrayScaleColor</a>, <a 
+        href="pycocoa.colors.HSBColor-class.html" 
+        class="link">HSBColor</a>, <a 
+        href="pycocoa.colors.RGBColor-class.html" 
+        class="link">RGBColor</a>, <a 
+        href="pycocoa.colors.TintColor-class.html" 
+        class="link">TintColor</a> and <a 
+        href="pycocoa.colors.UIColor-class.html" class="link">UIColor</a> 
+        wrapping Cocoa's <code>NSColor</code> and <code>enum</code>-like 
+        constants <a href="pycocoa.colors-module.html#CMYColors" 
+        class="link">CMYColors</a>, <a 
+        href="pycocoa.colors-module.html#GrayScaleColors" 
+        class="link">GrayScaleColors</a>, <a 
+        href="pycocoa.colors-module.html#HSBColors" 
+        class="link">HSBColors</a>, <a 
+        href="pycocoa.colors-module.html#RGBColors" 
+        class="link">RGBColors</a>, <a 
+        href="pycocoa.colors.TintColor-class.html" 
+        class="link">TintColor</a>, <a 
+        href="pycocoa.colors-module.html#TintColors" 
+        class="link">TintColors</a>, <a 
+        href="pycocoa.colors-module.html#UIColors" 
+        class="link">UIColors</a> and all <a 
+        href="pycocoa.colors-module.html#Colors" class="link">Colors</a> 
+        accessible by color space acronym like <code>CMY</code>, 
+        <code>GS</code>, <code>RGB</code>, etc.</em>    </li>
     <li> <strong class="uidlink"><a href="pycocoa.dicts-module.html">pycocoa.dicts</a></strong>: <em class="summary">Types <a href="pycocoa.dicts.FrozenDict-class.html" 
         class="link">FrozenDict</a> and <a 
         href="pycocoa.dicts.Dict-class.html" class="link">Dict</a>, 
@@ -448,6 +481,14 @@
     <td width="15%" align="right" valign="top" class="summary">
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
+        <a href="pycocoa.colors.CMYColor-class.html" class="summary-name">CMYColor</a><br />
+      Color in the Cyan-Magenta-Yellow space.
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
         <a href="ctypes.c_uint-class.html" class="summary-name">CTFontOrientation_t</a>
     </td>
   </tr>
@@ -474,6 +515,25 @@
     </td><td class="summary">
         <a href="pycocoa.octypes.Class_t-class.html" class="summary-name">Class_t</a><br />
       ObjC <code>Class</code> type, encoding b'#'.
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="pycocoa.colors.Color-class.html" class="summary-name">Color</a><br />
+      Base <code>Color</code> class wrapping <code>NSColor</code> 
+        objects, intended <i>specifically</i> to avoid fatal exceptions 
+        when accessing <i>non-applicable</i> <code>NSColor</code> 
+        attributes.
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="pycocoa.colors.ColorError-class.html" class="summary-name">ColorError</a><br />
+      <code>Color</code> issue.
     </td>
   </tr>
 <tr>
@@ -548,6 +608,22 @@
         <a href="pycocoa.sets.FrozenSet-class.html" class="summary-name">FrozenSet</a><br />
       Python <code>frozenset</code> Type, wrapping an immutable ObjC 
         <code>NSSet</code>.
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="pycocoa.colors.GrayScaleColor-class.html" class="summary-name">GrayScaleColor</a><br />
+      Color in the Gray-Scale space.
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="pycocoa.colors.HSBColor-class.html" class="summary-name">HSBColor</a><br />
+      Color in thecHue-Saturation-Brightness space.
     </td>
   </tr>
 <tr>
@@ -656,7 +732,7 @@
     <td width="15%" align="right" valign="top" class="summary">
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
-        <a href="pycocoa.nstypes.NSExceptionHandler_t-class.html" class="summary-name">NSExceptionHandler_t</a>
+        <a href="pycocoa.oslibs.NSExceptionHandler_t-class.html" class="summary-name">NSExceptionHandler_t</a>
     </td>
   </tr>
 <tr>
@@ -961,6 +1037,14 @@
     <td width="15%" align="right" valign="top" class="summary">
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
+        <a href="pycocoa.colors.RGBColor-class.html" class="summary-name">RGBColor</a><br />
+      Color in the Red-Green-Blue space.
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
         <a href="pycocoa.geometry.Rect-class.html" class="summary-name">Rect</a><br />
       Python Type, wrapping an ObjC <a 
         href="pycocoa.octypes.NSRect_t-class.html" 
@@ -1134,6 +1218,15 @@
     <td width="15%" align="right" valign="top" class="summary">
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
+        <a href="pycocoa.colors.TintColor-class.html" class="summary-name">TintColor</a><br />
+      <i>Dynamic</i> color, adaptable to vibrancy and accessibility 
+        settings.
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
         <a href="pycocoa.tuples.Tuple-class.html" class="summary-name">Tuple</a><br />
       Python <code>tuple</code> Type, wrapping an immutable ObjC 
         <code>NSArray</code>.
@@ -1160,6 +1253,15 @@
     </td><td class="summary">
         <a href="pycocoa.octypes.TypeRef_t-class.html" class="summary-name">TypeRef_t</a><br />
       ObjC opaque type.
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="pycocoa.colors.UIColor-class.html" class="summary-name">UIColor</a><br />
+      <i>Dynamic</i> color for User-Interface elements, adaptable to 
+        vibrancy and accessibility settings.
     </td>
   </tr>
 <tr>
@@ -1975,6 +2077,23 @@
         <span class="summary-sig-arg">services</span>=<span class="summary-sig-default"><code class="variable-quote">'</code><code class="variable-string">ApplicationServices</code><code class="variable-quote">'</code></span>,
         <span class="summary-sig-arg">version</span>=<span class="summary-sig-default"><code class="variable-quote">'</code><code class="variable-string"></code><code class="variable-quote">'</code></span>)</span><br />
       Load a <code>Frameworks services .framework</code> library.</td>
+          <td align="right" valign="top">
+            
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a href="pycocoa-module.html#get_libs" class="summary-sig-name">get_libs</a>()</span><br />
+      Return the <code>.dylib</code> libraries loaded so far.</td>
           <td align="right" valign="top">
             
             
@@ -3625,7 +3744,7 @@
     <td width="15%" align="right" valign="top" class="summary">
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
-        <a name="version"></a><span class="summary-name">version</span> = <code title="'20.11.8'"><code class="variable-quote">'</code><code class="variable-string">20.11.8</code><code class="variable-quote">'</code></code>
+        <a name="version"></a><span class="summary-name">version</span> = <code title="'20.11.11'"><code class="variable-quote">'</code><code class="variable-string">20.11.11</code><code class="variable-quote">'</code></code>
     </td>
   </tr>
 <tr>
@@ -3708,6 +3827,27 @@
     <td width="15%" align="right" valign="top" class="summary">
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
+        <a href="pycocoa-module.html#CMYColors" class="summary-name">CMYColors</a> = <code title="CMYColors.Cyan=CMYColor(_NSTaggedPointerColor),
+         .Magenta=CMYColor(_NSTaggedPointerColor),
+         .Yellow=CMYColor(_NSTaggedPointerColor)">CMYColors.Cyan=CMYColor(_NSTaggedPointerColo<code class="variable-ellipsis">...</code></code>
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="pycocoa-module.html#Colors" class="summary-name">Colors</a> = <code title="Colors.CMY=CMYColors,
+      .GS=GrayScaleColors,
+      .HSB=HSBColors,
+      .RGB=RGBColors,
+      .Tint=TintColors,
+      .UI=UIColors">Colors.CMY=CMYColo<code class="variable-ellipsis">...</code></code>
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
         <a name="DEFAULT_UNICODE"></a><span class="summary-name">DEFAULT_UNICODE</span> = <code title="'utf-8'"><code class="variable-quote">'</code><code class="variable-string">utf-8</code><code class="variable-quote">'</code></code>
     </td>
   </tr>
@@ -3739,6 +3879,26 @@ y='.AppleSystemUIFont', size=13, traits='Bold Italic', weight=9),
      .Italic=Font(name='.AppleSystemUIFontItalic', family='.AppleSyste\
 mUIFont', size=13, traits='Italic', weight=5),
 ...">Fonts.App=Font(name='Helvetica', family='Helvetica', s<code class="variable-ellipsis">...</code></code>
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="pycocoa-module.html#GrayScaleColors" class="summary-name">GrayScaleColors</a> = <code title="GrayScaleColors.Black=GrayScaleColor(_NSTaggedPointerColor),
+               .Clear=GrayScaleColor(_NSTaggedPointerColor),
+               .DarkGray=GrayScaleColor(_NSTaggedPointerColor),
+               .Gray=GrayScaleColor(_NSTaggedPointerColor),
+               .LightGray=GrayScaleColor(_NSTaggedPointerColor),
+               .Tansparent=GrayScaleColor(_NSTaggedPointerColor),
+               .White=GrayScaleColor(_NSTaggedPointerColor)">GrayScaleColors.Black=GrayScaleColor(_NSTagg<code class="variable-ellipsis">...</code></code>
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a name="HSBColors"></a><span class="summary-name">HSBColors</span> = <code title="HSBColors.NoneYet=None">HSBColors.NoneYet=None</code>
     </td>
   </tr>
 <tr>
@@ -3837,7 +3997,7 @@ mUIFont', size=13, traits='Italic', weight=5),
     <td width="15%" align="right" valign="top" class="summary">
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
-        <a href="pycocoa-module.html#NSApplicationDelegate" class="summary-name">NSApplicationDelegate</a> = <code title="&lt;pycocoa.utils.module_property_RO object at 0x7feccaaa8d10&gt;">&lt;pycocoa.utils.module_property_RO obje<code class="variable-ellipsis">...</code></code>
+        <a href="pycocoa-module.html#NSApplicationDelegate" class="summary-name">NSApplicationDelegate</a> = <code title="&lt;pycocoa.utils.module_property_RO object at 0x7fde50caaf50&gt;">&lt;pycocoa.utils.module_property_RO obje<code class="variable-ellipsis">...</code></code>
     </td>
   </tr>
 <tr>
@@ -4096,7 +4256,7 @@ mUIFont', size=13, traits='Italic', weight=5),
     <td width="15%" align="right" valign="top" class="summary">
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
-        <a name="NSDeviceControl2Character"></a><span class="summary-name">NSDeviceControl2Character</span> = <code title="19">19</code>
+        <a name="NSDeviceControl2Character"></a><span class="summary-name">NSDeviceControl2Character</span> = <code title="18">18</code>
     </td>
   </tr>
 <tr>
@@ -4663,15 +4823,15 @@ mUIFont', size=13, traits='Italic', weight=5),
     <td width="15%" align="right" valign="top" class="summary">
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
-        <a href="pycocoa-module.html#NSMain" class="summary-name">NSMain</a> = <code title="NSMain.Application=NSApplication(&lt;Id_t at 0x7feccde09f80&gt;) of 0x7feccd\
-d4ae90,
-      .BooleanNO=NSBoolean(&lt;Id_t at 0x7feccde11200&gt;) of 0x7fff85b15390\
+        <a href="pycocoa-module.html#NSMain" class="summary-name">NSMain</a> = <code title="NSMain.Application=NSApplication(&lt;Id_t at 0x7fde54bc9320&gt;) of 0x7fde54\
+d0aa50,
+      .BooleanNO=NSBoolean(&lt;Id_t at 0x7fde54bc17a0&gt;) of 0x7fff85b15390\
 ,
-      .BooleanYES=NSBoolean(&lt;Id_t at 0x7feccde11560&gt;) of 0x7fff85b1538\
+      .BooleanYES=NSBoolean(&lt;Id_t at 0x7fde54bb7170&gt;) of 0x7fff85b1538\
 0,
-      .Bundle=NSBundle(&lt;Id_t at 0x7feccde11680&gt;) of 0x7feccab61890,
+      .Bundle=NSBundle(&lt;Id_t at 0x7fde54bde830&gt;) of 0x7fde4f164120,
       .BundleName=NSConstantString('CFBundleName'),
-...">NSMain.Application=NSApplication(&lt;Id_t at 0x7feccde09<code class="variable-ellipsis">...</code></code>
+...">NSMain.Application=NSApplication(&lt;Id_t at 0x7fde54bc9<code class="variable-ellipsis">...</code></code>
     </td>
   </tr>
 <tr>
@@ -5063,7 +5223,7 @@ d4ae90,
     <td width="15%" align="right" valign="top" class="summary">
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
-        <a href="pycocoa-module.html#NSTableViewDelegate" class="summary-name">NSTableViewDelegate</a> = <code title="&lt;pycocoa.utils.module_property_RO object at 0x7fecca988fd0&gt;">&lt;pycocoa.utils.module_property_RO object<code class="variable-ellipsis">...</code></code>
+        <a href="pycocoa-module.html#NSTableViewDelegate" class="summary-name">NSTableViewDelegate</a> = <code title="&lt;pycocoa.utils.module_property_RO object at 0x7fde509a2490&gt;">&lt;pycocoa.utils.module_property_RO object<code class="variable-ellipsis">...</code></code>
     </td>
   </tr>
 <tr>
@@ -5252,7 +5412,7 @@ d4ae90,
     <td width="15%" align="right" valign="top" class="summary">
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
-        <a href="pycocoa-module.html#NSWindowDelegate" class="summary-name">NSWindowDelegate</a> = <code title="&lt;pycocoa.utils.module_property_RO object at 0x7fecca9a7190&gt;">&lt;pycocoa.utils.module_property_RO object at<code class="variable-ellipsis">...</code></code>
+        <a href="pycocoa-module.html#NSWindowDelegate" class="summary-name">NSWindowDelegate</a> = <code title="&lt;pycocoa.utils.module_property_RO object at 0x7fde509a2210&gt;">&lt;pycocoa.utils.module_property_RO object at<code class="variable-ellipsis">...</code></code>
     </td>
   </tr>
 <tr>
@@ -5384,6 +5544,48 @@ d4ae90,
     <td width="15%" align="right" valign="top" class="summary">
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
+        <a href="pycocoa-module.html#RGBColors" class="summary-name">RGBColors</a> = <code title="RGBColors.Blue=RGBColor(_NSTaggedPointerColor),
+         .Brown=RGBColor(_NSTaggedPointerColor),
+         .Green=RGBColor(_NSTaggedPointerColor),
+         .Orange=RGBColor(NSCachedRGBColor),
+         .Purple=RGBColor(NSCachedRGBColor),
+         .Red=RGBColor(_NSTaggedPointerColor)">RGBColors.Blue=RGBColor(_NSTaggedPointerColo<code class="variable-ellipsis">...</code></code>
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="pycocoa-module.html#TintColors" class="summary-name">TintColors</a> = <code title="TintColors.Blue=TintColor(NSDynamicSystemColor),
+          .Brown=TintColor(NSDynamicSystemColor),
+          .Gray=TintColor(NSDynamicSystemColor),
+          .Green=TintColor(NSDynamicSystemColor),
+          .Indigo=TintColor(NSDynamicSystemColor),
+          .Orange=TintColor(NSDynamicSystemColor),
+          .Pink=TintColor(NSDynamicSystemColor),
+          .Purple=TintColor(NSDynamicSystemColor),
+...">TintColors.Blue=TintColor(NSDynamicSystemColo<code class="variable-ellipsis">...</code></code>
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="pycocoa-module.html#UIColors" class="summary-name">UIColors</a> = <code title="UIColors.Control=UIColor(NSDynamicSystemColor),
+        .ControlBackground=UIColor(NSDynamicSystemColor),
+        .Grid=UIColor(NSDynamicSystemColor),
+        .HeaderText=UIColor(NSDynamicSystemColor),
+        .Highlight=UIColor(NSDynamicSystemColor),
+        .Label=UIColor(NSDynamicSystemColor),
+        .Link=UIColor(NSDynamicSystemColor),
+        .SelectedText=UIColor(NSDynamicSystemColor),
+...">UIColors.Control=UIColor(NSDynamicSystemColo<code class="variable-ellipsis">...</code></code>
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
         <a href="pycocoa-module.html#WindowStyle" class="summary-name">WindowStyle</a> = <code title="WindowStyle.Closable=1&lt;&lt;1,
            .Miniaturizable=1&lt;&lt;2,
            .Resizable=1&lt;&lt;3,
@@ -5411,8 +5613,8 @@ d4ae90,
     <td width="15%" align="right" valign="top" class="summary">
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
-        <a href="pycocoa-module.html#libAppKit" class="summary-name">libAppKit</a> = <code title="&lt;CDLL '/System/Library/Frameworks/AppKit.framework/AppKit', handle 7fe\
-cc84b6600 at 7fecca9e98d0&gt;">&lt;CDLL '/System/Library/Frameworks/AppKit.framework<code class="variable-ellipsis">...</code></code>
+        <a href="pycocoa-module.html#libAppKit" class="summary-name">libAppKit</a> = <code title="&lt;CDLL '/System/Library/Frameworks/AppKit.framework/AppKit', handle 7fd\
+e4dcd5b60 at 7fde50beabd0&gt;">&lt;CDLL '/System/Library/Frameworks/AppKit.framework<code class="variable-ellipsis">...</code></code>
     </td>
   </tr>
 <tr>
@@ -5420,7 +5622,7 @@ cc84b6600 at 7fecca9e98d0&gt;">&lt;CDLL '/System/Library/Frameworks/AppKit.frame
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
         <a href="pycocoa-module.html#libCF" class="summary-name">libCF</a> = <code title="&lt;CDLL '/System/Library/Frameworks/CoreFoundation.framework/CoreFoundat\
-ion', handle 108eed878 at 7fecca9e7c10&gt;">&lt;CDLL '/System/Library/Frameworks/CoreFoundation.frame<code class="variable-ellipsis">...</code></code>
+ion', handle 1113d5878 at 7fde50be7f10&gt;">&lt;CDLL '/System/Library/Frameworks/CoreFoundation.frame<code class="variable-ellipsis">...</code></code>
     </td>
   </tr>
 <tr>
@@ -5428,7 +5630,7 @@ ion', handle 108eed878 at 7fecca9e7c10&gt;">&lt;CDLL '/System/Library/Frameworks
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
         <a href="pycocoa-module.html#libCT" class="summary-name">libCT</a> = <code title="&lt;CDLL '/System/Library/Frameworks/CoreText.framework/CoreText', handle\
- 7fecc8666780 at 7fecca9ce750&gt;">&lt;CDLL '/System/Library/Frameworks/CoreText.framework/C<code class="variable-ellipsis">...</code></code>
+ 7fde4dcdae90 at 7fde50bcfa90&gt;">&lt;CDLL '/System/Library/Frameworks/CoreText.framework/C<code class="variable-ellipsis">...</code></code>
     </td>
   </tr>
 <tr>
@@ -5436,7 +5638,7 @@ ion', handle 108eed878 at 7fecca9e7c10&gt;">&lt;CDLL '/System/Library/Frameworks
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
         <a href="pycocoa-module.html#libFoundation" class="summary-name">libFoundation</a> = <code title="&lt;CDLL '/System/Library/Frameworks/Foundation.framework/Foundation', ha\
-ndle 7fecc864c240 at 7fecca9cebd0&gt;">&lt;CDLL '/System/Library/Frameworks/Foundation.f<code class="variable-ellipsis">...</code></code>
+ndle 7fde4dcd6080 at 7fde50bcff10&gt;">&lt;CDLL '/System/Library/Frameworks/Foundation.f<code class="variable-ellipsis">...</code></code>
     </td>
   </tr>
 <tr>
@@ -5451,15 +5653,15 @@ ndle 7fecc864c240 at 7fecca9cebd0&gt;">&lt;CDLL '/System/Library/Frameworks/Foun
     <td width="15%" align="right" valign="top" class="summary">
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
-        <a href="pycocoa-module.html#libobjc" class="summary-name">libobjc</a> = <code title="&lt;CDLL '/usr/lib/libobjc.dylib', handle 108eef9d0 at 7fecca9cee90&gt;">&lt;CDLL '/usr/lib/libobjc.dylib', handle 108eef9d0 at <code class="variable-ellipsis">...</code></code>
+        <a href="pycocoa-module.html#libobjc" class="summary-name">libobjc</a> = <code title="&lt;CDLL '/usr/lib/libobjc.dylib', handle 1113d79d0 at 7fde50bcff90&gt;">&lt;CDLL '/usr/lib/libobjc.dylib', handle 1113d79d0 at <code class="variable-ellipsis">...</code></code>
     </td>
   </tr>
 <tr>
     <td width="15%" align="right" valign="top" class="summary">
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
-        <a href="pycocoa-module.html#libquartz" class="summary-name">libquartz</a> = <code title="&lt;CDLL '/System/Library/Frameworks/quartz.framework/quartz', handle 7fe\
-cc8676d20 at 7fecc9d7c710&gt;">&lt;CDLL '/System/Library/Frameworks/quartz.framework<code class="variable-ellipsis">...</code></code>
+        <a href="pycocoa-module.html#libquartz" class="summary-name">libquartz</a> = <code title="&lt;CDLL '/System/Library/Frameworks/quartz.framework/quartz', handle 7fd\
+e4dceb310 at 7fde509fca50&gt;">&lt;CDLL '/System/Library/Frameworks/quartz.framework<code class="variable-ellipsis">...</code></code>
     </td>
   </tr>
 <tr>
@@ -6580,6 +6782,27 @@ cc8676d20 at 7fecc9d7c710&gt;">&lt;CDLL '/System/Library/Frameworks/quartz.frame
         </ul>
       </p>
 </div></td></tr></table>
+</div>
+<a name="get_libs"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">get_libs</span>()</span>
+  </h3>
+  </td><td align="right" valign="top"
+    >&nbsp;
+    </td>
+  </tr></table>
+  
+  <p>Return the <code>.dylib</code> libraries loaded so far.</p>
+  <dl class="fields">
+    <dt>Returns:</dt>
+        <dd>The libraries cached (<code>dict</code>).</dd>
+  </dl>
+</td></tr></table>
 </div>
 <a name="get_metaclass"></a>
 <div>
@@ -8426,7 +8649,7 @@ cc8676d20 at 7fecc9d7c710&gt;">&lt;CDLL '/System/Library/Frameworks/quartz.frame
   </dl>
 <div class="fields">      <p><strong>Note:</strong>
         Faults like <code>SIGILL</code>, <code>SIGSEGV</code>, etc. do not 
-        throw uncaught <code>NSException</code>s and will not invoke this 
+        throw an uncaught <code>NSException</code> and will not invoke the 
         <i>handler</i>.
       </p>
 </div></td></tr></table>
@@ -9665,6 +9888,49 @@ Border.Bezel=1&lt;&lt;1,
   </dl>
 </td></tr></table>
 </div>
+<a name="CMYColors"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <h3 class="epydoc">CMYColors</h3>
+  
+  <dl class="fields">
+  </dl>
+  <dl class="fields">
+    <dt>Value:</dt>
+      <dd><table><tr><td><pre class="variable">
+CMYColors.Cyan=CMYColor(_NSTaggedPointerColor),
+         .Magenta=CMYColor(_NSTaggedPointerColor),
+         .Yellow=CMYColor(_NSTaggedPointerColor)
+</pre></td></tr></table>
+</dd>
+  </dl>
+</td></tr></table>
+</div>
+<a name="Colors"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <h3 class="epydoc">Colors</h3>
+  
+  <dl class="fields">
+  </dl>
+  <dl class="fields">
+    <dt>Value:</dt>
+      <dd><table><tr><td><pre class="variable">
+Colors.CMY=CMYColors,
+      .GS=GrayScaleColors,
+      .HSB=HSBColors,
+      .RGB=RGBColors,
+      .Tint=TintColors,
+      .UI=UIColors
+</pre></td></tr></table>
+</dd>
+  </dl>
+</td></tr></table>
+</div>
 <a name="FontTrait"></a>
 <div>
 <table class="details" border="1" cellpadding="3"
@@ -9717,6 +9983,30 @@ mUIFont', size=13, traits='Italic', weight=5),
   </dl>
 </td></tr></table>
 </div>
+<a name="GrayScaleColors"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <h3 class="epydoc">GrayScaleColors</h3>
+  
+  <dl class="fields">
+  </dl>
+  <dl class="fields">
+    <dt>Value:</dt>
+      <dd><table><tr><td><pre class="variable">
+GrayScaleColors.Black=GrayScaleColor(_NSTaggedPointerColor),
+               .Clear=GrayScaleColor(_NSTaggedPointerColor),
+               .DarkGray=GrayScaleColor(_NSTaggedPointerColor),
+               .Gray=GrayScaleColor(_NSTaggedPointerColor),
+               .LightGray=GrayScaleColor(_NSTaggedPointerColor),
+               .Tansparent=GrayScaleColor(_NSTaggedPointerColor),
+               .White=GrayScaleColor(_NSTaggedPointerColor)
+</pre></td></tr></table>
+</dd>
+  </dl>
+</td></tr></table>
+</div>
 <a name="Keys"></a>
 <div>
 <table class="details" border="1" cellpadding="3"
@@ -9755,7 +10045,7 @@ Keys.ACK=0x6,
   <dl class="fields">
     <dt>Value:</dt>
       <dd><table><tr><td><pre class="variable">
-&lt;pycocoa.utils.module_property_RO object at 0x7feccaaa8d10&gt;
+&lt;pycocoa.utils.module_property_RO object at 0x7fde50caaf50&gt;
 </pre></td></tr></table>
 </dd>
   </dl>
@@ -9773,13 +10063,13 @@ Keys.ACK=0x6,
   <dl class="fields">
     <dt>Value:</dt>
       <dd><table><tr><td><pre class="variable">
-NSMain.Application=NSApplication(&lt;Id_t at 0x7feccde09f80&gt;) of 0x7feccd<span class="variable-linewrap"><img src="crarr.png" alt="\" /></span>
-d4ae90,
-      .BooleanNO=NSBoolean(&lt;Id_t at 0x7feccde11200&gt;) of 0x7fff85b15390<span class="variable-linewrap"><img src="crarr.png" alt="\" /></span>
+NSMain.Application=NSApplication(&lt;Id_t at 0x7fde54bc9320&gt;) of 0x7fde54<span class="variable-linewrap"><img src="crarr.png" alt="\" /></span>
+d0aa50,
+      .BooleanNO=NSBoolean(&lt;Id_t at 0x7fde54bc17a0&gt;) of 0x7fff85b15390<span class="variable-linewrap"><img src="crarr.png" alt="\" /></span>
 ,
-      .BooleanYES=NSBoolean(&lt;Id_t at 0x7feccde11560&gt;) of 0x7fff85b1538<span class="variable-linewrap"><img src="crarr.png" alt="\" /></span>
+      .BooleanYES=NSBoolean(&lt;Id_t at 0x7fde54bb7170&gt;) of 0x7fff85b1538<span class="variable-linewrap"><img src="crarr.png" alt="\" /></span>
 0,
-      .Bundle=NSBundle(&lt;Id_t at 0x7feccde11680&gt;) of 0x7feccab61890,
+      .Bundle=NSBundle(&lt;Id_t at 0x7fde54bde830&gt;) of 0x7fde4f164120,
       .BundleName=NSConstantString('CFBundleName'),
 <code class="variable-ellipsis">...</code>
 </pre></td></tr></table>
@@ -9799,7 +10089,7 @@ d4ae90,
   <dl class="fields">
     <dt>Value:</dt>
       <dd><table><tr><td><pre class="variable">
-&lt;pycocoa.utils.module_property_RO object at 0x7fecca988fd0&gt;
+&lt;pycocoa.utils.module_property_RO object at 0x7fde509a2490&gt;
 </pre></td></tr></table>
 </dd>
   </dl>
@@ -9817,7 +10107,7 @@ d4ae90,
   <dl class="fields">
     <dt>Value:</dt>
       <dd><table><tr><td><pre class="variable">
-&lt;pycocoa.utils.module_property_RO object at 0x7fecca9a7190&gt;
+&lt;pycocoa.utils.module_property_RO object at 0x7fde509a2210&gt;
 </pre></td></tr></table>
 </dd>
   </dl>
@@ -9842,6 +10132,81 @@ PanelButton.Cancel=0,
            .Other=1&lt;&lt;1,
            .Suppressed=-2,
            .TimedOut=-1
+</pre></td></tr></table>
+</dd>
+  </dl>
+</td></tr></table>
+</div>
+<a name="RGBColors"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <h3 class="epydoc">RGBColors</h3>
+  
+  <dl class="fields">
+  </dl>
+  <dl class="fields">
+    <dt>Value:</dt>
+      <dd><table><tr><td><pre class="variable">
+RGBColors.Blue=RGBColor(_NSTaggedPointerColor),
+         .Brown=RGBColor(_NSTaggedPointerColor),
+         .Green=RGBColor(_NSTaggedPointerColor),
+         .Orange=RGBColor(NSCachedRGBColor),
+         .Purple=RGBColor(NSCachedRGBColor),
+         .Red=RGBColor(_NSTaggedPointerColor)
+</pre></td></tr></table>
+</dd>
+  </dl>
+</td></tr></table>
+</div>
+<a name="TintColors"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <h3 class="epydoc">TintColors</h3>
+  
+  <dl class="fields">
+  </dl>
+  <dl class="fields">
+    <dt>Value:</dt>
+      <dd><table><tr><td><pre class="variable">
+TintColors.Blue=TintColor(NSDynamicSystemColor),
+          .Brown=TintColor(NSDynamicSystemColor),
+          .Gray=TintColor(NSDynamicSystemColor),
+          .Green=TintColor(NSDynamicSystemColor),
+          .Indigo=TintColor(NSDynamicSystemColor),
+          .Orange=TintColor(NSDynamicSystemColor),
+          .Pink=TintColor(NSDynamicSystemColor),
+          .Purple=TintColor(NSDynamicSystemColor),
+<code class="variable-ellipsis">...</code>
+</pre></td></tr></table>
+</dd>
+  </dl>
+</td></tr></table>
+</div>
+<a name="UIColors"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <h3 class="epydoc">UIColors</h3>
+  
+  <dl class="fields">
+  </dl>
+  <dl class="fields">
+    <dt>Value:</dt>
+      <dd><table><tr><td><pre class="variable">
+UIColors.Control=UIColor(NSDynamicSystemColor),
+        .ControlBackground=UIColor(NSDynamicSystemColor),
+        .Grid=UIColor(NSDynamicSystemColor),
+        .HeaderText=UIColor(NSDynamicSystemColor),
+        .Highlight=UIColor(NSDynamicSystemColor),
+        .Label=UIColor(NSDynamicSystemColor),
+        .Link=UIColor(NSDynamicSystemColor),
+        .SelectedText=UIColor(NSDynamicSystemColor),
+<code class="variable-ellipsis">...</code>
 </pre></td></tr></table>
 </dd>
   </dl>
@@ -9882,8 +10247,8 @@ WindowStyle.Closable=1&lt;&lt;1,
   <dl class="fields">
     <dt>Value:</dt>
       <dd><table><tr><td><pre class="variable">
-&lt;CDLL '/System/Library/Frameworks/AppKit.framework/AppKit', handle 7fe<span class="variable-linewrap"><img src="crarr.png" alt="\" /></span>
-cc84b6600 at 7fecca9e98d0&gt;
+&lt;CDLL '/System/Library/Frameworks/AppKit.framework/AppKit', handle 7fd<span class="variable-linewrap"><img src="crarr.png" alt="\" /></span>
+e4dcd5b60 at 7fde50beabd0&gt;
 </pre></td></tr></table>
 </dd>
   </dl>
@@ -9902,7 +10267,7 @@ cc84b6600 at 7fecca9e98d0&gt;
     <dt>Value:</dt>
       <dd><table><tr><td><pre class="variable">
 &lt;CDLL '/System/Library/Frameworks/CoreFoundation.framework/CoreFoundat<span class="variable-linewrap"><img src="crarr.png" alt="\" /></span>
-ion', handle 108eed878 at 7fecca9e7c10&gt;
+ion', handle 1113d5878 at 7fde50be7f10&gt;
 </pre></td></tr></table>
 </dd>
   </dl>
@@ -9921,7 +10286,7 @@ ion', handle 108eed878 at 7fecca9e7c10&gt;
     <dt>Value:</dt>
       <dd><table><tr><td><pre class="variable">
 &lt;CDLL '/System/Library/Frameworks/CoreText.framework/CoreText', handle<span class="variable-linewrap"><img src="crarr.png" alt="\" /></span>
- 7fecc8666780 at 7fecca9ce750&gt;
+ 7fde4dcdae90 at 7fde50bcfa90&gt;
 </pre></td></tr></table>
 </dd>
   </dl>
@@ -9940,7 +10305,7 @@ ion', handle 108eed878 at 7fecca9e7c10&gt;
     <dt>Value:</dt>
       <dd><table><tr><td><pre class="variable">
 &lt;CDLL '/System/Library/Frameworks/Foundation.framework/Foundation', ha<span class="variable-linewrap"><img src="crarr.png" alt="\" /></span>
-ndle 7fecc864c240 at 7fecca9cebd0&gt;
+ndle 7fde4dcd6080 at 7fde50bcff10&gt;
 </pre></td></tr></table>
 </dd>
   </dl>
@@ -9958,7 +10323,7 @@ ndle 7fecc864c240 at 7fecca9cebd0&gt;
   <dl class="fields">
     <dt>Value:</dt>
       <dd><table><tr><td><pre class="variable">
-&lt;CDLL '/usr/lib/libobjc.dylib', handle 108eef9d0 at 7fecca9cee90&gt;
+&lt;CDLL '/usr/lib/libobjc.dylib', handle 1113d79d0 at 7fde50bcff90&gt;
 </pre></td></tr></table>
 </dd>
   </dl>
@@ -9976,8 +10341,8 @@ ndle 7fecc864c240 at 7fecca9cebd0&gt;
   <dl class="fields">
     <dt>Value:</dt>
       <dd><table><tr><td><pre class="variable">
-&lt;CDLL '/System/Library/Frameworks/quartz.framework/quartz', handle 7fe<span class="variable-linewrap"><img src="crarr.png" alt="\" /></span>
-cc8676d20 at 7fecc9d7c710&gt;
+&lt;CDLL '/System/Library/Frameworks/quartz.framework/quartz', handle 7fd<span class="variable-linewrap"><img src="crarr.png" alt="\" /></span>
+e4dceb310 at 7fde509fca50&gt;
 </pre></td></tr></table>
 </dd>
   </dl>
@@ -10015,7 +10380,7 @@ cc8676d20 at 7fecc9d7c710&gt;
 <table border="0" cellpadding="0" cellspacing="0" width="100%%">
   <tr>
     <td align="left" class="footer">
-    Generated by Epydoc 3.0.1 on Sun Nov  8 21:23:54 2020
+    Generated by Epydoc 3.0.1 on Wed Nov 11 21:56:39 2020
     </td>
     <td align="right" class="footer">
       <a target="mainFrame" href="http://epydoc.sourceforge.net"

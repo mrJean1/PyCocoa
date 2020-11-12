@@ -18,7 +18,7 @@ _Python3 = sys.version_info.major > 2  # PYCHOK internal
 del sys
 
 __all__ = _ALL_LAZY.utils
-__version__ = '20.1.08'
+__version__ = '20.11.10'
 
 
 class module_property_RO(object):
@@ -98,6 +98,15 @@ class _MutableConstants(object):
         for n in self.keys():
             yield n, getattr(self, n)
 
+    def items_(self, *classes):
+        '''Yield 2-tuple (name, value) for each constant,
+           if an instance of one of the B{C{classes}}.
+        '''
+        if classes:
+            for n, v in self.items():
+                if isinstance(v, classes):
+                    yield n, v
+
     def keys(self):
         '''Yield each constant name.
         '''
@@ -152,7 +161,7 @@ class _Globals(object):
     raiser   = False      # set by .apps.App.__init__
     Tables   = []         # set by .tables.TableWindow.__init__
     Windows  = {}         # set by .windows.Window.__init__
-    Xhandler = None       # set by .nstype.nsUncaughtExceptionHandler
+    Xhandler = None       # set by .nstypes.nsUncaughtExceptionHandler
 
 
 class _Singletons(_MutableConstants):
@@ -213,8 +222,7 @@ class _Types(_MutableConstants):
             '''
             return _MutableConstants.__getattribute__(self, name) or _lazy_import(name)
 
-
-_Types = _Types()  # freeze
+_Types = _Types()  # PYCHOK singleton
 
 
 def _TypeError(name, inst, func, classes=()):
@@ -231,6 +239,64 @@ def _TypeError(name, inst, func, classes=()):
     else:
         t = 'invalid %s(%r, %s)' % (func.__name__, inst, c)
     return TypeError(t)
+
+
+# class Adict(dict):
+#     '''A C{dict} with key I{and} attribute access to the items.
+#     '''
+#     _name = ''
+#
+#     def __init__(self, *args, **kwds):
+#         if args:  # args override kwds
+#             kwds = kwds.copy()
+#             kwds.update(dict(args))
+#         if 'name' in kwds:
+#             self._name = kwds.pop('name'))  # see _Named.name
+#         dict.__init__(self, kwds)
+#
+#     def __delattr__(self, name):
+#         '''Delete an attribute or item by B{C{name}}.
+#         '''
+#         if name in ('name', '_name')):
+#             dict.__setattr__(self, '_name', '')
+#         elif dict.__contains__(self, name):
+#             dict.pop(name)
+#         else:
+#             dict.__delattr__(self, name)
+#
+#     def __getattr__(self, name):
+#         '''Get the value of an attribute or item by B{C{name}}.
+#         '''
+#         try:
+#             return self[name]
+#         except KeyError:
+#             if name in ('name', '_name')
+#                 return dict.__getattr__(self, '_name')
+#             else:
+#                 return dict.__getattr__(self, name)
+#
+#     def __getitem__(self, key):
+#         '''Get the value of an item by B{C{key}}.
+#         '''
+#         return dict.__getitem__(self, key)
+#
+#     def __setattr__(self, name, value):
+#         '''Set attribute or item B{C{name}} to B{C{value}}.
+#         '''
+#         if name in ('name', '_name'):
+#             dict.__setattr__(self, '_name', value)
+#         elif dict.__contains__(self, name):
+#             dict.__setitem__(self, name, value)  # self[name] = value
+#         else:
+#             dict.__setattr__(self, name, value)
+#
+#     def __setitem__(self, key, value):
+#         '''Set item B{C{key}} to B{C{value}}.
+#         '''
+#         if key in ('name', '_name'):
+#             dict.__setattr__(self, '_name', value)
+#         else:
+#             dict.__setitem__(self, key, value)
 
 
 class Cache2(dict):
@@ -530,14 +596,12 @@ def _all_exports(localls, *names, **starts_ends):  # starts=(), ends=(), not_sta
     return names
 
 
-def _all_listing(alls, localls, version='', filename='', argv0=''):
+def _all_listing(alls, localls, libs=False, _file_=''):
     '''(INTERNAL) Print sorted __all__ names and values.
     '''
-    _Globals.argv0 = argv0
-
-    f = filename or localls.get('__file__', 'n/a')
-    m = os.path.basename(os.path.splitext(f)[0])
-    printf('%s.%s = %s(', m, '__all__', alls.__class__.__name__, nl=1)
+    f = _file_ or localls.get('__file__', '')
+    m = _dirbasename(f)
+    printf('%s.%s = %s(', m, '__all__', alls.__class__.__name__, argv0='', nl=1)
 
     d = i = 0
     p = ''
@@ -561,18 +625,34 @@ def _all_listing(alls, localls, version='', filename='', argv0=''):
             p = n
         if r.startswith(n + '.'):
             # increase indentation to align enums, constants, etc.
-            r = r.replace(' ' * len(n), ' ' * (len(n) + len(m) + 4))
-            printf('  %s.%s,', m, r)
+            r = r.replace(' ' * len(n), ' ' * (len(n) + len(m) + 2))
         else:
-            printf('  %s.%s is %s,', m, n, r)
+            r = '%s is %s' % (n, r)
+        printf(' %s.%s,', m, r, argv0='')
         i += 1
     if d:
         d = ' %s%s%s' % (d, ' DUPLICATE', 's' if d > 1 else '')
     else:
         d = ''
-    printf(')[%d]%s', i, d)
-    v = version or localls.get('__version__', 'n/a')  # PYCHOK version
-    printf('%s.%s = %r', m, 'version', v)
+    printf(')[%d]%s', i, d, argv0='')
+    _all_versions(libs=libs, _file_=f, _version_=localls.get('__version__', ''))  # PYCHOK kwargs
+
+
+def _all_versions(libs=False, _file_='', _version_=''):
+    '''(INTERNAL) Print PyCocao, Python, macOS.
+    '''
+    from pycocoa import oslibs, _pycocoa, version as _version
+    import platform
+
+    t = (('version', _version_ or _version),  # PYCHOK shadow
+         ('.isLazy',  str(isLazy)),
+         ('Python',  _Python_, platform.architecture()[0]),
+         ('macOS',    platform.mac_ver()[0]))
+    if libs:
+        t += ('oslibs', str(sorted(oslibs.get_libs().keys())).replace("'", '')),
+
+    n = _dirbasename(_file_ or _pycocoa)
+    printf('%s.%s', n, ', '.join(' '.join(v) for v in t), argv0='')
 
 
 def aspect_ratio(width, height):
@@ -625,6 +705,21 @@ def clip(bytestr, limit=50):
         #   if XXX:
         #       bytestr += t('[' + str(n) + ']')
     return bytestr
+
+
+def _dirbasename(filename, sep='.'):
+    '''(INTERNAL) get the dir and base name of a C{filename} without extension.
+    '''
+    f = os.path.splitext(filename)[0]
+    d, b = os.path.split(f.strip())
+    while d and not b:  # ended with '/'
+        d, b = os.path.split(d)
+    _, d = os.path.split(d)
+    if d and b:
+        f = sep.join((d, b)) if sep else os.path.join(d, b)
+    else:
+        f = d or b
+    return f
 
 
 def flint(f):
@@ -771,11 +866,11 @@ def printf(fmt, *args, **kwds):  # argv0='', nl=0, nt=0
        @keyword nl: Number of leading blank lines (C{int}).
        @keyword nt: Number of trailing blank lines (C{int}).
     '''
-    a = kwds.get('argv0', _Globals.argv0)
-    t = (fmt % args) if args else fmt
+    a  = kwds.get('argv0', _Globals.argv0)
     nl = '\n' * kwds.get('nl', 0)
     nt = '\n' * kwds.get('nt', 0)
-    print('%s%s %s%s' % (nl, a, t, nt))
+    t  = (fmt % args) if args else fmt
+    print(''.join((nl, a, (' ' if a else ''), t, nt)))
 
 
 def properties(inst):

@@ -27,9 +27,11 @@ imported by that top-level module.
 '''
 
 from os import environ as _environ
+from os.path import basename as _basename
+import sys as _sys
 
 _FOR_DOCS = _environ.get('PYCOCOA_FOR_DOCS', None)
-_N_A      = object()
+_N_A      =  object()
 
 # @module_property[_RO?] <https://GitHub.com/jtushman/proxy_tools/>
 isLazy = None  # see @var isLazy above
@@ -40,6 +42,25 @@ class LazyImportError(ImportError):
     '''
     def __init__(self, fmt, *args):
         ImportError.__init__(self, (fmt % args) if args else fmt)
+
+
+class _Dict(dict):
+    '''(INTERNAL) Imports C{dict}.
+    '''
+    def add(self, key, value, *values):
+        '''Add C{[key] = value}, typically C{[attr] = mod}.
+
+           @raise AssertionError: The B{C{key}} already
+                                  exists with different
+                                  B{C{value}}.
+        '''
+        if key in self:
+            val = self[key]  # duplicate OK
+            if val != value and val not in values:
+                t = 'imports', key, val, value
+                raise AssertionError('%s[%s]: %r, not %r' % t)
+        else:
+            self[key] = value
 
 
 class _NamedEnum_RO(dict):
@@ -61,20 +82,22 @@ class _NamedEnum_RO(dict):
 
 
 def _ALL_DOCS(*names):
-    '''(INTERNAL) Only export B{C{names}} when making docs to force
-       C{epydoc} to include classes, methods, functions and other
-       names in the documentation.  Using C{epydoc --private ...}
-       tends to include too much private documentation.
+    '''(INTERNAL) Only export B{C{names}} when make'ing docs to
+       force C{epydoc} to include classes, methods, functions and
+       other names in the documentation.  Using C{epydoc --private
+       ...} tends to include far too much internal documentation.
     '''
     return names if _FOR_DOCS else ()
 
 
-_ALL_INIT = ('pycocoa_abspath', 'version')
+_ALL_INIT = 'pycocoa_abspath', 'version'  # exported by pycocoa.__init__,py
 
 # __all__ value for most modules, accessible as _ALL_LAZY.<module>
 _ALL_LAZY = _NamedEnum_RO(_name='_ALL_LAZY',
                            apps=('App', 'app_title', 'ns2App', 'NSApplicationDelegate', 'Tile'),
                           bases=(),  # module only
+                         colors=('CMYColor', 'CMYColors', 'Color', 'ColorError', 'Colors', 'GrayScaleColor', 'GrayScaleColors',
+                                 'HSBColor', 'HSBColors', 'RGBColor', 'RGBColors', 'TintColor', 'TintColors', 'UIColor', 'UIColors'),
                           dicts=('Dict', 'FrozenDict'),
                           fonts=('Font', 'FontError', 'fontfamilies', 'fontnamesof', 'Fonts',
                                  'fontsof', 'fontsof4', 'FontTrait', 'FontTraitError', 'fontTraits', 'fontTraitstrs'),
@@ -93,15 +116,15 @@ _ALL_LAZY = _NamedEnum_RO(_name='_ALL_LAZY',
                                  'NSColor', 'NSConcreteNotification', 'NSConstantString',
                                  'NSData', 'nsData2bytes', 'NSDecimal', 'nsDecimal2decimal', 'NSDecimalNumber',
                                  'NSDictionary', 'nsDictionary2dict', 'NSDockTile', 'NSDouble',
-                                 'NSEnumerator', 'NSError', 'NSException', 'NSExceptionHandler_t',
+                                 'NSEnumerator', 'NSError', 'NSException',
                                  'NSFloat', 'NSFont', 'NSFontDescriptor', 'NSFontManager', 'NSFontPanel',
                                  'NSImage', 'NSImageView', 'NSInt', 'nsIter', 'nsIter2',
                                  'NSLayoutManager', 'nsLog', 'nsLogf', 'NSLong', 'NSLongLong',
                                  'NSMain', 'NSMenu', 'NSMenuItem', 'NSMutableArray', 'NSMutableData',
                                  'NSMutableDictionary', 'NSMutableSet', 'NSMutableString',
                                  'NSNotification', 'NSNotificationCenter', 'NSNull', 'nsNull2none', 'NSNumber', 'nsNumber2num',
-                                 'NSObject', 'nsOf', 'NSOpenPanel', 'NSPageLayout', 'NSPoint_t',
-                                 'NSPrinter', 'NSPrintInfo', 'NSPrintOperation', 'NSPrintPanel', 'NSRect4_t',
+                                 'NSObject', 'nsOf', 'NSOpenPanel', 'NSPageLayout',
+                                 'NSPrinter', 'NSPrintInfo', 'NSPrintOperation', 'NSPrintPanel',
                                  'NSSavePanel', 'NSScreen', 'NSScrollView', 'NSSet', 'nsSet2set',
                                  'NSStatusBar', 'NSStr', 'NSString', 'nsString2str',
                                  'NSTableColumn', 'NSTableView', 'NSTextField', 'nsTextSize3', 'nsTextView', 'NSTextView', 'NSThread', 'nsThrow',
@@ -124,7 +147,7 @@ _ALL_LAZY = _NamedEnum_RO(_name='_ALL_LAZY',
                                  'Set_t', 'split_emcoding2', 'split_encoding', 'String_t', 'Struct_t',
                                  'TimeInterval_t', 'TypeCodeError', 'TypeID_t', 'TypeRef_t',
                                  'UniChar_t', 'unichar_t', 'Union_t', 'Unknown_t', 'UnknownPtr_t', 'URL_t', 'VoidPtr_t'),
-                         oslibs=('get_lib', 'get_lib_framework', 'leaked2',
+                         oslibs=('get_lib', 'get_libs', 'get_lib_framework', 'leaked2',
                                  'libAppKit', 'libCF', 'libCT', 'libFoundation', 'libobjc', 'libquartz',
                                  'NO', 'NSAcknowledgeCharacter', 'NSAlphaShiftKeyMask', 'NSAlternateKeyMask', 'NSAnyEventMask',
                                  'NSApplicationActivationPolicyAccessory', 'NSApplicationActivationPolicyProhibited',
@@ -146,11 +169,11 @@ _ALL_LAZY = _NamedEnum_RO(_name='_ALL_LAZY',
                                  'NSFontSansSerifClass', 'NSFontScriptsClass', 'NSFontSlabSerifsClass', 'NSFontSmallCapsMask', 'NSFontSymbolicClass',
                                  'NSFontTransitionalSerifsClass', 'NSFontUIOptimizedMask', 'NSFontUnboldMask', 'NSFontUnitalicMask', 'NSFontUnknownClass',
                                  'NSFontVerticalMask', 'NSFormFeedCharacter', 'NSFunctionKeyMask', 'NSGroupSeparatorCharacter', 'NSHelpFunctionKey',
-                                 'NSHelpKeyMask', 'NSHomeFunctionKey', 'NSHorizontalTabCharacter', 'NSInteger_t', 'NSJustifiedTextAlignment',
+                                 'NSHelpKeyMask', 'NSHomeFunctionKey', 'NSHorizontalTabCharacter', 'NSJustifiedTextAlignment',
                                  'NSKeyDown', 'NSKeyUp', 'NSLeftArrowFunctionKey', 'NSLeftTextAlignment', 'NSLineFeedCharacter', 'NSLineSeparatorCharacter',
                                  'NSNaturalTextAlignment', 'NSNegativeAcknowledgeCharacter', 'NSNewLineCharacter', 'NSNullCharacter', 'NSNumericPadKeyMask',
                                  'NSOKButton', 'NSPageDownFunctionKey', 'NSPageUpFunctionKey', 'NSParagraphSeparatorCharacter', 'NSRecordSeparatorCharacter',
-                                 'NSRect_t', 'NSRightArrowFunctionKey', 'NSRightTextAlignment', 'NSShiftInCharacter', 'NSShiftKeyMask', 'NSShiftOutCharacter',
+                                 'NSRightArrowFunctionKey', 'NSRightTextAlignment', 'NSShiftInCharacter', 'NSShiftKeyMask', 'NSShiftOutCharacter',
                                  'NSSpaceCharacter', 'NSSquareStatusItemLength', 'NSStartOfHeadingCharacter', 'NSStartOfTextCharacter', 'NSSubstituteCharacter',
                                  'NSSynchronousIdleCharacter', 'NSTabCharacter', 'NSTableViewDashedHorizontalGridLineMask', 'NSTableViewGridNone',
                                  'NSTableViewSolidHorizontalGridLineMask', 'NSTableViewSolidVerticalGridLineMask', 'NSTextAlignmentCenter',
@@ -166,9 +189,9 @@ _ALL_LAZY = _NamedEnum_RO(_name='_ALL_LAZY',
                                  'Paper', 'PaperCustom', 'PaperMargins', 'Printer'),
                         pytypes=('bool2NS', 'bytes2NS', 'dict2NS', 'float2NS', 'frozenset2NS', 'generator2NS', 'int2NS', 'list2NS', 'map2NS',
                                  'None2NS', 'py2NS', 'range2NS', 'set2NS', 'str2NS', 'tuple2NS', 'type2NS', 'unicode2NS', 'url2NS'),
-                        runtime=('add_ivar', 'add_method', 'add_protocol', 'add_subclass', 'isClass', 'isImmutable', 'isinstanceOf',
-                                 'isMetaClass', 'isObjCInstanceOf', 'libobjc', 'OBJC_ASSOCIATION_COPY', 'OBJC_ASSOCIATION_COPY_NONATOMIC',
-                                 'OBJC_ASSOCIATION_RETAIN', 'OBJC_ASSOCIATION_RETAIN_NONATOMIC', 'ObjC_t', 'ObjCBoundClassMethod', 'ObjCBoundMethod',
+                        runtime=('add_ivar', 'add_method', 'add_protocol', 'add_subclass', 'isClass', 'isImmutable',
+                                 'isMetaClass', 'isObjCInstanceOf', 'OBJC_ASSOCIATION_COPY', 'OBJC_ASSOCIATION_COPY_NONATOMIC',
+                                 'OBJC_ASSOCIATION_RETAIN', 'OBJC_ASSOCIATION_RETAIN_NONATOMIC', 'ObjCBoundClassMethod', 'ObjCBoundMethod',
                                  'ObjCClass', 'ObjCClassMethod', 'ObjCConstant', 'ObjCDelegate', 'ObjCInstance', 'ObjCMethod', 'ObjCSubclass',
                                  'register_subclass', 'release', 'retain', 'send_message', 'send_super', 'send_super_init', 'set_ivar'),
                            sets=('FrozenSet', 'Set'),
@@ -183,7 +206,7 @@ _ALL_LAZY = _NamedEnum_RO(_name='_ALL_LAZY',
                                  'printf', 'properties', 'property2', 'property_RO',
                                  'sortuples', 'str2bytes', 'terminating', 'type2strepr',
                                  'z1000str', 'zfstr', 'zSIstr'),
-                        windows=('AutoResize', 'AutoResizeError', 'autoResizes', 'BezelStyle', 'Border', 'MediaWindow', 'ns2Window', 'nsTextSize3',
+                        windows=('AutoResize', 'AutoResizeError', 'autoResizes', 'BezelStyle', 'Border', 'MediaWindow', 'ns2Window',
                                  'NSWindowDelegate', 'Screen', 'TextWindow', 'Window', 'WindowError', 'WindowStyle', 'WindowStyleError', 'windowStyles'))
 
 # DEPRECATED __all__ names overloading those in _ALL_LAZY.deprecated where
@@ -191,7 +214,7 @@ _ALL_LAZY = _NamedEnum_RO(_name='_ALL_LAZY',
 _ALL_OVERRIDING = _NamedEnum_RO(_name='_ALL_OVERRIDING')  # all DEPRECATED
 
 __all__ = _ALL_LAZY.lazily
-__version__ = '20.01.30'
+__version__ = '20.11.11'
 
 
 def _all_imports(**more):
@@ -202,28 +225,26 @@ def _all_imports(**more):
     #  from <module> import <attr>            - [<attr>] = <module>
     #  from pygeodesy import <attr>           - [<attr>] = <attr>
     #  from <module> import <attr> as <name>  - [<name>] = <module>.<attr>
-    imports = {}
+    imports = _Dict()
+    imports_add = imports.add
+
     for _all_ in (_ALL_LAZY, _ALL_OVERRIDING, more):
         for mod, attrs in _all_.items():
             if isinstance(attrs, tuple) and not mod.startswith('_'):
-                if mod not in imports:
-                    imports[mod] = mod
-                elif imports[mod] != mod:
-                    raise AssertionError('%s[%r] vs %r' % ('imports',
-                                         imports[mod], mod))
+                imports_add(mod, mod)
                 for attr in attrs:
                     attr, _, _as_ = attr.partition(' as ')
                     if _as_:
-                        imports[_as_] = mod + '.' + attr
+                        imports_add(_as_, mod + '.' + attr)
                     else:
-                        imports[attr] = mod
+                        imports_add(attr, mod)
     return imports
 
 
 def _all_missing2(_all_):
     '''(INTERNAL) Get deltas between pycocoa.__all__ and lazily._all_imports.
     '''
-    _allx = _all_ + ('c_void', 'c_struct_t', 'c_ptrdiff_t')  # extendedssssssssssssss
+    _allx = _all_ + ('c_void', 'c_struct_t', 'c_ptrdiff_t')  # extended
     _alzy = _all_imports(**_NamedEnum_RO((a, ()) for a in _ALL_INIT))
     return (('lazily._all_imports', ', '.join(a for a in _all_ if a not in _alzy)),
             ('pycocoa.__all__',     ', '.join(a for a in _alzy if a not in _allx)))
@@ -239,13 +260,25 @@ def _2kwds(kwds, **dflts):
     return d
 
 
-def _lazy_import(name):  # overloaded below
-    '''(INTERNAL) Lazily import an attribute.
+def _caller3(up):  # in .named
+    '''(INTERNAL) Get 3-tuple C{(caller name, file name, line number)}
+       for the caller B{C{up}} stack frames in the Python call stack.
+    '''
+    # sys._getframe(1) ... 'importlib._bootstrap' line 1032,
+    # may throw a ValueError('call stack not deep enough')
+    f = _sys._getframe(up + 1)
+    return (f.f_code.co_name,  # caller name
+           _basename(f.f_code.co_filename),  # file name
+            f.f_lineno)  # line number
+
+
+def _lazy_import(name):  # overwritten below
+    '''(INTERNAL) Lazily import an attribute by C{name}.
     '''
     raise LazyImportError('unsupported: %s(%s)', _lazy_import.__name__, name)
 
 
-def _lazy_import2(_package_):  # MCCABE 23
+def _lazy_import2(_package_):  # MCCABE 15
     '''Check for and set up lazy importing.
 
        @param _package_: The name of the package (C{str}) performing
@@ -272,44 +305,15 @@ def _lazy_import2(_package_):  # MCCABE 23
     '''
     global isLazy
 
-    import sys
-    if sys.version_info[:2] < (3, 7):  # not supported
+    if _sys.version_info[:2] < (3, 7):  # not supported
         raise LazyImportError('no %s.%s for Python %s', _package_,
-                             _lazy_import2.__name__, sys.version.split()[0])
+                              _lazy_import2.__name__, _sys.version.split()[0])
 
-    z = _environ.get('PYCOCOA_LAZY_IMPORT', None)
-    if z is None:  # PYCOCOA_LAZY_IMPORT not set
-        isLazy = 1  # on by default on 3.7
-    else:
-        z = z.strip()  # like PYTHONVERBOSE et.al.
-        isLazy = int(z) if z.isdigit() else (1 if z else 0)
-    if isLazy < 1:  # not enabled
-        raise LazyImportError('env %s=%r', 'PYCOCOA_LAZY_IMPORT', z)
-    if _environ.get('PYTHONVERBOSE', None):
-        isLazy += 1
-    del z
+    import_module, package, parent = _lazy_init3(_package_)
 
-    try:  # to initialize
-        from importlib import import_module
-
-        package = import_module(_package_)
-        parent = package.__spec__.parent  # __spec__ only in Python 3.7+
-        if parent != _package_:  # assertion
-            raise AttributeError('parent %r vs %r' % (parent, _package_))
-    except (AttributeError, ImportError) as x:
-        isLazy = False  # failed
-        raise LazyImportError('init failed: %s', x)
-
-    if isLazy > 2:  # trim import path names
-        import os  # PYCHOK re-import
-        cwdir = os.getcwd()
-        cwdir = cwdir[:-len(os.path.basename(cwdir))]
-        del os
-    else:  # no import path names
-        cwdir = ''
-
-    import_ = _package_ + '.'  # namespace
-    imports = _all_imports()
+    import_  = _package_ + '.'  # namespace
+    imports  = _all_imports()
+    packages = (parent, '__main__', '')
 
     def __getattr__(name):  # __getattr__ only for Python 3.7+
         # only called once for each undefined pygeodesy attribute
@@ -321,8 +325,9 @@ def _lazy_import2(_package_):  # MCCABE 23
             if mod not in imports:
                 raise LazyImportError('no %s %s.%s', 'module', parent, mod)
             imported = import_module(import_ + mod, parent)  # XXX '.' + mod
-            if imported.__package__ not in (parent, '__main__', ''):
-                raise LazyImportError('%s.%s %r' % (mod, '__package__', imported.__package__))
+            pkg = getattr(imported, '__package__', None)
+            if pkg not in packages:
+                raise LazyImportError('%s.%s %r' % (mod, '__package__', pkg))
             # import the module or module attribute
             if attr:
                 imported = getattr(imported, attr, _N_A)
@@ -343,14 +348,9 @@ def _lazy_import2(_package_):  # MCCABE 23
             if mod and mod != name:
                 z = ' from .%s' % (mod,)
             if isLazy > 2:
-                # sys._getframe(1) ... 'importlib._bootstrap' line 1032,
-                # may throw a ValueError('call stack not deep enough')
-                try:
-                    f = sys._getframe(2)  # importing file and line
-                    n = f.f_code.co_filename
-                    if cwdir and n.startswith(cwdir):
-                        n = n[len(cwdir):]
-                    z = '%s by %s line %d' % (z, n, f.f_lineno)
+                try:  # see C{_caller3}
+                    _, f, s = _caller3(2)
+                    z = '%s by %s line %d' % (z, f, s)
                 except ValueError:
                     pass
             print('# lazily imported %s.%s%s' % (parent, name, z))
@@ -361,6 +361,72 @@ def _lazy_import2(_package_):  # MCCABE 23
     _lazy_import = __getattr__
 
     return package, __getattr__  # _lazy_import2
+
+
+def _lazy_init3(_package_):
+    '''(INTERNAL) Try to initialize lazy import.
+
+       @arg _package_: The name of the package (C{str}) performing
+                       the imports, to help facilitate resolving
+                       relative imports, usually C{__package__}.
+
+       @return: 3-Tuple C{(import_module, package, parent)} of module
+                C{importlib.import_module}, the importing C{package}
+                for easy reference within itself and the package name,
+                aka the C{parent}.
+
+       @raise LazyImportError: Lazy import not supported or not enabled,
+                               an import failed or the package name is
+                               invalid or does not exist.
+
+       @note: Global C{isLazy} is set accordingly.
+    '''
+    global isLazy
+
+    if _package_ != 'pycocoa':
+        raise LazyImportError('%s: %r, not %r', 'package', _package_, 'pycocoa')
+
+    z = _environ.get('PYCOCOA_LAZY_IMPORT', None)
+    if z is None:  # PYCOCOA_LAZY_IMPORT not set
+        isLazy = 1  # on by default on 3.7
+    else:
+        z = z.strip()  # like PYTHONVERBOSE et.al.
+        isLazy = int(z) if z.isdigit() else (1 if z else 0)
+    if isLazy < 1:  # not enabled
+        raise LazyImportError('env %s=%r', 'PYCOCOA_LAZY_IMPORT', z)
+    if _environ.get('PYTHONVERBOSE', None):
+        isLazy += 1
+
+    try:  # to initialize in Python 3+
+        from importlib import import_module
+
+        package = import_module(_package_)
+        parent = package.__spec__.parent  # __spec__ only in Python 3.7+
+        if parent != _package_:  # assertion
+            raise AttributeError('parent %r vs %r' % (parent, _package_))
+
+    except (AttributeError, ImportError) as x:
+        isLazy = False  # failed
+        raise LazyImportError('init failed: %s', str(x))
+
+    return import_module, package, parent
+
+
+if __name__ == '__main__':
+
+    # the following warning appear when running this module with Python 3.7 or later as ...
+    #
+    # % python3 -m pycocoa.lazily
+    #
+    # /Library/Frameworks/Python.framework/Versions/3.9/lib/python3.9/runpy.py:127: RuntimeWarning:
+    # 'pycocoa.lazily' found in sys.modules after import of package 'pycocoa', but prior to execution
+    #  of 'pycocoa.lazily'; this may result in unpredictable behaviour ... warn(RuntimeWarning(msg))
+    #
+    # <https://StackOverflow.com/questions/43393764/python-3-6-project-structure-leads-to-runtimewarning>
+
+    for n, m in _sys.modules.items():  # show any pre-loaded modules
+        if n in _ALL_LAZY or getattr(m, '__package__', None) == 'pycocoa':
+            print('pre-loaded %s: %s?' % (n, getattr(m, '__file__', '?')))
 
 # MIT License <https://OpenSource.org/licenses/MIT>
 #

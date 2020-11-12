@@ -1,0 +1,874 @@
+<?xml version="1.0" encoding="ascii"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+          "DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+  <title>pycocoa.colors.Color</title>
+  <link rel="stylesheet" href="epydoc.css" type="text/css" />
+  <script type="text/javascript" src="epydoc.js"></script>
+</head>
+
+<body bgcolor="white" text="black" link="blue" vlink="#204080"
+      alink="#204080">
+<!-- ==================== NAVIGATION BAR ==================== -->
+<table class="navbar" border="0" width="100%" cellpadding="0"
+       bgcolor="#a0c0ff" cellspacing="0">
+  <tr valign="middle">
+  <!-- Home link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="pycocoa-module.html">Home</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Tree link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="module-tree.html">Trees</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Index link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="identifier-index.html">Indices</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Help link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="help.html">Help</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Project homepage -->
+      <th class="navbar" align="right" width="100%">
+        <table border="0" cellpadding="0" cellspacing="0">
+          <tr><th class="navbar" align="center"
+            ><a class="navbar" target="_top" href="https://GitHub.com/mrJean1/PyCocoa">PyCocoa</a></th>
+          </tr></table></th>
+  </tr>
+</table>
+<table width="100%" cellpadding="0" cellspacing="0">
+  <tr valign="top">
+    <td width="100%">
+      <span class="breadcrumbs">
+        <a href="pycocoa-module.html">Package&nbsp;pycocoa</a> ::
+        <a href="pycocoa.colors-module.html">Module&nbsp;colors</a> ::
+        Class&nbsp;Color
+      </span>
+    </td>
+    <td>
+      <table cellpadding="0" cellspacing="0">
+        <!-- hide/show private -->
+        <tr><td align="right"><span class="options"
+            >[<a href="frames.html" target="_top">frames</a
+            >]&nbsp;|&nbsp;<a href="pycocoa.colors.Color-class.html"
+            target="_top">no&nbsp;frames</a>]</span></td></tr>
+      </table>
+    </td>
+  </tr>
+</table>
+<!-- ==================== CLASS DESCRIPTION ==================== -->
+<h1 class="epydoc">Class Color</h1><p class="nomargin-top"></p>
+<pre class="base-tree">
+  object --+    
+           |    
+bases._Type0 --+
+               |
+              <strong class="uidshort">Color</strong>
+</pre>
+
+<dl><dt>Known Subclasses:</dt>
+<dd>
+      <ul class="subclass-list">
+<li><a href="pycocoa.colors.CMYColor-class.html">CMYColor</a></li><li>, <a href="pycocoa.colors.GrayScaleColor-class.html">GrayScaleColor</a></li><li>, <a href="pycocoa.colors.HSBColor-class.html">HSBColor</a></li><li>, <a href="pycocoa.colors.RGBColor-class.html">RGBColor</a></li><li class="private">, _SystemColor</li>  </ul>
+</dd></dl>
+
+<hr />
+<p>Base <code>Color</code> class wrapping <code>NSColor</code> objects, 
+  intended <i>specifically</i> to avoid fatal exceptions when accessing 
+  <i>non-applicable</i> <code>NSColor</code> attributes.</p>
+  <p>For example, getting the <code>cyanComponent</code> of an RGB 
+  <code>NSColor</code> instance throws an <code>NSException</code>, but 
+  using <a href="pycocoa.colors.Color-class.html#cyan" 
+  class="link">Color.cyan</a> for any non-<a 
+  href="pycocoa.colors.CMYColor-class.html" class="link">CMYColor</a> 
+  safely returns <code>None</code>.  Likewise for other attributes.</p>
+
+<hr />
+<div class="fields">      <p><strong>Note:</strong>
+        Only pre-existing <code>NSColor</code> can be wrapped, creating new
+        <code>NSColor</code> is reserved for a future <code>PyCocoa</code> 
+        release.  Also, color conversion and any other <a 
+        href="https://PyPI.org/project/colormath/" 
+        target="_top">&quot;color math&quot;</a> are not supported (yet).
+      </p>
+</div><!-- ==================== INSTANCE METHODS ==================== -->
+<a name="section-InstanceMethods"></a>
+<table class="summary" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr bgcolor="#70b0f0" class="table-header">
+  <td align="left" colspan="2" class="table-header">
+    <span class="table-header">Instance Methods</span></td>
+</tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a href="pycocoa.colors.Color-class.html#__init__" class="summary-sig-name">__init__</a>(<span class="summary-sig-arg">self</span>,
+        <span class="summary-sig-arg">name</span>,
+        <span class="summary-sig-arg">nsColor</span>=<span class="summary-sig-default"><code class="variable-quote">'</code><code class="variable-string"></code><code class="variable-quote">'</code></span>)</span><br />
+      New <a href="pycocoa.colors.Color-class.html" class="link">Color</a> 
+      from an existing <code>NSColor</code>.</td>
+          <td align="right" valign="top">
+            
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a name="copy"></a><span class="summary-sig-name">copy</span>(<span class="summary-sig-arg">self</span>,
+        <span class="summary-sig-arg">name</span>)</span><br />
+      Copy this color with a new <i>given</i> name.</td>
+          <td align="right" valign="top">
+            
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a name="toCMY3"></a><span class="summary-sig-name">toCMY3</span>(<span class="summary-sig-arg">self</span>,
+        <span class="summary-sig-arg">upscale</span>=<span class="summary-sig-default">0</span>)</span><br />
+      Get the <i>RGB</i> components as 3-tuple <code>(cyan, magenta, 
+      yellow</code>) or <code>None</code> if not applicable.</td>
+          <td align="right" valign="top">
+            
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a name="toHSB3"></a><span class="summary-sig-name">toHSB3</span>(<span class="summary-sig-arg">self</span>,
+        <span class="summary-sig-arg">upscale</span>=<span class="summary-sig-default">0</span>)</span><br />
+      Get the <i>HSB</i> components as 3-tuple <code>(hue, saturation, 
+      brightness</code>) or <code>None</code> if not applicable.</td>
+          <td align="right" valign="top">
+            
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a name="toRGB3"></a><span class="summary-sig-name">toRGB3</span>(<span class="summary-sig-arg">self</span>,
+        <span class="summary-sig-arg">upscale</span>=<span class="summary-sig-default">0</span>)</span><br />
+      Get the <i>RGB</i> components as 3-tuple <code>(red, green, 
+      blue</code>) or <code>None</code> if not applicable.</td>
+          <td align="right" valign="top">
+            
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+  <tr>
+    <td colspan="2" class="summary">
+    <p class="indent-wrapped-lines"><b>Inherited from <code>bases._Type0</code></b>:
+      <code>__repr__</code>,
+      <code>__str__</code>,
+      <code>type2strepr</code>
+      </p>
+    <p class="indent-wrapped-lines"><b>Inherited from <code>object</code></b>:
+      <code>__delattr__</code>,
+      <code>__format__</code>,
+      <code>__getattribute__</code>,
+      <code>__hash__</code>,
+      <code>__new__</code>,
+      <code>__reduce__</code>,
+      <code>__reduce_ex__</code>,
+      <code>__setattr__</code>,
+      <code>__sizeof__</code>,
+      <code>__subclasshook__</code>
+      </p>
+    </td>
+  </tr>
+</table>
+<!-- ==================== PROPERTIES ==================== -->
+<a name="section-Properties"></a>
+<table class="summary" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr bgcolor="#70b0f0" class="table-header">
+  <td align="left" colspan="2" class="table-header">
+    <span class="table-header">Properties</span></td>
+</tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="pycocoa.colors.Color-class.html#alpha" class="summary-name">alpha</a><br />
+      Get the <i>alpha</i> component (<code>float</code>) or 
+      <code>None</code> if not applicable or <i>ignored</i>.
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="pycocoa.colors.Color-class.html#black" class="summary-name">black</a><br />
+      Get the <i>black</i> component (<code>float</code>) or 
+      <code>None</code> if not applicable.
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="pycocoa.colors.Color-class.html#blue" class="summary-name">blue</a><br />
+      Get the <i>blue</i> component (<code>float</code>) or 
+      <code>None</code> if not applicable.
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="pycocoa.colors.Color-class.html#brightness" class="summary-name">brightness</a><br />
+      Get the <i>brightness</i> component (<code>float</code>) or 
+      <code>None</code> if not applicable.
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="pycocoa.colors.Color-class.html#colorSpace" class="summary-name">colorSpace</a><br />
+      Get the space of this color (<code>str</code>).
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="pycocoa.colors.Color-class.html#cyan" class="summary-name">cyan</a><br />
+      Get the <i>cyan</i> component (<code>float</code>) or 
+      <code>None</code> if not applicable.
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="pycocoa.colors.Color-class.html#green" class="summary-name">green</a><br />
+      Get the <i>green</i> component (<code>float</code>) or 
+      <code>None</code> if not applicable.
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="pycocoa.colors.Color-class.html#hex" class="summary-name">hex</a><br />
+      Get the <i>RGB</i> components as <i>hex</i> (<code>int</code>) or 
+      <code>None</code> if not applicable.
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="pycocoa.colors.Color-class.html#hue" class="summary-name">hue</a><br />
+      Get the <i>hue</i> component (<code>float</code>) or 
+      <code>None</code> if not applicable.
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="pycocoa.colors.Color-class.html#magenta" class="summary-name">magenta</a><br />
+      Get the <i>magenta</i> component (<code>float</code>) or 
+      <code>None</code> if not applicable.
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="pycocoa.colors.Color-class.html#n" class="summary-name">n</a><br />
+      Get the number of components of this color (<code>int</code>) or 
+      <code>None</code> if not applicable.
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="pycocoa.colors.Color-class.html#name" class="summary-name">name</a><br />
+      Get the given name of this color (<code>str</code>).
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="pycocoa.colors.Color-class.html#nsColor" class="summary-name">nsColor</a><br />
+      Get the <i>name</i> of the <code>NSColor</code> of this color 
+      (<code>str</code>).
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="pycocoa.colors.Color-class.html#red" class="summary-name">red</a><br />
+      Get the <i>red</i> component (<code>float</code>) or 
+      <code>None</code> if not applicable.
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="pycocoa.colors.Color-class.html#saturation" class="summary-name">saturation</a><br />
+      Get the <i>saturation</i> component (<code>float</code>) or 
+      <code>None</code> if not applicable.
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="pycocoa.colors.Color-class.html#white" class="summary-name">white</a><br />
+      Get the <i>white</i> component (<code>float</code>) or 
+      <code>None</code> if not applicable.
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="pycocoa.colors.Color-class.html#yellow" class="summary-name">yellow</a><br />
+      Get the <i>yellow</i> component (<code>float</code>) or 
+      <code>None</code> if not applicable.
+    </td>
+  </tr>
+  <tr>
+    <td colspan="2" class="summary">
+    <p class="indent-wrapped-lines"><b>Inherited from <code>bases._Type0</code></b>:
+      <code>NS</code>,
+      <code>NSDelegate</code>
+      </p>
+    <p class="indent-wrapped-lines"><b>Inherited from <code>object</code></b>:
+      <code>__class__</code>
+      </p>
+    </td>
+  </tr>
+</table>
+<!-- ==================== METHOD DETAILS ==================== -->
+<a name="section-MethodDetails"></a>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr bgcolor="#70b0f0" class="table-header">
+  <td align="left" colspan="2" class="table-header">
+    <span class="table-header">Method Details</span></td>
+</tr>
+</table>
+<a name="__init__"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">__init__</span>(<span class="sig-arg">self</span>,
+        <span class="sig-arg">name</span>,
+        <span class="sig-arg">nsColor</span>=<span class="sig-default"><code class="variable-quote">'</code><code class="variable-string"></code><code class="variable-quote">'</code></span>)</span>
+    <br /><em class="fname">(Constructor)</em>
+  </h3>
+  </td><td align="right" valign="top"
+    >&nbsp;
+    </td>
+  </tr></table>
+  
+  <p>New <a href="pycocoa.colors.Color-class.html" class="link">Color</a> 
+  from an existing <code>NSColor</code>.</p>
+  <dl class="fields">
+    <dt>Parameters:</dt>
+    <dd><ul class="nomargin-top">
+        <li><strong class="pname"><code>name</code></strong> - Given color nsme (<code>str</code>).</li>
+        <li><strong class="pname"><code>nsColor</code></strong> - Optionally, the name of an existing <code>NSColor</code> 
+          (<code>str</code>).</li>
+    </ul></dd>
+    <dt>Raises:</dt>
+    <dd><ul class="nomargin-top">
+        <li><code><strong class='fraise'><a href="pycocoa.colors.ColorError-class.html">ColorError</a></strong></code> - Invalid <b><code>name</code></b> or <b><code>nsColor</code></b>.</li>
+    </ul></dd>
+    <dt>Overrides:
+        object.__init__
+    </dt>
+  </dl>
+<div class="fields">      <p><strong>Note:</strong>
+        If no <b><code>nsColor</code></b> is specified, it is assumed to be
+        the value of <b><code>name</code></b> suffixed with 
+        <code>&quot;Color&quot;</code>, provided <b><code>name</code></b> 
+        does not end with <code>&quot;Color&quot;</code>.
+      </p>
+</div></td></tr></table>
+</div>
+<br />
+<!-- ==================== PROPERTY DETAILS ==================== -->
+<a name="section-PropertyDetails"></a>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr bgcolor="#70b0f0" class="table-header">
+  <td align="left" colspan="2" class="table-header">
+    <span class="table-header">Property Details</span></td>
+</tr>
+</table>
+<a name="alpha"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <h3 class="epydoc">alpha</h3>
+  <p>Get the <i>alpha</i> component (<code>float</code>) or 
+  <code>None</code> if not applicable or <i>ignored</i>.</p>
+  <dl class="fields">
+    <dt>Get Method:</dt>
+    <dd class="value"><span class="summary-sig">alpha(<span class="summary-sig-arg">self</span>)</span>
+        - Get the <i>alpha</i> component (<code>float</code>) or <code>None</code> if
+not applicable or <i>ignored</i>.
+    </dd>
+    <dt>Set Method:</dt>
+    <dd class="value"><span class="summary-sig">Read_Only(<span class="summary-sig-arg">self</span>,
+        <span class="summary-sig-arg">ignored</span>)</span>
+        - Throws an <code>AttributeError</code>, always.
+    </dd>
+  </dl>
+</td></tr></table>
+</div>
+<a name="black"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <h3 class="epydoc">black</h3>
+  <p>Get the <i>black</i> component (<code>float</code>) or 
+  <code>None</code> if not applicable.</p>
+  <dl class="fields">
+    <dt>Get Method:</dt>
+    <dd class="value"><span class="summary-sig">black(<span class="summary-sig-arg">self</span>)</span>
+        - Get the <i>black</i> component (<code>float</code>) or <code>None</code> if
+not applicable.
+    </dd>
+    <dt>Set Method:</dt>
+    <dd class="value"><span class="summary-sig">Read_Only(<span class="summary-sig-arg">self</span>,
+        <span class="summary-sig-arg">ignored</span>)</span>
+        - Throws an <code>AttributeError</code>, always.
+    </dd>
+  </dl>
+</td></tr></table>
+</div>
+<a name="blue"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <h3 class="epydoc">blue</h3>
+  <p>Get the <i>blue</i> component (<code>float</code>) or 
+  <code>None</code> if not applicable.</p>
+  <dl class="fields">
+    <dt>Get Method:</dt>
+    <dd class="value"><span class="summary-sig">blue(<span class="summary-sig-arg">self</span>)</span>
+        - Get the <i>blue</i> component (<code>float</code>) or <code>None</code> if 
+not applicable.
+    </dd>
+    <dt>Set Method:</dt>
+    <dd class="value"><span class="summary-sig">Read_Only(<span class="summary-sig-arg">self</span>,
+        <span class="summary-sig-arg">ignored</span>)</span>
+        - Throws an <code>AttributeError</code>, always.
+    </dd>
+  </dl>
+</td></tr></table>
+</div>
+<a name="brightness"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <h3 class="epydoc">brightness</h3>
+  <p>Get the <i>brightness</i> component (<code>float</code>) or 
+  <code>None</code> if not applicable.</p>
+  <dl class="fields">
+    <dt>Get Method:</dt>
+    <dd class="value"><span class="summary-sig">brightness(<span class="summary-sig-arg">self</span>)</span>
+        - Get the <i>brightness</i> component (<code>float</code>) or 
+<code>None</code> if not applicable.
+    </dd>
+    <dt>Set Method:</dt>
+    <dd class="value"><span class="summary-sig">Read_Only(<span class="summary-sig-arg">self</span>,
+        <span class="summary-sig-arg">ignored</span>)</span>
+        - Throws an <code>AttributeError</code>, always.
+    </dd>
+  </dl>
+</td></tr></table>
+</div>
+<a name="colorSpace"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <h3 class="epydoc">colorSpace</h3>
+  <p>Get the space of this color (<code>str</code>).</p>
+  <dl class="fields">
+    <dt>Get Method:</dt>
+    <dd class="value"><span class="summary-sig">colorSpace(<span class="summary-sig-arg">self</span>)</span>
+        - Get the space of this color (<code>str</code>).
+    </dd>
+    <dt>Set Method:</dt>
+    <dd class="value"><span class="summary-sig">Read_Only(<span class="summary-sig-arg">self</span>,
+        <span class="summary-sig-arg">ignored</span>)</span>
+        - Throws an <code>AttributeError</code>, always.
+    </dd>
+  </dl>
+</td></tr></table>
+</div>
+<a name="cyan"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <h3 class="epydoc">cyan</h3>
+  <p>Get the <i>cyan</i> component (<code>float</code>) or 
+  <code>None</code> if not applicable.</p>
+  <dl class="fields">
+    <dt>Get Method:</dt>
+    <dd class="value"><span class="summary-sig">cyan(<span class="summary-sig-arg">self</span>)</span>
+        - Get the <i>cyan</i> component (<code>float</code>) or <code>None</code> if 
+not applicable.
+    </dd>
+    <dt>Set Method:</dt>
+    <dd class="value"><span class="summary-sig">Read_Only(<span class="summary-sig-arg">self</span>,
+        <span class="summary-sig-arg">ignored</span>)</span>
+        - Throws an <code>AttributeError</code>, always.
+    </dd>
+  </dl>
+</td></tr></table>
+</div>
+<a name="green"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <h3 class="epydoc">green</h3>
+  <p>Get the <i>green</i> component (<code>float</code>) or 
+  <code>None</code> if not applicable.</p>
+  <dl class="fields">
+    <dt>Get Method:</dt>
+    <dd class="value"><span class="summary-sig">green(<span class="summary-sig-arg">self</span>)</span>
+        - Get the <i>green</i> component (<code>float</code>) or <code>None</code> if
+not applicable.
+    </dd>
+    <dt>Set Method:</dt>
+    <dd class="value"><span class="summary-sig">Read_Only(<span class="summary-sig-arg">self</span>,
+        <span class="summary-sig-arg">ignored</span>)</span>
+        - Throws an <code>AttributeError</code>, always.
+    </dd>
+  </dl>
+</td></tr></table>
+</div>
+<a name="hex"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <h3 class="epydoc">hex</h3>
+  <p>Get the <i>RGB</i> components as <i>hex</i> (<code>int</code>) or 
+  <code>None</code> if not applicable.</p>
+  <dl class="fields">
+    <dt>Get Method:</dt>
+    <dd class="value"><span class="summary-sig">hex(<span class="summary-sig-arg">self</span>)</span>
+        - Get the <i>RGB</i> components as <i>hex</i> (<code>int</code>) or 
+<code>None</code> if not applicable.
+    </dd>
+    <dt>Set Method:</dt>
+    <dd class="value"><span class="summary-sig">Read_Only(<span class="summary-sig-arg">self</span>,
+        <span class="summary-sig-arg">ignored</span>)</span>
+        - Throws an <code>AttributeError</code>, always.
+    </dd>
+  </dl>
+</td></tr></table>
+</div>
+<a name="hue"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <h3 class="epydoc">hue</h3>
+  <p>Get the <i>hue</i> component (<code>float</code>) or <code>None</code>
+  if not applicable.</p>
+  <dl class="fields">
+    <dt>Get Method:</dt>
+    <dd class="value"><span class="summary-sig">hue(<span class="summary-sig-arg">self</span>)</span>
+        - Get the <i>hue</i> component (<code>float</code>) or <code>None</code> if 
+not applicable.
+    </dd>
+    <dt>Set Method:</dt>
+    <dd class="value"><span class="summary-sig">Read_Only(<span class="summary-sig-arg">self</span>,
+        <span class="summary-sig-arg">ignored</span>)</span>
+        - Throws an <code>AttributeError</code>, always.
+    </dd>
+  </dl>
+</td></tr></table>
+</div>
+<a name="magenta"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <h3 class="epydoc">magenta</h3>
+  <p>Get the <i>magenta</i> component (<code>float</code>) or 
+  <code>None</code> if not applicable.</p>
+  <dl class="fields">
+    <dt>Get Method:</dt>
+    <dd class="value"><span class="summary-sig">magenta(<span class="summary-sig-arg">self</span>)</span>
+        - Get the <i>magenta</i> component (<code>float</code>) or <code>None</code> 
+if not applicable.
+    </dd>
+    <dt>Set Method:</dt>
+    <dd class="value"><span class="summary-sig">Read_Only(<span class="summary-sig-arg">self</span>,
+        <span class="summary-sig-arg">ignored</span>)</span>
+        - Throws an <code>AttributeError</code>, always.
+    </dd>
+  </dl>
+</td></tr></table>
+</div>
+<a name="n"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <h3 class="epydoc">n</h3>
+  <p>Get the number of components of this color (<code>int</code>) or 
+  <code>None</code> if not applicable.</p>
+  <dl class="fields">
+    <dt>Get Method:</dt>
+    <dd class="value"><span class="summary-sig">n(<span class="summary-sig-arg">self</span>)</span>
+        - Get the number of components of this color (<code>int</code>) or 
+<code>None</code> if not applicable.
+    </dd>
+    <dt>Set Method:</dt>
+    <dd class="value"><span class="summary-sig">Read_Only(<span class="summary-sig-arg">self</span>,
+        <span class="summary-sig-arg">ignored</span>)</span>
+        - Throws an <code>AttributeError</code>, always.
+    </dd>
+  </dl>
+</td></tr></table>
+</div>
+<a name="name"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <h3 class="epydoc">name</h3>
+  <p>Get the given name of this color (<code>str</code>).</p>
+  <dl class="fields">
+    <dt>Get Method:</dt>
+    <dd class="value"><span class="summary-sig">name(<span class="summary-sig-arg">self</span>)</span>
+        - Get the given name of this color (<code>str</code>).
+    </dd>
+    <dt>Set Method:</dt>
+    <dd class="value"><span class="summary-sig">name(<span class="summary-sig-arg">self</span>,
+        <span class="summary-sig-arg">name</span>)</span>
+        - Set the given name of this color (<code>str</code>).
+    </dd>
+  </dl>
+</td></tr></table>
+</div>
+<a name="nsColor"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <h3 class="epydoc">nsColor</h3>
+  <p>Get the <i>name</i> of the <code>NSColor</code> of this color 
+  (<code>str</code>).</p>
+  <dl class="fields">
+    <dt>Get Method:</dt>
+    <dd class="value"><span class="summary-sig">nsColor(<span class="summary-sig-arg">self</span>)</span>
+        - Get the <i>name</i> of the <code>NSColor</code> of this color 
+(<code>str</code>).
+    </dd>
+    <dt>Set Method:</dt>
+    <dd class="value"><span class="summary-sig">Read_Only(<span class="summary-sig-arg">self</span>,
+        <span class="summary-sig-arg">ignored</span>)</span>
+        - Throws an <code>AttributeError</code>, always.
+    </dd>
+  </dl>
+</td></tr></table>
+</div>
+<a name="red"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <h3 class="epydoc">red</h3>
+  <p>Get the <i>red</i> component (<code>float</code>) or <code>None</code>
+  if not applicable.</p>
+  <dl class="fields">
+    <dt>Get Method:</dt>
+    <dd class="value"><span class="summary-sig">red(<span class="summary-sig-arg">self</span>)</span>
+        - Get the <i>red</i> component (<code>float</code>) or <code>None</code> if 
+not applicable.
+    </dd>
+    <dt>Set Method:</dt>
+    <dd class="value"><span class="summary-sig">Read_Only(<span class="summary-sig-arg">self</span>,
+        <span class="summary-sig-arg">ignored</span>)</span>
+        - Throws an <code>AttributeError</code>, always.
+    </dd>
+  </dl>
+</td></tr></table>
+</div>
+<a name="saturation"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <h3 class="epydoc">saturation</h3>
+  <p>Get the <i>saturation</i> component (<code>float</code>) or 
+  <code>None</code> if not applicable.</p>
+  <dl class="fields">
+    <dt>Get Method:</dt>
+    <dd class="value"><span class="summary-sig">saturation(<span class="summary-sig-arg">self</span>)</span>
+        - Get the <i>saturation</i> component (<code>float</code>) or 
+<code>None</code> if not applicable.
+    </dd>
+    <dt>Set Method:</dt>
+    <dd class="value"><span class="summary-sig">Read_Only(<span class="summary-sig-arg">self</span>,
+        <span class="summary-sig-arg">ignored</span>)</span>
+        - Throws an <code>AttributeError</code>, always.
+    </dd>
+  </dl>
+</td></tr></table>
+</div>
+<a name="white"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <h3 class="epydoc">white</h3>
+  <p>Get the <i>white</i> component (<code>float</code>) or 
+  <code>None</code> if not applicable.</p>
+  <dl class="fields">
+    <dt>Get Method:</dt>
+    <dd class="value"><span class="summary-sig">white(<span class="summary-sig-arg">self</span>)</span>
+        - Get the <i>white</i> component (<code>float</code>) or <code>None</code> if
+not applicable.
+    </dd>
+    <dt>Set Method:</dt>
+    <dd class="value"><span class="summary-sig">Read_Only(<span class="summary-sig-arg">self</span>,
+        <span class="summary-sig-arg">ignored</span>)</span>
+        - Throws an <code>AttributeError</code>, always.
+    </dd>
+  </dl>
+</td></tr></table>
+</div>
+<a name="yellow"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <h3 class="epydoc">yellow</h3>
+  <p>Get the <i>yellow</i> component (<code>float</code>) or 
+  <code>None</code> if not applicable.</p>
+  <dl class="fields">
+    <dt>Get Method:</dt>
+    <dd class="value"><span class="summary-sig">yellow(<span class="summary-sig-arg">self</span>)</span>
+        - Get the <i>yellow</i> component (<code>float</code>) or <code>None</code> 
+if not applicable.
+    </dd>
+    <dt>Set Method:</dt>
+    <dd class="value"><span class="summary-sig">Read_Only(<span class="summary-sig-arg">self</span>,
+        <span class="summary-sig-arg">ignored</span>)</span>
+        - Throws an <code>AttributeError</code>, always.
+    </dd>
+  </dl>
+</td></tr></table>
+</div>
+<br />
+<!-- ==================== NAVIGATION BAR ==================== -->
+<table class="navbar" border="0" width="100%" cellpadding="0"
+       bgcolor="#a0c0ff" cellspacing="0">
+  <tr valign="middle">
+  <!-- Home link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="pycocoa-module.html">Home</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Tree link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="module-tree.html">Trees</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Index link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="identifier-index.html">Indices</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Help link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="help.html">Help</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Project homepage -->
+      <th class="navbar" align="right" width="100%">
+        <table border="0" cellpadding="0" cellspacing="0">
+          <tr><th class="navbar" align="center"
+            ><a class="navbar" target="_top" href="https://GitHub.com/mrJean1/PyCocoa">PyCocoa</a></th>
+          </tr></table></th>
+  </tr>
+</table>
+<table border="0" cellpadding="0" cellspacing="0" width="100%%">
+  <tr>
+    <td align="left" class="footer">
+    Generated by Epydoc 3.0.1 on Wed Nov 11 21:56:40 2020
+    </td>
+    <td align="right" class="footer">
+      <a target="mainFrame" href="http://epydoc.sourceforge.net"
+        >http://epydoc.sourceforge.net</a>
+    </td>
+  </tr>
+</table>
+
+<script type="text/javascript">
+  <!--
+  // Private objects are initially displayed (because if
+  // javascript is turned off then we want them to be
+  // visible); but by default, we want to hide them.  So hide
+  // them unless we have a cookie that says to show them.
+  checkCookie();
+  // -->
+</script>
+</body>
+</html>
