@@ -23,7 +23,7 @@
 from setuptools import setup
 
 __all__ = ()
-__version__ = '20.11.11'
+__version__ = '20.11.15'
 
 
 def _c2(*names):
@@ -47,6 +47,7 @@ def _version():
 
 
 _KeyWords=('Cocoa', 'cocoa-python', 'cocoavlc', 'ctypes',
+           'fault', 'faults', 'faulthandler',
            'macOS', 'MacOSX',
            'Objective-C',
            'PyCocoa', 'Python-VLC',
