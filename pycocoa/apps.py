@@ -618,6 +618,17 @@ if __name__ == '__main__':
 
     _all_listing(__all__, locals())
 
+# % python3 -m pycocoa.apps
+#
+# pycocoa.apps.__all__ = tuple(
+#  pycocoa.apps.App is <class .App>,
+#  pycocoa.apps.app_title is <function .app_title at 0x7fec649aaca0>,
+#  pycocoa.apps.ns2App is <function .ns2App at 0x7fec649eb4c0>,
+#  pycocoa.apps.NSApplicationDelegate is <pycocoa.utils.module_property_RO object at 0x7fec62c2b7c0>,
+#  pycocoa.apps.Tile is <class .Tile>,
+# )[5]
+# pycocoa.apps.version 20.01.08, .isLazy 1, Python 3.9.0 64bit, macOS 10.15.7
+
 # MIT License <https://OpenSource.org/licenses/MIT>
 #
 # Copyright (C) 2017-2020 -- mrJean1 at Gmail -- All Rights Reserved.

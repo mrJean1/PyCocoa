@@ -62,8 +62,12 @@
 <p>Various ObjC and macOS libraries, signatures, constants, etc.</p>
 
 <hr />
-<div class="fields">      <p><strong>Version:</strong>
-        20.11.11
+<div class="fields">      <p><strong>Note:</strong>
+        The macOS <code>libc</code> library (<code>ctypes.CDLL</code>) is 
+        also installed, but not exported.
+      </p>
+      <p><strong>Version:</strong>
+        20.11.14
       </p>
 </div><!-- ==================== CLASSES ==================== -->
 <a name="section-Classes"></a>
@@ -77,7 +81,7 @@
     <td width="15%" align="right" valign="top" class="summary">
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
-        <a href="pycocoa.oslibs.NSExceptionHandler_t-class.html" class="summary-name">NSExceptionHandler_t</a>
+        <a href="pycocoa.NSExceptionHandler_t-class.html" class="summary-name">NSExceptionHandler_t</a>
     </td>
   </tr>
 </table>
@@ -196,7 +200,7 @@
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
         <a href="pycocoa.oslibs-module.html#libCF" class="summary-name">libCF</a> = <code title="&lt;CDLL '/System/Library/Frameworks/CoreFoundation.framework/CoreFoundat\
-ion', handle 1113d5878 at 7fde50be7f10&gt;">&lt;CDLL '/System/Library/Frameworks/CoreFoundation.frame<code class="variable-ellipsis">...</code></code><br />
+ion', handle 10dc36878 at 7fbe3bbe9750&gt;">&lt;CDLL '/System/Library/Frameworks/CoreFoundation.frame<code class="variable-ellipsis">...</code></code><br />
       The macOS <code>CoreFoundation</code> library 
       (<code>ctypes.CDLL</code>).
     </td>
@@ -205,8 +209,8 @@ ion', handle 1113d5878 at 7fde50be7f10&gt;">&lt;CDLL '/System/Library/Frameworks
     <td width="15%" align="right" valign="top" class="summary">
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
-        <a href="pycocoa.oslibs-module.html#libAppKit" class="summary-name">libAppKit</a> = <code title="&lt;CDLL '/System/Library/Frameworks/AppKit.framework/AppKit', handle 7fd\
-e4dcd5b60 at 7fde50beabd0&gt;">&lt;CDLL '/System/Library/Frameworks/AppKit.framework<code class="variable-ellipsis">...</code></code><br />
+        <a href="pycocoa.oslibs-module.html#libAppKit" class="summary-name">libAppKit</a> = <code title="&lt;CDLL '/System/Library/Frameworks/AppKit.framework/AppKit', handle 7fb\
+e3a025ad0 at 7fbe3bbc81d0&gt;">&lt;CDLL '/System/Library/Frameworks/AppKit.framework<code class="variable-ellipsis">...</code></code><br />
       The macOS <code>AppKit</code> library (<code>ctypes.CDLL</code>).
     </td>
   </tr>
@@ -1040,8 +1044,8 @@ e4dcd5b60 at 7fde50beabd0&gt;">&lt;CDLL '/System/Library/Frameworks/AppKit.frame
     <td width="15%" align="right" valign="top" class="summary">
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
-        <a href="pycocoa.oslibs-module.html#libquartz" class="summary-name">libquartz</a> = <code title="&lt;CDLL '/System/Library/Frameworks/quartz.framework/quartz', handle 7fd\
-e4dceb310 at 7fde509fca50&gt;">&lt;CDLL '/System/Library/Frameworks/quartz.framework<code class="variable-ellipsis">...</code></code><br />
+        <a href="pycocoa.oslibs-module.html#libquartz" class="summary-name">libquartz</a> = <code title="&lt;CDLL '/System/Library/Frameworks/quartz.framework/quartz', handle 7fb\
+e3a02c100 at 7fbe3bbc8390&gt;">&lt;CDLL '/System/Library/Frameworks/quartz.framework<code class="variable-ellipsis">...</code></code><br />
       The macOS <code>quartz</code> library (<code>ctypes.CDLL</code>).
     </td>
   </tr>
@@ -1050,7 +1054,7 @@ e4dceb310 at 7fde509fca50&gt;">&lt;CDLL '/System/Library/Frameworks/quartz.frame
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
         <a href="pycocoa.oslibs-module.html#libCT" class="summary-name">libCT</a> = <code title="&lt;CDLL '/System/Library/Frameworks/CoreText.framework/CoreText', handle\
- 7fde4dcdae90 at 7fde50bcfa90&gt;">&lt;CDLL '/System/Library/Frameworks/CoreText.framework/C<code class="variable-ellipsis">...</code></code><br />
+ 7fbe3a028110 at 7fbe3bbdb210&gt;">&lt;CDLL '/System/Library/Frameworks/CoreText.framework/C<code class="variable-ellipsis">...</code></code><br />
       The macOS <code>CoreText</code> library (<code>ctypes.CDLL</code>).
     </td>
   </tr>
@@ -1255,7 +1259,7 @@ e4dceb310 at 7fde509fca50&gt;">&lt;CDLL '/System/Library/Frameworks/quartz.frame
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
         <a href="pycocoa.oslibs-module.html#libFoundation" class="summary-name">libFoundation</a> = <code title="&lt;CDLL '/System/Library/Frameworks/Foundation.framework/Foundation', ha\
-ndle 7fde4dcd6080 at 7fde50bcff10&gt;">&lt;CDLL '/System/Library/Frameworks/Foundation.f<code class="variable-ellipsis">...</code></code><br />
+ndle 7fbe3a027050 at 7fbe3bbdb690&gt;">&lt;CDLL '/System/Library/Frameworks/Foundation.f<code class="variable-ellipsis">...</code></code><br />
       The macOS <code>Foundation</code> library (<code>ctypes.CDLL</code>).
     </td>
   </tr>
@@ -1263,7 +1267,7 @@ ndle 7fde4dcd6080 at 7fde50bcff10&gt;">&lt;CDLL '/System/Library/Frameworks/Foun
     <td width="15%" align="right" valign="top" class="summary">
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
-        <a href="pycocoa.oslibs-module.html#libobjc" class="summary-name">libobjc</a> = <code title="&lt;CDLL '/usr/lib/libobjc.dylib', handle 1113d79d0 at 7fde50bcff90&gt;">&lt;CDLL '/usr/lib/libobjc.dylib', handle 1113d79d0 at <code class="variable-ellipsis">...</code></code><br />
+        <a href="pycocoa.oslibs-module.html#libobjc" class="summary-name">libobjc</a> = <code title="&lt;CDLL '/usr/lib/libobjc.dylib', handle 10dc389d0 at 7fbe3bbdb950&gt;">&lt;CDLL '/usr/lib/libobjc.dylib', handle 10dc389d0 at <code class="variable-ellipsis">...</code></code><br />
       The macOS <code>objc</code> library (<code>ctypes.CDLL</code>).
     </td>
   </tr>
@@ -1413,7 +1417,7 @@ ndle 7fde4dcd6080 at 7fde50bcff10&gt;">&lt;CDLL '/System/Library/Frameworks/Foun
     <dt>Value:</dt>
       <dd><table><tr><td><pre class="variable">
 &lt;CDLL '/System/Library/Frameworks/CoreFoundation.framework/CoreFoundat<span class="variable-linewrap"><img src="crarr.png" alt="\" /></span>
-ion', handle 1113d5878 at 7fde50be7f10&gt;
+ion', handle 10dc36878 at 7fbe3bbe9750&gt;
 </pre></td></tr></table>
 </dd>
   </dl>
@@ -1431,8 +1435,8 @@ ion', handle 1113d5878 at 7fde50be7f10&gt;
   <dl class="fields">
     <dt>Value:</dt>
       <dd><table><tr><td><pre class="variable">
-&lt;CDLL '/System/Library/Frameworks/AppKit.framework/AppKit', handle 7fd<span class="variable-linewrap"><img src="crarr.png" alt="\" /></span>
-e4dcd5b60 at 7fde50beabd0&gt;
+&lt;CDLL '/System/Library/Frameworks/AppKit.framework/AppKit', handle 7fb<span class="variable-linewrap"><img src="crarr.png" alt="\" /></span>
+e3a025ad0 at 7fbe3bbc81d0&gt;
 </pre></td></tr></table>
 </dd>
   </dl>
@@ -1450,8 +1454,8 @@ e4dcd5b60 at 7fde50beabd0&gt;
   <dl class="fields">
     <dt>Value:</dt>
       <dd><table><tr><td><pre class="variable">
-&lt;CDLL '/System/Library/Frameworks/quartz.framework/quartz', handle 7fd<span class="variable-linewrap"><img src="crarr.png" alt="\" /></span>
-e4dceb310 at 7fde509fca50&gt;
+&lt;CDLL '/System/Library/Frameworks/quartz.framework/quartz', handle 7fb<span class="variable-linewrap"><img src="crarr.png" alt="\" /></span>
+e3a02c100 at 7fbe3bbc8390&gt;
 </pre></td></tr></table>
 </dd>
   </dl>
@@ -1470,7 +1474,7 @@ e4dceb310 at 7fde509fca50&gt;
     <dt>Value:</dt>
       <dd><table><tr><td><pre class="variable">
 &lt;CDLL '/System/Library/Frameworks/CoreText.framework/CoreText', handle<span class="variable-linewrap"><img src="crarr.png" alt="\" /></span>
- 7fde4dcdae90 at 7fde50bcfa90&gt;
+ 7fbe3a028110 at 7fbe3bbdb210&gt;
 </pre></td></tr></table>
 </dd>
   </dl>
@@ -1489,7 +1493,7 @@ e4dceb310 at 7fde509fca50&gt;
     <dt>Value:</dt>
       <dd><table><tr><td><pre class="variable">
 &lt;CDLL '/System/Library/Frameworks/Foundation.framework/Foundation', ha<span class="variable-linewrap"><img src="crarr.png" alt="\" /></span>
-ndle 7fde4dcd6080 at 7fde50bcff10&gt;
+ndle 7fbe3a027050 at 7fbe3bbdb690&gt;
 </pre></td></tr></table>
 </dd>
   </dl>
@@ -1507,7 +1511,7 @@ ndle 7fde4dcd6080 at 7fde50bcff10&gt;
   <dl class="fields">
     <dt>Value:</dt>
       <dd><table><tr><td><pre class="variable">
-&lt;CDLL '/usr/lib/libobjc.dylib', handle 1113d79d0 at 7fde50bcff90&gt;
+&lt;CDLL '/usr/lib/libobjc.dylib', handle 10dc389d0 at 7fbe3bbdb950&gt;
 </pre></td></tr></table>
 </dd>
   </dl>
@@ -1545,7 +1549,7 @@ ndle 7fde4dcd6080 at 7fde50bcff10&gt;
 <table border="0" cellpadding="0" cellspacing="0" width="100%%">
   <tr>
     <td align="left" class="footer">
-    Generated by Epydoc 3.0.1 on Wed Nov 11 21:56:39 2020
+    Generated by Epydoc 3.0.1 on Sun Nov 15 17:17:35 2020
     </td>
     <td align="right" class="footer">
       <a target="mainFrame" href="http://epydoc.sourceforge.net"

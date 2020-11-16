@@ -387,6 +387,16 @@ if __name__ == '__main__':
 
     _all_listing(__all__, locals())
 
+# % python3 -m pycocoa.tables
+#
+# pycocoa.tables.__all__ = tuple(
+#  pycocoa.tables.closeTables is <function .closeTables at 0x7fdcfa5d6430>,
+#  pycocoa.tables.NSTableViewDelegate is <pycocoa.utils.module_property_RO object at 0x7fdcfa5a2070>,
+#  pycocoa.tables.Table is <class .Table>,
+#  pycocoa.tables.TableWindow is <class .TableWindow>,
+# )[4]
+# pycocoa.tables.version 20.01.08, .isLazy 1, Python 3.9.0 64bit, macOS 10.15.7
+
 # MIT License <https://OpenSource.org/licenses/MIT>
 #
 # Copyright (C) 2017-2020 -- mrJean1 at Gmail -- All Rights Reserved.

@@ -43,7 +43,7 @@ Tests
 The tests and examples have only been run with 64-bit Python 3.9.0, 3.8.6, 3.7.6,
 2.7.18 and macOS' 2.7.16 using U{Python-VLC<https://PyPI.org/project/python-vlc>}
 3.0.8, 3.0.6, 3.0.4 and 2.2.8 (with the compatible U{VLC App<https://www.VideoLan.org/vlc>})
-on macOS 10.15.6 Catalina, 10.14.6 Mojave or 10.13.6 High Sierra.  The tests run
+on macOS 10.15.7 Catalina, 10.14.6 Mojave or 10.13.6 High Sierra.  The tests run
 with and without C{lazy import} in Python 3.9.0, 3.8.6 and 3.7.6.
 
 Previously, PyCocoa was tested with 64-bit Python 3.8.3, 3.8.1, 3.7.5, 3.7.4,
@@ -131,26 +131,28 @@ POSSIBILITY OF SUCH DAMAGE.}
 @newfield example: Example, Examples
 
 '''
-
 from os.path import abspath, basename, dirname
 import sys
-
-p = sys.platform
-if not p.startswith('darwin'):
-    raise NotImplementedError('%s not supported, only %s' % (p, 'macOS'))
-p = 'PyPy'
-if p in sys.version:
-    raise NotImplementedError('%s not supported, only %s' % (p, 'CPython'))
-del p
 
 # <https://PyInstaller.ReadTheDocs.io/en/stable/runtime-information.html>
 _isfrozen       = getattr(sys, 'frozen', False)
 pycocoa_abspath = dirname(abspath(__file__))  # sys._MEIPASS + '/pycocoa'
 _pycocoa        = __package__ or basename(pycocoa_abspath)
 
-__version__ = '20.11.11'
+__version__ = '20.11.15'
 # see setup.py for similar logic
 version = '.'.join(map(str, map(int, __version__.split('.'))))
+
+def _Error(what, only):  # PYCHOK expected
+    return NotImplementedError('%s not supported by %s %s, only %s'
+                               % (what, _pycocoa, version, only))
+
+_ = sys.platform  # PYCHOK iOS?
+if not _.startswith('darwin'):
+    raise _Error(_, 'macOS')
+_ = 'PyPy'
+if _ in sys.version:
+    raise _Error(_, 'CPython')
 
 if _isfrozen:  # avoid lazy import
     _lazy_import2 = None
@@ -173,7 +175,7 @@ else:
     except (ImportError, LazyImportError, NotImplementedError):
         _lazy_import2 = None
 
-del abspath, basename, dirname, sys  # exclude from globals(), __all__
+del _, abspath, basename, dirname, _Error, sys  # exclude from globals(), __all__
 
 if not _lazy_import2:  # import and set __all__
 
@@ -188,6 +190,8 @@ if not _lazy_import2:  # import and set __all__
     import pycocoa.bases    as bases     # PYCHOK exported
     import pycocoa.bases    as bases     # PYCHOK exported
     import pycocoa.colors   as colors    # PYCHOK exported
+    import pycocoa.faults   as faults    # PYCHOK exported
+    import pycocoa.fonts    as fonts     # PYCHOK exported
     import pycocoa.getters  as getters   # PYCHOK exported
     import pycocoa.geometry as geometry  # PYCHOK exported
     import pycocoa.lazily   as lazily    # PYCHOK exported
@@ -217,6 +221,7 @@ if not _lazy_import2:  # import and set __all__
     from pycocoa.colors   import *  # PYCHOK __all__
     from pycocoa.dicts    import *  # PYCHOK __all__
     from pycocoa.fonts    import *  # PYCHOK __all__
+    from pycocoa.faults   import *  # PYCHOK __all__
     from pycocoa.getters  import *  # PYCHOK __all__
     from pycocoa.geometry import *  # PYCHOK __all__
     from pycocoa.lazily   import *  # PYCHOK __all__
@@ -272,8 +277,8 @@ if not _lazy_import2:  # import and set __all__
     # NSUnscaledWindowMask               = NSWindowStyleMaskUnscaled                # PYCHOK D? XXX
 
     # filter locals() for .__init__.py
-    from pycocoa.utils import _all_exports  # PYCHOK expected
-    __all__ = _all_exports(locals(), not_starts=('_', 'CFUNCTION', 'c_', 'kC'))
+    __all__ = tuple(set(_ for _ in locals().keys() if
+                          not _.startswith(('_', 'CFUNCTION', 'c_', 'kC'))))
 
 
 def _locals():

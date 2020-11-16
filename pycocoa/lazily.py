@@ -81,13 +81,17 @@ class _NamedEnum_RO(dict):
                 yield k, v
 
 
-def _ALL_DOCS(*names):
-    '''(INTERNAL) Only export B{C{names}} when make'ing docs to
-       force C{epydoc} to include classes, methods, functions and
-       other names in the documentation.  Using C{epydoc --private
-       ...} tends to include far too much internal documentation.
-    '''
-    return names if _FOR_DOCS else ()
+if _FOR_DOCS:
+    def _ALL_DOCS(*exports):
+        '''(INTERNAL) Only C{B{exports}.__name__} when make'ing docs to
+           force C{epydoc} to include classes, methods, functions and
+           other names in the documentation.  Using C{epydoc --private
+           ...} tends to include far too much internal documentation.
+        '''
+        return tuple(x.__name__ for x in exports)
+else:
+    def _ALL_DOCS(*unused):  # PYCHOK expected
+        return ()
 
 
 _ALL_INIT = 'pycocoa_abspath', 'version'  # exported by pycocoa.__init__,py
@@ -99,6 +103,7 @@ _ALL_LAZY = _NamedEnum_RO(_name='_ALL_LAZY',
                          colors=('CMYColor', 'CMYColors', 'Color', 'ColorError', 'Colors', 'GrayScaleColor', 'GrayScaleColors',
                                  'HSBColor', 'HSBColors', 'RGBColor', 'RGBColors', 'TintColor', 'TintColors', 'UIColor', 'UIColors'),
                           dicts=('Dict', 'FrozenDict'),
+                         faults=('setUncaughtExceptionHandler',),  # faults.disable, .enable, .exiting, .is_enabled, .SIGs_enabled
                           fonts=('Font', 'FontError', 'fontfamilies', 'fontnamesof', 'Fonts',
                                  'fontsof', 'fontsof4', 'FontTrait', 'FontTraitError', 'fontTraits', 'fontTraitstrs'),
                        geometry=('Point', 'Point2', 'Rect', 'Rect4', 'Size', 'Size2'),
@@ -116,7 +121,7 @@ _ALL_LAZY = _NamedEnum_RO(_name='_ALL_LAZY',
                                  'NSColor', 'NSConcreteNotification', 'NSConstantString',
                                  'NSData', 'nsData2bytes', 'NSDecimal', 'nsDecimal2decimal', 'NSDecimalNumber',
                                  'NSDictionary', 'nsDictionary2dict', 'NSDockTile', 'NSDouble',
-                                 'NSEnumerator', 'NSError', 'NSException',
+                                 'NSEnumerator', 'NSError', 'NSException', 'NSExceptionError',
                                  'NSFloat', 'NSFont', 'NSFontDescriptor', 'NSFontManager', 'NSFontPanel',
                                  'NSImage', 'NSImageView', 'NSInt', 'nsIter', 'nsIter2',
                                  'NSLayoutManager', 'nsLog', 'nsLogf', 'NSLong', 'NSLongLong',
@@ -127,8 +132,10 @@ _ALL_LAZY = _NamedEnum_RO(_name='_ALL_LAZY',
                                  'NSPrinter', 'NSPrintInfo', 'NSPrintOperation', 'NSPrintPanel',
                                  'NSSavePanel', 'NSScreen', 'NSScrollView', 'NSSet', 'nsSet2set',
                                  'NSStatusBar', 'NSStr', 'NSString', 'nsString2str',
-                                 'NSTableColumn', 'NSTableView', 'NSTextField', 'nsTextSize3', 'nsTextView', 'NSTextView', 'NSThread', 'nsThrow',
-                                 'nsUncaughtExceptionHandler', 'NSURL', 'nsURL2str', 'NSView', 'NSWindow'),
+                                 'NSTableColumn', 'NSTableView',
+                                 'NSTextField', 'nsTextSize3', 'nsTextView', 'NSTextView',
+                                 'NSThread', 'nsThrow',
+                                 'NSURL', 'nsURL2str', 'NSView', 'NSWindow'),
                         octypes=('Allocator_t', 'Array_t', 'Block_t', 'BOOL_t',
                                  'c_ptrdiff_t', 'c_struct_t', 'c_void',  # exported
                                  'CFIndex_t', 'CFRange_t',
@@ -200,7 +207,8 @@ _ALL_LAZY = _NamedEnum_RO(_name='_ALL_LAZY',
                          tuples=('Tuple',),
                           utils=('aspect_ratio', 'bytes2repr', 'bytes2str', 'Cache2', 'clip',
                                  'DEFAULT_UNICODE', 'flint', 'gcd',
-                                 'inst2strepr', 'isinstanceOf', 'iterbytes', 'lambda1',
+                                 'inst2strepr', 'isinstanceOf', 'iterbytes',
+                                 'lambda1', 'logf',
                                  'missing', 'module_property_RO',
                                  'name2objc', 'name2py', 'name2pymethod',
                                  'printf', 'properties', 'property2', 'property_RO',
@@ -214,7 +222,7 @@ _ALL_LAZY = _NamedEnum_RO(_name='_ALL_LAZY',
 _ALL_OVERRIDING = _NamedEnum_RO(_name='_ALL_OVERRIDING')  # all DEPRECATED
 
 __all__ = _ALL_LAZY.lazily
-__version__ = '20.11.11'
+__version__ = '20.11.15'
 
 
 def _all_imports(**more):
@@ -223,7 +231,7 @@ def _all_imports(**more):
     # imports naming conventions stored below - [<key>] = <from>:
     #  import <module>                        - [<module>] = <module>
     #  from <module> import <attr>            - [<attr>] = <module>
-    #  from pygeodesy import <attr>           - [<attr>] = <attr>
+    #  from pycocoa import <attr>             - [<attr>] = <attr>
     #  from <module> import <attr> as <name>  - [<name>] = <module>.<attr>
     imports = _Dict()
     imports_add = imports.add
@@ -316,7 +324,7 @@ def _lazy_import2(_package_):  # MCCABE 15
     packages = (parent, '__main__', '')
 
     def __getattr__(name):  # __getattr__ only for Python 3.7+
-        # only called once for each undefined pygeodesy attribute
+        # only called once for each undefined pycocoa attribute
         if name in imports:
             # importlib.import_module() implicitly sets sub-modules
             # on this module as appropriate for direct imports (see
@@ -427,6 +435,13 @@ if __name__ == '__main__':
     for n, m in _sys.modules.items():  # show any pre-loaded modules
         if n in _ALL_LAZY or getattr(m, '__package__', None) == 'pycocoa':
             print('pre-loaded %s: %s?' % (n, getattr(m, '__file__', '?')))
+
+# % python3 -m pycocoa.lazily
+# /Library/Frameworks/Python.framework/Versions/3.9/lib/python3.9/runpy.py:127: RuntimeWarning: 'pycocoa.lazily' found in sys.modules after import of package 'pycocoa', but prior to execution of 'pycocoa.lazily'; this may result in unpredictable behaviour
+#   warn(RuntimeWarning(msg))
+# pre-loaded __main__: .../PyCocoa/pycocoa/lazily.py?
+# pre-loaded pycocoa.lazily: .../PyCocoa/pycocoa/lazily.py?
+# pre-loaded pycocoa: .../PyCocoa/pycocoa/__init__.py?
 
 # MIT License <https://OpenSource.org/licenses/MIT>
 #

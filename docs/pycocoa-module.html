@@ -101,7 +101,7 @@
     href="https://PyPI.org/project/python-vlc" target="_top">Python-VLC</a>
     3.0.8, 3.0.6, 3.0.4 and 2.2.8 (with the compatible <a 
     href="https://www.VideoLan.org/vlc" target="_top">VLC App</a>) on macOS
-    10.15.6 Catalina, 10.14.6 Mojave or 10.13.6 High Sierra.  The tests run
+    10.15.7 Catalina, 10.14.6 Mojave or 10.13.6 High Sierra.  The tests run
     with and without <code>lazy import</code> in Python 3.9.0, 3.8.6 and 
     3.7.6.</p>
     <p>Previously, PyCocoa was tested with 64-bit Python 3.8.3, 3.8.1, 
@@ -187,7 +187,7 @@
 
 <hr />
 <div class="fields">      <p><strong>Version:</strong>
-        20.11.11
+        20.11.15
       </p>
 </div><!-- ==================== SUBMODULES ==================== -->
 <a name="section-Submodules"></a>
@@ -243,6 +243,9 @@
         class="link">FrozenDict</a> and <a 
         href="pycocoa.dicts.Dict-class.html" class="link">Dict</a>, 
         wrapping ObjC <code>NS[Mutable]Dictionary</code>.</em>    </li>
+    <li> <strong class="uidlink"><a href="pycocoa.faults-module.html">pycocoa.faults</a></strong>: <em class="summary">Handle <i>uncaught</i> <code>ObjC/NSExceptions</code> and other 
+        <code>fault</code>s similar to standard module 
+        <code>faulthandler</code> available since Python 3.3.</em>    </li>
     <li> <strong class="uidlink"><a href="pycocoa.fonts-module.html">pycocoa.fonts</a></strong>: <em class="summary">Type <a href="pycocoa.fonts.Font-class.html" class="link">Font</a>,
         etc., wrapping ObjC <code>NSFont</code>.</em>    </li>
     <li> <strong class="uidlink"><a href="pycocoa.geometry-module.html">pycocoa.geometry</a></strong>: <em class="summary">Types <a href="pycocoa.geometry.Point-class.html" 
@@ -732,7 +735,15 @@
     <td width="15%" align="right" valign="top" class="summary">
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
-        <a href="pycocoa.oslibs.NSExceptionHandler_t-class.html" class="summary-name">NSExceptionHandler_t</a>
+        <a href="pycocoa.nstypes.NSExceptionError-class.html" class="summary-name">NSExceptionError</a><br />
+      Python Error wrapping an <code>ObjC/NSexception</code>.
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="pycocoa.NSExceptionHandler_t-class.html" class="summary-name">NSExceptionHandler_t</a>
     </td>
   </tr>
 <tr>
@@ -1428,6 +1439,23 @@
     </td><td class="summary">
       <table width="100%" cellpadding="0" cellspacing="0" border="0">
         <tr>
+          <td><span class="summary-sig"><a href="pycocoa-module.html#SIGs_enabled" class="summary-sig-name">SIGs_enabled</a>(<span class="summary-sig-arg">*sigs</span>)</span><br />
+      Return the signals currently handled as <code>fault</code>.</td>
+          <td align="right" valign="top">
+            
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
           <td><span class="summary-sig"><a href="pycocoa-module.html#add_ivar" class="summary-sig-name">add_ivar</a>(<span class="summary-sig-arg">clas</span>,
         <span class="summary-sig-arg">name</span>,
         <span class="summary-sig-arg">ctype</span>)</span><br />
@@ -1669,6 +1697,67 @@
         <span class="summary-sig-arg">frozen</span>=<span class="summary-sig-default">False</span>)</span><br />
       Create an <code>NS[Mutable]Dictionary</code> instance from a Python 
       <code>dict</code>.</td>
+          <td align="right" valign="top">
+            
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a href="pycocoa-module.html#disable" class="summary-sig-name">disable</a>()</span><br />
+      Disable <code>fault</code> handling and uninstall the signal handlers
+      installed by <a href="pycocoa.faults-module.html#enable" 
+      class="link">faults.enable</a>, like the <a 
+      href="https://Docs.Python.org/3/library/faulthandler.html" 
+      target="_top">faulthandler</a> module in Python 3.3 and later.</td>
+          <td align="right" valign="top">
+            
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a href="pycocoa-module.html#enable" class="summary-sig-name">enable</a>(<span class="summary-sig-arg">file</span>=<span class="summary-sig-default">sys.stdout</span>,
+        <span class="summary-sig-arg">**unused</span>)</span><br />
+      Enable <code>fault</code> handling similar to the <a 
+      href="https://Docs.Python.org/3/library/faulthandler.html" 
+      target="_top">faulthandler</a> module available in Python 3.3 and 
+      later.</td>
+          <td align="right" valign="top">
+            
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a href="pycocoa-module.html#exiting" class="summary-sig-name">exiting</a>(<span class="summary-sig-arg">status</span>=<span class="summary-sig-default">None</span>)</span><br />
+      Get/set the <code>exit</code> and <code>status</code> to use after 
+      <code>fault</code>s or <i>uncaught</i> 
+      <code>ObjC/NSException</code>s.</td>
           <td align="right" valign="top">
             
             
@@ -2569,6 +2658,26 @@
     </td><td class="summary">
       <table width="100%" cellpadding="0" cellspacing="0" border="0">
         <tr>
+          <td><span class="summary-sig"><a href="pycocoa-module.html#is_enabled" class="summary-sig-name">is_enabled</a>(<span class="summary-sig-arg">sig</span>=<span class="summary-sig-default">None</span>)</span><br />
+      Check whether <code>fault</code> handling is enabled, similar to the 
+      <a href="https://Docs.Python.org/3/library/faulthandler.html" 
+      target="_top">faulthandler</a> module available in Python 3.3 and 
+      later.</td>
+          <td align="right" valign="top">
+            
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
           <td><span class="summary-sig"><a href="pycocoa-module.html#isinstanceOf" class="summary-sig-name">isinstanceOf</a>(<span class="summary-sig-arg">inst</span>,
         <span class="summary-sig-arg">*classes</span>,
         <span class="summary-sig-arg">**name_missing</span>)</span><br />
@@ -2642,6 +2751,25 @@
           <td><span class="summary-sig"><a href="pycocoa-module.html#list2NS" class="summary-sig-name">list2NS</a>(<span class="summary-sig-arg">py</span>)</span><br />
       Create an <code>NSMutableArray</code> instance from a Python 
       <code>list</code>.</td>
+          <td align="right" valign="top">
+            
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a href="pycocoa-module.html#logf" class="summary-sig-name">logf</a>(<span class="summary-sig-arg">fmt</span>,
+        <span class="summary-sig-arg">*args</span>,
+        <span class="summary-sig-arg">**kwds</span>)</span><br />
+      Formatted log <i>fmt % args</i> with optional keywords.</td>
           <td align="right" valign="top">
             
             
@@ -3168,25 +3296,6 @@
     </td><td class="summary">
       <table width="100%" cellpadding="0" cellspacing="0" border="0">
         <tr>
-          <td><span class="summary-sig"><a href="pycocoa-module.html#nsUncaughtExceptionHandler" class="summary-sig-name">nsUncaughtExceptionHandler</a>(<span class="summary-sig-arg">handler</span>)</span><br />
-      Install an ObjC <code>NSException</code> handler, the handler 
-      signature must match <code>NSExceptionHandler_t</code> <code>def 
-      handler(ns_exc): ...</code>.</td>
-          <td align="right" valign="top">
-            
-            
-          </td>
-        </tr>
-      </table>
-      
-    </td>
-  </tr>
-<tr>
-    <td width="15%" align="right" valign="top" class="summary">
-      <span class="summary-type">&nbsp;</span>
-    </td><td class="summary">
-      <table width="100%" cellpadding="0" cellspacing="0" border="0">
-        <tr>
           <td><span class="summary-sig"><a href="pycocoa-module.html#printf" class="summary-sig-name">printf</a>(<span class="summary-sig-arg">fmt</span>,
         <span class="summary-sig-arg">*args</span>,
         <span class="summary-sig-arg">**kwds</span>)</span><br />
@@ -3405,6 +3514,26 @@
           <td><span class="summary-sig"><a href="pycocoa-module.html#set2NS" class="summary-sig-name">set2NS</a>(<span class="summary-sig-arg">py</span>)</span><br />
       Create an <code>NSMutableSet</code> instance from a Python 
       <code>set</code>.</td>
+          <td align="right" valign="top">
+            
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a href="pycocoa-module.html#setUncaughtExceptionHandler" class="summary-sig-name">setUncaughtExceptionHandler</a>(<span class="summary-sig-arg">handler</span>,
+        <span class="summary-sig-arg">log</span>=<span class="summary-sig-default">True</span>,
+        <span class="summary-sig-arg">raiser</span>=<span class="summary-sig-default">False</span>)</span><br />
+      Install a callback to handle <i>uncaught</i> 
+      <code>ObjC/NSException</code>s.</td>
           <td align="right" valign="top">
             
             
@@ -3744,7 +3873,7 @@
     <td width="15%" align="right" valign="top" class="summary">
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
-        <a name="version"></a><span class="summary-name">version</span> = <code title="'20.11.11'"><code class="variable-quote">'</code><code class="variable-string">20.11.11</code><code class="variable-quote">'</code></code>
+        <a name="version"></a><span class="summary-name">version</span> = <code title="'20.11.15'"><code class="variable-quote">'</code><code class="variable-string">20.11.15</code><code class="variable-quote">'</code></code>
     </td>
   </tr>
 <tr>
@@ -3997,7 +4126,7 @@ mUIFont', size=13, traits='Italic', weight=5),
     <td width="15%" align="right" valign="top" class="summary">
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
-        <a href="pycocoa-module.html#NSApplicationDelegate" class="summary-name">NSApplicationDelegate</a> = <code title="&lt;pycocoa.utils.module_property_RO object at 0x7fde50caaf50&gt;">&lt;pycocoa.utils.module_property_RO obje<code class="variable-ellipsis">...</code></code>
+        <a href="pycocoa-module.html#NSApplicationDelegate" class="summary-name">NSApplicationDelegate</a> = <code title="&lt;pycocoa.utils.module_property_RO object at 0x7fbe3bf3b110&gt;">&lt;pycocoa.utils.module_property_RO obje<code class="variable-ellipsis">...</code></code>
     </td>
   </tr>
 <tr>
@@ -4823,15 +4952,15 @@ mUIFont', size=13, traits='Italic', weight=5),
     <td width="15%" align="right" valign="top" class="summary">
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
-        <a href="pycocoa-module.html#NSMain" class="summary-name">NSMain</a> = <code title="NSMain.Application=NSApplication(&lt;Id_t at 0x7fde54bc9320&gt;) of 0x7fde54\
-d0aa50,
-      .BooleanNO=NSBoolean(&lt;Id_t at 0x7fde54bc17a0&gt;) of 0x7fff85b15390\
+        <a href="pycocoa-module.html#NSMain" class="summary-name">NSMain</a> = <code title="NSMain.Application=NSApplication(&lt;Id_t at 0x7fbe3f697560&gt;) of 0x7fbe3e\
+351b00,
+      .BooleanNO=NSBoolean(&lt;Id_t at 0x7fbe3f68b200&gt;) of 0x7fff85b15390\
 ,
-      .BooleanYES=NSBoolean(&lt;Id_t at 0x7fde54bb7170&gt;) of 0x7fff85b1538\
+      .BooleanYES=NSBoolean(&lt;Id_t at 0x7fbe3f6a53b0&gt;) of 0x7fff85b1538\
 0,
-      .Bundle=NSBundle(&lt;Id_t at 0x7fde54bde830&gt;) of 0x7fde4f164120,
+      .Bundle=NSBundle(&lt;Id_t at 0x7fbe3f6a54d0&gt;) of 0x7fbe38750b40,
       .BundleName=NSConstantString('CFBundleName'),
-...">NSMain.Application=NSApplication(&lt;Id_t at 0x7fde54bc9<code class="variable-ellipsis">...</code></code>
+...">NSMain.Application=NSApplication(&lt;Id_t at 0x7fbe3f697<code class="variable-ellipsis">...</code></code>
     </td>
   </tr>
 <tr>
@@ -5223,7 +5352,7 @@ d0aa50,
     <td width="15%" align="right" valign="top" class="summary">
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
-        <a href="pycocoa-module.html#NSTableViewDelegate" class="summary-name">NSTableViewDelegate</a> = <code title="&lt;pycocoa.utils.module_property_RO object at 0x7fde509a2490&gt;">&lt;pycocoa.utils.module_property_RO object<code class="variable-ellipsis">...</code></code>
+        <a href="pycocoa-module.html#NSTableViewDelegate" class="summary-name">NSTableViewDelegate</a> = <code title="&lt;pycocoa.utils.module_property_RO object at 0x7fbe3bc6cbd0&gt;">&lt;pycocoa.utils.module_property_RO object<code class="variable-ellipsis">...</code></code>
     </td>
   </tr>
 <tr>
@@ -5412,7 +5541,7 @@ d0aa50,
     <td width="15%" align="right" valign="top" class="summary">
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
-        <a href="pycocoa-module.html#NSWindowDelegate" class="summary-name">NSWindowDelegate</a> = <code title="&lt;pycocoa.utils.module_property_RO object at 0x7fde509a2210&gt;">&lt;pycocoa.utils.module_property_RO object at<code class="variable-ellipsis">...</code></code>
+        <a href="pycocoa-module.html#NSWindowDelegate" class="summary-name">NSWindowDelegate</a> = <code title="&lt;pycocoa.utils.module_property_RO object at 0x7fbe3bc6c950&gt;">&lt;pycocoa.utils.module_property_RO object at<code class="variable-ellipsis">...</code></code>
     </td>
   </tr>
 <tr>
@@ -5613,8 +5742,8 @@ d0aa50,
     <td width="15%" align="right" valign="top" class="summary">
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
-        <a href="pycocoa-module.html#libAppKit" class="summary-name">libAppKit</a> = <code title="&lt;CDLL '/System/Library/Frameworks/AppKit.framework/AppKit', handle 7fd\
-e4dcd5b60 at 7fde50beabd0&gt;">&lt;CDLL '/System/Library/Frameworks/AppKit.framework<code class="variable-ellipsis">...</code></code>
+        <a href="pycocoa-module.html#libAppKit" class="summary-name">libAppKit</a> = <code title="&lt;CDLL '/System/Library/Frameworks/AppKit.framework/AppKit', handle 7fb\
+e3a025ad0 at 7fbe3bbc81d0&gt;">&lt;CDLL '/System/Library/Frameworks/AppKit.framework<code class="variable-ellipsis">...</code></code>
     </td>
   </tr>
 <tr>
@@ -5622,7 +5751,7 @@ e4dcd5b60 at 7fde50beabd0&gt;">&lt;CDLL '/System/Library/Frameworks/AppKit.frame
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
         <a href="pycocoa-module.html#libCF" class="summary-name">libCF</a> = <code title="&lt;CDLL '/System/Library/Frameworks/CoreFoundation.framework/CoreFoundat\
-ion', handle 1113d5878 at 7fde50be7f10&gt;">&lt;CDLL '/System/Library/Frameworks/CoreFoundation.frame<code class="variable-ellipsis">...</code></code>
+ion', handle 10dc36878 at 7fbe3bbe9750&gt;">&lt;CDLL '/System/Library/Frameworks/CoreFoundation.frame<code class="variable-ellipsis">...</code></code>
     </td>
   </tr>
 <tr>
@@ -5630,7 +5759,7 @@ ion', handle 1113d5878 at 7fde50be7f10&gt;">&lt;CDLL '/System/Library/Frameworks
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
         <a href="pycocoa-module.html#libCT" class="summary-name">libCT</a> = <code title="&lt;CDLL '/System/Library/Frameworks/CoreText.framework/CoreText', handle\
- 7fde4dcdae90 at 7fde50bcfa90&gt;">&lt;CDLL '/System/Library/Frameworks/CoreText.framework/C<code class="variable-ellipsis">...</code></code>
+ 7fbe3a028110 at 7fbe3bbdb210&gt;">&lt;CDLL '/System/Library/Frameworks/CoreText.framework/C<code class="variable-ellipsis">...</code></code>
     </td>
   </tr>
 <tr>
@@ -5638,7 +5767,7 @@ ion', handle 1113d5878 at 7fde50be7f10&gt;">&lt;CDLL '/System/Library/Frameworks
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
         <a href="pycocoa-module.html#libFoundation" class="summary-name">libFoundation</a> = <code title="&lt;CDLL '/System/Library/Frameworks/Foundation.framework/Foundation', ha\
-ndle 7fde4dcd6080 at 7fde50bcff10&gt;">&lt;CDLL '/System/Library/Frameworks/Foundation.f<code class="variable-ellipsis">...</code></code>
+ndle 7fbe3a027050 at 7fbe3bbdb690&gt;">&lt;CDLL '/System/Library/Frameworks/Foundation.f<code class="variable-ellipsis">...</code></code>
     </td>
   </tr>
 <tr>
@@ -5653,15 +5782,15 @@ ndle 7fde4dcd6080 at 7fde50bcff10&gt;">&lt;CDLL '/System/Library/Frameworks/Foun
     <td width="15%" align="right" valign="top" class="summary">
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
-        <a href="pycocoa-module.html#libobjc" class="summary-name">libobjc</a> = <code title="&lt;CDLL '/usr/lib/libobjc.dylib', handle 1113d79d0 at 7fde50bcff90&gt;">&lt;CDLL '/usr/lib/libobjc.dylib', handle 1113d79d0 at <code class="variable-ellipsis">...</code></code>
+        <a href="pycocoa-module.html#libobjc" class="summary-name">libobjc</a> = <code title="&lt;CDLL '/usr/lib/libobjc.dylib', handle 10dc389d0 at 7fbe3bbdb950&gt;">&lt;CDLL '/usr/lib/libobjc.dylib', handle 10dc389d0 at <code class="variable-ellipsis">...</code></code>
     </td>
   </tr>
 <tr>
     <td width="15%" align="right" valign="top" class="summary">
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
-        <a href="pycocoa-module.html#libquartz" class="summary-name">libquartz</a> = <code title="&lt;CDLL '/System/Library/Frameworks/quartz.framework/quartz', handle 7fd\
-e4dceb310 at 7fde509fca50&gt;">&lt;CDLL '/System/Library/Frameworks/quartz.framework<code class="variable-ellipsis">...</code></code>
+        <a href="pycocoa-module.html#libquartz" class="summary-name">libquartz</a> = <code title="&lt;CDLL '/System/Library/Frameworks/quartz.framework/quartz', handle 7fb\
+e3a02c100 at 7fbe3bbc8390&gt;">&lt;CDLL '/System/Library/Frameworks/quartz.framework<code class="variable-ellipsis">...</code></code>
     </td>
   </tr>
 <tr>
@@ -5708,6 +5837,28 @@ e4dceb310 at 7fde509fca50&gt;">&lt;CDLL '/System/Library/Frameworks/quartz.frame
     <dd><ul class="nomargin-top">
         <li><code><strong class='fraise'>ValueError</strong></code> - If <i>py</i> is not <code>None</code>.</li>
     </ul></dd>
+  </dl>
+</td></tr></table>
+</div>
+<a name="SIGs_enabled"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">SIGs_enabled</span>(<span class="sig-arg">*sigs</span>)</span>
+  </h3>
+  </td><td align="right" valign="top"
+    >&nbsp;
+    </td>
+  </tr></table>
+  
+  <p>Return the signals currently handled as <code>fault</code>.</p>
+  <dl class="fields">
+    <dt>Returns:</dt>
+        <dd>A <code>dict</code> with the <code>SIG*</code> name and value of 
+          the currently handled signals, if any.</dd>
   </dl>
 </td></tr></table>
 </div>
@@ -6134,6 +6285,104 @@ e4dceb310 at 7fde509fca50&gt;">&lt;CDLL '/System/Library/Frameworks/quartz.frame
     </ul></dd>
   </dl>
 </td></tr></table>
+</div>
+<a name="disable"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">disable</span>()</span>
+  </h3>
+  </td><td align="right" valign="top"
+    >&nbsp;
+    </td>
+  </tr></table>
+  
+  <p>Disable <code>fault</code> handling and uninstall the signal handlers 
+  installed by <a href="pycocoa.faults-module.html#enable" 
+  class="link">faults.enable</a>, like the <a 
+  href="https://Docs.Python.org/3/library/faulthandler.html" 
+  target="_top">faulthandler</a> module in Python 3.3 and later.</p>
+  <dl class="fields">
+    <dt>Returns:</dt>
+        <dd><code>None</code>.</dd>
+  </dl>
+</td></tr></table>
+</div>
+<a name="enable"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">enable</span>(<span class="sig-arg">file</span>=<span class="sig-default">sys.stdout</span>,
+        <span class="sig-arg">**unused</span>)</span>
+  </h3>
+  </td><td align="right" valign="top"
+    >&nbsp;
+    </td>
+  </tr></table>
+  
+  <p>Enable <code>fault</code> handling similar to the <a 
+  href="https://Docs.Python.org/3/library/faulthandler.html" 
+  target="_top">faulthandler</a> module available in Python 3.3 and 
+  later.</p>
+  <p>Try to install handlers for the <code>SIGABRT</code>, 
+  <code>SIGBUS</code>, <code>SIGFPE</code>, <code>SIGILL</code> and 
+  <code>SIGSEGV</code> signals to dump a an ObjC call stack and Python 
+  traceback to <b><code>file</code></b>.</p>
+  <dl class="fields">
+    <dt>Raises:</dt>
+    <dd><ul class="nomargin-top">
+        <li><code><strong class='fraise'>TypeError</strong></code> - File <b><code>file</code></b> doesn't have callable 
+        <code>write</code> and <code>flush</code> attributes.</li>
+    </ul></dd>
+  </dl>
+<div class="fields">      <p><strong>See Also:</strong>
+        <code>NSMain.stdlog</code>.
+      </p>
+</div></td></tr></table>
+</div>
+<a name="exiting"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">exiting</span>(<span class="sig-arg">status</span>=<span class="sig-default">None</span>)</span>
+  </h3>
+  </td><td align="right" valign="top"
+    >&nbsp;
+    </td>
+  </tr></table>
+  
+  <p>Get/set the <code>exit</code> and <code>status</code> to use after 
+  <code>fault</code>s or <i>uncaught</i> 
+  <code>ObjC/NSException</code>s.</p>
+  <dl class="fields">
+    <dt>Parameters:</dt>
+    <dd><ul class="nomargin-top">
+        <li><strong class="pname"><code>status</code></strong> - The exit &quot;door&quot; and status code to be used (<code>small
+          int</code>) or <code>None</code> to leave unchanged.  A 
+          <i>negative</i> <b><code>status</code></b> invokes 
+          <code>os._exit(abs(status))</code> to terminate without normal 
+          exit processing, while a <i>non-negative</i> 
+          <b><code>status</code></b> uses <code>sys.exit(status)</code> 
+          after a <code>fault</code>.</li>
+    </ul></dd>
+    <dt>Returns:</dt>
+        <dd>The previously set <b><code>exiting</code></b> code 
+          (<code>int</code>).</dd>
+  </dl>
+<div class="fields">      <p><strong>Note:</strong>
+        The <code>faulthandler</code> module in Python 3.3 and later 
+        ignores all <b><code>exiting</code></b> settings.
+      </p>
+</div></td></tr></table>
 </div>
 <a name="float2NS"></a>
 <div>
@@ -7624,6 +7873,36 @@ e4dceb310 at 7fde509fca50&gt;">&lt;CDLL '/System/Library/Frameworks/quartz.frame
       </p>
 </div></td></tr></table>
 </div>
+<a name="is_enabled"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">is_enabled</span>(<span class="sig-arg">sig</span>=<span class="sig-default">None</span>)</span>
+  </h3>
+  </td><td align="right" valign="top"
+    >&nbsp;
+    </td>
+  </tr></table>
+  
+  <p>Check whether <code>fault</code> handling is enabled, similar to the 
+  <a href="https://Docs.Python.org/3/library/faulthandler.html" 
+  target="_top">faulthandler</a> module available in Python 3.3 and 
+  later.</p>
+  <dl class="fields">
+    <dt>Parameters:</dt>
+    <dd><ul class="nomargin-top">
+        <li><strong class="pname"><code>sig</code></strong> - Check whether <code>fault</code> handling includes this signal 
+          (<code>signal.SIG*</code>).</li>
+    </ul></dd>
+    <dt>Returns:</dt>
+        <dd><code>True</code> if <code>fault</code> handling is currently 
+          enabled, <code>False</code> otherwise.</dd>
+  </dl>
+</td></tr></table>
+</div>
 <a name="isinstanceOf"></a>
 <div>
 <table class="details" border="1" cellpadding="3"
@@ -7733,6 +8012,39 @@ e4dceb310 at 7fde509fca50&gt;">&lt;CDLL '/System/Library/Frameworks/quartz.frame
     <dt>Raises:</dt>
     <dd><ul class="nomargin-top">
         <li><code><strong class='fraise'>RuntimeError</strong></code> - If <code>len</code> vs <code>count</code> assertion failed.</li>
+    </ul></dd>
+  </dl>
+</td></tr></table>
+</div>
+<a name="logf"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">logf</span>(<span class="sig-arg">fmt</span>,
+        <span class="sig-arg">*args</span>,
+        <span class="sig-arg">**kwds</span>)</span>
+  </h3>
+  </td><td align="right" valign="top"
+    >&nbsp;
+    </td>
+  </tr></table>
+  
+  <p>Formatted log <i>fmt % args</i> with optional keywords.</p>
+  <dl class="fields">
+    <dt>Parameters:</dt>
+    <dd><ul class="nomargin-top">
+        <li><strong class="pname"><code>fmt</code></strong> - Print-like format or plain string (<code>str</code>).</li>
+        <li><strong class="pname"><code>args</code></strong> - Optional arguments to format (<i>all positional</i>).</li>
+        <li><strong class="pname"><code>argv0</code></strong> - Optional prefix (<code>str</code>).</li>
+        <li><strong class="pname"><code>file</code></strong> - Alternate file to write to (<code>file</code>-type), default 
+          <code>NSMain.stdlog</code>.</li>
+        <li><strong class="pname"><code>flush</code></strong> - Flush <b><code>file</code></b> after writing (<code>bool</code>),
+          default C(True).</li>
+        <li><strong class="pname"><code>nl</code></strong> - Number of leading blank lines (<code>int</code>).</li>
+        <li><strong class="pname"><code>nt</code></strong> - Number of trailing blank lines (<code>int</code>).</li>
     </ul></dd>
   </dl>
 </td></tr></table>
@@ -8355,6 +8667,10 @@ e4dceb310 at 7fde509fca50&gt;">&lt;CDLL '/System/Library/Frameworks/quartz.frame
         The <i>ns_fmt</i> and all <i>ns_args</i> must be <code>NS...</code>
         ObjC instances.
       </p>
+      <p><strong>See Also:</strong>
+        Dglessus' <a href="https://gist.GitHub.com/dgelessus" 
+        target="_top">nslog.py</a>.
+      </p>
 </div></td></tr></table>
 </div>
 <a name="nsLogf"></a>
@@ -8380,7 +8696,10 @@ e4dceb310 at 7fde509fca50&gt;">&lt;CDLL '/System/Library/Frameworks/quartz.frame
         <li><strong class="pname"><code>args</code></strong> - Optional arguments to format (<code>all positional</code>).</li>
     </ul></dd>
   </dl>
-</td></tr></table>
+<div class="fields">      <p><strong>See Also:</strong>
+        <a href="pycocoa.nstypes-module.html#nsLog" class="link">nsLog</a>.
+      </p>
+</div></td></tr></table>
 </div>
 <a name="nsNull2none"></a>
 <div>
@@ -8622,38 +8941,6 @@ e4dceb310 at 7fde509fca50&gt;">&lt;CDLL '/System/Library/Frameworks/quartz.frame
   </dl>
 </td></tr></table>
 </div>
-<a name="nsUncaughtExceptionHandler"></a>
-<div>
-<table class="details" border="1" cellpadding="3"
-       cellspacing="0" width="100%" bgcolor="white">
-<tr><td>
-  <table width="100%" cellpadding="0" cellspacing="0" border="0">
-  <tr valign="top"><td>
-  <h3 class="epydoc"><span class="sig"><span class="sig-name">nsUncaughtExceptionHandler</span>(<span class="sig-arg">handler</span>)</span>
-  </h3>
-  </td><td align="right" valign="top"
-    >&nbsp;
-    </td>
-  </tr></table>
-  
-  <p>Install an ObjC <code>NSException</code> handler, the handler 
-  signature must match <code>NSExceptionHandler_t</code> <code>def 
-  handler(ns_exc): ...</code>.</p>
-  <dl class="fields">
-    <dt>Parameters:</dt>
-    <dd><ul class="nomargin-top">
-        <li><strong class="pname"><code>handler</code></strong> - A callable (<code>NSExceptionHandler_t</code>).</li>
-    </ul></dd>
-    <dt>Returns:</dt>
-        <dd>Previously installed handler (<code>NSExceptionHandler_t</code>).</dd>
-  </dl>
-<div class="fields">      <p><strong>Note:</strong>
-        Faults like <code>SIGILL</code>, <code>SIGSEGV</code>, etc. do not 
-        throw an uncaught <code>NSException</code> and will not invoke the 
-        <i>handler</i>.
-      </p>
-</div></td></tr></table>
-</div>
 <a name="printf"></a>
 <div>
 <table class="details" border="1" cellpadding="3"
@@ -8674,9 +8961,13 @@ e4dceb310 at 7fde509fca50&gt;">&lt;CDLL '/System/Library/Frameworks/quartz.frame
   <dl class="fields">
     <dt>Parameters:</dt>
     <dd><ul class="nomargin-top">
-        <li><strong class="pname"><code>fmt</code></strong> - Print-like format (<code>str</code>).</li>
-        <li><strong class="pname"><code>args</code></strong> - Optional arguments to include (<i>all positional</i>).</li>
+        <li><strong class="pname"><code>fmt</code></strong> - Print-like format or plain string (<code>str</code>).</li>
+        <li><strong class="pname"><code>args</code></strong> - Optional arguments to format (<i>all positional</i>).</li>
         <li><strong class="pname"><code>argv0</code></strong> - Optional prefix (<code>str</code>).</li>
+        <li><strong class="pname"><code>file</code></strong> - Alternate file to write to (<code>file</code>-type), default 
+          <code>sys.stdout</code>.</li>
+        <li><strong class="pname"><code>flush</code></strong> - Flush <b><code>file</code></b> after writing (<code>bool</code>),
+          default <code>False</code>.</li>
         <li><strong class="pname"><code>nl</code></strong> - Number of leading blank lines (<code>int</code>).</li>
         <li><strong class="pname"><code>nt</code></strong> - Number of trailing blank lines (<code>int</code>).</li>
     </ul></dd>
@@ -9137,6 +9428,77 @@ e4dceb310 at 7fde509fca50&gt;">&lt;CDLL '/System/Library/Frameworks/quartz.frame
     </ul></dd>
   </dl>
 </td></tr></table>
+</div>
+<a name="setUncaughtExceptionHandler"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">setUncaughtExceptionHandler</span>(<span class="sig-arg">handler</span>,
+        <span class="sig-arg">log</span>=<span class="sig-default">True</span>,
+        <span class="sig-arg">raiser</span>=<span class="sig-default">False</span>)</span>
+  </h3>
+  </td><td align="right" valign="top"
+    >&nbsp;
+    </td>
+  </tr></table>
+  
+  <p>Install a callback to handle <i>uncaught</i> 
+  <code>ObjC/NSException</code>s.</p>
+  <p>The <code><b>handler</b>(error)</code> is called with one argument 
+  <code>error</code>, an <a 
+  href="pycocoa.nstypes.NSExceptionError-class.html" 
+  class="link">NSExceptionError</a> instance.  It should return either 
+  <code>None</code> or that same <code>error</code>.  In the latter case, 
+  that <code>error</code> will subsequently be raised as Python 
+  exception.</p>
+  <dl class="fields">
+    <dt>Parameters:</dt>
+    <dd><ul class="nomargin-top">
+        <li><strong class="pname"><code>handler</code></strong> - A callable to be invoked with a single argument 
+          <code>error</code>, an <a 
+          href="pycocoa.nstypes.NSExceptionError-class.html" 
+          class="link">NSExceptionError</a> instance and returning 
+          <code>None</code> or that very <code>error</code>.</li>
+        <li><strong class="pname"><code>log</code></strong> - Print the <code>error</code>, time stamp, ObjC callstack and 
+          Python traceback prior to invoking the 
+          <b><code>handler</code></b> (<code>bool</code>).</li>
+        <li><strong class="pname"><code>raiser</code></strong> - Raise the <a href="pycocoa.nstypes.NSExceptionError-class.html" 
+          class="link">NSExceptionError</a> <b><code>error</code></b>, 
+          regardless of the return value from the 
+          <b><code>handler</code></b>.</li>
+    </ul></dd>
+    <dt>Returns:</dt>
+        <dd>The previously installed <i>uncaught</i> 
+          <code>ObjC/NSException</code> handler or <code>None</code> if no 
+          handler was installed.</dd>
+    <dt>Raises:</dt>
+    <dd><ul class="nomargin-top">
+        <li><code><strong class='fraise'>TypeError</strong></code> - The <b><code>handler</code></b> is not callable.</li>
+    </ul></dd>
+  </dl>
+<div class="fields">      <p><strong>Note:</strong>
+        Faults like <code>SIGILL</code>, <code>SIGSEGV</code>, etc. do not 
+        throw <i>uncaught</i> <code>ObjC/NSException</code>s and will not 
+        invoke the given <b><code>handler</code></b>.  However, those and 
+        several other signals can be handled as <code>fault</code>s, see <a
+        href="pycocoa.faults-module.html#enable" 
+        class="link">faults.enable</a>, <a 
+        href="pycocoa.faults-module.html#disable" 
+        class="link">faults.disable</a> and other functions module <a 
+        href="pycocoa.faults-module.html" class="link">faults</a>.
+      </p>
+      <p><strong>See Also:</strong>
+        Dgelessus' <a href="https://gist.GitHub.com/dgelessus" 
+        target="_top">pythonista_startup.py</a>, <a 
+        href="https://Developer.Apple.com/library/archive/documentation/Cocoa/Conceptual/Exceptions/Tasks/HandlingExceptions.html"
+        target="_top">Handling Exceptions</a> and <a 
+        href="https://Developer.Apple.com/library/archive/documentation/Cocoa/Conceptual/ErrorHandlingCocoa/ErrorHandling/ErrorHandling.html#//apple_ref/doc/uid/TP40001806"
+        target="_top">Error Handling Programming Guide</a>.
+      </p>
+</div></td></tr></table>
 </div>
 <a name="set_ivar"></a>
 <div>
@@ -10045,7 +10407,7 @@ Keys.ACK=0x6,
   <dl class="fields">
     <dt>Value:</dt>
       <dd><table><tr><td><pre class="variable">
-&lt;pycocoa.utils.module_property_RO object at 0x7fde50caaf50&gt;
+&lt;pycocoa.utils.module_property_RO object at 0x7fbe3bf3b110&gt;
 </pre></td></tr></table>
 </dd>
   </dl>
@@ -10063,13 +10425,13 @@ Keys.ACK=0x6,
   <dl class="fields">
     <dt>Value:</dt>
       <dd><table><tr><td><pre class="variable">
-NSMain.Application=NSApplication(&lt;Id_t at 0x7fde54bc9320&gt;) of 0x7fde54<span class="variable-linewrap"><img src="crarr.png" alt="\" /></span>
-d0aa50,
-      .BooleanNO=NSBoolean(&lt;Id_t at 0x7fde54bc17a0&gt;) of 0x7fff85b15390<span class="variable-linewrap"><img src="crarr.png" alt="\" /></span>
+NSMain.Application=NSApplication(&lt;Id_t at 0x7fbe3f697560&gt;) of 0x7fbe3e<span class="variable-linewrap"><img src="crarr.png" alt="\" /></span>
+351b00,
+      .BooleanNO=NSBoolean(&lt;Id_t at 0x7fbe3f68b200&gt;) of 0x7fff85b15390<span class="variable-linewrap"><img src="crarr.png" alt="\" /></span>
 ,
-      .BooleanYES=NSBoolean(&lt;Id_t at 0x7fde54bb7170&gt;) of 0x7fff85b1538<span class="variable-linewrap"><img src="crarr.png" alt="\" /></span>
+      .BooleanYES=NSBoolean(&lt;Id_t at 0x7fbe3f6a53b0&gt;) of 0x7fff85b1538<span class="variable-linewrap"><img src="crarr.png" alt="\" /></span>
 0,
-      .Bundle=NSBundle(&lt;Id_t at 0x7fde54bde830&gt;) of 0x7fde4f164120,
+      .Bundle=NSBundle(&lt;Id_t at 0x7fbe3f6a54d0&gt;) of 0x7fbe38750b40,
       .BundleName=NSConstantString('CFBundleName'),
 <code class="variable-ellipsis">...</code>
 </pre></td></tr></table>
@@ -10089,7 +10451,7 @@ d0aa50,
   <dl class="fields">
     <dt>Value:</dt>
       <dd><table><tr><td><pre class="variable">
-&lt;pycocoa.utils.module_property_RO object at 0x7fde509a2490&gt;
+&lt;pycocoa.utils.module_property_RO object at 0x7fbe3bc6cbd0&gt;
 </pre></td></tr></table>
 </dd>
   </dl>
@@ -10107,7 +10469,7 @@ d0aa50,
   <dl class="fields">
     <dt>Value:</dt>
       <dd><table><tr><td><pre class="variable">
-&lt;pycocoa.utils.module_property_RO object at 0x7fde509a2210&gt;
+&lt;pycocoa.utils.module_property_RO object at 0x7fbe3bc6c950&gt;
 </pre></td></tr></table>
 </dd>
   </dl>
@@ -10247,8 +10609,8 @@ WindowStyle.Closable=1&lt;&lt;1,
   <dl class="fields">
     <dt>Value:</dt>
       <dd><table><tr><td><pre class="variable">
-&lt;CDLL '/System/Library/Frameworks/AppKit.framework/AppKit', handle 7fd<span class="variable-linewrap"><img src="crarr.png" alt="\" /></span>
-e4dcd5b60 at 7fde50beabd0&gt;
+&lt;CDLL '/System/Library/Frameworks/AppKit.framework/AppKit', handle 7fb<span class="variable-linewrap"><img src="crarr.png" alt="\" /></span>
+e3a025ad0 at 7fbe3bbc81d0&gt;
 </pre></td></tr></table>
 </dd>
   </dl>
@@ -10267,7 +10629,7 @@ e4dcd5b60 at 7fde50beabd0&gt;
     <dt>Value:</dt>
       <dd><table><tr><td><pre class="variable">
 &lt;CDLL '/System/Library/Frameworks/CoreFoundation.framework/CoreFoundat<span class="variable-linewrap"><img src="crarr.png" alt="\" /></span>
-ion', handle 1113d5878 at 7fde50be7f10&gt;
+ion', handle 10dc36878 at 7fbe3bbe9750&gt;
 </pre></td></tr></table>
 </dd>
   </dl>
@@ -10286,7 +10648,7 @@ ion', handle 1113d5878 at 7fde50be7f10&gt;
     <dt>Value:</dt>
       <dd><table><tr><td><pre class="variable">
 &lt;CDLL '/System/Library/Frameworks/CoreText.framework/CoreText', handle<span class="variable-linewrap"><img src="crarr.png" alt="\" /></span>
- 7fde4dcdae90 at 7fde50bcfa90&gt;
+ 7fbe3a028110 at 7fbe3bbdb210&gt;
 </pre></td></tr></table>
 </dd>
   </dl>
@@ -10305,7 +10667,7 @@ ion', handle 1113d5878 at 7fde50be7f10&gt;
     <dt>Value:</dt>
       <dd><table><tr><td><pre class="variable">
 &lt;CDLL '/System/Library/Frameworks/Foundation.framework/Foundation', ha<span class="variable-linewrap"><img src="crarr.png" alt="\" /></span>
-ndle 7fde4dcd6080 at 7fde50bcff10&gt;
+ndle 7fbe3a027050 at 7fbe3bbdb690&gt;
 </pre></td></tr></table>
 </dd>
   </dl>
@@ -10323,7 +10685,7 @@ ndle 7fde4dcd6080 at 7fde50bcff10&gt;
   <dl class="fields">
     <dt>Value:</dt>
       <dd><table><tr><td><pre class="variable">
-&lt;CDLL '/usr/lib/libobjc.dylib', handle 1113d79d0 at 7fde50bcff90&gt;
+&lt;CDLL '/usr/lib/libobjc.dylib', handle 10dc389d0 at 7fbe3bbdb950&gt;
 </pre></td></tr></table>
 </dd>
   </dl>
@@ -10341,8 +10703,8 @@ ndle 7fde4dcd6080 at 7fde50bcff10&gt;
   <dl class="fields">
     <dt>Value:</dt>
       <dd><table><tr><td><pre class="variable">
-&lt;CDLL '/System/Library/Frameworks/quartz.framework/quartz', handle 7fd<span class="variable-linewrap"><img src="crarr.png" alt="\" /></span>
-e4dceb310 at 7fde509fca50&gt;
+&lt;CDLL '/System/Library/Frameworks/quartz.framework/quartz', handle 7fb<span class="variable-linewrap"><img src="crarr.png" alt="\" /></span>
+e3a02c100 at 7fbe3bbc8390&gt;
 </pre></td></tr></table>
 </dd>
   </dl>
@@ -10380,7 +10742,7 @@ e4dceb310 at 7fde509fca50&gt;
 <table border="0" cellpadding="0" cellspacing="0" width="100%%">
   <tr>
     <td align="left" class="footer">
-    Generated by Epydoc 3.0.1 on Wed Nov 11 21:56:39 2020
+    Generated by Epydoc 3.0.1 on Sun Nov 15 17:17:35 2020
     </td>
     <td align="right" class="footer">
       <a target="mainFrame" href="http://epydoc.sourceforge.net"

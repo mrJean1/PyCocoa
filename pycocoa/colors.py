@@ -21,13 +21,13 @@ accessible by color space acronym like C{CMY}, C{GS}, C{RGB}, etc.
 from pycocoa.bases   import _Type0
 from pycocoa.lazily  import _ALL_LAZY
 from pycocoa.nstypes import  NSColor
-from pycocoa.utils   import _Constants, property_RO
+from pycocoa.utils   import _Constants, property_RO, _Types
 
 from copy import copy as _copy
 # from enum   import Enum
 
 __all__ = _ALL_LAZY.colors
-__version__ = '20.11.11'
+__version__ = '20.11.14'
 
 
 def _Xhandler(unused):
@@ -453,11 +453,73 @@ class Colors(_Constants):
 
 Colors = Colors()  # PYCHOK singleton
 
+NSColor._Type = _Types.Color = Color
+
 if __name__ == '__main__':
 
     from pycocoa.utils import _all_listing
 
     _all_listing(__all__, locals())
+
+# % python3 -m pycocoa.colors
+#
+# pycocoa.colors.__all__ = tuple(
+#  pycocoa.colors.CMYColor is <class .CMYColor>,
+#  pycocoa.colors.CMYColors.Cyan=CMYColor(_NSTaggedPointerColor),
+#                          .Magenta=CMYColor(_NSTaggedPointerColor),
+#                          .Yellow=CMYColor(_NSTaggedPointerColor),
+#  pycocoa.colors.Color is <class .Color>,
+#  pycocoa.colors.ColorError is <class .ColorError>,
+#  pycocoa.colors.Colors.CMY=CMYColors,
+#                       .GS=GrayScaleColors,
+#                       .HSB=HSBColors,
+#                       .RGB=RGBColors,
+#                       .Tint=TintColors,
+#                       .UI=UIColors,
+#  pycocoa.colors.GrayScaleColor is <class .GrayScaleColor>,
+#  pycocoa.colors.GrayScaleColors.Black=GrayScaleColor(_NSTaggedPointerColor),
+#                                .Clear=GrayScaleColor(_NSTaggedPointerColor),
+#                                .DarkGray=GrayScaleColor(_NSTaggedPointerColor),
+#                                .Gray=GrayScaleColor(_NSTaggedPointerColor),
+#                                .LightGray=GrayScaleColor(_NSTaggedPointerColor),
+#                                .Tansparent=GrayScaleColor(_NSTaggedPointerColor),
+#                                .White=GrayScaleColor(_NSTaggedPointerColor),
+#  pycocoa.colors.HSBColor is <class .HSBColor>,
+#  pycocoa.colors.HSBColors.NoneYet=None,
+#  pycocoa.colors.RGBColor is <class .RGBColor>,
+#  pycocoa.colors.RGBColors.Blue=RGBColor(_NSTaggedPointerColor),
+#                          .Brown=RGBColor(_NSTaggedPointerColor),
+#                          .Green=RGBColor(_NSTaggedPointerColor),
+#                          .Orange=RGBColor(NSCachedRGBColor),
+#                          .Purple=RGBColor(NSCachedRGBColor),
+#                          .Red=RGBColor(_NSTaggedPointerColor),
+#  pycocoa.colors.TintColor is <class .TintColor>,
+#  pycocoa.colors.TintColors.Blue=TintColor(NSDynamicSystemColor),
+#                           .Brown=TintColor(NSDynamicSystemColor),
+#                           .Gray=TintColor(NSDynamicSystemColor),
+#                           .Green=TintColor(NSDynamicSystemColor),
+#                           .Indigo=TintColor(NSDynamicSystemColor),
+#                           .Orange=TintColor(NSDynamicSystemColor),
+#                           .Pink=TintColor(NSDynamicSystemColor),
+#                           .Purple=TintColor(NSDynamicSystemColor),
+#                           .Red=TintColor(NSDynamicSystemColor),
+#                           .Teal=TintColor(NSDynamicSystemColor),
+#                           .Yellow=TintColor(NSDynamicSystemColor),
+#  pycocoa.colors.UIColor is <class .UIColor>,
+#  pycocoa.colors.UIColors.Control=UIColor(NSDynamicSystemColor),
+#                         .ControlBackground=UIColor(NSDynamicSystemColor),
+#                         .Grid=UIColor(NSDynamicSystemColor),
+#                         .HeaderText=UIColor(NSDynamicSystemColor),
+#                         .Highlight=UIColor(NSDynamicSystemColor),
+#                         .Label=UIColor(NSDynamicSystemColor),
+#                         .Link=UIColor(NSDynamicSystemColor),
+#                         .SelectedText=UIColor(NSDynamicSystemColor),
+#                         .Separator=UIColor(NSDynamicSystemColor),
+#                         .Shadow=UIColor(NSDynamicSystemColor),
+#                         .Text=UIColor(NSDynamicSystemColor),
+#                         .WindowBackground=UIColor(NSDynamicSystemColor),
+# )[15]
+# pycocoa.colors.version 20.11.14, .isLazy 1, Python 3.9.0 64bit, macOS 10.15.7
 
 # MIT License <https://OpenSource.org/licenses/MIT>
 #

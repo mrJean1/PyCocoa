@@ -281,6 +281,18 @@ if __name__ == '__main__':
 
     _all_listing(__all__, locals())
 
+# % python3 -m pycocoa.geometry
+#
+# pycocoa.geometry.__all__ = tuple(
+#  pycocoa.geometry.Point is <class .Point>,
+#  pycocoa.geometry.Point2 is <class .Point2>,
+#  pycocoa.geometry.Rect is <class .Rect>,
+#  pycocoa.geometry.Rect4 is <class .Rect4>,
+#  pycocoa.geometry.Size is <class .Size>,
+#  pycocoa.geometry.Size2 is <class .Size2>,
+# )[6]
+# pycocoa.geometry.version 20.01.08, .isLazy 1, Python 3.9.0 64bit, macOS 10.15.7
+
 # MIT License <https://OpenSource.org/licenses/MIT>
 #
 # Copyright (C) 2017-2020 -- mrJean1 at Gmail -- All Rights Reserved.

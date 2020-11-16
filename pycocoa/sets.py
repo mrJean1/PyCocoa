@@ -322,6 +322,14 @@ if __name__ == '__main__':
 
     _all_listing(__all__, locals(), __version__, __file__)
 
+# % python3 -m pycocoa.sets
+#
+# pycocoa.sets.__all__ = tuple(
+#  pycocoa.sets.FrozenSet is <class .FrozenSet>,
+#  pycocoa.sets.Set is <class .Set>,
+# )[2]
+# pycocoa.sets.version 20.01.08, .isLazy 1, Python 3.9.0 64bit, macOS 10.15.7, oslibs [AppKit, CoreFoundation, CoreText, Foundation, c, objc, quartz]
+
 # MIT License <https://OpenSource.org/licenses/MIT>
 #
 # Copyright (C) 2017-2020 -- mrJean1 at Gmail -- All Rights Reserved.

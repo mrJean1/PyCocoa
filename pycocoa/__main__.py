@@ -9,7 +9,7 @@ import sys
 from pycocoa import __all__ as _all_, _locals, _pycocoa as _package
 from pycocoa.utils import _all_listing, _all_versions, _Python3  # PYCHOK expected
 
-if _Python3:  # get pygeodesy.__all__ from .lazily
+if _Python3:  # get pycocoa.__all__ from .lazily
     from pycocoa import *  # PYCHOK expected
 
 _all_versions(_file_=_package)
@@ -20,7 +20,25 @@ from pycocoa.runtime import _nsDeallocObserverIvar1
 _nsDeallocObserverIvar1()  # check the _NSDeallocObserver class
 
 __all__ = ()
-__version__ = '20.11.11'
+__version__ = '20.11.14'
+
+# % python3 -m pycocoa
+# pycocoa.version 20.11.16, .isLazy 1, Python 3.9.0 64bit, macOS 10.15.7
+
+# % python3.8 -m pycocoa
+# pycocoa.version 20.11.16, .isLazy 1, Python 3.8.6 64bit, macOS 10.15.7
+
+# % python3.7 -m pycocoa
+# pycocoa.version 20.11.16, .isLazy 1, Python 3.7.6 64bit, macOS 10.15.7
+
+# % python3.6 -m pycocoa
+# pycocoa.version 20.11.16, .isLazy None, Python 3.6.5 64bit, macOS 10.15.7
+
+# % python -m pycocoa
+# pycocoa.version 20.11.16, .isLazy None, Python 2.7.18 64bit, macOS 10.15.7
+
+# % python2.7macOS -m pycocoa
+# pycocoa.version 20.11.16, .isLazy None, Python 2.7.16 64bit, macOS 10.15.7
 
 # MIT License <https://OpenSource.org/licenses/MIT>
 #

@@ -15,10 +15,9 @@ import sys
 _Python_ = sys.version.split()[0]  # PYCHOK internal
 _Python2 = sys.version_info.major < 3  # PYCHOK internal
 _Python3 = sys.version_info.major > 2  # PYCHOK internal
-del sys
 
 __all__ = _ALL_LAZY.utils
-__version__ = '20.11.10'
+__version__ = '20.11.15'
 
 
 class module_property_RO(object):
@@ -153,15 +152,16 @@ class _Constants(_MutableConstants):
 class _Globals(object):
     '''(INTERNAL) Some PyCocoa globals
     '''
-    App      = None       # set by .apps.App.__init__, not an NSApplication!
-    argv0    = 'PyCocoa'  # set by .nstypes.nsBundleRename, _allisting, test/simple_VLCplayer
-    Items    = {}         # set by .menus.Item.__init__, gotten by .menus.ns2Item
-    MenuBar  = None       # set by .menus.MenuBar.__init__
-#   Menus    = {}         # set by .menus._Menu_Type2._initM
-    raiser   = False      # set by .apps.App.__init__
-    Tables   = []         # set by .tables.TableWindow.__init__
-    Windows  = {}         # set by .windows.Window.__init__
-    Xhandler = None       # set by .nstypes.nsUncaughtExceptionHandler
+    App       = None        # set by .apps.App.__init__, not an NSApplication!
+    argv0     = 'pycocoa'   # set by .nstypes.nsBundleRename, _allisting, test/simple_VLCplayer
+    Items     = {}          # set by .menus.Item.__init__, gotten by .menus.ns2Item
+    MenuBar   = None        # set by .menus.MenuBar.__init__
+#   Menus     = {}          # set by .menus._Menu_Type2._initM
+    raiser    = False       # set by .apps.App.__init__
+    stdlog    = sys.stdout  # set by .faults
+    Tables    = []          # set by .tables.TableWindow.__init__
+    Windows   = {}          # set by .windows.Window.__init__
+    Xhandler2 = None        # set by .faults.setUncaughtExceptionHandler
 
 
 class _Singletons(_MutableConstants):
@@ -172,14 +172,14 @@ class _Singletons(_MutableConstants):
             return '%s=%s' % (n, v)
         return self._strepr(_fmt)
 
-    def items(self):
+    def items(self, *extra):  # PYCHOK signature
         '''Yield 2-tuple (name, value) for each singleton.
         '''
         c = self.__class__
         for n in dir(self):
             if not n.startswith('_'):
                 g, _ = property2(self, n)
-                if g and hasattr(c, '_' + n):
+                if g and (n in extra or hasattr(c, '_' + n)):
                     # XXX resolves the property
                     yield n, g(self)
 
@@ -189,6 +189,7 @@ class _Types(_MutableConstants):
     '''
     AlertPanel    = None  # set by .panels.py
     App           = None  # set by .apps.py
+    Color         = None  # set by .colors.py
     Dict          = None  # set by .dicts.py
     ErrorPanel    = None  # set by .panels.py
     Font          = None  # sef by .fonts.py
@@ -562,46 +563,24 @@ except NameError:  # Python 3+
 _ByteStrs = _Bytes + _Strs  # bytes and/or str types
 
 
-def _all_exports(localls, *names, **starts_ends):  # starts=(), ends=(), not_starts=())
-    '''(INTERNAL) Check and return a tuple of __all__ exported names.
-    '''
-    m = os.path.basename(os.path.splitext(localls['__file__'])[0])
-
-    x = ', '.join(_ for _ in names if _ not in localls)
-    if x:
-        raise NameError('no %s in %s %s()' % (x, m, 'locals'))
-
-    e = starts_ends.pop('ends', ()) or ()
-    n = starts_ends.pop('not_starts', ()) or ()
-    s = starts_ends.pop('starts', ()) or ()
-    if starts_ends:  # should be empty
-        raise ValueError('%s(..., %s) in %s' % ('_exports', ', '.join(
-                         '%s=%r' % t for t in sorted(starts_ends.items())),
-                          m))
-    if e or n or s:
-        names += tuple(_ for _ in localls.keys() if (s and _.startswith(s))
-                                                 or (e and _.endswith(e)
-                                                       and not _.startswith('_'))
-                                                 or (n and not _.startswith(n)))
-
-    lazy = _ALL_LAZY.get(m, ())
-    if lazy:
-        t = ', '.join(a for a in names if a not in lazy)
-        if t:
-            raise NameError('missing %s.%s: %s' % ('lazily', m, t))
-        t = ', '.join(a for a in lazy if a not in names)
-        if t:
-            raise NameError('missing %s.%s: %s' % (m, '__all__', t))
-
-    return names
-
-
 def _all_listing(alls, localls, libs=False, _file_=''):
     '''(INTERNAL) Print sorted __all__ names and values.
     '''
+    def _all_in(alls, inns, m, n):
+        t = tuple(a for a in alls if a not in inns)
+        if t:
+            t = ', '.join(t)
+            raise NameError('missing %s.%s: %s' % (m, n, t))
+
     f = _file_ or localls.get('__file__', '')
-    m = _dirbasename(f)
+    m, n = _dirbasename2(f)
     printf('%s.%s = %s(', m, '__all__', alls.__class__.__name__, argv0='', nl=1)
+
+    lazy = _ALL_LAZY.get(n, ())
+    if lazy:
+        _all_in(alls, lazy,   'lazily', n)
+        _all_in(lazy, alls,    m, '__all__')
+        _all_in(lazy, localls, m, 'locals()')
 
     d = i = 0
     p = ''
@@ -641,6 +620,12 @@ def _all_listing(alls, localls, libs=False, _file_=''):
 def _all_versions(libs=False, _file_='', _version_=''):
     '''(INTERNAL) Print PyCocao, Python, macOS.
     '''
+    printf(_all_versionstr(libs=libs, _file_=_file_, _version_=_version_), argv0='')
+
+
+def _all_versionstr(libs=False, _file_='', _version_=''):
+    '''(INTERNAL) PyCocao, Python, macOS, etc. versions as C{str}.
+    '''
     from pycocoa import oslibs, _pycocoa, version as _version
     import platform
 
@@ -651,8 +636,8 @@ def _all_versions(libs=False, _file_='', _version_=''):
     if libs:
         t += ('oslibs', str(sorted(oslibs.get_libs().keys())).replace("'", '')),
 
-    n = _dirbasename(_file_ or _pycocoa)
-    printf('%s.%s', n, ', '.join(' '.join(v) for v in t), argv0='')
+    m, _ = _dirbasename2(_file_ or _pycocoa)
+    return '%s.%s' % (m, ', '.join(' '.join(v) for v in t))
 
 
 def aspect_ratio(width, height):
@@ -707,7 +692,7 @@ def clip(bytestr, limit=50):
     return bytestr
 
 
-def _dirbasename(filename, sep='.'):
+def _dirbasename2(filename, sep='.'):
     '''(INTERNAL) get the dir and base name of a C{filename} without extension.
     '''
     f = os.path.splitext(filename)[0]
@@ -716,10 +701,11 @@ def _dirbasename(filename, sep='.'):
         d, b = os.path.split(d)
     _, d = os.path.split(d)
     if d and b:
-        f = sep.join((d, b)) if sep else os.path.join(d, b)
+        m = sep.join((d, b)) if sep else os.path.join(d, b)
+        n = b
     else:
-        f = d or b
-    return f
+        m = n = d or b
+    return m, n
 
 
 def flint(f):
@@ -812,6 +798,25 @@ def lambda1(arg):
     return arg
 
 
+def logf(fmt, *args, **kwds):
+    '''Formatted log I{fmt % args} with optional keywords.
+
+       @param fmt: Print-like format or plain string (C{str}).
+       @param args: Optional arguments to format (I{all positional}).
+       @keyword argv0: Optional prefix (C{str}).
+       @keyword file: Alternate file to write to (C{file}-type),
+                      default C{NSMain.stdlog}.
+       @keyword flush: Flush B{C{file}} after writing (C{bool}),
+                       default C(True).
+       @keyword nl: Number of leading blank lines (C{int}).
+       @keyword nt: Number of trailing blank lines (C{int}).
+    '''
+    opts = dict(file=_Globals.stdlog, flush=True)
+    if kwds:
+        opts.update(kwds)
+    _writestr(fmt, args, **opts)
+
+
 def name2objc(name_):
     '''Convert a (selector) name to C{bytes} and ObjC naming rules.
 
@@ -857,20 +862,20 @@ def name2pymethod(name_):
     return m
 
 
-def printf(fmt, *args, **kwds):  # argv0='', nl=0, nt=0
+def printf(fmt, *args, **kwds):
     '''Formatted print I{fmt % args} with optional keywords.
 
-       @param fmt: Print-like format (C{str}).
-       @param args: Optional arguments to include (I{all positional}).
+       @param fmt: Print-like format or plain string (C{str}).
+       @param args: Optional arguments to format (I{all positional}).
        @keyword argv0: Optional prefix (C{str}).
+       @keyword file: Alternate file to write to (C{file}-type),
+                      default C{sys.stdout}.
+       @keyword flush: Flush B{C{file}} after writing (C{bool}),
+                       default C{False}.
        @keyword nl: Number of leading blank lines (C{int}).
        @keyword nt: Number of trailing blank lines (C{int}).
     '''
-    a  = kwds.get('argv0', _Globals.argv0)
-    nl = '\n' * kwds.get('nl', 0)
-    nt = '\n' * kwds.get('nt', 0)
-    t  = (fmt % args) if args else fmt
-    print(''.join((nl, a, (' ' if a else ''), t, nt)))
+    _writestr(fmt, args, **kwds)
 
 
 def properties(inst):
@@ -984,6 +989,23 @@ def type2strepr(inst, strepr=str):
     return '%s(%s)' % (inst.__class__.__name__, strepr(t))
 
 
+def _writestr(fmtxt, args=(), argv0=_Globals.argv0, nl=0, nt=0,
+                               file=sys.stdout, flush=False):
+    '''(INTERNAL) Write C{text} to C{file}.
+    '''
+    if args:
+        try:
+            fmtxt %= args
+        except TypeError:
+            fmtxt += str(map(str, args))
+    s = ' ' if argv0 else ''
+    t = '\n' * nl, argv0, s, fmtxt, '\n' * (nt + 1)
+    n = file.write(''.join(t))
+    if flush:
+        file.flush()
+    return n
+
+
 def z1000str(size, sep='_'):
     '''Convert a size to string with 1_000's seperator.
 
@@ -1054,13 +1076,41 @@ def zSIstr(size, B='B', K=1024):
 
 if __name__ == '__main__':
 
-    _all_exports(locals(), 'aspect_ratio', 'Cache2', 'clip',
-                           'DEFAULT_UNICODE', 'flint', 'isinstanceOf',
-                           'gcd', 'iterbytes', 'lambda1', 'missing',
-                           'module_property_RO', 'printf',
-                           'sortuples', 'terminating', 'type2strepr',
-                 starts=('bytes', 'inst', 'name2', 'propert', 'str', 'z'))
     _all_listing(__all__, locals())
+
+# % python3 -m pycocoa.utils
+#
+# pycocoa.utils.__all__ = tuple(
+#  pycocoa.utils.aspect_ratio is <function .aspect_ratio at 0x7f8967a840d0>,
+#  pycocoa.utils.bytes2repr is <built-in function repr>,
+#  pycocoa.utils.bytes2str is <function .bytes2str at 0x7f8967a813a0>,
+#  pycocoa.utils.Cache2 is <class .Cache2>,
+#  pycocoa.utils.clip is <function .clip at 0x7f8967a84160>,
+#  pycocoa.utils.DEFAULT_UNICODE is 'utf-8',
+#  pycocoa.utils.flint is <function .flint at 0x7f8967a84280>,
+#  pycocoa.utils.gcd is <built-in function gcd>,
+#  pycocoa.utils.inst2strepr is <function .inst2strepr at 0x7f8967a84310>,
+#  pycocoa.utils.isinstanceOf is <function .isinstanceOf at 0x7f8967a844c0>,
+#  pycocoa.utils.iterbytes is <function .iterbytes at 0x7f8967a81d30>,
+#  pycocoa.utils.lambda1 is <function .lambda1 at 0x7f8967a84550>,
+#  pycocoa.utils.missing is missing,
+#  pycocoa.utils.module_property_RO is <class .module_property_RO>,
+#  pycocoa.utils.name2objc is <function .name2objc at 0x7f8967a845e0>,
+#  pycocoa.utils.name2py is <function .name2py at 0x7f8967a84670>,
+#  pycocoa.utils.name2pymethod is <function .name2pymethod at 0x7f8967a84700>,
+#  pycocoa.utils.printf is <function .printf at 0x7f8967a84790>,
+#  pycocoa.utils.properties is <function .properties at 0x7f8967a84820>,
+#  pycocoa.utils.property2 is <function .property2 at 0x7f8967a848b0>,
+#  pycocoa.utils.property_RO is <function .property_RO at 0x7f8967a708b0>,
+#  pycocoa.utils.sortuples is <function .sortuples at 0x7f8967a84940>,
+#  pycocoa.utils.str2bytes is <function .str2bytes at 0x7f8967a81dc0>,
+#  pycocoa.utils.terminating is <function .terminating at 0x7f8967a849d0>,
+#  pycocoa.utils.type2strepr is <function .type2strepr at 0x7f8967a84af0>,
+#  pycocoa.utils.z1000str is <function .z1000str at 0x7f8967a84b80>,
+#  pycocoa.utils.zfstr is <function .zfstr at 0x7f8967a84c10>,
+#  pycocoa.utils.zSIstr is <function .zSIstr at 0x7f8967a84ca0>,
+# )[28]
+# pycocoa.utils.version 20.11.14, .isLazy 1, Python 3.9.0 64bit, macOS 10.15.7
 
 # MIT License <https://OpenSource.org/licenses/MIT>
 #

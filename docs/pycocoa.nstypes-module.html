@@ -64,7 +64,7 @@
 
 <hr />
 <div class="fields">      <p><strong>Version:</strong>
-        20.11.11
+        20.11.15
       </p>
 </div><!-- ==================== CLASSES ==================== -->
 <a name="section-Classes"></a>
@@ -80,6 +80,14 @@
     </td><td class="summary">
         <a href="pycocoa.nstypes.NSDecimal-class.html" class="summary-name">NSDecimal</a><br />
       Optimized, Python <code>NSDecimalNumber</code> class.
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="pycocoa.nstypes.NSExceptionError-class.html" class="summary-name">NSExceptionError</a><br />
+      Python Error wrapping an <code>ObjC/NSexception</code>.
     </td>
   </tr>
 <tr>
@@ -482,25 +490,6 @@
         <tr>
           <td><span class="summary-sig"><a href="pycocoa.nstypes-module.html#nsThrow" class="summary-sig-name">nsThrow</a>(<span class="summary-sig-arg">ns_exception</span>)</span><br />
       Mimick ObjC's <code>@throw NSException</code> to raise an exception.</td>
-          <td align="right" valign="top">
-            
-            
-          </td>
-        </tr>
-      </table>
-      
-    </td>
-  </tr>
-<tr>
-    <td width="15%" align="right" valign="top" class="summary">
-      <span class="summary-type">&nbsp;</span>
-    </td><td class="summary">
-      <table width="100%" cellpadding="0" cellspacing="0" border="0">
-        <tr>
-          <td><span class="summary-sig"><a href="pycocoa.nstypes-module.html#nsUncaughtExceptionHandler" class="summary-sig-name">nsUncaughtExceptionHandler</a>(<span class="summary-sig-arg">handler</span>)</span><br />
-      Install an ObjC <code>NSException</code> handler, the handler 
-      signature must match <code>NSExceptionHandler_t</code> <code>def 
-      handler(ns_exc): ...</code>.</td>
           <td align="right" valign="top">
             
             
@@ -1018,16 +1007,209 @@
     <td width="15%" align="right" valign="top" class="summary">
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
-        <a href="pycocoa.nstypes-module.html#NSMain" class="summary-name">NSMain</a> = <code title="NSMain.Application=NSApplication(&lt;Id_t at 0x7fde54bc9320&gt;) of 0x7fde54\
-d0aa50,
-      .BooleanNO=NSBoolean(&lt;Id_t at 0x7fde54bc17a0&gt;) of 0x7fff85b15390\
+        <a href="pycocoa.nstypes-module.html#NSMain" class="summary-name">NSMain</a> = <code title="NSMain.Application=NSApplication(&lt;Id_t at 0x7fbe3f697560&gt;) of 0x7fbe3e\
+351b00,
+      .BooleanNO=NSBoolean(&lt;Id_t at 0x7fbe3f68b200&gt;) of 0x7fff85b15390\
 ,
-      .BooleanYES=NSBoolean(&lt;Id_t at 0x7fde54bb7170&gt;) of 0x7fff85b1538\
+      .BooleanYES=NSBoolean(&lt;Id_t at 0x7fbe3f6a53b0&gt;) of 0x7fff85b1538\
 0,
-      .Bundle=NSBundle(&lt;Id_t at 0x7fde54bde830&gt;) of 0x7fde4f164120,
+      .Bundle=NSBundle(&lt;Id_t at 0x7fbe3f6a54d0&gt;) of 0x7fbe38750b40,
       .BundleName=NSConstantString('CFBundleName'),
-...">NSMain.Application=NSApplication(&lt;Id_t at 0x7fde54bc9<code class="variable-ellipsis">...</code></code><br />
-      Global <code>NS...</code> singletons (<code>const</code>).
+...">NSMain.Application=NSApplication(&lt;Id_t at 0x7fbe3f697<code class="variable-ellipsis">...</code></code><br />
+      Global <code>NS...</code> singletons (<code>const</code> or 
+      <code>property</code>).
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a name="NSMain.Application"></a><span class="summary-name">NSMain.Application</span><br />
+      Get the <code>NSApplication.sharedApplication</code>.
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a name="NSMain.BooleanNO"></a><span class="summary-name">NSMain.BooleanNO</span><br />
+      Get <code>NSBoolean(NO)</code>.
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a name="NSMain.BooleanYES"></a><span class="summary-name">NSMain.BooleanYES</span><br />
+      Get <code>NSBoolean(YES)</code>.
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a name="NSMain.Bundle"></a><span class="summary-name">NSMain.Bundle</span><br />
+      Get the <code>NSBundle.mainBundle</code>.
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a name="NSMain.BundleName"></a><span class="summary-name">NSMain.BundleName</span><br />
+      Get the <code>NS/CFBundleName</code>.
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a name="NSMain.FontManager"></a><span class="summary-name">NSMain.FontManager</span><br />
+      Get the <code>NSFontManager.sharedFontManager</code>.
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a name="NSMain.LayoutManager"></a><span class="summary-name">NSMain.LayoutManager</span><br />
+      Get the <code>NSLayoutManager</code>.
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a name="NSMain.NO_false"></a><span class="summary-name">NSMain.NO_false</span><br />
+      Get <code>NSfalse/NO</code>.
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a name="NSMain.Null"></a><span class="summary-name">NSMain.Null</span><br />
+      Get the <code>NSNull</code>.
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a name="NSMain.PrintInfo"></a><span class="summary-name">NSMain.PrintInfo</span><br />
+      Get the <code>NSPrintInfo</code>.
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a name="NSMain.Screen"></a><span class="summary-name">NSMain.Screen</span><br />
+      Get the <code>NSScreen.mainScreen</code>.
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a name="NSMain.ScreenBottomLeft"></a><span class="summary-name">NSMain.ScreenBottomLeft</span><br />
+      Get the <code>NSScreen.mainScreen.frame</code> lower left corner as 
+      <code>NSPoint_t</code>.
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a name="NSMain.ScreenBottomRight"></a><span class="summary-name">NSMain.ScreenBottomRight</span><br />
+      Get the <code>NSScreen.mainScreen.frame</code> lower right corner as 
+      <code>NSPoint_t</code>.
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a name="NSMain.ScreenCenter"></a><span class="summary-name">NSMain.ScreenCenter</span><br />
+      Get the <code>NSScreen.mainScreen.frame</code> center as 
+      <code>NSPoint_t</code>.
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a name="NSMain.ScreenFrame"></a><span class="summary-name">NSMain.ScreenFrame</span><br />
+      Get the <code>NSScreen.mainScreen.frame</code> as 
+      <code>NSRect_t</code>.
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a name="NSMain.ScreenSize"></a><span class="summary-name">NSMain.ScreenSize</span><br />
+      Get the <code>NSScreen.mainScreen.frame.size</code> as 
+      <code>NSSize_t</code>.
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a name="NSMain.ScreenTopLeft"></a><span class="summary-name">NSMain.ScreenTopLeft</span><br />
+      Get the <code>NSScreen.mainScreen.frame</code> upper left corner as 
+      <code>NSPoint_t</code>.
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a name="NSMain.ScreenTopRight"></a><span class="summary-name">NSMain.ScreenTopRight</span><br />
+      Get the <code>NSScreen.mainScreen.frame</code> upper right corner as 
+      <code>NSPoint_t</code>.
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a name="NSMain.TableColumn"></a><span class="summary-name">NSMain.TableColumn</span><br />
+      Get a blank <code>NSTableColumn</code>.
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a name="NSMain.YES_true"></a><span class="summary-name">NSMain.YES_true</span><br />
+      Get <code>NStrue/YES</code>.
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a name="NSMain.nil"></a><span class="summary-name">NSMain.nil</span><br />
+      Get <code>NSnil</code>.
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a name="NSMain.stdlog"></a><span class="summary-name">NSMain.stdlog</span><br />
+      Get the standard log file (<code>stdout</code>, <code>stderr</code>, 
+      other).
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a name="NSMain.versionstr"></a><span class="summary-name">NSMain.versionstr</span><br />
+      Get the PyCocoa, Python, macOS versions as <code>str</code>.
     </td>
   </tr>
 </table>
@@ -1406,6 +1588,10 @@ d0aa50,
         The <i>ns_fmt</i> and all <i>ns_args</i> must be <code>NS...</code>
         ObjC instances.
       </p>
+      <p><strong>See Also:</strong>
+        Dglessus' <a href="https://gist.GitHub.com/dgelessus" 
+        target="_top">nslog.py</a>.
+      </p>
 </div></td></tr></table>
 </div>
 <a name="nsLogf"></a>
@@ -1431,7 +1617,10 @@ d0aa50,
         <li><strong class="pname"><code>args</code></strong> - Optional arguments to format (<code>all positional</code>).</li>
     </ul></dd>
   </dl>
-</td></tr></table>
+<div class="fields">      <p><strong>See Also:</strong>
+        <a href="pycocoa.nstypes-module.html#nsLog" class="link">nsLog</a>.
+      </p>
+</div></td></tr></table>
 </div>
 <a name="nsNull2none"></a>
 <div>
@@ -1646,38 +1835,6 @@ d0aa50,
   </dl>
 </td></tr></table>
 </div>
-<a name="nsUncaughtExceptionHandler"></a>
-<div>
-<table class="details" border="1" cellpadding="3"
-       cellspacing="0" width="100%" bgcolor="white">
-<tr><td>
-  <table width="100%" cellpadding="0" cellspacing="0" border="0">
-  <tr valign="top"><td>
-  <h3 class="epydoc"><span class="sig"><span class="sig-name">nsUncaughtExceptionHandler</span>(<span class="sig-arg">handler</span>)</span>
-  </h3>
-  </td><td align="right" valign="top"
-    >&nbsp;
-    </td>
-  </tr></table>
-  
-  <p>Install an ObjC <code>NSException</code> handler, the handler 
-  signature must match <code>NSExceptionHandler_t</code> <code>def 
-  handler(ns_exc): ...</code>.</p>
-  <dl class="fields">
-    <dt>Parameters:</dt>
-    <dd><ul class="nomargin-top">
-        <li><strong class="pname"><code>handler</code></strong> - A callable (<code>NSExceptionHandler_t</code>).</li>
-    </ul></dd>
-    <dt>Returns:</dt>
-        <dd>Previously installed handler (<code>NSExceptionHandler_t</code>).</dd>
-  </dl>
-<div class="fields">      <p><strong>Note:</strong>
-        Faults like <code>SIGILL</code>, <code>SIGSEGV</code>, etc. do not 
-        throw an uncaught <code>NSException</code> and will not invoke the 
-        <i>handler</i>.
-      </p>
-</div></td></tr></table>
-</div>
 <a name="nsURL2str"></a>
 <div>
 <table class="details" border="1" cellpadding="3"
@@ -1835,19 +1992,20 @@ d0aa50,
        cellspacing="0" width="100%" bgcolor="white">
 <tr><td>
   <h3 class="epydoc">NSMain</h3>
-  Global <code>NS...</code> singletons (<code>const</code>).
+  Global <code>NS...</code> singletons (<code>const</code> or 
+  <code>property</code>).
   <dl class="fields">
   </dl>
   <dl class="fields">
     <dt>Value:</dt>
       <dd><table><tr><td><pre class="variable">
-NSMain.Application=NSApplication(&lt;Id_t at 0x7fde54bc9320&gt;) of 0x7fde54<span class="variable-linewrap"><img src="crarr.png" alt="\" /></span>
-d0aa50,
-      .BooleanNO=NSBoolean(&lt;Id_t at 0x7fde54bc17a0&gt;) of 0x7fff85b15390<span class="variable-linewrap"><img src="crarr.png" alt="\" /></span>
+NSMain.Application=NSApplication(&lt;Id_t at 0x7fbe3f697560&gt;) of 0x7fbe3e<span class="variable-linewrap"><img src="crarr.png" alt="\" /></span>
+351b00,
+      .BooleanNO=NSBoolean(&lt;Id_t at 0x7fbe3f68b200&gt;) of 0x7fff85b15390<span class="variable-linewrap"><img src="crarr.png" alt="\" /></span>
 ,
-      .BooleanYES=NSBoolean(&lt;Id_t at 0x7fde54bb7170&gt;) of 0x7fff85b1538<span class="variable-linewrap"><img src="crarr.png" alt="\" /></span>
+      .BooleanYES=NSBoolean(&lt;Id_t at 0x7fbe3f6a53b0&gt;) of 0x7fff85b1538<span class="variable-linewrap"><img src="crarr.png" alt="\" /></span>
 0,
-      .Bundle=NSBundle(&lt;Id_t at 0x7fde54bde830&gt;) of 0x7fde4f164120,
+      .Bundle=NSBundle(&lt;Id_t at 0x7fbe3f6a54d0&gt;) of 0x7fbe38750b40,
       .BundleName=NSConstantString('CFBundleName'),
 <code class="variable-ellipsis">...</code>
 </pre></td></tr></table>
@@ -1887,7 +2045,7 @@ d0aa50,
 <table border="0" cellpadding="0" cellspacing="0" width="100%%">
   <tr>
     <td align="left" class="footer">
-    Generated by Epydoc 3.0.1 on Wed Nov 11 21:56:39 2020
+    Generated by Epydoc 3.0.1 on Sun Nov 15 17:17:35 2020
     </td>
     <td align="right" class="footer">
       <a target="mainFrame" href="http://epydoc.sourceforge.net"

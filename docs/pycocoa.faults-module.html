@@ -1,0 +1,534 @@
+<?xml version="1.0" encoding="ascii"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+          "DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+  <title>pycocoa.faults</title>
+  <link rel="stylesheet" href="epydoc.css" type="text/css" />
+  <script type="text/javascript" src="epydoc.js"></script>
+</head>
+
+<body bgcolor="white" text="black" link="blue" vlink="#204080"
+      alink="#204080">
+<!-- ==================== NAVIGATION BAR ==================== -->
+<table class="navbar" border="0" width="100%" cellpadding="0"
+       bgcolor="#a0c0ff" cellspacing="0">
+  <tr valign="middle">
+  <!-- Home link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="pycocoa-module.html">Home</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Tree link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="module-tree.html">Trees</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Index link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="identifier-index.html">Indices</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Help link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="help.html">Help</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Project homepage -->
+      <th class="navbar" align="right" width="100%">
+        <table border="0" cellpadding="0" cellspacing="0">
+          <tr><th class="navbar" align="center"
+            ><a class="navbar" target="_top" href="https://GitHub.com/mrJean1/PyCocoa">PyCocoa</a></th>
+          </tr></table></th>
+  </tr>
+</table>
+<table width="100%" cellpadding="0" cellspacing="0">
+  <tr valign="top">
+    <td width="100%">
+      <span class="breadcrumbs">
+        <a href="pycocoa-module.html">Package&nbsp;pycocoa</a> ::
+        Module&nbsp;faults
+      </span>
+    </td>
+    <td>
+      <table cellpadding="0" cellspacing="0">
+        <!-- hide/show private -->
+        <tr><td align="right"><span class="options"
+            >[<a href="frames.html" target="_top">frames</a
+            >]&nbsp;|&nbsp;<a href="pycocoa.faults-module.html"
+            target="_top">no&nbsp;frames</a>]</span></td></tr>
+      </table>
+    </td>
+  </tr>
+</table>
+<!-- ==================== MODULE DESCRIPTION ==================== -->
+<h1 class="epydoc">Module faults</h1><p class="nomargin-top"></p>
+<p>Handle <i>uncaught</i> <code>ObjC/NSExceptions</code> and other 
+  <code>fault</code>s similar to standard module <code>faulthandler</code> 
+  available since Python 3.3.</p>
+  <p>By default, <code>fault</code> handling is not enabled.  In Python 3.3
+  and later, the <a 
+  href="https://Docs.Python.org/3/library/faulthandler.html" 
+  target="_top">faulthandler</a> may be enabled by (a) calling function 
+  <code>faulthandler.enable</code> or (b) setting environment variable <a 
+  href="https://Docs.Python.org/3/using/cmdline.html#envvar-PYTHONFAULTHANDLER"
+  target="_top">PYTHONFAULTHANDLER</a> to any no-empty string or (c) 
+  including option <code>-X faulthandler</code> on the python command 
+  line.</p>
+  <p>For other Python releases, <code>fault</code> handling by this module 
+  <a href="pycocoa.faults-module.html" class="link">pycocoa.faults</a> is 
+  enabled by either (a) calling function <a 
+  href="pycocoa.faults-module.html#enable" class="link">faults.enable</a> 
+  or (b) setting environment variable <a 
+  href="https://Docs.Python.org/3/using/cmdline.html#envvar-PYTHONFAULTHANDLER"
+  target="_top">PYTHONFAULTHANDLER</a> to any no-empty string.  Command 
+  line option <code>-X faulthandler</code> is not available in older Python
+  versions.</p>
+  <p><b>NOTE, if in Python 3.3 or later,</b> the environment variable is 
+  defined as <b><a 
+  href="https://Docs.Python.org/3/using/cmdline.html#envvar-PYTHONFAULTHANDLER"
+  target="_top">PYTHONFAULTHANDLER=pycocoa</a></b>, the Python 
+  <code>faulthandler</code> will be overridden by this module <a 
+  href="pycocoa.faults-module.html" class="link">pycocoa.faults</a>.</p>
+
+<hr />
+<div class="fields">      <p><strong>Note:</strong>
+        Functions <a href="pycocoa.faults-module.html#disable" 
+        class="link">faults.disable</a>, <a 
+        href="pycocoa.faults-module.html#enable" 
+        class="link">faults.enable</a>, <a 
+        href="pycocoa.faults-module.html#exiting" 
+        class="link">faults.exiting</a>, <a 
+        href="pycocoa.faults-module.html#is_enabled" 
+        class="link">faults.is_enabled</a> and <a 
+        href="pycocoa.faults-module.html#SIGs_enabled" 
+        class="link">faults.SIGs_enabled</a> are not exported publicly as 
+        <code>pycocoa.disable</code>, <code>pycocoa.enable</code>, 
+        <code>pycocoa.exiting</code>, etc., only function <a 
+        href="pycocoa.faults-module.html#setUncaughtExceptionHandler" 
+        class="link">setUncaughtExceptionHandler</a> is.
+      </p>
+      <p><strong>Version:</strong>
+        20.11.15
+      </p>
+</div><!-- ==================== FUNCTIONS ==================== -->
+<a name="section-Functions"></a>
+<table class="summary" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr bgcolor="#70b0f0" class="table-header">
+  <td align="left" colspan="2" class="table-header">
+    <span class="table-header">Functions</span></td>
+</tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a href="pycocoa.faults-module.html#disable" class="summary-sig-name">disable</a>()</span><br />
+      Disable <code>fault</code> handling and uninstall the signal handlers
+      installed by <a href="pycocoa.faults-module.html#enable" 
+      class="link">faults.enable</a>, like the <a 
+      href="https://Docs.Python.org/3/library/faulthandler.html" 
+      target="_top">faulthandler</a> module in Python 3.3 and later.</td>
+          <td align="right" valign="top">
+            
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a href="pycocoa.faults-module.html#enable" class="summary-sig-name">enable</a>(<span class="summary-sig-arg">file</span>=<span class="summary-sig-default">sys.stdout</span>,
+        <span class="summary-sig-arg">**unused</span>)</span><br />
+      Enable <code>fault</code> handling similar to the <a 
+      href="https://Docs.Python.org/3/library/faulthandler.html" 
+      target="_top">faulthandler</a> module available in Python 3.3 and 
+      later.</td>
+          <td align="right" valign="top">
+            
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a href="pycocoa.faults-module.html#is_enabled" class="summary-sig-name">is_enabled</a>(<span class="summary-sig-arg">sig</span>=<span class="summary-sig-default">None</span>)</span><br />
+      Check whether <code>fault</code> handling is enabled, similar to the 
+      <a href="https://Docs.Python.org/3/library/faulthandler.html" 
+      target="_top">faulthandler</a> module available in Python 3.3 and 
+      later.</td>
+          <td align="right" valign="top">
+            
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a href="pycocoa.faults-module.html#SIGs_enabled" class="summary-sig-name">SIGs_enabled</a>(<span class="summary-sig-arg">*sigs</span>)</span><br />
+      Return the signals currently handled as <code>fault</code>.</td>
+          <td align="right" valign="top">
+            
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a href="pycocoa.faults-module.html#exiting" class="summary-sig-name">exiting</a>(<span class="summary-sig-arg">status</span>=<span class="summary-sig-default">None</span>)</span><br />
+      Get/set the <code>exit</code> and <code>status</code> to use after 
+      <code>fault</code>s or <i>uncaught</i> 
+      <code>ObjC/NSException</code>s.</td>
+          <td align="right" valign="top">
+            
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a href="pycocoa.faults-module.html#setUncaughtExceptionHandler" class="summary-sig-name">setUncaughtExceptionHandler</a>(<span class="summary-sig-arg">handler</span>,
+        <span class="summary-sig-arg">log</span>=<span class="summary-sig-default">True</span>,
+        <span class="summary-sig-arg">raiser</span>=<span class="summary-sig-default">False</span>)</span><br />
+      Install a callback to handle <i>uncaught</i> 
+      <code>ObjC/NSException</code>s.</td>
+          <td align="right" valign="top">
+            
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+</table>
+<!-- ==================== VARIABLES ==================== -->
+<a name="section-Variables"></a>
+<table class="summary" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr bgcolor="#70b0f0" class="table-header">
+  <td align="left" colspan="2" class="table-header">
+    <span class="table-header">Variables</span></td>
+</tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a name="__all__"></a><span class="summary-name">__all__</span> = <code title="_ALL_LAZY.faults">_ALL_LAZY.faults</code>
+    </td>
+  </tr>
+</table>
+<!-- ==================== FUNCTION DETAILS ==================== -->
+<a name="section-FunctionDetails"></a>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr bgcolor="#70b0f0" class="table-header">
+  <td align="left" colspan="2" class="table-header">
+    <span class="table-header">Function Details</span></td>
+</tr>
+</table>
+<a name="disable"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">disable</span>()</span>
+  </h3>
+  </td><td align="right" valign="top"
+    >&nbsp;
+    </td>
+  </tr></table>
+  
+  <p>Disable <code>fault</code> handling and uninstall the signal handlers 
+  installed by <a href="pycocoa.faults-module.html#enable" 
+  class="link">faults.enable</a>, like the <a 
+  href="https://Docs.Python.org/3/library/faulthandler.html" 
+  target="_top">faulthandler</a> module in Python 3.3 and later.</p>
+  <dl class="fields">
+    <dt>Returns:</dt>
+        <dd><code>None</code>.</dd>
+  </dl>
+</td></tr></table>
+</div>
+<a name="enable"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">enable</span>(<span class="sig-arg">file</span>=<span class="sig-default">sys.stdout</span>,
+        <span class="sig-arg">**unused</span>)</span>
+  </h3>
+  </td><td align="right" valign="top"
+    >&nbsp;
+    </td>
+  </tr></table>
+  
+  <p>Enable <code>fault</code> handling similar to the <a 
+  href="https://Docs.Python.org/3/library/faulthandler.html" 
+  target="_top">faulthandler</a> module available in Python 3.3 and 
+  later.</p>
+  <p>Try to install handlers for the <code>SIGABRT</code>, 
+  <code>SIGBUS</code>, <code>SIGFPE</code>, <code>SIGILL</code> and 
+  <code>SIGSEGV</code> signals to dump a an ObjC call stack and Python 
+  traceback to <b><code>file</code></b>.</p>
+  <dl class="fields">
+    <dt>Raises:</dt>
+    <dd><ul class="nomargin-top">
+        <li><code><strong class='fraise'>TypeError</strong></code> - File <b><code>file</code></b> doesn't have callable 
+        <code>write</code> and <code>flush</code> attributes.</li>
+    </ul></dd>
+  </dl>
+<div class="fields">      <p><strong>See Also:</strong>
+        <code>NSMain.stdlog</code>.
+      </p>
+</div></td></tr></table>
+</div>
+<a name="is_enabled"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">is_enabled</span>(<span class="sig-arg">sig</span>=<span class="sig-default">None</span>)</span>
+  </h3>
+  </td><td align="right" valign="top"
+    >&nbsp;
+    </td>
+  </tr></table>
+  
+  <p>Check whether <code>fault</code> handling is enabled, similar to the 
+  <a href="https://Docs.Python.org/3/library/faulthandler.html" 
+  target="_top">faulthandler</a> module available in Python 3.3 and 
+  later.</p>
+  <dl class="fields">
+    <dt>Parameters:</dt>
+    <dd><ul class="nomargin-top">
+        <li><strong class="pname"><code>sig</code></strong> - Check whether <code>fault</code> handling includes this signal 
+          (<code>signal.SIG*</code>).</li>
+    </ul></dd>
+    <dt>Returns:</dt>
+        <dd><code>True</code> if <code>fault</code> handling is currently 
+          enabled, <code>False</code> otherwise.</dd>
+  </dl>
+</td></tr></table>
+</div>
+<a name="SIGs_enabled"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">SIGs_enabled</span>(<span class="sig-arg">*sigs</span>)</span>
+  </h3>
+  </td><td align="right" valign="top"
+    >&nbsp;
+    </td>
+  </tr></table>
+  
+  <p>Return the signals currently handled as <code>fault</code>.</p>
+  <dl class="fields">
+    <dt>Returns:</dt>
+        <dd>A <code>dict</code> with the <code>SIG*</code> name and value of 
+          the currently handled signals, if any.</dd>
+  </dl>
+</td></tr></table>
+</div>
+<a name="exiting"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">exiting</span>(<span class="sig-arg">status</span>=<span class="sig-default">None</span>)</span>
+  </h3>
+  </td><td align="right" valign="top"
+    >&nbsp;
+    </td>
+  </tr></table>
+  
+  <p>Get/set the <code>exit</code> and <code>status</code> to use after 
+  <code>fault</code>s or <i>uncaught</i> 
+  <code>ObjC/NSException</code>s.</p>
+  <dl class="fields">
+    <dt>Parameters:</dt>
+    <dd><ul class="nomargin-top">
+        <li><strong class="pname"><code>status</code></strong> - The exit &quot;door&quot; and status code to be used (<code>small
+          int</code>) or <code>None</code> to leave unchanged.  A 
+          <i>negative</i> <b><code>status</code></b> invokes 
+          <code>os._exit(abs(status))</code> to terminate without normal 
+          exit processing, while a <i>non-negative</i> 
+          <b><code>status</code></b> uses <code>sys.exit(status)</code> 
+          after a <code>fault</code>.</li>
+    </ul></dd>
+    <dt>Returns:</dt>
+        <dd>The previously set <b><code>exiting</code></b> code 
+          (<code>int</code>).</dd>
+  </dl>
+<div class="fields">      <p><strong>Note:</strong>
+        The <code>faulthandler</code> module in Python 3.3 and later 
+        ignores all <b><code>exiting</code></b> settings.
+      </p>
+</div></td></tr></table>
+</div>
+<a name="setUncaughtExceptionHandler"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">setUncaughtExceptionHandler</span>(<span class="sig-arg">handler</span>,
+        <span class="sig-arg">log</span>=<span class="sig-default">True</span>,
+        <span class="sig-arg">raiser</span>=<span class="sig-default">False</span>)</span>
+  </h3>
+  </td><td align="right" valign="top"
+    >&nbsp;
+    </td>
+  </tr></table>
+  
+  <p>Install a callback to handle <i>uncaught</i> 
+  <code>ObjC/NSException</code>s.</p>
+  <p>The <code><b>handler</b>(error)</code> is called with one argument 
+  <code>error</code>, an <a 
+  href="pycocoa.nstypes.NSExceptionError-class.html" 
+  class="link">NSExceptionError</a> instance.  It should return either 
+  <code>None</code> or that same <code>error</code>.  In the latter case, 
+  that <code>error</code> will subsequently be raised as Python 
+  exception.</p>
+  <dl class="fields">
+    <dt>Parameters:</dt>
+    <dd><ul class="nomargin-top">
+        <li><strong class="pname"><code>handler</code></strong> - A callable to be invoked with a single argument 
+          <code>error</code>, an <a 
+          href="pycocoa.nstypes.NSExceptionError-class.html" 
+          class="link">NSExceptionError</a> instance and returning 
+          <code>None</code> or that very <code>error</code>.</li>
+        <li><strong class="pname"><code>log</code></strong> - Print the <code>error</code>, time stamp, ObjC callstack and 
+          Python traceback prior to invoking the 
+          <b><code>handler</code></b> (<code>bool</code>).</li>
+        <li><strong class="pname"><code>raiser</code></strong> - Raise the <a href="pycocoa.nstypes.NSExceptionError-class.html" 
+          class="link">NSExceptionError</a> <b><code>error</code></b>, 
+          regardless of the return value from the 
+          <b><code>handler</code></b>.</li>
+    </ul></dd>
+    <dt>Returns:</dt>
+        <dd>The previously installed <i>uncaught</i> 
+          <code>ObjC/NSException</code> handler or <code>None</code> if no 
+          handler was installed.</dd>
+    <dt>Raises:</dt>
+    <dd><ul class="nomargin-top">
+        <li><code><strong class='fraise'>TypeError</strong></code> - The <b><code>handler</code></b> is not callable.</li>
+    </ul></dd>
+  </dl>
+<div class="fields">      <p><strong>Note:</strong>
+        Faults like <code>SIGILL</code>, <code>SIGSEGV</code>, etc. do not 
+        throw <i>uncaught</i> <code>ObjC/NSException</code>s and will not 
+        invoke the given <b><code>handler</code></b>.  However, those and 
+        several other signals can be handled as <code>fault</code>s, see <a
+        href="pycocoa.faults-module.html#enable" 
+        class="link">faults.enable</a>, <a 
+        href="pycocoa.faults-module.html#disable" 
+        class="link">faults.disable</a> and other functions module <a 
+        href="pycocoa.faults-module.html" class="link">faults</a>.
+      </p>
+      <p><strong>See Also:</strong>
+        Dgelessus' <a href="https://gist.GitHub.com/dgelessus" 
+        target="_top">pythonista_startup.py</a>, <a 
+        href="https://Developer.Apple.com/library/archive/documentation/Cocoa/Conceptual/Exceptions/Tasks/HandlingExceptions.html"
+        target="_top">Handling Exceptions</a> and <a 
+        href="https://Developer.Apple.com/library/archive/documentation/Cocoa/Conceptual/ErrorHandlingCocoa/ErrorHandling/ErrorHandling.html#//apple_ref/doc/uid/TP40001806"
+        target="_top">Error Handling Programming Guide</a>.
+      </p>
+</div></td></tr></table>
+</div>
+<br />
+<!-- ==================== NAVIGATION BAR ==================== -->
+<table class="navbar" border="0" width="100%" cellpadding="0"
+       bgcolor="#a0c0ff" cellspacing="0">
+  <tr valign="middle">
+  <!-- Home link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="pycocoa-module.html">Home</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Tree link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="module-tree.html">Trees</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Index link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="identifier-index.html">Indices</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Help link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="help.html">Help</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Project homepage -->
+      <th class="navbar" align="right" width="100%">
+        <table border="0" cellpadding="0" cellspacing="0">
+          <tr><th class="navbar" align="center"
+            ><a class="navbar" target="_top" href="https://GitHub.com/mrJean1/PyCocoa">PyCocoa</a></th>
+          </tr></table></th>
+  </tr>
+</table>
+<table border="0" cellpadding="0" cellspacing="0" width="100%%">
+  <tr>
+    <td align="left" class="footer">
+    Generated by Epydoc 3.0.1 on Sun Nov 15 17:17:35 2020
+    </td>
+    <td align="right" class="footer">
+      <a target="mainFrame" href="http://epydoc.sourceforge.net"
+        >http://epydoc.sourceforge.net</a>
+    </td>
+  </tr>
+</table>
+
+<script type="text/javascript">
+  <!--
+  // Private objects are initially displayed (because if
+  // javascript is turned off then we want them to be
+  // visible); but by default, we want to hide them.  So hide
+  // them unless we have a cookie that says to show them.
+  checkCookie();
+  // -->
+</script>
+</body>
+</html>

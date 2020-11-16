@@ -1,5 +1,4 @@
 pycocoa	pycocoa-module.html
-pycocoa._all_exports	pycocoa.utils-module.html#_all_exports
 pycocoa.NSHomeFunctionKey	pycocoa-module.html#NSHomeFunctionKey
 pycocoa.NSUpArrowFunctionKey	pycocoa-module.html#NSUpArrowFunctionKey
 pycocoa.NSFontColorGlyphsMask	pycocoa-module.html#NSFontColorGlyphsMask
@@ -57,6 +56,7 @@ pycocoa.NSTableViewSolidVerticalGridLineMask	pycocoa-module.html#NSTableViewSoli
 pycocoa.add_ivar	pycocoa-module.html#add_ivar
 pycocoa.z1000str	pycocoa-module.html#z1000str
 pycocoa.Fonts	pycocoa-module.html#Fonts
+pycocoa.exiting	pycocoa-module.html#exiting
 pycocoa.NSEnterCharacter	pycocoa-module.html#NSEnterCharacter
 pycocoa.NSNegativeAcknowledgeCharacter	pycocoa-module.html#NSNegativeAcknowledgeCharacter
 pycocoa.NSFontBoldMask	pycocoa-module.html#NSFontBoldMask
@@ -86,6 +86,7 @@ pycocoa.RGBColors	pycocoa-module.html#RGBColors
 pycocoa.NSTextWritingDirectionOverride	pycocoa-module.html#NSTextWritingDirectionOverride
 pycocoa.AlertStyle	pycocoa-module.html#AlertStyle
 pycocoa.NSMutableDictionary	pycocoa-module.html#NSMutableDictionary
+pycocoa.disable	pycocoa-module.html#disable
 pycocoa.nsNull2none	pycocoa-module.html#nsNull2none
 pycocoa.NSMain	pycocoa-module.html#NSMain
 pycocoa.get_selectorname_permutations	pycocoa-module.html#get_selectorname_permutations
@@ -96,7 +97,6 @@ pycocoa.NSTextView	pycocoa-module.html#NSTextView
 pycocoa.fontnamesof	pycocoa-module.html#fontnamesof
 pycocoa.nsString2str	pycocoa-module.html#nsString2str
 pycocoa.nsDecimal2decimal	pycocoa-module.html#nsDecimal2decimal
-pycocoa.nsUncaughtExceptionHandler	pycocoa-module.html#nsUncaughtExceptionHandler
 pycocoa.NSFontItalicMask	pycocoa-module.html#NSFontItalicMask
 pycocoa.NSLineSeparatorCharacter	pycocoa-module.html#NSLineSeparatorCharacter
 pycocoa.str2NS	pycocoa-module.html#str2NS
@@ -105,7 +105,6 @@ pycocoa.NSNullCharacter	pycocoa-module.html#NSNullCharacter
 pycocoa.get_ivar	pycocoa-module.html#get_ivar
 pycocoa.fontTraitstrs	pycocoa-module.html#fontTraitstrs
 pycocoa.NSFontOrnamentalsClass	pycocoa-module.html#NSFontOrnamentalsClass
-pycocoa.fontsof4	pycocoa-module.html#fontsof4
 pycocoa.ns2Item	pycocoa-module.html#ns2Item
 pycocoa.OBJC_ASSOCIATION_COPY	pycocoa-module.html#OBJC_ASSOCIATION_COPY
 pycocoa.ns2App	pycocoa-module.html#ns2App
@@ -128,6 +127,7 @@ pycocoa.range2NS	pycocoa-module.html#range2NS
 pycocoa.NSEscapeCharacter	pycocoa-module.html#NSEscapeCharacter
 pycocoa.NSDeviceControl1Character	pycocoa-module.html#NSDeviceControl1Character
 pycocoa.NSView	pycocoa-module.html#NSView
+pycocoa.logf	pycocoa-module.html#logf
 pycocoa.NSTableViewGridNone	pycocoa-module.html#NSTableViewGridNone
 pycocoa.isNone	pycocoa-module.html#isNone
 pycocoa.NSFontFreeformSerifsClass	pycocoa-module.html#NSFontFreeformSerifsClass
@@ -190,6 +190,7 @@ pycocoa.NSFontOldStyleSerifsClass	pycocoa-module.html#NSFontOldStyleSerifsClass
 pycocoa.printf	pycocoa-module.html#printf
 pycocoa.NSRecordSeparatorCharacter	pycocoa-module.html#NSRecordSeparatorCharacter
 pycocoa.NSColor	pycocoa-module.html#NSColor
+pycocoa.setUncaughtExceptionHandler	pycocoa-module.html#setUncaughtExceptionHandler
 pycocoa.NSKeyUp	pycocoa-module.html#NSKeyUp
 pycocoa.set2NS	pycocoa-module.html#set2NS
 pycocoa.NSFloatEncoding	pycocoa-module.html#NSFloatEncoding
@@ -199,6 +200,7 @@ pycocoa._pycocoa	pycocoa-module.html#_pycocoa
 pycocoa.NSWindow	pycocoa-module.html#NSWindow
 pycocoa.fontTraits	pycocoa-module.html#fontTraits
 pycocoa.NSBoolean	pycocoa-module.html#NSBoolean
+pycocoa.fontsof4	pycocoa-module.html#fontsof4
 pycocoa.NSScrollView	pycocoa-module.html#NSScrollView
 pycocoa.OBJC_ASSOCIATION_RETAIN_NONATOMIC	pycocoa-module.html#OBJC_ASSOCIATION_RETAIN_NONATOMIC
 pycocoa.NSFontDescriptor	pycocoa-module.html#NSFontDescriptor
@@ -213,6 +215,7 @@ pycocoa.dict2NS	pycocoa-module.html#dict2NS
 pycocoa.NSConstantString	pycocoa-module.html#NSConstantString
 pycocoa.NSBackSpaceCharacter	pycocoa-module.html#NSBackSpaceCharacter
 pycocoa.NSTableViewDelegate	pycocoa-module.html#NSTableViewDelegate
+pycocoa.is_enabled	pycocoa-module.html#is_enabled
 pycocoa.NSNull	pycocoa-module.html#NSNull
 pycocoa.NSPrintInfo	pycocoa-module.html#NSPrintInfo
 pycocoa.NSTrackingCursorUpdate	pycocoa-module.html#NSTrackingCursorUpdate
@@ -349,6 +352,7 @@ pycocoa.isObjCInstanceOf	pycocoa-module.html#isObjCInstanceOf
 pycocoa.NSWindowToolbarButton	pycocoa-module.html#NSWindowToolbarButton
 pycocoa.NSVerticalTabCharacter	pycocoa-module.html#NSVerticalTabCharacter
 pycocoa.NSError	pycocoa-module.html#NSError
+pycocoa.SIGs_enabled	pycocoa-module.html#SIGs_enabled
 pycocoa.NSPageDownFunctionKey	pycocoa-module.html#NSPageDownFunctionKey
 pycocoa.properties	pycocoa-module.html#properties
 pycocoa.NSAutoreleasePool	pycocoa-module.html#NSAutoreleasePool
@@ -381,6 +385,7 @@ pycocoa.NSBezierPath	pycocoa-module.html#NSBezierPath
 pycocoa.unicode2NS	pycocoa-module.html#unicode2NS
 pycocoa.NSFontClassMask	pycocoa-module.html#NSFontClassMask
 pycocoa.sortuples	pycocoa-module.html#sortuples
+pycocoa.enable	pycocoa-module.html#enable
 pycocoa.nsNumber2num	pycocoa-module.html#nsNumber2num
 pycocoa.isClass	pycocoa-module.html#isClass
 pycocoa.NSFlagsChanged	pycocoa-module.html#NSFlagsChanged
@@ -455,6 +460,27 @@ pycocoa.dicts._dict_cmp	pycocoa.dicts-module.html#_dict_cmp
 pycocoa.dicts.isinstanceOf	pycocoa.utils-module.html#isinstanceOf
 pycocoa.dicts.ns2Type	pycocoa.nstypes-module.html#ns2Type
 pycocoa.dicts.nsIter2	pycocoa.nstypes-module.html#nsIter2
+pycocoa.faults	pycocoa.faults-module.html
+pycocoa.faults._SIGraise	pycocoa.faults-module.html#_SIGraise
+pycocoa.faults._SIGenabled	pycocoa.faults-module.html#_SIGenabled
+pycocoa.faults._SIGhandler	pycocoa.faults-module.html#_SIGhandler
+pycocoa.faults._unCatcher	pycocoa.faults-module.html#_unCatcher
+pycocoa.faults._ALL_DOCS	pycocoa.lazily-module.html#_ALL_DOCS
+pycocoa.faults._SIGdict	pycocoa.faults-module.html#_SIGdict
+pycocoa.faults.__all__	pycocoa.faults-module.html#__all__
+pycocoa.faults.__package__	pycocoa.faults-module.html#__package__
+pycocoa.faults._SIGname	pycocoa.faults-module.html#_SIGname
+pycocoa.faults.is_enabled	pycocoa.faults-module.html#is_enabled
+pycocoa.faults.enable	pycocoa.faults-module.html#enable
+pycocoa.faults.setUncaughtExceptionHandler	pycocoa.faults-module.html#setUncaughtExceptionHandler
+pycocoa.faults.disable	pycocoa.faults-module.html#disable
+pycocoa.faults.SIGs_enabled	pycocoa.faults-module.html#SIGs_enabled
+pycocoa.faults._exiting	pycocoa.faults-module.html#_exiting
+pycocoa.faults._SIGnals	pycocoa.faults-module.html#_SIGnals
+pycocoa.faults.logf	pycocoa.utils-module.html#logf
+pycocoa.faults.exiting	pycocoa.faults-module.html#exiting
+pycocoa.faults._PY_FH	pycocoa.faults-module.html#_PY_FH
+pycocoa.faults._bye	pycocoa.faults-module.html#_bye
 pycocoa.fonts	pycocoa.fonts-module.html
 pycocoa.fonts._familyTraits	pycocoa.fonts-module.html#_familyTraits
 pycocoa.fonts.fontfamilies	pycocoa.fonts-module.html#fontfamilies
@@ -613,6 +639,7 @@ pycocoa.nstypes.isAlias	pycocoa.nstypes-module.html#isAlias
 pycocoa.nstypes.nsBoolean2bool	pycocoa.nstypes-module.html#nsBoolean2bool
 pycocoa.nstypes.nsOf	pycocoa.nstypes-module.html#nsOf
 pycocoa.nstypes.NSView	pycocoa.nstypes-module.html#NSView
+pycocoa.nstypes.isNone	pycocoa.nstypes-module.html#isNone
 pycocoa.nstypes.NSBundle	pycocoa.nstypes-module.html#NSBundle
 pycocoa.nstypes.NSObject	pycocoa.nstypes-module.html#NSObject
 pycocoa.nstypes.NSThread	pycocoa.nstypes-module.html#NSThread
@@ -632,6 +659,7 @@ pycocoa.nstypes.release	pycocoa.runtime-module.html#release
 pycocoa.nstypes.NSError	pycocoa.nstypes-module.html#NSError
 pycocoa.nstypes.NSImageView	pycocoa.nstypes-module.html#NSImageView
 pycocoa.nstypes.NSDockTile	pycocoa.nstypes-module.html#NSDockTile
+pycocoa.nstypes._all_versionstr	pycocoa.utils-module.html#_all_versionstr
 pycocoa.nstypes.NSAutoreleasePool	pycocoa.nstypes-module.html#NSAutoreleasePool
 pycocoa.nstypes.NSEnumerator	pycocoa.nstypes-module.html#NSEnumerator
 pycocoa.nstypes.nsLog	pycocoa.nstypes-module.html#nsLog
@@ -667,7 +695,6 @@ pycocoa.nstypes.NSBezierPath	pycocoa.nstypes-module.html#NSBezierPath
 pycocoa.nstypes._ns2ctype2py	pycocoa.nstypes-module.html#_ns2ctype2py
 pycocoa.nstypes.NSMenuItem	pycocoa.nstypes-module.html#NSMenuItem
 pycocoa.nstypes.clip	pycocoa.utils-module.html#clip
-pycocoa.nstypes.isNone	pycocoa.nstypes-module.html#isNone
 pycocoa.nstypes.NSSavePanel	pycocoa.nstypes-module.html#NSSavePanel
 pycocoa.nstypes._Xargs	pycocoa.runtime-module.html#_Xargs
 pycocoa.nstypes.nsNumber2num	pycocoa.nstypes-module.html#nsNumber2num
@@ -689,7 +716,6 @@ pycocoa.nstypes.NSFontPanel	pycocoa.nstypes-module.html#NSFontPanel
 pycocoa.nstypes.NSTextView	pycocoa.nstypes-module.html#NSTextView
 pycocoa.nstypes.NSWindow	pycocoa.nstypes-module.html#NSWindow
 pycocoa.nstypes.nsDecimal2decimal	pycocoa.nstypes-module.html#nsDecimal2decimal
-pycocoa.nstypes.nsUncaughtExceptionHandler	pycocoa.nstypes-module.html#nsUncaughtExceptionHandler
 pycocoa.octypes	pycocoa.octypes-module.html
 pycocoa.octypes.iterbytes	pycocoa.utils-module.html#iterbytes
 pycocoa.octypes._emcoding2ctype	pycocoa.octypes-module.html#_emcoding2ctype
@@ -775,6 +801,7 @@ pycocoa.oslibs.NSFunctionKeyMask	pycocoa.oslibs-module.html#NSFunctionKeyMask
 pycocoa.oslibs.NSTrackingCursorUpdate	pycocoa.oslibs-module.html#NSTrackingCursorUpdate
 pycocoa.oslibs.libFoundation	pycocoa.oslibs-module.html#libFoundation
 pycocoa.oslibs.NSEndFunctionKey	pycocoa.oslibs-module.html#NSEndFunctionKey
+pycocoa.oslibs._setUncaughtExceptionHandler	pycocoa.oslibs-module.html#_setUncaughtExceptionHandler
 pycocoa.oslibs.kCFAllocatorDefault	pycocoa.oslibs-module.html#kCFAllocatorDefault
 pycocoa.oslibs.kCGBitmapByteOrder16Little	pycocoa.oslibs-module.html#kCGBitmapByteOrder16Little
 pycocoa.oslibs.kCTFontSymbolicTrait	pycocoa.oslibs-module.html#kCTFontSymbolicTrait
@@ -1188,7 +1215,6 @@ pycocoa.tuples.nsIter2	pycocoa.nstypes-module.html#nsIter2
 pycocoa.tuples.ns2Type	pycocoa.nstypes-module.html#ns2Type
 pycocoa.tuples.isinstanceOf	pycocoa.utils-module.html#isinstanceOf
 pycocoa.utils	pycocoa.utils-module.html
-pycocoa.utils._all_exports	pycocoa.utils-module.html#_all_exports
 pycocoa.utils._text_title2	pycocoa.utils-module.html#_text_title2
 pycocoa.utils.bytes2repr	pycocoa.utils-module.html#bytes2repr
 pycocoa.utils.name2objc	pycocoa.utils-module.html#name2objc
@@ -1197,7 +1223,6 @@ pycocoa.utils.iterbytes	pycocoa.utils-module.html#iterbytes
 pycocoa.utils.clip	pycocoa.utils-module.html#clip
 pycocoa.utils.printf	pycocoa.utils-module.html#printf
 pycocoa.utils.DEFAULT_UNICODE	pycocoa.utils-module.html#DEFAULT_UNICODE
-pycocoa.utils._dirbasename	pycocoa.utils-module.html#_dirbasename
 pycocoa.utils.str2bytes	pycocoa.utils-module.html#str2bytes
 pycocoa.utils.lambda1	pycocoa.utils-module.html#lambda1
 pycocoa.utils.bytes2str	pycocoa.utils-module.html#bytes2str
@@ -1209,6 +1234,7 @@ pycocoa.utils.property_RO	pycocoa.utils-module.html#property_RO
 pycocoa.utils.__package__	pycocoa.utils-module.html#__package__
 pycocoa.utils.terminating	pycocoa.utils-module.html#terminating
 pycocoa.utils.inst2strepr	pycocoa.utils-module.html#inst2strepr
+pycocoa.utils._writestr	pycocoa.utils-module.html#_writestr
 pycocoa.utils._all_versions	pycocoa.utils-module.html#_all_versions
 pycocoa.utils._Types	pycocoa.utils-module.html#_Types
 pycocoa.utils._TypeError	pycocoa.utils-module.html#_TypeError
@@ -1217,20 +1243,23 @@ pycocoa.utils.missing	pycocoa.utils-module.html#missing
 pycocoa.utils._Python_	pycocoa.utils-module.html#_Python_
 pycocoa.utils.z1000str	pycocoa.utils-module.html#z1000str
 pycocoa.utils._Strs	pycocoa.utils-module.html#_Strs
-pycocoa.utils._int2	pycocoa.utils-module.html#_int2
+pycocoa.utils._all_versionstr	pycocoa.utils-module.html#_all_versionstr
 pycocoa.utils.flint	pycocoa.utils-module.html#flint
 pycocoa.utils.type2strepr	pycocoa.utils-module.html#type2strepr
 pycocoa.utils.properties	pycocoa.utils-module.html#properties
 pycocoa.utils.isinstanceOf	pycocoa.utils-module.html#isinstanceOf
 pycocoa.utils.gcd	pycocoa.utils-module.html#gcd
+pycocoa.utils.logf	pycocoa.utils-module.html#logf
 pycocoa.utils._lazy_import	pycocoa.lazily-module.html#_lazy_import
 pycocoa.utils._all_listing	pycocoa.utils-module.html#_all_listing
+pycocoa.utils._int2	pycocoa.utils-module.html#_int2
 pycocoa.utils.zfstr	pycocoa.utils-module.html#zfstr
 pycocoa.utils._Ints	pycocoa.utils-module.html#_Ints
 pycocoa.utils._Bytes	pycocoa.utils-module.html#_Bytes
 pycocoa.utils.name2py	pycocoa.utils-module.html#name2py
 pycocoa.utils.aspect_ratio	pycocoa.utils-module.html#aspect_ratio
 pycocoa.utils.zSIstr	pycocoa.utils-module.html#zSIstr
+pycocoa.utils._dirbasename2	pycocoa.utils-module.html#_dirbasename2
 pycocoa.utils.name2pymethod	pycocoa.utils-module.html#name2pymethod
 pycocoa.windows	pycocoa.windows-module.html
 pycocoa.windows.send_super_init	pycocoa.runtime-module.html#send_super_init
@@ -1316,6 +1345,10 @@ ctypes.c_void_p._type_	ctypes.c_void_p-class.html#_type_
 ctypes.c_void_p.from_param	ctypes.c_void_p-class.html#from_param
 ctypes.c_wchar	ctypes.c_wchar-class.html
 ctypes.c_wchar._type_	ctypes.c_wchar-class.html#_type_
+pycocoa.NSExceptionHandler_t	pycocoa.NSExceptionHandler_t-class.html
+pycocoa.NSExceptionHandler_t._argtypes_	pycocoa.NSExceptionHandler_t-class.html#_argtypes_
+pycocoa.NSExceptionHandler_t._restype_	pycocoa.NSExceptionHandler_t-class.html#_restype_
+pycocoa.NSExceptionHandler_t._flags_	pycocoa.NSExceptionHandler_t-class.html#_flags_
 pycocoa.apps.App	pycocoa.apps.App-class.html
 pycocoa.apps.App.menuHide_	pycocoa.apps.App-class.html#menuHide_
 pycocoa.apps.App._keyWindow	pycocoa.apps.App-class.html#_keyWindow
@@ -1806,6 +1839,18 @@ pycocoa.nstypes.NSDecimal.value	pycocoa.nstypes.NSDecimal-class.html#value
 pycocoa.runtime.ObjCInstance._objc_class	pycocoa.runtime.ObjCInstance-class.html#_objc_class
 pycocoa.runtime.ObjCInstance._objc_ptr	pycocoa.runtime.ObjCInstance-class.html#_objc_ptr
 pycocoa.nstypes.NSDecimal._pyDec	pycocoa.nstypes.NSDecimal-class.html#_pyDec
+pycocoa.nstypes.NSExceptionError	pycocoa.nstypes.NSExceptionError-class.html
+pycocoa.nstypes.NSExceptionError.datetime	pycocoa.nstypes.NSExceptionError-class.html#datetime
+pycocoa.nstypes.NSExceptionError._dt_fmt	pycocoa.nstypes.NSExceptionError-class.html#_dt_fmt
+pycocoa.nstypes.NSExceptionError.__init__	pycocoa.nstypes.NSExceptionError-class.html#__init__
+pycocoa.nstypes.NSExceptionError.callstack	pycocoa.nstypes.NSExceptionError-class.html#callstack
+pycocoa.nstypes.NSExceptionError.NS	pycocoa.nstypes.NSExceptionError-class.html#NS
+pycocoa.nstypes.NSExceptionError.timestamp	pycocoa.nstypes.NSExceptionError-class.html#timestamp
+pycocoa.nstypes.NSExceptionError.reason	pycocoa.nstypes.NSExceptionError-class.html#reason
+pycocoa.nstypes.NSExceptionError.versionstr	pycocoa.nstypes.NSExceptionError-class.html#versionstr
+pycocoa.nstypes.NSExceptionError.info	pycocoa.nstypes.NSExceptionError-class.html#info
+pycocoa.nstypes.NSExceptionError._timestamp	pycocoa.nstypes.NSExceptionError-class.html#_timestamp
+pycocoa.nstypes.NSExceptionError.name	pycocoa.nstypes.NSExceptionError-class.html#name
 pycocoa.nstypes.NSStr	pycocoa.nstypes.NSStr-class.html
 pycocoa.runtime.ObjCInstance._objc_cache	pycocoa.runtime.ObjCInstance-class.html#_objc_cache
 pycocoa.nstypes.NSStr.__str__	pycocoa.nstypes.NSStr-class.html#__str__
@@ -2025,10 +2070,6 @@ pycocoa.octypes.c_struct_t._attrs	pycocoa.octypes.c_struct_t-class.html#_attrs
 pycocoa.octypes.objc_super_t._fields_	pycocoa.octypes.objc_super_t-class.html#_fields_
 pycocoa.octypes.c_struct_t.__repr__	pycocoa.octypes.c_struct_t-class.html#__repr__
 pycocoa.octypes.objc_super_t.receiver	pycocoa.octypes.objc_super_t-class.html#receiver
-pycocoa.oslibs.NSExceptionHandler_t	pycocoa.oslibs.NSExceptionHandler_t-class.html
-pycocoa.oslibs.NSExceptionHandler_t._argtypes_	pycocoa.oslibs.NSExceptionHandler_t-class.html#_argtypes_
-pycocoa.oslibs.NSExceptionHandler_t._restype_	pycocoa.oslibs.NSExceptionHandler_t-class.html#_restype_
-pycocoa.oslibs.NSExceptionHandler_t._flags_	pycocoa.oslibs.NSExceptionHandler_t-class.html#_flags_
 pycocoa.panels.AlertPanel	pycocoa.panels.AlertPanel-class.html
 pycocoa.panels.AlertPanel.show	pycocoa.panels.AlertPanel-class.html#show
 pycocoa.panels.AlertPanel._cancel	pycocoa.panels.AlertPanel-class.html#_cancel

@@ -46,7 +46,7 @@ from ctypes import alignment, ArgumentError, byref, cast, c_buffer, \
 #                  # very end of this module.
 
 __all__ = _ALL_LAZY.runtime
-__version__ = '20.11.10'
+__version__ = '20.11.14'
 
 # <https://Developer.Apple.com/documentation/objectivec/
 #        objc_associationpolicy?language=objc>
@@ -1563,11 +1563,43 @@ from ctypes import sizeof
 
 if __name__ == '__main__':
 
-    from pycocoa.utils import _all_exports, _all_listing
+    from pycocoa.utils import _all_listing
 
-    _all_exports(locals(), 'libobjc', 'release', 'register_subclass', 'retain',
-                 starts=('add_', 'is', 'OBJC_', 'ObjC', 'send_', 'set_'))
     _all_listing(__all__, locals())
+
+# % python3 -m pycocoa.runtime
+#
+# pycocoa.runtime.__all__ = tuple(
+#  pycocoa.runtime.add_ivar is <function .add_ivar at 0x7fe5cf3540d0>,
+#  pycocoa.runtime.add_method is <function .add_method at 0x7fe5cf359a60>,
+#  pycocoa.runtime.add_protocol is <function .add_protocol at 0x7fe5cf359af0>,
+#  pycocoa.runtime.add_subclass is <function .add_subclass at 0x7fe5cf359b80>,
+#  pycocoa.runtime.isClass is <function .isClass at 0x7fe5cf359c10>,
+#  pycocoa.runtime.isImmutable is <function .isImmutable at 0x7fe5cf359ca0>,
+#  pycocoa.runtime.isMetaClass is <function .isMetaClass at 0x7fe5cf359dc0>,
+#  pycocoa.runtime.isObjCInstanceOf is <function .isObjCInstanceOf at 0x7fe5cf359d30>,
+#  pycocoa.runtime.OBJC_ASSOCIATION_COPY is 771 or 0x303,
+#  pycocoa.runtime.OBJC_ASSOCIATION_COPY_NONATOMIC is 3 or 0x3,
+#  pycocoa.runtime.OBJC_ASSOCIATION_RETAIN is 769 or 0x301,
+#  pycocoa.runtime.OBJC_ASSOCIATION_RETAIN_NONATOMIC is 1 or 0x1,
+#  pycocoa.runtime.ObjCBoundClassMethod is <class .ObjCBoundClassMethod>,
+#  pycocoa.runtime.ObjCBoundMethod is <class .ObjCBoundMethod>,
+#  pycocoa.runtime.ObjCClass is <class .ObjCClass>,
+#  pycocoa.runtime.ObjCClassMethod is <class .ObjCClassMethod>,
+#  pycocoa.runtime.ObjCConstant is <class .ObjCConstant>,
+#  pycocoa.runtime.ObjCDelegate is <class .ObjCDelegate>,
+#  pycocoa.runtime.ObjCInstance is <class .ObjCInstance>,
+#  pycocoa.runtime.ObjCMethod is <class .ObjCMethod>,
+#  pycocoa.runtime.ObjCSubclass is <class .ObjCSubclass>,
+#  pycocoa.runtime.register_subclass is <function .register_subclass at 0x7fe5cf359ee0>,
+#  pycocoa.runtime.release is <function .release at 0x7fe5cf359e50>,
+#  pycocoa.runtime.retain is <function .retain at 0x7fe5cf359f70>,
+#  pycocoa.runtime.send_message is <function .send_message at 0x7fe5cf35c0d0>,
+#  pycocoa.runtime.send_super is <function .send_super at 0x7fe5cf35c160>,
+#  pycocoa.runtime.send_super_init is <function .send_super_init at 0x7fe5cf35c1f0>,
+#  pycocoa.runtime.set_ivar is <function .set_ivar at 0x7fe5cf35c280>,
+# )[28]
+# pycocoa.runtime.version 20.11.14, .isLazy 1, Python 3.9.0 64bit, macOS 10.15.7
 
 # MIT License <https://OpenSource.org/licenses/MIT>
 #

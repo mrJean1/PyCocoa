@@ -55,7 +55,7 @@ except ImportError:
 from platform import machine  # as machine
 
 __all__ = _ALL_LAZY.octypes
-__version__ = '20.01.08'
+__version__ = '20.11.14'
 
 z = sizeof(c_void_p)
 if z == 4:
@@ -821,12 +821,8 @@ def split_encoding(encoding):  # MCCABE 18
 
 if __name__ == '__main__':
 
-    from pycocoa.utils import _all_exports, _all_listing, \
-                               bytes2repr, _Globals, printf
-
-    _all_exports(locals(), 'PyObjectEncoding', 'TypeCodeError', 'c_void',
-                 starts=('CG', 'CF', 'NS', 'ObjC', 'is', 'split_'),
-                 ends='_t')
+    from pycocoa.utils import _all_listing, bytes2repr, \
+                              _Globals, printf
 
     _Globals.argv0 = ''
 
@@ -859,158 +855,156 @@ if __name__ == '__main__':
 
     _all_listing(__all__, locals())
 
-    _ = '''% python3 -m pycocoa.octypes
-
- ctype2encoding ...
-    1: Class_t   -> b'#'
-    2: Id_t      -> b'@'
-    3: NSPoint_t -> b'{CGPoint=dd}'
-    4: NSRange_t -> b'{_NSRange=QQ}'
-    5: NSRect_t  -> b'{CGRect={CGPoint=dd}{CGSize=dd}}'
-    6: NSSize_t  -> b'{CGSize=dd}'
-    7: SEL_t     -> b':'
-    8: c_bool    -> b'B'
-    9: c_char    -> b'c'
-   10: c_char_p  -> b'*'
-   11: c_double  -> b'd'
-   12: c_float   -> b'f'
-   13: c_int     -> b'i'
-   14: c_long    -> b'l'
-   15: c_short   -> b's'
-   16: c_ubyte   -> b'C'
-   17: c_uint    -> b'I'
-   18: c_ulong   -> b'L'
-   19: c_ushort  -> b'S'
-   20: c_void_p  -> b'@'
-   21: py_object -> b'{PyObject=@}'
-
- encoding2ctype ...
-    1: b'#'  -> Class_t
-    2: b'()' -> Union_t
-    3: b'*'  -> c_char_p
-    4: b':'  -> SEL_t
-    5: b'<>' -> Block_t
-    6: b'?'  -> Unknown_t
-    7: b'@'  -> Id_t
-    8: b'B'  -> c_bool
-    9: b'C'  -> c_ubyte
-   10: b'I'  -> c_uint
-   11: b'L'  -> c_ulong
-   12: b'P'  -> py_object
-   13: b'Q'  -> c_ulong
-   14: b'S'  -> c_ushort
-   15: b'Vv' -> c_void
-   16: b'[]' -> c_void_p
-   17: b'^?' -> UnknownPtr_t
-   18: b'^v' -> VoidPtr_t
-   19: b'^{CGImage=}' -> c_void_p
-   20: b'^{_NSZone=}' -> c_void_p
-   21: b'c'  -> c_byte
-   22: b'd'  -> c_double
-   23: b'f'  -> c_float
-   24: b'i'  -> c_int
-   25: b'l'  -> c_long
-   26: b'q'  -> c_long
-   27: b's'  -> c_short
-   28: b'v'  -> c_void
-   29: b'{CGPoint=dd}' -> NSPoint_t
-   30: b'{CGRect={CGPoint=dd}{CGSize=dd}}' -> NSRect_t
-   31: b'{CGSize=dd}' -> NSSize_t
-   32: b'{PyObject=@}' -> py_object
-   33: b'{_NSRange=QQ}' -> NSRange_t
-   34: b'{}' -> Struct_t
-
- checking NS...Encoding ...
-   NSRange_t: b'=LL}' != b'{_NSRange=QQ}'
-
- octypes.__all__ = tuple(
-   octypes.Allocator_t is <class .Allocator_t>,
-   octypes.Array_t is <class ctypes.c_void_p>,
-   octypes.Block_t is <class .Block_t>,
-   octypes.BOOL_t is <class .BOOL_t>,
-   octypes.c_ptrdiff_t is <class ctypes.c_long>,
-   octypes.c_struct_t is <class .c_struct_t>,
-   octypes.c_void is None,
-   octypes.CFIndex_t is <class ctypes.c_long>,
-   octypes.CFRange_t is <class .CFRange_t>,
-   octypes.CGBitmapInfo_t is <class ctypes.c_uint>,
-   octypes.CGDirectDisplayID_t is <class ctypes.c_uint>,
-   octypes.CGError_t is <class ctypes.c_int>,
-   octypes.CGFloat_t is <class ctypes.c_double>,
-   octypes.CGGlyph_t is <class ctypes.c_ushort>,
-   octypes.CGImageEncoding is b'{CGImage=}',
-   octypes.CGPoint_t is <class .NSPoint_t>,
-   octypes.CGPointEncoding is b'{CGPoint=dd}',
-   octypes.CGRect_t is <class .NSRect_t>,
-   octypes.CGRectEncoding is b'{CGRect={CGPoint=dd}{CGSize=dd}}',
-   octypes.CGSize_t is <class .NSSize_t>,
-   octypes.CGSizeEncoding is b'{CGSize=dd}',
-   octypes.Class_t is <class .Class_t>,
-   octypes.CTFontOrientation_t is <class ctypes.c_uint>,
-   octypes.CTFontSymbolicTraits_t is <class ctypes.c_uint>,
-   octypes.Data_t is <class ctypes.c_void_p>,
-   octypes.Dictionary_t is <class ctypes.c_void_p>,
-   octypes.Id_t is <class .Id_t>,
-   octypes.IMP_t is <class .IMP_t>,
-   octypes.Ivar_t is <class .Ivar_t>,
-   octypes.Method_t is <class .Method_t>,
-   octypes.NSDouble_t is <class ctypes.c_double>,
-   octypes.NSFloat_t is <class ctypes.c_float>,
-   octypes.NSFloatEncoding is b'f',
-   octypes.NSInteger_t is <class ctypes.c_long>,
-   octypes.NSIntegerEncoding is b'l',
-   octypes.NSIntegerMax is 9223372036854775807 or 0x7FFFFFFFFFFFFFFF,
-   octypes.NSMakePoint is <class .NSPoint_t>,
-   octypes.NSMakeRange is <class .NSRange_t>,
-   octypes.NSMakeRect is <class .NSRect4_t>,
-   octypes.NSMakeSize is <class .NSSize_t>,
-   octypes.NSNotFound is 9223372036854775807 or 0x7FFFFFFFFFFFFFFF,
-   octypes.NSPoint_t is <class .NSPoint_t>,
-   octypes.NSPointEncoding is b'{CGPoint=dd}',
-   octypes.NSPointZero is <NSPoint_t(x=0.0, y=0.0) at 0x10ebc7320>,
-   octypes.NSRange_t is <class .NSRange_t>,
-   octypes.NSRangeEncoding is b'{_NSRange=QQ}',
-   octypes.NSRect4_t is <class .NSRect4_t>,
-   octypes.NSRect_t is <class .NSRect_t>,
-   octypes.NSRectEncoding is b'{CGRect={CGPoint=dd}{CGSize=dd}}',
-   octypes.NSSize_t is <class .NSSize_t>,
-   octypes.NSSizeEncoding is b'{CGSize=dd}',
-   octypes.NSTimeInterval_t is <class ctypes.c_double>,
-   octypes.NSUInteger_t is <class ctypes.c_ulong>,
-   octypes.NSUIntegerEncoding is b'L',
-   octypes.NSZoneEncoding is b'{_NSZone=}',
-   octypes.Number_t is <class ctypes.c_void_p>,
-   octypes.NumberType_t is <class ctypes.c_ulong>,
-   octypes.objc_method_description_t is <class .objc_method_description_t>,
-   octypes.objc_property_attribute_t is <class .objc_property_attribute_t>,
-   octypes.objc_property_t is <class .objc_property_t>,
-   octypes.objc_super_t is <class .objc_super_t>,
-   octypes.ObjC_t is <class .ObjC_t>,
-   octypes.OptionFlags_t is <class ctypes.c_ulong>,
-   octypes.Protocol_t is <class .Protocol_t>,
-   octypes.PyObjectEncoding is b'{PyObject=@}',
-   octypes.RunLoop_t is <class .RunLoop_t>,
-   octypes.SEL_t is <class .SEL_t>,
-   octypes.Set_t is <class ctypes.c_void_p>,
-   octypes.split_emcoding2 is <function .split_emcoding2 at 0x10ebd5290>,
-   octypes.split_encoding is <function .split_encoding at 0x10ebd5320>,
-   octypes.String_t is <class ctypes.c_void_p>,
-   octypes.Struct_t is <class .Struct_t>,
-   octypes.TimeInterval_t is <class ctypes.c_double>,
-   octypes.TypeCodeError is <class .TypeCodeError>,
-   octypes.TypeID_t is <class ctypes.c_ulong>,
-   octypes.TypeRef_t is <class .TypeRef_t>,
-   octypes.UniChar_t is <class ctypes.c_ushort>,
-   octypes.unichar_t is <class ctypes.c_wchar>,
-   octypes.Union_t is <class .Union_t>,
-   octypes.Unknown_t is <class .Unknown_t>,
-   octypes.UnknownPtr_t is <class .UnknownPtr_t>,
-   octypes.URL_t is <class .URL_t>,
-   octypes.VoidPtr_t is <class .VoidPtr_t>,
- )[83]
- octypes.version = '20.01.08'
-'''
-    del _
+# % python3 -m pycocoa.octypes
+#
+# ctype2encoding ...
+#    1: Class_t   -> b'#'
+#    2: Id_t      -> b'@'
+#    3: NSPoint_t -> b'{CGPoint=dd}'
+#    4: NSRange_t -> b'{_NSRange=QQ}'
+#    5: NSRect_t  -> b'{CGRect={CGPoint=dd}{CGSize=dd}}'
+#    6: NSSize_t  -> b'{CGSize=dd}'
+#    7: SEL_t     -> b':'
+#    8: c_bool    -> b'B'
+#    9: c_char    -> b'c'
+#   10: c_char_p  -> b'*'
+#   11: c_double  -> b'd'
+#   12: c_float   -> b'f'
+#   13: c_int     -> b'i'
+#   14: c_long    -> b'l'
+#   15: c_short   -> b's'
+#   16: c_ubyte   -> b'C'
+#   17: c_uint    -> b'I'
+#   18: c_ulong   -> b'L'
+#   19: c_ushort  -> b'S'
+#   20: c_void_p  -> b'@'
+#   21: py_object -> b'{PyObject=@}'
+#
+# encoding2ctype ...
+#    1: b'#'  -> Class_t
+#    2: b'()' -> Union_t
+#    3: b'*'  -> c_char_p
+#    4: b':'  -> SEL_t
+#    5: b'<>' -> Block_t
+#    6: b'?'  -> Unknown_t
+#    7: b'@'  -> Id_t
+#    8: b'B'  -> c_bool
+#    9: b'C'  -> c_ubyte
+#   10: b'I'  -> c_uint
+#   11: b'L'  -> c_ulong
+#   12: b'P'  -> py_object
+#   13: b'Q'  -> c_ulong
+#   14: b'S'  -> c_ushort
+#   15: b'Vv' -> c_void
+#   16: b'[]' -> c_void_p
+#   17: b'^?' -> UnknownPtr_t
+#   18: b'^v' -> VoidPtr_t
+#   19: b'^{CGImage=}' -> c_void_p
+#   20: b'^{_NSZone=}' -> c_void_p
+#   21: b'c'  -> c_byte
+#   22: b'd'  -> c_double
+#   23: b'f'  -> c_float
+#   24: b'i'  -> c_int
+#   25: b'l'  -> c_long
+#   26: b'q'  -> c_long
+#   27: b's'  -> c_short
+#   28: b'v'  -> c_void
+#   29: b'{CGPoint=dd}' -> NSPoint_t
+#   30: b'{CGRect={CGPoint=dd}{CGSize=dd}}' -> NSRect_t
+#   31: b'{CGSize=dd}' -> NSSize_t
+#   32: b'{PyObject=@}' -> py_object
+#   33: b'{_NSRange=QQ}' -> NSRange_t
+#   34: b'{}' -> Struct_t
+#
+# checking NS...Encoding ...
+#   NSRange_t: b'=LL}' != b'{_NSRange=QQ}'
+#
+# pycocoa.octypes.__all__ = tuple(
+#  pycocoa.octypes.Allocator_t is <class .Allocator_t>,
+#  pycocoa.octypes.Array_t is <class ctypes.c_void_p>,
+#  pycocoa.octypes.Block_t is <class .Block_t>,
+#  pycocoa.octypes.BOOL_t is <class .BOOL_t>,
+#  pycocoa.octypes.c_ptrdiff_t is <class ctypes.c_long>,
+#  pycocoa.octypes.c_struct_t is <class .c_struct_t>,
+#  pycocoa.octypes.c_void is None,
+#  pycocoa.octypes.CFIndex_t is <class ctypes.c_long>,
+#  pycocoa.octypes.CFRange_t is <class .CFRange_t>,
+#  pycocoa.octypes.CGBitmapInfo_t is <class ctypes.c_uint>,
+#  pycocoa.octypes.CGDirectDisplayID_t is <class ctypes.c_uint>,
+#  pycocoa.octypes.CGError_t is <class ctypes.c_int>,
+#  pycocoa.octypes.CGFloat_t is <class ctypes.c_double>,
+#  pycocoa.octypes.CGGlyph_t is <class ctypes.c_ushort>,
+#  pycocoa.octypes.CGImageEncoding is b'{CGImage=}',
+#  pycocoa.octypes.CGPoint_t is <class .NSPoint_t>,
+#  pycocoa.octypes.CGPointEncoding is b'{CGPoint=dd}',
+#  pycocoa.octypes.CGRect_t is <class .NSRect_t>,
+#  pycocoa.octypes.CGRectEncoding is b'{CGRect={CGPoint=dd}{CGSize=dd}}',
+#  pycocoa.octypes.CGSize_t is <class .NSSize_t>,
+#  pycocoa.octypes.CGSizeEncoding is b'{CGSize=dd}',
+#  pycocoa.octypes.Class_t is <class .Class_t>,
+#  pycocoa.octypes.CTFontOrientation_t is <class ctypes.c_uint>,
+#  pycocoa.octypes.CTFontSymbolicTraits_t is <class ctypes.c_uint>,
+#  pycocoa.octypes.Data_t is <class ctypes.c_void_p>,
+#  pycocoa.octypes.Dictionary_t is <class ctypes.c_void_p>,
+#  pycocoa.octypes.Id_t is <class .Id_t>,
+#  pycocoa.octypes.IMP_t is <class .IMP_t>,
+#  pycocoa.octypes.Ivar_t is <class .Ivar_t>,
+#  pycocoa.octypes.Method_t is <class .Method_t>,
+#  pycocoa.octypes.NSDouble_t is <class ctypes.c_double>,
+#  pycocoa.octypes.NSFloat_t is <class ctypes.c_float>,
+#  pycocoa.octypes.NSFloatEncoding is b'f',
+#  pycocoa.octypes.NSInteger_t is <class ctypes.c_long>,
+#  pycocoa.octypes.NSIntegerEncoding is b'l',
+#  pycocoa.octypes.NSIntegerMax is 9223372036854775807 or 0x7FFFFFFFFFFFFFFF,
+#  pycocoa.octypes.NSMakePoint is <class .NSPoint_t>,
+#  pycocoa.octypes.NSMakeRange is <class .NSRange_t>,
+#  pycocoa.octypes.NSMakeRect is <class .NSRect4_t>,
+#  pycocoa.octypes.NSMakeSize is <class .NSSize_t>,
+#  pycocoa.octypes.NSNotFound is 9223372036854775807 or 0x7FFFFFFFFFFFFFFF,
+#  pycocoa.octypes.NSPoint_t is <class .NSPoint_t>,
+#  pycocoa.octypes.NSPointEncoding is b'{CGPoint=dd}',
+#  pycocoa.octypes.NSPointZero is <NSPoint_t(x=0.0, y=0.0) at 0x7f7fa0aa97c0>,
+#  pycocoa.octypes.NSRange_t is <class .NSRange_t>,
+#  pycocoa.octypes.NSRangeEncoding is b'{_NSRange=QQ}',
+#  pycocoa.octypes.NSRect4_t is <class .NSRect4_t>,
+#  pycocoa.octypes.NSRect_t is <class .NSRect_t>,
+#  pycocoa.octypes.NSRectEncoding is b'{CGRect={CGPoint=dd}{CGSize=dd}}',
+#  pycocoa.octypes.NSSize_t is <class .NSSize_t>,
+#  pycocoa.octypes.NSSizeEncoding is b'{CGSize=dd}',
+#  pycocoa.octypes.NSTimeInterval_t is <class ctypes.c_double>,
+#  pycocoa.octypes.NSUInteger_t is <class ctypes.c_ulong>,
+#  pycocoa.octypes.NSUIntegerEncoding is b'L',
+#  pycocoa.octypes.NSZoneEncoding is b'{_NSZone=}',
+#  pycocoa.octypes.Number_t is <class ctypes.c_void_p>,
+#  pycocoa.octypes.NumberType_t is <class ctypes.c_ulong>,
+#  pycocoa.octypes.objc_method_description_t is <class .objc_method_description_t>,
+#  pycocoa.octypes.objc_property_attribute_t is <class .objc_property_attribute_t>,
+#  pycocoa.octypes.objc_property_t is <class .objc_property_t>,
+#  pycocoa.octypes.objc_super_t is <class .objc_super_t>,
+#  pycocoa.octypes.ObjC_t is <class .ObjC_t>,
+#  pycocoa.octypes.OptionFlags_t is <class ctypes.c_ulong>,
+#  pycocoa.octypes.Protocol_t is <class .Protocol_t>,
+#  pycocoa.octypes.PyObjectEncoding is b'{PyObject=@}',
+#  pycocoa.octypes.RunLoop_t is <class .RunLoop_t>,
+#  pycocoa.octypes.SEL_t is <class .SEL_t>,
+#  pycocoa.octypes.Set_t is <class ctypes.c_void_p>,
+#  pycocoa.octypes.split_emcoding2 is <function .split_emcoding2 at 0x7f7fa0c8fee0>,
+#  pycocoa.octypes.split_encoding is <function .split_encoding at 0x7f7fa0c8ff70>,
+#  pycocoa.octypes.String_t is <class ctypes.c_void_p>,
+#  pycocoa.octypes.Struct_t is <class .Struct_t>,
+#  pycocoa.octypes.TimeInterval_t is <class ctypes.c_double>,
+#  pycocoa.octypes.TypeCodeError is <class .TypeCodeError>,
+#  pycocoa.octypes.TypeID_t is <class ctypes.c_ulong>,
+#  pycocoa.octypes.TypeRef_t is <class .TypeRef_t>,
+#  pycocoa.octypes.UniChar_t is <class ctypes.c_ushort>,
+#  pycocoa.octypes.unichar_t is <class ctypes.c_wchar>,
+#  pycocoa.octypes.Union_t is <class .Union_t>,
+#  pycocoa.octypes.Unknown_t is <class .Unknown_t>,
+#  pycocoa.octypes.UnknownPtr_t is <class .UnknownPtr_t>,
+#  pycocoa.octypes.URL_t is <class .URL_t>,
+#  pycocoa.octypes.VoidPtr_t is <class .VoidPtr_t>,
+# )[83]
+# pycocoa.octypes.version 20.11.14, .isLazy 1, Python 3.9.0 64bit, macOS 10.15.7
 
 # MIT License <https://OpenSource.org/licenses/MIT>
 #

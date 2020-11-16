@@ -507,29 +507,27 @@ if __name__ == '__main__':
 
     _all_listing(__all__, locals())
 
-    _ = '''% python3 -m pycocoa.panels
-
- panels.__all__ = tuple(
-   panels.AlertPanel is <class .AlertPanel>,
-   panels.AlertStyle.Critical=1<<1,
-                    .Info=1,
-                    .Warning=0,
-   panels.BrowserPanel is <class .BrowserPanel>,
-   panels.ErrorPanel is <class .ErrorPanel>,
-   panels.OpenPanel is <class .OpenPanel>,
-   panels.PanelButton.Cancel=0,
-                     .Close=1,
-                     .Error=-3,
-                     .OK=1,
-                     .Other=1<<1,
-                     .Suppressed=-2,
-                     .TimedOut=-1,
-   panels.SavePanel is <class .SavePanel>,
-   panels.TextPanel is <class .TextPanel>,
- )[8]
- panels.version = '20.01.08'
-'''
-    del _
+# % python3 -m pycocoa.panels
+#
+# pycocoa.panels.__all__ = tuple(
+#  pycocoa.panels.AlertPanel is <class .AlertPanel>,
+#  pycocoa.panels.AlertStyle.Critical=1<<1,
+#                           .Info=1,
+#                           .Warning=0,
+#  pycocoa.panels.BrowserPanel is <class .BrowserPanel>,
+#  pycocoa.panels.ErrorPanel is <class .ErrorPanel>,
+#  pycocoa.panels.OpenPanel is <class .OpenPanel>,
+#  pycocoa.panels.PanelButton.Cancel=0,
+#                            .Close=1,
+#                            .Error=-3,
+#                            .OK=1,
+#                            .Other=1<<1,
+#                            .Suppressed=-2,
+#                            .TimedOut=-1,
+#  pycocoa.panels.SavePanel is <class .SavePanel>,
+#  pycocoa.panels.TextPanel is <class .TextPanel>,
+# )[8]
+# pycocoa.panels.version 20.01.08, .isLazy 1, Python 3.9.0 64bit, macOS 10.15.7
 
 # MIT License <https://OpenSource.org/licenses/MIT>
 #

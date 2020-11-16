@@ -36,7 +36,7 @@ from pycocoa.utils    import aspect_ratio, bytes2str, _Constants, _Globals, \
 # from enum   import Enum
 
 __all__ = _ALL_LAZY.windows
-__version__ = '20.11.11'
+__version__ = '20.11.14'
 
 _Cascade = NSPoint_t(25, 25)  # PYCHOK false
 
@@ -786,63 +786,57 @@ _Types.TextWindow              = TextWindow
 
 if __name__ == '__main__':
 
-    from pycocoa.utils import _all_exports, _all_listing
+    from pycocoa.utils import _all_listing
 
-    _all_exports(locals(), 'BezelStyle', 'Border', 'MediaWindow',
-                           'NSWindowDelegate', 'Screen', 'TextWindow',
-                 starts=('AutoResize', 'autoResizes', 'ns', 'Window', 'window'))
     _all_listing(__all__, locals())
 
-    _ = '''% python3 -m pycocoa.windows
-
- windows.__all__ = tuple(
-   windows.AutoResize.HeightSizable=1<<4,
-                     .MaxXMargin=1<<2,
-                     .MaxYMargin=1<<5,
-                     .MinXMargin=1,
-                     .MinYMargin=1<<3,
-                     .NotSizable=0,
-                     .Sizable=9<<1,
-                     .WidthSizable=1<<1,
-   windows.AutoResizeError is <class .AutoResizeError>,
-   windows.autoResizes is <function .autoResizes at 0x10bf34ef0>,
-   windows.BezelStyle.Disclosure=5,
-                     .HelpButton=9,
-                     .Inline=15,
-                     .NCircular=7,
-                     .Recessed=13,
-                     .RegularSquare=1<<1,
-                     .Rounded=1,
-                     .RoundedDisclosure=7<<1,
-                     .RoundRect=3<<2,
-                     .ShadowlessSquare=3<<1,
-                     .SmallSquare=5<<1,
-                     .TexturedRounded=11,
-                     .TexturedSquare=1<<3,
-   windows.Border.Bezel=1<<1,
-                 .Groove=3,
-                 .Line=1,
-                 .No=0,
-   windows.MediaWindow is <class .MediaWindow>,
-   windows.ns2Window is <function .ns2Window at 0x10bf40e60>,
-   windows.nsTextSize3 is <function pycocoa.nstypes.nsTextSize3 at 0x10bf34170>,
-   windows.NSWindowDelegate is <pycocoa.utils.module_property_RO object at 0x10bf3ed50>,
-   windows.Screen is <class .Screen>,
-   windows.TextWindow is <class .TextWindow>,
-   windows.Window is <class .Window>,
-   windows.WindowError is <class .WindowError>,
-   windows.WindowStyle.Closable=1<<1,
-                      .Miniaturizable=1<<2,
-                      .Resizable=1<<3,
-                      .Titled=1,
-                      .Typical=15,
-                      .Utility=1<<4,
-   windows.WindowStyleError is <class .WindowStyleError>,
-   windows.windowStyles is <function .windowStyles at 0x10bba3b90>,
- )[16]
- windows.version = '20.01.08'
-'''
-    del _
+# % python3 -m pycocoa.windows
+#
+# pycocoa.windows.__all__ = tuple(
+#  pycocoa.windows.AutoResize.HeightSizable=1<<4,
+#                            .MaxXMargin=1<<2,
+#                            .MaxYMargin=1<<5,
+#                            .MinXMargin=1,
+#                            .MinYMargin=1<<3,
+#                            .NotSizable=0,
+#                            .Sizable=9<<1,
+#                            .WidthSizable=1<<1,
+#  pycocoa.windows.AutoResizeError is <class .AutoResizeError>,
+#  pycocoa.windows.autoResizes is <function .autoResizes at 0x7fd452d878b0>,
+#  pycocoa.windows.BezelStyle.Disclosure=5,
+#                            .HelpButton=9,
+#                            .Inline=15,
+#                            .NCircular=7,
+#                            .Recessed=13,
+#                            .RegularSquare=1<<1,
+#                            .Rounded=1,
+#                            .RoundedDisclosure=7<<1,
+#                            .RoundRect=3<<2,
+#                            .ShadowlessSquare=3<<1,
+#                            .SmallSquare=5<<1,
+#                            .TexturedRounded=11,
+#                            .TexturedSquare=1<<3,
+#  pycocoa.windows.Border.Bezel=1<<1,
+#                        .Groove=3,
+#                        .Line=1,
+#                        .No=0,
+#  pycocoa.windows.MediaWindow is <class .MediaWindow>,
+#  pycocoa.windows.ns2Window is <function .ns2Window at 0x7fd452d90ca0>,
+#  pycocoa.windows.NSWindowDelegate is <pycocoa.utils.module_property_RO object at 0x7fd452d8fb50>,
+#  pycocoa.windows.Screen is <class .Screen>,
+#  pycocoa.windows.TextWindow is <class .TextWindow>,
+#  pycocoa.windows.Window is <class .Window>,
+#  pycocoa.windows.WindowError is <class .WindowError>,
+#  pycocoa.windows.WindowStyle.Closable=1<<1,
+#                             .Miniaturizable=1<<2,
+#                             .Resizable=1<<3,
+#                             .Titled=1,
+#                             .Typical=15,
+#                             .Utility=1<<4,
+#  pycocoa.windows.WindowStyleError is <class .WindowStyleError>,
+#  pycocoa.windows.windowStyles is <function .windowStyles at 0x7fd452d879d0>,
+# )[15]
+# pycocoa.windows.version 20.11.14, .isLazy 1, Python 3.9.0 64bit, macOS 10.15.7
 
 # MIT License <https://OpenSource.org/licenses/MIT>
 #

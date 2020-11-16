@@ -28,7 +28,7 @@ from ctypes  import ArgumentError, byref, cast, c_char_p, c_double, \
 import os
 
 __all__ = _ALL_LAZY.printers
-__version__ = '20.01.08'
+__version__ = '20.11.14'
 
 libPC = None  # loaded on-demand
 kPMServerLocal = None
@@ -896,11 +896,7 @@ _Types.Printer      = Printer
 
 if __name__ == '__main__':
 
-    from pycocoa.utils import _all_exports
-
-    _all_exports(locals(), 'get_libPC', 'get_resolutions',
-                           'libPC', 'Printer',
-                 starts=('Paper', 'get_p'))
+    from pycocoa.utils import _all_listing
 
     for i, p in enumerate(get_printers()):
         print('%2s %s: ID %r, makemodel %r, URI %r' % (i + 1,
@@ -929,59 +925,70 @@ if __name__ == '__main__':
         print(' %s.%s: %r' % (p, a, getattr(p, a)))
     print(' %s.%s: %r' % (p, 'localname', p.localname()))
 
+    _all_listing(__all__, locals())
+
     # get_printer_browser()
 
-    _ = '''% python3 -m pycocoa.printers
-
- 1 Printer('B&W WiFi'): ID 'B_W_WiFi', makemodel 'Brother HL-2270DW series CUPS', URI 'dnssd://Brother%20HL-2270DW...'
- 2 Printer('B&W Wired'): ID 'Brother_HL_2270DW_series_2', makemodel 'Brother HL-2270DW series CUPS', URI 'usb://....'
- 3 Printer('Color WiFi'): ID 'Color_WiFi', makemodel 'Brother MFC-9340CDW CUPS', URI 'dnssd://Brother%20MFC-9340CDW....'
- 4 Printer('Color Wired'): ID 'Color_Wired', makemodel 'Brother MFC-9340CDW CUPS', URI 'usb://Brother/MFC-9340CDW....'
-
-default (True) printer: Printer('Color WiFi')...
- Printer('Color WiFi').name: 'Color WiFi'
- Printer('Color WiFi').ID: 'Color_WiFi'
- Printer('Color WiFi').makemodel: 'Brother MFC-9340CDW CUPS'
- Printer('Color WiFi').isColor: True
- Printer('Color WiFi').location: '....'
- Printer('Color WiFi').psCapable: True
- Printer('Color WiFi').psLevel: 3
- Printer('Color WiFi').isRemote: False
- Printer('Color WiFi').deviceURI: 'dnssd://Brother%20MFC-9340CDW....'
- Printer('Color WiFi').deviceDescription: {'NSDeviceIsPrinter': 'YES'}
- Printer('Color WiFi').description: '{\n    "Device Description" =     {\n        NSDeviceIsPrinter = YES;\n    };\n    "Language Level" = 3;\n    Name = "Color WiFi";\n    Type = "Brother MFC-9340CDW CUPS";\n}'
- Printer('Color WiFi').PPD: 'file://....'
- Printer('Color WiFi').resolution: (300.0, 300.0)
-
- 1 Paper('A4'): ID 'iso-a4', 595x842 (8.264X11.694)
- 2 Paper('US Letter'): ID 'na-letter', 612x792 (8.5X11)
- 3 Paper('US Legal'): ID 'na-legal', 612x1008 (8.5X14)
- 4 Paper('Executive'): ID 'executive', 522x756 (7.25X10.5)
- 5 Paper('A5'): ID 'iso-a5', 420x595 (5.833X8.264)
- 6 Paper('A5 Long Edge'): ID 'A5 Long Edge', 595x420 (8.264X5.833)
- 7 Paper('A6'): ID 'iso-a6', 297x420 (4.125X5.833)
- 8 Paper('B5'): ID 'iso-b5', 499x709 (6.931X9.847)
- 9 Paper('JIS B5'): ID 'jis-b5', 516x729 (7.167X10.125)
-10 Paper('Envelope DL'): ID 'iso-designated', 312x624 (4.333X8.667)
-11 Paper('Envelope C5'): ID 'iso-c5', 459x649 (6.375X9.014)
-12 Paper('Envelope #10'): ID 'na-number-10-envelope', 297x684 (4.125X9.5)
-13 Paper('Envelope Monarch'): ID 'monarch-envelope', 279x540 (3.875X7.5)
-14 Paper('3 x 5'): ID '3 x 5', 216x360 (3X5)
-15 Paper('8.5 x 13'): ID 'Folio', 612x936 (8.5X13)
-16 Paper('Envelope PRC5 Long Edge'): ID 'DL Long Edge', 624x312 (8.667X4.333)
-
-paper: Paper('A4')...
- Paper('A4').name: 'A4'
- Paper('A4').ID: 'iso-a4'
- Paper('A4').height: 842.0
- Paper('A4').width: 595.0
- Paper('A4').size2inch: (8.26388888888889, 11.694444444444445)
- Paper('A4').size2mm: (209.90277777777774, 297.03888888888883)
- Paper('A4').PPD: 'A4'
- Paper('A4').printer: Printer('Color WiFi') at 0x107508ad0
- Paper('A4').localname: 'A4'
-'''
-    del _
+# % python3 -m pycocoa.printers
+#  1 Printer('Color'): ID 'Brother_MFC_9340CDW_2', makemodel 'Brother MFC-9340CDW CUPS', URI 'usb://...'
+#
+# default (True) printer: Printer('Color')...
+#  Printer('Color').name: 'Color'
+#  Printer('Color').ID: 'Brother_MFC_9340CDW_2'
+#  Printer('Color').makemodel: 'Brother MFC-9340CDW CUPS'
+#  Printer('Color').isColor: True
+#  Printer('Color').location: '...'
+#  Printer('Color').psCapable: True
+#  Printer('Color').psLevel: 3
+#  Printer('Color').isRemote: False
+#  Printer('Color').deviceURI: 'usb://...'
+#  Printer('Color').deviceDescription: {'NSDeviceIsPrinter': 'YES'}
+#  Printer('Color').description: '{\n    "Device Description" =     {\n        NSDeviceIsPrinter = YES;\n    };\n    "Language Level" = 3;\n    Name = Color;\n    Type = "Brother MFC-9340CDW CUPS";\n}'
+#  Printer('Color').PPD: 'file:///...'
+#  Printer('Color').resolution: (300.0, 300.0)
+#
+#  1 Paper('A4'): ID 'iso-a4', 595x842 (8.264X11.694)
+#  2 Paper('US Letter'): ID 'na-letter', 612x792 (8.5X11)
+#  3 Paper('US Legal'): ID 'na-legal', 612x1008 (8.5X14)
+#  4 Paper('Executive'): ID 'executive', 522x756 (7.25X10.5)
+#  5 Paper('A5'): ID 'iso-a5', 420x595 (5.833X8.264)
+#  6 Paper('A5 Long Edge'): ID 'A5 Long Edge', 595x420 (8.264X5.833)
+#  7 Paper('A6'): ID 'iso-a6', 297x420 (4.125X5.833)
+#  8 Paper('B5'): ID 'iso-b5', 499x709 (6.931X9.847)
+#  9 Paper('JIS B5'): ID 'jis-b5', 516x729 (7.167X10.125)
+# 10 Paper('Envelope DL'): ID 'iso-designated', 312x624 (4.333X8.667)
+# 11 Paper('Envelope C5'): ID 'iso-c5', 459x649 (6.375X9.014)
+# 12 Paper('Envelope #10'): ID 'na-number-10-envelope', 297x684 (4.125X9.5)
+# 13 Paper('Envelope Monarch'): ID 'monarch-envelope', 279x540 (3.875X7.5)
+# 14 Paper('3 x 5'): ID '3 x 5', 216x360 (3X5)
+# 15 Paper('8.5 x 13'): ID 'Folio', 612x936 (8.5X13)
+# 16 Paper('Envelope PRC5 Long Edge'): ID 'DL Long Edge', 624x312 (8.667X4.333)
+#
+# paper: Paper('A4')...
+#  Paper('A4').name: 'A4'
+#  Paper('A4').ID: 'iso-a4'
+#  Paper('A4').height: 842.0
+#  Paper('A4').width: 595.0
+#  Paper('A4').size2inch: (8.26388888888889, 11.694444444444445)
+#  Paper('A4').size2mm: (209.90277777777774, 297.03888888888883)
+#  Paper('A4').PPD: 'A4'
+#  Paper('A4').printer: Printer('Color') at 0x7fe3a86bbe20
+#  Paper('A4').localname: 'A4'
+#
+# pycocoa.printers.__all__ = tuple(
+#  pycocoa.printers.get_libPC is <function .get_libPC at 0x7fe3a8270940>,
+#  pycocoa.printers.get_papers is <function .get_papers at 0x7fe3a86a84c0>,
+#  pycocoa.printers.get_printer is <function .get_printer at 0x7fe3a86a8550>,
+#  pycocoa.printers.get_printer_browser is <function .get_printer_browser at 0x7fe3a86a85e0>,
+#  pycocoa.printers.get_printers is <function .get_printers at 0x7fe3a86a8670>,
+#  pycocoa.printers.get_resolutions is <function .get_resolutions at 0x7fe3a86a8700>,
+#  pycocoa.printers.libPC is <CDLL '/System/Library/.../PrintCore', handle 7fe3a6e4db70 at 0x7fe3a86a0f70>,
+#  pycocoa.printers.Paper is <class .Paper>,
+#  pycocoa.printers.PaperCustom is <class .PaperCustom>,
+#  pycocoa.printers.PaperMargins is <class .PaperMargins>,
+#  pycocoa.printers.Printer is <class .Printer>,
+# )[11]
+# pycocoa.printers.version 20.11.14, .isLazy 1, Python 3.9.0 64bit, macOS 10.15.7
 
 # MIT License <https://OpenSource.org/licenses/MIT>
 #

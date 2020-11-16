@@ -260,6 +260,14 @@ if __name__ == '__main__':
 
     _all_listing(__all__, locals())
 
+# % python3 -m pycocoa.strs
+#
+# pycocoa.strs.__all__ = tuple(
+#  pycocoa.strs.Str is <class .Str>,
+#  pycocoa.strs.StrAttd is <class .StrAttd>,
+# )[2]
+# pycocoa.strs.version 20.01.08, .isLazy 1, Python 3.9.0 64bit, macOS 10.15.7
+
 # MIT License <https://OpenSource.org/licenses/MIT>
 #
 # Copyright (C) 2017-2020 -- mrJean1 at Gmail -- All Rights Reserved.
