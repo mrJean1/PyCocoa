@@ -100,12 +100,14 @@
         href="pycocoa.faults-module.html#SIGs_enabled" 
         class="link">faults.SIGs_enabled</a> are not exported publicly as 
         <code>pycocoa.disable</code>, <code>pycocoa.enable</code>, 
-        <code>pycocoa.exiting</code>, etc., only function <a 
+        <code>pycocoa.exiting</code>, etc., only functions <a 
+        href="pycocoa.faults-module.html#getUncaughtExceptionHandler" 
+        class="link">getUncaughtExceptionHandler</a> and <a 
         href="pycocoa.faults-module.html#setUncaughtExceptionHandler" 
-        class="link">setUncaughtExceptionHandler</a> is.
+        class="link">setUncaughtExceptionHandler</a> are.
       </p>
       <p><strong>Version:</strong>
-        20.11.15
+        20.11.16
       </p>
 </div><!-- ==================== FUNCTIONS ==================== -->
 <a name="section-Functions"></a>
@@ -204,6 +206,24 @@
       Get/set the <code>exit</code> and <code>status</code> to use after 
       <code>fault</code>s or <i>uncaught</i> 
       <code>ObjC/NSException</code>s.</td>
+          <td align="right" valign="top">
+            
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a href="pycocoa.faults-module.html#getUncaughtExceptionHandler" class="summary-sig-name">getUncaughtExceptionHandler</a>()</span><br />
+      Get the currently installed <i>uncaught</i> 
+      <code>ObjC/NSException</code> handler.</td>
           <td align="right" valign="top">
             
             
@@ -366,8 +386,8 @@
   <p>Return the signals currently handled as <code>fault</code>.</p>
   <dl class="fields">
     <dt>Returns:</dt>
-        <dd>A <code>dict</code> with the <code>SIG*</code> name and value of 
-          the currently handled signals, if any.</dd>
+        <dd>An Adict with the <code>SIG*</code> name and value of the 
+          currently handled signals, if any.</dd>
   </dl>
 </td></tr></table>
 </div>
@@ -409,6 +429,29 @@
       </p>
 </div></td></tr></table>
 </div>
+<a name="getUncaughtExceptionHandler"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">getUncaughtExceptionHandler</span>()</span>
+  </h3>
+  </td><td align="right" valign="top"
+    >&nbsp;
+    </td>
+  </tr></table>
+  
+  <p>Get the currently installed <i>uncaught</i> 
+  <code>ObjC/NSException</code> handler.</p>
+  <dl class="fields">
+    <dt>Returns:</dt>
+        <dd>The installed handler (<code>callable</code>) or 
+          <code>None</code> if no handler was installed.</dd>
+  </dl>
+</td></tr></table>
+</div>
 <a name="setUncaughtExceptionHandler"></a>
 <div>
 <table class="details" border="1" cellpadding="3"
@@ -430,20 +473,24 @@
   <p>The <code><b>handler</b>(error)</code> is called with one argument 
   <code>error</code>, an <a 
   href="pycocoa.nstypes.NSExceptionError-class.html" 
-  class="link">NSExceptionError</a> instance.  It should return either 
-  <code>None</code> or that same <code>error</code>.  In the latter case, 
-  that <code>error</code> will subsequently be raised as Python 
-  exception.</p>
+  class="link">NSExceptionError</a> instance.  It should return that same 
+  <code>error</code>, an <a href="pycocoa.faults-module.html#exiting" 
+  class="link">exiting</a> <code>status</code> or <code>None</code>.  In in
+  former case, that <code>error</code> will subsequently be raised as 
+  Python exception.</p>
   <dl class="fields">
     <dt>Parameters:</dt>
     <dd><ul class="nomargin-top">
         <li><strong class="pname"><code>handler</code></strong> - A callable to be invoked with a single argument 
           <code>error</code>, an <a 
           href="pycocoa.nstypes.NSExceptionError-class.html" 
-          class="link">NSExceptionError</a> instance and returning 
-          <code>None</code> or that very <code>error</code>.</li>
-        <li><strong class="pname"><code>log</code></strong> - Print the <code>error</code>, time stamp, ObjC callstack and 
-          Python traceback prior to invoking the 
+          class="link">NSExceptionError</a> instance and to return that 
+          same <code>error</code>, an <a 
+          href="pycocoa.faults-module.html#exiting" 
+          class="link">exiting</a> <code>status</code> or 
+          <code>None</code>.</li>
+        <li><strong class="pname"><code>log</code></strong> - Print the <code>error</code>, an time stamp and -if avilable- the
+          ObjC callstack and Python traceback prior to invoking the 
           <b><code>handler</code></b> (<code>bool</code>).</li>
         <li><strong class="pname"><code>raiser</code></strong> - Raise the <a href="pycocoa.nstypes.NSExceptionError-class.html" 
           class="link">NSExceptionError</a> <b><code>error</code></b>, 
@@ -459,7 +506,9 @@
         <li><code><strong class='fraise'>TypeError</strong></code> - The <b><code>handler</code></b> is not callable.</li>
     </ul></dd>
   </dl>
-<div class="fields">      <p><strong>Note:</strong>
+<div class="fields">      <strong>Notes:</strong>
+      <ul class="nomargin-top">
+        <li>
         Faults like <code>SIGILL</code>, <code>SIGSEGV</code>, etc. do not 
         throw <i>uncaught</i> <code>ObjC/NSException</code>s and will not 
         invoke the given <b><code>handler</code></b>.  However, those and 
@@ -469,7 +518,17 @@
         href="pycocoa.faults-module.html#disable" 
         class="link">faults.disable</a> and other functions module <a 
         href="pycocoa.faults-module.html" class="link">faults</a>.
-      </p>
+        </li>
+        <li>
+        An <i>uncaught</i> <code>ObjC/NSException</code> always results in 
+        (graceful) termination of the process.
+        </li>
+        <li>
+        <i>Uncaught</i> <code>ObjC/NSException</code>s are not <a 
+        href="https://Developer.Apple.com/documentation/appkit/nsapplication/1428396-reportexception"
+        target="_top">reported</a> to an <code>NSLog</code> file (yet).
+        </li>
+      </ul>
       <p><strong>See Also:</strong>
         Dgelessus' <a href="https://gist.GitHub.com/dgelessus" 
         target="_top">pythonista_startup.py</a>, <a 
@@ -512,7 +571,7 @@
 <table border="0" cellpadding="0" cellspacing="0" width="100%%">
   <tr>
     <td align="left" class="footer">
-    Generated by Epydoc 3.0.1 on Sun Nov 15 17:17:35 2020
+    Generated by Epydoc 3.0.1 on Mon Nov 16 20:16:49 2020
     </td>
     <td align="right" class="footer">
       <a target="mainFrame" href="http://epydoc.sourceforge.net"

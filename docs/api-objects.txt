@@ -176,11 +176,12 @@ pycocoa.NSFontSymbolicClass	pycocoa-module.html#NSFontSymbolicClass
 pycocoa.NSFontPanel	pycocoa-module.html#NSFontPanel
 pycocoa.clip	pycocoa-module.html#clip
 pycocoa.NSPointEncoding	pycocoa-module.html#NSPointEncoding
+pycocoa.nsRaise	pycocoa-module.html#nsRaise
 pycocoa.AutoResize	pycocoa-module.html#AutoResize
 pycocoa.NSWindowStyleMaskUtilityWindow	pycocoa-module.html#NSWindowStyleMaskUtilityWindow
 pycocoa.NSCancelCharacter	pycocoa-module.html#NSCancelCharacter
 pycocoa.NSAlternateKeyMask	pycocoa-module.html#NSAlternateKeyMask
-pycocoa.nsLogf	pycocoa-module.html#nsLogf
+pycocoa.get_libs	pycocoa-module.html#get_libs
 pycocoa.NSControlKeyMask	pycocoa-module.html#NSControlKeyMask
 pycocoa.NSHorizontalTabCharacter	pycocoa-module.html#NSHorizontalTabCharacter
 pycocoa.title2action	pycocoa-module.html#title2action
@@ -197,6 +198,7 @@ pycocoa.NSFloatEncoding	pycocoa-module.html#NSFloatEncoding
 pycocoa.get_c_func_t	pycocoa-module.html#get_c_func_t
 pycocoa.NSCancelButton	pycocoa-module.html#NSCancelButton
 pycocoa._pycocoa	pycocoa-module.html#_pycocoa
+pycocoa.nsLogf	pycocoa-module.html#nsLogf
 pycocoa.NSWindow	pycocoa-module.html#NSWindow
 pycocoa.fontTraits	pycocoa-module.html#fontTraits
 pycocoa.NSBoolean	pycocoa-module.html#NSBoolean
@@ -235,7 +237,7 @@ pycocoa.YES	pycocoa-module.html#YES
 pycocoa.NSVariableStatusItemLength	pycocoa-module.html#NSVariableStatusItemLength
 pycocoa.NSEndOfTextCharacter	pycocoa-module.html#NSEndOfTextCharacter
 pycocoa.NSBundle	pycocoa-module.html#NSBundle
-pycocoa.get_libs	pycocoa-module.html#get_libs
+pycocoa.getUncaughtExceptionHandler	pycocoa-module.html#getUncaughtExceptionHandler
 pycocoa.bytes2str	pycocoa-module.html#bytes2str
 pycocoa._isfrozen	pycocoa-module.html#_isfrozen
 pycocoa.NSRectEncoding	pycocoa-module.html#NSRectEncoding
@@ -303,6 +305,7 @@ pycocoa.NSDeviceControl2Character	pycocoa-module.html#NSDeviceControl2Character
 pycocoa.NSFontUnitalicMask	pycocoa-module.html#NSFontUnitalicMask
 pycocoa.FontTrait	pycocoa-module.html#FontTrait
 pycocoa.isImmutable	pycocoa-module.html#isImmutable
+pycocoa._PY_FH	pycocoa-module.html#_PY_FH
 pycocoa.name2py	pycocoa-module.html#name2py
 pycocoa.NSApplicationPresentationHideDock	pycocoa-module.html#NSApplicationPresentationHideDock
 pycocoa.bytes2repr	pycocoa-module.html#bytes2repr
@@ -371,6 +374,7 @@ pycocoa.NSLeftTextAlignment	pycocoa-module.html#NSLeftTextAlignment
 pycocoa.NO	pycocoa-module.html#NO
 pycocoa.Keys	pycocoa-module.html#Keys
 pycocoa.NSWindowMiniaturizeButton	pycocoa-module.html#NSWindowMiniaturizeButton
+pycocoa.nsException	pycocoa-module.html#nsException
 pycocoa.NSPageUpFunctionKey	pycocoa-module.html#NSPageUpFunctionKey
 pycocoa.libobjc	pycocoa-module.html#libobjc
 pycocoa.DEFAULT_UNICODE	pycocoa-module.html#DEFAULT_UNICODE
@@ -468,6 +472,7 @@ pycocoa.faults._unCatcher	pycocoa.faults-module.html#_unCatcher
 pycocoa.faults._ALL_DOCS	pycocoa.lazily-module.html#_ALL_DOCS
 pycocoa.faults._SIGdict	pycocoa.faults-module.html#_SIGdict
 pycocoa.faults.__all__	pycocoa.faults-module.html#__all__
+pycocoa.faults.getUncaughtExceptionHandler	pycocoa.faults-module.html#getUncaughtExceptionHandler
 pycocoa.faults.__package__	pycocoa.faults-module.html#__package__
 pycocoa.faults._SIGname	pycocoa.faults-module.html#_SIGname
 pycocoa.faults.is_enabled	pycocoa.faults-module.html#is_enabled
@@ -479,7 +484,6 @@ pycocoa.faults._exiting	pycocoa.faults-module.html#_exiting
 pycocoa.faults._SIGnals	pycocoa.faults-module.html#_SIGnals
 pycocoa.faults.logf	pycocoa.utils-module.html#logf
 pycocoa.faults.exiting	pycocoa.faults-module.html#exiting
-pycocoa.faults._PY_FH	pycocoa.faults-module.html#_PY_FH
 pycocoa.faults._bye	pycocoa.faults-module.html#_bye
 pycocoa.fonts	pycocoa.fonts-module.html
 pycocoa.fonts._familyTraits	pycocoa.fonts-module.html#_familyTraits
@@ -566,6 +570,7 @@ pycocoa.lazily._lazy_import	pycocoa.lazily-module.html#_lazy_import
 pycocoa.lazily._all_imports	pycocoa.lazily-module.html#_all_imports
 pycocoa.lazily._ALL_OVERRIDING	pycocoa.lazily-module.html#_ALL_OVERRIDING
 pycocoa.lazily._2kwds	pycocoa.lazily-module.html#_2kwds
+pycocoa.lazily._PY_FH	pycocoa.lazily-module.html#_PY_FH
 pycocoa.lazily.isLazy	pycocoa.lazily-module.html#isLazy
 pycocoa.lazily._FOR_DOCS	pycocoa.lazily-module.html#_FOR_DOCS
 pycocoa.lists	pycocoa.lists-module.html
@@ -677,6 +682,8 @@ pycocoa.nstypes._CFTypeID2py	pycocoa.nstypes-module.html#_CFTypeID2py
 pycocoa.nstypes.NSTableColumn	pycocoa.nstypes-module.html#NSTableColumn
 pycocoa.nstypes.NSDecimalNumber	pycocoa.nstypes-module.html#NSDecimalNumber
 pycocoa.nstypes.cfNumber2bool	pycocoa.oslibs-module.html#cfNumber2bool
+pycocoa.nstypes.nsException	pycocoa.nstypes-module.html#nsException
+pycocoa.nstypes.nsRaise	pycocoa.nstypes-module.html#nsRaise
 pycocoa.nstypes.NSNotification	pycocoa.nstypes-module.html#NSNotification
 pycocoa.nstypes.property_RO	pycocoa.utils-module.html#property_RO
 pycocoa.nstypes.NSPrinter	pycocoa.nstypes-module.html#NSPrinter
@@ -1222,7 +1229,7 @@ pycocoa.utils.sortuples	pycocoa.utils-module.html#sortuples
 pycocoa.utils.iterbytes	pycocoa.utils-module.html#iterbytes
 pycocoa.utils.clip	pycocoa.utils-module.html#clip
 pycocoa.utils.printf	pycocoa.utils-module.html#printf
-pycocoa.utils.DEFAULT_UNICODE	pycocoa.utils-module.html#DEFAULT_UNICODE
+pycocoa.utils._ByteStrs	pycocoa.utils-module.html#_ByteStrs
 pycocoa.utils.str2bytes	pycocoa.utils-module.html#str2bytes
 pycocoa.utils.lambda1	pycocoa.utils-module.html#lambda1
 pycocoa.utils.bytes2str	pycocoa.utils-module.html#bytes2str
@@ -1238,7 +1245,7 @@ pycocoa.utils._writestr	pycocoa.utils-module.html#_writestr
 pycocoa.utils._all_versions	pycocoa.utils-module.html#_all_versions
 pycocoa.utils._Types	pycocoa.utils-module.html#_Types
 pycocoa.utils._TypeError	pycocoa.utils-module.html#_TypeError
-pycocoa.utils._ByteStrs	pycocoa.utils-module.html#_ByteStrs
+pycocoa.utils.DEFAULT_UNICODE	pycocoa.utils-module.html#DEFAULT_UNICODE
 pycocoa.utils.missing	pycocoa.utils-module.html#missing
 pycocoa.utils._Python_	pycocoa.utils-module.html#_Python_
 pycocoa.utils.z1000str	pycocoa.utils-module.html#z1000str

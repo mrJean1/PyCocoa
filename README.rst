@@ -55,7 +55,7 @@ to Objective-C bridge (and included in `macOS' Python`_), (b) `Rubicon-ObjC`_
 for Python 3.5+, taking advantage of Python's new typing_ annotations, (c)
 PyGUI_ for macOS_ and (d) wxPython_.
 
-*Last updated: Nov 15, 2020.*
+*Last updated: Nov 16, 2020.*
 
 .. image:: https://Img.Shields.io/pypi/pyversions/PyCocoa.svg?label=Python
   :target: https://PyPI.org/project/PyCocoa

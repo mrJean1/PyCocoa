@@ -149,6 +149,21 @@ class _Constants(_MutableConstants):
         return ' '.join(n for n, m in self.items() if mask & m)
 
 
+class Adict(dict):
+    '''A C{dict} with key I{and} attribute access to the items.
+    '''
+    def __getattr__(self, name):
+        '''Get the value of an attribute or item by B{C{name}}.
+        '''
+        try:
+            return self[name]
+        except KeyError:
+            return dict.__getattr__(self, name)
+
+    def __str__(self):
+        return '{%s}' % ', '.join('%s=%r' % t for t in sorted(self.items()))
+
+
 class _Globals(object):
     '''(INTERNAL) Some PyCocoa globals
     '''
@@ -240,64 +255,6 @@ def _TypeError(name, inst, func, classes=()):
     else:
         t = 'invalid %s(%r, %s)' % (func.__name__, inst, c)
     return TypeError(t)
-
-
-# class Adict(dict):
-#     '''A C{dict} with key I{and} attribute access to the items.
-#     '''
-#     _name = ''
-#
-#     def __init__(self, *args, **kwds):
-#         if args:  # args override kwds
-#             kwds = kwds.copy()
-#             kwds.update(dict(args))
-#         if 'name' in kwds:
-#             self._name = kwds.pop('name'))  # see _Named.name
-#         dict.__init__(self, kwds)
-#
-#     def __delattr__(self, name):
-#         '''Delete an attribute or item by B{C{name}}.
-#         '''
-#         if name in ('name', '_name')):
-#             dict.__setattr__(self, '_name', '')
-#         elif dict.__contains__(self, name):
-#             dict.pop(name)
-#         else:
-#             dict.__delattr__(self, name)
-#
-#     def __getattr__(self, name):
-#         '''Get the value of an attribute or item by B{C{name}}.
-#         '''
-#         try:
-#             return self[name]
-#         except KeyError:
-#             if name in ('name', '_name')
-#                 return dict.__getattr__(self, '_name')
-#             else:
-#                 return dict.__getattr__(self, name)
-#
-#     def __getitem__(self, key):
-#         '''Get the value of an item by B{C{key}}.
-#         '''
-#         return dict.__getitem__(self, key)
-#
-#     def __setattr__(self, name, value):
-#         '''Set attribute or item B{C{name}} to B{C{value}}.
-#         '''
-#         if name in ('name', '_name'):
-#             dict.__setattr__(self, '_name', value)
-#         elif dict.__contains__(self, name):
-#             dict.__setitem__(self, name, value)  # self[name] = value
-#         else:
-#             dict.__setattr__(self, name, value)
-#
-#     def __setitem__(self, key, value):
-#         '''Set item B{C{key}} to B{C{value}}.
-#         '''
-#         if key in ('name', '_name'):
-#             dict.__setattr__(self, '_name', value)
-#         else:
-#             dict.__setitem__(self, key, value)
 
 
 class Cache2(dict):

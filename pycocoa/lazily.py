@@ -32,6 +32,7 @@ import sys as _sys
 
 _FOR_DOCS = _environ.get('PYCOCOA_FOR_DOCS', None)
 _N_A      =  object()
+_PY_FH    = _environ.get('PYTHONFAULTHANDLER', None)  # PYCHOK .faults, .__init__
 
 # @module_property[_RO?] <https://GitHub.com/jtushman/proxy_tools/>
 isLazy = None  # see @var isLazy above
@@ -103,7 +104,7 @@ _ALL_LAZY = _NamedEnum_RO(_name='_ALL_LAZY',
                          colors=('CMYColor', 'CMYColors', 'Color', 'ColorError', 'Colors', 'GrayScaleColor', 'GrayScaleColors',
                                  'HSBColor', 'HSBColors', 'RGBColor', 'RGBColors', 'TintColor', 'TintColors', 'UIColor', 'UIColors'),
                           dicts=('Dict', 'FrozenDict'),
-                         faults=('setUncaughtExceptionHandler',),  # faults.disable, .enable, .exiting, .is_enabled, .SIGs_enabled
+                         faults=('getUncaughtExceptionHandler', 'setUncaughtExceptionHandler',),  # disable, enable, exiting, is_enabled, SIGs_enabled
                           fonts=('Font', 'FontError', 'fontfamilies', 'fontnamesof', 'Fonts',
                                  'fontsof', 'fontsof4', 'FontTrait', 'FontTraitError', 'fontTraits', 'fontTraitstrs'),
                        geometry=('Point', 'Point2', 'Rect', 'Rect4', 'Size', 'Size2'),
@@ -121,7 +122,7 @@ _ALL_LAZY = _NamedEnum_RO(_name='_ALL_LAZY',
                                  'NSColor', 'NSConcreteNotification', 'NSConstantString',
                                  'NSData', 'nsData2bytes', 'NSDecimal', 'nsDecimal2decimal', 'NSDecimalNumber',
                                  'NSDictionary', 'nsDictionary2dict', 'NSDockTile', 'NSDouble',
-                                 'NSEnumerator', 'NSError', 'NSException', 'NSExceptionError',
+                                 'NSEnumerator', 'NSError', 'NSException', 'nsException', 'NSExceptionError',
                                  'NSFloat', 'NSFont', 'NSFontDescriptor', 'NSFontManager', 'NSFontPanel',
                                  'NSImage', 'NSImageView', 'NSInt', 'nsIter', 'nsIter2',
                                  'NSLayoutManager', 'nsLog', 'nsLogf', 'NSLong', 'NSLongLong',
@@ -129,7 +130,7 @@ _ALL_LAZY = _NamedEnum_RO(_name='_ALL_LAZY',
                                  'NSMutableDictionary', 'NSMutableSet', 'NSMutableString',
                                  'NSNotification', 'NSNotificationCenter', 'NSNull', 'nsNull2none', 'NSNumber', 'nsNumber2num',
                                  'NSObject', 'nsOf', 'NSOpenPanel', 'NSPageLayout',
-                                 'NSPrinter', 'NSPrintInfo', 'NSPrintOperation', 'NSPrintPanel',
+                                 'NSPrinter', 'NSPrintInfo', 'NSPrintOperation', 'NSPrintPanel', 'nsRaise',
                                  'NSSavePanel', 'NSScreen', 'NSScrollView', 'NSSet', 'nsSet2set',
                                  'NSStatusBar', 'NSStr', 'NSString', 'nsString2str',
                                  'NSTableColumn', 'NSTableView',
@@ -222,7 +223,7 @@ _ALL_LAZY = _NamedEnum_RO(_name='_ALL_LAZY',
 _ALL_OVERRIDING = _NamedEnum_RO(_name='_ALL_OVERRIDING')  # all DEPRECATED
 
 __all__ = _ALL_LAZY.lazily
-__version__ = '20.11.15'
+__version__ = '20.11.16'
 
 
 def _all_imports(**more):

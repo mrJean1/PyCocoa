@@ -29,24 +29,24 @@ the Python C{faulthandler} will be overridden by this module L{pycocoa.faults}.
 @note: Functions L{faults.disable}, L{faults.enable}, L{faults.exiting},
 L{faults.is_enabled} and L{faults.SIGs_enabled} are not exported publicly
 as C{pycocoa.disable}, C{pycocoa.enable}, C{pycocoa.exiting}, etc., only
-function L{setUncaughtExceptionHandler} is.
+functions L{getUncaughtExceptionHandler} and L{setUncaughtExceptionHandler}
+are.
 '''
 # all imports listed explicitly to help PyChecker
-from pycocoa.lazily  import _ALL_DOCS, _ALL_LAZY
+from pycocoa.lazily  import _ALL_DOCS, _ALL_LAZY, _PY_FH
 from pycocoa.nstypes import  NSExceptionError, NSMain
 from pycocoa.oslibs  import _setUncaughtExceptionHandler, _UncaughtExceptionHandler_t
 from pycocoa.runtime import  ObjCInstance  # release
-from pycocoa.utils   import _Globals, logf
+from pycocoa.utils   import  Adict, _Globals, logf
 
 import os
 import signal as _signal
 import sys
 
 __all__ = _ALL_LAZY.faults
-__version__ = '20.11.15'
+__version__ = '20.11.16'
 
 _exiting = -9  # default _exit and status
-_PY_FH   =  os.environ.get('PYTHONFAULTHANDLER', None)
 # SIGnals handled by Python 3 C{faulthandler}
 _SIGnals = (_signal.SIGABRT,  # critical
             _signal.SIGBUS, _signal.SIGFPE,
@@ -56,7 +56,9 @@ _SIGnals = (_signal.SIGABRT,  # critical
 def _bye(name):
     '''(INTERNAL) Time to go ...
     '''
-    logf('%s(%s) from %s', exiting.__name__, _exiting, name, nl=1, nt=1)
+    logf('%s(%s) from %s %s', exiting.__name__,
+                             _exiting, name, 'handler',
+                              nl=1, nt=1)
     if _exiting < 0:
         os._exit(-_exiting)  # force exit
     else:
@@ -68,7 +70,7 @@ def _SIGdict(sigs, enabled):
     '''
     if not sigs:
         sigs = _SIGnals
-    return dict((_SIGname(sig), sig) for sig in enabled if sig in sigs)
+    return Adict((_SIGname(sig), sig) for sig in enabled if sig in sigs)
 
 
 def _SIGname(sig):
@@ -113,7 +115,7 @@ try:  # MCCABE 27
     def SIGs_enabled(*sigs):
         '''Return the signals handled by the C{faulthandler}.
 
-           @return: A C{dict} with the C{SIG*} name and value
+           @return: An L{Adict} with the C{SIG*} name and value
                     the currently handled signals, if any.
         '''
         return _SIGdict(sigs, _SIGnals if _fh.is_enabled() else ())
@@ -140,7 +142,7 @@ except ImportError:
         for t in '\n'.join(traceback.format_stack(frame)).split('\n'):
             if t:
                 logf(t)
-        _bye(_SIGname(sig) + 'handler')
+        _bye(_SIGname(sig))
 
     def _unCatcher(error):
         '''(INTERNAL) Default handler for I{uncaught} C{ObjC/NSExceptions}
@@ -206,7 +208,7 @@ except ImportError:
     def SIGs_enabled(*sigs):  # PYCHOK expected
         '''Return the signals currently handled as C{fault}.
 
-           @return: A C{dict} with the C{SIG*} name and value of
+           @return: An L{Adict} with the C{SIG*} name and value of
                     the currently handled signals, if any.
         '''
         return _SIGdict(sigs, _SIGenabled.keys())
@@ -236,20 +238,33 @@ def exiting(status=None):
     return s
 
 
+def getUncaughtExceptionHandler():
+    '''Get the currently installed I{uncaught} C{ObjC/NSException}
+       handler.
+
+       @return: The installed handler (C{callable}) or C{None}
+                if no handler was installed.
+    '''
+    h, _ = _Globals.Xhandler2
+    return h
+
+
 def setUncaughtExceptionHandler(handler, log=True, raiser=False):
     '''Install a callback to handle I{uncaught} C{ObjC/NSException}s.
 
        The C{B{handler}(error)} is called with one argument C{error},
-       an L{NSExceptionError} instance.  It should return either C{None}
-       or that same C{error}.  In the latter case, that C{error} will
-       subsequently be raised as Python exception.
+       an L{NSExceptionError} instance.  It should return that same
+       C{error}, an L{exiting} C{status} or C{None}.  In in former
+       case, that C{error} will subsequently be raised as Python
+       exception.
 
        @param handler: A callable to be invoked with a single argument
-                       C{error}, an L{NSExceptionError} instance and
-                       returning C{None} or that very C{error}.
-       @keyword log: Print the C{error}, time stamp, ObjC callstack
-                     and Python traceback prior to invoking the
-                     B{C{handler}} (C{bool}).
+                       C{error}, an L{NSExceptionError} instance and to
+                       return that same C{error}, an L{exiting} C{status}
+                       or C{None}.
+       @keyword log: Print the C{error}, an time stamp and -if avilable-
+                     the ObjC callstack and Python traceback prior to
+                     invoking the B{C{handler}} (C{bool}).
        @keyword raiser: Raise the L{NSExceptionError} B{C{error}},
                         regardless of the return value from the
                         B{C{handler}}.
@@ -264,6 +279,13 @@ def setUncaughtExceptionHandler(handler, log=True, raiser=False):
               given B{C{handler}}.  However, those and several other
               signals can be handled as C{fault}s, see L{faults.enable},
               L{faults.disable} and other functions module L{faults}.
+
+       @note: An I{uncaught} C{ObjC/NSException} always results in
+              (graceful) termination of the process.
+
+       @note: I{Uncaught} C{ObjC/NSException}s are not U{reported
+              <https://Developer.Apple.com/documentation/appkit/nsapplication/
+              1428396-reportexception>} to an C{NSLog} file (yet).
 
        @see: Dgelessus' U{pythonista_startup.py<https://gist.GitHub.com/dgelessus>},
              U{Handling Exceptions<https://Developer.Apple.com/library/archive/
@@ -280,7 +302,7 @@ def setUncaughtExceptionHandler(handler, log=True, raiser=False):
     def _handler(nsException):
         e = NSExceptionError(ObjCInstance(nsException))
         if log:
-            s = e.reason or '*** n/a'
+            s = e.reason or 'not given'
             logf('uncaught ObjC/%s: %s', e.name, s, nl=1)
             logf('datetime %s (%s)', e.datetime, e.versionstr)
             if e.info:
@@ -289,12 +311,14 @@ def setUncaughtExceptionHandler(handler, log=True, raiser=False):
             for s in e.callstack:
                 logf('  %s', s)  # argv0='', nt=1
 
-        if handler(e) is e or raiser:
+        r = handler(e)
+        if r is e or raiser:
             raise e
-
+        elif isinstance(r, int):
+            exiting(r)
         _bye(handler.__name__)
 
-    _ = _setUncaughtExceptionHandler(_handler)
+    _ =_setUncaughtExceptionHandler(_handler)
     h = None  # previous
     if _Globals.Xhandler2:
         h, _h = _Globals.Xhandler2
@@ -311,7 +335,7 @@ __all__ += _ALL_DOCS(disable, enable, exiting, is_enabled, SIGs_enabled)
 
 if __name__ == '__main__':
 
-    if is_enabled() or '-X' in sys.argv[1:]:
+    if is_enabled() and '-X' in sys.argv[1:]:
         # test fault handling
         enable(sys.stdout)
         logf('%s: %s', SIGs_enabled.__name__, SIGs_enabled())
@@ -319,6 +343,29 @@ if __name__ == '__main__':
         from pycocoa.nstypes import NSColor
         r = NSColor.redColor()
         c = r.cyanComponent()  # bye ...
+
+    elif _PY_FH and '-raise' in sys.argv[1:]:
+        # throw an ObjC/NSException and catch it
+        from pycocoa.nstypes import nsRaise
+        logf('%s ...', nsRaise.__name__)
+
+        nsRaise(reason='test', _PY_FH=_PY_FH)
+
+    elif _PY_FH and '-try' in sys.argv[1:]:
+        # throw an ObjC/NSException and try
+        # to catch it as Python exception
+        from pycocoa.nstypes import nsRaise  # PYCHOK twice
+        logf('%s ...', 'try:')
+
+        def _h(x):
+            # raise ValueError
+            return 8
+
+        setUncaughtExceptionHandler(_h, raiser=True)
+        try:
+            nsRaise(reason='test', _PY_FH=_PY_FH)
+        except NSExceptionError as x:
+            logf('except: %s', x)
 
     from pycocoa.utils import _all_listing
 

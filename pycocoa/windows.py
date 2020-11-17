@@ -36,7 +36,7 @@ from pycocoa.utils    import aspect_ratio, bytes2str, _Constants, _Globals, \
 # from enum   import Enum
 
 __all__ = _ALL_LAZY.windows
-__version__ = '20.11.14'
+__version__ = '20.11.16'
 
 _Cascade = NSPoint_t(25, 25)  # PYCHOK false
 
@@ -407,7 +407,7 @@ class Window(_Type2):
             _nset(ns, NO, NO, GrayScaleColors.Clear)
         elif p and not transparent:  # undo
             _nset(self.NS, *self._untrans)
-            self._untrans4 = None
+            self._untrans = None
 
     @property
     def transparentTitlebar(self):

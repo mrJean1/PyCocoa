@@ -5,7 +5,6 @@
 
 '''ObjC classes C{NS...} and conversions from C{NS...} ObjC to Python instances.
 
-@var NSMain: Global C{NS...} singletons (C{const} or C{property}).
 @var NSMain.Application: Get the C{NSApplication.sharedApplication}.
 @var NSMain.BooleanNO: Get C{NSBoolean(NO)}.
 @var NSMain.BooleanYES: Get C{NSBoolean(YES)}.
@@ -40,9 +39,9 @@ from pycocoa.oslibs  import cfNumber2bool, cfNumber2num, cfString, cfString2str,
                             NO, YES
 from pycocoa.runtime import isObjCInstanceOf, ObjCClass, ObjCInstance, release, \
                             retain, send_message, _Xargs
-from pycocoa.utils   import _all_versionstr, bytes2str, _ByteStrs, clip, _Globals, \
-                            isinstanceOf, iterbytes, lambda1, missing, property_RO, \
-                            _Singletons, _Types
+from pycocoa.utils   import Adict, _all_versionstr, bytes2str, _ByteStrs, clip, \
+                           _Globals, isinstanceOf, iterbytes, lambda1, missing, \
+                           _Singletons, _Types, property_RO
 
 from ctypes import ArgumentError, byref, cast, c_byte, CFUNCTYPE, c_void_p
 from datetime import datetime as _datetime
@@ -51,7 +50,7 @@ from os import linesep, path as os_path
 from time import time as _timestamp
 
 __all__ = _ALL_LAZY.nstypes
-__version__ = '20.11.15'
+__version__ = '20.11.16'
 
 # some commonly used Foundation and Cocoa classes, described here
 # <https://OMZ-Software.com/pythonista/docs/ios/objc_util.html>
@@ -197,21 +196,25 @@ class NSDecimal(ObjCInstance):
 
 
 class NSExceptionError(RuntimeError):
-    '''Python Error wrapping an C{ObjC/NSexception}.
+    '''Python Error wrapping an C{ObjC/NSException}.
 
-       Used for I{uncaught} C{ObjC/NSexception}, see
+       Used to wrap I{uncaught} C{ObjC/NSException}s, see
        L{setUncaughtExceptionHandler}.
     '''
     _dt_fmt     = '%04d-%02d-%02d %02d:%02d:%06.3f'
     NS          = None
     _timestamp  = None
 
-    def __init__(self, nsExc=None):
-        if nsExc:
+    def __init__(self, nsExc):
+        '''New L{NSExceptionError} wrapper.
+
+           @param nsExc: The C{ObjC/NSException} instance to wrap.
+        '''
+        if isObjCInstanceOf(nsExc, NSException, name='nsExc'):
             self.NS = nsExc
         self._timestamp = _timestamp()
         n = self.name or NSExceptionError.__name__
-        r = self.reason or 'unknown'
+        r = self.reason or 'not given'
         RuntimeError.__init__(self, 'ObjC/%s: %s' % (n, r))
 
     @property_RO
@@ -224,18 +227,21 @@ class NSExceptionError(RuntimeError):
     @property_RO
     def name(self):
         '''Get the name of the exception (C{str}).
+
+           @see: U{NSExceptionName<https://Developer.Apple.com/
+                 documentation/foundation/nsexceptionname>}.
         '''
         return self.NS.name if self.NS else ''
 
     @property_RO
     def info(self):
-        '''Get additional info about the exception (C{str}) or C{None}.
+        '''Get additional info about the exception (L{Adict}) or C{None}.
         '''
         return ns2py(self.NS.userInfo(), dflt=None) if self.NS else None
 
     @property_RO
     def reason(self):
-        '''Get the reason the exception (C{str}) or C{None}.
+        '''Get the reason for the exception (C{str}) or C{None}.
         '''
         return ns2py(self.NS.reason(), dflt=None) if self.NS else None
 
@@ -699,15 +705,39 @@ def nsDictionary2dict(ns, ctype_keys=c_void_p, ctype_vals=c_void_p):  # XXX an N
        @keyword ctype_keys: The dictionary keys type (C{ctypes}).
        @keyword ctype_vals: The dictionary values type (C{ctypes}).
 
-       @return: The dict (C{dict}).
+       @return: The dict (L{Adict}).
     '''
     # <https://Developer.Apple.com/documentation/corefoundation/cfdictionary-rum>
     n = libCF.CFDictionaryGetCount(ns)
     keys = (ctype_keys * n)()
     vals = (ctype_vals * n)()
     libCF.CFDictionaryGetKeysAndValues(ns, byref(keys), byref(vals))
-    return dict((_ns2ctype2py(keys[i], ctype_keys),
-                 _ns2ctype2py(vals[i], ctype_vals)) for i in range(n))
+    return Adict((_ns2ctype2py(keys[i], ctype_keys),
+                  _ns2ctype2py(vals[i], ctype_vals)) for i in range(n))
+
+
+def nsException(name=None, reason='not given', **info):
+    '''Create an C{ObjC/NSException} instance.
+
+       @keyword name: Ignored (U{NSExceptionName<https://Developer.Apple.com/
+                      documentation/foundation/nsexceptionname>}).
+       @keyword reason: The reason for the exception (C{str}).
+       @keyword info: Other, caller-defined information (C{all keywords}).
+
+       @see: L{nsRaise}, L{nsThrow} and L{NSExceptionError}.
+
+       @note: Use L{NSExceptionError}C{(nsExc)} to wrap a Python
+              exception around an C{ObjC/NSException} instance and
+              get access to the attributes of the latter.
+    '''
+    from pycocoa.pytypes import dict2NS
+    # <https://Developer.Apple.com/library/archive/documentation/
+    #        Cocoa/Conceptual/Exceptions/Tasks/RaisingExceptions.html>
+    # XXX use NSExceptionName inlieu of NSStr(name) since the latter
+    # seems to always  become 'NSException' instead of the 'name'
+    return NSException.alloc().initWithName_reason_userInfo_(
+                                   NSStr(name or nsException.__name__),
+                                   NSStr(str(reason)), dict2NS(info))
 
 
 def nsIter(ns, reverse=False):
@@ -835,6 +865,20 @@ def nsOf(inst):
     raise TypeError('%s without .NS: %r' % ('inst', inst))
 
 
+def nsRaise(name=None, reason='not given', **info):
+    '''Create an C{NSException} and mimick C{@throw NSException}.
+
+       @keyword name: Ignored (U{NSExceptionName<https://Developer.Apple.com/
+                      documentation/foundation/nsexceptionname>}).
+       @keyword reason: The reason for the exception (C{str}).
+       @keyword info: Other, caller-defined information (C{all keywords}).
+
+       @see: L{NSException} and L{nsThrow}.
+    '''
+    # XXX use NSExceptionName, see nsException above
+    nsThrow(nsException(name=name, reason=reason, **info))
+
+
 def nsSet2set(ns, ctype=Set_t):  # XXX NS*Set method?
     '''Create a Python C{set} or C{frozenset} from an C{NS[Mutable]Set}.
 
@@ -928,18 +972,20 @@ def nsTextView(text, ns_font):
     return ns
 
 
-def nsThrow(ns_exception):
+def nsThrow(nsExc):
     '''Mimick ObjC's C{@throw NSException} to raise an exception.
 
-       @param ns_exception: The exception to raise (C{NSException}).
-    '''
-    # <https://Developer.Apple.com/library/archive/documentation/
-    #        Cocoa/Conceptual/Exceptions/Tasks/RaisingExceptions.html>
+       @param nsExc: The exception to raise (C{NSException}).
 
+       @see: L{NSException} and L{nsRaise}.
+
+       @raise TypeError: Invalid B{C{nsExc}}.
+    '''
     # can't use ns_exception.raise() since 'raise' is reserved
     # in Python; see also .runtime.ObjCInstance.__getattr__
     # substituting method name 'throw' for 'raise'.
-    send_message(ns_exception, 'raise')
+    if isObjCInstanceOf(nsExc, NSException, name='nsExc'):
+        send_message(nsExc, 'raise')
 
 
 def nsURL2str(ns):
@@ -1081,9 +1127,10 @@ if __name__ == '__main__':
     from pycocoa.utils import _all_listing
 
     for n, _ in NSMain.items():
-        d = getattr(_NSMain, n).__doc__ or ''
-        d = d.split('\n')[0].strip()
-        print('@var NSMain.%s: %s' % (n, d))
+        c = getattr(NSMain.__class__, n)
+        d = getattr(c, '__doc__', '')
+        t = d.split('\n')[0].strip()
+        print('@var NSMain.%s: %s' % (n, t))
 
     _all_listing(__all__, locals())
 

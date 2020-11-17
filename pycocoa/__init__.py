@@ -139,7 +139,7 @@ _isfrozen       = getattr(sys, 'frozen', False)
 pycocoa_abspath = dirname(abspath(__file__))  # sys._MEIPASS + '/pycocoa'
 _pycocoa        = __package__ or basename(pycocoa_abspath)
 
-__version__ = '20.11.15'
+__version__ = '20.11.16'
 # see setup.py for similar logic
 version = '.'.join(map(str, map(int, __version__.split('.'))))
 
@@ -169,11 +169,14 @@ else:
 
     try:
         # lazily requires Python 3.7+, see lazily.__doc__
-        from pycocoa.lazily import LazyImportError, _lazy_import2  # PYCHOK expected
+        from pycocoa.lazily import LazyImportError, _lazy_import2, _PY_FH  # PYCHOK expected
         _, __getattr__ = _lazy_import2(_pycocoa)  # PYCHOK expected
 
     except (ImportError, LazyImportError, NotImplementedError):
-        _lazy_import2 = None
+        _lazy_import2 = _PY_FH = None
+
+    if _PY_FH == _pycocoa:  # override Python 3.3+ faulthandler
+        import pycocoa.faults as _
 
 del _, abspath, basename, dirname, _Error, sys  # exclude from globals(), __all__
 
