@@ -7,13 +7,86 @@
 wrapping ObjC C{NSMenuItem} and C{NSMenu} and L{Keys}.
 
 @var Keys: Menu L{Item} shortcut keys (C{chr}).
+@var Keys.ACK: '\x06'.
+@var Keys.Acknowledge: '\x06'.
+@var Keys.BEL: '\x07'.
+@var Keys.BS: '\x08'.
+@var Keys.BT: '\x19'.
+@var Keys.BackSpace: '\x08'.
+@var Keys.BackTab: '\x19'.
+@var Keys.Bell: '\x07'.
+@var Keys.CAN: '\x18'.
+@var Keys.CR: '\r'.
+@var Keys.Cancel: '\x18'.
+@var Keys.CarriageReturn: '\r'.
+@var Keys.DC1: '\x11'.
+@var Keys.DC2: '\x12'.
+@var Keys.DC3: '\x13'.
+@var Keys.DC4: '\x14'.
+@var Keys.DEL: '\x7f'.
+@var Keys.DLE: '\x10'.
+@var Keys.DataLineEscape: '\x10'.
+@var Keys.Delete: '\x7f'.
+@var Keys.DeviceControl1: '\x11'.
+@var Keys.DeviceControl2: '\x12'.
+@var Keys.DeviceControl3: '\x13'.
+@var Keys.DeviceControl4: '\x14'.
+@var Keys.EM: '\x19'.
+@var Keys.ENQ: '\x05'.
+@var Keys.EOT: '\x04'.
+@var Keys.ESC: '\x1b'.
+@var Keys.ETB: '\x17'.
+@var Keys.ETX: '\x03'.
+@var Keys.EndOfMedium: '\x19'.
+@var Keys.EndOfText: '\x03'.
+@var Keys.EndOfTransmit: '\x04'.
+@var Keys.EndOfTransmitBlock: '\x17'.
+@var Keys.Enquiry: '\x05'.
+@var Keys.Enter: '\x03'.
+@var Keys.Escape: '\x1b'.
+@var Keys.FF: '\x0c'.
+@var Keys.FS: '\x1c'.
+@var Keys.FileSeparator: '\x1c'.
+@var Keys.FormFeed: '\x0c'.
+@var Keys.GS: '\x1d'.
+@var Keys.GroupSeparator: '\x1d'.
+@var Keys.HT: '\t'.
+@var Keys.HorizontalTab: '\t'.
+@var Keys.LF: '\n'.
+@var Keys.LineFeed: '\n'.
+@var Keys.NAK: '\x15'.
+@var Keys.NL: '\n'.
+@var Keys.NegativeAcknowledge: '\x15'.
+@var Keys.NewLine: '\n'.
+@var Keys.RS: '\x1e'.
+@var Keys.RecordSeparator: '\x1e'.
+@var Keys.SI: '\x0f'.
+@var Keys.SO: '\x0e'.
+@var Keys.SOH: '\x01'.
+@var Keys.SP: ' '.
+@var Keys.STX: '\x02'.
+@var Keys.SUB: '\x1a'.
+@var Keys.SYN: '\x16'.
+@var Keys.ShiftIn: '\x0f'.
+@var Keys.ShiftOut: '\x0e'.
+@var Keys.Space: ' '.
+@var Keys.StartOfHeading: '\x01'.
+@var Keys.StartOfText: '\x02'.
+@var Keys.Substitute: '\x1a'.
+@var Keys.SynchronousIdle: '\x16'.
+@var Keys.Tab: '\t'.
+@var Keys.US: '\x1f'.
+@var Keys.UnitSeparator: '\x1f'.
+@var Keys.VT: '\x0b'.
+@var Keys.VerticalTab: '\x0b'.
 '''
 # all imports listed explicitly to help PyChecker
 from pycocoa.bases    import _Type2
 from pycocoa.fonts    import Font
 from pycocoa.geometry import Size
 from pycocoa.getters  import get_selector, get_selectornameof
-from pycocoa.lazily   import _ALL_LAZY
+from pycocoa.lazily   import _ALL_LAZY, _COMMASPACE_, _DOT_, _NN_, \
+                             _NL_, _UNDER_
 from pycocoa.nstypes  import isNone, NSMain, NSMenu, NSMenuItem, nsOf, \
                              NSStr, nsString2str
 from pycocoa.pytypes  import int2NS
@@ -39,9 +112,9 @@ from pycocoa.oslibs   import NSAcknowledgeCharacter, NSBackSpaceCharacter, \
                              NSSynchronousIdleCharacter, NSTabCharacter, \
                              NSUnitSeparatorCharacter, NSVerticalTabCharacter
 from pycocoa.runtime  import isObjCInstanceOf  # , ObjCInstance
-from pycocoa.utils    import bytes2str, _ByteStrs, _Constants, _Globals, \
-                             _Ints, isinstanceOf, missing, name2pymethod, \
-                             printf, property2, property_RO, _Strs, _Types
+from pycocoa.utils    import Adict, bytes2str, _ByteStrs, _Constants, _Globals, _Ints, \
+                             isinstanceOf, missing, name2pymethod, printf, property2, \
+                             property_RO, _Strs, _Types
 
 try:
     from inspect import getfullargspec as getargspec  # Python 3+
@@ -51,7 +124,7 @@ from inspect import isfunction, ismethod
 # from types import FunctionType, MethodType
 
 __all__ = _ALL_LAZY.menus
-__version__ = '20.01.08'
+__version__ = '20.11.18'
 
 # Method _NSApplicationDelegate.handleMenuItem_ in .apps.py
 # is the handler ('selector') for all menu items specified
@@ -71,7 +144,7 @@ _Modifiers2 = (('Alt',   NSAlternateKeyMask),
                ('Cmd',   NSCommandKeyMask),
                ('Ctrl',  NSControlKeyMask),
                ('Shift', NSShiftKeyMask))  # or NSAlphaShiftKeyMask?
-_NoKey = NSStr('')
+_NoKey = NSStr(_NN_)
 
 
 def _bindM(inst, parent):
@@ -108,7 +181,7 @@ def _nsKey2(key):
     '''(INTERNAL) Check a shortcut key.
     '''
     if not key:
-        return _NoKey, ''
+        return _NoKey, _NN_
     k = bytes2str(key, name='key')
     if len(k) == 1 and 32 < ord(k[0]) < 127:  # k.isprintable() and not k.ispace()
         return NSStr(k), k
@@ -168,13 +241,13 @@ class Item(_Item_Type2):
     '''Python menu L{Item} Type, wrapping ObjC C{NSMenuItem}.
     '''
     _action  = _handleMenuItem_name
-    _key     = ''
-    _mask    = 0  # used in Menu.item below
+    _key     = _NN_
+    _mask    =  0  # used in Menu.item below
     _SEL_    = _HANDLE_
-    _subMenu = None
-    _tag     = 0
+    _subMenu =  None
+    _tag     =  0
 
-    def __init__(self, title, action=None, key='',  # MCCABE 13
+    def __init__(self, title, action=None, key=_NN_,  # MCCABE 13
                                            alt=False,
                                            cmd=True,  # default
                                           ctrl=False,
@@ -468,8 +541,7 @@ class Item(_Item_Type2):
         d = self._keyModifiers(**modifiers)
         if d:
             self._mask = m  # restore
-            raise KeyError('%s(%s)' % (self,
-                           ', '.join('%s=%r' % _ for _ in sorted(d.items()))))
+            raise KeyError('%s(%s)' % (self, Adict(d)))
 
     def _keyModifiers(self, **kwds):
         '''(INTERNAL) Set the item's shortcut key modifiers.
@@ -593,7 +665,7 @@ class Item(_Item_Type2):
         '''Get the item's C{toolTip} (C{str}) or C{''}.
         '''
         ns = self.NS.toolTip()
-        return nsString2str(ns) if ns else ''
+        return nsString2str(ns) if ns else _NN_
 
     @toolTip.setter  # PYCHOK property.setter
     def toolTip(self, tip):
@@ -673,8 +745,7 @@ class Keys(_Constants):
             return '%s=%s' % (n, hex(ord(v)))
         return self._strepr(_fmt)
 
-
-Keys = Keys()  # overwrite class on purpose
+Keys = Keys()  # PYCHOK constants
 
 
 # % python -m test.list_methods NSMenu
@@ -738,7 +809,7 @@ class _Menu_Type2(_Type2):
             for inst in self._listM('title'):
                 if inst.title.startswith(t):
                     return inst
-            t = '%s=%r' % ('title', title)
+            t = Adict(title=title)
 
         elif action:
             if isinstance(action, _ByteStrs):
@@ -750,20 +821,20 @@ class _Menu_Type2(_Type2):
                 for a, inst in self._alistM2(type(action)):
                     if a == action:
                         return inst
-            t = '%s=%r' % ('action', action)
+            t = Adict(action=action)
 
         elif isinstance(tag, _Ints):
             # only L{Item}s have non-zero tags
             for inst in self._listM:
                 if inst.tag == tag:
                     return inst
-            t = '%s=%r' % ('tag', tag)
+            t = Adict(tsg=tag)
 
         else:
-            t = ''
+            t = _NN_
 
         if dflt is missing:
-            raise ValueError('no such %s.%s(%s)' % (self, self._nameM, t))
+            raise ValueError('no such %s(%s)' % (_DOT_(self, self._nameM), t))
         return dflt
 
     def _getiteM(self, index, bytitle=None):
@@ -1125,7 +1196,7 @@ class Menu(_Menu_Type2):
         '''
         return bool(self._NSiMI and self._NSiMI.isHighlighted())
 
-    def item(self, title='', action=None, tag=None, dflt=missing, key='', **modifiers):
+    def item(self, title=_NN_, action=None, tag=None, dflt=missing, key=_NN_, **modifiers):
         '''Find an item by title, by action, by tag or by key.
 
            @keyword title: The item title to match (C{str}).
@@ -1142,14 +1213,13 @@ class Menu(_Menu_Type2):
                               I{action} nor I{tag} match.
         '''
         def _raise(Error, prefix, kwds):
-            t = [('key', key)] + sorted(kwds.items())
-            raise Error('%s%s.item(%s)' % (prefix, self,
-                        ', '.join('%s=%r' % _ for _ in t)))
+            t = _COMMASPACE_(Adict(key=key), Adict(kwds))
+            raise Error('%s%s(%s)' % (prefix, _DOT_(self, 'item'), t))
 
         if key:  # find by key and modifiers
             m, d = _modifiedMask2(0, modifiers)
             if d:  # can't have leftovers
-                _raise(ValueError, '', d)
+                _raise(ValueError, _NN_, d)
 
             try:
                 _, k = _nsKey2(bytes2str(key))
@@ -1164,7 +1234,7 @@ class Menu(_Menu_Type2):
             return dflt
 
         elif modifiers:  # can't have modifiers
-            _raise(ValueError, '', modifiers)
+            _raise(ValueError, _NN_, modifiers)
 
         return self._findM(title, action, tag, dflt)
 
@@ -1385,7 +1455,7 @@ class MenuBar(_Menu_Type2):
                 self._title = self.app.title
             self.app.NS.setMainMenu_(self.NS)
 
-    def menu(self, title='', dflt=missing):
+    def menu(self, title=_NN_, dflt=missing):
         '''Find a menu by title.
 
            @keyword title: The menu title to match (C{str}).
@@ -1474,9 +1544,9 @@ def title2action(title):
 
        @raise ValueError: If I{title} can not be converted.
     '''
-    t = ''.join(_ for _ in bytes2str(title).strip().rstrip('.')
-                        if _.isalnum() or _ in '_:')
-    return name2pymethod('menu' + t + '_')
+    t = _NN_.join(_ for _ in bytes2str(title).strip().rstrip(_DOT_)
+                          if _.isalnum() or _ in '_:')
+    return name2pymethod(_NN_('menu', t, _UNDER_))
 
 
 _Types.Item          = Item
@@ -1486,7 +1556,9 @@ _Types.MenuBar       = MenuBar
 
 if __name__ == '__main__':
 
-    from pycocoa.utils import _all_listing, properties
+    from pycocoa.utils import _all_listing, properties, _varstr
+
+    print(_varstr(Keys, strepr=repr))
 
     _all_listing(__all__, locals())
 
@@ -1505,7 +1577,7 @@ if __name__ == '__main__':
     assert item.parent is menu, item.parent
 
     for x in (item, menu, bar):
-        print('\n%s properties:' % (x,))
+        print('%s%s properties:' % (_NL_, x))
         for p, v in sorted(properties(x).items()):
             print('  %s = %r' % (p, v))
 
@@ -1527,7 +1599,7 @@ if __name__ == '__main__':
     item.subMenu = None
     assert item.subMenu is None, item.subMenu
 
-# % python3 -m pycocoa.menus
+# % python2 -m pycocoa.menus
 #
 # pycocoa.menus.__all__ = tuple(
 #  pycocoa.menus.Item is <class .Item>,
@@ -1606,14 +1678,14 @@ if __name__ == '__main__':
 #                    .VT=0xb,
 #  pycocoa.menus.Menu is <class .Menu>,
 #  pycocoa.menus.MenuBar is <class .MenuBar>,
-#  pycocoa.menus.ns2Item is <function .ns2Item at 0x7fa992646040>,
-#  pycocoa.menus.title2action is <function .title2action at 0x7fa99264d040>,
+#  pycocoa.menus.ns2Item is <function .ns2Item at 0x7fcffb473d50>,
+#  pycocoa.menus.title2action is <function .title2action at 0x7fcffb4765d0>,
 # )[7]
-# pycocoa.menus.version 20.01.08, .isLazy 1, Python 3.9.0 64bit, macOS 10.15.7
+# pycocoa.menus.version 20.11.18, .isLazy None, Python 2.7.18 64bit, macOS 10.15.7
 #
 # Item('Quit', 'menuTerminate_', Cmd+q) properties:
-#   NS = <ObjCInstance(NSMenuItem(<Id_t at 0x7fa99267e1c0>) of 0x7fa990f52e40) at 0x7fa99267a430>
-#   NSDelegate = 'AttributeError("use \'NSd-\' not \'NSD-\'")'
+#   NS = <ObjCInstance(NSMenuItem(<Id_t at 0x7fcffb47aa70>) of 0x7fcff8c735e0) at 0x7fcffb47b250>
+#   NSDelegate = 'AttributeError("use \'NSd-\' not \'NSD-\'",)'
 #   NSdelegate = None
 #   action = 'menuTerminate_'
 #   allowsKeyWhenHidden = False
@@ -1631,10 +1703,10 @@ if __name__ == '__main__':
 #   isSeparator = False
 #   key = 'q'
 #   keyEquivalent = 'q'
-#   keyEquivalentModifiers = {'alt': False, 'cmd': True, 'ctrl': False, 'shift': False}
-#   keyModifiers = {'alt': False, 'cmd': True, 'ctrl': False, 'shift': False}
+#   keyEquivalentModifiers = {'shift': False, 'alt': False, 'cmd': True, 'ctrl': False}
+#   keyModifiers = {'shift': False, 'alt': False, 'cmd': True, 'ctrl': False}
 #   nsTarget = None
-#   parent = Menu('Test') at 0x7fa99266aac0
+#   parent = Menu('Test') at 0x7fcffb029e50
 #   shift = False
 #   state = 0
 #   subMenu = None
@@ -1643,8 +1715,8 @@ if __name__ == '__main__':
 #   toolTip = ''
 #
 # Menu('Test') properties:
-#   NS = <ObjCInstance(NSMenu(<Id_t at 0x7fa992672440>) of 0x7fa990f514d0) at 0x7fa99266aa90>
-#   NSDelegate = 'AttributeError("use \'NSd-\' not \'NSD-\'")'
+#   NS = <ObjCInstance(NSMenu(<Id_t at 0x7fcffb010d40>) of 0x7fcff8c6fd30) at 0x7fcffb029dd0>
+#   NSDelegate = 'AttributeError("use \'NSd-\' not \'NSD-\'",)'
 #   NSdelegate = None
 #   action = None
 #   app = None
@@ -1657,17 +1729,17 @@ if __name__ == '__main__':
 #   isTornOff = False
 #   isVisible = None
 #   minWidth = 0.0
-#   nsMenuItem = <ObjCInstance(NSMenuItem(<Id_t at 0x7fa99267e940>) of 0x7fa992412ae0) at 0x7fa99267a070>
-#   parent = MenuBar(None) at 0x7fa9925c05b0
+#   nsMenuItem = <ObjCInstance(NSMenuItem(<Id_t at 0x7fcffb47d9e0>) of 0x7fcff8c78800) at 0x7fcffb47b750>
+#   parent = MenuBar(None) at 0x7fcffb029c50
 #   showsState = True
-#   size = <NSSize_t(width=100.0, height=29.0) at 0x7fa992692040>
+#   size = <NSSize_t(width=100.0, height=29.0) at 0x7fcffb48d830>
 #   tag = 2
 #   tags = 2
 #   title = 'Test'
 #
 # MenuBar(None) properties:
-#   NS = <ObjCInstance(NSMenu(<Id_t at 0x7fa99263bcc0>) of 0x7fa990f50b50) at 0x7fa99266a4c0>
-#   NSDelegate = 'AttributeError("use \'NSd-\' not \'NSD-\'")'
+#   NS = <ObjCInstance(NSMenu(<Id_t at 0x7fcffa7b2200>) of 0x7fcff8c70000) at 0x7fcffb029e90>
+#   NSDelegate = 'AttributeError("use \'NSd-\' not \'NSD-\'",)'
 #   NSdelegate = None
 #   action = None
 #   app = None
@@ -1680,7 +1752,7 @@ if __name__ == '__main__':
 #   minWidth = 0.0
 #   parent = None
 #   showsState = True
-#   size = <NSSize_t(width=107.0, height=29.0) at 0x7fa992692340>
+#   size = <NSSize_t(width=107.0, height=29.0) at 0x7fcffb48db90>
 #   tag = None
 #   tags = 2
 #   title = None

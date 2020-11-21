@@ -7,21 +7,21 @@
 '''
 # all imports listed explicitly to help PyChecker
 from pycocoa.bases   import _Type0
-from pycocoa.lazily  import _ALL_LAZY
+from pycocoa.lazily  import _ALL_LAZY, _NN_
 from pycocoa.nstypes import NSAttributedString, NSConstantString, \
                             NSStr, NSString, nsString2str
 from pycocoa.pytypes import dict2NS, str2NS
 from pycocoa.utils   import isinstanceOf, property_RO, _Strs, _Types
 
 __all__ = _ALL_LAZY.strs
-__version__ = '20.01.08'
+__version__ = '20.11.17'
 
 
 class Str(str, _Type0):  # str, first to maintain str behavior
     '''Python C{str} Type, wrapping (immutable) ObjC C{NSStr[ing]}.
     '''
 
-    def __new__(cls, ns_str=''):
+    def __new__(cls, ns_str=_NN_):
         '''New L{Str} from C{str}, L{Str} or C{NSStr[ing]}.
         '''
         if isinstance(ns_str, Str):
@@ -72,7 +72,7 @@ class StrAttd(Str, _Type0):
 
     # <https://Developer.Apple.com/library/content/documentation/
     #        Cocoa/Conceptual/AttributedStrings/Articles/standardAttributes.html>
-    def __new__(cls, ns_str='', **attrs):
+    def __new__(cls, ns_str=_NN_, **attrs):
         self = Str.__new__(cls, ns_str)
         for a, v in attrs.items():
             setattr(self, a, v)
@@ -243,7 +243,7 @@ class StrAttd(Str, _Type0):
                   you can specify no underline, a single underline, a
                   single strikethrough, both an underline and a strikethrough,
                   and whether the line is drawn for whitespace or not.
-           '''
+        '''
         return self._underlineStyle
 
     @underlineStyle.setter  # PYCHOK property.setter

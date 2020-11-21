@@ -101,9 +101,9 @@
     href="https://PyPI.org/project/python-vlc" target="_top">Python-VLC</a>
     3.0.8, 3.0.6, 3.0.4 and 2.2.8 (with the compatible <a 
     href="https://www.VideoLan.org/vlc" target="_top">VLC App</a>) on macOS
-    10.15.7 Catalina, 10.14.6 Mojave or 10.13.6 High Sierra.  The tests run
-    with and without <code>lazy import</code> in Python 3.9.0, 3.8.6 and 
-    3.7.6.</p>
+    11.0.1 (10.16) Big Sur, 10.15.7 Catalina, 10.14.6 Mojave or 10.13.6 
+    High Sierra. The tests run with and without <code>lazy import</code> in
+    Python 3.9.0, 3.8.6 and 3.7.6.</p>
     <p>Previously, PyCocoa was tested with 64-bit Python 3.8.3, 3.8.1, 
     3.7.5, 3.7.4, 2.7.16 and 2.7.17.  PyCocoa has <i>not been tested</i> on
     iOS nor with 32-bit Python and <i>does not work</i> with <a 
@@ -120,7 +120,8 @@
     target="_top">PyCodeStyle</a> (formerly Pep8) and <a 
     href="https://PyPI.org/project/mccabe" target="_top">McCabe</a> using 
     64-bit Python 2.7.18 and with <a href="https://PyPI.org/project/flake8"
-    target="_top">Flake8</a> using 64-bit Python 3.9.0.</p>
+    target="_top">Flake8</a> using 64-bit Python 3.9.0 on macOS 11.0.1 
+    (10.16) Big Sur.</p>
     <p>Some alternatives to PyCocoa are (a) <a 
     href="https://PyPI.org/project/pyobjc" target="_top">PyObjC</a>, the 
     most comprehensive Python to Objective-C bridge (and included in <a 
@@ -187,7 +188,7 @@
 
 <hr />
 <div class="fields">      <p><strong>Version:</strong>
-        20.11.16
+        20.11.20
       </p>
 </div><!-- ==================== SUBMODULES ==================== -->
 <a name="section-Submodules"></a>
@@ -336,6 +337,15 @@
     </td><td class="summary">
         <a href="pycocoa.lazily.LazyImportError-class.html" class="summary-name">LazyImportError</a><br />
       Lazy import is not supported, disabled or failed some other way.
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="pycocoa.utils.Adict-class.html" class="summary-name">Adict</a><br />
+      A <code>dict</code> with key <i>and</i> attribute access to the 
+        items and callable to add items.
     </td>
   </tr>
 <tr>
@@ -1360,6 +1370,21 @@
     <td width="15%" align="right" valign="top" class="summary">
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
+        <a href="ctypes.c_long-class.html" class="summary-name">c_ptrdiff_t</a>
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="pycocoa.octypes.c_struct_t-class.html" class="summary-name">c_struct_t</a><br />
+      Base type to pretty-print <i>ctypes</i> <code>Structures</code>.
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
         <a href="pycocoa.utils.module_property_RO-class.html" class="summary-name">module_property_RO</a><br />
       Decorator for a <code>Read-Only</code> module property.
     </td>
@@ -1640,7 +1665,7 @@
         <tr>
           <td><span class="summary-sig"><a href="pycocoa-module.html#bytes2str" class="summary-sig-name">bytes2str</a>(<span class="summary-sig-arg">bytestr</span>,
         <span class="summary-sig-arg">dflt</span>=<span class="summary-sig-default">missing</span>,
-        <span class="summary-sig-arg">name</span>=<span class="summary-sig-default"><code class="variable-quote">'</code><code class="variable-string"></code><code class="variable-quote">'</code></span>)</span><br />
+        <span class="summary-sig-arg">name</span>=<span class="summary-sig-default">''</span>)</span><br />
       Convert <code>bytes</code>/<code>unicode</code> to <code>str</code> 
       if needed.</td>
           <td align="right" valign="top">
@@ -1658,7 +1683,7 @@
     </td><td class="summary">
       <table width="100%" cellpadding="0" cellspacing="0" border="0">
         <tr>
-          <td><span class="summary-sig"><a href="pycocoa-module.html#clip" class="summary-sig-name">clip</a>(<span class="summary-sig-arg">bytestr</span>,
+          <td><span class="summary-sig"><a href="pycocoa-module.html#clipstr" class="summary-sig-name">clipstr</a>(<span class="summary-sig-arg">bytestr</span>,
         <span class="summary-sig-arg">limit</span>=<span class="summary-sig-default">50</span>)</span><br />
       Clip a string to the given length limit.</td>
           <td align="right" valign="top">
@@ -2182,7 +2207,7 @@
         <tr>
           <td><span class="summary-sig"><a href="pycocoa-module.html#get_lib_framework" class="summary-sig-name">get_lib_framework</a>(<span class="summary-sig-arg">name</span>,
         <span class="summary-sig-arg">services</span>=<span class="summary-sig-default"><code class="variable-quote">'</code><code class="variable-string">ApplicationServices</code><code class="variable-quote">'</code></span>,
-        <span class="summary-sig-arg">version</span>=<span class="summary-sig-default"><code class="variable-quote">'</code><code class="variable-string"></code><code class="variable-quote">'</code></span>)</span><br />
+        <span class="summary-sig-arg">version</span>=<span class="summary-sig-default">''</span>)</span><br />
       Load a <code>Frameworks services .framework</code> library.</td>
           <td align="right" valign="top">
             
@@ -3698,7 +3723,7 @@
         <tr>
           <td><span class="summary-sig"><a href="pycocoa-module.html#str2bytes" class="summary-sig-name">str2bytes</a>(<span class="summary-sig-arg">bytestr</span>,
         <span class="summary-sig-arg">dflt</span>=<span class="summary-sig-default">missing</span>,
-        <span class="summary-sig-arg">name</span>=<span class="summary-sig-default"><code class="variable-quote">'</code><code class="variable-string"></code><code class="variable-quote">'</code></span>)</span><br />
+        <span class="summary-sig-arg">name</span>=<span class="summary-sig-default">''</span>)</span><br />
       Convert <code>str</code> to <code>bytes</code>/<code>unicode</code> 
       if needed.</td>
           <td align="right" valign="top">
@@ -3862,7 +3887,7 @@
       <table width="100%" cellpadding="0" cellspacing="0" border="0">
         <tr>
           <td><span class="summary-sig"><a href="pycocoa-module.html#z1000str" class="summary-sig-name">z1000str</a>(<span class="summary-sig-arg">size</span>,
-        <span class="summary-sig-arg">sep</span>=<span class="summary-sig-default"><code class="variable-quote">'</code><code class="variable-string">_</code><code class="variable-quote">'</code></span>)</span><br />
+        <span class="summary-sig-arg">sep</span>=<span class="summary-sig-default">'_'</span>)</span><br />
       Convert a size to string with 1_000's seperator.</td>
           <td align="right" valign="top">
             
@@ -3930,16 +3955,16 @@
     <td width="15%" align="right" valign="top" class="summary">
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
-        <a name="version"></a><span class="summary-name">version</span> = <code title="'20.11.16'"><code class="variable-quote">'</code><code class="variable-string">20.11.16</code><code class="variable-quote">'</code></code>
+        <a name="version"></a><span class="summary-name">version</span> = <code title="'20.11.20'"><code class="variable-quote">'</code><code class="variable-string">20.11.20</code><code class="variable-quote">'</code></code>
     </td>
   </tr>
 <tr>
     <td width="15%" align="right" valign="top" class="summary">
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
-        <a href="pycocoa-module.html#AlertStyle" class="summary-name">AlertStyle</a> = <code title="AlertStyle.Critical=1&lt;&lt;1,
+        <a href="pycocoa-module.html#AlertStyle" class="summary-name">AlertStyle</a> = <code title="AlertStyle.Critical=2,
           .Info=1,
-          .Warning=0">AlertStyle.Critical=1&lt;<code class="variable-ellipsis">...</code></code>
+          .Warning=0">AlertStyle.Critical<code class="variable-ellipsis">...</code></code>
     </td>
   </tr>
 <tr>
@@ -3952,8 +3977,8 @@
           .MinXMargin=1,
           .MinYMargin=1&lt;&lt;3,
           .NotSizable=0,
-          .Sizable=9&lt;&lt;1,
-          .WidthSizable=1&lt;&lt;1">AutoResize.HeightSizable=1&lt;<code class="variable-ellipsis">...</code></code>
+          .Sizable=18,
+          .WidthSizable=2">AutoResize.HeightSizable=1&lt;<code class="variable-ellipsis">...</code></code>
     </td>
   </tr>
 <tr>
@@ -3965,9 +3990,9 @@
           .Inline=15,
           .NCircular=7,
           .Recessed=13,
-          .RegularSquare=1&lt;&lt;1,
+          .RegularSquare=2,
           .Rounded=1,
-          .RoundedDisclosure=7&lt;&lt;1,
+          .RoundedDisclosure=14,
 ...">BezelStyle.Disclosure<code class="variable-ellipsis">...</code></code>
     </td>
   </tr>
@@ -3975,10 +4000,10 @@
     <td width="15%" align="right" valign="top" class="summary">
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
-        <a href="pycocoa-module.html#Border" class="summary-name">Border</a> = <code title="Border.Bezel=1&lt;&lt;1,
+        <a href="pycocoa-module.html#Border" class="summary-name">Border</a> = <code title="Border.Bezel=2,
       .Groove=3,
       .Line=1,
-      .No=0">Border.Bezel=1&lt;<code class="variable-ellipsis">...</code></code>
+      .No=0">Border.Bezel<code class="variable-ellipsis">...</code></code>
     </td>
   </tr>
 <tr>
@@ -4041,7 +4066,7 @@
     <td width="15%" align="right" valign="top" class="summary">
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
-        <a href="pycocoa-module.html#FontTrait" class="summary-name">FontTrait</a> = <code title="FontTrait.Bold=1&lt;&lt;1,
+        <a href="pycocoa-module.html#FontTrait" class="summary-name">FontTrait</a> = <code title="FontTrait.Bold=2,
          .Compressed=1&lt;&lt;9,
          .Condensed=1&lt;&lt;6,
          .Expanded=1&lt;&lt;5,
@@ -4049,22 +4074,22 @@
          .MonoSpace=1&lt;&lt;10,
          .Narrow=1&lt;&lt;4,
          .Poster=1&lt;&lt;8,
-...">FontTrait.Bold=1&lt;<code class="variable-ellipsis">...</code></code>
+...">FontTrait.Bold<code class="variable-ellipsis">...</code></code>
     </td>
   </tr>
 <tr>
     <td width="15%" align="right" valign="top" class="summary">
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
-        <a href="pycocoa-module.html#Fonts" class="summary-name">Fonts</a> = <code title="Fonts.App=Font(name='Helvetica', family='Helvetica', size=12, weight=5\
-),
-     .Bold=Font(name='.AppleSystemUIFontBold', family='.AppleSystemUIF\
-ont', size=13, traits='Bold', weight=9),
-     .BoldItalic=Font(name='.AppleSystemUIFontEmphasizedItalic', famil\
-y='.AppleSystemUIFont', size=13, traits='Bold Italic', weight=9),
-     .Italic=Font(name='.AppleSystemUIFontItalic', family='.AppleSyste\
-mUIFont', size=13, traits='Italic', weight=5),
-...">Fonts.App=Font(name='Helvetica', family='Helvetica', s<code class="variable-ellipsis">...</code></code>
+        <a href="pycocoa-module.html#Fonts" class="summary-name">Fonts</a> = <code title="Fonts.App=Font({family='Helvetica', name='Helvetica', size=12, weight=\
+5}),
+     .Bold=Font({family='.AppleSystemUIFont', name='.AppleSystemUIFont\
+Bold', size=13, traits='Bold', weight=9}),
+     .BoldItalic=Font({family='.AppleSystemUIFont', name='.AppleSystem\
+UIFontEmphasizedItalic', size=13, traits='Bold Italic', weight=9}),
+     .Italic=Font({family='.AppleSystemUIFont', name='.AppleSystemUIFo\
+ntItalic', size=13, traits='Italic', weight=5}),
+...">Fonts.App=Font({family='Helvetica', name='Helvetica', <code class="variable-ellipsis">...</code></code>
     </td>
   </tr>
 <tr>
@@ -4183,21 +4208,21 @@ mUIFont', size=13, traits='Italic', weight=5),
     <td width="15%" align="right" valign="top" class="summary">
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
-        <a href="pycocoa-module.html#NSApplicationDelegate" class="summary-name">NSApplicationDelegate</a> = <code title="&lt;pycocoa.utils.module_property_RO object at 0x7fb4e5e2fdd0&gt;">&lt;pycocoa.utils.module_property_RO obje<code class="variable-ellipsis">...</code></code>
+        <a href="pycocoa-module.html#NSApplicationDelegate" class="summary-name">NSApplicationDelegate</a> = <code title="&lt;pycocoa.utils.module_property_RO object at 0x7ff71dfa0910&gt;">&lt;pycocoa.utils.module_property_RO obje<code class="variable-ellipsis">...</code></code>
     </td>
   </tr>
 <tr>
     <td width="15%" align="right" valign="top" class="summary">
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
-        <a name="NSApplicationDidHideNotification"></a><span class="summary-name">NSApplicationDidHideNotification</span> = <code title="c_void_p(140735427515976)">c_void_p(140735427515976)</code>
+        <a name="NSApplicationDidHideNotification"></a><span class="summary-name">NSApplicationDidHideNotification</span> = <code title="c_void_p(140735346447704)">c_void_p(140735346447704)</code>
     </td>
   </tr>
 <tr>
     <td width="15%" align="right" valign="top" class="summary">
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
-        <a name="NSApplicationDidUnhideNotification"></a><span class="summary-name">NSApplicationDidUnhideNotification</span> = <code title="c_void_p(140735427516072)">c_void_p(140735427516072)</code>
+        <a name="NSApplicationDidUnhideNotification"></a><span class="summary-name">NSApplicationDidUnhideNotification</span> = <code title="c_void_p(140735346447800)">c_void_p(140735346447800)</code>
     </td>
   </tr>
 <tr>
@@ -4414,7 +4439,7 @@ mUIFont', size=13, traits='Italic', weight=5),
     <td width="15%" align="right" valign="top" class="summary">
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
-        <a name="NSDefaultRunLoopMode"></a><span class="summary-name">NSDefaultRunLoopMode</span> = <code title="c_void_p(140735436663552)">c_void_p(140735436663552)</code>
+        <a name="NSDefaultRunLoopMode"></a><span class="summary-name">NSDefaultRunLoopMode</span> = <code title="c_void_p(140735342906320)">c_void_p(140735342906320)</code>
     </td>
   </tr>
 <tr>
@@ -4561,7 +4586,7 @@ mUIFont', size=13, traits='Italic', weight=5),
     <td width="15%" align="right" valign="top" class="summary">
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
-        <a name="NSEventTrackingRunLoopMode"></a><span class="summary-name">NSEventTrackingRunLoopMode</span> = <code title="c_void_p(140735427511176)">c_void_p(140735427511176)</code>
+        <a name="NSEventTrackingRunLoopMode"></a><span class="summary-name">NSEventTrackingRunLoopMode</span> = <code title="c_void_p(140735346442904)">c_void_p(140735346442904)</code>
     </td>
   </tr>
 <tr>
@@ -5009,15 +5034,15 @@ mUIFont', size=13, traits='Italic', weight=5),
     <td width="15%" align="right" valign="top" class="summary">
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
-        <a href="pycocoa-module.html#NSMain" class="summary-name">NSMain</a> = <code title="NSMain.Application=NSApplication(&lt;Id_t at 0x7fb4eb4bcf80&gt;) of 0x7fb4e9\
-ec9b60,
-      .BooleanNO=NSBoolean(&lt;Id_t at 0x7fb4eb4bcb90&gt;) of 0x7fff85b15390\
+        <a href="pycocoa-module.html#NSMain" class="summary-name">NSMain</a> = <code title="NSMain.Application=NSApplication(&lt;Id_t at 0x7ff7236fb7a0&gt;) of 0x7ff720\
+a36450,
+      .BooleanNO=NSBoolean(&lt;Id_t at 0x7ff7236f6b00&gt;) of 0x7fff80041620\
 ,
-      .BooleanYES=NSBoolean(&lt;Id_t at 0x7fb4eb4b0e60&gt;) of 0x7fff85b1538\
+      .BooleanYES=NSBoolean(&lt;Id_t at 0x7ff7236f6050&gt;) of 0x7fff8004161\
 0,
-      .Bundle=NSBundle(&lt;Id_t at 0x7fb4eb4ca560&gt;) of 0x7fb4e44ec3d0,
+      .Bundle=NSBundle(&lt;Id_t at 0x7ff7236eb680&gt;) of 0x7ff71eb18360,
       .BundleName=NSConstantString('CFBundleName'),
-...">NSMain.Application=NSApplication(&lt;Id_t at 0x7fb4eb4bc<code class="variable-ellipsis">...</code></code>
+...">NSMain.Application=NSApplication(&lt;Id_t at 0x7ff7236fb<code class="variable-ellipsis">...</code></code>
     </td>
   </tr>
 <tr>
@@ -5409,7 +5434,7 @@ ec9b60,
     <td width="15%" align="right" valign="top" class="summary">
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
-        <a href="pycocoa-module.html#NSTableViewDelegate" class="summary-name">NSTableViewDelegate</a> = <code title="&lt;pycocoa.utils.module_property_RO object at 0x7fb4e5e5acd0&gt;">&lt;pycocoa.utils.module_property_RO object<code class="variable-ellipsis">...</code></code>
+        <a href="pycocoa-module.html#NSTableViewDelegate" class="summary-name">NSTableViewDelegate</a> = <code title="&lt;pycocoa.utils.module_property_RO object at 0x7ff71ea0b290&gt;">&lt;pycocoa.utils.module_property_RO object<code class="variable-ellipsis">...</code></code>
     </td>
   </tr>
 <tr>
@@ -5598,7 +5623,7 @@ ec9b60,
     <td width="15%" align="right" valign="top" class="summary">
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
-        <a href="pycocoa-module.html#NSWindowDelegate" class="summary-name">NSWindowDelegate</a> = <code title="&lt;pycocoa.utils.module_property_RO object at 0x7fb4e5e5aa50&gt;">&lt;pycocoa.utils.module_property_RO object at<code class="variable-ellipsis">...</code></code>
+        <a href="pycocoa-module.html#NSWindowDelegate" class="summary-name">NSWindowDelegate</a> = <code title="&lt;pycocoa.utils.module_property_RO object at 0x7ff71ea08fd0&gt;">&lt;pycocoa.utils.module_property_RO object at<code class="variable-ellipsis">...</code></code>
     </td>
   </tr>
 <tr>
@@ -5714,7 +5739,7 @@ ec9b60,
            .Close=1,
            .Error=-3,
            .OK=1,
-           .Other=1&lt;&lt;1,
+           .Other=2,
            .Suppressed=-2,
            .TimedOut=-1">PanelButton.Cancel<code class="variable-ellipsis">...</code></code>
     </td>
@@ -5772,12 +5797,12 @@ ec9b60,
     <td width="15%" align="right" valign="top" class="summary">
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
-        <a href="pycocoa-module.html#WindowStyle" class="summary-name">WindowStyle</a> = <code title="WindowStyle.Closable=1&lt;&lt;1,
+        <a href="pycocoa-module.html#WindowStyle" class="summary-name">WindowStyle</a> = <code title="WindowStyle.Closable=2,
            .Miniaturizable=1&lt;&lt;2,
            .Resizable=1&lt;&lt;3,
            .Titled=1,
            .Typical=15,
-           .Utility=1&lt;&lt;4">WindowStyle.Closable=1&lt;<code class="variable-ellipsis">...</code></code>
+           .Utility=1&lt;&lt;4">WindowStyle.Closable<code class="variable-ellipsis">...</code></code>
     </td>
   </tr>
 <tr>
@@ -5785,6 +5810,14 @@ ec9b60,
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
         <a name="YES"></a><span class="summary-name">YES</span> = <code title="True">True</code>
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a name="c_void"></a><span class="summary-name">c_void</span> = <code title="None">None</code><br />
+      hash(x)
     </td>
   </tr>
 <tr>
@@ -5799,32 +5832,31 @@ ec9b60,
     <td width="15%" align="right" valign="top" class="summary">
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
-        <a href="pycocoa-module.html#libAppKit" class="summary-name">libAppKit</a> = <code title="&lt;CDLL '/System/Library/Frameworks/AppKit.framework/AppKit', handle 7fb\
-4e44c8d50 at 7fb4e6ac7250&gt;">&lt;CDLL '/System/Library/Frameworks/AppKit.framework<code class="variable-ellipsis">...</code></code>
+        <a href="pycocoa-module.html#libAppKit" class="summary-name">libAppKit</a> = <code title="&lt;CDLL 'AppKit.framework/AppKit', handle 7ff71eb041c0 at 7ff71e9d7b50&gt;">&lt;CDLL 'AppKit.framework/AppKit', handle 7ff71eb041<code class="variable-ellipsis">...</code></code>
     </td>
   </tr>
 <tr>
     <td width="15%" align="right" valign="top" class="summary">
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
-        <a href="pycocoa-module.html#libCF" class="summary-name">libCF</a> = <code title="&lt;CDLL '/System/Library/Frameworks/CoreFoundation.framework/CoreFoundat\
-ion', handle 110670878 at 7fb4e6aeb7d0&gt;">&lt;CDLL '/System/Library/Frameworks/CoreFoundation.frame<code class="variable-ellipsis">...</code></code>
+        <a href="pycocoa-module.html#libCF" class="summary-name">libCF</a> = <code title="&lt;CDLL 'CoreFoundation.framework/CoreFoundation', handle 113f43910 at 7\
+ff71e9d7290&gt;">&lt;CDLL 'CoreFoundation.framework/CoreFoundation', handl<code class="variable-ellipsis">...</code></code>
     </td>
   </tr>
 <tr>
     <td width="15%" align="right" valign="top" class="summary">
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
-        <a href="pycocoa-module.html#libCT" class="summary-name">libCT</a> = <code title="&lt;CDLL '/System/Library/Frameworks/CoreText.framework/CoreText', handle\
- 7fb4e44cde90 at 7fb4e6adb290&gt;">&lt;CDLL '/System/Library/Frameworks/CoreText.framework/C<code class="variable-ellipsis">...</code></code>
+        <a href="pycocoa-module.html#libCT" class="summary-name">libCT</a> = <code title="&lt;CDLL 'CoreText.framework/CoreText', handle 7ff71eb06c30 at 7ff71e9d7c\
+10&gt;">&lt;CDLL 'CoreText.framework/CoreText', handle 7ff71eb06c<code class="variable-ellipsis">...</code></code>
     </td>
   </tr>
 <tr>
     <td width="15%" align="right" valign="top" class="summary">
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
-        <a href="pycocoa-module.html#libFoundation" class="summary-name">libFoundation</a> = <code title="&lt;CDLL '/System/Library/Frameworks/Foundation.framework/Foundation', ha\
-ndle 7fb4e44cbaf0 at 7fb4e6adb710&gt;">&lt;CDLL '/System/Library/Frameworks/Foundation.f<code class="variable-ellipsis">...</code></code>
+        <a href="pycocoa-module.html#libFoundation" class="summary-name">libFoundation</a> = <code title="&lt;CDLL 'Foundation.framework/Foundation', handle 7ff71eb05890 at 7ff71e\
+9ea1d0&gt;">&lt;CDLL 'Foundation.framework/Foundation', handl<code class="variable-ellipsis">...</code></code>
     </td>
   </tr>
 <tr>
@@ -5839,15 +5871,15 @@ ndle 7fb4e44cbaf0 at 7fb4e6adb710&gt;">&lt;CDLL '/System/Library/Frameworks/Foun
     <td width="15%" align="right" valign="top" class="summary">
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
-        <a href="pycocoa-module.html#libobjc" class="summary-name">libobjc</a> = <code title="&lt;CDLL '/usr/lib/libobjc.dylib', handle 1106729d0 at 7fb4e6adb9d0&gt;">&lt;CDLL '/usr/lib/libobjc.dylib', handle 1106729d0 at <code class="variable-ellipsis">...</code></code>
+        <a href="pycocoa-module.html#libobjc" class="summary-name">libobjc</a> = <code title="&lt;CDLL 'libobjc.dylib', handle 113f46080 at 7ff71e9ea210&gt;">&lt;CDLL 'libobjc.dylib', handle 113f46080 at 7ff71e9ea<code class="variable-ellipsis">...</code></code>
     </td>
   </tr>
 <tr>
     <td width="15%" align="right" valign="top" class="summary">
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
-        <a href="pycocoa-module.html#libquartz" class="summary-name">libquartz</a> = <code title="&lt;CDLL '/System/Library/Frameworks/quartz.framework/quartz', handle 7fb\
-4e44dd0a0 at 7fb4e6ac7410&gt;">&lt;CDLL '/System/Library/Frameworks/quartz.framework<code class="variable-ellipsis">...</code></code>
+        <a name="libquartz"></a><span class="summary-name">libquartz</span> = <code title="None">None</code><br />
+      hash(x)
     </td>
   </tr>
 <tr>
@@ -5914,8 +5946,9 @@ ndle 7fb4e44cbaf0 at 7fb4e6adb710&gt;">&lt;CDLL '/System/Library/Frameworks/Foun
   <p>Return the signals currently handled as <code>fault</code>.</p>
   <dl class="fields">
     <dt>Returns:</dt>
-        <dd>An Adict with the <code>SIG*</code> name and value of the 
-          currently handled signals, if any.</dd>
+        <dd>An <a href="pycocoa.utils.Adict-class.html" 
+          class="link">Adict</a> with the <code>SIG*</code> name and value 
+          of the currently handled signals, if any.</dd>
   </dl>
 </td></tr></table>
 </div>
@@ -6257,7 +6290,7 @@ ndle 7fb4e44cbaf0 at 7fb4e6adb710&gt;">&lt;CDLL '/System/Library/Frameworks/Foun
   <tr valign="top"><td>
   <h3 class="epydoc"><span class="sig"><span class="sig-name">bytes2str</span>(<span class="sig-arg">bytestr</span>,
         <span class="sig-arg">dflt</span>=<span class="sig-default">missing</span>,
-        <span class="sig-arg">name</span>=<span class="sig-default"><code class="variable-quote">'</code><code class="variable-string"></code><code class="variable-quote">'</code></span>)</span>
+        <span class="sig-arg">name</span>=<span class="sig-default">''</span>)</span>
   </h3>
   </td><td align="right" valign="top"
     >&nbsp;
@@ -6283,14 +6316,14 @@ ndle 7fb4e44cbaf0 at 7fb4e6adb710&gt;">&lt;CDLL '/System/Library/Frameworks/Foun
   </dl>
 </td></tr></table>
 </div>
-<a name="clip"></a>
+<a name="clipstr"></a>
 <div>
 <table class="details" border="1" cellpadding="3"
        cellspacing="0" width="100%" bgcolor="white">
 <tr><td>
   <table width="100%" cellpadding="0" cellspacing="0" border="0">
   <tr valign="top"><td>
-  <h3 class="epydoc"><span class="sig"><span class="sig-name">clip</span>(<span class="sig-arg">bytestr</span>,
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">clipstr</span>(<span class="sig-arg">bytestr</span>,
         <span class="sig-arg">limit</span>=<span class="sig-default">50</span>)</span>
   </h3>
   </td><td align="right" valign="top"
@@ -7079,7 +7112,7 @@ ndle 7fb4e44cbaf0 at 7fb4e6adb710&gt;">&lt;CDLL '/System/Library/Frameworks/Foun
   <tr valign="top"><td>
   <h3 class="epydoc"><span class="sig"><span class="sig-name">get_lib_framework</span>(<span class="sig-arg">name</span>,
         <span class="sig-arg">services</span>=<span class="sig-default"><code class="variable-quote">'</code><code class="variable-string">ApplicationServices</code><code class="variable-quote">'</code></span>,
-        <span class="sig-arg">version</span>=<span class="sig-default"><code class="variable-quote">'</code><code class="variable-string"></code><code class="variable-quote">'</code></span>)</span>
+        <span class="sig-arg">version</span>=<span class="sig-default">''</span>)</span>
   </h3>
   </td><td align="right" valign="top"
     >&nbsp;
@@ -7129,7 +7162,7 @@ ndle 7fb4e44cbaf0 at 7fb4e6adb710&gt;">&lt;CDLL '/System/Library/Frameworks/Foun
   <p>Return the <code>.dylib</code> libraries loaded so far.</p>
   <dl class="fields">
     <dt>Returns:</dt>
-        <dd>The libraries cached (<code>dict</code>).</dd>
+        <dd>The libraries cached (<code>Adict</code>).</dd>
   </dl>
 </td></tr></table>
 </div>
@@ -8653,7 +8686,8 @@ ndle 7fb4e44cbaf0 at 7fb4e6adb710&gt;">&lt;CDLL '/System/Library/Frameworks/Foun
         <li><strong class="pname"><code>ctype_vals</code></strong> - The dictionary values type (<code>ctypes</code>).</li>
     </ul></dd>
     <dt>Returns:</dt>
-        <dd>The dict (Adict).</dd>
+        <dd>The dict (<a href="pycocoa.utils.Adict-class.html" 
+          class="link">Adict</a>).</dd>
   </dl>
 </td></tr></table>
 </div>
@@ -8691,12 +8725,20 @@ ndle 7fb4e44cbaf0 at 7fb4e6adb710&gt;">&lt;CDLL '/System/Library/Frameworks/Foun
         and <a href="pycocoa.nstypes.NSExceptionError-class.html" 
         class="link">NSExceptionError</a>.
       </p>
-      <p><strong>Note:</strong>
+      <strong>Notes:</strong>
+      <ul class="nomargin-top">
+        <li>
         Use <a href="pycocoa.nstypes.NSExceptionError-class.html" 
         class="link">NSExceptionError</a><code>(nsExc)</code> to wrap a 
         Python exception around an <code>ObjC/NSException</code> instance 
         and get access to the attributes of the latter.
-      </p>
+        </li>
+        <li>
+        Raised and thrown <code>NSException</code>s can not be caught and 
+        result in <i>fatal</i> <a href="pycocoa.faults-module.html#exiting"
+        class="link">exiting</a>.
+        </li>
+      </ul>
 </div></td></tr></table>
 </div>
 <a name="nsIter"></a>
@@ -8950,7 +8992,12 @@ ndle 7fb4e44cbaf0 at 7fb4e6adb710&gt;">&lt;CDLL '/System/Library/Frameworks/Foun
         <li><strong class="pname"><code>info</code></strong> - Other, caller-defined information (<code>all keywords</code>).</li>
     </ul></dd>
   </dl>
-<div class="fields">      <p><strong>See Also:</strong>
+<div class="fields">      <p><strong>Note:</strong>
+        Raised <code>NSException</code>s can not be caught and result in 
+        <i>fatal</i> <a href="pycocoa.faults-module.html#exiting" 
+        class="link">exiting</a>.
+      </p>
+      <p><strong>See Also:</strong>
         <a href="pycocoa.nstypes-module.html#NSException" 
         class="link">NSException</a> and <a 
         href="pycocoa.nstypes-module.html#nsThrow" 
@@ -9079,6 +9126,11 @@ ndle 7fb4e44cbaf0 at 7fb4e6adb710&gt;">&lt;CDLL '/System/Library/Frameworks/Foun
         class="link">NSException</a> and <a 
         href="pycocoa.nstypes-module.html#nsRaise" 
         class="link">nsRaise</a>.
+      </p>
+      <p><strong>Note:</strong>
+        Thrown <code>NSException</code>s can not be caught and result in 
+        <i>fatal</i> <a href="pycocoa.faults-module.html#exiting" 
+        class="link">exiting</a>.
       </p>
 </div></td></tr></table>
 </div>
@@ -9957,7 +10009,7 @@ ndle 7fb4e44cbaf0 at 7fb4e6adb710&gt;">&lt;CDLL '/System/Library/Frameworks/Foun
   <tr valign="top"><td>
   <h3 class="epydoc"><span class="sig"><span class="sig-name">str2bytes</span>(<span class="sig-arg">bytestr</span>,
         <span class="sig-arg">dflt</span>=<span class="sig-default">missing</span>,
-        <span class="sig-arg">name</span>=<span class="sig-default"><code class="variable-quote">'</code><code class="variable-string"></code><code class="variable-quote">'</code></span>)</span>
+        <span class="sig-arg">name</span>=<span class="sig-default">''</span>)</span>
   </h3>
   </td><td align="right" valign="top"
     >&nbsp;
@@ -10237,7 +10289,7 @@ ndle 7fb4e44cbaf0 at 7fb4e6adb710&gt;">&lt;CDLL '/System/Library/Frameworks/Foun
   <table width="100%" cellpadding="0" cellspacing="0" border="0">
   <tr valign="top"><td>
   <h3 class="epydoc"><span class="sig"><span class="sig-name">z1000str</span>(<span class="sig-arg">size</span>,
-        <span class="sig-arg">sep</span>=<span class="sig-default"><code class="variable-quote">'</code><code class="variable-string">_</code><code class="variable-quote">'</code></span>)</span>
+        <span class="sig-arg">sep</span>=<span class="sig-default">'_'</span>)</span>
   </h3>
   </td><td align="right" valign="top"
     >&nbsp;
@@ -10354,7 +10406,7 @@ ndle 7fb4e44cbaf0 at 7fb4e6adb710&gt;">&lt;CDLL '/System/Library/Frameworks/Foun
   <dl class="fields">
     <dt>Value:</dt>
       <dd><table><tr><td><pre class="variable">
-AlertStyle.Critical=1&lt;&lt;1,
+AlertStyle.Critical=2,
           .Info=1,
           .Warning=0
 </pre></td></tr></table>
@@ -10380,8 +10432,8 @@ AutoResize.HeightSizable=1&lt;&lt;4,
           .MinXMargin=1,
           .MinYMargin=1&lt;&lt;3,
           .NotSizable=0,
-          .Sizable=9&lt;&lt;1,
-          .WidthSizable=1&lt;&lt;1
+          .Sizable=18,
+          .WidthSizable=2
 </pre></td></tr></table>
 </dd>
   </dl>
@@ -10404,9 +10456,9 @@ BezelStyle.Disclosure=5,
           .Inline=15,
           .NCircular=7,
           .Recessed=13,
-          .RegularSquare=1&lt;&lt;1,
+          .RegularSquare=2,
           .Rounded=1,
-          .RoundedDisclosure=7&lt;&lt;1,
+          .RoundedDisclosure=14,
 <code class="variable-ellipsis">...</code>
 </pre></td></tr></table>
 </dd>
@@ -10425,7 +10477,7 @@ BezelStyle.Disclosure=5,
   <dl class="fields">
     <dt>Value:</dt>
       <dd><table><tr><td><pre class="variable">
-Border.Bezel=1&lt;&lt;1,
+Border.Bezel=2,
       .Groove=3,
       .Line=1,
       .No=0
@@ -10489,7 +10541,7 @@ Colors.CMY=CMYColors,
   <dl class="fields">
     <dt>Value:</dt>
       <dd><table><tr><td><pre class="variable">
-FontTrait.Bold=1&lt;&lt;1,
+FontTrait.Bold=2,
          .Compressed=1&lt;&lt;9,
          .Condensed=1&lt;&lt;6,
          .Expanded=1&lt;&lt;5,
@@ -10515,14 +10567,14 @@ FontTrait.Bold=1&lt;&lt;1,
   <dl class="fields">
     <dt>Value:</dt>
       <dd><table><tr><td><pre class="variable">
-Fonts.App=Font(name='Helvetica', family='Helvetica', size=12, weight=5<span class="variable-linewrap"><img src="crarr.png" alt="\" /></span>
-),
-     .Bold=Font(name='.AppleSystemUIFontBold', family='.AppleSystemUIF<span class="variable-linewrap"><img src="crarr.png" alt="\" /></span>
-ont', size=13, traits='Bold', weight=9),
-     .BoldItalic=Font(name='.AppleSystemUIFontEmphasizedItalic', famil<span class="variable-linewrap"><img src="crarr.png" alt="\" /></span>
-y='.AppleSystemUIFont', size=13, traits='Bold Italic', weight=9),
-     .Italic=Font(name='.AppleSystemUIFontItalic', family='.AppleSyste<span class="variable-linewrap"><img src="crarr.png" alt="\" /></span>
-mUIFont', size=13, traits='Italic', weight=5),
+Fonts.App=Font({family='Helvetica', name='Helvetica', size=12, weight=<span class="variable-linewrap"><img src="crarr.png" alt="\" /></span>
+5}),
+     .Bold=Font({family='.AppleSystemUIFont', name='.AppleSystemUIFont<span class="variable-linewrap"><img src="crarr.png" alt="\" /></span>
+Bold', size=13, traits='Bold', weight=9}),
+     .BoldItalic=Font({family='.AppleSystemUIFont', name='.AppleSystem<span class="variable-linewrap"><img src="crarr.png" alt="\" /></span>
+UIFontEmphasizedItalic', size=13, traits='Bold Italic', weight=9}),
+     .Italic=Font({family='.AppleSystemUIFont', name='.AppleSystemUIFo<span class="variable-linewrap"><img src="crarr.png" alt="\" /></span>
+ntItalic', size=13, traits='Italic', weight=5}),
 <code class="variable-ellipsis">...</code>
 </pre></td></tr></table>
 </dd>
@@ -10591,7 +10643,7 @@ Keys.ACK=0x6,
   <dl class="fields">
     <dt>Value:</dt>
       <dd><table><tr><td><pre class="variable">
-&lt;pycocoa.utils.module_property_RO object at 0x7fb4e5e2fdd0&gt;
+&lt;pycocoa.utils.module_property_RO object at 0x7ff71dfa0910&gt;
 </pre></td></tr></table>
 </dd>
   </dl>
@@ -10609,13 +10661,13 @@ Keys.ACK=0x6,
   <dl class="fields">
     <dt>Value:</dt>
       <dd><table><tr><td><pre class="variable">
-NSMain.Application=NSApplication(&lt;Id_t at 0x7fb4eb4bcf80&gt;) of 0x7fb4e9<span class="variable-linewrap"><img src="crarr.png" alt="\" /></span>
-ec9b60,
-      .BooleanNO=NSBoolean(&lt;Id_t at 0x7fb4eb4bcb90&gt;) of 0x7fff85b15390<span class="variable-linewrap"><img src="crarr.png" alt="\" /></span>
+NSMain.Application=NSApplication(&lt;Id_t at 0x7ff7236fb7a0&gt;) of 0x7ff720<span class="variable-linewrap"><img src="crarr.png" alt="\" /></span>
+a36450,
+      .BooleanNO=NSBoolean(&lt;Id_t at 0x7ff7236f6b00&gt;) of 0x7fff80041620<span class="variable-linewrap"><img src="crarr.png" alt="\" /></span>
 ,
-      .BooleanYES=NSBoolean(&lt;Id_t at 0x7fb4eb4b0e60&gt;) of 0x7fff85b1538<span class="variable-linewrap"><img src="crarr.png" alt="\" /></span>
+      .BooleanYES=NSBoolean(&lt;Id_t at 0x7ff7236f6050&gt;) of 0x7fff8004161<span class="variable-linewrap"><img src="crarr.png" alt="\" /></span>
 0,
-      .Bundle=NSBundle(&lt;Id_t at 0x7fb4eb4ca560&gt;) of 0x7fb4e44ec3d0,
+      .Bundle=NSBundle(&lt;Id_t at 0x7ff7236eb680&gt;) of 0x7ff71eb18360,
       .BundleName=NSConstantString('CFBundleName'),
 <code class="variable-ellipsis">...</code>
 </pre></td></tr></table>
@@ -10635,7 +10687,7 @@ ec9b60,
   <dl class="fields">
     <dt>Value:</dt>
       <dd><table><tr><td><pre class="variable">
-&lt;pycocoa.utils.module_property_RO object at 0x7fb4e5e5acd0&gt;
+&lt;pycocoa.utils.module_property_RO object at 0x7ff71ea0b290&gt;
 </pre></td></tr></table>
 </dd>
   </dl>
@@ -10653,7 +10705,7 @@ ec9b60,
   <dl class="fields">
     <dt>Value:</dt>
       <dd><table><tr><td><pre class="variable">
-&lt;pycocoa.utils.module_property_RO object at 0x7fb4e5e5aa50&gt;
+&lt;pycocoa.utils.module_property_RO object at 0x7ff71ea08fd0&gt;
 </pre></td></tr></table>
 </dd>
   </dl>
@@ -10675,7 +10727,7 @@ PanelButton.Cancel=0,
            .Close=1,
            .Error=-3,
            .OK=1,
-           .Other=1&lt;&lt;1,
+           .Other=2,
            .Suppressed=-2,
            .TimedOut=-1
 </pre></td></tr></table>
@@ -10770,7 +10822,7 @@ UIColors.Control=UIColor(NSDynamicSystemColor),
   <dl class="fields">
     <dt>Value:</dt>
       <dd><table><tr><td><pre class="variable">
-WindowStyle.Closable=1&lt;&lt;1,
+WindowStyle.Closable=2,
            .Miniaturizable=1&lt;&lt;2,
            .Resizable=1&lt;&lt;3,
            .Titled=1,
@@ -10793,8 +10845,7 @@ WindowStyle.Closable=1&lt;&lt;1,
   <dl class="fields">
     <dt>Value:</dt>
       <dd><table><tr><td><pre class="variable">
-&lt;CDLL '/System/Library/Frameworks/AppKit.framework/AppKit', handle 7fb<span class="variable-linewrap"><img src="crarr.png" alt="\" /></span>
-4e44c8d50 at 7fb4e6ac7250&gt;
+&lt;CDLL 'AppKit.framework/AppKit', handle 7ff71eb041c0 at 7ff71e9d7b50&gt;
 </pre></td></tr></table>
 </dd>
   </dl>
@@ -10812,8 +10863,8 @@ WindowStyle.Closable=1&lt;&lt;1,
   <dl class="fields">
     <dt>Value:</dt>
       <dd><table><tr><td><pre class="variable">
-&lt;CDLL '/System/Library/Frameworks/CoreFoundation.framework/CoreFoundat<span class="variable-linewrap"><img src="crarr.png" alt="\" /></span>
-ion', handle 110670878 at 7fb4e6aeb7d0&gt;
+&lt;CDLL 'CoreFoundation.framework/CoreFoundation', handle 113f43910 at 7<span class="variable-linewrap"><img src="crarr.png" alt="\" /></span>
+ff71e9d7290&gt;
 </pre></td></tr></table>
 </dd>
   </dl>
@@ -10831,8 +10882,8 @@ ion', handle 110670878 at 7fb4e6aeb7d0&gt;
   <dl class="fields">
     <dt>Value:</dt>
       <dd><table><tr><td><pre class="variable">
-&lt;CDLL '/System/Library/Frameworks/CoreText.framework/CoreText', handle<span class="variable-linewrap"><img src="crarr.png" alt="\" /></span>
- 7fb4e44cde90 at 7fb4e6adb290&gt;
+&lt;CDLL 'CoreText.framework/CoreText', handle 7ff71eb06c30 at 7ff71e9d7c<span class="variable-linewrap"><img src="crarr.png" alt="\" /></span>
+10&gt;
 </pre></td></tr></table>
 </dd>
   </dl>
@@ -10850,8 +10901,8 @@ ion', handle 110670878 at 7fb4e6aeb7d0&gt;
   <dl class="fields">
     <dt>Value:</dt>
       <dd><table><tr><td><pre class="variable">
-&lt;CDLL '/System/Library/Frameworks/Foundation.framework/Foundation', ha<span class="variable-linewrap"><img src="crarr.png" alt="\" /></span>
-ndle 7fb4e44cbaf0 at 7fb4e6adb710&gt;
+&lt;CDLL 'Foundation.framework/Foundation', handle 7ff71eb05890 at 7ff71e<span class="variable-linewrap"><img src="crarr.png" alt="\" /></span>
+9ea1d0&gt;
 </pre></td></tr></table>
 </dd>
   </dl>
@@ -10869,26 +10920,7 @@ ndle 7fb4e44cbaf0 at 7fb4e6adb710&gt;
   <dl class="fields">
     <dt>Value:</dt>
       <dd><table><tr><td><pre class="variable">
-&lt;CDLL '/usr/lib/libobjc.dylib', handle 1106729d0 at 7fb4e6adb9d0&gt;
-</pre></td></tr></table>
-</dd>
-  </dl>
-</td></tr></table>
-</div>
-<a name="libquartz"></a>
-<div>
-<table class="details" border="1" cellpadding="3"
-       cellspacing="0" width="100%" bgcolor="white">
-<tr><td>
-  <h3 class="epydoc">libquartz</h3>
-  
-  <dl class="fields">
-  </dl>
-  <dl class="fields">
-    <dt>Value:</dt>
-      <dd><table><tr><td><pre class="variable">
-&lt;CDLL '/System/Library/Frameworks/quartz.framework/quartz', handle 7fb<span class="variable-linewrap"><img src="crarr.png" alt="\" /></span>
-4e44dd0a0 at 7fb4e6ac7410&gt;
+&lt;CDLL 'libobjc.dylib', handle 113f46080 at 7ff71e9ea210&gt;
 </pre></td></tr></table>
 </dd>
   </dl>
@@ -10926,7 +10958,7 @@ ndle 7fb4e44cbaf0 at 7fb4e6adb710&gt;
 <table border="0" cellpadding="0" cellspacing="0" width="100%%">
   <tr>
     <td align="left" class="footer">
-    Generated by Epydoc 3.0.1 on Mon Nov 16 20:16:49 2020
+    Generated by Epydoc 3.0.1 on Sat Nov 21 15:42:46 2020
     </td>
     <td align="right" class="footer">
       <a target="mainFrame" href="http://epydoc.sourceforge.net"

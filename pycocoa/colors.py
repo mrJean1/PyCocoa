@@ -9,17 +9,69 @@ C{enum}-like constants L{CMYColors}, L{GrayScaleColors}, L{HSBColors},
 L{RGBColors}, L{TintColor}, L{TintColors}, L{UIColors} and all L{Colors}
 accessible by color space acronym like C{CMY}, C{GS}, C{RGB}, etc.
 
-@var Colors:          Colors by color space acronym, like C{Colors.RGB.Red}, C{Colors.Tint.Red} (C{enum}).
-@var CMYColors:       Some standard C{Cyan-Magenta-Yellow} colors, all L{CMYColor} instances (C{enum}).
+@var Colors: Colors by color space acronym, like C{Colors.RGB.Red}, C{Colors.Tint.Red} (C{enum}).
+@var Colors.CMY: Some standard C{Cyan-Magenta-Yellow} colors, all L{CMYColor} instances (C{enum}).
+@var Colors.GS: Some standard C{Gray-Scale} colors, all L{GrayScaleColor} instances (C{enum}).
+@var Colors.HSB: I{No} standard C{Hue-Saturation-Brightness} colors, L{HSBColor} instances (C{enum}).
+@var Colors.RGB: Some standard C{Red-Green-Blue} colors, all L{RGBColor} instances (C{enum}).
+@var Colors.Tint: Some I{dynamic} tints, adaptable to vibrancy and accessibility settings, all L{TintColor} instances (C{enum}).
+@var Colors.UI: Some I{dynamic} UI element colors, adaptable to vibrancy and accessibility settings, all L{UIColor} instances (C{enum}).
+
+@var CMYColors: Some standard C{Cyan-Magenta-Yellow} colors, all L{CMYColor} instances (C{enum}).
+@var CMYColors.Cyan: Color in the Cyan-Magenta-Yellow space.
+@var CMYColors.Magenta: Color in the Cyan-Magenta-Yellow space.
+@var CMYColors.Yellow: Color in the Cyan-Magenta-Yellow space.
+
 @var GrayScaleColors: Some standard C{Gray-Scale} colors, all L{GrayScaleColor} instances (C{enum}).
-@var HSBColors:       I{No} standard C{Hue-Saturation-Brightness} colors, L{HSBColor} instances (C{enum}).
-@var RGBColors:       Some standard C{Red-Green-Blue} colors, all L{RGBColor} instances (C{enum}).
-@var TintColors:      Some I{dynamic} tints, adaptable to vibrancy and accessibility settings, all L{TintColor} instances (C{enum}).
-@var UIColors:        Some I{dynamic} UI element colors, adaptable to vibrancy and accessibility settings, all L{UIColor} instances (C{enum}).
+@var GrayScaleColors.Black: Color in the Gray-Scale space.
+@var GrayScaleColors.Clear: Color in the Gray-Scale space.
+@var GrayScaleColors.DarkGray: Color in the Gray-Scale space.
+@var GrayScaleColors.Gray: Color in the Gray-Scale space.
+@var GrayScaleColors.LightGray: Color in the Gray-Scale space.
+@var GrayScaleColors.Tansparent: Color in the Gray-Scale space.
+@var GrayScaleColors.White: Color in the Gray-Scale space.
+
+@var HSBColors: I{No} standard C{Hue-Saturation-Brightness} colors, L{HSBColor} instances (C{enum}).
+@var HSBColors.NoneYet:
+
+@var RGBColors: Some standard C{Red-Green-Blue} colors, all L{RGBColor} instances (C{enum}).
+@var RGBColors.Blue: Color in the Red-Green-Blue space.
+@var RGBColors.Brown: Color in the Red-Green-Blue space.
+@var RGBColors.Green: Color in the Red-Green-Blue space.
+@var RGBColors.Orange: Color in the Red-Green-Blue space.
+@var RGBColors.Purple: Color in the Red-Green-Blue space.
+@var RGBColors.Red: Color in the Red-Green-Blue space.
+
+@var TintColors: Some I{dynamic} tints, adaptable to vibrancy and accessibility settings, all L{TintColor} instances (C{enum}).
+@var TintColors.Blue: I{Dynamic} color, adaptable to vibrancy and accessibility settings.
+@var TintColors.Brown: I{Dynamic} color, adaptable to vibrancy and accessibility settings.
+@var TintColors.Gray: I{Dynamic} color, adaptable to vibrancy and accessibility settings.
+@var TintColors.Green: I{Dynamic} color, adaptable to vibrancy and accessibility settings.
+@var TintColors.Indigo: I{Dynamic} color, adaptable to vibrancy and accessibility settings.
+@var TintColors.Orange: I{Dynamic} color, adaptable to vibrancy and accessibility settings.
+@var TintColors.Pink: I{Dynamic} color, adaptable to vibrancy and accessibility settings.
+@var TintColors.Purple: I{Dynamic} color, adaptable to vibrancy and accessibility settings.
+@var TintColors.Red: I{Dynamic} color, adaptable to vibrancy and accessibility settings.
+@var TintColors.Teal: I{Dynamic} color, adaptable to vibrancy and accessibility settings.
+@var TintColors.Yellow: I{Dynamic} color, adaptable to vibrancy and accessibility settings.
+
+@var UIColors: Some I{dynamic} UI element colors, adaptable to vibrancy and accessibility settings, all L{UIColor} instances (C{enum}).
+@var UIColors.Control: I{Dynamic} color for User-Interface elements, adaptable to vibrancy and accessibility settings.
+@var UIColors.ControlBackground: I{Dynamic} color for User-Interface elements, adaptable to vibrancy and accessibility settings.
+@var UIColors.Grid: I{Dynamic} color for User-Interface elements, adaptable to vibrancy and accessibility settings.
+@var UIColors.HeaderText: I{Dynamic} color for User-Interface elements, adaptable to vibrancy and accessibility settings.
+@var UIColors.Highlight: I{Dynamic} color for User-Interface elements, adaptable to vibrancy and accessibility settings.
+@var UIColors.Label: I{Dynamic} color for User-Interface elements, adaptable to vibrancy and accessibility settings.
+@var UIColors.Link: I{Dynamic} color for User-Interface elements, adaptable to vibrancy and accessibility settings.
+@var UIColors.SelectedText: I{Dynamic} color for User-Interface elements, adaptable to vibrancy and accessibility settings.
+@var UIColors.Separator: I{Dynamic} color for User-Interface elements, adaptable to vibrancy and accessibility settings.
+@var UIColors.Shadow: I{Dynamic} color for User-Interface elements, adaptable to vibrancy and accessibility settings.
+@var UIColors.Text: I{Dynamic} color for User-Interface elements, adaptable to vibrancy and accessibility settings.
+@var UIColors.WindowBackground: I{Dynamic} color for User-Interface elements, adaptable to vibrancy and accessibility settings.
 '''
 # all imports listed explicitly to help PyChecker
 from pycocoa.bases   import _Type0
-from pycocoa.lazily  import _ALL_LAZY
+from pycocoa.lazily  import _ALL_LAZY, _NN_
 from pycocoa.nstypes import  NSColor
 from pycocoa.utils   import _Constants, property_RO, _Types
 
@@ -27,7 +79,7 @@ from copy import copy as _copy
 # from enum   import Enum
 
 __all__ = _ALL_LAZY.colors
-__version__ = '20.11.14'
+__version__ = '20.11.20'
 
 
 def _Xhandler(unused):
@@ -62,7 +114,7 @@ class Color(_Type0):
     _name    = None
     _nsColor = None
 
-    def __init__(self, name, nsColor=''):
+    def __init__(self, name, nsColor=_NN_):
         ''' New L{Color} from an existing C{NSColor}.
 
            @arg name: Given color nsme (C{str}).
@@ -260,7 +312,7 @@ class CMYColor(Color):
 
 # <https://Developer.Apple.com/documentation/appkit/nscolor/standard_colors>
 class CMYColors(_Constants):
-    '''Some standard C{Cyan-Magenta-Yellow} colors.
+    '''Some standard C{Cyan-Magenta-Yellow} colors, all L{CMYColor} instances (C{enum}).
     '''
     Cyan    = CMYColor('cyan')
     Magenta = CMYColor('magenta')
@@ -287,7 +339,7 @@ class GrayScaleColor(Color):
 
 # <https://Developer.Apple.com/documentation/appkit/nscolor/standard_colors>
 class GrayScaleColors(_Constants):
-    '''Some standard C{Gray-Scale} colors.
+    '''Some standard C{Gray-Scale} colors, all L{GrayScaleColor} instances (C{enum}).
     '''
     Black      = GrayScaleColor('black')
     Clear      = GrayScaleColor('clear')
@@ -324,7 +376,7 @@ class HSBColor(Color):
 
 # <https://Developer.Apple.com/documentation/appkit/nscolor/standard_colors>
 class HSBColors(_Constants):
-    '''I{No} standard C{Hue-Saturation-Brightness} colors, I{yet}.
+    '''I{No} standard C{Hue-Saturation-Brightness} colors, L{HSBColor} instances (C{enum}).
     '''
     NoneYet=None
 
@@ -355,15 +407,15 @@ class RGBColor(Color):
 
 # <https://Developer.Apple.com/documentation/appkit/nscolor/standard_colors>
 class RGBColors(_Constants):
-    '''Some standard C{Red-Green-Blue} colors.
+    '''Some standard C{Red-Green-Blue} colors, all L{RGBColor} instances (C{enum}).
     '''
-    Red     = RGBColor('red')
-    Green   = RGBColor('green')
-    Blue    = RGBColor('blue')
+    Red    = RGBColor('red')
+    Green  = RGBColor('green')
+    Blue   = RGBColor('blue')
 
-    Brown   = RGBColor('brown')
-    Orange  = RGBColor('orange')
-    Purple  = RGBColor('purple')
+    Brown  = RGBColor('brown')
+    Orange = RGBColor('orange')
+    Purple = RGBColor('purple')
 
 RGBColors = RGBColors()  # PYCHOK singleton
 
@@ -388,19 +440,22 @@ class TintColor(_SystemColor):
 
 # <https://Developer.Apple.com/documentation/appkit/nscolor/standard_colors>
 class TintColors(_Constants):
-    '''Some I{dynamic} tints, adaptable to vibrancy and accessibility settings.
+    '''Some I{dynamic} tints, adaptable to vibrancy and accessibility settings, all L{TintColor} instances (C{enum}).
     '''
-    Blue    = TintColor('Blue')
-    Brown   = TintColor('Brown')
-    Gray    = TintColor('Gray')
-    Green   = TintColor('Green')
-    Indigo  = TintColor('Indigo')
-    Orange  = TintColor('Orange')
-    Pink    = TintColor('Pink')
-    Purple  = TintColor('Purple')
-    Red     = TintColor('Red')
-    Teal    = TintColor('Teal')
-    Yellow  = TintColor('Yellow')
+    Blue       = TintColor('Blue')
+    Brown      = TintColor('Brown')
+    Gray       = TintColor('Gray')
+    Green      = TintColor('Green')
+    try:  # may not exist
+        Indigo = TintColor('Indigo')
+    except ColorError:
+        pass
+    Orange     = TintColor('Orange')
+    Pink       = TintColor('Pink')
+    Purple     = TintColor('Purple')
+    Red        = TintColor('Red')
+    Teal       = TintColor('Teal')
+    Yellow     = TintColor('Yellow')
 
 TintColors = TintColors()  # PYCHOK singleton
 
@@ -413,7 +468,7 @@ class UIColor(_SystemColor):
 
 # <https://Developer.Apple.com/documentation/appkit/nscolor/ui_element_colors>
 class UIColors(_Constants):
-    '''Some I{dynamic} UI element colors, adaptable to vibrancy and accessibility settings.
+    '''Some I{dynamic} UI element colors, adaptable to vibrancy and accessibility settings, all L{UIColor} instances (C{enum}).
     '''
     Control           = UIColor('control')
     ControlBackground = UIColor('controlBackground')
@@ -422,7 +477,10 @@ class UIColors(_Constants):
     Highlight         = UIColor('highlight')
     Label             = UIColor('label')
     Link              = UIColor('link')
-    Separator         = UIColor('separator')
+    try:
+        Separator     = UIColor('separator')
+    except ColorError:
+        pass
     SelectedText      = UIColor('selectedText')
     Shadow            = UIColor('shadow')
     Text              = UIColor('text')
@@ -432,7 +490,7 @@ UIColors = UIColors()  # PYCHOK singleton
 
 
 class Colors(_Constants):
-    '''Colors by color space acronym, like C{Colors.RGB.Red}, C{Colors.Tint.Red}.
+    '''Colors by color space acronym, like C{Colors.RGB.Red}, C{Colors.Tint.Red} (C{enum}).
     '''
     CMY  = CMYColors
     GS   = GrayScaleColors
@@ -457,7 +515,15 @@ NSColor._Type = _Types.Color = Color
 
 if __name__ == '__main__':
 
-    from pycocoa.utils import _all_listing
+    from pycocoa.utils import _all_listing, _varstr
+
+    print(_varstr(Colors))
+    print(_varstr(CMYColors))
+    print(_varstr(GrayScaleColors))
+    print(_varstr(HSBColors))
+    print(_varstr(RGBColors))
+    print(_varstr(TintColors))
+    print(_varstr(UIColors))
 
     _all_listing(__all__, locals())
 

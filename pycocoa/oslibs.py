@@ -20,7 +20,7 @@ but not exported.
 
 '''
 # all imports listed explicitly to help PyChecker
-from pycocoa.lazily import _ALL_LAZY
+from pycocoa.lazily import _ALL_LAZY, _bNN_, _DOT_, _NN_
 from pycocoa.octypes import Allocator_t, Array_t, BOOL_t, CFIndex_t, \
                             CFRange_t, CGBitmapInfo_t, CGDirectDisplayID_t, \
                             CGError_t, CGFloat_t, CGGlyph_t, CGPoint_t, \
@@ -33,7 +33,7 @@ from pycocoa.octypes import Allocator_t, Array_t, BOOL_t, CFIndex_t, \
                             objc_property_attribute_t, Protocol_t, \
                             SEL_t, Set_t, String_t, TypeRef_t, \
                             UniChar_t, URL_t
-from pycocoa.utils import bytes2str, str2bytes
+from pycocoa.utils import Adict, bytes2str, _macOSver, str2bytes
 
 from ctypes import byref, cast, cdll, c_buffer, c_byte, c_char, \
                    c_char_p, c_double, c_float, c_int, c_int8, c_int16, \
@@ -41,16 +41,16 @@ from ctypes import byref, cast, cdll, c_buffer, c_byte, c_char, \
                    c_short, c_size_t, c_uint, c_uint8, c_uint32, \
                    c_void_p, POINTER, sizeof  # c_ubyte, string_at
 try:
-    from ctypes.util import find_library as _find_lib
+    from ctypes.util import find_library as _find_library
 except ImportError:  # XXX Pythonista/iOS
-    def _find_lib(unused):
-        return None
-import os.path as os_path
+    def _find_library(*unused):  # PYCHOK expected
+        return None  # not found
+from os.path import join as _join, sep as _SEP
 
 __all__ = _ALL_LAZY.oslibs
-__version__ = '20.11.14'
+__version__ = '20.11.20'
 _leaked2    = []  # leaked memory, 2-tuples (ptr, size)
-_libs_cache = {}  # loaded libraries, by name
+_libs_cache = Adict()  # loaded libraries, by name
 
 NO  = False  # c_byte(0)
 YES = True   # c_byte(1)
@@ -119,6 +119,53 @@ def _free_memory(ptr, size):
         _libc_free(ptr)
 
 
+if _macOSver() > '10.15':  # Big Sur plus
+    # macOS 10.16 aka 11 no longer provides direct loading
+    # of system libraries, instead it installs the library
+    # after a low-level dlopen(name) call with the library
+    # base name; as a result, ctypes.util.find_library may
+    # longer find any library not previously dlopen'ed.
+
+    from ctypes import _dlopen
+
+    def _find_lib(name):
+        '''Mimick C{ctype.util.find_library}, return the base
+           name of the library.
+        '''
+        ns = (name, _DOT_(name, 'dylib'),
+                    _DOT_(name, 'framework'), _join(
+                    _DOT_(name, 'framework'), name),
+                    _find_library(name))
+        for n in ns:
+            try:
+                if n and _dlopen(n):  # handle
+                    return n
+            except OSError:
+                pass
+        else:
+            ns = '%r %r' % (name, ns[1:])
+            raise OSError("couldn't %s lib %s" % ('find', ns))
+        return None  # not found
+
+else:
+    _find_lib = _find_library
+
+
+def _load_lib(name):  # PYCHOK expected
+    '''Load the named library.
+    '''
+    if name:
+        try:
+            lib = cdll.LoadLibrary(name)
+            if lib._name:  # qualified name
+                return lib
+        except (AttributeError, OSError):
+            t = 'load'
+    else:
+        t = 'find'
+    raise OSError("couldn't %s lib %r" % (t, name))
+
+
 def get_lib(name):
     '''Find and load a C{.dylib} library.
 
@@ -128,23 +175,20 @@ def get_lib(name):
 
        @note: Private attribute C{._name} shows the library path.
     '''
-    try:
-        lib = _libs_cache[name]
-    except KeyError:
-        lib = cdll.LoadLibrary(_find_lib(name))
-        _libs_cache[name] = lib
-    return lib
+    if name not in _libs_cache:
+        _libs_cache[name] = _load_lib(_find_lib(name))
+    return _libs_cache[name]
 
 
 def get_libs():
     '''Return the C{.dylib} libraries loaded so far.
 
-       @return: The libraries cached (C{dict}).
+       @return: The libraries cached (C{Adict}).
     '''
     return _libs_cache.copy()
 
 
-def get_lib_framework(name, services='ApplicationServices', version=''):
+def get_lib_framework(name, services='ApplicationServices', version=_NN_):
     '''Load a C{Frameworks services .framework} library.
 
        @param name: Library base name (C{str}).
@@ -159,24 +203,21 @@ def get_lib_framework(name, services='ApplicationServices', version=''):
         - get_lib_framework('PrintCore')
         - get_lib_framework('Metadata', services='CoreServices')
     '''
-    try:
-        n_fw = name + '.framework'
-        lib = _libs_cache[n_fw]
-    except KeyError:
-        s_fw = services + '.framework'
+    n_fw = _DOT_(name, 'framework')
+    if n_fw not in _libs_cache:
+        s_fw = _DOT_(services, 'framework')
         if version:  # PYCHOK not 'Current'
-            name = os_path.join('Versions', version, name)  # PYCHOK version
-        p = os_path.join('System', 'Library', 'Frameworks',
-                          s_fw, 'Frameworks', n_fw, name)
-        lib = cdll.LoadLibrary(os_path.sep + p)
-        _libs_cache[n_fw] = lib
-    return lib
+            name = _join('Versions', version, name)  # PYCHOK version
+        p = _join(_SEP, 'System', 'Library', 'Frameworks',
+                  s_fw, 'Frameworks', n_fw, name)
+        _libs_cache[n_fw] = _load_lib(p)
+    return _libs_cache[n_fw]
 
 
 # get function free(void *ptr) from the C runtime
 # (see <https://GitHub.com/oaubert/python-vlc>, the
 # Python binding for VLC in folder generated/*/vlc.py)
-_libc = get_lib('c')
+_libc = get_lib('libc')
 if _libc:  # macOS, linux, etc.
     _libc_free = _libc.free
     _csignature(_libc_free, c_void, c_void_p)
@@ -213,11 +254,10 @@ def _listdup(result, *unused):  # func, args
 def _strdup(result, *unused):  # func, args
     # copy the nul-terminated string
     # and free the original memory
-    return b''.join(_dup(result, c_byte)) if result else b''
+    return _bNN_.join(_dup(result, c_byte)) if result else _bNN_
 
 
 # CORE FOUNDATION
-
 libCF = get_lib('CoreFoundation')
 
 # see also framework_constants_via_ctypes.py and -_pyobjc.py
@@ -463,7 +503,7 @@ def cfURL2str(url):
     return cfString2str(libCF.CFURLGetString(url))
 
 
-# APPLICATION KIc
+# APPLICATION KIT
 # Even though we don't use this directly, it must be loaded so that
 # we can find the NSApplication, NSWindow, and NSView classes.
 libAppKit = get_lib('AppKit')
@@ -698,86 +738,6 @@ NSWindowDocumentIconButton = 4
 # <https://Developer.Apple.com/documentation/appkit/1473652-nsrectfill>
 _csignature(libAppKit.NSRectFill, c_void, POINTER(NSRect_t))
 
-# QUARTZ / COREGRAPHICS
-libquartz = get_lib('quartz')
-
-# /System/Library/Frameworks/ApplicationServices.framework/Frameworks/...
-#  CoreGraphics.framework/Headers/CGImage.h
-kCGImageAlphaNone               = 0
-kCGImageAlphaPremultipliedLast  = 1
-kCGImageAlphaPremultipliedFirst = 2
-kCGImageAlphaLast               = 3
-kCGImageAlphaFirst              = 4
-kCGImageAlphaNoneSkipLast       = 5
-kCGImageAlphaNoneSkipFirst      = 6
-kCGImageAlphaOnly               = 7
-
-kCGImageAlphaPremultipliedLast = 1
-
-kCGBitmapAlphaInfoMask   = 0x1F
-kCGBitmapFloatComponents = 1 << 8
-
-kCGBitmapByteOrderDefault  = 0 << 12
-kCGBitmapByteOrder16Little = 1 << 12
-kCGBitmapByteOrder32Little = 2 << 12
-kCGBitmapByteOrder16Big    = 3 << 12
-kCGBitmapByteOrder32Big    = 4 << 12
-kCGBitmapByteOrderMask     = 7 << 12
-
-# /System/Library/Frameworks/ApplicationServices.framework/Frameworks/...
-#  ImageIO.framework/Headers/CGImageProperties.h
-kCGImagePropertyGIFDictionary = c_void_p.in_dll(libquartz, 'kCGImagePropertyGIFDictionary')
-kCGImagePropertyGIFDelayTime  = c_void_p.in_dll(libquartz, 'kCGImagePropertyGIFDelayTime')
-
-# /System/Library/Frameworks/ApplicationServices.framework/Frameworks/...
-#  CoreGraphics.framework/Headers/CGColorSpace.h
-kCGRenderingIntentDefault = 0
-
-_csignature(libquartz.CGAssociateMouseAndMouseCursorPosition, CGError_t, BOOL_t)
-_csignature(libquartz.CGBitmapContextCreate, c_void_p, c_void_p, c_size_t, c_size_t, c_size_t, c_size_t, c_void_p, CGBitmapInfo_t)
-_csignature(libquartz.CGBitmapContextCreateImage, c_void_p, c_void_p)
-_csignature(libquartz.CGColorSpaceCreateDeviceRGB, c_void_p)
-_csignature(libquartz.CGColorSpaceRelease, c_void, c_void_p)
-_csignature(libquartz.CGContextDrawImage, c_void, c_void_p, CGRect_t, c_void_p)
-_csignature(libquartz.CGContextRelease, c_void, c_void_p)
-_csignature(libquartz.CGContextSetShouldAntialias, c_void,c_void_p, BOOL_t)
-_csignature(libquartz.CGContextSetTextPosition, c_void, c_void_p, CGFloat_t, CGFloat_t)
-_csignature(libquartz.CGCursorIsVisible, BOOL_t)
-_csignature(libquartz.CGDataProviderCopyData, c_void_p, c_void_p)
-_csignature(libquartz.CGDataProviderCreateWithCFData, c_void_p, c_void_p)
-_csignature(libquartz.CGDataProviderRelease, c_void, c_void_p)
-_csignature(libquartz.CGDisplayBounds, CGRect_t, CGDirectDisplayID_t)
-_csignature(libquartz.CGDisplayCapture, CGError_t, CGDirectDisplayID_t)
-_csignature(libquartz.CGDisplayCopyAllDisplayModes, c_void_p, CGDirectDisplayID_t, c_void_p)
-_csignature(libquartz.CGDisplayCopyDisplayMode, c_void_p, CGDirectDisplayID_t)
-_csignature(libquartz.CGDisplayIDToOpenGLDisplayMask, c_uint32, c_uint32)
-_csignature(libquartz.CGDisplayModeCopyPixelEncoding, c_void_p, c_void_p)
-_csignature(libquartz.CGDisplayModeGetHeight, c_size_t, c_void_p)
-_csignature(libquartz.CGDisplayModeGetRefreshRate, c_double, c_void_p)
-_csignature(libquartz.CGDisplayModeGetWidth, c_size_t, c_void_p)
-_csignature(libquartz.CGDisplayModeRelease, c_void, c_void_p)
-_csignature(libquartz.CGDisplayModeRetain, c_void_p, c_void_p)
-_csignature(libquartz.CGDisplayMoveCursorToPoint, CGError_t, CGDirectDisplayID_t, CGPoint_t)
-_csignature(libquartz.CGDisplayRelease, CGError_t, CGDirectDisplayID_t)
-_csignature(libquartz.CGDisplaySetDisplayMode, CGError_t, CGDirectDisplayID_t, c_void_p, c_void_p)
-_csignature(libquartz.CGFontCreateWithDataProvider, c_void_p, c_void_p)
-_csignature(libquartz.CGFontCreateWithFontName, c_void_p, c_void_p)
-_csignature(libquartz.CGGetActiveDisplayList, CGError_t, c_uint32, POINTER(CGDirectDisplayID_t), POINTER(c_uint32))
-_csignature(libquartz.CGImageCreate, c_void_p, c_size_t, c_size_t, c_size_t, c_size_t, c_size_t, c_void_p, c_uint32, c_void_p, c_void_p, BOOL_t, c_int)
-_csignature(libquartz.CGImageGetBitmapInfo, CGBitmapInfo_t, c_void_p)
-_csignature(libquartz.CGImageGetBitsPerPixel, c_size_t, c_void_p)
-_csignature(libquartz.CGImageGetBytesPerRow, c_size_t, c_void_p)
-_csignature(libquartz.CGImageGetDataProvider, c_void_p, c_void_p)
-_csignature(libquartz.CGImageGetHeight, c_size_t, c_void_p)
-_csignature(libquartz.CGImageGetWidth, c_size_t, c_void_p)
-_csignature(libquartz.CGImageRelease, c_void, c_void_p)
-_csignature(libquartz.CGImageSourceCopyPropertiesAtIndex, c_void_p, c_void_p, c_size_t, c_void_p)
-_csignature(libquartz.CGImageSourceCreateImageAtIndex, c_void_p, c_void_p, c_size_t, c_void_p)
-_csignature(libquartz.CGImageSourceCreateWithData, c_void_p, c_void_p, c_void_p)
-_csignature(libquartz.CGMainDisplayID, CGDirectDisplayID_t)
-_csignature(libquartz.CGShieldingWindowLevel, c_int32)
-_csignature(libquartz.CGWarpMouseCursorPosition, CGError_t, CGPoint_t)
-
 # CORETEXT
 libCT = get_lib('CoreText')
 
@@ -859,7 +819,7 @@ _csignature_variadic(libFoundation.NSLog, c_void, c_char_p)  # ... like printf(f
 _csignature(libFoundation.NSMouseInRect, BOOL_t, CGPoint_t, CGRect_t, BOOL_t)  # CORETEXT  flipped=NO
 
 # OBJECTIVE-C
-libobjc = get_lib('objc')
+libobjc = get_lib('libobjc')
 
 # BOOL class_addIvar(Class_t cls, const char *name, size_t size, uint8_t alignment, const char *types)
 _csignature(libobjc.class_addIvar, BOOL_t, Class_t, c_char_p, c_size_t, c_uint8, c_char_p)
@@ -1065,6 +1025,88 @@ _csignature(libobjc.sel_isEqual, BOOL_t, SEL_t, SEL_t)
 # Use sel_registerName instead.
 # SEL_t sel_registerName(const char *str)
 _csignature(libobjc.sel_registerName, SEL_t, c_char_p)
+
+try:  # QUARTZ / COREGRAPHICS
+    libquartz = get_lib('quartz')
+
+    # /System/Library/Frameworks/ApplicationServices.framework/Frameworks/...
+    #  CoreGraphics.framework/Headers/CGImage.h
+    kCGImageAlphaNone               = 0
+    kCGImageAlphaPremultipliedLast  = 1
+    kCGImageAlphaPremultipliedFirst = 2
+    kCGImageAlphaLast               = 3
+    kCGImageAlphaFirst              = 4
+    kCGImageAlphaNoneSkipLast       = 5
+    kCGImageAlphaNoneSkipFirst      = 6
+    kCGImageAlphaOnly               = 7
+
+    kCGImageAlphaPremultipliedLast = 1
+
+    kCGBitmapAlphaInfoMask   = 0x1F
+    kCGBitmapFloatComponents = 1 << 8
+
+    kCGBitmapByteOrderDefault  = 0 << 12
+    kCGBitmapByteOrder16Little = 1 << 12
+    kCGBitmapByteOrder32Little = 2 << 12
+    kCGBitmapByteOrder16Big    = 3 << 12
+    kCGBitmapByteOrder32Big    = 4 << 12
+    kCGBitmapByteOrderMask     = 7 << 12
+
+    # /System/Library/Frameworks/ApplicationServices.framework/Frameworks/...
+    #  ImageIO.framework/Headers/CGImageProperties.h
+    kCGImagePropertyGIFDictionary = c_void_p.in_dll(libquartz, 'kCGImagePropertyGIFDictionary')
+    kCGImagePropertyGIFDelayTime  = c_void_p.in_dll(libquartz, 'kCGImagePropertyGIFDelayTime')
+    # /System/Library/Frameworks/ApplicationServices.framework/Frameworks/...
+    #  CoreGraphics.framework/Headers/CGColorSpace.h
+    kCGRenderingIntentDefault = 0
+
+    _csignature(libquartz.CGAssociateMouseAndMouseCursorPosition, CGError_t, BOOL_t)
+    _csignature(libquartz.CGBitmapContextCreate, c_void_p, c_void_p, c_size_t, c_size_t, c_size_t, c_size_t, c_void_p, CGBitmapInfo_t)
+    _csignature(libquartz.CGBitmapContextCreateImage, c_void_p, c_void_p)
+    _csignature(libquartz.CGColorSpaceCreateDeviceRGB, c_void_p)
+    _csignature(libquartz.CGColorSpaceRelease, c_void, c_void_p)
+    _csignature(libquartz.CGContextDrawImage, c_void, c_void_p, CGRect_t, c_void_p)
+    _csignature(libquartz.CGContextRelease, c_void, c_void_p)
+    _csignature(libquartz.CGContextSetShouldAntialias, c_void,c_void_p, BOOL_t)
+    _csignature(libquartz.CGContextSetTextPosition, c_void, c_void_p, CGFloat_t, CGFloat_t)
+    _csignature(libquartz.CGCursorIsVisible, BOOL_t)
+    _csignature(libquartz.CGDataProviderCopyData, c_void_p, c_void_p)
+    _csignature(libquartz.CGDataProviderCreateWithCFData, c_void_p, c_void_p)
+    _csignature(libquartz.CGDataProviderRelease, c_void, c_void_p)
+    _csignature(libquartz.CGDisplayBounds, CGRect_t, CGDirectDisplayID_t)
+    _csignature(libquartz.CGDisplayCapture, CGError_t, CGDirectDisplayID_t)
+    _csignature(libquartz.CGDisplayCopyAllDisplayModes, c_void_p, CGDirectDisplayID_t, c_void_p)
+    _csignature(libquartz.CGDisplayCopyDisplayMode, c_void_p, CGDirectDisplayID_t)
+    _csignature(libquartz.CGDisplayIDToOpenGLDisplayMask, c_uint32, c_uint32)
+    _csignature(libquartz.CGDisplayModeCopyPixelEncoding, c_void_p, c_void_p)
+    _csignature(libquartz.CGDisplayModeGetHeight, c_size_t, c_void_p)
+    _csignature(libquartz.CGDisplayModeGetRefreshRate, c_double, c_void_p)
+    _csignature(libquartz.CGDisplayModeGetWidth, c_size_t, c_void_p)
+    _csignature(libquartz.CGDisplayModeRelease, c_void, c_void_p)
+    _csignature(libquartz.CGDisplayModeRetain, c_void_p, c_void_p)
+    _csignature(libquartz.CGDisplayMoveCursorToPoint, CGError_t, CGDirectDisplayID_t, CGPoint_t)
+    _csignature(libquartz.CGDisplayRelease, CGError_t, CGDirectDisplayID_t)
+    _csignature(libquartz.CGDisplaySetDisplayMode, CGError_t, CGDirectDisplayID_t, c_void_p, c_void_p)
+    _csignature(libquartz.CGFontCreateWithDataProvider, c_void_p, c_void_p)
+    _csignature(libquartz.CGFontCreateWithFontName, c_void_p, c_void_p)
+    _csignature(libquartz.CGGetActiveDisplayList, CGError_t, c_uint32, POINTER(CGDirectDisplayID_t), POINTER(c_uint32))
+    _csignature(libquartz.CGImageCreate, c_void_p, c_size_t, c_size_t, c_size_t, c_size_t, c_size_t, c_void_p, c_uint32, c_void_p, c_void_p, BOOL_t, c_int)
+    _csignature(libquartz.CGImageGetBitmapInfo, CGBitmapInfo_t, c_void_p)
+    _csignature(libquartz.CGImageGetBitsPerPixel, c_size_t, c_void_p)
+    _csignature(libquartz.CGImageGetBytesPerRow, c_size_t, c_void_p)
+    _csignature(libquartz.CGImageGetDataProvider, c_void_p, c_void_p)
+    _csignature(libquartz.CGImageGetHeight, c_size_t, c_void_p)
+    _csignature(libquartz.CGImageGetWidth, c_size_t, c_void_p)
+    _csignature(libquartz.CGImageRelease, c_void, c_void_p)
+    _csignature(libquartz.CGImageSourceCopyPropertiesAtIndex, c_void_p, c_void_p, c_size_t, c_void_p)
+    _csignature(libquartz.CGImageSourceCreateImageAtIndex, c_void_p, c_void_p, c_size_t, c_void_p)
+    _csignature(libquartz.CGImageSourceCreateWithData, c_void_p, c_void_p, c_void_p)
+    _csignature(libquartz.CGMainDisplayID, CGDirectDisplayID_t)
+    _csignature(libquartz.CGShieldingWindowLevel, c_int32)
+    _csignature(libquartz.CGWarpMouseCursorPosition, CGError_t, CGPoint_t)
+
+except OSError:  # macOS 11 Big Sur
+    libquartz = None
 
 # VLC KIT
 # libVLCKit = get_lib('VLCKit')  # XXX not needed

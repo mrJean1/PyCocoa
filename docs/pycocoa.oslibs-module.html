@@ -67,7 +67,7 @@
         also installed, but not exported.
       </p>
       <p><strong>Version:</strong>
-        20.11.14
+        20.11.20
       </p>
 </div><!-- ==================== CLASSES ==================== -->
 <a name="section-Classes"></a>
@@ -135,7 +135,7 @@
         <tr>
           <td><span class="summary-sig"><a href="pycocoa.oslibs-module.html#get_lib_framework" class="summary-sig-name">get_lib_framework</a>(<span class="summary-sig-arg">name</span>,
         <span class="summary-sig-arg">services</span>=<span class="summary-sig-default"><code class="variable-quote">'</code><code class="variable-string">ApplicationServices</code><code class="variable-quote">'</code></span>,
-        <span class="summary-sig-arg">version</span>=<span class="summary-sig-default"><code class="variable-quote">'</code><code class="variable-string"></code><code class="variable-quote">'</code></span>)</span><br />
+        <span class="summary-sig-arg">version</span>=<span class="summary-sig-default">''</span>)</span><br />
       Load a <code>Frameworks services .framework</code> library.</td>
           <td align="right" valign="top">
             
@@ -199,8 +199,8 @@
     <td width="15%" align="right" valign="top" class="summary">
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
-        <a href="pycocoa.oslibs-module.html#libCF" class="summary-name">libCF</a> = <code title="&lt;CDLL '/System/Library/Frameworks/CoreFoundation.framework/CoreFoundat\
-ion', handle 110670878 at 7fb4e6aeb7d0&gt;">&lt;CDLL '/System/Library/Frameworks/CoreFoundation.frame<code class="variable-ellipsis">...</code></code><br />
+        <a href="pycocoa.oslibs-module.html#libCF" class="summary-name">libCF</a> = <code title="&lt;CDLL 'CoreFoundation.framework/CoreFoundation', handle 113f43910 at 7\
+ff71e9d7290&gt;">&lt;CDLL 'CoreFoundation.framework/CoreFoundation', handl<code class="variable-ellipsis">...</code></code><br />
       The macOS <code>CoreFoundation</code> library 
       (<code>ctypes.CDLL</code>).
     </td>
@@ -209,8 +209,7 @@ ion', handle 110670878 at 7fb4e6aeb7d0&gt;">&lt;CDLL '/System/Library/Frameworks
     <td width="15%" align="right" valign="top" class="summary">
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
-        <a href="pycocoa.oslibs-module.html#libAppKit" class="summary-name">libAppKit</a> = <code title="&lt;CDLL '/System/Library/Frameworks/AppKit.framework/AppKit', handle 7fb\
-4e44c8d50 at 7fb4e6ac7250&gt;">&lt;CDLL '/System/Library/Frameworks/AppKit.framework<code class="variable-ellipsis">...</code></code><br />
+        <a href="pycocoa.oslibs-module.html#libAppKit" class="summary-name">libAppKit</a> = <code title="&lt;CDLL 'AppKit.framework/AppKit', handle 7ff71eb041c0 at 7ff71e9d7b50&gt;">&lt;CDLL 'AppKit.framework/AppKit', handle 7ff71eb041<code class="variable-ellipsis">...</code></code><br />
       The macOS <code>AppKit</code> library (<code>ctypes.CDLL</code>).
     </td>
   </tr>
@@ -218,28 +217,28 @@ ion', handle 110670878 at 7fb4e6aeb7d0&gt;">&lt;CDLL '/System/Library/Frameworks
     <td width="15%" align="right" valign="top" class="summary">
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
-        <a name="NSApplicationDidHideNotification"></a><span class="summary-name">NSApplicationDidHideNotification</span> = <code title="c_void_p(140735427515976)">c_void_p(140735427515976)</code>
+        <a name="NSApplicationDidHideNotification"></a><span class="summary-name">NSApplicationDidHideNotification</span> = <code title="c_void_p(140735346447704)">c_void_p(140735346447704)</code>
     </td>
   </tr>
 <tr>
     <td width="15%" align="right" valign="top" class="summary">
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
-        <a name="NSApplicationDidUnhideNotification"></a><span class="summary-name">NSApplicationDidUnhideNotification</span> = <code title="c_void_p(140735427516072)">c_void_p(140735427516072)</code>
+        <a name="NSApplicationDidUnhideNotification"></a><span class="summary-name">NSApplicationDidUnhideNotification</span> = <code title="c_void_p(140735346447800)">c_void_p(140735346447800)</code>
     </td>
   </tr>
 <tr>
     <td width="15%" align="right" valign="top" class="summary">
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
-        <a name="NSDefaultRunLoopMode"></a><span class="summary-name">NSDefaultRunLoopMode</span> = <code title="c_void_p(140735436663552)">c_void_p(140735436663552)</code>
+        <a name="NSDefaultRunLoopMode"></a><span class="summary-name">NSDefaultRunLoopMode</span> = <code title="c_void_p(140735342906320)">c_void_p(140735342906320)</code>
     </td>
   </tr>
 <tr>
     <td width="15%" align="right" valign="top" class="summary">
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
-        <a name="NSEventTrackingRunLoopMode"></a><span class="summary-name">NSEventTrackingRunLoopMode</span> = <code title="c_void_p(140735427511176)">c_void_p(140735427511176)</code>
+        <a name="NSEventTrackingRunLoopMode"></a><span class="summary-name">NSEventTrackingRunLoopMode</span> = <code title="c_void_p(140735346442904)">c_void_p(140735346442904)</code>
     </td>
   </tr>
 <tr>
@@ -1044,17 +1043,8 @@ ion', handle 110670878 at 7fb4e6aeb7d0&gt;">&lt;CDLL '/System/Library/Frameworks
     <td width="15%" align="right" valign="top" class="summary">
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
-        <a href="pycocoa.oslibs-module.html#libquartz" class="summary-name">libquartz</a> = <code title="&lt;CDLL '/System/Library/Frameworks/quartz.framework/quartz', handle 7fb\
-4e44dd0a0 at 7fb4e6ac7410&gt;">&lt;CDLL '/System/Library/Frameworks/quartz.framework<code class="variable-ellipsis">...</code></code><br />
-      The macOS <code>quartz</code> library (<code>ctypes.CDLL</code>).
-    </td>
-  </tr>
-<tr>
-    <td width="15%" align="right" valign="top" class="summary">
-      <span class="summary-type">&nbsp;</span>
-    </td><td class="summary">
-        <a href="pycocoa.oslibs-module.html#libCT" class="summary-name">libCT</a> = <code title="&lt;CDLL '/System/Library/Frameworks/CoreText.framework/CoreText', handle\
- 7fb4e44cde90 at 7fb4e6adb290&gt;">&lt;CDLL '/System/Library/Frameworks/CoreText.framework/C<code class="variable-ellipsis">...</code></code><br />
+        <a href="pycocoa.oslibs-module.html#libCT" class="summary-name">libCT</a> = <code title="&lt;CDLL 'CoreText.framework/CoreText', handle 7ff71eb06c30 at 7ff71e9d7c\
+10&gt;">&lt;CDLL 'CoreText.framework/CoreText', handle 7ff71eb06c<code class="variable-ellipsis">...</code></code><br />
       The macOS <code>CoreText</code> library (<code>ctypes.CDLL</code>).
     </td>
   </tr>
@@ -1258,8 +1248,8 @@ ion', handle 110670878 at 7fb4e6aeb7d0&gt;">&lt;CDLL '/System/Library/Frameworks
     <td width="15%" align="right" valign="top" class="summary">
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
-        <a href="pycocoa.oslibs-module.html#libFoundation" class="summary-name">libFoundation</a> = <code title="&lt;CDLL '/System/Library/Frameworks/Foundation.framework/Foundation', ha\
-ndle 7fb4e44cbaf0 at 7fb4e6adb710&gt;">&lt;CDLL '/System/Library/Frameworks/Foundation.f<code class="variable-ellipsis">...</code></code><br />
+        <a href="pycocoa.oslibs-module.html#libFoundation" class="summary-name">libFoundation</a> = <code title="&lt;CDLL 'Foundation.framework/Foundation', handle 7ff71eb05890 at 7ff71e\
+9ea1d0&gt;">&lt;CDLL 'Foundation.framework/Foundation', handl<code class="variable-ellipsis">...</code></code><br />
       The macOS <code>Foundation</code> library (<code>ctypes.CDLL</code>).
     </td>
   </tr>
@@ -1267,8 +1257,149 @@ ndle 7fb4e44cbaf0 at 7fb4e6adb710&gt;">&lt;CDLL '/System/Library/Frameworks/Foun
     <td width="15%" align="right" valign="top" class="summary">
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
-        <a href="pycocoa.oslibs-module.html#libobjc" class="summary-name">libobjc</a> = <code title="&lt;CDLL '/usr/lib/libobjc.dylib', handle 1106729d0 at 7fb4e6adb9d0&gt;">&lt;CDLL '/usr/lib/libobjc.dylib', handle 1106729d0 at <code class="variable-ellipsis">...</code></code><br />
+        <a href="pycocoa.oslibs-module.html#libobjc" class="summary-name">libobjc</a> = <code title="&lt;CDLL 'libobjc.dylib', handle 113f46080 at 7ff71e9ea210&gt;">&lt;CDLL 'libobjc.dylib', handle 113f46080 at 7ff71e9ea<code class="variable-ellipsis">...</code></code><br />
       The macOS <code>objc</code> library (<code>ctypes.CDLL</code>).
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a name="kCGImageAlphaNone"></a><span class="summary-name">kCGImageAlphaNone</span> = <code title="0">0</code>
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a name="kCGImageAlphaPremultipliedFirst"></a><span class="summary-name">kCGImageAlphaPremultipliedFirst</span> = <code title="2">2</code>
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a name="kCGImageAlphaLast"></a><span class="summary-name">kCGImageAlphaLast</span> = <code title="3">3</code>
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a name="kCGImageAlphaFirst"></a><span class="summary-name">kCGImageAlphaFirst</span> = <code title="4">4</code>
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a name="kCGImageAlphaNoneSkipLast"></a><span class="summary-name">kCGImageAlphaNoneSkipLast</span> = <code title="5">5</code>
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a name="kCGImageAlphaNoneSkipFirst"></a><span class="summary-name">kCGImageAlphaNoneSkipFirst</span> = <code title="6">6</code>
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a name="kCGImageAlphaOnly"></a><span class="summary-name">kCGImageAlphaOnly</span> = <code title="7">7</code>
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a name="kCGImageAlphaPremultipliedLast"></a><span class="summary-name">kCGImageAlphaPremultipliedLast</span> = <code title="1">1</code>
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a name="kCGBitmapAlphaInfoMask"></a><span class="summary-name">kCGBitmapAlphaInfoMask</span> = <code title="0x1F">0x1F</code>
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a name="kCGBitmapFloatComponents"></a><span class="summary-name">kCGBitmapFloatComponents</span> = <code title="1 &lt;&lt; 8">1 &lt;&lt; 8</code>
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a name="kCGBitmapByteOrderDefault"></a><span class="summary-name">kCGBitmapByteOrderDefault</span> = <code title="0 &lt;&lt; 12">0 &lt;&lt; 12</code>
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a name="kCGBitmapByteOrder16Little"></a><span class="summary-name">kCGBitmapByteOrder16Little</span> = <code title="1 &lt;&lt; 12">1 &lt;&lt; 12</code>
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a name="kCGBitmapByteOrder32Little"></a><span class="summary-name">kCGBitmapByteOrder32Little</span> = <code title="2 &lt;&lt; 12">2 &lt;&lt; 12</code>
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a name="kCGBitmapByteOrder16Big"></a><span class="summary-name">kCGBitmapByteOrder16Big</span> = <code title="3 &lt;&lt; 12">3 &lt;&lt; 12</code>
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a name="kCGBitmapByteOrder32Big"></a><span class="summary-name">kCGBitmapByteOrder32Big</span> = <code title="4 &lt;&lt; 12">4 &lt;&lt; 12</code>
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a name="kCGBitmapByteOrderMask"></a><span class="summary-name">kCGBitmapByteOrderMask</span> = <code title="7 &lt;&lt; 12">7 &lt;&lt; 12</code>
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="pycocoa.oslibs-module.html#kCGImagePropertyGIFDictionary" class="summary-name">kCGImagePropertyGIFDictionary</a> = <code title="c_void_p.in_dll(libquartz, 'kCGImagePropertyGIFDictionary')">c_void_p.in_dll(libquartz, 'kC<code class="variable-ellipsis">...</code></code>
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="pycocoa.oslibs-module.html#kCGImagePropertyGIFDelayTime" class="summary-name">kCGImagePropertyGIFDelayTime</a> = <code title="c_void_p.in_dll(libquartz, 'kCGImagePropertyGIFDelayTime')">c_void_p.in_dll(libquartz, 'kCG<code class="variable-ellipsis">...</code></code>
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a name="kCGRenderingIntentDefault"></a><span class="summary-name">kCGRenderingIntentDefault</span> = <code title="0">0</code>
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a name="libquartz"></a><span class="summary-name">libquartz</span> = <code title="None">None</code><br />
+      The macOS <code>quartz</code> library (<code>ctypes.CDLL</code>).
     </td>
   </tr>
 </table>
@@ -1326,7 +1457,7 @@ ndle 7fb4e44cbaf0 at 7fb4e6adb710&gt;">&lt;CDLL '/System/Library/Frameworks/Foun
   <p>Return the <code>.dylib</code> libraries loaded so far.</p>
   <dl class="fields">
     <dt>Returns:</dt>
-        <dd>The libraries cached (<code>dict</code>).</dd>
+        <dd>The libraries cached (<code>Adict</code>).</dd>
   </dl>
 </td></tr></table>
 </div>
@@ -1339,7 +1470,7 @@ ndle 7fb4e44cbaf0 at 7fb4e6adb710&gt;">&lt;CDLL '/System/Library/Frameworks/Foun
   <tr valign="top"><td>
   <h3 class="epydoc"><span class="sig"><span class="sig-name">get_lib_framework</span>(<span class="sig-arg">name</span>,
         <span class="sig-arg">services</span>=<span class="sig-default"><code class="variable-quote">'</code><code class="variable-string">ApplicationServices</code><code class="variable-quote">'</code></span>,
-        <span class="sig-arg">version</span>=<span class="sig-default"><code class="variable-quote">'</code><code class="variable-string"></code><code class="variable-quote">'</code></span>)</span>
+        <span class="sig-arg">version</span>=<span class="sig-default">''</span>)</span>
   </h3>
   </td><td align="right" valign="top"
     >&nbsp;
@@ -1416,8 +1547,8 @@ ndle 7fb4e44cbaf0 at 7fb4e6adb710&gt;">&lt;CDLL '/System/Library/Frameworks/Foun
   <dl class="fields">
     <dt>Value:</dt>
       <dd><table><tr><td><pre class="variable">
-&lt;CDLL '/System/Library/Frameworks/CoreFoundation.framework/CoreFoundat<span class="variable-linewrap"><img src="crarr.png" alt="\" /></span>
-ion', handle 110670878 at 7fb4e6aeb7d0&gt;
+&lt;CDLL 'CoreFoundation.framework/CoreFoundation', handle 113f43910 at 7<span class="variable-linewrap"><img src="crarr.png" alt="\" /></span>
+ff71e9d7290&gt;
 </pre></td></tr></table>
 </dd>
   </dl>
@@ -1435,27 +1566,7 @@ ion', handle 110670878 at 7fb4e6aeb7d0&gt;
   <dl class="fields">
     <dt>Value:</dt>
       <dd><table><tr><td><pre class="variable">
-&lt;CDLL '/System/Library/Frameworks/AppKit.framework/AppKit', handle 7fb<span class="variable-linewrap"><img src="crarr.png" alt="\" /></span>
-4e44c8d50 at 7fb4e6ac7250&gt;
-</pre></td></tr></table>
-</dd>
-  </dl>
-</td></tr></table>
-</div>
-<a name="libquartz"></a>
-<div>
-<table class="details" border="1" cellpadding="3"
-       cellspacing="0" width="100%" bgcolor="white">
-<tr><td>
-  <h3 class="epydoc">libquartz</h3>
-  The macOS <code>quartz</code> library (<code>ctypes.CDLL</code>).
-  <dl class="fields">
-  </dl>
-  <dl class="fields">
-    <dt>Value:</dt>
-      <dd><table><tr><td><pre class="variable">
-&lt;CDLL '/System/Library/Frameworks/quartz.framework/quartz', handle 7fb<span class="variable-linewrap"><img src="crarr.png" alt="\" /></span>
-4e44dd0a0 at 7fb4e6ac7410&gt;
+&lt;CDLL 'AppKit.framework/AppKit', handle 7ff71eb041c0 at 7ff71e9d7b50&gt;
 </pre></td></tr></table>
 </dd>
   </dl>
@@ -1473,8 +1584,8 @@ ion', handle 110670878 at 7fb4e6aeb7d0&gt;
   <dl class="fields">
     <dt>Value:</dt>
       <dd><table><tr><td><pre class="variable">
-&lt;CDLL '/System/Library/Frameworks/CoreText.framework/CoreText', handle<span class="variable-linewrap"><img src="crarr.png" alt="\" /></span>
- 7fb4e44cde90 at 7fb4e6adb290&gt;
+&lt;CDLL 'CoreText.framework/CoreText', handle 7ff71eb06c30 at 7ff71e9d7c<span class="variable-linewrap"><img src="crarr.png" alt="\" /></span>
+10&gt;
 </pre></td></tr></table>
 </dd>
   </dl>
@@ -1492,8 +1603,8 @@ ion', handle 110670878 at 7fb4e6aeb7d0&gt;
   <dl class="fields">
     <dt>Value:</dt>
       <dd><table><tr><td><pre class="variable">
-&lt;CDLL '/System/Library/Frameworks/Foundation.framework/Foundation', ha<span class="variable-linewrap"><img src="crarr.png" alt="\" /></span>
-ndle 7fb4e44cbaf0 at 7fb4e6adb710&gt;
+&lt;CDLL 'Foundation.framework/Foundation', handle 7ff71eb05890 at 7ff71e<span class="variable-linewrap"><img src="crarr.png" alt="\" /></span>
+9ea1d0&gt;
 </pre></td></tr></table>
 </dd>
   </dl>
@@ -1511,7 +1622,43 @@ ndle 7fb4e44cbaf0 at 7fb4e6adb710&gt;
   <dl class="fields">
     <dt>Value:</dt>
       <dd><table><tr><td><pre class="variable">
-&lt;CDLL '/usr/lib/libobjc.dylib', handle 1106729d0 at 7fb4e6adb9d0&gt;
+&lt;CDLL 'libobjc.dylib', handle 113f46080 at 7ff71e9ea210&gt;
+</pre></td></tr></table>
+</dd>
+  </dl>
+</td></tr></table>
+</div>
+<a name="kCGImagePropertyGIFDictionary"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <h3 class="epydoc">kCGImagePropertyGIFDictionary</h3>
+  
+  <dl class="fields">
+  </dl>
+  <dl class="fields">
+    <dt>Value:</dt>
+      <dd><table><tr><td><pre class="variable">
+c_void_p.in_dll(libquartz, 'kCGImagePropertyGIFDictionary')
+</pre></td></tr></table>
+</dd>
+  </dl>
+</td></tr></table>
+</div>
+<a name="kCGImagePropertyGIFDelayTime"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <h3 class="epydoc">kCGImagePropertyGIFDelayTime</h3>
+  
+  <dl class="fields">
+  </dl>
+  <dl class="fields">
+    <dt>Value:</dt>
+      <dd><table><tr><td><pre class="variable">
+c_void_p.in_dll(libquartz, 'kCGImagePropertyGIFDelayTime')
 </pre></td></tr></table>
 </dd>
   </dl>
@@ -1549,7 +1696,7 @@ ndle 7fb4e44cbaf0 at 7fb4e6adb710&gt;
 <table border="0" cellpadding="0" cellspacing="0" width="100%%">
   <tr>
     <td align="left" class="footer">
-    Generated by Epydoc 3.0.1 on Mon Nov 16 20:16:49 2020
+    Generated by Epydoc 3.0.1 on Sat Nov 21 15:42:47 2020
     </td>
     <td align="right" class="footer">
       <a target="mainFrame" href="http://epydoc.sourceforge.net"

@@ -5,12 +5,39 @@
 
 '''Type L{Font}, etc., wrapping ObjC C{NSFont}.
 
-@var Fonts:     Pre-defined system fonts, all L{Font} instances.
-@var FontTrait: Font traits (C{mask}).
+@var Fonts: Pre-defined system fonts, all L{Font} instances.
+@var Fonts.App: Get the C{UserFont}.
+@var Fonts.Bold: Get the C{BoldFont}.
+@var Fonts.BoldItalic: Get the C{BoldItalicFont}.
+@var Fonts.Italic: Get the C{ItalicFont}.
+@var Fonts.Label: Get the C{LabelFont}.
+@var Fonts.Menu: Get the C{MenuFont}.
+@var Fonts.MenuBar: Get the C{MenuBarFont}.
+@var Fonts.Message: Get the C{MessageFont}.
+@var Fonts.MonoSpace: Get the C{MonoSpaceFont}.
+@var Fonts.Palette: Get the C{PaletteFont}.
+@var Fonts.System: Get the C{SystemFont}.
+@var Fonts.TableData: Get the C{TableDataFont}.
+@var Fonts.TableHeader: Get the C{TableHeaderFont}.
+@var Fonts.Title: Get the C{TitleFont}.
+
+@var FontTrait: Font trait constants (C{mask}).
+@var FontTrait.Bold: int(x=0) -> int or long.
+@var FontTrait.Compressed: int(x=0) -> int or long.
+@var FontTrait.Condensed: int(x=0) -> int or long.
+@var FontTrait.Expanded: int(x=0) -> int or long.
+@var FontTrait.Italic: int(x=0) -> int or long.
+@var FontTrait.MonoSpace: int(x=0) -> int or long.
+@var FontTrait.Narrow: int(x=0) -> int or long.
+@var FontTrait.Poster: int(x=0) -> int or long.
+@var FontTrait.SansSerif: int(x=0) -> int or long.
+@var FontTrait.SmallCaps: int(x=0) -> int or long.
+@var FontTrait.UnBold: int(x=0) -> int or long.
+@var FontTrait.UnItalic: int(x=0) -> int or long.
 '''
 # all imports listed explicitly to help PyChecker
 from pycocoa.bases   import _Type0
-from pycocoa.lazily  import _ALL_LAZY
+from pycocoa.lazily  import _ALL_LAZY, _NN_
 from pycocoa.nstypes import isNone, NSFont, nsIter, nsIter2, NSMain, \
                             NSStr, nsString2str
 from pycocoa.oslibs  import NSFontBoldMask, NSFontItalicMask, \
@@ -21,12 +48,12 @@ from pycocoa.oslibs  import NSFontBoldMask, NSFontItalicMask, \
                             NSFontUnboldMask, NSFontUnitalicMask
 from pycocoa.runtime import isObjCInstanceOf, release
 from pycocoa.strs    import Str
-from pycocoa.utils   import bytes2str, _ByteStrs, _Constants, flint, \
-                           _Ints, isinstanceOf, property_RO, \
-                           _Singletons, _Types
+from pycocoa.utils   import Adict, bytes2str, _ByteStrs, _Constants, flint, \
+                           _Ints, isinstanceOf, property_RO, _Singletons, \
+                           _SPACE_, _Types
 
 __all__ = _ALL_LAZY.fonts
-__version__ = '20.11.14'
+__version__ = '20.11.18'
 
 # <https://Developer.Apple.com/documentation/appkit/nsfont.weight>
 # _NSFontWeigthHeavy      = 13 ?
@@ -65,8 +92,7 @@ class FontTrait(_Constants):
     UnBold     = NSFontUnboldMask
     UnItalic   = NSFontUnitalicMask
 
-
-FontTrait = FontTrait()  # overwrite class on purpose
+FontTrait = FontTrait()  # PYCHOK contants
 
 # dict for Font.traitsup() to update traits with family traits
 _familyTraits = dict((n.lower(), m) for n, m in FontTrait.items()
@@ -147,12 +173,12 @@ def _weightin(weight):
 class Font(_Type0):
     '''Python C{Font} Type, wrapping ObjC C{NSFont}.
     '''
-    _family = ''
-    _height = 0
-    _name   = ''
-    _size   = 0
-    _traits = 0
-    _weight = None
+    _family = _NN_
+    _height =  0
+    _name   = _NN_
+    _size   =  0
+    _traits =  0
+    _weight =  None
 
     def __init__(self, family_or_font, size=0, traits=0, weight=5):
         '''New L{Font}.
@@ -233,20 +259,16 @@ class Font(_Type0):
         return '%s(%s)' % (self.__class__.__name__,
                            self._argstr(name=self.name))
 
-    def _argstr(self, name=''):
-        ts = []
+    def _argstr(self, name=_NN_):
+        td = Adict(family=self.family, size=self.size)
         if name:
-            ts.append(('name', name))
-        ts.append(('family', self.family))
-        ts.append(('size', self.size))
-
+            td(name=name)
         t = tuple(t[2:] for t in _isTraits if getattr(self, t))
         if t:
-            ts.append(('traits', ' '.join(t)))
-
+            td(traits=_SPACE_.join(t))
         if self.weight is not None:
-            ts.append(('weight', self.weight))
-        return ', '.join('%s=%r' % t for t in ts)
+            td(weight=self.weight)
+        return str(td)
 
     def _isTrait(self, mask):
         return True if (self._traits & mask) else False
@@ -533,7 +555,7 @@ class FontTraitError(FontError):
 
 
 class _Fonts(_Singletons):
-    '''Some pre-defined fonts.
+    '''Pre-defined system fonts, all L{Font} instances.
     '''
     _App         = None
     _Bold        = None
@@ -662,8 +684,7 @@ class _Fonts(_Singletons):
             _Fonts._Title = Font(NSFont.titleBarFontOfSize_(0))
         return self._Title
 
-
-Fonts = _Fonts()  # pre-defined system fonts as L{Font}s
+Fonts = _Fonts()  # PYCHOK singletons
 
 
 def fontfamilies(*prefixes):
@@ -768,7 +789,10 @@ NSFont._Type = _Types.Font = Font
 
 if __name__ == '__main__':
 
-    from pycocoa.utils import _all_listing
+    from pycocoa.utils import _all_listing, _varstr
+
+    print(_varstr(Fonts))
+    print(_varstr(FontTrait))
 
     _all_listing(__all__, locals())
 

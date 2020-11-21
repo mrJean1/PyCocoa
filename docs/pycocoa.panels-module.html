@@ -66,7 +66,7 @@
 
 <hr />
 <div class="fields">      <p><strong>Version:</strong>
-        20.01.08
+        20.11.18
       </p>
 </div><!-- ==================== CLASSES ==================== -->
 <a name="section-Classes"></a>
@@ -147,10 +147,10 @@
     <td width="15%" align="right" valign="top" class="summary">
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
-        <a href="pycocoa.panels-module.html#AlertStyle" class="summary-name">AlertStyle</a> = <code title="AlertStyle.Critical=1&lt;&lt;1,
+        <a href="pycocoa.panels-module.html#AlertStyle" class="summary-name">AlertStyle</a> = <code title="AlertStyle.Critical=2,
           .Info=1,
-          .Warning=0">AlertStyle.Critical=1&lt;<code class="variable-ellipsis">...</code></code><br />
-      Alert levels (<code>enum</code>).
+          .Warning=0">AlertStyle.Critical<code class="variable-ellipsis">...</code></code><br />
+      Alert level constants (<code>int</code>).
     </td>
   </tr>
 <tr>
@@ -161,10 +161,90 @@
            .Close=1,
            .Error=-3,
            .OK=1,
-           .Other=1&lt;&lt;1,
+           .Other=2,
            .Suppressed=-2,
            .TimedOut=-1">PanelButton.Cancel<code class="variable-ellipsis">...</code></code><br />
-      Panel button kinds (<code>enum</code>).
+      Panel button kinds (<code>int</code>).
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a name="AlertStyle.Critical"></a><span class="summary-name">AlertStyle.Critical</span><br />
+      2.
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a name="AlertStyle.Info"></a><span class="summary-name">AlertStyle.Info</span><br />
+      1.
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a name="AlertStyle.Warning"></a><span class="summary-name">AlertStyle.Warning</span><br />
+      0.
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a name="PanelButton.Cancel"></a><span class="summary-name">PanelButton.Cancel</span><br />
+      0.
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a name="PanelButton.Close"></a><span class="summary-name">PanelButton.Close</span><br />
+      1.
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a name="PanelButton.Error"></a><span class="summary-name">PanelButton.Error</span><br />
+      -3.
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a name="PanelButton.OK"></a><span class="summary-name">PanelButton.OK</span><br />
+      1.
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a name="PanelButton.Other"></a><span class="summary-name">PanelButton.Other</span><br />
+      2.
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a name="PanelButton.Suppressed"></a><span class="summary-name">PanelButton.Suppressed</span><br />
+      -2.
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a name="PanelButton.TimedOut"></a><span class="summary-name">PanelButton.TimedOut</span><br />
+      -1.
     </td>
   </tr>
 </table>
@@ -183,13 +263,13 @@
        cellspacing="0" width="100%" bgcolor="white">
 <tr><td>
   <h3 class="epydoc">AlertStyle</h3>
-  <p>Alert level constants (<code>int</code>).</p>
+  Alert level constants (<code>int</code>).
   <dl class="fields">
   </dl>
   <dl class="fields">
     <dt>Value:</dt>
       <dd><table><tr><td><pre class="variable">
-AlertStyle.Critical=1&lt;&lt;1,
+AlertStyle.Critical=2,
           .Info=1,
           .Warning=0
 </pre></td></tr></table>
@@ -203,7 +283,7 @@ AlertStyle.Critical=1&lt;&lt;1,
        cellspacing="0" width="100%" bgcolor="white">
 <tr><td>
   <h3 class="epydoc">PanelButton</h3>
-  <p>Panel button kinds (<code>int</code>).</p>
+  Panel button kinds (<code>int</code>).
   <dl class="fields">
   </dl>
   <dl class="fields">
@@ -213,7 +293,7 @@ PanelButton.Cancel=0,
            .Close=1,
            .Error=-3,
            .OK=1,
-           .Other=1&lt;&lt;1,
+           .Other=2,
            .Suppressed=-2,
            .TimedOut=-1
 </pre></td></tr></table>
@@ -253,7 +333,7 @@ PanelButton.Cancel=0,
 <table border="0" cellpadding="0" cellspacing="0" width="100%%">
   <tr>
     <td align="left" class="footer">
-    Generated by Epydoc 3.0.1 on Mon Nov 16 20:16:49 2020
+    Generated by Epydoc 3.0.1 on Sat Nov 21 15:42:47 2020
     </td>
     <td align="right" class="footer">
       <a target="mainFrame" href="http://epydoc.sourceforge.net"

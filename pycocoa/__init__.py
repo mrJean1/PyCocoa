@@ -43,8 +43,8 @@ Tests
 The tests and examples have only been run with 64-bit Python 3.9.0, 3.8.6, 3.7.6,
 2.7.18 and macOS' 2.7.16 using U{Python-VLC<https://PyPI.org/project/python-vlc>}
 3.0.8, 3.0.6, 3.0.4 and 2.2.8 (with the compatible U{VLC App<https://www.VideoLan.org/vlc>})
-on macOS 10.15.7 Catalina, 10.14.6 Mojave or 10.13.6 High Sierra.  The tests run
-with and without C{lazy import} in Python 3.9.0, 3.8.6 and 3.7.6.
+on macOS 11.0.1 (10.16) Big Sur, 10.15.7 Catalina, 10.14.6 Mojave or 10.13.6 High Sierra.
+The tests run with and without C{lazy import} in Python 3.9.0, 3.8.6 and 3.7.6.
 
 Previously, PyCocoa was tested with 64-bit Python 3.8.3, 3.8.1, 3.7.5, 3.7.4,
 2.7.16 and 2.7.17.  PyCocoa has I{not been tested} on iOS nor with 32-bit Python
@@ -60,7 +60,8 @@ with U{PyChecker<https://PyPI.org/project/pychecker>},
 U{PyFlakes<https://PyPI.org/project/pyflakes>},
 U{PyCodeStyle<https://PyPI.org/project/pycodestyle>} (formerly Pep8) and
 U{McCabe<https://PyPI.org/project/mccabe>} using 64-bit Python 2.7.18 and with
-U{Flake8<https://PyPI.org/project/flake8>} using 64-bit Python 3.9.0.
+U{Flake8<https://PyPI.org/project/flake8>} using 64-bit Python 3.9.0 on macOS
+11.0.1 (10.16) Big Sur.
 
 Some alternatives to PyCocoa are (a) U{PyObjC<https://PyPI.org/project/pyobjc>},
 the most comprehensive Python to Objective-C bridge (and included in
@@ -139,7 +140,7 @@ _isfrozen       = getattr(sys, 'frozen', False)
 pycocoa_abspath = dirname(abspath(__file__))  # sys._MEIPASS + '/pycocoa'
 _pycocoa        = __package__ or basename(pycocoa_abspath)
 
-__version__ = '20.11.16'
+__version__ = '20.11.20'
 # see setup.py for similar logic
 version = '.'.join(map(str, map(int, __version__.split('.'))))
 
@@ -280,8 +281,9 @@ if not _lazy_import2:  # import and set __all__
     # NSUnscaledWindowMask               = NSWindowStyleMaskUnscaled                # PYCHOK D? XXX
 
     # filter locals() for .__init__.py
-    __all__ = tuple(set(_ for _ in locals().keys() if
-                          not _.startswith(('_', 'CFUNCTION', 'c_', 'kC'))))
+    __all__ = tuple(set(_ for _ in locals().keys() if  # _UNDER_
+                          not _.startswith(('_', 'CFUNCTION', 'c_', 'kC')))) \
+            + lazily._C_XTYPES  # export some extended C types
 
 
 def _locals():

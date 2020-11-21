@@ -26,10 +26,11 @@ imported by that top-level module.
              C{lazy import} failed.
 '''
 
-from os import environ as _environ
+from os import environ as _environ, linesep as _NL_  # PYCHOK expected
 from os.path import basename as _basename
 import sys as _sys
 
+_C_XTYPES = 'c_ptrdiff_t', 'c_struct_t', 'c_void'  # exported
 _FOR_DOCS = _environ.get('PYCOCOA_FOR_DOCS', None)
 _N_A      =  object()
 _PY_FH    = _environ.get('PYTHONFAULTHANDLER', None)  # PYCHOK .faults, .__init__
@@ -74,11 +75,11 @@ class _NamedEnum_RO(dict):
             raise AttributeError("%s.%s doesn't exist" % (self._name, attr))  # PYCHOK expected
 
     def __setattr__(self, attr, value):
-        raise TypeError('Read_Only %s.%s = %r' % (self._name, attr, value))  # PYCHOK expected
+        raise TypeError('Read_Only %s = %r' % (self._name, _DOT_(attr, value)))  # PYCHOK expected
 
     def enums(self):
         for k, v in dict.items(self):
-            if not k.startswith('_'):
+            if not k.startswith(_UNDER_):
                 yield k, v
 
 
@@ -138,7 +139,6 @@ _ALL_LAZY = _NamedEnum_RO(_name='_ALL_LAZY',
                                  'NSThread', 'nsThrow',
                                  'NSURL', 'nsURL2str', 'NSView', 'NSWindow'),
                         octypes=('Allocator_t', 'Array_t', 'Block_t', 'BOOL_t',
-                                 'c_ptrdiff_t', 'c_struct_t', 'c_void',  # exported
                                  'CFIndex_t', 'CFRange_t',
                                  'CGBitmapInfo_t', 'CGDirectDisplayID_t', 'CGError_t', 'CGFloat_t',
                                  'CGGlyph_t', 'CGImageEncoding', 'CGPoint_t', 'CGPointEncoding',
@@ -154,7 +154,8 @@ _ALL_LAZY = _NamedEnum_RO(_name='_ALL_LAZY',
                                  'ObjC_t', 'OptionFlags_t', 'Protocol_t', 'PyObjectEncoding', 'RunLoop_t', 'SEL_t',
                                  'Set_t', 'split_emcoding2', 'split_encoding', 'String_t', 'Struct_t',
                                  'TimeInterval_t', 'TypeCodeError', 'TypeID_t', 'TypeRef_t',
-                                 'UniChar_t', 'unichar_t', 'Union_t', 'Unknown_t', 'UnknownPtr_t', 'URL_t', 'VoidPtr_t'),
+                                 'UniChar_t', 'unichar_t', 'Union_t', 'Unknown_t', 'UnknownPtr_t', 'URL_t',
+                                 'VoidPtr_t') + _C_XTYPES,
                          oslibs=('get_lib', 'get_libs', 'get_lib_framework', 'leaked2',
                                  'libAppKit', 'libCF', 'libCT', 'libFoundation', 'libobjc', 'libquartz',
                                  'NO', 'NSAcknowledgeCharacter', 'NSAlphaShiftKeyMask', 'NSAlternateKeyMask', 'NSAnyEventMask',
@@ -206,7 +207,8 @@ _ALL_LAZY = _NamedEnum_RO(_name='_ALL_LAZY',
                            strs=('Str', 'StrAttd'),
                          tables=('closeTables', 'NSTableViewDelegate', 'Table', 'TableWindow'),
                          tuples=('Tuple',),
-                          utils=('aspect_ratio', 'bytes2repr', 'bytes2str', 'Cache2', 'clip',
+                          utils=('Adict', 'aspect_ratio',
+                                 'bytes2repr', 'bytes2str', 'Cache2', 'clipstr',
                                  'DEFAULT_UNICODE', 'flint', 'gcd',
                                  'inst2strepr', 'isinstanceOf', 'iterbytes',
                                  'lambda1', 'logf',
@@ -223,7 +225,7 @@ _ALL_LAZY = _NamedEnum_RO(_name='_ALL_LAZY',
 _ALL_OVERRIDING = _NamedEnum_RO(_name='_ALL_OVERRIDING')  # all DEPRECATED
 
 __all__ = _ALL_LAZY.lazily
-__version__ = '20.11.16'
+__version__ = '20.11.19'
 
 
 def _all_imports(**more):
@@ -239,34 +241,29 @@ def _all_imports(**more):
 
     for _all_ in (_ALL_LAZY, _ALL_OVERRIDING, more):
         for mod, attrs in _all_.items():
-            if isinstance(attrs, tuple) and not mod.startswith('_'):
+            if isinstance(attrs, tuple) and not mod.startswith(_UNDER_):
                 imports_add(mod, mod)
                 for attr in attrs:
                     attr, _, _as_ = attr.partition(' as ')
                     if _as_:
-                        imports_add(_as_, mod + '.' + attr)
+                        imports_add(_as_, _DOT_(mod, attr))
                     else:
                         imports_add(attr, mod)
     return imports
 
 
-def _all_missing2(_all_):
+def _all_missing(_all, _imp):
+    '''(INTERNAL) Get deltas between C{_all} and C{_imp}.
+    '''
+    return _COMMASPACE_.join(a for a in _all if a not in _imp)
+
+
+def _all_missing2(_all):
     '''(INTERNAL) Get deltas between pycocoa.__all__ and lazily._all_imports.
     '''
-    _allx = _all_ + ('c_void', 'c_struct_t', 'c_ptrdiff_t')  # extended
-    _alzy = _all_imports(**_NamedEnum_RO((a, ()) for a in _ALL_INIT))
-    return (('lazily._all_imports', ', '.join(a for a in _all_ if a not in _alzy)),
-            ('pycocoa.__all__',     ', '.join(a for a in _alzy if a not in _allx)))
-
-
-def _2kwds(kwds, **dflts):
-    '''(INTERNAL) Override C{dflts} with C{kwds}.
-    '''
-    d = dflts
-    if kwds:
-        d = d.copy()
-        d.update(kwds)
-    return d
+    _imp = _all_imports(**_NamedEnum_RO((a, ()) for a in _ALL_INIT))
+    return ((_DOT_('lazily', _all_imports.__name__), _all_missing(_all, _imp)),
+            (_DOT_('pycocoa', '__all__'),            _all_missing(_imp, _all)))
 
 
 def _caller3(up):  # in .named
@@ -315,14 +312,13 @@ def _lazy_import2(_package_):  # MCCABE 15
     global isLazy
 
     if _sys.version_info[:2] < (3, 7):  # not supported
-        raise LazyImportError('no %s.%s for Python %s', _package_,
-                              _lazy_import2.__name__, _sys.version.split()[0])
+        raise LazyImportError('no %s for Python %s', _DOT_(_package_,
+                              _lazy_import2.__name__), _sys.version.split()[0])
 
     import_module, package, parent = _lazy_init3(_package_)
 
-    import_  = _package_ + '.'  # namespace
     imports  = _all_imports()
-    packages = (parent, '__main__', '')
+    packages = (parent, '__main__', _NN_)
 
     def __getattr__(name):  # __getattr__ only for Python 3.7+
         # only called once for each undefined pycocoa attribute
@@ -330,39 +326,39 @@ def _lazy_import2(_package_):  # MCCABE 15
             # importlib.import_module() implicitly sets sub-modules
             # on this module as appropriate for direct imports (see
             # note in the _lazy_import.__doc__ above).
-            mod, _, attr = imports[name].partition('.')
+            mod, _, attr = imports[name].partition(_DOT_)
             if mod not in imports:
-                raise LazyImportError('no %s %s.%s', 'module', parent, mod)
-            imported = import_module(import_ + mod, parent)  # XXX '.' + mod
+                raise LazyImportError('no %s %s', 'module', _DOT_(parent, mod))
+            imported = import_module(_DOT_(_package_, mod), parent)
             pkg = getattr(imported, '__package__', None)
             if pkg not in packages:
-                raise LazyImportError('%s.%s %r' % (mod, '__package__', pkg))
+                raise LazyImportError('%s %r' % (_DOT_(mod, '__package__'), pkg))
             # import the module or module attribute
             if attr:
                 imported = getattr(imported, attr, _N_A)
             elif name != mod:
                 imported = getattr(imported, name, _N_A)
             if imported is _N_A:
-                raise LazyImportError('no %s %s.%s', 'attribute', mod, attr or name)
+                raise LazyImportError('no %s %s', 'attribute', _DOT_(mod, attr or name))
 
         elif name in ('__all__',):  # XXX '__dir__', '__members__'?
             imported = _ALL_INIT + tuple(imports.keys())
-            mod = ''
+            mod = _NN_
         else:
-            raise LazyImportError('no %s %s.%s', 'module or attribute', parent, name)
+            raise LazyImportError('no %s %s', 'module or attribute', _DOT_(parent, name))
 
         setattr(package, name, imported)
         if isLazy > 1:
-            z = ''
+            z = _NN_
             if mod and mod != name:
-                z = ' from .%s' % (mod,)
+                z = _DOT_(' from ', mod)
             if isLazy > 2:
                 try:  # see C{_caller3}
                     _, f, s = _caller3(2)
                     z = '%s by %s line %d' % (z, f, s)
                 except ValueError:
                     pass
-            print('# lazily imported %s.%s%s' % (parent, name, z))
+            print('# lazily imported %s%s' % (_DOT_(parent, name), z))
 
         return imported  # __getattr__
 
@@ -421,9 +417,25 @@ def _lazy_init3(_package_):
     return import_module, package, parent
 
 
+class _Str(str):
+    '''(INTERNAL) Callable C{_Str(*args)} == C{_Str.join(map(str, args))}.
+    '''
+    def __call__(self, *args):
+        '''Join C{args} as C{self.join(args)}.
+        '''
+        return self.join(map(str, args))
+
+_bNN_        = b''        # PYCHOK bytes(_NN_)
+_COLON_      = _Str(':')  # PYCHOK expected
+_COMMASPACE_ = _Str(', ')
+_DOT_        = _Str('.')
+_NN_         = _Str('')   # empty string, I{Nomen Nescio}
+_UNDER_      = _Str('_')
+
+
 if __name__ == '__main__':
 
-    # the following warning appear when running this module with Python 3.7 or later as ...
+    # the following warning appears when running this module with Python 3.7 or later as ...
     #
     # % python3 -m pycocoa.lazily
     #

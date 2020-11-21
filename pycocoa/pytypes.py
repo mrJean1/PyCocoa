@@ -6,14 +6,14 @@
 '''Conversions from C{NS...} ObjC instances to Python.
 '''
 # all imports listed explicitly to help PyChecker
-from pycocoa.lazily  import _ALL_LAZY
+from pycocoa.lazily  import _ALL_LAZY, _COLON_
 from pycocoa.nstypes import NSArray, NSData, NSDecimal, NSDictionary, \
                             NSDouble, NSInt, NSLong, NSLongLong, \
                             NSMain, NSMutableArray, NSMutableDictionary, \
                             NSMutableSet, NSSet, NSStr, NSURL
 from pycocoa.oslibs  import libCF
 from pycocoa.runtime import ObjCInstance, release
-from pycocoa.utils   import bytes2str, _ByteStrs, clip, DEFAULT_UNICODE, \
+from pycocoa.utils   import bytes2str, _ByteStrs, clipstr, DEFAULT_UNICODE, \
                            _Ints, isinstanceOf
 
 from ctypes  import c_void_p
@@ -21,7 +21,7 @@ from decimal import Decimal as _Decimal
 from types   import GeneratorType as _Generator
 
 __all__ = _ALL_LAZY.pytypes
-__version__ = '20.11.14'
+__version__ = '20.11.19'
 
 
 def _iter2NS(ns, py, getCount):
@@ -39,7 +39,7 @@ def _len2NS(py, ns, getCount):
     '''
     n, m = len(py), getCount(ns)
     if m != n:
-        t = (ns.objc_classname, m, clip(repr(py)), n)
+        t = (ns.objc_classname, m, clipstr(repr(py)), n)
         raise RuntimeError('%s[%s] vs %s[%s]' % t)
     return ns
 
@@ -278,7 +278,7 @@ def url2NS(py, url2=None):
              for parsing an C{NSURL}.
     '''
     ns = release(NSStr(py))
-    if ':' in bytes2str(py):
+    if _COLON_ in bytes2str(py):
         if url2:
             return NSURL.alloc().initWithString_relativeToURL_(ns, url2NS(url2))
         else:

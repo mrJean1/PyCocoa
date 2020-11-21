@@ -33,8 +33,8 @@ functions L{getUncaughtExceptionHandler} and L{setUncaughtExceptionHandler}
 are.
 '''
 # all imports listed explicitly to help PyChecker
-from pycocoa.lazily  import _ALL_DOCS, _ALL_LAZY, _PY_FH
-from pycocoa.nstypes import  NSExceptionError, NSMain
+from pycocoa.lazily  import _ALL_DOCS, _ALL_LAZY, _NL_, _NN_, _PY_FH
+from pycocoa.nstypes import _not_given_, NSExceptionError, NSMain
 from pycocoa.oslibs  import _setUncaughtExceptionHandler, _UncaughtExceptionHandler_t
 from pycocoa.runtime import  ObjCInstance  # release
 from pycocoa.utils   import  Adict, _Globals, logf
@@ -44,7 +44,7 @@ import signal as _signal
 import sys
 
 __all__ = _ALL_LAZY.faults
-__version__ = '20.11.16'
+__version__ = '20.11.20'
 
 _exiting = -9  # default _exit and status
 # SIGnals handled by Python 3 C{faulthandler}
@@ -56,9 +56,9 @@ _SIGnals = (_signal.SIGABRT,  # critical
 def _bye(name):
     '''(INTERNAL) Time to go ...
     '''
-    logf('%s(%s) from %s %s', exiting.__name__,
-                             _exiting, name, 'handler',
-                              nl=1, nt=1)
+    logf('%s(%s) %s %s %s', exiting.__name__, _exiting,
+                           'from', name, 'handler',
+                            nl=1, nt=1)
     if _exiting < 0:
         os._exit(-_exiting)  # force exit
     else:
@@ -66,7 +66,7 @@ def _bye(name):
 
 
 def _SIGdict(sigs, enabled):
-    '''(INTERNAL) Get a C{dict} of C{SIG*} name and I{value}.
+    '''(INTERNAL) Get a C{dict} of C{SIG*} name and C{sig} number.
     '''
     if not sigs:
         sigs = _SIGnals
@@ -78,9 +78,9 @@ def _SIGname(sig):
     '''
     for S in dir(_signal):
         if S.isupper() and S.startswith('SIG') \
-                       and getattr(_signal, S, None) == sig:
+                       and getattr(_signal, S) == sig:
             return S
-    return '%s%s' % ('SIG', sig)
+    return _NN_('SIG', sig)
 
 
 try:  # MCCABE 27
@@ -139,7 +139,7 @@ except ImportError:
         '''(INTERNAL) Handler for the C{signal}s enabled by C{fault}.
         '''
         logf('traceback (most recent call last):')
-        for t in '\n'.join(traceback.format_stack(frame)).split('\n'):
+        for t in _NL_.join(traceback.format_stack(frame)).split(_NL_):
             if t:
                 logf(t)
         _bye(_SIGname(sig))
@@ -294,7 +294,6 @@ def setUncaughtExceptionHandler(handler, log=True, raiser=False):
              library/archive/documentation/Cocoa/Conceptual/ErrorHandlingCocoa/
              ErrorHandling/ErrorHandling.html#//apple_ref/doc/uid/TP40001806>}.
     '''
-
     if not callable(handler):
         raise TypeError('non-callable %s: %r' % ('handler', handler))
 
@@ -302,20 +301,21 @@ def setUncaughtExceptionHandler(handler, log=True, raiser=False):
     def _handler(nsException):
         e = NSExceptionError(ObjCInstance(nsException))
         if log:
-            s = e.reason or 'not given'
+            s = e.reason or _not_given_
             logf('uncaught ObjC/%s: %s', e.name, s, nl=1)
             logf('datetime %s (%s)', e.datetime, e.versionstr)
             if e.info:
                 logf('info: %s', e.info)
             logf('callstack (most recent last):')
             for s in e.callstack:
-                logf('  %s', s)  # argv0='', nt=1
+                logf('  %s', s)  # argv0=_NN_, nt=1
 
         r = handler(e)
         if r is e or raiser:
             raise e
         elif isinstance(r, int):
             exiting(r)
+
         _bye(handler.__name__)
 
     _ =_setUncaughtExceptionHandler(_handler)
@@ -349,22 +349,30 @@ if __name__ == '__main__':
         from pycocoa.nstypes import nsRaise
         logf('%s ...', nsRaise.__name__)
 
-        nsRaise(reason='test', _PY_FH=_PY_FH)
+        nsRaise(reason='testing', _PY_FH=_PY_FH)
 
     elif _PY_FH and '-try' in sys.argv[1:]:
-        # throw an ObjC/NSException and try
-        # to catch it as Python exception
+        # throw an ObjC/NSException, have the handler
+        # raise the NSExceptionError and then try to
+        # catch that as a regular Python exception:
+        # - doesn't work, the exception never forces
+        # return of control to Python, instead the
+        # process terminates with Abrt
+        # - even setting a SIGABRT handler inside the
+        # uncaught ObjC/NSException handler to try to
+        # override ObjC/NS does not help, same
+        # result, terminated by Abrt
         from pycocoa.nstypes import nsRaise  # PYCHOK twice
         logf('%s ...', 'try:')
 
         def _h(x):
             # raise ValueError
-            return 8
+            return 8  # x
 
-        setUncaughtExceptionHandler(_h, raiser=True)
+        setUncaughtExceptionHandler(_h)
         try:
-            nsRaise(reason='test', _PY_FH=_PY_FH)
-        except NSExceptionError as x:
+            nsRaise(reason='testing', _PY_FH=_PY_FH)
+        except (NSExceptionError, SystemExit) as x:
             logf('except: %s', x)
 
     from pycocoa.utils import _all_listing
@@ -373,7 +381,6 @@ if __name__ == '__main__':
 
 # % [env PYTHONFAULTHANDLER=pycocoa] python[3] -m pycocoa.faults [-X]
 #
-# pycocoa.faults.__all__ = tuple(
 #  pycocoa.faults.exito is <function .exito at 0x7fe1efc8b0d0>,
 #  pycocoa.faults.setUncaughtExceptionHandler is <function .setUncaughtExceptionHandler at 0x7fe1efc8b160>,
 # )[2]

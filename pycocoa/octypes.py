@@ -38,9 +38,10 @@ are ObjC types defined in terms of a C{ctypes} C{c_} type.
 '''
 # all imports listed explicitly to help PyChecker
 # from pycocoa.getters import get_selectornameof
-from pycocoa.lazily import _ALL_LAZY
-from pycocoa.utils  import bytes2str, inst2strepr, iterbytes, \
-                           missing, property_RO, str2bytes
+from pycocoa.lazily import _ALL_LAZY, _bNN_, _NN_
+from pycocoa.utils  import _bCOLON_, bytes2str, inst2strepr, \
+                            iterbytes, missing, property_RO, \
+                            str2bytes
 
 from ctypes import c_bool, c_byte, c_char, c_char_p, c_double, \
                    c_float, c_int, c_int32, c_int64, c_long, \
@@ -55,7 +56,7 @@ except ImportError:
 from platform import machine  # as machine
 
 __all__ = _ALL_LAZY.octypes
-__version__ = '20.11.14'
+__version__ = '20.11.17'
 
 z = sizeof(c_void_p)
 if z == 4:
@@ -104,9 +105,9 @@ class TypeCodeError(ValueError):
     pass
 
 
-def _join(codes):
+def _bJoin(codes):
     # join bytes
-    return b''.join(codes)
+    return _bNN_.join(codes)
 
 
 # Note CGBase.h at /System/Library/Frameworks/ApplicationServices
@@ -475,7 +476,7 @@ _ctype2encoding = {c_char:     b'c', c_ubyte:     b'C',
                    NSRange_t:  NSRangeEncoding,
                    NSRect_t:   NSRectEncoding,
                    NSSize_t:   NSSizeEncoding,
-                   SEL_t:      b':',
+                   SEL_t:     _bCOLON_,
                    py_object:  PyObjectEncoding}
 
 # add c_?longlong only if different from c_?long
@@ -665,12 +666,12 @@ def split_emcoding2(encoding, start=0):
        >>> (['v', '@', ':', '*'], 'v@:*')
     '''
     codes = split_encoding(encoding)
-    if codes[1:3] != [b'@', b':']:
+    if codes[1:3] != [b'@', _bCOLON_]:
         # Add codes for hidden arguments
-        codes.insert(1, b'@')  # Id/self type encoding
-        codes.insert(2, b':')  # SEL/cmd type encoding
+        codes.insert(1,  b'@')     # Id/self type encoding
+        codes.insert(2, _bCOLON_)  # SEL/cmd type encoding
 
-    return codes[start:], _join(codes)
+    return codes[start:], _bJoin(codes)
 
 
 _TYPECODESET = set(iterbytes(b'cCiIsSlLqQfdBvP*@#:b^?'))  # _emcoding2ctype.keys()
@@ -763,7 +764,7 @@ def split_encoding(encoding):  # MCCABE 18
 
         if b in _TYPEOPENERS:
             if code and code[-1] != b'^' and not opened:
-                codes.append(_join(code))
+                codes.append(_bJoin(code))
                 code = []
             opened.append(_TYPE2CLOSER[b])
             code.append(b)
@@ -772,9 +773,9 @@ def split_encoding(encoding):  # MCCABE 18
             code.append(b)
             if not opened or b != opened.pop():
                 raise TypeCodeError('encoding %s: %r' % ('unbalanced',
-                                    bytes2str(_join(code))))
+                                    bytes2str(_bJoin(code))))
             if not opened:
-                codes.append(_join(code))
+                codes.append(_bJoin(code))
                 code = []
 
         elif opened:  # inside braces, etc
@@ -784,7 +785,7 @@ def split_encoding(encoding):  # MCCABE 18
         elif b == b'"':
             code.append(b)
             if quoted:  # closing quotes
-                code = _join(code)
+                code = _bJoin(code)
                 if code[:2] in (b'@"', b'#"'):
                     # XXX only @"..." and #"..." are OK
                     # XXX what about ^@"..." and ^#"..."?
@@ -804,7 +805,7 @@ def split_encoding(encoding):  # MCCABE 18
         elif b in _TYPECODESET:
             if code and code[-1] != b'^':
                 # not a pointer, previous char != '^'
-                codes.append(_join(code))
+                codes.append(_bJoin(code))
                 code = []
             code.append(b)
 
@@ -815,7 +816,7 @@ def split_encoding(encoding):  # MCCABE 18
         raise TypeCodeError('encoding %s: %r' % ('unbalanced', bytes2str(encoding)))
 
     if code:  # final type code
-        codes.append(_join(code))
+        codes.append(_bJoin(code))
     return codes
 
 
@@ -824,7 +825,7 @@ if __name__ == '__main__':
     from pycocoa.utils import _all_listing, bytes2repr, \
                               _Globals, printf
 
-    _Globals.argv0 = ''
+    _Globals.argv0 = _NN_
 
     def _c(ctype):
         return 'c_void' if ctype is c_void else ctype.__name__
@@ -848,8 +849,8 @@ if __name__ == '__main__':
                  (NSRange_t, NSRangeEncoding),
                  (NSRect_t,  NSRectEncoding),
                  (NSSize_t,  NSSizeEncoding)):
-        c = _join(ctype2encoding(c) for _, c in t._fields_)
-        c = b'=%s}' % (c,)
+        c = _bJoin(ctype2encoding(c) for _, c in t._fields_)
+        c = _bJoin((b'=', c, b'}'))
         if not e.endswith(c):
             printf('  %s: %r != %r', t.__name__, c, e)
 

@@ -5,6 +5,7 @@
 
 '''ObjC classes C{NS...} and conversions from C{NS...} ObjC to Python instances.
 
+@var NSMain: Global C{ObjC/NS/CF...} singletons.
 @var NSMain.Application: Get the C{NSApplication.sharedApplication}.
 @var NSMain.BooleanNO: Get C{NSBoolean(NO)}.
 @var NSMain.BooleanYES: Get C{NSBoolean(YES)}.
@@ -31,7 +32,7 @@
 '''
 # all imports listed explicitly to help PyChecker
 from pycocoa.getters import get_selector
-from pycocoa.lazily  import _ALL_LAZY
+from pycocoa.lazily  import _ALL_LAZY, _bNN_, _COMMASPACE_, _NN_
 from pycocoa.octypes import Array_t, Class_t, c_struct_t, Id_t, NSPoint_t, \
                             NSRect4_t, ObjC_t, SEL_t, Set_t
 from pycocoa.oslibs  import cfNumber2bool, cfNumber2num, cfString, cfString2str, \
@@ -39,7 +40,7 @@ from pycocoa.oslibs  import cfNumber2bool, cfNumber2num, cfString, cfString2str,
                             NO, YES
 from pycocoa.runtime import isObjCInstanceOf, ObjCClass, ObjCInstance, release, \
                             retain, send_message, _Xargs
-from pycocoa.utils   import Adict, _all_versionstr, bytes2str, _ByteStrs, clip, \
+from pycocoa.utils   import Adict, _all_versionstr, bytes2str, _ByteStrs, clipstr, \
                            _Globals, isinstanceOf, iterbytes, lambda1, missing, \
                            _Singletons, _Types, property_RO
 
@@ -50,7 +51,9 @@ from os import linesep, path as os_path
 from time import time as _timestamp
 
 __all__ = _ALL_LAZY.nstypes
-__version__ = '20.11.16'
+__version__ = '20.11.20'
+
+_not_given_ = 'not given'
 
 # some commonly used Foundation and Cocoa classes, described here
 # <https://OMZ-Software.com/pythonista/docs/ios/objc_util.html>
@@ -59,7 +62,7 @@ __version__ = '20.11.16'
 # for use by runtime.isObjCInstanceOf repectively utils.isinstanceOf
 NSAlert                = ObjCClass('NSAlert')
 NSApplication          = ObjCClass('NSApplication')
-# NSApplicationDelegate  = ObjCClass('_NSApplicationDelegate')  # see .apps
+# NSApplicationDelegate defined in .apps
 NSArray                = ObjCClass('NSArray')  # immutable
 NSAttributedString     = ObjCClass('NSAttributedString')
 NSAutoreleasePool      = ObjCClass('NSAutoreleasePool')
@@ -231,7 +234,7 @@ class NSExceptionError(RuntimeError):
            @see: U{NSExceptionName<https://Developer.Apple.com/
                  documentation/foundation/nsexceptionname>}.
         '''
-        return self.NS.name if self.NS else ''
+        return self.NS.name if self.NS else _NN_
 
     @property_RO
     def info(self):
@@ -269,7 +272,7 @@ class NSExceptionError(RuntimeError):
 
 
 class _NSMain(_Singletons):
-    '''Global C{NS...} singletons.
+    '''Global C{ObjC/NS/CF...} singletons.
     '''
     _Application   =  None  # NSApplication, see .utils._Globals.App
     _BooleanNO     =  None
@@ -520,7 +523,7 @@ class NSStr(ObjCInstance):
         return not self.__eq__(other)
 
     def __str__(self):
-        return '%s(%r)' % (self.objc_classname, clip(self.value))
+        return '%s(%r)' % (self.objc_classname, clipstr(self.value))
 
 #   @property_RO
 #   def objc_classname(self):
@@ -661,13 +664,13 @@ def nsBundleRename(ns_title, match='Python'):
         if ns:
             p = ns.objectForKey_(NSMain.BundleName) or None
             if p:
-                p = ns2py(p, dflt='') or ''
-                if t and match in (p, '', None):  # can't be empty
+                p = ns2py(p, dflt=_NN_) or _NN_
+                if t and match in (p, _NN_, None):  # can't be empty
                     ns.setObject_forKey_(ns_title, NSMain.BundleName)
     return p
 
 
-def nsData2bytes(ns, dflt=b''):  # XXX an NSData method?
+def nsData2bytes(ns, dflt=_bNN_):  # XXX an NSData method?
     '''Create Python C{bytes} from C{NSData}.
 
        @param ns: The C{NSData} (L{ObjCInstance}).
@@ -680,7 +683,7 @@ def nsData2bytes(ns, dflt=b''):  # XXX an NSData method?
     if n:
         buf = (c_byte * n)()
         ns.getBytes_length_(byref(buf), n)
-        return b''.join(iterbytes(buf[:n]))
+        return _bNN_.join(iterbytes(buf[:n]))
     return dflt
 
 
@@ -716,7 +719,7 @@ def nsDictionary2dict(ns, ctype_keys=c_void_p, ctype_vals=c_void_p):  # XXX an N
                   _ns2ctype2py(vals[i], ctype_vals)) for i in range(n))
 
 
-def nsException(name=None, reason='not given', **info):
+def nsException(name=None, reason=_not_given_, **info):
     '''Create an C{ObjC/NSException} instance.
 
        @keyword name: Ignored (U{NSExceptionName<https://Developer.Apple.com/
@@ -729,6 +732,10 @@ def nsException(name=None, reason='not given', **info):
        @note: Use L{NSExceptionError}C{(nsExc)} to wrap a Python
               exception around an C{ObjC/NSException} instance and
               get access to the attributes of the latter.
+
+       @note: Raised and thrown C{NSException}s can not be caught and
+              result in I{fatal} L{exiting}.
+
     '''
     from pycocoa.pytypes import dict2NS
     # <https://Developer.Apple.com/library/archive/documentation/
@@ -865,13 +872,16 @@ def nsOf(inst):
     raise TypeError('%s without .NS: %r' % ('inst', inst))
 
 
-def nsRaise(name=None, reason='not given', **info):
+def nsRaise(name=None, reason=_not_given_, **info):
     '''Create an C{NSException} and mimick C{@throw NSException}.
 
        @keyword name: Ignored (U{NSExceptionName<https://Developer.Apple.com/
                       documentation/foundation/nsexceptionname>}).
        @keyword reason: The reason for the exception (C{str}).
        @keyword info: Other, caller-defined information (C{all keywords}).
+
+       @note: Raised C{NSException}s can not be caught and result
+              in I{fatal} L{exiting}.
 
        @see: L{NSException} and L{nsThrow}.
     '''
@@ -922,7 +932,7 @@ def nsTextSize3(text, ns_font=None):
        @return: 3-Tuple (width, height, lines) in (pixels, pixels) or
                 in (characters, lines, lines) if I{ns_font} is C{None}.
     '''
-    w = ''
+    w = _NN_
     for t in text.split(linesep):
         if len(t) > len(w):
             w = t
@@ -978,6 +988,9 @@ def nsThrow(nsExc):
        @param nsExc: The exception to raise (C{NSException}).
 
        @see: L{NSException} and L{nsRaise}.
+
+       @note: Thrown C{NSException}s can not be caught and result
+              in I{fatal} L{exiting}.
 
        @raise TypeError: Invalid B{C{nsExc}}.
     '''
@@ -1071,8 +1084,8 @@ def ns2py(ns, dflt=missing):  # XXX an NSObject method?
 
     except KeyError:
         if dflt is missing:
-            t = ', '.join('TypeID[%d]: %s' % t for t in
-                          sorted(_CFTypeID2py_items()))
+            t = _COMMASPACE_.join('TypeID[%d]: %s' % t for t in
+                                  sorted(_CFTypeID2py_items()))
             raise TypeError('unhandled %s[%r]: %r {%s}' %
                            ('TypeID', typeID, ns, t))
         return dflt
@@ -1124,13 +1137,9 @@ def ns2Type(ns):
 
 if __name__ == '__main__':
 
-    from pycocoa.utils import _all_listing
+    from pycocoa.utils import _all_listing, _varstr
 
-    for n, _ in NSMain.items():
-        c = getattr(NSMain.__class__, n)
-        d = getattr(c, '__doc__', '')
-        t = d.split('\n')[0].strip()
-        print('@var NSMain.%s: %s' % (n, t))
+    print(_varstr(NSMain))
 
     _all_listing(__all__, locals())
 

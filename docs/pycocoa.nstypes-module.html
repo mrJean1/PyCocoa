@@ -64,7 +64,7 @@
 
 <hr />
 <div class="fields">      <p><strong>Version:</strong>
-        20.11.16
+        20.11.20
       </p>
 </div><!-- ==================== CLASSES ==================== -->
 <a name="section-Classes"></a>
@@ -1046,15 +1046,16 @@
     <td width="15%" align="right" valign="top" class="summary">
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
-        <a href="pycocoa.nstypes-module.html#NSMain" class="summary-name">NSMain</a> = <code title="NSMain.Application=NSApplication(&lt;Id_t at 0x7fb4eb4bcf80&gt;) of 0x7fb4e9\
-ec9b60,
-      .BooleanNO=NSBoolean(&lt;Id_t at 0x7fb4eb4bcb90&gt;) of 0x7fff85b15390\
+        <a href="pycocoa.nstypes-module.html#NSMain" class="summary-name">NSMain</a> = <code title="NSMain.Application=NSApplication(&lt;Id_t at 0x7ff7236fb7a0&gt;) of 0x7ff720\
+a36450,
+      .BooleanNO=NSBoolean(&lt;Id_t at 0x7ff7236f6b00&gt;) of 0x7fff80041620\
 ,
-      .BooleanYES=NSBoolean(&lt;Id_t at 0x7fb4eb4b0e60&gt;) of 0x7fff85b1538\
+      .BooleanYES=NSBoolean(&lt;Id_t at 0x7ff7236f6050&gt;) of 0x7fff8004161\
 0,
-      .Bundle=NSBundle(&lt;Id_t at 0x7fb4eb4ca560&gt;) of 0x7fb4e44ec3d0,
+      .Bundle=NSBundle(&lt;Id_t at 0x7ff7236eb680&gt;) of 0x7ff71eb18360,
       .BundleName=NSConstantString('CFBundleName'),
-...">NSMain.Application=NSApplication(&lt;Id_t at 0x7fb4eb4bc<code class="variable-ellipsis">...</code></code>
+...">NSMain.Application=NSApplication(&lt;Id_t at 0x7ff7236fb<code class="variable-ellipsis">...</code></code><br />
+      Global <code>ObjC/NS/CF...</code> singletons.
     </td>
   </tr>
 <tr>
@@ -1531,7 +1532,8 @@ ec9b60,
         <li><strong class="pname"><code>ctype_vals</code></strong> - The dictionary values type (<code>ctypes</code>).</li>
     </ul></dd>
     <dt>Returns:</dt>
-        <dd>The dict (Adict).</dd>
+        <dd>The dict (<a href="pycocoa.utils.Adict-class.html" 
+          class="link">Adict</a>).</dd>
   </dl>
 </td></tr></table>
 </div>
@@ -1569,12 +1571,20 @@ ec9b60,
         and <a href="pycocoa.nstypes.NSExceptionError-class.html" 
         class="link">NSExceptionError</a>.
       </p>
-      <p><strong>Note:</strong>
+      <strong>Notes:</strong>
+      <ul class="nomargin-top">
+        <li>
         Use <a href="pycocoa.nstypes.NSExceptionError-class.html" 
         class="link">NSExceptionError</a><code>(nsExc)</code> to wrap a 
         Python exception around an <code>ObjC/NSException</code> instance 
         and get access to the attributes of the latter.
-      </p>
+        </li>
+        <li>
+        Raised and thrown <code>NSException</code>s can not be caught and 
+        result in <i>fatal</i> <a href="pycocoa.faults-module.html#exiting"
+        class="link">exiting</a>.
+        </li>
+      </ul>
 </div></td></tr></table>
 </div>
 <a name="nsIter"></a>
@@ -1828,7 +1838,12 @@ ec9b60,
         <li><strong class="pname"><code>info</code></strong> - Other, caller-defined information (<code>all keywords</code>).</li>
     </ul></dd>
   </dl>
-<div class="fields">      <p><strong>See Also:</strong>
+<div class="fields">      <p><strong>Note:</strong>
+        Raised <code>NSException</code>s can not be caught and result in 
+        <i>fatal</i> <a href="pycocoa.faults-module.html#exiting" 
+        class="link">exiting</a>.
+      </p>
+      <p><strong>See Also:</strong>
         <a href="pycocoa.nstypes-module.html#NSException" 
         class="link">NSException</a> and <a 
         href="pycocoa.nstypes-module.html#nsThrow" 
@@ -1957,6 +1972,11 @@ ec9b60,
         class="link">NSException</a> and <a 
         href="pycocoa.nstypes-module.html#nsRaise" 
         class="link">nsRaise</a>.
+      </p>
+      <p><strong>Note:</strong>
+        Thrown <code>NSException</code>s can not be caught and result in 
+        <i>fatal</i> <a href="pycocoa.faults-module.html#exiting" 
+        class="link">exiting</a>.
       </p>
 </div></td></tr></table>
 </div>
@@ -2117,19 +2137,19 @@ ec9b60,
        cellspacing="0" width="100%" bgcolor="white">
 <tr><td>
   <h3 class="epydoc">NSMain</h3>
-  
+  Global <code>ObjC/NS/CF...</code> singletons.
   <dl class="fields">
   </dl>
   <dl class="fields">
     <dt>Value:</dt>
       <dd><table><tr><td><pre class="variable">
-NSMain.Application=NSApplication(&lt;Id_t at 0x7fb4eb4bcf80&gt;) of 0x7fb4e9<span class="variable-linewrap"><img src="crarr.png" alt="\" /></span>
-ec9b60,
-      .BooleanNO=NSBoolean(&lt;Id_t at 0x7fb4eb4bcb90&gt;) of 0x7fff85b15390<span class="variable-linewrap"><img src="crarr.png" alt="\" /></span>
+NSMain.Application=NSApplication(&lt;Id_t at 0x7ff7236fb7a0&gt;) of 0x7ff720<span class="variable-linewrap"><img src="crarr.png" alt="\" /></span>
+a36450,
+      .BooleanNO=NSBoolean(&lt;Id_t at 0x7ff7236f6b00&gt;) of 0x7fff80041620<span class="variable-linewrap"><img src="crarr.png" alt="\" /></span>
 ,
-      .BooleanYES=NSBoolean(&lt;Id_t at 0x7fb4eb4b0e60&gt;) of 0x7fff85b1538<span class="variable-linewrap"><img src="crarr.png" alt="\" /></span>
+      .BooleanYES=NSBoolean(&lt;Id_t at 0x7ff7236f6050&gt;) of 0x7fff8004161<span class="variable-linewrap"><img src="crarr.png" alt="\" /></span>
 0,
-      .Bundle=NSBundle(&lt;Id_t at 0x7fb4eb4ca560&gt;) of 0x7fb4e44ec3d0,
+      .Bundle=NSBundle(&lt;Id_t at 0x7ff7236eb680&gt;) of 0x7ff71eb18360,
       .BundleName=NSConstantString('CFBundleName'),
 <code class="variable-ellipsis">...</code>
 </pre></td></tr></table>
@@ -2169,7 +2189,7 @@ ec9b60,
 <table border="0" cellpadding="0" cellspacing="0" width="100%%">
   <tr>
     <td align="left" class="footer">
-    Generated by Epydoc 3.0.1 on Mon Nov 16 20:16:49 2020
+    Generated by Epydoc 3.0.1 on Sat Nov 21 15:42:46 2020
     </td>
     <td align="right" class="footer">
       <a target="mainFrame" href="http://epydoc.sourceforge.net"

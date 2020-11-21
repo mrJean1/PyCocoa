@@ -24,7 +24,8 @@ from pycocoa.getters import _ivar_ctype, get_c_func_t, get_class, \
                             get_classname, get_classof, get_ivar, \
                             get_metaclass, get_protocol, get_selector, \
                             get_superclassof
-from pycocoa.lazily  import _ALL_LAZY
+from pycocoa.lazily  import _ALL_LAZY, _bNN_, _COMMASPACE_, _NL_, \
+                            _NN_  # _UNDER_
 from pycocoa.octypes import __i386__, __LP64__, c_struct_t, c_void, \
                             ctype2encoding, emcoding2ctype, \
                             encoding2ctype, Class_t, Id_t, IMP_t, \
@@ -32,10 +33,10 @@ from pycocoa.octypes import __i386__, __LP64__, c_struct_t, c_void, \
                             ObjC_t, SEL_t, split_emcoding2, \
                             TypeCodeError
 from pycocoa.oslibs  import cfString2str, _csignature, libobjc
-from pycocoa.utils   import bytes2str, _ByteStrs, _Constants, \
-                            isinstanceOf, lambda1, missing,  name2py, \
-                            printf, property2, property_RO, str2bytes, \
-                            _TypeError
+from pycocoa.utils   import Adict, bytes2str, _ByteStrs, _Constants, \
+                            isinstanceOf, lambda1, missing, name2py, \
+                            printf, property2, property_RO, \
+                            str2bytes, _TypeError
 
 from ctypes import alignment, ArgumentError, byref, cast, c_buffer, \
                    c_char_p, c_double, c_float, CFUNCTYPE, c_longdouble, \
@@ -46,7 +47,7 @@ from ctypes import alignment, ArgumentError, byref, cast, c_buffer, \
 #                  # very end of this module.
 
 __all__ = _ALL_LAZY.runtime
-__version__ = '20.11.14'
+__version__ = '20.11.18'
 
 # <https://Developer.Apple.com/documentation/objectivec/
 #        objc_associationpolicy?language=objc>
@@ -67,14 +68,14 @@ _object_setInstanceVariable = 'object_setInstanceVariable'
 
 import os
 _OBJC_ENV = 'PYCOCOA_OBJC_LOG'
-_OBJC_LOG = dict((_, 0) for _ in os.environ.get(_OBJC_ENV, '').upper())
+_OBJC_LOG = dict((_, 0) for _ in os.environ.get(_OBJC_ENV, _NN_).upper())
 del os
 
 
 def _c_tstr(*c_ts):
     '''(INTERNAL) Simplify names of c_..._t result or argument types.
     '''
-    return ', '.join(getattr(t, '__name__', str(t)) for t in c_ts)
+    return _COMMASPACE_.join(getattr(t, '__name__', str(t)) for t in c_ts)
 
 
 def _libobjcall(name, restype, argtypes, *args):  # see printer.py
@@ -133,7 +134,8 @@ def _ObjC_log(inst, what, T, *args):  # B, C, I, M, S
         _OBJC_LOG[T] += 1
         r = repr(inst)
         if args:  # insert method call args
-            r = r.replace('))',  '), %s)' % (', '.join(map(repr, args)),))
+            a = _COMMASPACE_.join(map(repr, args))
+            r = r.replace('))',  '), %s)' % (a,))
         printf('%s %s %d', what, r, _OBJC_LOG[T])
 
 
@@ -189,8 +191,7 @@ def _signature3(objc_t, sel_name_, args, restype=c_void_p,
        [I{objc_t}, C{SEL_t}].
     '''
     if extra:  # must be empty
-        t = ', '.join('%s=%r' % _ for _ in sorted(extra.items()))
-        raise ValueError('extra %s kwds %s' % (sel_name_, t))
+        raise ValueError('extra %s kwds %s' % (sel_name_, Adict(extra)))
 
     if argtypes:  # allow varargs
         if len(argtypes) != len(args):
@@ -211,8 +212,8 @@ def _Xargs(x, name, argtypes, restype='void'):  # imported by nstypes.py, printe
     '''
     # x.args = tuple(x.args) + ('%s(%s) %s' % (name, _c_tstr(*argtypes),
     #                                                _c_tstr(restype)),)
-    x.args = ('%s: %s(%s) %s' % (', '.join(map(str, x.args)), name,
-                                _c_tstr(*argtypes), _c_tstr(restype)),)
+    x.args = ('%s: %s(%s) %s' % (_COMMASPACE_.join(map(str, x.args)), name,
+                                 _c_tstr(*argtypes), _c_tstr(restype)),)
     return x
 
 
@@ -230,7 +231,7 @@ class _ObjCBase(object):
         '''
         n = getattr(self, 'name', self.__class__.__name__)
         d = '%s: %s' % (n, getattr(self, '__doc__', 'n/a').strip())
-        n = d.find('\n')
+        n = d.find(_NL_)
         return d if n < 0 else d[:n]
 
 
@@ -308,10 +309,9 @@ class ObjCClass(_ObjCBase):
     _classmethods = {}  # shut PyChecker up
     _methods = {}
 
-    _name = b''  # shut PyChecker up
-    _ptr  = None
-
-    _Type = None  # Python Type, e.g. Dict, List, Tuple, etc.
+    _name = _bNN_  # shut PyChecker up
+    _ptr  =  None
+    _Type =  None  # Python Type, e.g. Dict, List, Tuple, etc.
 
     # Only one Python object is created for each ObjC class.  Any
     # future calls with the same class will return the previously
@@ -635,7 +635,7 @@ class ObjCInstance(_ObjCBase):
     def objc_classname(self):
         '''Get this instance' ObjC class name (C{str}).
         '''
-        return self._objc_class.name.replace('__NSCF', 'NS')  # .lstrip('_')
+        return self._objc_class.name.replace('__NSCF', 'NS')  # .lstrip(_UNDER_)
 
     # XXX name property clashes with NSPrinter.NS.name()
     name = objc_classname  # for C{ObjCMethod.__call__}
@@ -704,13 +704,13 @@ class ObjCMethod(_ObjCBase):
        method, actually an L{IMP_t}.
     '''
     _argtypes = []  # list of ctypes
-    _callable = None
-    _encoding = b''
-    _IMP      = None
-    _name     = b''
-    _pyresult = None  # None, ObjCClass or ObjCInstance
-    _SEL      = None
-    _restype  = None  # None (i.e. c_void), Class_t or Id_t
+    _callable =  None
+    _encoding = _bNN_
+    _IMP      =  None
+    _name     = _bNN_
+    _pyresult =  None  # None, ObjCClass or ObjCInstance
+    _SEL      =  None
+    _restype  =  None  # None (i.e. c_void), Class_t or Id_t
 
     def __init__(self, method):
         '''New C{ObjC[Class]Method} for an ObjC method pointer.
@@ -876,7 +876,7 @@ class ObjCSubclass(_ObjCBase):
        >>> myinstance = myclass.alloc().init()
     '''
     _imp_cache = {}  # decorated class/method cache
-    _name      = b''
+    _name      = _bNN_
 
     _objc_class     = None
     _objc_metaclass = None  # None means, not (yet) registered
@@ -952,7 +952,7 @@ class ObjCSubclass(_ObjCBase):
                 _pycls.objc_cmd = objc_cmd
                 return _pyresult(m(_pycls, *_pyargs(codes3, args)))
             n = m.__name__
-#           if n.startswith('_'):
+#           if n.startswith(_UNDER_):
 #               raise NameError('%s: %r' % ('classmethod', n))
             self._add_classmethod(objc_classmethod, n, encoding)
             objc_classmethod.name = n  # preserve name
@@ -981,7 +981,7 @@ class ObjCSubclass(_ObjCBase):
                 _pyself.objc_cmd = objc_cmd
                 return _pyresult(m(_pyself, *_pyargs(codes3, args)))
             n = m.__name__
-#           if n.startswith('_'):
+#           if n.startswith(_UNDER_):
 #               raise NameError('%s: %r' % ('method', n))
             self._add_method(objc_method, n, encoding)
             objc_method.name = n  # preserve name

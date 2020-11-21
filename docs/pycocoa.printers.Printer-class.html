@@ -110,7 +110,7 @@ bases._Type0 --+
         <tr>
           <td><span class="summary-sig"><a href="pycocoa.printers.Printer-class.html#printView" class="summary-sig-name">printView</a>(<span class="summary-sig-arg">self</span>,
         <span class="summary-sig-arg">PMview</span>,
-        <span class="summary-sig-arg">toPDF</span>=<span class="summary-sig-default"><code class="variable-quote">'</code><code class="variable-string"></code><code class="variable-quote">'</code></span>,
+        <span class="summary-sig-arg">toPDF</span>=<span class="summary-sig-default">''</span>,
         <span class="summary-sig-arg">wait</span>=<span class="summary-sig-default">True</span>)</span><br />
       Print an ObjC <code>NSView</code> or <code>PMview</code>.</td>
           <td align="right" valign="top">
@@ -186,7 +186,8 @@ bases._Type0 --+
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
         <a href="pycocoa.printers.Printer-class.html#deviceDescription" class="summary-name">deviceDescription</a><br />
-      Get the <code>NSDevice</code> description (<code>dict</code>).
+      Get the <code>NSDevice</code> description (<a 
+      href="pycocoa.utils.Adict-class.html" class="link">Adict</a>).
     </td>
   </tr>
 <tr>
@@ -194,7 +195,8 @@ bases._Type0 --+
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
         <a href="pycocoa.printers.Printer-class.html#deviceURI" class="summary-name">deviceURI</a><br />
-      Get the printer device (<code>URI</code>).
+      Get the printer device (<code>URI</code>) or 
+      <code>&quot;&quot;</code>.
     </td>
   </tr>
 <tr>
@@ -202,7 +204,8 @@ bases._Type0 --+
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
         <a href="pycocoa.printers.Printer-class.html#ID" class="summary-name">ID</a><br />
-      Get the printer IDentifier (<code>str</code>).
+      Get the printer IDentifier (<code>str</code>) or 
+      <code>&quot;&quot;</code>.
     </td>
   </tr>
 <tr>
@@ -234,7 +237,8 @@ bases._Type0 --+
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
         <a href="pycocoa.printers.Printer-class.html#location" class="summary-name">location</a><br />
-      Get the printer location (<code>str</code>).
+      Get the printer location (<code>str</code>) or 
+      <code>&quot;&quot;</code>.
     </td>
   </tr>
 <tr>
@@ -242,7 +246,8 @@ bases._Type0 --+
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
         <a href="pycocoa.printers.Printer-class.html#makemodel" class="summary-name">makemodel</a><br />
-      Get the printer make and model (<code>str</code>).
+      Get the printer make and model (<code>str</code>) or 
+      <code>&quot;&quot;</code>.
     </td>
   </tr>
 <tr>
@@ -250,7 +255,7 @@ bases._Type0 --+
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
         <a href="pycocoa.printers.Printer-class.html#name" class="summary-name">name</a><br />
-      Get the printer name (<code>str</code>).
+      Get the printer name (<code>str</code>) or <code>&quot;&quot;</code>.
     </td>
   </tr>
 <tr>
@@ -366,7 +371,7 @@ bases._Type0 --+
   <tr valign="top"><td>
   <h3 class="epydoc"><span class="sig"><span class="sig-name">printView</span>(<span class="sig-arg">self</span>,
         <span class="sig-arg">PMview</span>,
-        <span class="sig-arg">toPDF</span>=<span class="sig-default"><code class="variable-quote">'</code><code class="variable-string"></code><code class="variable-quote">'</code></span>,
+        <span class="sig-arg">toPDF</span>=<span class="sig-default">''</span>,
         <span class="sig-arg">wait</span>=<span class="sig-default">True</span>)</span>
   </h3>
   </td><td align="right" valign="top"
@@ -451,11 +456,13 @@ bases._Type0 --+
        cellspacing="0" width="100%" bgcolor="white">
 <tr><td>
   <h3 class="epydoc">deviceDescription</h3>
-  <p>Get the <code>NSDevice</code> description (<code>dict</code>).</p>
+  <p>Get the <code>NSDevice</code> description (<a 
+  href="pycocoa.utils.Adict-class.html" class="link">Adict</a>).</p>
   <dl class="fields">
     <dt>Get Method:</dt>
     <dd class="value"><span class="summary-sig">deviceDescription(<span class="summary-sig-arg">self</span>)</span>
-        - Get the <code>NSDevice</code> description (<code>dict</code>).
+        - Get the <code>NSDevice</code> description (<a 
+href="pycocoa.utils.Adict-class.html" class="link">Adict</a>).
     </dd>
     <dt>Set Method:</dt>
     <dd class="value"><span class="summary-sig">Read_Only(<span class="summary-sig-arg">self</span>,
@@ -471,11 +478,12 @@ bases._Type0 --+
        cellspacing="0" width="100%" bgcolor="white">
 <tr><td>
   <h3 class="epydoc">deviceURI</h3>
-  <p>Get the printer device (<code>URI</code>).</p>
+  <p>Get the printer device (<code>URI</code>) or 
+  <code>&quot;&quot;</code>.</p>
   <dl class="fields">
     <dt>Get Method:</dt>
     <dd class="value"><span class="summary-sig">deviceURI(<span class="summary-sig-arg">self</span>)</span>
-        - Get the printer device (<code>URI</code>).
+        - Get the printer device (<code>URI</code>) or <code>&quot;&quot;</code>.
     </dd>
     <dt>Set Method:</dt>
     <dd class="value"><span class="summary-sig">Read_Only(<span class="summary-sig-arg">self</span>,
@@ -491,11 +499,12 @@ bases._Type0 --+
        cellspacing="0" width="100%" bgcolor="white">
 <tr><td>
   <h3 class="epydoc">ID</h3>
-  <p>Get the printer IDentifier (<code>str</code>).</p>
+  <p>Get the printer IDentifier (<code>str</code>) or 
+  <code>&quot;&quot;</code>.</p>
   <dl class="fields">
     <dt>Get Method:</dt>
     <dd class="value"><span class="summary-sig">ID(<span class="summary-sig-arg">self</span>)</span>
-        - Get the printer IDentifier (<code>str</code>).
+        - Get the printer IDentifier (<code>str</code>) or <code>&quot;&quot;</code>.
     </dd>
     <dt>Set Method:</dt>
     <dd class="value"><span class="summary-sig">Read_Only(<span class="summary-sig-arg">self</span>,
@@ -571,11 +580,12 @@ bases._Type0 --+
        cellspacing="0" width="100%" bgcolor="white">
 <tr><td>
   <h3 class="epydoc">location</h3>
-  <p>Get the printer location (<code>str</code>).</p>
+  <p>Get the printer location (<code>str</code>) or 
+  <code>&quot;&quot;</code>.</p>
   <dl class="fields">
     <dt>Get Method:</dt>
     <dd class="value"><span class="summary-sig">location(<span class="summary-sig-arg">self</span>)</span>
-        - Get the printer location (<code>str</code>).
+        - Get the printer location (<code>str</code>) or <code>&quot;&quot;</code>.
     </dd>
     <dt>Set Method:</dt>
     <dd class="value"><span class="summary-sig">Read_Only(<span class="summary-sig-arg">self</span>,
@@ -591,11 +601,13 @@ bases._Type0 --+
        cellspacing="0" width="100%" bgcolor="white">
 <tr><td>
   <h3 class="epydoc">makemodel</h3>
-  <p>Get the printer make and model (<code>str</code>).</p>
+  <p>Get the printer make and model (<code>str</code>) or 
+  <code>&quot;&quot;</code>.</p>
   <dl class="fields">
     <dt>Get Method:</dt>
     <dd class="value"><span class="summary-sig">makemodel(<span class="summary-sig-arg">self</span>)</span>
-        - Get the printer make and model (<code>str</code>).
+        - Get the printer make and model (<code>str</code>) or 
+<code>&quot;&quot;</code>.
     </dd>
     <dt>Set Method:</dt>
     <dd class="value"><span class="summary-sig">Read_Only(<span class="summary-sig-arg">self</span>,
@@ -611,11 +623,12 @@ bases._Type0 --+
        cellspacing="0" width="100%" bgcolor="white">
 <tr><td>
   <h3 class="epydoc">name</h3>
-  <p>Get the printer name (<code>str</code>).</p>
+  <p>Get the printer name (<code>str</code>) or 
+  <code>&quot;&quot;</code>.</p>
   <dl class="fields">
     <dt>Get Method:</dt>
     <dd class="value"><span class="summary-sig">name(<span class="summary-sig-arg">self</span>)</span>
-        - Get the printer name (<code>str</code>).
+        - Get the printer name (<code>str</code>) or <code>&quot;&quot;</code>.
     </dd>
     <dt>Set Method:</dt>
     <dd class="value"><span class="summary-sig">Read_Only(<span class="summary-sig-arg">self</span>,
@@ -781,7 +794,7 @@ class="link">Paper</a>).
 <table border="0" cellpadding="0" cellspacing="0" width="100%%">
   <tr>
     <td align="left" class="footer">
-    Generated by Epydoc 3.0.1 on Mon Nov 16 20:16:51 2020
+    Generated by Epydoc 3.0.1 on Sat Nov 21 15:42:48 2020
     </td>
     <td align="right" class="footer">
       <a target="mainFrame" href="http://epydoc.sourceforge.net"

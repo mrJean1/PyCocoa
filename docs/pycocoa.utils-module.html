@@ -63,7 +63,7 @@
 
 <hr />
 <div class="fields">      <p><strong>Version:</strong>
-        20.11.15
+        20.11.20
       </p>
 </div><!-- ==================== CLASSES ==================== -->
 <a name="section-Classes"></a>
@@ -79,6 +79,15 @@
     </td><td class="summary">
         <a href="pycocoa.utils.module_property_RO-class.html" class="summary-name">module_property_RO</a><br />
       Decorator for a <code>Read-Only</code> module property.
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="pycocoa.utils.Adict-class.html" class="summary-name">Adict</a><br />
+      A <code>dict</code> with key <i>and</i> attribute access to the 
+        items and callable to add items.
     </td>
   </tr>
 <tr>
@@ -143,7 +152,7 @@
         <tr>
           <td><span class="summary-sig"><a href="pycocoa.utils-module.html#bytes2str" class="summary-sig-name">bytes2str</a>(<span class="summary-sig-arg">bytestr</span>,
         <span class="summary-sig-arg">dflt</span>=<span class="summary-sig-default">missing</span>,
-        <span class="summary-sig-arg">name</span>=<span class="summary-sig-default"><code class="variable-quote">'</code><code class="variable-string"></code><code class="variable-quote">'</code></span>)</span><br />
+        <span class="summary-sig-arg">name</span>=<span class="summary-sig-default">''</span>)</span><br />
       Convert <code>bytes</code>/<code>unicode</code> to <code>str</code> 
       if needed.</td>
           <td align="right" valign="top">
@@ -180,7 +189,7 @@
         <tr>
           <td><span class="summary-sig"><a href="pycocoa.utils-module.html#str2bytes" class="summary-sig-name">str2bytes</a>(<span class="summary-sig-arg">bytestr</span>,
         <span class="summary-sig-arg">dflt</span>=<span class="summary-sig-default">missing</span>,
-        <span class="summary-sig-arg">name</span>=<span class="summary-sig-default"><code class="variable-quote">'</code><code class="variable-string"></code><code class="variable-quote">'</code></span>)</span><br />
+        <span class="summary-sig-arg">name</span>=<span class="summary-sig-default">''</span>)</span><br />
       Convert <code>str</code> to <code>bytes</code>/<code>unicode</code> 
       if needed.</td>
           <td align="right" valign="top">
@@ -216,7 +225,7 @@
     </td><td class="summary">
       <table width="100%" cellpadding="0" cellspacing="0" border="0">
         <tr>
-          <td><span class="summary-sig"><a href="pycocoa.utils-module.html#clip" class="summary-sig-name">clip</a>(<span class="summary-sig-arg">bytestr</span>,
+          <td><span class="summary-sig"><a href="pycocoa.utils-module.html#clipstr" class="summary-sig-name">clipstr</a>(<span class="summary-sig-arg">bytestr</span>,
         <span class="summary-sig-arg">limit</span>=<span class="summary-sig-default">50</span>)</span><br />
       Clip a string to the given length limit.</td>
           <td align="right" valign="top">
@@ -506,7 +515,7 @@
       <table width="100%" cellpadding="0" cellspacing="0" border="0">
         <tr>
           <td><span class="summary-sig"><a href="pycocoa.utils-module.html#z1000str" class="summary-sig-name">z1000str</a>(<span class="summary-sig-arg">size</span>,
-        <span class="summary-sig-arg">sep</span>=<span class="summary-sig-default"><code class="variable-quote">'</code><code class="variable-string">_</code><code class="variable-quote">'</code></span>)</span><br />
+        <span class="summary-sig-arg">sep</span>=<span class="summary-sig-default">'_'</span>)</span><br />
       Convert a size to string with 1_000's seperator.</td>
           <td align="right" valign="top">
             
@@ -658,7 +667,7 @@
   <tr valign="top"><td>
   <h3 class="epydoc"><span class="sig"><span class="sig-name">bytes2str</span>(<span class="sig-arg">bytestr</span>,
         <span class="sig-arg">dflt</span>=<span class="sig-default">missing</span>,
-        <span class="sig-arg">name</span>=<span class="sig-default"><code class="variable-quote">'</code><code class="variable-string"></code><code class="variable-quote">'</code></span>)</span>
+        <span class="sig-arg">name</span>=<span class="sig-default">''</span>)</span>
   </h3>
   </td><td align="right" valign="top"
     >&nbsp;
@@ -716,7 +725,7 @@
   <tr valign="top"><td>
   <h3 class="epydoc"><span class="sig"><span class="sig-name">str2bytes</span>(<span class="sig-arg">bytestr</span>,
         <span class="sig-arg">dflt</span>=<span class="sig-default">missing</span>,
-        <span class="sig-arg">name</span>=<span class="sig-default"><code class="variable-quote">'</code><code class="variable-string"></code><code class="variable-quote">'</code></span>)</span>
+        <span class="sig-arg">name</span>=<span class="sig-default">''</span>)</span>
   </h3>
   </td><td align="right" valign="top"
     >&nbsp;
@@ -785,14 +794,14 @@
       </p>
 </div></td></tr></table>
 </div>
-<a name="clip"></a>
+<a name="clipstr"></a>
 <div>
 <table class="details" border="1" cellpadding="3"
        cellspacing="0" width="100%" bgcolor="white">
 <tr><td>
   <table width="100%" cellpadding="0" cellspacing="0" border="0">
   <tr valign="top"><td>
-  <h3 class="epydoc"><span class="sig"><span class="sig-name">clip</span>(<span class="sig-arg">bytestr</span>,
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">clipstr</span>(<span class="sig-arg">bytestr</span>,
         <span class="sig-arg">limit</span>=<span class="sig-default">50</span>)</span>
   </h3>
   </td><td align="right" valign="top"
@@ -1173,7 +1182,7 @@
   <table width="100%" cellpadding="0" cellspacing="0" border="0">
   <tr valign="top"><td>
   <h3 class="epydoc"><span class="sig"><span class="sig-name">z1000str</span>(<span class="sig-arg">size</span>,
-        <span class="sig-arg">sep</span>=<span class="sig-default"><code class="variable-quote">'</code><code class="variable-string">_</code><code class="variable-quote">'</code></span>)</span>
+        <span class="sig-arg">sep</span>=<span class="sig-default">'_'</span>)</span>
   </h3>
   </td><td align="right" valign="top"
     >&nbsp;
@@ -1282,7 +1291,7 @@
 <table border="0" cellpadding="0" cellspacing="0" width="100%%">
   <tr>
     <td align="left" class="footer">
-    Generated by Epydoc 3.0.1 on Mon Nov 16 20:16:49 2020
+    Generated by Epydoc 3.0.1 on Sat Nov 21 15:42:47 2020
     </td>
     <td align="right" class="footer">
       <a target="mainFrame" href="http://epydoc.sourceforge.net"

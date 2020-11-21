@@ -6,15 +6,49 @@
 '''Types L{AutoResize}, L{Window}, L{MediaWindow}, L{Screen},
 L{WindowStyle}, wrapping ObjC C{NSWindow}, etc.
 
-@var AutoResize:  Window resize options (C{mask}).
-@var BezelStyle:  Bezel kinds (C{enum}).
-@var Border:      Border kinds (C{enum}).
-@var WindowStyle: Window styles (C{mask}).
+@var AutoResize: AutoResize options (C{mask}, wrapping C{NSAutoresizingMaskOptions}).
+@var AutoResize.HeightSizable: 020.
+@var AutoResize.MaxXMargin: 04.
+@var AutoResize.MaxYMargin: 040.
+@var AutoResize.MinXMargin: 01.
+@var AutoResize.MinYMargin: 010.
+@var AutoResize.NotSizable: 0.
+@var AutoResize.Sizable: 022.
+@var AutoResize.WidthSizable: 02.
+
+@var BezelStyle: Bezel style constants (C{int}).
+@var BezelStyle.Disclosure: 0x5.
+@var BezelStyle.HelpButton: 0x9.
+@var BezelStyle.Inline: 0xf.
+@var BezelStyle.NCircular: 0x7.
+@var BezelStyle.Recessed: 0xd.
+@var BezelStyle.RegularSquare: 0x2.
+@var BezelStyle.RoundRect: 0xc.
+@var BezelStyle.Rounded: 0x1.
+@var BezelStyle.RoundedDisclosure: 0xe.
+@var BezelStyle.ShadowlessSquare: 0x6.
+@var BezelStyle.SmallSquare: 0xa.
+@var BezelStyle.TexturedRounded: 0xb.
+@var BezelStyle.TexturedSquare: 0x8.
+
+@var Border: Border type constants (C{int}).
+@var Border.Bezel: 0x2.
+@var Border.Groove: 0x3.
+@var Border.Line: 0x1.
+@var Border.No: 0x0.
+
+@var WindowStyle: Window style constants (C{mask}).
+@var WindowStyle.Closable: 0x2.
+@var WindowStyle.Miniaturizable: 0x4.
+@var WindowStyle.Resizable: 0x8.
+@var WindowStyle.Titled: 0x1.
+@var WindowStyle.Typical: 0xf.
+@var WindowStyle.Utility: 0x10.
 '''
 # all imports listed explicitly to help PyChecker
 from pycocoa.bases    import _Type2
 from pycocoa.geometry import Rect
-from pycocoa.lazily   import _ALL_LAZY
+from pycocoa.lazily   import _ALL_LAZY, _COLON_  # PYCHOK used!
 from pycocoa.nstypes  import isNone, NSConcreteNotification, NSFont, \
                              NSImageView, NSMain, NSNotification, \
                              NSScrollView, NSStr, NSTableView, \
@@ -36,7 +70,7 @@ from pycocoa.utils    import aspect_ratio, bytes2str, _Constants, _Globals, \
 # from enum   import Enum
 
 __all__ = _ALL_LAZY.windows
-__version__ = '20.11.16'
+__version__ = '20.11.18'
 
 _Cascade = NSPoint_t(25, 25)  # PYCHOK false
 
@@ -366,7 +400,7 @@ class Window(_Type2):
         try:
             r = bytes2str(ratio, dflt=None)
             if r is not None:
-                r = map(int, r.split(':'))
+                r = map(int, r.split(_COLON_))
             elif isinstance(ratio, (tuple, list)) and len(ratio) == 2:
                 r = tuple(ratio)
             else:  # NSSize_t
@@ -786,7 +820,12 @@ _Types.TextWindow              = TextWindow
 
 if __name__ == '__main__':
 
-    from pycocoa.utils import _all_listing
+    from pycocoa.utils import _all_listing, _varstr
+
+    print(_varstr(AutoResize, strepr=hex))  # XXX oct
+    print(_varstr(BezelStyle, strepr=hex))
+    print(_varstr(Border, strepr=hex))
+    print(_varstr(WindowStyle, strepr=hex))
 
     _all_listing(__all__, locals())
 

@@ -5,13 +5,23 @@
 
 '''Types L{OpenPanel} and L{SavePanel}, wrapping ObjC C{NSOpenPanel} and C{NSSavePanel}.
 
-@var AlertStyle:  Alert levels (C{enum}).
-@var PanelButton: Panel button kinds (C{enum}).
+@var AlertStyle: Alert level constants (C{int}).
+@var AlertStyle.Critical: 2.
+@var AlertStyle.Info: 1.
+@var AlertStyle.Warning: 0.
 
+@var PanelButton: Panel button kinds (C{int}).
+@var PanelButton.Cancel: 0.
+@var PanelButton.Close: 1.
+@var PanelButton.Error: -3.
+@var PanelButton.OK: 1.
+@var PanelButton.Other: 2.
+@var PanelButton.Suppressed: -2.
+@var PanelButton.TimedOut: -1.
 '''
 # all imports listed explicitly to help PyChecker
 from pycocoa.bases   import _Type2
-from pycocoa.lazily  import _ALL_LAZY
+from pycocoa.lazily  import _ALL_LAZY, _DOT_, _NN_
 from pycocoa.nstypes import NSAlert, NSError, NSFont, NSMain, \
                             NSNotificationCenter, NSOpenPanel, \
                             NSSavePanel, NSStr, nsString2str, \
@@ -36,7 +46,7 @@ except ImportError:
     _Browser, _BrowserError = None, ImportError
 
 __all__ = _ALL_LAZY.panels
-__version__ = '20.01.08'
+__version__ = '20.11.18'
 
 
 class AlertStyle(_Constants):  # Enum?
@@ -46,8 +56,7 @@ class AlertStyle(_Constants):  # Enum?
     Info     = 1  # NSAlertStyleInformational
     Warning  = 0  # NSAlertStyleWarning
 
-
-AlertStyle = AlertStyle()  #: Alert level constants (C{int}).
+AlertStyle = AlertStyle()  # PYCHOK constants
 
 _AlertStyleStr = {AlertStyle.Critical: 'Critical ',
                   AlertStyle.Info:     'Informational ',
@@ -58,14 +67,14 @@ class AlertPanel(_Type2):
     '''Python Type to show an alert, wrapping ObjC C{NSAlert}.
     '''
     _cancel   = False
-    _info     = ''
+    _info     = _NN_
     _ok       = 'OK'
     _other    = False
     _style    = None
     _suppress = None
 
-    def __init__(self, title='', info='', ok='OK', cancel=False, other=False,
-                                 style=AlertStyle.Info, suppressable=False):
+    def __init__(self, title=_NN_, info=_NN_, ok='OK', cancel=False, other=False,
+                       style=AlertStyle.Info, suppressable=False):
         '''New L{AlertPanel}.
 
           @keyword title: The panel name and title (C{str}).
@@ -97,13 +106,13 @@ class AlertPanel(_Type2):
             self._suppress = YES
 
         self._style = style
-        s = _AlertStyleStr.get(style, '')
+        s = _AlertStyleStr.get(style, _NN_)
         t = s or 'Alert '
         if title:
             t = '%s- %s' % (t, title)
         self.title = t
 
-    def show(self, text='', font=None, timeout=None):
+    def show(self, text=_NN_, font=None, timeout=None):
         '''Show alert message iff not suppressed.
 
            @keyword text: Optional, accessory text (C{str}).
@@ -137,7 +146,7 @@ class AlertPanel(_Type2):
         if self._suppress in (False, YES):
             self._suppress = False
             ns.setShowsSuppressionButton_(YES)
-            s = _AlertStyleStr.get(self._style, '')
+            s = _AlertStyleStr.get(self._style, _NN_)
             s = 'Do not show this %sAlert again' % (s,)
             ns.suppressionButton().setTitle_(release(NSStr(s)))
 
@@ -173,7 +182,7 @@ class BrowserPanel(_Type2):
     '''
     _browser = None
 
-    def __init__(self, name=None, title=''):
+    def __init__(self, name=None, title=_NN_):
         '''New L{BrowserPanel}, a browser.
 
           @keyword name: Browser type (C{str} or C{None} for default).
@@ -261,7 +270,7 @@ class OpenPanel(_Type2):
     '''Python Type to select a file, wrapping ObjC C{NSOpenPanel}.
     '''
 
-    def __init__(self, title=''):
+    def __init__(self, title=_NN_):
         '''New L{OpenPanel}, a file selection dialog.
 
           @keyword title: The panel name (C{str}).
@@ -275,7 +284,7 @@ class OpenPanel(_Type2):
                               hidexts=False,
                              multiple=False,
                              packages=False,
-                               prompt='',
+                               prompt=_NN_,
                               otherOK=False, dflt=None):
         '''Select a file from the panel.
 
@@ -307,7 +316,7 @@ class OpenPanel(_Type2):
 
         # ns.setRequiredFileType_(NSStr)
         if filetypes:  # an NSArray of file extension NSStr[ing]s without the '.'
-            ns.setAllowedFileTypes_(py2NS(t.lstrip('.') for t in filetypes))
+            ns.setAllowedFileTypes_(py2NS(t.lstrip(_DOT_) for t in filetypes))
 
         ns.setAllowsOtherFileTypes_(YES if otherOK else NO)
         ns.setTreatsFilePackagesAsDirectories_(YES if packages else NO)
@@ -343,8 +352,7 @@ class PanelButton(_Constants):  # Enum?
     OK         = 1  # NSOKButton
     Other      = 2
 
-
-PanelButton = PanelButton()  #: Panel button kinds (C{int}).
+PanelButton = PanelButton()  # PYCHOK constants
 
 
 def _runModal(ns, timeout=None):
@@ -378,21 +386,21 @@ def _runModal(ns, timeout=None):
 class SavePanel(_Type2):
     '''Python Type to save a file, wrapping ObjC C{NSSavePanel}.
     '''
-    def __init__(self, title=''):
+    def __init__(self, title=_NN_):
         '''New L{SavePanel}, a file save dialog.
 
            @keyword title: The panel name (C{str}).
         '''
         self.title = title
 
-    def save_as(self, name='', filetype='',  # PYCHOK expected
-                                    dir='',
-                                 hidden=False,
-                                hidexts=False,
-                                  label='',
-                               packages=False,
-                                 prompt='',
-                                   tags=(), dflt=None):
+    def save_as(self, name=_NN_, filetype=_NN_,  # PYCHOK expected
+                                      dir=_NN_,
+                                   hidden=False,
+                                  hidexts=False,
+                                    label=_NN_,
+                                 packages=False,
+                                   prompt=_NN_,
+                                     tags=(), dflt=None):
         '''Specify a file name in the panel.
 
            @keyword name: A suggested file name (C{str}), default "Untitled".
@@ -421,7 +429,7 @@ class SavePanel(_Type2):
                 ns.setDirectory_(release(NSStr(dir)))
 
         if filetype:
-            ns.setRequiredFileType_(release(NSStr(filetype.lstrip('.'))))
+            ns.setRequiredFileType_(release(NSStr(filetype.lstrip(_DOT_))))
             hidexts = False
 
         ns.setShowsHiddenFiles_(YES if hidden else NO)
@@ -464,7 +472,7 @@ class TextPanel(AlertPanel):
         '''
         self.title = title
 
-    def show(self, text_or_file='', font=None, timeout=None):
+    def show(self, text_or_file=_NN_, font=None, timeout=None):
         '''Show alert message iff not suppressed.
 
            @param text_or_file: The contents (C{str} or C{file}).
@@ -503,7 +511,10 @@ _Types.TextPanel  = TextPanel
 
 if __name__ == '__main__':
 
-    from pycocoa.utils import _all_listing
+    from pycocoa.utils import _all_listing, _varstr
+
+    print(_varstr(AlertStyle,  strepr=repr))
+    print(_varstr(PanelButton, strepr=repr))
 
     _all_listing(__all__, locals())
 

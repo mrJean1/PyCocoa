@@ -12,7 +12,7 @@
 from pycocoa.bases    import _Type2
 from pycocoa.fonts    import Font
 from pycocoa.geometry import Rect4
-from pycocoa.lazily   import _ALL_LAZY
+from pycocoa.lazily   import _ALL_LAZY, _COLON_, _NN_
 from pycocoa.nstypes  import NSMain, NSScrollView, NSStr, NSTableColumn, \
                              NSTableView  # isNone, NSTextField
 from pycocoa.octypes  import NSSize_t
@@ -28,7 +28,7 @@ from pycocoa.utils    import _Globals, isinstanceOf, module_property_RO, \
 from pycocoa.windows  import Screen, Window, WindowStyle
 
 __all__ = _ALL_LAZY.tables
-__version__ = '20.01.08'
+__version__ = '20.11.17'
 
 _Alignment = dict(center=NSTextAlignmentCenter,
                justified=NSTextAlignmentJustified,
@@ -40,14 +40,14 @@ _Alignment = dict(center=NSTextAlignmentCenter,
 class _NS(object):
     '''(INTERNAL) Singletons.
     '''
-    BlankCell = retain(NSStr(''))
+    BlankCell = retain(NSStr(_NN_))
     EmptyCell = retain(NSStr('-'))
 
 
 def _format(header, col):
     # format a table column from the header string
     # "title:<col_width>:left|center|right|justified:bold|italic"
-    t = header.rstrip().split(':')
+    t = header.rstrip().split(_COLON_)
     while len(t) > 1:
         try:
             f = t.pop(1)
@@ -319,7 +319,7 @@ class TableWindow(Window):
     '''
     _table = None
 
-    def __init__(self, title='', table=None, frame=None):
+    def __init__(self, title=_NN_, table=None, frame=None):
         '''New L{TableWindow}.
 
            @keyword title: Window name or title (C{str}).

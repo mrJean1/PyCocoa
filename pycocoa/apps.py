@@ -9,7 +9,7 @@
 from pycocoa.bases   import _Type2
 from pycocoa.menus   import _callMenuItem_name, _handleMenuItem_name, \
                             Item, ItemSeparator, Menu, MenuBar, ns2Item
-from pycocoa.lazily  import _ALL_LAZY
+from pycocoa.lazily  import _ALL_LAZY, _NN_
 from pycocoa.nstypes import NSApplication, nsBundleRename, \
                             NSConcreteNotification, NSMain, \
                             NSNotification, nsOf, NSStr
@@ -24,7 +24,7 @@ from threading import Thread
 from time import sleep
 
 __all__ = _ALL_LAZY.apps
-__version__ = '20.01.08'
+__version__ = '20.11.20'
 
 
 class App(_Type2):
@@ -225,7 +225,7 @@ class App(_Type2):
            @keyword timeout: Run time limit in seconds (C{float}).
 
            @note: Although I{run} never returns, any Python threads
-           started earlier continue to run concurrently.
+                  started earlier continue to run concurrently.
         '''
         if timeout:
             try:
@@ -433,7 +433,7 @@ class _NSApplicationDelegate(object):
         self.app._isUp = True
         self.app.appLaunched_(ns2App(ns_notification))
 
-#   @_ObjC.method('Bv@')
+#   @_ObjC.method('B@')
 #   def applicationDidFinishLaunchingWithOptions_(self, ns_dictionary):
 #       '''ObjC callback to handle C{UIApplication} event.
 #       '''
@@ -446,7 +446,7 @@ class _NSApplicationDelegate(object):
 #       '''
 #       pass
 
-#   @_ObjC.method('Bv@')
+#   @_ObjC.method('B@')
 #   def applicationShouldTerminateAfterLastWindowClosed_(self, ns_application):
 #       return YES
 
@@ -554,7 +554,7 @@ def NSApplicationDelegate():
 class Tile(_Type2):
     '''Dock tile for an L{App}, wrapping an ObjC C{NSDockTile}.
     '''
-    _label = ''
+    _label = _NN_
 
     def __init__(self, app):
         '''New dock L{Tile}.
@@ -603,11 +603,11 @@ def ns2App(ns):
     '''
     if isObjCInstanceOf(ns, NSApplication):
         pass
-    elif isObjCInstanceOf(ns, NSConcreteNotification, NSNotification, ns='ns'):
+    elif isObjCInstanceOf(ns, NSConcreteNotification, NSNotification, name='ns'):
         ns = ns.object()
     if ns == _Globals.App.NS:
         return _Globals.App
-    raise RuntimeError('%r vs %r' % (ns, _Globals.App.NS))
+    raise RuntimeError('%s %r vs %r' % ('ns', ns, _Globals.App.NS))
 
 
 NSApplication._Type = _Types.App = App

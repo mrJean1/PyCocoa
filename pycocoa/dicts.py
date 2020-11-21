@@ -7,7 +7,7 @@
 '''
 # all imports listed explicitly to help PyChecker
 from pycocoa.bases   import _Type0
-from pycocoa.lazily  import _ALL_LAZY
+from pycocoa.lazily  import _ALL_LAZY, _DOT_
 from pycocoa.nstypes import isNone, NSDictionary, nsIter2, \
                             NSMutableDictionary, ns2Type
 from pycocoa.pytypes import py2NS, type2NS
@@ -16,7 +16,7 @@ from pycocoa.runtime import isImmutable, isObjCInstanceOf, \
 from pycocoa.utils   import isinstanceOf, missing, _Types
 
 __all__ = _ALL_LAZY.dicts
-__version__ = '20.01.08'
+__version__ = '20.11.18'
 
 
 def _dict_cmp(dict1, dict2):
@@ -105,7 +105,7 @@ class FrozenDict(_Type0):
         raise TypeError('%s[%r] = %r' % (self, key, value))
 
     def clear(self):
-        raise TypeError('%s.%s()' % (self, 'clear'))
+        raise TypeError('%s()' % (_DOT_(self, 'clear'),))
 
     def copy(self):
         '''Make a shallow copy.
@@ -140,7 +140,7 @@ class FrozenDict(_Type0):
     __iter__ = keys
 
     def pop(self, key, **unused):
-        raise TypeError('%s.%s(%r)' % (self, 'pop', key))
+        raise TypeError('%s(%r)' % (_DOT_(self, self.pop.__name__), key))
 
     def values(self):
         '''Yield the values, like C{dict.values}.

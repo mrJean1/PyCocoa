@@ -6,7 +6,8 @@
 '''C{get_...} functions to obtain ObjC classes, methods, protocols, etc.
 '''
 # all imports listed explicitly to help PyChecker
-from pycocoa.lazily  import _ALL_LAZY
+from pycocoa.lazily  import _ALL_LAZY, _COLON_, _COMMASPACE_, \
+                            _NN_, _UNDER_
 from pycocoa.octypes import emcoding2ctype, encoding2ctype, \
                             Class_t, Id_t, IMP_t, Ivar_t, Protocol_t, \
                             SEL_t, split_encoding
@@ -25,7 +26,7 @@ except AttributeError:
 del itertools
 
 __all__ = _ALL_LAZY.getters
-__version__ = '20.11.14'
+__version__ = '20.11.17'
 
 _c_func_t_cache = {}
 _SEL_t_cache = Cache2(limit2=128)
@@ -314,13 +315,13 @@ def get_properties(clas_or_proto, *prefixes):
             # XXX should yield name, ObjCProperty instance
             # attrs T@"type",&,C,D,G<name>,N,P,R,S<name>,W,t<encoding>,V<varname>
             attrs = bytes2str(libobjc.property_getAttributes(prop))
-            attrs = '%s=(%s)' % (attrs, ', '.join(_PropertyAttributes
-                    .get(_[:1], _[:1]) + _[1:] for _ in attrs.split(',')))
-            setter = ''
+            attrs = '%s=(%s)' % (attrs, _COMMASPACE_.join(_PropertyAttributes
+                       .get(_[:1], _[:1]) + _[1:] for _ in attrs.split(',')))
+            setter = _NN_
             if setters:
-                set_ = 'set' + name.capitalize() + ':'
+                set_ = _NN_('set', name.capitalize(), _COLON_)
                 if set_ in setters:
-                    setter = _PropertyAttributes['S'] + set_
+                    setter = _NN_(_PropertyAttributes['S'], set_)
             yield name, attrs, setter, prop
 
 
@@ -385,10 +386,10 @@ def get_selectorname_permutations(name_, leading=False):
     yield name_  # original, first
 
     if leading:  # include
-        s = name_.split('_')
+        s = name_.split(_UNDER_)
     else:  # exclude
-        n = name_.lstrip('_')
-        s = n.split('_')
+        n = name_.lstrip(_UNDER_)
+        s = n.split(_UNDER_)
         p = len(name_) - len(n)
         if p > 0:
             s[0] = name_[:p] + s[0]
@@ -397,7 +398,7 @@ def get_selectorname_permutations(name_, leading=False):
     if n > 0:
         for p in _iter_product('_:', repeat=n):
             # <https://StackOverflow.com/questions/952914>
-            n = ''.join(_iter_chain(_iter_zip(s, p, fillvalue='')))
+            n = _NN_.join(_iter_chain(_iter_zip(s, p, fillvalue=_NN_)))
             if n != name_:
                 yield n
 
@@ -410,7 +411,7 @@ def get_selectornameof(sel):
        @return: The selector name (C{str}) if found, C{""} otherwise.
     '''
     isinstanceOf(sel, SEL_t, name='sel')
-    return bytes2str(libobjc.sel_getName(sel)) or ''
+    return bytes2str(libobjc.sel_getName(sel)) or _NN_
 
 
 def get_superclass(clas):

@@ -10,7 +10,7 @@ C{PMPaperMargins} plus several C{get_...} print functions.
 @var libPC: The macOS C{PrintCore} framework library (C{ctypes.CDLL}) or C{None}.
 '''
 from pycocoa.bases   import _Type0
-from pycocoa.lazily  import _ALL_LAZY
+from pycocoa.lazily  import _ALL_LAZY, _DOT_, _NN_
 from pycocoa.nstypes import nsDictionary2dict, NSImageView, NSMain, \
                             NSPrinter, NSPrintInfo, NSPrintOperation, \
                             ns2py, NSStr, NSTableView, NSTextView
@@ -20,15 +20,15 @@ from pycocoa.oslibs  import cfNumber2bool, cfString, cfString2str, \
                             cfURL2str, _csignature, _free_memory, \
                             get_lib_framework, libCF, YES
 from pycocoa.runtime import isObjCInstanceOf, send_message, _Xargs
-from pycocoa.utils   import isinstanceOf, property_RO, _Strs, zfstr, \
-                           _Types
+from pycocoa.utils   import Adict, isinstanceOf, property_RO, \
+                           _Strs, _Types, zfstr
 
 from ctypes  import ArgumentError, byref, cast, c_char_p, c_double, \
                     c_int, c_void_p, POINTER, sizeof
 import os
 
 __all__ = _ALL_LAZY.printers
-__version__ = '20.11.14'
+__version__ = '20.11.20'
 
 libPC = None  # loaded on-demand
 kPMServerLocal = None
@@ -334,7 +334,7 @@ class Paper(_PM_Type0):
 class PaperCustom(Paper):
     '''Create a custom L{Paper}.
     '''
-    def __init__(self, name='Custom', ID='', width=612, height=792, margins=None, printer=None):
+    def __init__(self, name='Custom', ID=_NN_, width=612, height=792, margins=None, printer=None):
         '''New L{PaperCustom} from paper attributes.
 
            @raise TypeError: Invalid I{margins} or I{printer}.
@@ -444,21 +444,24 @@ class Printer(_PM_Type0):
 
     @property_RO
     def deviceDescription(self):
-        '''Get the C{NSDevice} description (C{dict}).
+        '''Get the C{NSDevice} description (L{Adict}).
         '''
         return ns2py(self.NS.deviceDescription())
 
     @property_RO
     def deviceURI(self):
-        '''Get the printer device (C{URI}).
+        '''Get the printer device (C{URI}) or C{""}.
         '''
-        return self._2ustr(libPC.PMPrinterCopyDeviceURI)
+        try:
+            return self._2ustr(libPC.PMPrinterCopyDeviceURI)
+        except _StatusError:
+            return _NN_
 
     @property_RO
     def ID(self):
-        '''Get the printer IDentifier (C{str}).
+        '''Get the printer IDentifier (C{str}) or C{""}.
         '''
-        return cfString2str(libPC.PMPrinterGetID(self.PM))
+        return cfString2str(libPC.PMPrinterGetID(self.PM)).strip()
 
     @property_RO
     def isColor(self):
@@ -488,22 +491,26 @@ class Printer(_PM_Type0):
 
     @property_RO
     def location(self):
-        '''Get the printer location (C{str}).
+        '''Get the printer location (C{str}) or C{""}.
         '''
-        return cfString2str(libPC.PMPrinterGetLocation(self.PM))
+        s = libPC.PMPrinterGetLocation(self.PM)
+        return cfString2str(s) if s else _NN_
 
     @property_RO
     def makemodel(self):
-        '''Get the printer make and model (C{str}).
+        '''Get the printer make and model (C{str}) or C{""}.
         '''
-        return self._2str(libPC.PMPrinterGetMakeAndModelName)
+        try:
+            return self._2str(libPC.PMPrinterGetMakeAndModelName)
+        except _StatusError:
+            return _NN_
 
     @property_RO
     def name(self):
-        '''Get the printer name (C{str}).
+        '''Get the printer name (C{str}) or C{""}.
         '''
         if self._name is None:
-            self._name = cfString2str(libPC.PMPrinterGetName(self.PM))
+            self._name = cfString2str(libPC.PMPrinterGetName(self.PM)).strip()
         return self._name
 
     @property_RO
@@ -537,7 +544,7 @@ class Printer(_PM_Type0):
         '''
         return int(self.NS.languageLevel())
 
-#     def printImage(self, image, toPDF='', wait=True):
+#     def printImage(self, image, toPDF=_NN_, wait=True):
 #         '''Print an image file.
 #
 #            @param image: The image file name path (C{str}).
@@ -558,7 +565,7 @@ class Printer(_PM_Type0):
 #         vw.setImage_(im)
 #         return self.printView(vw, toPDF=toPDF, wait=wait)
 
-    def printView(self, PMview, toPDF='', wait=True):
+    def printView(self, PMview, toPDF=_NN_, wait=True):
         '''Print an ObjC C{NSView} or C{PMview}.
 
            @param PMview: The ObjC view to print (C{NSView} or C{PMview}).
@@ -768,7 +775,7 @@ class _StatusError(PrintError):
 #        A/Frameworks/PrintCore.framework/Versions/A/Headers/PMErrors.h>
 # Contains: Mac OS X Printing Manager Error Codes.
 # Copyright: 2001-2006 by Apple Computer, Inc., all rights reserved
-kPMErrors = dict(
+kPMErrors = Adict(
     # General error codes originally in PMDefinitions (-30870 to -30899)
     kPMNoError                   = noErr,   # no error
     kPMInvalidParameter          = -50,     # paramErr: parameter missing or invalid
@@ -896,34 +903,35 @@ _Types.Printer      = Printer
 
 if __name__ == '__main__':
 
-    from pycocoa.utils import _all_listing
+    from pycocoa.utils import _all_listing, _Globals, printf
+
+    _Globals.argv0 = _NN_
 
     for i, p in enumerate(get_printers()):
-        print('%2s %s: ID %r, makemodel %r, URI %r' % (i + 1,
-                    p, p.ID, p.makemodel, p.deviceURI))
+        printf('%2s %s: ID %r, makemodel %r, URI %r', i + 1,
+                     p, p.ID, p.makemodel, p.deviceURI)
 
     d = get_printer()
     if d:
-        print('\ndefault (%s) printer: %s...' % (d.isDefault, d))
+        printf('default (%s) printer: %s...', d.isDefault, d, nl=1)
         for a in ('name', 'ID', 'makemodel', 'isColor', 'location',
                                 'psCapable', 'psLevel', 'isRemote',
                                 'deviceURI', 'deviceDescription',
                                 'description', 'PPD', 'resolution'):
-            print(' %s.%s: %r' % (d, a, getattr(d, a)))
+            printf(' %s: %r', _DOT_(d, a), getattr(d, a))
 
-        print('')
+        printf(_NN_)
         for i, p in enumerate(get_papers(d)):
             t = tuple(map(zfstr, (p.width, p.height) + p.size2inch))
-            print('%2s %s: ID %r, %sx%s (%sX%s)' % ((i + 1,
-                            p, p.ID) + t))
+            printf('%2s %s: ID %r, %sx%s (%sX%s)', i + 1, p, p.ID, *t)
 
     p = Paper('A4')
-    print('\npaper: %s...' % (p,))
+    printf('paper: %s...', p, nl=1)
     for a in ('name', 'ID', 'height', 'width',
                             'size2inch', 'size2mm',
                             'PPD', 'printer'):
-        print(' %s.%s: %r' % (p, a, getattr(p, a)))
-    print(' %s.%s: %r' % (p, 'localname', p.localname()))
+        printf(' %s: %r', _DOT_(p, a), getattr(p, a))
+    printf(' %s: %r', _DOT_(p, 'localname'), p.localname(), nt=1)
 
     _all_listing(__all__, locals())
 
@@ -974,6 +982,7 @@ if __name__ == '__main__':
 #  Paper('A4').PPD: 'A4'
 #  Paper('A4').printer: Printer('Color') at 0x7fe3a86bbe20
 #  Paper('A4').localname: 'A4'
+#
 #
 # pycocoa.printers.__all__ = tuple(
 #  pycocoa.printers.get_libPC is <function .get_libPC at 0x7fe3a8270940>,
