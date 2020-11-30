@@ -938,22 +938,22 @@ if __name__ == '__main__':
     # get_printer_browser()
 
 # % python3 -m pycocoa.printers
-#  1 Printer('Color'): ID 'Brother_MFC_9340CDW_2', makemodel 'Brother MFC-9340CDW CUPS', URI 'usb://...'
+#  1 Printer('Color'): ID 'Brother_MFC_...', makemodel 'Brother MFC-... CUPS', URI 'usb://...'
 #
-# default (True) printer: Printer('Color')...
-#  Printer('Color').name: 'Color'
-#  Printer('Color').ID: 'Brother_MFC_9340CDW_2'
-#  Printer('Color').makemodel: 'Brother MFC-9340CDW CUPS'
-#  Printer('Color').isColor: True
-#  Printer('Color').location: '...'
-#  Printer('Color').psCapable: True
-#  Printer('Color').psLevel: 3
-#  Printer('Color').isRemote: False
-#  Printer('Color').deviceURI: 'usb://...'
-#  Printer('Color').deviceDescription: {'NSDeviceIsPrinter': 'YES'}
-#  Printer('Color').description: '{\n    "Device Description" =     {\n        NSDeviceIsPrinter = YES;\n    };\n    "Language Level" = 3;\n    Name = Color;\n    Type = "Brother MFC-9340CDW CUPS";\n}'
-#  Printer('Color').PPD: 'file:///...'
-#  Printer('Color').resolution: (300.0, 300.0)
+# default (False) printer: Printer('')...
+#  Printer('').name: ''
+#  Printer('').ID: ''
+#  Printer('').makemodel: ''
+#  Printer('').isColor: False
+#  Printer('').location: ''
+#  Printer('').psCapable: True
+#  Printer('').psLevel: 3
+#  Printer('').isRemote: False
+#  Printer('').deviceURI: ''
+#  Printer('').deviceDescription: {'NSDeviceIsPrinter': 'YES'}
+#  Printer('').description: '{\n    "Device Description" =     {\n        NSDeviceIsPrinter = YES;\n    };\n    "Language Level" = 3;\n    Name = " ";\n    Type = "";\n}'
+#  Printer('').PPD: 'file:///.../GenericPrinter.ppd'
+#  Printer('').resolution: (300.0, 300.0)
 #
 #  1 Paper('A4'): ID 'iso-a4', 595x842 (8.264X11.694)
 #  2 Paper('US Letter'): ID 'na-letter', 612x792 (8.5X11)
@@ -985,19 +985,19 @@ if __name__ == '__main__':
 #
 #
 # pycocoa.printers.__all__ = tuple(
-#  pycocoa.printers.get_libPC is <function .get_libPC at 0x7fe3a8270940>,
-#  pycocoa.printers.get_papers is <function .get_papers at 0x7fe3a86a84c0>,
-#  pycocoa.printers.get_printer is <function .get_printer at 0x7fe3a86a8550>,
-#  pycocoa.printers.get_printer_browser is <function .get_printer_browser at 0x7fe3a86a85e0>,
-#  pycocoa.printers.get_printers is <function .get_printers at 0x7fe3a86a8670>,
-#  pycocoa.printers.get_resolutions is <function .get_resolutions at 0x7fe3a86a8700>,
-#  pycocoa.printers.libPC is <CDLL '/System/Library/.../PrintCore', handle 7fe3a6e4db70 at 0x7fe3a86a0f70>,
+#  pycocoa.printers.get_libPC is <function .get_libPC at 0x7f9f7d38a9d0>,
+#  pycocoa.printers.get_papers is <function .get_papers at 0x7f9f7f8023a0>,
+#  pycocoa.printers.get_printer is <function .get_printer at 0x7f9f7f802430>,
+#  pycocoa.printers.get_printer_browser is <function .get_printer_browser at 0x7f9f7f8024c0>,
+#  pycocoa.printers.get_printers is <function .get_printers at 0x7f9f7f802550>,
+#  pycocoa.printers.get_resolutions is <function .get_resolutions at 0x7f9f7f8025e0>,
+#  pycocoa.printers.libPC is <CDLL '/System/Library/Frameworks/ApplicationServices.framework/Frameworks/PrintCore.framework/PrintCore', handle 7f9f7c60f490 at 0x7f9f7d5c2ee0>,
 #  pycocoa.printers.Paper is <class .Paper>,
 #  pycocoa.printers.PaperCustom is <class .PaperCustom>,
 #  pycocoa.printers.PaperMargins is <class .PaperMargins>,
 #  pycocoa.printers.Printer is <class .Printer>,
 # )[11]
-# pycocoa.printers.version 20.11.14, .isLazy 1, Python 3.9.0 64bit, macOS 10.15.7
+# pycocoa.printers.version 20.11.20, .isLazy 1, Python 3.9.0 64bit, macOS 10.16
 
 # MIT License <https://OpenSource.org/licenses/MIT>
 #

@@ -9,23 +9,24 @@
 # <https://GitHub.com/versluis/Mac-TableViewCode/tree/master/Mac%20TableViewCode>
 
 # all imports listed explicitly to help PyChecker
-from pycocoa.bases    import _Type2
-from pycocoa.fonts    import Font
+from pycocoa.bases import _Type2
+from pycocoa.fonts import Font
 from pycocoa.geometry import Rect4
-from pycocoa.lazily   import _ALL_LAZY, _COLON_, _NN_
-from pycocoa.nstypes  import NSMain, NSScrollView, NSStr, NSTableColumn, \
-                             NSTableView  # isNone, NSTextField
-from pycocoa.octypes  import NSSize_t
-from pycocoa.oslibs   import NSTableViewSolidHorizontalGridLineMask, \
-                             NSTableViewSolidVerticalGridLineMask, \
-                             NSTextAlignmentCenter, NSTextAlignmentJustified, \
-                             NSTextAlignmentLeft, NSTextAlignmentNatural, \
-                             NSTextAlignmentRight, YES
-from pycocoa.runtime  import isObjCInstanceOf, ObjCDelegate, ObjCInstance, \
-                             ObjCSubclass, release, retain, send_super_init
-from pycocoa.utils    import _Globals, isinstanceOf, module_property_RO, \
-                             property_RO, _Types
-from pycocoa.windows  import Screen, Window, WindowStyle
+from pycocoa.lazily import _ALL_LAZY, _COLON_, _NN_
+from pycocoa.nstypes import NSMain, NSScrollView, NSStr, NSTableColumn, \
+                            NSTableView  # isNone, NSTextField
+from pycocoa.octypes import NSSize_t
+from pycocoa.oslibs import NSTableViewSolidHorizontalGridLineMask, \
+                           NSTableViewSolidVerticalGridLineMask, \
+                           NSTextAlignmentCenter, NSTextAlignmentJustified, \
+                           NSTextAlignmentLeft, NSTextAlignmentNatural, \
+                           NSTextAlignmentRight, YES
+from pycocoa.runtime import isObjCInstanceOf, ObjCDelegate, ObjCInstance, \
+                            ObjCSubclass, release, retain, send_super_init
+from pycocoa.screens import Screens
+from pycocoa.utils import _Globals, isinstanceOf, module_property_RO, \
+                           property_RO, _Types
+from pycocoa.windows import Window, WindowStyle
 
 __all__ = _ALL_LAZY.tables
 __version__ = '20.11.17'
@@ -340,7 +341,7 @@ class TableWindow(Window):
         # adjust frame to include all (or most) table rows
         f = tbl.frame() if frame is None else frame.NS
         if f.size.height < h:
-            h = min(Screen().height, h)
+            h = min(Screens.Main.height, h)
             f.size = NSSize_t(f.size.width, h)
             tbl.setFrameSize_(f.size)
 
@@ -390,12 +391,12 @@ if __name__ == '__main__':
 # % python3 -m pycocoa.tables
 #
 # pycocoa.tables.__all__ = tuple(
-#  pycocoa.tables.closeTables is <function .closeTables at 0x7fdcfa5d6430>,
-#  pycocoa.tables.NSTableViewDelegate is <pycocoa.utils.module_property_RO object at 0x7fdcfa5a2070>,
+#  pycocoa.tables.closeTables is <function .closeTables at 0x7f9ad7ee3160>,
+#  pycocoa.tables.NSTableViewDelegate is <pycocoa.utils.module_property_RO object at 0x7f9ad7ec70a0>,
 #  pycocoa.tables.Table is <class .Table>,
 #  pycocoa.tables.TableWindow is <class .TableWindow>,
 # )[4]
-# pycocoa.tables.version 20.01.08, .isLazy 1, Python 3.9.0 64bit, macOS 10.15.7
+# pycocoa.tables.version 20.11.17, .isLazy 1, Python 3.9.0 64bit, macOS 10.16
 
 # MIT License <https://OpenSource.org/licenses/MIT>
 #

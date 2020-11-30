@@ -81,40 +81,41 @@ wrapping ObjC C{NSMenuItem} and C{NSMenu} and L{Keys}.
 @var Keys.VerticalTab: '\x0b'.
 '''
 # all imports listed explicitly to help PyChecker
-from pycocoa.bases    import _Type2
-from pycocoa.fonts    import Font
+from pycocoa.bases import _Type2
+from pycocoa.fonts import Font
 from pycocoa.geometry import Size
-from pycocoa.getters  import get_selector, get_selectornameof
-from pycocoa.lazily   import _ALL_LAZY, _COMMASPACE_, _DOT_, _NN_, \
-                             _NL_, _UNDER_
-from pycocoa.nstypes  import isNone, NSMain, NSMenu, NSMenuItem, nsOf, \
-                             NSStr, nsString2str
-from pycocoa.pytypes  import int2NS
-from pycocoa.octypes  import SEL_t
-from pycocoa.oslibs   import NO, NSAlternateKeyMask, NSCommandKeyMask, \
-                             NSControlKeyMask, NSShiftKeyMask, YES  # PYCHOK expected
-from pycocoa.oslibs   import NSAcknowledgeCharacter, NSBackSpaceCharacter, \
-                             NSBackTabCharacter, NSBellCharacter, \
-                             NSCancelCharacter, NSCarriageReturnCharacter, \
-                             NSDataLineEscapeCharacter, NSDeleteCharacter, \
-                             NSDeviceControl1Character, NSDeviceControl2Character, \
-                             NSDeviceControl3Character, NSDeviceControl4Character, \
-                             NSEndOfMediumCharacter, NSEndOfTextCharacter, \
-                             NSEndOfTransmitCharacter, NSEndOfTransmitBlockCharacter, \
-                             NSEnquiryCharacter, NSEnterCharacter, NSEscapeCharacter, \
-                             NSFileSeparatorCharacter, NSFormFeedCharacter, \
-                             NSGroupSeparatorCharacter, NSHorizontalTabCharacter, \
-                             NSLineFeedCharacter, NSNegativeAcknowledgeCharacter, \
-                             NSNewLineCharacter, NSRecordSeparatorCharacter, \
-                             NSShiftInCharacter, NSShiftOutCharacter, \
-                             NSSpaceCharacter, NSStartOfHeadingCharacter, \
-                             NSStartOfTextCharacter, NSSubstituteCharacter, \
-                             NSSynchronousIdleCharacter, NSTabCharacter, \
-                             NSUnitSeparatorCharacter, NSVerticalTabCharacter
-from pycocoa.runtime  import isObjCInstanceOf  # , ObjCInstance
-from pycocoa.utils    import Adict, bytes2str, _ByteStrs, _Constants, _Globals, _Ints, \
-                             isinstanceOf, missing, name2pymethod, printf, property2, \
-                             property_RO, _Strs, _Types
+from pycocoa.getters import get_selector, get_selectornameof
+from pycocoa.lazily import _ALL_LAZY, _COMMASPACE_, _DOT_, _NN_, \
+                           _NL_, _UNDER_
+from pycocoa.nstypes import isNone, NSMain, NSMenu, NSMenuItem, nsOf, \
+                            NSStr, nsString2str
+from pycocoa.pytypes import int2NS
+from pycocoa.octypes import SEL_t
+from pycocoa.oslibs import NO, NSAlternateKeyMask, NSCommandKeyMask, \
+                           NSControlKeyMask, NSShiftKeyMask, YES  # PYCHOK expected
+from pycocoa.oslibs import NSAcknowledgeCharacter, NSBackSpaceCharacter, \
+                           NSBackTabCharacter, NSBellCharacter, \
+                           NSCancelCharacter, NSCarriageReturnCharacter, \
+                           NSDataLineEscapeCharacter, NSDeleteCharacter, \
+                           NSDeviceControl1Character, NSDeviceControl2Character, \
+                           NSDeviceControl3Character, NSDeviceControl4Character, \
+                           NSEndOfMediumCharacter, NSEndOfTextCharacter, \
+                           NSEndOfTransmitCharacter, NSEndOfTransmitBlockCharacter, \
+                           NSEnquiryCharacter, NSEnterCharacter, NSEscapeCharacter, \
+                           NSFileSeparatorCharacter, NSFormFeedCharacter, \
+                           NSGroupSeparatorCharacter, NSHorizontalTabCharacter, \
+                           NSLineFeedCharacter, NSNegativeAcknowledgeCharacter, \
+                           NSNewLineCharacter, NSRecordSeparatorCharacter, \
+                           NSShiftInCharacter, NSShiftOutCharacter, \
+                           NSSpaceCharacter, NSStartOfHeadingCharacter, \
+                           NSStartOfTextCharacter, NSSubstituteCharacter, \
+                           NSSynchronousIdleCharacter, NSTabCharacter, \
+                           NSUnitSeparatorCharacter, NSVerticalTabCharacter
+from pycocoa.runtime import isObjCInstanceOf  # , ObjCInstance
+from pycocoa.screens import Screens
+from pycocoa.utils import Adict, bytes2str, _ByteStrs, _Constants, _Globals, _Ints, \
+                          isinstanceOf, missing, name2pymethod, printf, property2, \
+                          property_RO, _Strs, _Types
 
 try:
     from inspect import getfullargspec as getargspec  # Python 3+
@@ -124,7 +125,7 @@ from inspect import isfunction, ismethod
 # from types import FunctionType, MethodType
 
 __all__ = _ALL_LAZY.menus
-__version__ = '20.11.18'
+__version__ = '20.11.28'
 
 # Method _NSApplicationDelegate.handleMenuItem_ in .apps.py
 # is the handler ('selector') for all menu items specified
@@ -1284,8 +1285,8 @@ class Menu(_Menu_Type2):
 
            @return: C{True} if an item was selected, C{False} otherwise.
         '''
-        p = NSMain.ScreenCascade(fraction)
-        t = self.NS.popUpMenuPositioningItem_atLocation_inView_(NSMain.nil, p, NSMain.nil)
+        p = Screens.Main.cascade(fraction)
+        t = self.NS.popUpMenuPositioningItem_atLocation_inView_(NSMain.nil, p.NS, NSMain.nil)
         return bool(t)
 
     def remove(self, *items):
@@ -1678,10 +1679,10 @@ if __name__ == '__main__':
 #                    .VT=0xb,
 #  pycocoa.menus.Menu is <class .Menu>,
 #  pycocoa.menus.MenuBar is <class .MenuBar>,
-#  pycocoa.menus.ns2Item is <function .ns2Item at 0x7fcffb473d50>,
-#  pycocoa.menus.title2action is <function .title2action at 0x7fcffb4765d0>,
+#  pycocoa.menus.ns2Item is <function .ns2Item at 0x7fa73ce6c940>,
+#  pycocoa.menus.title2action is <function .title2action at 0x7fa73ce78940>,
 # )[7]
-# pycocoa.menus.version 20.11.18, .isLazy None, Python 2.7.18 64bit, macOS 10.15.7
+# pycocoa.menus.version 20.11.28, .isLazy 1, Python 3.9.0 64bit, macOS 10.16
 #
 # Item('Quit', 'menuTerminate_', Cmd+q) properties:
 #   NS = <ObjCInstance(NSMenuItem(<Id_t at 0x7fcffb47aa70>) of 0x7fcff8c735e0) at 0x7fcffb47b250>

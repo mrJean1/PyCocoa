@@ -381,10 +381,11 @@ if __name__ == '__main__':
 
 # % [env PYTHONFAULTHANDLER=pycocoa] python[3] -m pycocoa.faults [-X]
 #
-#  pycocoa.faults.exito is <function .exito at 0x7fe1efc8b0d0>,
-#  pycocoa.faults.setUncaughtExceptionHandler is <function .setUncaughtExceptionHandler at 0x7fe1efc8b160>,
+# pycocoa.faults.__all__ = tuple(
+#  pycocoa.faults.getUncaughtExceptionHandler is <function .getUncaughtExceptionHandler at 0x7f8cab477040>,
+#  pycocoa.faults.setUncaughtExceptionHandler is <function .setUncaughtExceptionHandler at 0x7f8cab4770d0>,
 # )[2]
-# pycocoa.faults.version 20.11.14, .isLazy 1, Python 3.9.0 64bit, macOS 10.15.7
+# pycocoa.faults.version 20.11.20, .isLazy 1, Python 3.9.0 64bit, macOS 10.16
 
 # MIT License <https://OpenSource.org/licenses/MIT>
 #

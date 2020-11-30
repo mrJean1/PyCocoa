@@ -97,10 +97,11 @@ bases._Type0 --+
         <tr>
           <td><span class="summary-sig"><a href="pycocoa.windows.Window-class.html#__init__" class="summary-sig-name">__init__</a>(<span class="summary-sig-arg">self</span>,
         <span class="summary-sig-arg">title</span>=<span class="summary-sig-default"><code class="variable-quote">'</code><code class="variable-string">Main</code><code class="variable-quote">'</code></span>,
+        <span class="summary-sig-arg">screen</span>=<span class="summary-sig-default">None</span>,
+        <span class="summary-sig-arg">fraction</span>=<span class="summary-sig-default">0.5</span>,
         <span class="summary-sig-arg">frame</span>=<span class="summary-sig-default">None</span>,
         <span class="summary-sig-arg">excl</span>=<span class="summary-sig-default">0</span>,
         <span class="summary-sig-arg">auto</span>=<span class="summary-sig-default">False</span>,
-        <span class="summary-sig-arg">fraction</span>=<span class="summary-sig-default">0.5</span>,
         <span class="summary-sig-arg">**kwds</span>)</span><br />
       Create a new <a href="pycocoa.windows.Window-class.html" 
       class="link">Window</a>.</td>
@@ -348,6 +349,25 @@ bases._Type0 --+
     </td><td class="summary">
       <table width="100%" cellpadding="0" cellspacing="0" border="0">
         <tr>
+          <td><span class="summary-sig"><a href="pycocoa.windows.Window-class.html#windowScreen_" class="summary-sig-name">windowScreen_</a>(<span class="summary-sig-arg">self</span>,
+        <span class="summary-sig-arg">change</span>)</span><br />
+      Called <i>window</i> when screen or screen profile changed 
+      <code>Main</code>.</td>
+          <td align="right" valign="top">
+            
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
           <td><span class="summary-sig"><a href="pycocoa.windows.Window-class.html#windowZoomOK_" class="summary-sig-name">windowZoomOK_</a>(<span class="summary-sig-arg">self</span>,
         <span class="summary-sig-arg">frame</span>=<span class="summary-sig-default">None</span>)</span><br />
       Is it OK? to toggle zoom <i>window</i> callback.</td>
@@ -494,7 +514,17 @@ bases._Type0 --+
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
         <a href="pycocoa.windows.Window-class.html#ratio" class="summary-name">ratio</a><br />
-      Get this window's aspect ratio as 2-tuple (width, height).
+      Get this window's contents' aspect ratio (2-tuple <code>(w, 
+      h)</code>).
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="pycocoa.windows.Window-class.html#screen" class="summary-name">screen</a><br />
+      Get the screen of this window (<a 
+      href="pycocoa.screens.Screen-class.html" class="link">Screen</a>).
     </td>
   </tr>
 <tr>
@@ -550,10 +580,11 @@ bases._Type0 --+
   <tr valign="top"><td>
   <h3 class="epydoc"><span class="sig"><span class="sig-name">__init__</span>(<span class="sig-arg">self</span>,
         <span class="sig-arg">title</span>=<span class="sig-default"><code class="variable-quote">'</code><code class="variable-string">Main</code><code class="variable-quote">'</code></span>,
+        <span class="sig-arg">screen</span>=<span class="sig-default">None</span>,
+        <span class="sig-arg">fraction</span>=<span class="sig-default">0.5</span>,
         <span class="sig-arg">frame</span>=<span class="sig-default">None</span>,
         <span class="sig-arg">excl</span>=<span class="sig-default">0</span>,
         <span class="sig-arg">auto</span>=<span class="sig-default">False</span>,
-        <span class="sig-arg">fraction</span>=<span class="sig-default">0.5</span>,
         <span class="sig-arg">**kwds</span>)</span>
     <br /><em class="fname">(Constructor)</em>
   </h3>
@@ -568,19 +599,23 @@ bases._Type0 --+
     <dt>Parameters:</dt>
     <dd><ul class="nomargin-top">
         <li><strong class="pname"><code>title</code></strong> - Window title (<code>str</code>).</li>
-        <li><strong class="pname"><code>frame</code></strong> - Window frame (<a href="pycocoa.geometry.Rect-class.html" 
-          class="link">Rect</a>, <a 
+        <li><strong class="pname"><code>screen</code></strong> - The screen to place the window on (<code>int</code>) or 
+          <code>None</code> for the current one.  Use <code>screen=0</code>
+          for the built-in screen or <code>screen=1</code> for the first 
+          external monitor, etc.</li>
+        <li><strong class="pname"><code>fraction</code></strong> - Window size as fraction of the screen (<code>float</code>), 
+          defining the window <code><b>frame</b></code>.</li>
+        <li><strong class="pname"><code>frame</code></strong> - The window's origin and <i>content</i> size (<a 
+          href="pycocoa.geometry.Rect-class.html" class="link">Rect</a>, <a
           href="pycocoa.octypes.NSRect_t-class.html" 
           class="link">NSRect_t</a>, <a 
           href="pycocoa.octypes.NSRect4_t-class.html" 
-          class="link">NSRect4_t</a>, or None).</li>
-        <li><strong class="pname"><code>excl</code></strong> - Window styles to exclude (<a 
+          class="link">NSRect4_t</a>), overriding 
+          <b><code>fraction</code></b>.</li>
+        <li><strong class="pname"><code>excl</code></strong> - Window <i>styles</i> to exclude (<a 
           href="pycocoa.windows-module.html#WindowStyle" 
           class="link">WindowStyle</a><code>.attribute</code>).</li>
         <li><strong class="pname"><code>auto</code></strong> - Release window resource when closed (<code>bool</code>).</li>
-        <li><strong class="pname"><code>fraction</code></strong> - Window size as fraction of the screen (<code>float</code>), 
-          defining <code><b>frame</b></code> if 
-          <code><b>frame=None</b></code>.</li>
         <li><strong class="pname"><code>kwds</code></strong> - Optional, additional keyword arguments.</li>
     </ul></dd>
     <dt>Raises:</dt>
@@ -808,6 +843,36 @@ bases._Type0 --+
   </dl>
 </td></tr></table>
 </div>
+<a name="windowScreen_"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">windowScreen_</span>(<span class="sig-arg">self</span>,
+        <span class="sig-arg">change</span>)</span>
+  </h3>
+  </td><td align="right" valign="top"
+    >&nbsp;
+    </td>
+  </tr></table>
+  
+  <p>Called <i>window</i> when screen or screen profile changed 
+  <code>Main</code>.</p>
+  <dl class="fields">
+    <dt>Parameters:</dt>
+    <dd><ul class="nomargin-top">
+        <li><strong class="pname"><code>change</code></strong> - <code>True</code> if the screen or <code>False</code> if the 
+          profile changed (<code>bool</code>).</li>
+    </ul></dd>
+  </dl>
+<div class="fields">      <p><strong>Note:</strong>
+        Typically, changing screen involves 2 callback invokations, once 
+        for the profile and once for the screen.
+      </p>
+</div></td></tr></table>
+</div>
 <a name="windowZoomOK_"></a>
 <div>
 <table class="details" border="1" cellpadding="3"
@@ -880,9 +945,11 @@ bases._Type0 --+
 class="link">Rect</a>).
     </dd>
     <dt>Set Method:</dt>
-    <dd class="value"><span class="summary-sig">Read_Only(<span class="summary-sig-arg">self</span>,
-        <span class="summary-sig-arg">ignored</span>)</span>
-        - Throws an <code>AttributeError</code>, always.
+    <dd class="value"><span class="summary-sig">frame(<span class="summary-sig-arg">self</span>,
+        <span class="summary-sig-arg">frame</span>)</span>
+        - Set the frame of this window (<a href="pycocoa.geometry.Rect-class.html" 
+class="link">Rect</a>, <code>NSRect_t</code>, <code>NSRect4_t</code>, or 
+None).
     </dd>
   </dl>
 </td></tr></table>
@@ -1093,16 +1160,39 @@ class="link">Rect</a>).
        cellspacing="0" width="100%" bgcolor="white">
 <tr><td>
   <h3 class="epydoc">ratio</h3>
-  <p>Get this window's aspect ratio as 2-tuple (width, height).</p>
+  <p>Get this window's contents' aspect ratio (2-tuple <code>(w, 
+  h)</code>).</p>
   <dl class="fields">
     <dt>Get Method:</dt>
     <dd class="value"><span class="summary-sig">ratio(<span class="summary-sig-arg">self</span>)</span>
-        - Get this window's aspect ratio as 2-tuple (width, height).
+        - Get this window's contents' aspect ratio (2-tuple <code>(w, h)</code>).
     </dd>
     <dt>Set Method:</dt>
     <dd class="value"><span class="summary-sig">ratio(<span class="summary-sig-arg">self</span>,
         <span class="summary-sig-arg">ratio</span>)</span>
-        - Set this window's aspect ratio.
+        - Set this window's contents' aspect ratio.
+    </dd>
+  </dl>
+</td></tr></table>
+</div>
+<a name="screen"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <h3 class="epydoc">screen</h3>
+  <p>Get the screen of this window (<a 
+  href="pycocoa.screens.Screen-class.html" class="link">Screen</a>).</p>
+  <dl class="fields">
+    <dt>Get Method:</dt>
+    <dd class="value"><span class="summary-sig">screen(<span class="summary-sig-arg">self</span>)</span>
+        - Get the screen of this window (<a href="pycocoa.screens.Screen-class.html" 
+class="link">Screen</a>).
+    </dd>
+    <dt>Set Method:</dt>
+    <dd class="value"><span class="summary-sig">screen(<span class="summary-sig-arg">self</span>,
+        <span class="summary-sig-arg">screen</span>)</span>
+        - Move this window to an other screen.
     </dd>
   </dl>
 </td></tr></table>
@@ -1179,7 +1269,7 @@ class="link">Rect</a>).
 <table border="0" cellpadding="0" cellspacing="0" width="100%%">
   <tr>
     <td align="left" class="footer">
-    Generated by Epydoc 3.0.1 on Sat Nov 21 15:42:48 2020
+    Generated by Epydoc 3.0.1 on Mon Nov 30 11:16:24 2020
     </td>
     <td align="right" class="footer">
       <a target="mainFrame" href="http://epydoc.sourceforge.net"

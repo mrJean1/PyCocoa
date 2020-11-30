@@ -56,7 +56,7 @@ except ImportError:
 from platform import machine  # as machine
 
 __all__ = _ALL_LAZY.octypes
-__version__ = '20.11.17'
+__version__ = '20.11.22'
 
 z = sizeof(c_void_p)
 if z == 4:
@@ -501,7 +501,7 @@ NSFloatEncoding    = ctype2encoding(NSFloat_t)
 NSIntegerEncoding  = ctype2encoding(NSInteger_t)
 NSUIntegerEncoding = ctype2encoding(NSUInteger_t)
 
-# map for encoding type code to ctypes type
+# map for encoding type code to ctypes type, in .nstypes.nsValue2type
 _encoding2ctype = {b'c': c_char,     b'C': c_ubyte,
                    b's': c_short,    b'S': c_ushort,
                    b'i': c_int,      b'I': c_uint,
@@ -964,7 +964,7 @@ if __name__ == '__main__':
 #  pycocoa.octypes.NSNotFound is 9223372036854775807 or 0x7FFFFFFFFFFFFFFF,
 #  pycocoa.octypes.NSPoint_t is <class .NSPoint_t>,
 #  pycocoa.octypes.NSPointEncoding is b'{CGPoint=dd}',
-#  pycocoa.octypes.NSPointZero is <NSPoint_t(x=0.0, y=0.0) at 0x7f7fa0aa97c0>,
+#  pycocoa.octypes.NSPointZero is <NSPoint_t(x=0.0, y=0.0) at 0x7fecef272440>,
 #  pycocoa.octypes.NSRange_t is <class .NSRange_t>,
 #  pycocoa.octypes.NSRangeEncoding is b'{_NSRange=QQ}',
 #  pycocoa.octypes.NSRect4_t is <class .NSRect4_t>,
@@ -989,8 +989,8 @@ if __name__ == '__main__':
 #  pycocoa.octypes.RunLoop_t is <class .RunLoop_t>,
 #  pycocoa.octypes.SEL_t is <class .SEL_t>,
 #  pycocoa.octypes.Set_t is <class ctypes.c_void_p>,
-#  pycocoa.octypes.split_emcoding2 is <function .split_emcoding2 at 0x7f7fa0c8fee0>,
-#  pycocoa.octypes.split_encoding is <function .split_encoding at 0x7f7fa0c8ff70>,
+#  pycocoa.octypes.split_emcoding2 is <function .split_emcoding2 at 0x7fecef5775e0>,
+#  pycocoa.octypes.split_encoding is <function .split_encoding at 0x7fecef577670>,
 #  pycocoa.octypes.String_t is <class ctypes.c_void_p>,
 #  pycocoa.octypes.Struct_t is <class .Struct_t>,
 #  pycocoa.octypes.TimeInterval_t is <class ctypes.c_double>,
@@ -1005,7 +1005,7 @@ if __name__ == '__main__':
 #  pycocoa.octypes.URL_t is <class .URL_t>,
 #  pycocoa.octypes.VoidPtr_t is <class .VoidPtr_t>,
 # )[83]
-# pycocoa.octypes.version 20.11.14, .isLazy 1, Python 3.9.0 64bit, macOS 10.15.7
+# pycocoa.octypes.version 20.11.22, .isLazy 1, Python 3.9.0 64bit, macOS 10.16
 
 # MIT License <https://OpenSource.org/licenses/MIT>
 #

@@ -117,12 +117,14 @@ _ALL_LAZY = _NamedEnum_RO(_name='_ALL_LAZY',
                          lazily=('LazyImportError', 'isLazy'),
                           lists=('List',),
                           menus=('Item', 'ItemSeparator', 'Keys', 'Menu', 'MenuBar', 'ns2Item', 'title2action'),
-                        nstypes=('at', 'isAlias', 'isLink', 'isNone', 'ns2py', 'ns2Type', 'NSAlert', 'NSApplication', 'NSArray',
-                                 'nsArray2listuple', 'NSAttributedString', 'NSAutoreleasePool',
+                        nstypes=('at', 'isAlias', 'isLink', 'isNone',
+                                 'NSAlert', 'NSApplication',
+                                 'NSArray', 'nsArray2listuple', 'nsArray2tuple',
+                                 'NSAttributedString', 'NSAutoreleasePool',
                                  'NSBezierPath', 'NSBoolean', 'nsBoolean2bool', 'NSBundle', 'nsBundleRename',
-                                 'NSColor', 'NSConcreteNotification', 'NSConstantString',
-                                 'NSData', 'nsData2bytes', 'NSDecimal', 'nsDecimal2decimal', 'NSDecimalNumber',
-                                 'NSDictionary', 'nsDictionary2dict', 'NSDockTile', 'NSDouble',
+                                 'NSColor', 'NSConcreteNotification', 'NSConcreteValue', 'NSConstantString',
+                                 'NSData', 'nsData2bytes', 'NSDate', 'NSDecimal', 'nsDecimal2decimal', 'NSDecimalNumber',
+                                 'NSDictionary', 'nsDictionary2dict', 'nsDictionary2items', 'NSDockTile', 'NSDouble',
                                  'NSEnumerator', 'NSError', 'NSException', 'nsException', 'NSExceptionError',
                                  'NSFloat', 'NSFont', 'NSFontDescriptor', 'NSFontManager', 'NSFontPanel',
                                  'NSImage', 'NSImageView', 'NSInt', 'nsIter', 'nsIter2',
@@ -130,14 +132,14 @@ _ALL_LAZY = _NamedEnum_RO(_name='_ALL_LAZY',
                                  'NSMain', 'NSMenu', 'NSMenuItem', 'NSMutableArray', 'NSMutableData',
                                  'NSMutableDictionary', 'NSMutableSet', 'NSMutableString',
                                  'NSNotification', 'NSNotificationCenter', 'NSNull', 'nsNull2none', 'NSNumber', 'nsNumber2num',
-                                 'NSObject', 'nsOf', 'NSOpenPanel', 'NSPageLayout',
+                                 'NSObject', 'nsOf', 'NSOpenPanel', 'ns2py', 'NSPageLayout',
                                  'NSPrinter', 'NSPrintInfo', 'NSPrintOperation', 'NSPrintPanel', 'nsRaise',
                                  'NSSavePanel', 'NSScreen', 'NSScrollView', 'NSSet', 'nsSet2set',
                                  'NSStatusBar', 'NSStr', 'NSString', 'nsString2str',
                                  'NSTableColumn', 'NSTableView',
                                  'NSTextField', 'nsTextSize3', 'nsTextView', 'NSTextView',
-                                 'NSThread', 'nsThrow',
-                                 'NSURL', 'nsURL2str', 'NSView', 'NSWindow'),
+                                 'NSThread', 'nsThrow', 'ns2Type', 'ns2TypeID2',
+                                 'NSURL', 'nsURL2str', 'NSValue', 'nsValue2py', 'NSView', 'NSWindow'),
                         octypes=('Allocator_t', 'Array_t', 'Block_t', 'BOOL_t',
                                  'CFIndex_t', 'CFRange_t',
                                  'CGBitmapInfo_t', 'CGDirectDisplayID_t', 'CGError_t', 'CGFloat_t',
@@ -157,7 +159,7 @@ _ALL_LAZY = _NamedEnum_RO(_name='_ALL_LAZY',
                                  'UniChar_t', 'unichar_t', 'Union_t', 'Unknown_t', 'UnknownPtr_t', 'URL_t',
                                  'VoidPtr_t') + _C_XTYPES,
                          oslibs=('get_lib', 'get_libs', 'get_lib_framework', 'leaked2',
-                                 'libAppKit', 'libCF', 'libCT', 'libFoundation', 'libobjc', 'libquartz',
+                                 'libAppKit', 'libCF', 'libCG', 'libCT', 'libFoundation', 'libobjc', 'Libs',
                                  'NO', 'NSAcknowledgeCharacter', 'NSAlphaShiftKeyMask', 'NSAlternateKeyMask', 'NSAnyEventMask',
                                  'NSApplicationActivationPolicyAccessory', 'NSApplicationActivationPolicyProhibited',
                                  'NSApplicationActivationPolicyRegular', 'NSApplicationDefined', 'NSApplicationDidHideNotification',
@@ -197,12 +199,13 @@ _ALL_LAZY = _NamedEnum_RO(_name='_ALL_LAZY',
                        printers=('get_libPC', 'get_papers', 'get_printer', 'get_printer_browser', 'get_printers', 'get_resolutions', 'libPC',
                                  'Paper', 'PaperCustom', 'PaperMargins', 'Printer'),
                         pytypes=('bool2NS', 'bytes2NS', 'dict2NS', 'float2NS', 'frozenset2NS', 'generator2NS', 'int2NS', 'list2NS', 'map2NS',
-                                 'None2NS', 'py2NS', 'range2NS', 'set2NS', 'str2NS', 'tuple2NS', 'type2NS', 'unicode2NS', 'url2NS'),
+                                 'None2NS', 'py2NS', 'range2NS', 'set2NS', 'str2NS', 'time2NS', 'tuple2NS', 'type2NS', 'unicode2NS', 'url2NS'),
                         runtime=('add_ivar', 'add_method', 'add_protocol', 'add_subclass', 'isClass', 'isImmutable',
                                  'isMetaClass', 'isObjCInstanceOf', 'OBJC_ASSOCIATION_COPY', 'OBJC_ASSOCIATION_COPY_NONATOMIC',
                                  'OBJC_ASSOCIATION_RETAIN', 'OBJC_ASSOCIATION_RETAIN_NONATOMIC', 'ObjCBoundClassMethod', 'ObjCBoundMethod',
                                  'ObjCClass', 'ObjCClassMethod', 'ObjCConstant', 'ObjCDelegate', 'ObjCInstance', 'ObjCMethod', 'ObjCSubclass',
                                  'register_subclass', 'release', 'retain', 'send_message', 'send_super', 'send_super_init', 'set_ivar'),
+                        screens=('BuiltInScreen', 'DeepestScreen', 'ExternalScreen', 'Frame', 'MainScreen', 'Screen', 'Screens'),
                            sets=('FrozenSet', 'Set'),
                            strs=('Str', 'StrAttd'),
                          tables=('closeTables', 'NSTableViewDelegate', 'Table', 'TableWindow'),
@@ -218,14 +221,14 @@ _ALL_LAZY = _NamedEnum_RO(_name='_ALL_LAZY',
                                  'sortuples', 'str2bytes', 'terminating', 'type2strepr',
                                  'z1000str', 'zfstr', 'zSIstr'),
                         windows=('AutoResize', 'AutoResizeError', 'autoResizes', 'BezelStyle', 'Border', 'MediaWindow', 'ns2Window',
-                                 'NSWindowDelegate', 'Screen', 'TextWindow', 'Window', 'WindowError', 'WindowStyle', 'WindowStyleError', 'windowStyles'))
+                                 'NSWindowDelegate', 'TextWindow', 'Window', 'WindowError', 'WindowStyle', 'WindowStyleError', 'windowStyles'))
 
 # DEPRECATED __all__ names overloading those in _ALL_LAZY.deprecated where
 # the new name is fully backward compatible in signature and return value
 _ALL_OVERRIDING = _NamedEnum_RO(_name='_ALL_OVERRIDING')  # all DEPRECATED
 
 __all__ = _ALL_LAZY.lazily
-__version__ = '20.11.19'
+__version__ = '20.11.27'
 
 
 def _all_imports(**more):
@@ -429,6 +432,7 @@ _bNN_        = b''        # PYCHOK bytes(_NN_)
 _COLON_      = _Str(':')  # PYCHOK expected
 _COMMASPACE_ = _Str(', ')
 _DOT_        = _Str('.')
+_EQUALS_     = _Str('=')  # PYCHOK expected
 _NN_         = _Str('')   # empty string, I{Nomen Nescio}
 _UNDER_      = _Str('_')
 

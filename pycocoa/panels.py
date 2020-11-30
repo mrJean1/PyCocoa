@@ -522,7 +522,7 @@ if __name__ == '__main__':
 #
 # pycocoa.panels.__all__ = tuple(
 #  pycocoa.panels.AlertPanel is <class .AlertPanel>,
-#  pycocoa.panels.AlertStyle.Critical=1<<1,
+#  pycocoa.panels.AlertStyle.Critical=2,
 #                           .Info=1,
 #                           .Warning=0,
 #  pycocoa.panels.BrowserPanel is <class .BrowserPanel>,
@@ -532,13 +532,13 @@ if __name__ == '__main__':
 #                            .Close=1,
 #                            .Error=-3,
 #                            .OK=1,
-#                            .Other=1<<1,
+#                            .Other=2,
 #                            .Suppressed=-2,
 #                            .TimedOut=-1,
 #  pycocoa.panels.SavePanel is <class .SavePanel>,
 #  pycocoa.panels.TextPanel is <class .TextPanel>,
 # )[8]
-# pycocoa.panels.version 20.01.08, .isLazy 1, Python 3.9.0 64bit, macOS 10.15.7
+# pycocoa.panels.version 20.11.18, .isLazy 1, Python 3.9.0 64bit, macOS 10.16
 
 # MIT License <https://OpenSource.org/licenses/MIT>
 #

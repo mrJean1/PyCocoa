@@ -9,8 +9,8 @@
 '''
 
 from pycocoa.lazily import _ALL_LAZY, _COLON_, _COMMASPACE_, \
-                           _DOT_, _lazy_import, _NL_, _NN_, \
-                           _UNDER_, isLazy
+                           _DOT_, _EQUALS_, _lazy_import, \
+                           _NL_, _NN_, _UNDER_, isLazy
 
 import os
 import platform as _platform
@@ -20,7 +20,7 @@ _Python2 = sys.version_info.major < 3  # PYCHOK internal
 _Python3 = sys.version_info.major > 2  # PYCHOK internal
 
 __all__ = _ALL_LAZY.utils
-__version__ = '20.11.20'
+__version__ = '20.11.28'
 
 _bCOLON_ = b':'
 _bUNDER_ = b'_'
@@ -230,6 +230,7 @@ class _Types(_MutableConstants):
     FrozenDict    = None  # set by .dicts.py
     FrozenSet     = None  # set by .sets.py
     Item          = None  # set by .menus.py
+    ItemSeparator = None  # set by .menus.py
     List          = None  # set by .lists.py
     MediaWindow   = None  # set by .windows.py
     Menu          = None  # set by .menus.py
@@ -240,8 +241,8 @@ class _Types(_MutableConstants):
     PaperMargins  = None  # set by .printer.py
     Printer       = None  # set by .printer.py
     SavePanel     = None  # set by .panels.py
+    Screen        = None  # set by .screens.py
     Set           = None  # set by .sets.py
-    ItemSeparator = None  # set by .menus.py
     Str           = None  # set by .strs.py
     StrAttd       = None  # set by .strs.py
     Table         = None  # set by .tables.py
@@ -537,7 +538,7 @@ except NameError:  # Python 3+
 _ByteStrs = _Bytes + _Strs  # bytes and/or str types
 
 
-def _all_listing(alls, localls, libs=False, _file_=_NN_):
+def _all_listing(alls, localls, libs=False, _file_=_NN_, argv0='#'):
     '''(INTERNAL) Print sorted __all__ names and values.
     '''
     def _all_in(alls, inns, m, n):
@@ -548,7 +549,7 @@ def _all_listing(alls, localls, libs=False, _file_=_NN_):
 
     f = _file_ or localls.get('__file__', _NN_)
     m, n = _dirbasename2(f)
-    printf('%s = %s(', _DOT_(m, '__all__'), alls.__class__.__name__, argv0=_NN_, nl=1)
+    printf('%s = %s(', _DOT_(m, '__all__'), alls.__class__.__name__, argv0=argv0, nl=1)
 
     lazy = _ALL_LAZY.get(n, ())
     if lazy:
@@ -581,20 +582,20 @@ def _all_listing(alls, localls, libs=False, _file_=_NN_):
             r = r.replace(_SPACE_ * len(n), _SPACE_ * (len(n) + len(m) + 2))
         else:
             r = '%s is %s' % (n, r)
-        printf(' %s,', _DOT_(m, r), argv0=_NN_)
+        printf(' %s,', _DOT_(m, r), argv0=argv0)
         i += 1
     if d:
         d = _NN_(_SPACE_, d, ' DUPLICATE', 's' if d > 1 else _NN_)
     else:
         d = _NN_
-    printf(')[%d]%s', i, d, argv0=_NN_)
-    _all_versions(libs=libs, _file_=f, _version_=localls.get('__version__', _NN_))  # PYCHOK kwargs
+    printf(')[%d]%s', i, d, argv0=argv0)
+    _all_versions(libs=libs, _file_=f, _version_=localls.get('__version__', _NN_), argv0=argv0)  # PYCHOK kwargs
 
 
-def _all_versions(libs=False, _file_=_NN_, _version_=_NN_):
+def _all_versions(libs=False, _file_=_NN_, _version_=_NN_, argv0=_NN_):
     '''(INTERNAL) Print PyCocao, Python, macOS.
     '''
-    printf(_all_versionstr(libs=libs, _file_=_file_, _version_=_version_), argv0=_NN_)
+    printf(_all_versionstr(libs=libs, _file_=_file_, _version_=_version_), argv0=argv0)
 
 
 def _all_versionstr(libs=False, _file_=_NN_, _version_=_NN_):
@@ -613,10 +614,11 @@ def _all_versionstr(libs=False, _file_=_NN_, _version_=_NN_):
     return _DOT_(m, _COMMASPACE_.join(_SPACE_.join(v) for v in t))
 
 
-def aspect_ratio(width, height):
+def aspect_ratio(width, *height, **Error_kwds):
     '''Compute the smallest, integer aspect ratio.
 
-       @param width: The width (C{float} or C{int}).
+       @param width: The width (C{float}, C{int}, L{Size}, 2-tuple
+                     (width, height), str("w:h") or C{NSSize_t}).
        @param height: The height (C{float} or C{int}).
 
        @return: 2-Tuple (width, height) as (C{int}, C{int}) or C{None}.
@@ -636,14 +638,34 @@ def aspect_ratio(width, height):
        >>> aspect_ratio(0, 15)
        ()
     '''
-    # video 4:3, 16:9, 21:9 [14:10, 19:10]
-    # photo 1:1, 3:2, 4:3, 5:3, 5:4, 7:5, 16:9,
-    #            2:3  3:4  3:5  4:5  5:7  9:16
-    r = gcd(width, height)
-    if r and width and height:
-        return int(width / r), int(height / r)
+
+    if height:
+        r = (width,) + height
     else:
-        return None
+        r =  width
+    try:
+        s = bytes2str(r, dflt=None)
+        if s is not None:
+            w, h = map(int, s.split(_COLON_))
+        elif isinstance(r, (tuple, list)) and len(r) == 2:
+            w, h = map(flint, r)
+        else:  # NSSize_t
+            w, h = flint(r.width), flint(r.height)
+
+        # video 4:3, 16:9, 21:9 [14:10, 19:10]
+        # photo 1:1, 3:2, 4:3, 5:3, 5:4, 7:5, 16:9,
+        #            2:3  3:4  3:5  4:5  5:7  9:16
+        r = gcd(w, h)
+        if r and w and h:
+            r = float(r)
+            return int(w / r), int(h / r)
+        else:
+            return None
+
+    except (AttributeError, ValueError):
+        pass  # to avoid chaining
+    Error = Error_kwds.get('Error', ValueError)
+    raise Error('invalid %s: %r' % ('ratio', r))
 
 
 def clipstr(bytestr, limit=50):
@@ -688,7 +710,8 @@ def flint(f):
         if f.is_integer():
             return int(f)
     except AttributeError:
-        pass
+        if not isinstance(f, _Ints):
+            raise
     return f
 
 
@@ -959,7 +982,7 @@ def _text_title2(text_or_file, title=_NN_):
     return text, t
 
 
-def type2strepr(inst, strepr=str):
+def type2strepr(inst, strepr=str, **kwds):
     '''Represent a Python Type instance as L{str} or L{repr}.
 
        @param inst: Instance (C{any}).
@@ -975,7 +998,19 @@ def type2strepr(inst, strepr=str):
         t += '[%s]' % (len(inst),)
     except TypeError:
         pass
-    return '%s(%s)' % (inst.__class__.__name__, strepr(t))
+    try:
+        d = dict(name=repr(inst.name))
+        d.update(kwds)
+    except AttributeError:
+        d = kwds
+    d = tuple(_EQUALS_(n, v) for n, v in d.items())
+    if t and d:
+        t = _COMMASPACE_(strepr(t), *d)
+    elif d:
+        t = _COMMASPACE_.join(d)
+    else:
+        t = strepr(t)
+    return '%s(%s)' % (inst.__class__.__name__, t)
 
 
 def _varstr(constants, strepr=None):
@@ -1006,7 +1041,11 @@ def _writestr(fmtxt, args=(), file=sys.stdout, flush=False,
         except TypeError:
             fmtxt += str(map(str, args))
     a = argv0.get('argv0', _Globals.argv0)
-    s = _SPACE_ if a else _NN_
+    if a:
+        s = _SPACE_
+        fmtxt = fmtxt.replace(_NL_, _NN_(_NL_ + a + s))
+    else:
+        s = _NN_
     t = _NL_ * nl, a, s, fmtxt, _NL_ * (nt + 1)
     n = file.write(_NN_.join(t))
     if flush:
@@ -1089,36 +1128,38 @@ if __name__ == '__main__':
 # % python3 -m pycocoa.utils
 #
 # pycocoa.utils.__all__ = tuple(
-#  pycocoa.utils.aspect_ratio is <function .aspect_ratio at 0x7f8967a840d0>,
+#  pycocoa.utils.Adict is <class .Adict>,
+#  pycocoa.utils.aspect_ratio is <function .aspect_ratio at 0x7f92a2adff70>,
 #  pycocoa.utils.bytes2repr is <built-in function repr>,
-#  pycocoa.utils.bytes2str is <function .bytes2str at 0x7f8967a813a0>,
+#  pycocoa.utils.bytes2str is <function .bytes2str at 0x7f92a2adf310>,
 #  pycocoa.utils.Cache2 is <class .Cache2>,
-#  pycocoa.utils.clipstr is <function .clipstr at 0x7f8967a84160>,
+#  pycocoa.utils.clipstr is <function .clipstr at 0x7f92a2ae0040>,
 #  pycocoa.utils.DEFAULT_UNICODE is 'utf-8',
-#  pycocoa.utils.flint is <function .flint at 0x7f8967a84280>,
+#  pycocoa.utils.flint is <function .flint at 0x7f92a2ae0160>,
 #  pycocoa.utils.gcd is <built-in function gcd>,
-#  pycocoa.utils.inst2strepr is <function .inst2strepr at 0x7f8967a84310>,
-#  pycocoa.utils.isinstanceOf is <function .isinstanceOf at 0x7f8967a844c0>,
-#  pycocoa.utils.iterbytes is <function .iterbytes at 0x7f8967a81d30>,
-#  pycocoa.utils.lambda1 is <function .lambda1 at 0x7f8967a84550>,
+#  pycocoa.utils.inst2strepr is <function .inst2strepr at 0x7f92a2ae01f0>,
+#  pycocoa.utils.isinstanceOf is <function .isinstanceOf at 0x7f92a2ae03a0>,
+#  pycocoa.utils.iterbytes is <function .iterbytes at 0x7f92a2adfca0>,
+#  pycocoa.utils.lambda1 is <function .lambda1 at 0x7f92a2ae0430>,
+#  pycocoa.utils.logf is <function .logf at 0x7f92a2ae04c0>,
 #  pycocoa.utils.missing is missing,
 #  pycocoa.utils.module_property_RO is <class .module_property_RO>,
-#  pycocoa.utils.name2objc is <function .name2objc at 0x7f8967a845e0>,
-#  pycocoa.utils.name2py is <function .name2py at 0x7f8967a84670>,
-#  pycocoa.utils.name2pymethod is <function .name2pymethod at 0x7f8967a84700>,
-#  pycocoa.utils.printf is <function .printf at 0x7f8967a84790>,
-#  pycocoa.utils.properties is <function .properties at 0x7f8967a84820>,
-#  pycocoa.utils.property2 is <function .property2 at 0x7f8967a848b0>,
-#  pycocoa.utils.property_RO is <function .property_RO at 0x7f8967a708b0>,
-#  pycocoa.utils.sortuples is <function .sortuples at 0x7f8967a84940>,
-#  pycocoa.utils.str2bytes is <function .str2bytes at 0x7f8967a81dc0>,
-#  pycocoa.utils.terminating is <function .terminating at 0x7f8967a849d0>,
-#  pycocoa.utils.type2strepr is <function .type2strepr at 0x7f8967a84af0>,
-#  pycocoa.utils.z1000str is <function .z1000str at 0x7f8967a84b80>,
-#  pycocoa.utils.zfstr is <function .zfstr at 0x7f8967a84c10>,
-#  pycocoa.utils.zSIstr is <function .zSIstr at 0x7f8967a84ca0>,
-# )[28]
-# pycocoa.utils.version 20.11.14, .isLazy 1, Python 3.9.0 64bit, macOS 10.15.7
+#  pycocoa.utils.name2objc is <function .name2objc at 0x7f92a2ae05e0>,
+#  pycocoa.utils.name2py is <function .name2py at 0x7f92a2ae0670>,
+#  pycocoa.utils.name2pymethod is <function .name2pymethod at 0x7f92a2ae0700>,
+#  pycocoa.utils.printf is <function .printf at 0x7f92a2ae0790>,
+#  pycocoa.utils.properties is <function .properties at 0x7f92a2ae0820>,
+#  pycocoa.utils.property2 is <function .property2 at 0x7f92a2ae08b0>,
+#  pycocoa.utils.property_RO is <function .property_RO at 0x7f92a2a6f9d0>,
+#  pycocoa.utils.sortuples is <function .sortuples at 0x7f92a2ae0940>,
+#  pycocoa.utils.str2bytes is <function .str2bytes at 0x7f92a2adfd30>,
+#  pycocoa.utils.terminating is <function .terminating at 0x7f92a2ae09d0>,
+#  pycocoa.utils.type2strepr is <function .type2strepr at 0x7f92a2ae0af0>,
+#  pycocoa.utils.z1000str is <function .z1000str at 0x7f92a2ae0ca0>,
+#  pycocoa.utils.zfstr is <function .zfstr at 0x7f92a2ae0d30>,
+#  pycocoa.utils.zSIstr is <function .zSIstr at 0x7f92a2ae0dc0>,
+# )[30]
+# pycocoa.utils.version 20.11.27, .isLazy 1, Python 3.9.0 64bit, macOS 10.16
 
 # MIT License <https://OpenSource.org/licenses/MIT>
 #

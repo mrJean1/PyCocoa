@@ -266,7 +266,7 @@ if __name__ == '__main__':
 #  pycocoa.strs.Str is <class .Str>,
 #  pycocoa.strs.StrAttd is <class .StrAttd>,
 # )[2]
-# pycocoa.strs.version 20.01.08, .isLazy 1, Python 3.9.0 64bit, macOS 10.15.7
+# pycocoa.strs.version 20.11.17, .isLazy 1, Python 3.9.0 64bit, macOS 10.16
 
 # MIT License <https://OpenSource.org/licenses/MIT>
 #

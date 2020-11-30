@@ -64,7 +64,7 @@
 
 <hr />
 <div class="fields">      <p><strong>Version:</strong>
-        20.11.20
+        20.11.30
       </p>
 </div><!-- ==================== CLASSES ==================== -->
 <a name="section-Classes"></a>
@@ -193,6 +193,25 @@
     </td><td class="summary">
       <table width="100%" cellpadding="0" cellspacing="0" border="0">
         <tr>
+          <td><span class="summary-sig"><a href="pycocoa.nstypes-module.html#nsArray2tuple" class="summary-sig-name">nsArray2tuple</a>(<span class="summary-sig-arg">ns</span>,
+        <span class="summary-sig-arg">ctype</span>=<span class="summary-sig-default">&lt;class 'pycocoa.runtime.ObjCInstance'&gt;</span>)</span><br />
+      Create a Python <code>tuple</code> from an <i>immutable</i> 
+      <code>NSArray</code>.</td>
+          <td align="right" valign="top">
+            
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
           <td><span class="summary-sig"><a href="pycocoa.nstypes-module.html#nsBoolean2bool" class="summary-sig-name">nsBoolean2bool</a>(<span class="summary-sig-arg">ns</span>,
         <span class="summary-sig-arg">dflt</span>=<span class="summary-sig-default">missing</span>)</span><br />
       Create a Python <code>bool</code> from an <code>NSBoolean</code>.</td>
@@ -270,6 +289,24 @@
         <span class="summary-sig-arg">ctype_vals</span>=<span class="summary-sig-default">&lt;class 'ctypes.c_void_p'&gt;</span>)</span><br />
       Create a Python <code>dict</code> from an 
       <code>NS[Mutable]Dictionary</code>.</td>
+          <td align="right" valign="top">
+            
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a href="pycocoa.nstypes-module.html#nsDictionary2items" class="summary-sig-name">nsDictionary2items</a>(<span class="summary-sig-arg">ns</span>)</span><br />
+      Yield the <code>(key, value)</code> items from an 
+      <code>NSDictionary</code>.</td>
           <td align="right" valign="top">
             
             
@@ -561,6 +598,24 @@
     </td><td class="summary">
       <table width="100%" cellpadding="0" cellspacing="0" border="0">
         <tr>
+          <td><span class="summary-sig"><a href="pycocoa.nstypes-module.html#nsValue2py" class="summary-sig-name">nsValue2py</a>(<span class="summary-sig-arg">ns</span>,
+        <span class="summary-sig-arg">dflt</span>=<span class="summary-sig-default">missing</span>)</span><br />
+      Create a Python instance from an <code>NS[Concrete]Value</code>.</td>
+          <td align="right" valign="top">
+            
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
           <td><span class="summary-sig"><a href="pycocoa.nstypes-module.html#ns2py" class="summary-sig-name">ns2py</a>(<span class="summary-sig-arg">ns</span>,
         <span class="summary-sig-arg">dflt</span>=<span class="summary-sig-default">missing</span>)</span><br />
       Convert (an instance of) an ObjC class to an instance of the 
@@ -583,6 +638,24 @@
           <td><span class="summary-sig"><a href="pycocoa.nstypes-module.html#ns2Type" class="summary-sig-name">ns2Type</a>(<span class="summary-sig-arg">ns</span>)</span><br />
       Convert an <code>NS...</code> ObjC object to an instance of the 
       corresponding Python Type and value.</td>
+          <td align="right" valign="top">
+            
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a href="pycocoa.nstypes-module.html#ns2TypeID2" class="summary-sig-name">ns2TypeID2</a>(<span class="summary-sig-arg">ns</span>,
+        <span class="summary-sig-arg">dflt</span>=<span class="summary-sig-default">None</span>)</span><br />
+      Get the <code>NS...</code> ObjC <code>TypeID</code>.</td>
           <td align="right" valign="top">
             
             
@@ -675,6 +748,13 @@
     <td width="15%" align="right" valign="top" class="summary">
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
+        <a name="NSConcreteValue"></a><span class="summary-name">NSConcreteValue</span> = <code title="ObjCClass('NSConcreteValue')">ObjCClass('NSConcreteValue')</code>
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
         <a name="NSConstantString"></a><span class="summary-name">NSConstantString</span> = <code title="ObjCClass('NSConstantString')">ObjCClass('NSConstantString')</code>
     </td>
   </tr>
@@ -683,6 +763,13 @@
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
         <a name="NSData"></a><span class="summary-name">NSData</span> = <code title="ObjCClass('NSData')">ObjCClass('NSData')</code>
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a name="NSDate"></a><span class="summary-name">NSDate</span> = <code title="ObjCClass('NSDate')">ObjCClass('NSDate')</code>
     </td>
   </tr>
 <tr>
@@ -990,6 +1077,13 @@
     <td width="15%" align="right" valign="top" class="summary">
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
+        <a name="NSValue"></a><span class="summary-name">NSValue</span> = <code title="ObjCClass('NSValue')">ObjCClass('NSValue')</code>
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
         <a name="NSView"></a><span class="summary-name">NSView</span> = <code title="ObjCClass('NSView')">ObjCClass('NSView')</code>
     </td>
   </tr>
@@ -1046,15 +1140,15 @@
     <td width="15%" align="right" valign="top" class="summary">
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
-        <a href="pycocoa.nstypes-module.html#NSMain" class="summary-name">NSMain</a> = <code title="NSMain.Application=NSApplication(&lt;Id_t at 0x7ff7236fb7a0&gt;) of 0x7ff720\
-a36450,
-      .BooleanNO=NSBoolean(&lt;Id_t at 0x7ff7236f6b00&gt;) of 0x7fff80041620\
+        <a href="pycocoa.nstypes-module.html#NSMain" class="summary-name">NSMain</a> = <code title="NSMain.Application=NSApplication(&lt;Id_t at 0x7fe0c4841290&gt;) of 0x7fe0c3\
+0ac160,
+      .BooleanNO=NSBoolean(&lt;Id_t at 0x7fe0c483b680&gt;) of 0x7fff8004c620\
 ,
-      .BooleanYES=NSBoolean(&lt;Id_t at 0x7ff7236f6050&gt;) of 0x7fff8004161\
+      .BooleanYES=NSBoolean(&lt;Id_t at 0x7fe0c483b290&gt;) of 0x7fff8004c61\
 0,
-      .Bundle=NSBundle(&lt;Id_t at 0x7ff7236eb680&gt;) of 0x7ff71eb18360,
+      .Bundle=NSBundle(&lt;Id_t at 0x7fe0c483b9e0&gt;) of 0x7fe0bd637900,
       .BundleName=NSConstantString('CFBundleName'),
-...">NSMain.Application=NSApplication(&lt;Id_t at 0x7ff7236fb<code class="variable-ellipsis">...</code></code><br />
+...">NSMain.Application=NSApplication(&lt;Id_t at 0x7fe0c4841<code class="variable-ellipsis">...</code></code><br />
       Global <code>ObjC/NS/CF...</code> singletons.
     </td>
   </tr>
@@ -1127,7 +1221,7 @@ a36450,
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
         <a name="NSMain.Null"></a><span class="summary-name">NSMain.Null</span><br />
-      Get the <code>NSNull</code>.
+      Get <code>NSNull</code>.
     </td>
   </tr>
 <tr>
@@ -1143,70 +1237,7 @@ a36450,
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
         <a name="NSMain.Screen"></a><span class="summary-name">NSMain.Screen</span><br />
-      Get the <code>NSScreen.mainScreen</code>.
-    </td>
-  </tr>
-<tr>
-    <td width="15%" align="right" valign="top" class="summary">
-      <span class="summary-type">&nbsp;</span>
-    </td><td class="summary">
-        <a name="NSMain.ScreenBottomLeft"></a><span class="summary-name">NSMain.ScreenBottomLeft</span><br />
-      Get the <code>NSScreen.mainScreen.frame</code> lower left corner as 
-      <code>NSPoint_t</code>.
-    </td>
-  </tr>
-<tr>
-    <td width="15%" align="right" valign="top" class="summary">
-      <span class="summary-type">&nbsp;</span>
-    </td><td class="summary">
-        <a name="NSMain.ScreenBottomRight"></a><span class="summary-name">NSMain.ScreenBottomRight</span><br />
-      Get the <code>NSScreen.mainScreen.frame</code> lower right corner as 
-      <code>NSPoint_t</code>.
-    </td>
-  </tr>
-<tr>
-    <td width="15%" align="right" valign="top" class="summary">
-      <span class="summary-type">&nbsp;</span>
-    </td><td class="summary">
-        <a name="NSMain.ScreenCenter"></a><span class="summary-name">NSMain.ScreenCenter</span><br />
-      Get the <code>NSScreen.mainScreen.frame</code> center as 
-      <code>NSPoint_t</code>.
-    </td>
-  </tr>
-<tr>
-    <td width="15%" align="right" valign="top" class="summary">
-      <span class="summary-type">&nbsp;</span>
-    </td><td class="summary">
-        <a name="NSMain.ScreenFrame"></a><span class="summary-name">NSMain.ScreenFrame</span><br />
-      Get the <code>NSScreen.mainScreen.frame</code> as 
-      <code>NSRect_t</code>.
-    </td>
-  </tr>
-<tr>
-    <td width="15%" align="right" valign="top" class="summary">
-      <span class="summary-type">&nbsp;</span>
-    </td><td class="summary">
-        <a name="NSMain.ScreenSize"></a><span class="summary-name">NSMain.ScreenSize</span><br />
-      Get the <code>NSScreen.mainScreen.frame.size</code> as 
-      <code>NSSize_t</code>.
-    </td>
-  </tr>
-<tr>
-    <td width="15%" align="right" valign="top" class="summary">
-      <span class="summary-type">&nbsp;</span>
-    </td><td class="summary">
-        <a name="NSMain.ScreenTopLeft"></a><span class="summary-name">NSMain.ScreenTopLeft</span><br />
-      Get the <code>NSScreen.mainScreen.frame</code> upper left corner as 
-      <code>NSPoint_t</code>.
-    </td>
-  </tr>
-<tr>
-    <td width="15%" align="right" valign="top" class="summary">
-      <span class="summary-type">&nbsp;</span>
-    </td><td class="summary">
-        <a name="NSMain.ScreenTopRight"></a><span class="summary-name">NSMain.ScreenTopRight</span><br />
-      Get the <code>NSScreen.mainScreen.frame</code> upper right corner as 
-      <code>NSPoint_t</code>.
+      Get the <code>NSScreen.mainScreen</code>, once.
     </td>
   </tr>
 <tr>
@@ -1377,6 +1408,36 @@ a36450,
   </dl>
 </td></tr></table>
 </div>
+<a name="nsArray2tuple"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">nsArray2tuple</span>(<span class="sig-arg">ns</span>,
+        <span class="sig-arg">ctype</span>=<span class="sig-default">&lt;class 'pycocoa.runtime.ObjCInstance'&gt;</span>)</span>
+  </h3>
+  </td><td align="right" valign="top"
+    >&nbsp;
+    </td>
+  </tr></table>
+  
+  <p>Create a Python <code>tuple</code> from an <i>immutable</i> 
+  <code>NSArray</code>.</p>
+  <dl class="fields">
+    <dt>Parameters:</dt>
+    <dd><ul class="nomargin-top">
+        <li><strong class="pname"><code>ns</code></strong> - The <code>NSArray</code> (<a 
+          href="pycocoa.runtime.ObjCInstance-class.html" 
+          class="link">ObjCInstance</a>).</li>
+        <li><strong class="pname"><code>ctype</code></strong> - The array item type (<code>ObjCInstance</code>).</li>
+    </ul></dd>
+    <dt>Returns:</dt>
+        <dd>The array (<code>tuple</code>).</dd>
+  </dl>
+</td></tr></table>
+</div>
 <a name="nsBoolean2bool"></a>
 <div>
 <table class="details" border="1" cellpadding="3"
@@ -1534,6 +1595,36 @@ a36450,
     <dt>Returns:</dt>
         <dd>The dict (<a href="pycocoa.utils.Adict-class.html" 
           class="link">Adict</a>).</dd>
+  </dl>
+</td></tr></table>
+</div>
+<a name="nsDictionary2items"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">nsDictionary2items</span>(<span class="sig-arg">ns</span>)</span>
+  </h3>
+  </td><td align="right" valign="top"
+    >&nbsp;
+    </td>
+  </tr></table>
+  
+  <p>Yield the <code>(key, value)</code> items from an 
+  <code>NSDictionary</code>.</p>
+  <dl class="fields">
+    <dt>Parameters:</dt>
+    <dd><ul class="nomargin-top">
+        <li><strong class="pname"><code>ns</code></strong> - The <code>NSDictionary</code> instance (<a 
+          href="pycocoa.runtime.ObjCInstance-class.html" 
+          class="link">ObjCInstance</a>).</li>
+    </ul></dd>
+    <dt>Returns:</dt>
+        <dd>A 2-tuple <code>(key, value)</code> for each item, each a 
+          separate <a href="pycocoa.runtime.ObjCInstance-class.html" 
+          class="link">ObjCInstance</a></dd>
   </dl>
 </td></tr></table>
 </div>
@@ -2007,6 +2098,42 @@ a36450,
   </dl>
 </td></tr></table>
 </div>
+<a name="nsValue2py"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">nsValue2py</span>(<span class="sig-arg">ns</span>,
+        <span class="sig-arg">dflt</span>=<span class="sig-default">missing</span>)</span>
+  </h3>
+  </td><td align="right" valign="top"
+    >&nbsp;
+    </td>
+  </tr></table>
+  
+  <p>Create a Python instance from an <code>NS[Concrete]Value</code>.</p>
+  <dl class="fields">
+    <dt>Parameters:</dt>
+    <dd><ul class="nomargin-top">
+        <li><strong class="pname"><code>ns</code></strong> - The <code>NS[Concrete]Value</code> (<a 
+          href="pycocoa.runtime.ObjCInstance-class.html" 
+          class="link">ObjCInstance</a>).</li>
+        <li><strong class="pname"><code>dflt</code></strong> - Default for missing, unobtainable value.</li>
+    </ul></dd>
+    <dt>Returns:</dt>
+        <dd>The value (<code>NSPoint_t</code>, <code>NSRange_t</code>, 
+          <code>NSRect_t</code>, <code>NSSize_t</code> or 
+          <code>tuple</code>) or <b><code>dflt</code></b>.</dd>
+    <dt>Raises:</dt>
+    <dd><ul class="nomargin-top">
+        <li><code><strong class='fraise'>TypeError</strong></code> - Invalid <b><code>ns</code></b> or unexpected 
+        <code>ns.objCType</code>.</li>
+    </ul></dd>
+  </dl>
+</td></tr></table>
+</div>
 <a name="ns2py"></a>
 <div>
 <table class="details" border="1" cellpadding="3"
@@ -2121,6 +2248,37 @@ a36450,
   </dl>
 </td></tr></table>
 </div>
+<a name="ns2TypeID2"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">ns2TypeID2</span>(<span class="sig-arg">ns</span>,
+        <span class="sig-arg">dflt</span>=<span class="sig-default">None</span>)</span>
+  </h3>
+  </td><td align="right" valign="top"
+    >&nbsp;
+    </td>
+  </tr></table>
+  
+  <p>Get the <code>NS...</code> ObjC <code>TypeID</code>.</p>
+  <dl class="fields">
+    <dt>Parameters:</dt>
+    <dd><ul class="nomargin-top">
+        <li><strong class="pname"><code>ns</code></strong> - The <code>NS...</code> (<a 
+          href="pycocoa.runtime.ObjCInstance-class.html" 
+          class="link">ObjCInstance</a>).</li>
+        <li><strong class="pname"><code>dflt</code></strong> - Default for unhandled, unexpected <code>NS...</code>s 
+          (<code>missing</code>).</li>
+    </ul></dd>
+    <dt>Returns:</dt>
+        <dd>2-Tuple <code>(TypeID, ns...2py)</code> of an <code>int</code>NS 
+          and the type conversion <code>callable</code>.</dd>
+  </dl>
+</td></tr></table>
+</div>
 <br />
 <!-- ==================== VARIABLES DETAILS ==================== -->
 <a name="section-VariablesDetails"></a>
@@ -2143,13 +2301,13 @@ a36450,
   <dl class="fields">
     <dt>Value:</dt>
       <dd><table><tr><td><pre class="variable">
-NSMain.Application=NSApplication(&lt;Id_t at 0x7ff7236fb7a0&gt;) of 0x7ff720<span class="variable-linewrap"><img src="crarr.png" alt="\" /></span>
-a36450,
-      .BooleanNO=NSBoolean(&lt;Id_t at 0x7ff7236f6b00&gt;) of 0x7fff80041620<span class="variable-linewrap"><img src="crarr.png" alt="\" /></span>
+NSMain.Application=NSApplication(&lt;Id_t at 0x7fe0c4841290&gt;) of 0x7fe0c3<span class="variable-linewrap"><img src="crarr.png" alt="\" /></span>
+0ac160,
+      .BooleanNO=NSBoolean(&lt;Id_t at 0x7fe0c483b680&gt;) of 0x7fff8004c620<span class="variable-linewrap"><img src="crarr.png" alt="\" /></span>
 ,
-      .BooleanYES=NSBoolean(&lt;Id_t at 0x7ff7236f6050&gt;) of 0x7fff8004161<span class="variable-linewrap"><img src="crarr.png" alt="\" /></span>
+      .BooleanYES=NSBoolean(&lt;Id_t at 0x7fe0c483b290&gt;) of 0x7fff8004c61<span class="variable-linewrap"><img src="crarr.png" alt="\" /></span>
 0,
-      .Bundle=NSBundle(&lt;Id_t at 0x7ff7236eb680&gt;) of 0x7ff71eb18360,
+      .Bundle=NSBundle(&lt;Id_t at 0x7fe0c483b9e0&gt;) of 0x7fe0bd637900,
       .BundleName=NSConstantString('CFBundleName'),
 <code class="variable-ellipsis">...</code>
 </pre></td></tr></table>
@@ -2189,7 +2347,7 @@ a36450,
 <table border="0" cellpadding="0" cellspacing="0" width="100%%">
   <tr>
     <td align="left" class="footer">
-    Generated by Epydoc 3.0.1 on Sat Nov 21 15:42:46 2020
+    Generated by Epydoc 3.0.1 on Mon Nov 30 11:16:22 2020
     </td>
     <td align="right" class="footer">
       <a target="mainFrame" href="http://epydoc.sourceforge.net"

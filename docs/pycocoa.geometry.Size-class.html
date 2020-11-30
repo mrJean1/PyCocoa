@@ -106,11 +106,27 @@ bases._Type0 --+
       
     </td>
   </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a href="pycocoa.geometry.Size-class.html#__str__" class="summary-sig-name">__str__</a>(<span class="summary-sig-arg">self</span>)</span><br />
+      str(x)</td>
+          <td align="right" valign="top">
+            
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
   <tr>
     <td colspan="2" class="summary">
     <p class="indent-wrapped-lines"><b>Inherited from <code>bases._Type0</code></b>:
       <code>__repr__</code>,
-      <code>__str__</code>,
       <code>type2strepr</code>
       </p>
     <p class="indent-wrapped-lines"><b>Inherited from <code>object</code></b>:
@@ -140,17 +156,25 @@ bases._Type0 --+
     <td width="15%" align="right" valign="top" class="summary">
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
-        <a href="pycocoa.geometry.Size-class.html#size" class="summary-name">size</a><br />
-      Get the width, height (2-tuple) of (<code>float</code> or 
-      <code>int</code>).
+        <a href="pycocoa.geometry.Size-class.html#height" class="summary-name">height</a><br />
+      Get the height (<code>float</code> or <code>int</code>).
     </td>
   </tr>
 <tr>
     <td width="15%" align="right" valign="top" class="summary">
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
-        <a href="pycocoa.geometry.Size-class.html#height" class="summary-name">height</a><br />
-      Get the height (<code>float</code> or <code>int</code>).
+        <a href="pycocoa.geometry.Size-class.html#ratio" class="summary-name">ratio</a><br />
+      Get the aspect ratio as 2-tuple (width, height).
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="pycocoa.geometry.Size-class.html#size" class="summary-name">size</a><br />
+      Get the width, height (2-tuple) of (<code>float</code> or 
+      <code>int</code>).
     </td>
   </tr>
 <tr>
@@ -209,6 +233,30 @@ bases._Type0 --+
   </dl>
 </td></tr></table>
 </div>
+<a name="__str__"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">__str__</span>(<span class="sig-arg">self</span>)</span>
+    <br /><em class="fname">(Informal representation operator)</em>
+  </h3>
+  </td><td align="right" valign="top"
+    >&nbsp;
+    </td>
+  </tr></table>
+  
+  <p>str(x)</p>
+  <dl class="fields">
+    <dt>Overrides:
+        object.__str__
+        <dd><em class="note">(inherited documentation)</em></dd>
+    </dt>
+  </dl>
+</td></tr></table>
+</div>
 <br />
 <!-- ==================== PROPERTY DETAILS ==================== -->
 <a name="section-PropertyDetails"></a>
@@ -219,6 +267,46 @@ bases._Type0 --+
     <span class="table-header">Property Details</span></td>
 </tr>
 </table>
+<a name="height"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <h3 class="epydoc">height</h3>
+  <p>Get the height (<code>float</code> or <code>int</code>).</p>
+  <dl class="fields">
+    <dt>Get Method:</dt>
+    <dd class="value"><span class="summary-sig">height(<span class="summary-sig-arg">self</span>)</span>
+        - Get the height (<code>float</code> or <code>int</code>).
+    </dd>
+    <dt>Set Method:</dt>
+    <dd class="value"><span class="summary-sig">height(<span class="summary-sig-arg">self</span>,
+        <span class="summary-sig-arg">height</span>)</span>
+        - Set the height (<code>float</code> or <code>int</code>).
+    </dd>
+  </dl>
+</td></tr></table>
+</div>
+<a name="ratio"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <h3 class="epydoc">ratio</h3>
+  <p>Get the aspect ratio as 2-tuple (width, height).</p>
+  <dl class="fields">
+    <dt>Get Method:</dt>
+    <dd class="value"><span class="summary-sig">ratio(<span class="summary-sig-arg">self</span>)</span>
+        - Get the aspect ratio as 2-tuple (width, height).
+    </dd>
+    <dt>Set Method:</dt>
+    <dd class="value"><span class="summary-sig">ratio(<span class="summary-sig-arg">self</span>,
+        <span class="summary-sig-arg">ratio</span>)</span>
+        - Adjust width and/or height to the given aspect ratio.
+    </dd>
+  </dl>
+</td></tr></table>
+</div>
 <a name="size"></a>
 <div>
 <table class="details" border="1" cellpadding="3"
@@ -239,26 +327,6 @@ bases._Type0 --+
         - Set the size (<a href="pycocoa.geometry.Size-class.html" 
 class="link">Size</a>, <code>list</code>, <code>tuple</code> or 
 <code>NSSize_t</code>).
-    </dd>
-  </dl>
-</td></tr></table>
-</div>
-<a name="height"></a>
-<div>
-<table class="details" border="1" cellpadding="3"
-       cellspacing="0" width="100%" bgcolor="white">
-<tr><td>
-  <h3 class="epydoc">height</h3>
-  <p>Get the height (<code>float</code> or <code>int</code>).</p>
-  <dl class="fields">
-    <dt>Get Method:</dt>
-    <dd class="value"><span class="summary-sig">height(<span class="summary-sig-arg">self</span>)</span>
-        - Get the height (<code>float</code> or <code>int</code>).
-    </dd>
-    <dt>Set Method:</dt>
-    <dd class="value"><span class="summary-sig">height(<span class="summary-sig-arg">self</span>,
-        <span class="summary-sig-arg">height</span>)</span>
-        - Set the height (<code>float</code> or <code>int</code>).
     </dd>
   </dl>
 </td></tr></table>
@@ -315,7 +383,7 @@ class="link">Size</a>, <code>list</code>, <code>tuple</code> or
 <table border="0" cellpadding="0" cellspacing="0" width="100%%">
   <tr>
     <td align="left" class="footer">
-    Generated by Epydoc 3.0.1 on Sat Nov 21 15:42:47 2020
+    Generated by Epydoc 3.0.1 on Mon Nov 30 11:16:23 2020
     </td>
     <td align="right" class="footer">
       <a target="mainFrame" href="http://epydoc.sourceforge.net"

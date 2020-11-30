@@ -7,21 +7,24 @@
 '''
 # all imports listed explicitly to help PyChecker
 from pycocoa.lazily  import _ALL_LAZY, _COLON_
-from pycocoa.nstypes import NSArray, NSData, NSDecimal, NSDictionary, \
-                            NSDouble, NSInt, NSLong, NSLongLong, \
-                            NSMain, NSMutableArray, NSMutableDictionary, \
-                            NSMutableSet, NSSet, NSStr, NSURL
+from pycocoa.nstypes import NSArray, NSData, NSDate, NSDecimal, \
+                            NSDictionary, NSDouble, NSInt, NSLong, \
+                            NSLongLong, NSMain, NSMutableArray, \
+                            NSMutableDictionary, NSMutableSet, \
+                            NSSet, NSStr, NSURL
 from pycocoa.oslibs  import libCF
 from pycocoa.runtime import ObjCInstance, release
-from pycocoa.utils   import bytes2str, _ByteStrs, clipstr, DEFAULT_UNICODE, \
-                           _Ints, isinstanceOf
+from pycocoa.utils   import bytes2str, _ByteStrs, clipstr, \
+                            DEFAULT_UNICODE, _Ints, isinstanceOf
 
 from ctypes  import c_void_p
 from decimal import Decimal as _Decimal
 from types   import GeneratorType as _Generator
 
 __all__ = _ALL_LAZY.pytypes
-__version__ = '20.11.19'
+__version__ = '20.11.22'
+
+_Numbers  = _Ints  + (float, _Decimal)
 
 
 def _iter2NS(ns, py, getCount):
@@ -105,6 +108,7 @@ def dict2NS(py, frozen=False):
         ns = _len2NS(py, ns, libCF.CFDictionaryGetCount)
         if frozen:
             ns = NSDictionary.alloc().initWithDictionary_(ns)
+            ns._from_py2NS = True
         return ns
 
 
@@ -131,8 +135,10 @@ def frozenset2NS(py):
        @raise RuntimeError: If C{len} vs C{count} assertion failed.
     '''
     if isinstanceOf(py, frozenset, set, name='py'):
-        return _len2NS(py, NSSet.alloc().initWithSet_(_set2NS(py)),
-                           libCF.CFSetGetCount)
+        ns = _len2NS(py, NSSet.alloc().initWithSet_(_set2NS(py)),
+                         libCF.CFSetGetCount)
+        ns._from_py2NS = True
+        return ns
 
 
 def generator2NS(py):
@@ -242,6 +248,30 @@ def str2NS(py):
     return NSStr(py)
 
 
+def time2NS(py=None, since=1970):
+    '''Create an C{NSDate} instance from a timestamp.
+
+       @keyword py: The timestamp in seconds (C{float}, C{int}).
+       @keyword since: Epoch start (1970, 2001) otherwise now.
+
+       @return: The ObjC instance (C{NSDate}).
+
+       @note: Using C{B{py}=None} means C{B{py}=0, B{since}=None}
+              or C{B{py}=time.time(), B{since}=1970}.
+    '''
+    if py is None:
+        ns = NSDate.alloc().initWithTimeIntervalSinceNow_(0.0)
+    elif isinstanceOf(py, name='py', *_Numbers):
+        t = float(py)
+        if since == 1970:
+            ns = NSDate.alloc().initWithTimeIntervalSince1970_(t)
+        elif since == 2001:
+            ns = NSDate.alloc().initWithTimeIntervalSinceReferenceDate_(t)
+        else:
+            ns = NSDate.alloc().initWithTimeIntervalSinceNow_(t)
+    return ns
+
+
 def tuple2NS(py):
     '''Create an immutable C{NSArray} instance from a Python C{tuple}.
 
@@ -252,8 +282,10 @@ def tuple2NS(py):
        @raise RuntimeError: If C{len} vs C{count} assertion failed.
     '''
     if isinstanceOf(py, tuple, list, name='py'):
-        return _len2NS(py, NSArray.alloc().initWithArray_(_list2NS(py)),
-                           libCF.CFArrayGetCount)
+        ns = _len2NS(py, NSArray.alloc().initWithArray_(_list2NS(py)),
+                         libCF.CFArrayGetCount)
+        ns._from_py2NS = True
+        return ns
 
 
 def unicode2NS(py):
@@ -392,26 +424,27 @@ if __name__ == '__main__':
 # % python3 -m pycocoa.pytypes
 #
 # pycocoa.pytypes.__all__ = tuple(
-#  pycocoa.pytypes.bool2NS is <function .bool2NS at 0x7fa6f35a73a0>,
-#  pycocoa.pytypes.bytes2NS is <function .bytes2NS at 0x7fa6f35a7430>,
-#  pycocoa.pytypes.dict2NS is <function .dict2NS at 0x7fa6f35a74c0>,
-#  pycocoa.pytypes.float2NS is <function .float2NS at 0x7fa6f35a7550>,
-#  pycocoa.pytypes.frozenset2NS is <function .frozenset2NS at 0x7fa6f35a75e0>,
-#  pycocoa.pytypes.generator2NS is <function .generator2NS at 0x7fa6f35a7670>,
-#  pycocoa.pytypes.int2NS is <function .int2NS at 0x7fa6f35a7700>,
-#  pycocoa.pytypes.list2NS is <function .list2NS at 0x7fa6f35a7790>,
-#  pycocoa.pytypes.map2NS is <function .map2NS at 0x7fa6f35a7820>,
-#  pycocoa.pytypes.None2NS is <function .None2NS at 0x7fa6f35a78b0>,
-#  pycocoa.pytypes.py2NS is <function .py2NS at 0x7fa6f35a7ca0>,
-#  pycocoa.pytypes.range2NS is <function .range2NS at 0x7fa6f35a7940>,
-#  pycocoa.pytypes.set2NS is <function .set2NS at 0x7fa6f35a79d0>,
-#  pycocoa.pytypes.str2NS is <function .str2NS at 0x7fa6f35a7a60>,
-#  pycocoa.pytypes.tuple2NS is <function .tuple2NS at 0x7fa6f35a7af0>,
-#  pycocoa.pytypes.type2NS is <function .type2NS at 0x7fa6f35a7d30>,
-#  pycocoa.pytypes.unicode2NS is <function .unicode2NS at 0x7fa6f35a7b80>,
-#  pycocoa.pytypes.url2NS is <function .url2NS at 0x7fa6f35a7c10>,
-# )[18]
-# pycocoa.pytypes.version 20.11.14, .isLazy 1, Python 3.9.0 64bit, macOS 10.15.7
+#  pycocoa.pytypes.bool2NS is <function .bool2NS at 0x7f924a577d30>,
+#  pycocoa.pytypes.bytes2NS is <function .bytes2NS at 0x7f924a577dc0>,
+#  pycocoa.pytypes.dict2NS is <function .dict2NS at 0x7f924a577e50>,
+#  pycocoa.pytypes.float2NS is <function .float2NS at 0x7f924a577ee0>,
+#  pycocoa.pytypes.frozenset2NS is <function .frozenset2NS at 0x7f924a577f70>,
+#  pycocoa.pytypes.generator2NS is <function .generator2NS at 0x7f924a579040>,
+#  pycocoa.pytypes.int2NS is <function .int2NS at 0x7f924a5790d0>,
+#  pycocoa.pytypes.list2NS is <function .list2NS at 0x7f924a579160>,
+#  pycocoa.pytypes.map2NS is <function .map2NS at 0x7f924a5791f0>,
+#  pycocoa.pytypes.None2NS is <function .None2NS at 0x7f924a579280>,
+#  pycocoa.pytypes.py2NS is <function .py2NS at 0x7f924a579700>,
+#  pycocoa.pytypes.range2NS is <function .range2NS at 0x7f924a579310>,
+#  pycocoa.pytypes.set2NS is <function .set2NS at 0x7f924a5793a0>,
+#  pycocoa.pytypes.str2NS is <function .str2NS at 0x7f924a579430>,
+#  pycocoa.pytypes.time2NS is <function .time2NS at 0x7f924a5794c0>,
+#  pycocoa.pytypes.tuple2NS is <function .tuple2NS at 0x7f924a579550>,
+#  pycocoa.pytypes.type2NS is <function .type2NS at 0x7f924a579790>,
+#  pycocoa.pytypes.unicode2NS is <function .unicode2NS at 0x7f924a5795e0>,
+#  pycocoa.pytypes.url2NS is <function .url2NS at 0x7f924a579670>,
+# )[19]
+# pycocoa.pytypes.version 20.11.22, .isLazy 1, Python 3.9.0 64bit, macOS 10.16
 
 # MIT License <https://OpenSource.org/licenses/MIT>
 #

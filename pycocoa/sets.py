@@ -14,7 +14,7 @@ from pycocoa.runtime import isImmutable, isObjCInstanceOf, ObjCInstance
 from pycocoa.utils   import property_RO, _Types
 
 __all__ = _ALL_LAZY.sets
-__version__ = '20.01.08'
+__version__ = '20.01.28'
 
 if True:  # MCCABE 71
 
@@ -320,7 +320,7 @@ if __name__ == '__main__':
 
     from pycocoa.utils import _all_listing
 
-    _all_listing(__all__, locals(), __version__, __file__)
+    _all_listing(__all__, locals())
 
 # % python3 -m pycocoa.sets
 #
@@ -328,7 +328,7 @@ if __name__ == '__main__':
 #  pycocoa.sets.FrozenSet is <class .FrozenSet>,
 #  pycocoa.sets.Set is <class .Set>,
 # )[2]
-# pycocoa.sets.version 20.01.08, .isLazy 1, Python 3.9.0 64bit, macOS 10.15.7, oslibs [AppKit, CoreFoundation, CoreText, Foundation, c, objc, quartz]
+# pycocoa.sets.version 20.01.28, .isLazy 1, Python 3.9.0 64bit, macOS 10.16
 
 # MIT License <https://OpenSource.org/licenses/MIT>
 #

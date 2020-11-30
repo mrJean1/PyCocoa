@@ -140,7 +140,7 @@ _isfrozen       = getattr(sys, 'frozen', False)
 pycocoa_abspath = dirname(abspath(__file__))  # sys._MEIPASS + '/pycocoa'
 _pycocoa        = __package__ or basename(pycocoa_abspath)
 
-__version__ = '20.11.20'
+__version__ = '20.11.30'
 # see setup.py for similar logic
 version = '.'.join(map(str, map(int, __version__.split('.'))))
 
@@ -203,6 +203,7 @@ if not _lazy_import2:  # import and set __all__
     import pycocoa.menus    as menus     # PYCHOK exported
     import pycocoa.panels   as panels    # PYCHOK exported
     import pycocoa.printers as printers  # PYCHOK exported
+    import pycocoa.screens  as screens   # PYCHOK exported
     import pycocoa.sets     as sets      # PYCHOK exported
     import pycocoa.strs     as strs      # PYCHOK exported
     import pycocoa.tables   as tables    # PYCHOK exported
@@ -233,6 +234,7 @@ if not _lazy_import2:  # import and set __all__
     from pycocoa.menus    import *  # PYCHOK __all__
     from pycocoa.panels   import *  # PYCHOK __all__
     from pycocoa.printers import *  # PYCHOK __all__
+    from pycocoa.screens  import *  # PYCHOK __all__
     from pycocoa.sets     import *  # PYCHOK __all__
     from pycocoa.strs     import *  # PYCHOK __all__
     from pycocoa.tables   import *  # PYCHOK __all__

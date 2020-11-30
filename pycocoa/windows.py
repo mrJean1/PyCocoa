@@ -7,14 +7,14 @@
 L{WindowStyle}, wrapping ObjC C{NSWindow}, etc.
 
 @var AutoResize: AutoResize options (C{mask}, wrapping C{NSAutoresizingMaskOptions}).
-@var AutoResize.HeightSizable: 020.
-@var AutoResize.MaxXMargin: 04.
-@var AutoResize.MaxYMargin: 040.
-@var AutoResize.MinXMargin: 01.
-@var AutoResize.MinYMargin: 010.
-@var AutoResize.NotSizable: 0.
-@var AutoResize.Sizable: 022.
-@var AutoResize.WidthSizable: 02.
+@var AutoResize.HeightSizable: 0x10.
+@var AutoResize.MaxXMargin: 0x4.
+@var AutoResize.MaxYMargin: 0x20.
+@var AutoResize.MinXMargin: 0x1.
+@var AutoResize.MinYMargin: 0x8.
+@var AutoResize.NotSizable: 0x0.
+@var AutoResize.Sizable: 0x12.
+@var AutoResize.WidthSizable: 0x2.
 
 @var BezelStyle: Bezel style constants (C{int}).
 @var BezelStyle.Disclosure: 0x5.
@@ -46,33 +46,32 @@ L{WindowStyle}, wrapping ObjC C{NSWindow}, etc.
 @var WindowStyle.Utility: 0x10.
 '''
 # all imports listed explicitly to help PyChecker
-from pycocoa.bases    import _Type2
+from pycocoa.bases import _Type2
 from pycocoa.geometry import Rect
-from pycocoa.lazily   import _ALL_LAZY, _COLON_  # PYCHOK used!
-from pycocoa.nstypes  import isNone, NSConcreteNotification, NSFont, \
-                             NSImageView, NSMain, NSNotification, \
-                             NSScrollView, NSStr, NSTableView, \
-                             nsTextSize3, NSTextView, NSView, NSWindow
-from pycocoa.octypes  import NSIntegerMax, NSPoint_t, NSSize_t
-from pycocoa.oslibs   import NO, NSBackingStoreBuffered, \
-                             NSWindowStyleMaskClosable, \
-                             NSWindowStyleMaskMiniaturizable, \
-                             NSWindowStyleMaskResizable, \
-                             NSWindowStyleMaskTitled, \
-                             NSWindowStyleMaskUsual, \
-                             NSWindowStyleMaskUtilityWindow, YES
-from pycocoa.runtime  import isObjCInstanceOf, ObjCDelegate, ObjCInstance, \
-                             ObjCSubclass, release, retain, send_super_init
-from pycocoa.utils    import aspect_ratio, bytes2str, _Constants, _Globals, \
-                             isinstanceOf, module_property_RO, property_RO, \
-                             _Python3, _text_title2, _Types
+from pycocoa.lazily import _ALL_LAZY, _COLON_  # PYCHOK used!
+from pycocoa.nstypes import isNone, NSConcreteNotification, NSFont, \
+                            NSImageView, NSMain, NSNotification, \
+                            NSScreen, NSScrollView, NSStr, NSTableView, \
+                            nsTextSize3, NSTextView, NSView, NSWindow
+from pycocoa.octypes import NSIntegerMax, NSPoint_t, NSSize_t
+from pycocoa.oslibs import NO, NSBackingStoreBuffered, \
+                           NSWindowStyleMaskClosable, \
+                           NSWindowStyleMaskMiniaturizable, \
+                           NSWindowStyleMaskResizable, \
+                           NSWindowStyleMaskTitled, \
+                           NSWindowStyleMaskUsual, \
+                           NSWindowStyleMaskUtilityWindow, YES
+from pycocoa.runtime import isObjCInstanceOf, ObjCDelegate, ObjCInstance, \
+                            ObjCSubclass, release, retain, send_super_init
+from pycocoa.screens import Frame, Screen, Screens
+from pycocoa.utils import aspect_ratio, bytes2str, _Constants, _Globals, \
+                          isinstanceOf, _Ints, module_property_RO, \
+                          property_RO, _Python3, _text_title2, _Types
 
 # from enum   import Enum
 
 __all__ = _ALL_LAZY.windows
-__version__ = '20.11.18'
-
-_Cascade = NSPoint_t(25, 25)  # PYCHOK false
+__version__ = '20.11.29'
 
 
 class AutoResizeError(ValueError):
@@ -145,30 +144,6 @@ class Border(_Constants):  # Enum?
 Border = Border()  # PYCHOK border type constants
 
 
-class Screen(Rect):
-    '''Screen Python Type, wrapping ObjC L{NSRect_t}.
-    '''
-    def __init__(self, fraction=0.5, cascade=10):
-        '''New, partial screen L{Rect}.
-
-           @keyword fraction: Size of the screen (C{float}).
-           @keyword cascade: Shift from lower left corner (C{float} or C{int}).
-
-           @raise ValueError: Invalid I{fraction} value.
-        '''
-        f = NSMain.ScreenFrame
-        if 0.1 < fraction < 1.0:
-            # use the lower left side of the screen
-            w = int(f.size.width * fraction + 0.5)
-            h = int(f.size.height * w / f.size.width)
-            # avoid cascading window off-screen
-            c = min(max(0, cascade), min(f.size.width, f.size.height))
-            f = f.origin.x + c, f.origin.y + c, w, h
-        elif fraction < 0 or fraction > 1:
-            raise ValueError('invalid %s: %.2f' % ('fraction', fraction))
-        self.rect = f
-
-
 class Window(_Type2):
     '''Basic window Python Type, wrapping ObjC C{NSWindow}.
     '''
@@ -179,30 +154,42 @@ class Window(_Type2):
     _NSuniqID = 0
     _NSview   = None
     _PMview   = None
-    _ratio    = ()
     _untrans  = None
 
-    def __init__(self, title='Main', frame=None, excl=0, auto=False, fraction=0.5, **kwds):
+    def __init__(self, title='Main', screen=None, fraction=0.5,
+                                     frame=None, excl=0, auto=False, **kwds):
         '''Create a new L{Window}.
 
            @keyword title: Window title (C{str}).
-           @keyword frame: Window frame (L{Rect}, L{NSRect_t}, L{NSRect4_t}, or None).
-           @keyword excl: Window styles to exclude (L{WindowStyle}C{.attribute}).
-           @keyword auto: Release window resource when closed (C{bool}).
+           @keyword screen: The screen to place the window on (C{int}) or
+                            C{None} for the current one.  Use C{screen=0}
+                            for the built-in screen or C{screen=1} for the
+                            first external monitor, etc.
            @keyword fraction: Window size as fraction of the screen (C{float}),
-                              defining C{B{frame}} if C{B{frame=None}}.
+                              defining the window C{B{frame}}.
+           @keyword frame: The window's origin and I{content} size (L{Rect},
+                           L{NSRect_t}, L{NSRect4_t}), overriding B{C{fraction}}.
+           @keyword excl: Window I{styles} to exclude (L{WindowStyle}C{.attribute}).
+           @keyword auto: Release window resource when closed (C{bool}).
            @keyword kwds: Optional, additional keyword arguments.
 
            @raise WindowError: Unique C{Id} exists.
         '''
-        self._frame = Screen(fraction) if frame is None else Rect(frame)
-        self._ratio = self._frame.width, self._frame.height
-
-        self.NS = NSWindow.alloc().initWithContentRect_styleMask_backing_defer_(
-                                   self.frame.NS,
-                                   WindowStyle.Typical ^ excl,  # PYCHOK expected
-                                   NSBackingStoreBuffered,
-                                   NO)
+        if frame is None:
+            self._frame = Frame(screen, fraction=fraction)
+            self.NS = NSWindow.alloc().initWithContentRect_styleMask_backing_defer_(
+                                       self._frame.NS,
+                                       WindowStyle.Typical ^ excl,  # PYCHOK expected
+                                       NSBackingStoreBuffered,
+                                       NO)
+        else:  # for .tables.TableWindow
+            self._frame = Frame(frame)
+            self.NS = NSWindow.alloc().initWithContentRect_styleMask_backing_defer_screen_(
+                                       self._frame.NS,
+                                       WindowStyle.Typical ^ excl,  # PYCHOK expected
+                                       NSBackingStoreBuffered,
+                                       NO,
+                                       Screens.Main.NS)  # like .tables.TableWindow
         self.title = bytes2str(title)
         self.front(True)
 
@@ -250,14 +237,28 @@ class Window(_Type2):
     def cascade(self):
         '''Cascade window placement (from the top left screen corner).
         '''
-        self.NS.cascadeTopLeftFromPoint_(_Cascade)
-        _Cascade.x += 25
+        p = self.screen._NScascade
+        if p is None:
+            self.screen._NScascade = p = NSPoint_t(25, 25)
+        self.NS.cascadeTopLeftFromPoint_(p)
+        p.x += 25
+        if p.x > self.frame.center.x:
+            p.x = 25
 
-    @property_RO
+    @property
     def frame(self):
         '''Get this window's frame (L{Rect}).
         '''
-        return self._frame
+        return self._frame  # or Frame(self.NS.frame())
+
+    @frame.setter  # PYCHOK property.setter!
+    def frame(self, frame):
+        '''Set the frame of this window (L{Rect}, C{NSRect_t}, C{NSRect4_t}, or None).
+        '''
+        if frame:
+            self._frame.rect = Frame(frame)
+        # self.NS.setFrame_(self._frame.NS)
+        self.NS.setFrame_display_(self._frame.NS, YES)
 
     def front(self, focus=False):
         '''Order this window to the front.
@@ -345,7 +346,7 @@ class Window(_Type2):
     def NSview(self):
         '''Get this window's view (C{NSView...}).
         '''
-        return self._NSview or NSMain.Null
+        return self._NSview or NSMain.Null  # self.NS.contentView()
 
     @NSview.setter  # PYCHOK property.setter
     def NSview(self, ns_view):
@@ -385,33 +386,48 @@ class Window(_Type2):
 
     @property
     def ratio(self):
-        '''Get this window's aspect ratio as 2-tuple (width, height).
+        '''Get this window's contents' aspect ratio (2-tuple C{(w, h)}).
         '''
-        return self._ratio
+        r = self.NS.contentAspectRatio()
+        return r.width, r.heigth
 
     @ratio.setter  # PYCHOK property.setter
     def ratio(self, ratio):
-        '''Set this window's aspect ratio.
+        '''Set this window's contents' aspect ratio.
 
-           @param ratio: New ratio (L{Size}, 2-tuple (width, height), str("w:h") or C{NSSize_t}).
+           @param ratio: New ratio (L{Size}, 2-tuple C{(w, h)}, C{str("w:h")} or C{NSSize_t}).
 
            @raise WindowError: Invalid I{ratio}.
         '''
-        try:
-            r = bytes2str(ratio, dflt=None)
-            if r is not None:
-                r = map(int, r.split(_COLON_))
-            elif isinstance(ratio, (tuple, list)) and len(ratio) == 2:
-                r = tuple(ratio)
-            else:  # NSSize_t
-                r = ratio.width, ratio.height
-        except (AttributeError, ValueError):
-            raise WindowError('invalid %s: %r' % ('ratio', ratio))
-
-        r = aspect_ratio(*r)
+        r = aspect_ratio(ratio, Error=WindowError)
         if r:
-            self._ratio = r
             self.NS.setContentAspectRatio_(NSSize_t(*r))
+            # self.NS.setViewsNeedDisplay_(YES)
+            # self.NSview.setNeedsDisplay_(YES)
+
+    @property
+    def screen(self):
+        '''Get the screen of this window (L{Screen}).
+        '''
+        return Screen(self.NS.screen())
+
+    @screen.setter  # PYCHOK property.setter
+    def screen(self, screen):
+        '''Move this window to an other screen.
+
+           @param screen: The screen to move to (L{Screen}) or C{None}
+                          for the current C{Screens.Main} screen or an
+                          C{int} for any of the available C{Screens}.
+        '''
+        if screen is None or isinstance(screen, _Ints):
+            screen = Screens(screen)
+        if isinstanceOf(screen, Screen):
+            f = screen.frame
+        elif isObjCInstanceOf(screen, NSScreen, name='screen'):
+            f = screen.frame()
+        self.frame.origin = f.origin
+        self.NS.setFrame_display_(self.frame.NS, YES)
+        self.windowScreen_(True)
 
     @property
     def transparent(self):
@@ -460,8 +476,7 @@ class Window(_Type2):
 
            @param zoom: Zoom or un-zoom (C{bool}) or C{None} to toggle.
         '''
-        if zoom is None or (zoom and not self.isZoomed) \
-                        or (self.isZoomed and not zoom):
+        if zoom is None or bool(zoom) is not self.isZoomed:
             # click the "zoom box", toggles the zoom state
             # <https://Developer.Apple.com/documentation/appkit/nswindow/1419513-zoom>
             self.NS.performZoom_(self.NS)  # XXX self.delegate
@@ -512,8 +527,22 @@ class Window(_Type2):
     def windowResize_(self):
         '''Resizing I{window} callback.
         '''
+        self.frame.NS = self.NS.frame()
         if self.app:
             self.app.windowResize_(self)
+
+    def windowScreen_(self, change):
+        '''Called I{window} when screen or screen profile changed C{Main}.
+
+           @param change: C{True} if the screen or C{False} if
+                          the profile changed (C{bool}).
+
+           @note: Typically, changing screen involves 2 callback invokations,
+                  once for the profile and once for the screen.
+        '''
+        self.frame.NS = self.NS.frame()
+        if self.app:
+            self.app.windowScreen_(self, change)
 
     def windowZoomOK_(self, frame=None):
         '''Is it OK? to toggle zoom I{window} callback.
@@ -551,8 +580,7 @@ class WindowStyle(_Constants):  # Enum?
     Typical        = NSWindowStyleMaskUsual  # all of the above
     Utility        = NSWindowStyleMaskUtilityWindow
 
-
-WindowStyle = WindowStyle()  # window style constants
+WindowStyle = WindowStyle()  # PYCHOK window style constants
 
 
 def windowStyles(*styles):
@@ -659,6 +687,13 @@ class _NSWindowDelegate(object):
     '''An ObjC-callable C{NSDelegate} class to handle C{NSWindow} events
        as L{Window}.window..._ and L{App}.window..._ callback calls.
 
+       The event typically involves an C{NSNotification} instance the name
+       of which determines the callback method to invoke.  For example,
+       for notification named C{NSXxxYyyZzzNotification} will call the
+       method named C{xxxYyyZzz_}, i.e. the notification name less the
+       leading "NS" and trailing C"Notification", with "_" suffix added
+       and the first character in lower case.
+
        @see: The C{_NSApplicationDelegate} for more C{NSDelegate} details.
     '''
     _ObjC = ObjCSubclass('NSObject', '_NSWindowDelegate', register=False)  # defer
@@ -707,6 +742,20 @@ class _NSWindowDelegate(object):
         self.window.windowMain_(True)
 #       if self.isFull and _Globals.MenuBar:
 #           _Globals.MenuBar.isVisible = False  # hide
+
+    @_ObjC.method('v@')
+    def windowDidChangeScreen_(self, ns_notification):
+        '''ObjC callback to handle C{NSWindow} events.
+        '''
+        self._ns2w(ns_notification)
+        self.window.windowScreen_(True)
+
+    @_ObjC.method('v@')
+    def windowDidChangeScreenProfile_(self, ns_notification):
+        '''ObjC callback to handle C{NSWindow} events.
+        '''
+        self._ns2w(ns_notification)
+        self.window.windowScreen_(False)
 
     @_ObjC.method('v@')
     def windowDidResignKey_(self, ns_notification):
@@ -838,44 +887,43 @@ if __name__ == '__main__':
 #                            .MinXMargin=1,
 #                            .MinYMargin=1<<3,
 #                            .NotSizable=0,
-#                            .Sizable=9<<1,
-#                            .WidthSizable=1<<1,
+#                            .Sizable=18,
+#                            .WidthSizable=2,
 #  pycocoa.windows.AutoResizeError is <class .AutoResizeError>,
-#  pycocoa.windows.autoResizes is <function .autoResizes at 0x7fd452d878b0>,
+#  pycocoa.windows.autoResizes is <function .autoResizes at 0x7fd2a7590820>,
 #  pycocoa.windows.BezelStyle.Disclosure=5,
 #                            .HelpButton=9,
 #                            .Inline=15,
 #                            .NCircular=7,
 #                            .Recessed=13,
-#                            .RegularSquare=1<<1,
+#                            .RegularSquare=2,
 #                            .Rounded=1,
-#                            .RoundedDisclosure=7<<1,
+#                            .RoundedDisclosure=14,
 #                            .RoundRect=3<<2,
-#                            .ShadowlessSquare=3<<1,
-#                            .SmallSquare=5<<1,
+#                            .ShadowlessSquare=6,
+#                            .SmallSquare=10,
 #                            .TexturedRounded=11,
 #                            .TexturedSquare=1<<3,
-#  pycocoa.windows.Border.Bezel=1<<1,
+#  pycocoa.windows.Border.Bezel=2,
 #                        .Groove=3,
 #                        .Line=1,
 #                        .No=0,
 #  pycocoa.windows.MediaWindow is <class .MediaWindow>,
-#  pycocoa.windows.ns2Window is <function .ns2Window at 0x7fd452d90ca0>,
-#  pycocoa.windows.NSWindowDelegate is <pycocoa.utils.module_property_RO object at 0x7fd452d8fb50>,
-#  pycocoa.windows.Screen is <class .Screen>,
+#  pycocoa.windows.ns2Window is <function .ns2Window at 0x7fd2a75a91f0>,
+#  pycocoa.windows.NSWindowDelegate is <pycocoa.utils.module_property_RO object at 0x7fd2a75a6fa0>,
 #  pycocoa.windows.TextWindow is <class .TextWindow>,
 #  pycocoa.windows.Window is <class .Window>,
 #  pycocoa.windows.WindowError is <class .WindowError>,
-#  pycocoa.windows.WindowStyle.Closable=1<<1,
+#  pycocoa.windows.WindowStyle.Closable=2,
 #                             .Miniaturizable=1<<2,
 #                             .Resizable=1<<3,
 #                             .Titled=1,
 #                             .Typical=15,
 #                             .Utility=1<<4,
 #  pycocoa.windows.WindowStyleError is <class .WindowStyleError>,
-#  pycocoa.windows.windowStyles is <function .windowStyles at 0x7fd452d879d0>,
-# )[15]
-# pycocoa.windows.version 20.11.14, .isLazy 1, Python 3.9.0 64bit, macOS 10.15.7
+#  pycocoa.windows.windowStyles is <function .windowStyles at 0x7fd2a759ae50>,
+# )[14]
+# pycocoa.windows.version 20.11.28, .isLazy 1, Python 3.9.0 64bit, macOS 10.16
 
 # MIT License <https://OpenSource.org/licenses/MIT>
 #

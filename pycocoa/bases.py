@@ -25,9 +25,10 @@ class _Type0(object):
         # ignore __init__ from __new__, like Item
         if kwds and not args:
             for a, v in kwds.items():
-                if hasattr(self, a):
+                if not hasattr(self, a):
+                    setattr(self, a, v)
+                elif getattr(self, a) != v:
                     raise AttributeError('%s=%r exists' % (a, v))
-                setattr(self, a, v)
 
     def __repr__(self):
         return '%s at %#x' % (self, id(self))
@@ -145,7 +146,7 @@ if __name__ == '__main__':
 #
 # pycocoa.bases.__all__ = tuple(
 # )[0]
-# pycocoa.bases.version 20.01.08, .isLazy 1, Python 3.9.0 64bit, macOS 10.15.7
+# pycocoa.bases.version 20.01.08, .isLazy 1, Python 3.9.0 64bit, macOS 10.16
 
 # MIT License <https://OpenSource.org/licenses/MIT>
 #

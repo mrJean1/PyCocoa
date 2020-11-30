@@ -281,7 +281,7 @@ if __name__ == '__main__':
 #  pycocoa.dicts.Dict is <class .Dict>,
 #  pycocoa.dicts.FrozenDict is <class .FrozenDict>,
 # )[2]
-# pycocoa.dicts.version 20.01.08, .isLazy 1, Python 3.9.0 64bit, macOS 10.15.7
+# pycocoa.dicts.version 20.11.18, .isLazy 1, Python 3.9.0 64bit, macOS 10.16
 
 # MIT License <https://OpenSource.org/licenses/MIT>
 #

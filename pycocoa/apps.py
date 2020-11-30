@@ -24,7 +24,7 @@ from threading import Thread
 from time import sleep
 
 __all__ = _ALL_LAZY.apps
-__version__ = '20.11.20'
+__version__ = '20.11.30'
 
 
 class App(_Type2):
@@ -328,6 +328,14 @@ class App(_Type2):
         '''
         pass
 
+    def windowScreen_(self, window, change):
+        '''Called when I{window} screen or screen profile changed C{Main}.
+
+           @param change: C{True} if the screen or C{False} if
+                          the profile changed (C{bool}).
+        '''
+        pass
+
     def windowZoomOK_(self, window, frame=None):  # PYCHOK expected
         '''Is it OK? to toggle zoom I{window} callback.
 
@@ -369,7 +377,7 @@ class _NSApplicationDelegate(object):
     _ObjC = ObjCSubclass('NSObject', '_NSApplicationDelegate', register=False)  # defer
 
     # The _ObjC.method(signature) decorator specifies the signature
-    # of a Python method in Objective-C type encoding to make the
+    # of a Python method as an Objective-C type encoding to make the
     # Python method callable from Objective-C.
 
     # See pycocoa.runtime.split_encoding for ObjC type encoding of
@@ -622,12 +630,12 @@ if __name__ == '__main__':
 #
 # pycocoa.apps.__all__ = tuple(
 #  pycocoa.apps.App is <class .App>,
-#  pycocoa.apps.app_title is <function .app_title at 0x7fec649aaca0>,
-#  pycocoa.apps.ns2App is <function .ns2App at 0x7fec649eb4c0>,
-#  pycocoa.apps.NSApplicationDelegate is <pycocoa.utils.module_property_RO object at 0x7fec62c2b7c0>,
+#  pycocoa.apps.app_title is <function .app_title at 0x7fe73474b3a0>,
+#  pycocoa.apps.ns2App is <function .ns2App at 0x7fe73474bb80>,
+#  pycocoa.apps.NSApplicationDelegate is <pycocoa.utils.module_property_RO object at 0x7fe734785280>,
 #  pycocoa.apps.Tile is <class .Tile>,
 # )[5]
-# pycocoa.apps.version 20.01.08, .isLazy 1, Python 3.9.0 64bit, macOS 10.15.7
+# pycocoa.apps.version 20.11.25, .isLazy 1, Python 3.9.0 64bit, macOS 10.16
 
 # MIT License <https://OpenSource.org/licenses/MIT>
 #

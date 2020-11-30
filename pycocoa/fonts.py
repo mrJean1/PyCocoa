@@ -22,18 +22,18 @@
 @var Fonts.Title: Get the C{TitleFont}.
 
 @var FontTrait: Font trait constants (C{mask}).
-@var FontTrait.Bold: int(x=0) -> int or long.
-@var FontTrait.Compressed: int(x=0) -> int or long.
-@var FontTrait.Condensed: int(x=0) -> int or long.
-@var FontTrait.Expanded: int(x=0) -> int or long.
-@var FontTrait.Italic: int(x=0) -> int or long.
-@var FontTrait.MonoSpace: int(x=0) -> int or long.
-@var FontTrait.Narrow: int(x=0) -> int or long.
-@var FontTrait.Poster: int(x=0) -> int or long.
-@var FontTrait.SansSerif: int(x=0) -> int or long.
-@var FontTrait.SmallCaps: int(x=0) -> int or long.
-@var FontTrait.UnBold: int(x=0) -> int or long.
-@var FontTrait.UnItalic: int(x=0) -> int or long.
+@var FontTrait.Bold: int([x]) -> integer.
+@var FontTrait.Compressed: int([x]) -> integer.
+@var FontTrait.Condensed: int([x]) -> integer.
+@var FontTrait.Expanded: int([x]) -> integer.
+@var FontTrait.Italic: int([x]) -> integer.
+@var FontTrait.MonoSpace: int([x]) -> integer.
+@var FontTrait.Narrow: int([x]) -> integer.
+@var FontTrait.Poster: int([x]) -> integer.
+@var FontTrait.SansSerif: int([x]) -> integer.
+@var FontTrait.SmallCaps: int([x]) -> integer.
+@var FontTrait.UnBold: int([x]) -> integer.
+@var FontTrait.UnItalic: int([x]) -> integer.
 '''
 # all imports listed explicitly to help PyChecker
 from pycocoa.bases   import _Type0
@@ -53,7 +53,7 @@ from pycocoa.utils   import Adict, bytes2str, _ByteStrs, _Constants, flint, \
                            _SPACE_, _Types
 
 __all__ = _ALL_LAZY.fonts
-__version__ = '20.11.18'
+__version__ = '20.11.28'
 
 # <https://Developer.Apple.com/documentation/appkit/nsfont.weight>
 # _NSFontWeigthHeavy      = 13 ?
@@ -801,25 +801,25 @@ if __name__ == '__main__':
 # pycocoa.fonts.__all__ = tuple(
 #  pycocoa.fonts.Font is <class .Font>,
 #  pycocoa.fonts.FontError is <class .FontError>,
-#  pycocoa.fonts.fontfamilies is <function .fontfamilies at 0x7fa21e472820>,
-#  pycocoa.fonts.fontnamesof is <function .fontnamesof at 0x7fa21e485f70>,
-#  pycocoa.fonts.Fonts.App=Font(name='Helvetica', family='Helvetica', size=12, weight=5),
-#                     .Bold=Font(name='.AppleSystemUIFontBold', family='.AppleSystemUIFont', size=13, traits='Bold', weight=9),
-#                     .BoldItalic=Font(name='.AppleSystemUIFontEmphasizedItalic', family='.AppleSystemUIFont', size=13, traits='Bold Italic', weight=9),
-#                     .Italic=Font(name='.AppleSystemUIFontItalic', family='.AppleSystemUIFont', size=13, traits='Italic', weight=5),
-#                     .Label=Font(name='.AppleSystemUIFont', family='.AppleSystemUIFont', size=10, weight=5),
-#                     .Menu=Font(name='.AppleSystemUIFont', family='.AppleSystemUIFont', size=13, weight=5),
-#                     .MenuBar=Font(name='.AppleSystemUIFont', family='.AppleSystemUIFont', size=14, weight=5),
-#                     .Message=Font(name='.AppleSystemUIFont', family='.AppleSystemUIFont', size=13, weight=5),
-#                     .MonoSpace=Font(name='Menlo-Regular', family='Menlo', size=11, traits='MonoSpace', weight=5),
-#                     .Palette=Font(name='.AppleSystemUIFont', family='.AppleSystemUIFont', size=11, weight=5),
-#                     .System=Font(name='.AppleSystemUIFont', family='.AppleSystemUIFont', size=13, weight=5),
-#                     .TableData=Font(name='.AppleSystemUIFont', family='.AppleSystemUIFont', size=13, weight=5),
-#                     .TableHeader=Font(name='.AppleSystemUIFont', family='.AppleSystemUIFont', size=11, weight=5),
-#                     .Title=Font(name='.AppleSystemUIFont', family='.AppleSystemUIFont', size=13, weight=5),
-#  pycocoa.fonts.fontsof is <function .fontsof at 0x7fa21e486040>,
-#  pycocoa.fonts.fontsof4 is <function .fontsof4 at 0x7fa21e4860d0>,
-#  pycocoa.fonts.FontTrait.Bold=1<<1,
+#  pycocoa.fonts.fontfamilies is <function .fontfamilies at 0x7fd374398790>,
+#  pycocoa.fonts.fontnamesof is <function .fontnamesof at 0x7fd37439dee0>,
+#  pycocoa.fonts.Fonts.App=Font({family='Helvetica', name='Helvetica', size=12, weight=5}),
+#                     .Bold=Font({family='.AppleSystemUIFont', name='.AppleSystemUIFontBold', size=13, traits='Bold', weight=9}),
+#                     .BoldItalic=Font({family='.AppleSystemUIFont', name='.AppleSystemUIFontEmphasizedItalic', size=13, traits='Bold Italic', weight=9}),
+#                     .Italic=Font({family='.AppleSystemUIFont', name='.AppleSystemUIFontItalic', size=13, traits='Italic', weight=5}),
+#                     .Label=Font({family='.AppleSystemUIFont', name='.AppleSystemUIFont', size=10, weight=5}),
+#                     .Menu=Font({family='.AppleSystemUIFont', name='.AppleSystemUIFont', size=13, weight=5}),
+#                     .MenuBar=Font({family='.AppleSystemUIFont', name='.AppleSystemUIFont', size=13, weight=5}),
+#                     .Message=Font({family='.AppleSystemUIFont', name='.AppleSystemUIFont', size=13, weight=5}),
+#                     .MonoSpace=Font({family='Menlo', name='Menlo-Regular', size=11, traits='MonoSpace', weight=5}),
+#                     .Palette=Font({family='.AppleSystemUIFont', name='.AppleSystemUIFont', size=11, weight=5}),
+#                     .System=Font({family='.AppleSystemUIFont', name='.AppleSystemUIFont', size=13, weight=5}),
+#                     .TableData=Font({family='.AppleSystemUIFont', name='.AppleSystemUIFont', size=13, weight=5}),
+#                     .TableHeader=Font({family='.AppleSystemUIFont', name='.AppleSystemUIFont', size=11, weight=5}),
+#                     .Title=Font({family='.AppleSystemUIFont', name='.AppleSystemUIFaceHeadline', size=13, traits='Bold', weight=8}),
+#  pycocoa.fonts.fontsof is <function .fontsof at 0x7fd37439df70>,
+#  pycocoa.fonts.fontsof4 is <function .fontsof4 at 0x7fd37439e040>,
+#  pycocoa.fonts.FontTrait.Bold=2,
 #                         .Compressed=1<<9,
 #                         .Condensed=1<<6,
 #                         .Expanded=1<<5,
@@ -832,10 +832,10 @@ if __name__ == '__main__':
 #                         .UnBold=1<<2,
 #                         .UnItalic=1<<24,
 #  pycocoa.fonts.FontTraitError is <class .FontTraitError>,
-#  pycocoa.fonts.fontTraits is <function .fontTraits at 0x7fa21e486160>,
-#  pycocoa.fonts.fontTraitstrs is <function .fontTraitstrs at 0x7fa21e4861f0>,
+#  pycocoa.fonts.fontTraits is <function .fontTraits at 0x7fd37439e0d0>,
+#  pycocoa.fonts.fontTraitstrs is <function .fontTraitstrs at 0x7fd37439e160>,
 # )[11]
-# pycocoa.fonts.version 20.11.14, .isLazy 1, Python 3.9.0 64bit, macOS 10.15.7
+# pycocoa.fonts.version 20.11.18, .isLazy 1, Python 3.9.0 64bit, macOS 10.16
 
 # MIT License <https://OpenSource.org/licenses/MIT>
 #
