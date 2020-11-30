@@ -42,9 +42,10 @@ Tests
 
 The tests and examples have only been run with 64-bit Python 3.9.0, 3.8.6, 3.7.6,
 2.7.18 and macOS' 2.7.16 using U{Python-VLC<https://PyPI.org/project/python-vlc>}
-3.0.8, 3.0.6, 3.0.4 and 2.2.8 (with the compatible U{VLC App<https://www.VideoLan.org/vlc>})
-on macOS 11.0.1 (10.16) Big Sur, 10.15.7 Catalina, 10.14.6 Mojave or 10.13.6 High Sierra.
-The tests run with and without C{lazy import} in Python 3.9.0, 3.8.6 and 3.7.6.
+3.0.11, 3.0.10, 3.0.8, 3.0.6, 3.0.4 and 2.2.8 (with the compatible U{VLC App
+<https://www.VideoLan.org/vlc>}) on macOS 11.0.1 (10.16) Big Sur, 10.15.7 Catalina,
+10.14.6 Mojave or 10.13.6 High Sierra.  The tests run with and without C{lazy import}
+in Python 3.9.0, 3.8.6 and 3.7.6.
 
 Previously, PyCocoa was tested with 64-bit Python 3.8.3, 3.8.1, 3.7.5, 3.7.4,
 2.7.16 and 2.7.17.  PyCocoa has I{not been tested} on iOS nor with 32-bit Python
