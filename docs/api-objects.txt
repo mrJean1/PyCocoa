@@ -768,7 +768,6 @@ pycocoa.octypes.NSUIntegerEncoding	pycocoa.octypes-module.html#NSUIntegerEncodin
 pycocoa.octypes.NSPointZero	pycocoa.octypes-module.html#NSPointZero
 pycocoa.octypes.NSRangeEncoding	pycocoa.octypes-module.html#NSRangeEncoding
 pycocoa.octypes.__LP64__	pycocoa.octypes-module.html#__LP64__
-pycocoa.octypes._TYPE2CLOSER	pycocoa.octypes-module.html#_TYPE2CLOSER
 pycocoa.octypes.__all__	pycocoa.octypes-module.html#__all__
 pycocoa.octypes.bytes2str	pycocoa.utils-module.html#bytes2str
 pycocoa.octypes._TYPECLOSERS	pycocoa.octypes-module.html#_TYPECLOSERS
@@ -783,7 +782,6 @@ pycocoa.octypes.NSIntegerEncoding	pycocoa.octypes-module.html#NSIntegerEncoding
 pycocoa.octypes.CGImageEncoding	pycocoa.octypes-module.html#CGImageEncoding
 pycocoa.octypes.NSPointEncoding	pycocoa.octypes-module.html#NSPointEncoding
 pycocoa.octypes.property_RO	pycocoa.utils-module.html#property_RO
-pycocoa.octypes._TYPE2OPENER	pycocoa.octypes-module.html#_TYPE2OPENER
 pycocoa.octypes.NSSizeEncoding	pycocoa.octypes-module.html#NSSizeEncoding
 pycocoa.octypes._TYPESKIPPED	pycocoa.octypes-module.html#_TYPESKIPPED
 pycocoa.octypes.__i386__	pycocoa.octypes-module.html#__i386__
@@ -2411,6 +2409,7 @@ pycocoa.runtime.ObjCSubclass._name	pycocoa.runtime.ObjCSubclass-class.html#_name
 pycocoa.runtime.ObjCSubclass.rawmethod	pycocoa.runtime.ObjCSubclass-class.html#rawmethod
 pycocoa.runtime.ObjCSubclass._add_classmethod	pycocoa.runtime.ObjCSubclass-class.html#_add_classmethod
 pycocoa.screens.BuiltInScreen	pycocoa.screens.BuiltInScreen-class.html
+pycocoa.screens.Screen.origin	pycocoa.screens.Screen-class.html#origin
 pycocoa.screens.Screen.named	pycocoa.screens.Screen-class.html#named
 pycocoa.screens.Screen.right	pycocoa.screens.Screen-class.html#right
 pycocoa.screens.Screen.bottomright	pycocoa.screens.Screen-class.html#bottomright
@@ -2442,6 +2441,7 @@ pycocoa.screens.Screen.displayID	pycocoa.screens.Screen-class.html#displayID
 pycocoa.screens.Screen.top	pycocoa.screens.Screen-class.html#top
 pycocoa.screens.Screen.left	pycocoa.screens.Screen-class.html#left
 pycocoa.screens.DeepestScreen	pycocoa.screens.DeepestScreen-class.html
+pycocoa.screens.Screen.origin	pycocoa.screens.Screen-class.html#origin
 pycocoa.screens.Screen.named	pycocoa.screens.Screen-class.html#named
 pycocoa.screens.Screen.right	pycocoa.screens.Screen-class.html#right
 pycocoa.screens.Screen.bottomright	pycocoa.screens.Screen-class.html#bottomright
@@ -2473,6 +2473,7 @@ pycocoa.screens.Screen.displayID	pycocoa.screens.Screen-class.html#displayID
 pycocoa.screens.Screen.top	pycocoa.screens.Screen-class.html#top
 pycocoa.screens.Screen.left	pycocoa.screens.Screen-class.html#left
 pycocoa.screens.ExternalScreen	pycocoa.screens.ExternalScreen-class.html
+pycocoa.screens.Screen.origin	pycocoa.screens.Screen-class.html#origin
 pycocoa.screens.Screen.named	pycocoa.screens.Screen-class.html#named
 pycocoa.screens.Screen.right	pycocoa.screens.Screen-class.html#right
 pycocoa.screens.Screen.bottomright	pycocoa.screens.Screen-class.html#bottomright
@@ -2529,6 +2530,7 @@ pycocoa.geometry.Rect.y	pycocoa.geometry.Rect-class.html#y
 pycocoa.geometry.Rect.lowerleft	pycocoa.geometry.Rect-class.html#lowerleft
 pycocoa.geometry.Rect.left	pycocoa.geometry.Rect-class.html#left
 pycocoa.screens.MainScreen	pycocoa.screens.MainScreen-class.html
+pycocoa.screens.Screen.origin	pycocoa.screens.Screen-class.html#origin
 pycocoa.screens.Screen.named	pycocoa.screens.Screen-class.html#named
 pycocoa.screens.Screen.right	pycocoa.screens.Screen-class.html#right
 pycocoa.screens.Screen.bottomright	pycocoa.screens.Screen-class.html#bottomright
@@ -2560,6 +2562,7 @@ pycocoa.screens.Screen.displayID	pycocoa.screens.Screen-class.html#displayID
 pycocoa.screens.Screen.top	pycocoa.screens.Screen-class.html#top
 pycocoa.screens.Screen.left	pycocoa.screens.Screen-class.html#left
 pycocoa.screens.Screen	pycocoa.screens.Screen-class.html
+pycocoa.screens.Screen.origin	pycocoa.screens.Screen-class.html#origin
 pycocoa.screens.Screen.named	pycocoa.screens.Screen-class.html#named
 pycocoa.screens.Screen.right	pycocoa.screens.Screen-class.html#right
 pycocoa.screens.Screen.bottomright	pycocoa.screens.Screen-class.html#bottomright

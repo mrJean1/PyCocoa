@@ -17,7 +17,7 @@ from pycocoa.utils import _Ints, isinstanceOf, property_RO, \
                           _Singletons, _Types
 
 __all__ = _ALL_LAZY.screens
-__version__ = '20.11.30'
+__version__ = '20.12.10'
 
 
 class Frame(Rect):
@@ -48,11 +48,12 @@ class Frame(Rect):
 
         if isinstance(fraction, (float, int)):
             if 0.1 < fraction < 1.0:
+                z = f.size
                 # use the lower left side of the screen
-                w = int(f.size.width * fraction + 0.5)
-                h = int(f.size.height * w / f.size.width)
+                w = int(z.width * fraction + 0.5)
+                h = int(z.height * w / z.width)
                 # avoid cascading window off-screen
-                c = min(max(0, cascade), min(f.size.width, f.size.height))
+                c = min(max(0, cascade), min(z.width, z.height))
                 f = f.origin.x + c, f.origin.y + c, w, h
             elif fraction < 0 or fraction > 1:
                 raise ValueError('invalid %s: %.2f' % ('fraction', fraction))
@@ -212,6 +213,12 @@ class Screen(_Type0):
         '''Get the localized name (C{str}).
         '''
         return nsString2str(self.NS.localizedName())
+
+    @property_RO
+    def origin(self):
+        '''Get the origin (L{Point}).
+        '''
+        return self.frame.origin
 
     @property_RO
     def pixels(self):
@@ -470,7 +477,7 @@ if __name__ == '__main__':
 
 # MIT License <https://OpenSource.org/licenses/MIT>
 #
-# Copyright (C) 2017-2020 -- mrJean1 at Gmail -- All Rights Reserved.
+# Copyright (C) 2017-2021  -- mrJean1 at Gmail -- All Rights Reserved.
 #
 # Permission is hereby granted, free of charge, to any person obtaining a
 # copy of this software and associated documentation files (the "Software"),

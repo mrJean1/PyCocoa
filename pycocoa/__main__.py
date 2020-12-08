@@ -42,7 +42,7 @@ __version__ = '20.11.14'
 
 # MIT License <https://OpenSource.org/licenses/MIT>
 #
-# Copyright (C) 2018-2019 -- mrJean1 at Gmail -- All Rights Reserved.
+# Copyright (C) 2018-2021 -- mrJean1 at Gmail -- All Rights Reserved.
 #
 # Permission is hereby granted, free of charge, to any person obtaining a
 # copy of this software and associated documentation files (the "Software"),

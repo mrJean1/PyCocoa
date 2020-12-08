@@ -56,7 +56,7 @@ except ImportError:
 from platform import machine  # as machine
 
 __all__ = _ALL_LAZY.octypes
-__version__ = '20.11.22'
+__version__ = '20.12.02'
 
 z = sizeof(c_void_p)
 if z == 4:
@@ -610,12 +610,15 @@ def encoding2ctype(code, dflt=missing, name='type'):  # MCCABE 20
                 code = b'^' + code[1:-1].strip(b'0123456789')
 
         elif c in _TYPECLOSERS:  # Block, Struct or Union
-            o = _TYPE2OPENER[c]
-            if code[:1] != o:
-                o = b'^' + o
-                if code[:2] != o:
-                    raise TypeCodeError
-            code = o + c  # {} or ^{}, etc.
+            o = _TYPECLOSERS[c]
+            i = code.find(o)
+            if i < 0 or i > 4 or code[:i].strip(b'^'):  # != _bNN_
+                raise TypeCodeError
+            # if i > 1 code should only contain a name, see ^^{example}
+            # above Table 6-2 at <https://Developer.Apple.com/library/
+            # archive/documentation/Cocoa/Conceptual/ObjCRuntimeGuide/
+            # Articles/ocrtTypeEncodings.html>
+            code = code[:i + 1] + c
 
         if code[:1] == b'^':
             if len(code) < 2:
@@ -677,11 +680,8 @@ def split_emcoding2(encoding, start=0):
 _TYPECODESET = set(iterbytes(b'cCiIsSlLqQfdBvP*@#:b^?'))  # _emcoding2ctype.keys()
 _TYPESKIPPED = set(iterbytes(b'0123456789 nNoOrRV'))  # type, width and offsets
 
-_TYPE2CLOSER = {b'{': b'}', b'[': b']', b'(': b')', b'<': b'>'}
-_TYPE2OPENER = dict(reversed(_) for _ in _TYPE2CLOSER.items())
-
-_TYPEOPENERS = set(_TYPE2CLOSER.keys())
-_TYPECLOSERS = set(_TYPE2CLOSER.values())
+_TYPEOPENERS = {b'{': b'}', b'[': b']', b'(': b')', b'<': b'>'}  # opener->closer
+_TYPECLOSERS = dict(reversed(_) for _ in _TYPEOPENERS.items())   # closer->opener
 
 
 def split_encoding(encoding):  # MCCABE 18
@@ -766,7 +766,7 @@ def split_encoding(encoding):  # MCCABE 18
             if code and code[-1] != b'^' and not opened:
                 codes.append(_bJoin(code))
                 code = []
-            opened.append(_TYPE2CLOSER[b])
+            opened.append(_TYPEOPENERS[b])
             code.append(b)
 
         elif b in _TYPECLOSERS:
@@ -1009,7 +1009,7 @@ if __name__ == '__main__':
 
 # MIT License <https://OpenSource.org/licenses/MIT>
 #
-# Copyright (C) 2017-2020 -- mrJean1 at Gmail -- All Rights Reserved.
+# Copyright (C) 2017-2021  -- mrJean1 at Gmail -- All Rights Reserved.
 #
 # Permission is hereby granted, free of charge, to any person obtaining
 # a copy of this software and associated documentation files (the "Software"),

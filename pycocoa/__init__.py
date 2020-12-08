@@ -48,7 +48,7 @@ The tests and examples have only been run with 64-bit Python 3.9.0, 3.8.6, 3.7.6
 in Python 3.9.0, 3.8.6 and 3.7.6.
 
 Previously, PyCocoa was tested with 64-bit Python 3.8.3, 3.8.1, 3.7.5, 3.7.4,
-2.7.16 and 2.7.17.  PyCocoa has I{not been tested} on iOS nor with 32-bit Python
+2.7.17 and 2.7.16.  PyCocoa has I{not been tested} on iOS nor with 32-bit Python
 and I{does not work} with U{PyPy<https://PyPy.org>} nor with U{Intel(R) Python
 <https://Software.Intel.com/en-us/distribution-for-python>}.
 
@@ -76,7 +76,7 @@ and (d) U{wxPython<https://wxPython.org/pages/overview/index.html>}.
 Licenses
 ========
 
-U{Copyright (C) 2017-2020 -- mrJean1 at Gmail -- All Rights Reserved
+U{Copyright (C) 2017-2021 -- mrJean1 at Gmail -- All Rights Reserved
 <https://OpenSource.org/licenses/MIT>}.
 
 C{Permission is hereby granted, free of charge, to any person obtaining a
@@ -141,7 +141,7 @@ _isfrozen       = getattr(sys, 'frozen', False)
 pycocoa_abspath = dirname(abspath(__file__))  # sys._MEIPASS + '/pycocoa'
 _pycocoa        = __package__ or basename(pycocoa_abspath)
 
-__version__ = '20.11.30'
+__version__ = '20.12.10'
 # see setup.py for similar logic
 version = '.'.join(map(str, map(int, __version__.split('.'))))
 

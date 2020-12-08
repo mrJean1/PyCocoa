@@ -71,7 +71,7 @@ from pycocoa.utils import aspect_ratio, bytes2str, _Constants, _Globals, \
 # from enum   import Enum
 
 __all__ = _ALL_LAZY.windows
-__version__ = '20.11.29'
+__version__ = '20.12.10'
 
 
 class AutoResizeError(ValueError):
@@ -389,7 +389,7 @@ class Window(_Type2):
         '''Get this window's contents' aspect ratio (2-tuple C{(w, h)}).
         '''
         r = self.NS.contentAspectRatio()
-        return r.width, r.heigth
+        return int(r.width), int(r.height)
 
     @ratio.setter  # PYCHOK property.setter
     def ratio(self, ratio):
@@ -643,10 +643,10 @@ class TextWindow(Window):
         # <https://Developer.Apple.com/library/content/documentation/
         #        Cocoa/Conceptual/TextUILayer/Tasks/TextInScrollView.html>
         ns = self.NS
-        cr = ns.contentView().frame()
-        hs = w > cr.size.width
+        cf = ns.contentView().frame()
+        hs = w > cf.size.width
 
-        sv = NSScrollView.alloc().initWithFrame_(cr)
+        sv = NSScrollView.alloc().initWithFrame_(cf)
         sv.setBorderType_(Border.No)
         if hs:
             sv.setHasHorizontalScroller_(YES)
@@ -656,9 +656,9 @@ class TextWindow(Window):
             sv.setAutoresizingMask_(AutoResize.WidthSizable)
         sv.setHasVerticalScroller_(YES)
 
-        tv = NSTextView.alloc().initWithFrame_(cr)
+        tv = NSTextView.alloc().initWithFrame_(cf)
         tv.setMaxSize_(NSSize_t(NSIntegerMax, NSIntegerMax))
-        tv.setMinSize_(NSSize_t(16, cr.size.height))
+        tv.setMinSize_(NSSize_t(16, cf.size.height))
         tc = tv.textContainer()
         if hs:
             tv.setHorizontallyResizable_(YES)
@@ -668,7 +668,7 @@ class TextWindow(Window):
         else:
             tv.setHorizontallyResizable_(NO)
             tv.setAutoresizingMask_(AutoResize.WidthSizable)
-            tc.setContainerSize_(NSSize_t(cr.size.width, NSIntegerMax))  # FLT_MAX
+            tc.setContainerSize_(NSSize_t(cf.size.width, NSIntegerMax))  # FLT_MAX
             tc.setWidthTracksTextView_(YES)  # NO?
         tv.setVerticallyResizable_(YES)
 
@@ -927,7 +927,7 @@ if __name__ == '__main__':
 
 # MIT License <https://OpenSource.org/licenses/MIT>
 #
-# Copyright (C) 2017-2020 -- mrJean1 at Gmail -- All Rights Reserved.
+# Copyright (C) 2017-2021  -- mrJean1 at Gmail -- All Rights Reserved.
 #
 # Permission is hereby granted, free of charge, to any person obtaining a
 # copy of this software and associated documentation files (the "Software"),

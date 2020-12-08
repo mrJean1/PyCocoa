@@ -39,7 +39,7 @@ and 2.2.8 (with the compatible `VLC App`_) on macOS 11.0.1 (10.16) Big Sur,
 without* ``lazy import`` in Python 3.9.0, 3.8.6 and 3.7.6.
 
 Previously, PyCocoa was tested with 64-bit Python 3.8.3, 3.8.1, 3.7.5, 3.7.4,
-2.7.16 and 2.7.17.  PyCocoa has *not been tested* on iOS nor with 32-bit Python
+2.7.17 and 2.7.16.  PyCocoa has *not been tested* on iOS nor with 32-bit Python
 and *does not work* with PyPy_ nor with `Intel(R) Python`_.
 
 
@@ -55,7 +55,7 @@ to Objective-C bridge (and included in `macOS' Python`_), (b) `Rubicon-ObjC`_
 for Python 3.5+, taking advantage of Python's new typing_ annotations, (c)
 PyGUI_ for macOS_ and (d) wxPython_.
 
-*Last updated: Nov 30, 2020.*
+*Last updated: Dec 10, 2020.*
 
 .. image:: https://Img.Shields.io/pypi/pyversions/PyCocoa.svg?label=Python
   :target: https://PyPI.org/project/PyCocoa
@@ -97,7 +97,7 @@ PyGUI_ for macOS_ and (d) wxPython_.
 Licenses
 ========
 
-``Copyright (C) 2017-2020 -- mrJean1 at Gmail -- All Rights Reserved.``
+``Copyright (C) 2017-2021 -- mrJean1 at Gmail -- All Rights Reserved.``
 
 ``Permission is hereby granted, free of charge, to any person obtaining a
 copy of this software and associated documentation files (the "Software"),

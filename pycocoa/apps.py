@@ -8,14 +8,14 @@
 # all imports listed explicitly to help PyChecker
 from pycocoa.bases   import _Type2
 from pycocoa.menus   import _callMenuItem_name, _handleMenuItem_name, \
-                            Item, ItemSeparator, Menu, MenuBar, ns2Item
+                             Item, ItemSeparator, Menu, MenuBar, ns2Item
 from pycocoa.lazily  import _ALL_LAZY, _NN_
 from pycocoa.nstypes import NSApplication, nsBundleRename, \
                             NSConcreteNotification, NSMain, \
                             NSNotification, nsOf, NSStr
 # from pycocoa.oslibs  import YES
 from pycocoa.runtime import isObjCInstanceOf, ObjCDelegate, ObjCInstance, \
-                            _ObjC_log_totals, ObjCSubclass, release, retain, \
+                            ObjCSubclass, _ObjC_log_totals, release, retain, \
                             send_super_init
 from pycocoa.utils   import _Globals, bytes2str, isinstanceOf, \
                              module_property_RO, printf, property_RO, _Types
@@ -639,7 +639,7 @@ if __name__ == '__main__':
 
 # MIT License <https://OpenSource.org/licenses/MIT>
 #
-# Copyright (C) 2017-2020 -- mrJean1 at Gmail -- All Rights Reserved.
+# Copyright (C) 2017-2021 -- mrJean1 at Gmail -- All Rights Reserved.
 #
 # Permission is hereby granted, free of charge, to any person obtaining a
 # copy of this software and associated documentation files (the "Software"),

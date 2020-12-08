@@ -29,7 +29,7 @@ from pycocoa.utils import _Globals, isinstanceOf, module_property_RO, \
 from pycocoa.windows import Window, WindowStyle
 
 __all__ = _ALL_LAZY.tables
-__version__ = '20.11.17'
+__version__ = '20.12.10'
 
 _Alignment = dict(center=NSTextAlignmentCenter,
                justified=NSTextAlignmentJustified,
@@ -341,7 +341,7 @@ class TableWindow(Window):
         # adjust frame to include all (or most) table rows
         f = tbl.frame() if frame is None else frame.NS
         if f.size.height < h:
-            h = min(Screens.Main.height, h)
+            h = min(Screens.Main.size.height, h)
             f.size = NSSize_t(f.size.width, h)
             tbl.setFrameSize_(f.size)
 
@@ -400,7 +400,7 @@ if __name__ == '__main__':
 
 # MIT License <https://OpenSource.org/licenses/MIT>
 #
-# Copyright (C) 2017-2020 -- mrJean1 at Gmail -- All Rights Reserved.
+# Copyright (C) 2017-2021  -- mrJean1 at Gmail -- All Rights Reserved.
 #
 # Permission is hereby granted, free of charge, to any person obtaining a
 # copy of this software and associated documentation files (the "Software"),
