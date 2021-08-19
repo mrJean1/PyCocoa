@@ -79,7 +79,7 @@ setup(
     zip_safe=False,
     classifiers=[
         _c2('Development Status', '4 - Beta'),
-        _c2('Environment', 'MacOS', 'Cocoa'),
+        _c2('Environment', 'MacOS X', 'Cocoa'),
         _c2('Intended Audience', 'Developers'),
         _c2('License', 'OSI Approved', 'BSD License'),
         _c2('License', 'OSI Approved', 'MIT License'),
