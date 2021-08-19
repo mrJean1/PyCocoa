@@ -47,7 +47,7 @@ from ctypes import alignment, ArgumentError, byref, cast, c_buffer, \
 #                  # very end of this module.
 
 __all__ = _ALL_LAZY.runtime
-__version__ = '20.11.22'
+__version__ = '21.08.17'
 
 # <https://Developer.Apple.com/documentation/objectivec/
 #        objc_associationpolicy?language=objc>
@@ -56,11 +56,16 @@ OBJC_ASSOCIATION_COPY_NONATOMIC   = 3
 OBJC_ASSOCIATION_RETAIN           = 0x301  # 01401
 OBJC_ASSOCIATION_RETAIN_NONATOMIC = 1
 
-_objc_msgSend            = 'objc_msgSend'
-_objc_msgSend_fpret      = 'objc_msgSend_fpret'
-_objc_msgSend_stret      = 'objc_msgSend_stret'
-_objc_msgSendSuper       = 'objc_msgSendSuper'
-_objc_msgSendSuper_stret = 'objc_msgSendSuper_stret'
+_objc_msgSend_      = 'objc_msgSend'
+_objc_msgSendSuper_ = 'objc_msgSendSuper'
+if __i386__:
+    _objc_msgSend_fpret_      = _objc_msgSend_ + '_fpret'
+    _objc_msgSend_stret_      = _objc_msgSend_ + '_stret'
+    _objc_msgSendSuper_stret_ = _objc_msgSendSuper_ + '_stret'
+else:
+    _objc_msgSend_fpret_      = _objc_msgSend_
+    _objc_msgSend_stret_      = _objc_msgSend_
+    _objc_msgSendSuper_stret_ = _objc_msgSendSuper_
 
 # <https://Developer.Apple.com/documentation/objectivec/
 #        1441499-object_getinstancevariable>
@@ -1352,15 +1357,15 @@ def send_message(objc, sel_name_, *args, **resargtypes):
                                          args, **resargtypes)
 
     if restype in _FLOATS_:  # x86_should_use_fpret(restype):
-        result = _libobjcall(_objc_msgSend_fpret, restype, argtypes,
+        result = _libobjcall(_objc_msgSend_fpret_, restype, argtypes,
                               objc, sel, *args)
     elif _stret(restype):  # x86_should_use_stret(restype):
         argtypes = [POINTER(restype)] + argtypes
         result = restype()
-        _libobjcall(_objc_msgSend_stret, c_void, argtypes,
+        _libobjcall(_objc_msgSend_stret_, c_void, argtypes,
                      byref(result), objc, sel, *args)
     else:
-        result = _libobjcall(_objc_msgSend, restype, argtypes,
+        result = _libobjcall(_objc_msgSend_, restype, argtypes,
                               objc, sel, *args)
     return result
 
@@ -1399,10 +1404,10 @@ def send_super(objc, sel_name_, *args, **resargtypes):
                                          args, **resargtypes)
 
     if _stret(restype):  # x86_should_use_stret(restype):
-        return _libobjcall(_objc_msgSendSuper_stret, restype, argtypes,
+        return _libobjcall(_objc_msgSendSuper_stret_, restype, argtypes,
                             objc_ref, sel, *args)
     else:
-        return _libobjcall(_objc_msgSendSuper, restype, argtypes,
+        return _libobjcall(_objc_msgSendSuper_, restype, argtypes,
                             objc_ref, sel, *args)
 
 
@@ -1417,7 +1422,7 @@ def send_super_init(objc):
 
     objc = _objc_cast(objc)
     objc_ref = byref(objc_super_t(objc, get_superclassof(objc)))
-    return _libobjcall(_objc_msgSendSuper, Id_t, [],  # [objc_super_t_ptr, SEL_t]
+    return _libobjcall(_objc_msgSendSuper_, Id_t, [],  # [objc_super_t_ptr, SEL_t]
                         objc_ref, get_selector('init'))
 
 

@@ -10,21 +10,21 @@
 
 from pycocoa.lazily import _ALL_LAZY, _COLON_, _COMMASPACE_, \
                            _DOT_, _EQUALS_, _lazy_import, \
-                           _NL_, _NN_, _UNDER_, isLazy
+                           _NL_, _NN_, _SPACE_, _UNDER_, isLazy
 
 import os
 import platform as _platform
-import sys
+import sys  # in pycocoa.oslibs.py
 _Python_ = sys.version.split()[0]  # PYCHOK internal
 _Python2 = sys.version_info.major < 3  # PYCHOK internal
 _Python3 = sys.version_info.major > 2  # PYCHOK internal
 
 __all__ = _ALL_LAZY.utils
-__version__ = '20.11.28'
+__version__ = '21.08.18'
 
 _bCOLON_ = b':'
 _bUNDER_ = b'_'
-_SPACE_  =  ' '
+_COMMA_  =  ','
 
 
 class module_property_RO(object):
@@ -605,7 +605,7 @@ def _all_versionstr(libs=False, _file_=_NN_, _version_=_NN_):
 
     t = (('version', _version_ or _version),  # PYCHOK shadow
          ('.isLazy',  str(isLazy)),
-         ('Python',  _Python_, _platform.architecture()[0]),
+         ('Python',  _Python_, _platform.architecture()[0], machine()),
          ('macOS',   _macOSver()))
     if libs:
         t += ('oslibs', str(sorted(oslibs.get_libs().keys())).replace("'", _NN_)),
@@ -752,15 +752,10 @@ def _int2(i):
     '''
     s = 0
     if isinstance(i, _Ints) and i > 0:
-        while not (i & 255):
-            i >>= 8
-            s += 8
-        while not (i & 15):
-            i >>= 4
-            s += 4
-        while not (i & 1):
-            i >>= 1
-            s += 1
+        for m, n in ((255, 8), (15, 4), (1, 1)):
+            while not (i & m):
+                i >>= n
+                s  += n
     return i, s
 
 
@@ -820,13 +815,39 @@ def logf(fmt, *args, **kwds):
     _writestr(fmt, args, **opts)
 
 
+def machine():
+    '''Return the C{platform.machine} string, distinguishing Intel from
+       I{emulating} Intel on Apple Silicon (on macOS).
+
+       @return: Machine C{'arm64'} for Apple Silicon, C{"arm64_x86_64"} for
+                Intel I{emulated}, C{'x86_64'} for Intel, etc. (C{str} with
+                any C{comma}s by C{underscore}).
+    '''
+    m = _platform.machine().replace(_COMMA_, _UNDER_)  # arm64 Apple Si, x86_64, other?
+    if m == 'x86_64':  # only on Intel or Rosetta2
+        # <https://Developer.Apple.com/forums/thread/659846>
+        if _sysctl_uint('sysctl.proc_translated') == 1:  # and \
+#          _sysctl_uint('hw.optional.arm64') == 1:  # PYCHOK indent
+            m = _UNDER_('arm64', m)  # Apple Silicon emulating Intel x86
+    return m
+
+
 def _macOSver():
     '''(INTERNAL) Return the macOS release as C{str}.
 
-       @note: C{macOS 11 Big Sur} is macOS version C{'10.16'},
-              not C{'11.0'}.
+       @note: C{macOS 11 Big Sur} is C{'10.16'} before Python 3.9.6.
     '''
     return _platform.mac_ver()[0]
+
+
+def _macOSver2(n=2):
+    '''(INTERNAL) Return the macOS release as 1-, 2- or 3-tuple of C{int}s.
+
+       @note: C{macOS 11 Big Sur} is C{(10, 16)} before Python 3.9.6.
+    '''
+    v = _macOSver()
+    t = (tuple(map(int, v.split(_DOT_)[:n])) if v else ()) + (0, 0, 0)
+    return t[:n]
 
 
 def name2objc(name_):
@@ -933,6 +954,21 @@ def sortuples(iterable):  # sort tuples
     def _tup(tup):
         return tup[0].upper()
     return sorted(iterable, key=_tup)
+
+
+def _sysctl_uint(name):
+    '''(INTERNAL) Get an unsigned int sysctl item by name (on macOS).
+    '''
+    from pycocoa.oslibs import byref, c_char_p, c_size_t, c_uint, Libs, sizeof
+    C = Libs.C
+    if C:  # <https://StackOverflow.com/questions/759892/python-ctypes-and-sysctl>
+        n = name if str is bytes else bytes(name, 'utf_8')  # PYCHOK isPython2 = str is bytes
+        u = c_uint(0)
+        z = c_size_t(sizeof(u))
+        r = C.sysctlbyname(c_char_p(n), byref(u), byref(z), None, c_size_t(0))
+    else:  # could find or load 'libc'
+        r = -2
+    return int(r if r else u.value)  # -1 ENOENT error, -2 no libc
 
 
 def terminating(app, timeout=None):

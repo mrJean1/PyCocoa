@@ -8,12 +8,13 @@
 # all imports listed explicitly to help PyChecker
 from pycocoa.bases import _Type0
 from pycocoa.lazily import _ALL_LAZY
+from pycocoa.nstypes import nsValue2py
 from pycocoa.octypes import NSPoint_t, NSRect_t, NSRect4_t, NSSize_t
 from pycocoa.utils import aspect_ratio, isinstanceOf, property_RO, \
                           type2strepr
 
 __all__ = _ALL_LAZY.geometry
-__version__ = '20.11.28'
+__version__ = '21.08.17'
 
 
 class Point(_Type0):
@@ -359,8 +360,10 @@ class Size(_Type0):
             self.NS = NSSize_t(*size)
         elif isinstance(size, Size):
             self.NS = size.NS
-        elif isinstanceOf(size, NSSize_t, name='size'):
+        elif isinstanceOf(size, NSSize_t):
             self.NS = size
+        else:  # NSConcreteValue, like screen.resolutions
+            self.NS = nsValue2py(size)  # NSSize_t
 
     @property
     def width(self):

@@ -53,22 +53,27 @@ try:
     from ctypes import c_void
 except ImportError:
     c_void = None
-from platform import machine  # as machine
 
 __all__ = _ALL_LAZY.octypes
-__version__ = '20.12.02'
+__version__ = '21.08.18'
 
 z = sizeof(c_void_p)
 if z == 4:
     c_ptrdiff_t = c_int32
+    __LP64__ = False
 elif z == 8:
     c_ptrdiff_t = c_int64
+    __LP64__ = True
 else:
     raise ValueError('sizeof(c_void_p): %s' % (z,))
 del z
 
-__i386__ = machine() == 'i386'  # PYCHOK expected
-__LP64__ = c_ptrdiff_t is c_int64   # 64-bits
+from platform import machine as m
+m = m()  # see .utils.machine
+__arm64__  = m == 'arm64'   # PYCHOK see .oslibs._Apple_Si
+__i386__   = m == 'i386'    # PYCHOK expected
+__x86_64__ = m == 'x86_64'  # PYCHOK also Intel emulation
+del m
 
 unichar_t = c_wchar   # actually a c_ushort in NSString_.h,
 UniChar_t = c_ushort  # but need ctypes to convert properly

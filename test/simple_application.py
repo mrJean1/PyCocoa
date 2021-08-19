@@ -8,7 +8,7 @@
 # import datetime
 # import os
 import sched
-# import sys
+import sys
 # import tempfile
 import threading
 import time
@@ -18,7 +18,7 @@ from pycocoa import get_selector, NSApplication, NSAutoreleasePool, \
                     PyObjectEncoding, ObjCClass, ObjCInstance, \
                     ObjCSubclass, send_super, terminating
 
-__version__ = '19.09.27'
+__version__ = '21.08.18'
 
 # <https://StackOverflow.com/questions/24024723/swift-using-
 #  nsstatusbar-statusitemwithlength-and-nsvariablestatusitemlength>
@@ -107,7 +107,10 @@ def main(timeout=None):
 
     # on a separate thread, run the scheduler
     t = threading.Thread(target=schedule, args=(delegate.writer,))
-    t.setDaemon(1)
+    if sys.version_info[0] > 2:
+        t.deamon = True
+    else:  # throws DeprecationWarning
+        t.setDaemon(1)
     t.start()
 
     # set up the timeout
@@ -117,8 +120,6 @@ def main(timeout=None):
 
 
 if __name__ == '__main__':
-
-    import sys
 
     if len(sys.argv) > 1:
         main(sys.argv.pop(1))

@@ -23,21 +23,22 @@ but only exported as C{Libs.C}.
 '''
 # all imports listed explicitly to help PyChecker
 from pycocoa.lazily import _ALL_LAZY, _bNN_, _DOT_, _NN_
-from pycocoa.octypes import Allocator_t, Array_t, BOOL_t, CFIndex_t, \
+from pycocoa.octypes import Allocator_t, __arm64__, Array_t, BOOL_t, CFIndex_t, \
                             CFRange_t, CGBitmapInfo_t, CGDirectDisplayID_t, \
                             CGError_t, CGFloat_t, CGGlyph_t, CGPoint_t, \
                             CGRect_t, CGSize_t, Class_t, c_ptrdiff_t, \
                             CTFontOrientation_t, CTFontSymbolicTraits_t, \
-                            c_void, Data_t, Dictionary_t, Id_t, IMP_t, \
-                            Ivar_t, Method_t, Number_t, NumberType_t, \
+                            c_void, Data_t, Dictionary_t, __i386__, Id_t, \
+                            IMP_t, Ivar_t, Method_t, Number_t, NumberType_t, \
                             TypeID_t, NSInteger_t, NSRect_t, \
                             objc_method_description_t, objc_property_t, \
                             objc_property_attribute_t, Protocol_t, \
                             SEL_t, Set_t, String_t, TypeRef_t, \
-                            UniChar_t, URL_t
-from pycocoa.utils import Adict, bytes2str, _Constants, _macOSver, str2bytes
+                            UniChar_t, URL_t, __x86_64__
+from pycocoa.utils import Adict, bytes2str, _Constants, _macOSver2, \
+                          str2bytes, sys as _sys
 
-from ctypes import byref, cast, cdll, c_buffer, c_byte, c_char, \
+from ctypes import byref, cast, CDLL, c_buffer, c_byte, c_char, \
                    c_char_p, c_double, c_float, c_int, c_int8, c_int16, \
                    c_int32, c_int64, CFUNCTYPE, c_long, c_longlong, \
                    c_short, c_size_t, c_uint, c_uint8, c_uint32, \
@@ -48,9 +49,12 @@ except ImportError:  # XXX Pythonista/iOS
     def _find_library(*unused):  # PYCHOK expected
         return None  # not found
 from os.path import join as _join, sep as _SEP
+# import sys as _sys  # from pycocoa.utils
 
 __all__ = _ALL_LAZY.oslibs
-__version__ = '20.11.28'
+__version__ = '21.08.18'
+
+_framework_ = 'framework'
 _leaked2    = []  # leaked memory, 2-tuples (ptr, size)
 _libs_cache = Adict()  # loaded libraries, by name
 
@@ -121,35 +125,36 @@ def _free_memory(ptr, size):
         _libc_free(ptr)
 
 
-if _macOSver() > '10.15':  # Big Sur plus
-    # macOS 10.16 aka 11 no longer provides direct loading
-    # of system libraries, instead it installs the library
-    # after a low-level dlopen(name) call with the library
-    # base name; as a result, ctypes.util.find_library may
-    # longer find any library not previously dlopen'ed.
-
+if _macOSver2() > (10, 15):  # Big Sur and later
+    # macOS 11 (aka 10.16) no longer provides direct loading of
+    # system libraries, instead it installs the library after a
+    # low-level dlopen(name) call with the library base name,
+    # as a result, ctypes.util.find_library may not find any
+    # library not previously dlopen'ed in Python 3.8-
     from ctypes import _dlopen
 
     def _find_lib(name):
-        '''Mimick C{ctype.util.find_library}, return the base
-           name of the library.
+        '''Mimick C{ctype.util.find_library}, return the
+           (qualified) name of the library.
         '''
-        ns = (name, _DOT_(name, 'dylib'),
-                    _DOT_(name, 'framework'), _join(
-                    _DOT_(name, 'framework'), name),
-                    _find_library(name))
+        ns = _find_library(name), name
+        if _sys.version_info[:2] < (3, 9):  # and \
+#          _sys.platform[:6] == 'darwin':  # PYCHOK indent
+            ns += (_DOT_(name, 'dylib'),
+                   _DOT_(name, _framework_), _join(
+                   _DOT_(name, _framework_), name))
         for n in ns:
             try:
-                if n and _dlopen(n):  # handle
+                if n and _dlopen(n):  # handle OK
                     return n
-            except OSError:
+            except (OSError, TypeError):
                 pass
-        else:
-            ns = '%r %r' % (name, ns[1:])
-            raise OSError("couldn't %s lib %s" % ('find', ns))
-        return None  # not found
+        ns = '%r as %r' % (name, ns)
+        raise OSError("couldn't %s lib %s" % ('find', ns))
 
+    _Apple_Si = __arm64__  # and _macOSver2() > (11, 0)
 else:
+    _Apple_Si =  False
     _find_lib = _find_library
 
 
@@ -158,14 +163,15 @@ def _load_lib(name):  # PYCHOK expected
     '''
     if name:
         try:
-            lib = cdll.LoadLibrary(name)
+            lib = CDLL(name)  # == cdll.LoadLibrary(name)
             if lib._name:  # qualified name
                 return lib
-        except (AttributeError, OSError):
-            t = 'load'
+        except (AttributeError, OSError, TypeError):
+            pass
+        v = 'load'
     else:
-        t = 'find'
-    raise OSError("couldn't %s lib %r" % (t, name))
+        v = 'find'
+    raise OSError("couldn't %s lib %s" % (v, repr(name)))
 
 
 def get_lib(name):
@@ -180,14 +186,6 @@ def get_lib(name):
     if name not in _libs_cache:
         _libs_cache[name] = _load_lib(_find_lib(name))
     return _libs_cache[name]
-
-
-def get_libs():
-    '''Return the C{.dylib} libraries loaded so far.
-
-       @return: The libraries cached (C{Adict}).
-    '''
-    return _libs_cache.copy()
 
 
 def get_lib_framework(name, services='ApplicationServices', version=_NN_):
@@ -205,9 +203,9 @@ def get_lib_framework(name, services='ApplicationServices', version=_NN_):
         - get_lib_framework('PrintCore')
         - get_lib_framework('Metadata', services='CoreServices')
     '''
-    n_fw = _DOT_(name, 'framework')
+    n_fw = _DOT_(name, _framework_)
     if n_fw not in _libs_cache:
-        s_fw = _DOT_(services, 'framework')
+        s_fw = _DOT_(services, _framework_)
         if version:  # PYCHOK not 'Current'
             name = _join('Versions', version, name)  # PYCHOK version
         p = _join(_SEP, 'System', 'Library', 'Frameworks',
@@ -216,10 +214,18 @@ def get_lib_framework(name, services='ApplicationServices', version=_NN_):
     return _libs_cache[n_fw]
 
 
+def get_libs():
+    '''Return the C{.dylib} libraries loaded so far.
+
+       @return: The libraries cached (C{Adict}).
+    '''
+    return _libs_cache.copy()
+
+
 # get function free(void *ptr) from the C runtime
 # (see <https://GitHub.com/oaubert/python-vlc>, the
 # Python binding for VLC in folder generated/*/vlc.py)
-_libc = get_lib('libc')
+_libc = get_lib('libc')  # in pycocoa.utils.machine, NOT 'c'
 if _libc:  # macOS, linux, etc.
     _libc_free = _libc.free
     _csignature(_libc_free, c_void, c_void_p)
@@ -235,7 +241,6 @@ _setUncaughtExceptionHandler = _libc.objc_setUncaughtExceptionHandler  # .NSSetU
 # _UncaughtExceptionHandler_t* _setUncaughtExceptionHandler(_UncaughtExceptionHandler_t* h) installs
 # the given excpetion handler and returns the previously installed one (like signal.signal?).
 _csignature(_setUncaughtExceptionHandler, _UncaughtExceptionHandler_t, _UncaughtExceptionHandler_t)
-# del _libc
 
 
 def leaked2():
@@ -320,12 +325,12 @@ _csignature(libCF.CFDictionaryCreateMutable, c_void_p, Allocator_t, CFIndex_t, c
 _csignature(libCF.CFDictionaryGetCount, CFIndex_t, Dictionary_t)
 _csignature(libCF.CFDictionaryGetCountOfKey, CFIndex_t, Dictionary_t, c_void_p)
 _csignature(libCF.CFDictionaryGetCountOfValue, CFIndex_t, Dictionary_t, c_void_p)
-_csignature(libCF.CFDictionaryGetKeysAndValues, Dictionary_t, c_void_p, c_void_p)
+_csignature(libCF.CFDictionaryGetKeysAndValues, c_void, Dictionary_t, c_void_p, c_void_p)
 _csignature(libCF.CFDictionaryGetTypeID, TypeID_t)
-_csignature(libCF.CFDictionaryGetValue, c_void_p, Dictionary_t, c_void_p)  # (d, key)
+_csignature(libCF.CFDictionaryGetValue, c_void_p, Dictionary_t, c_void_p)  # v = (d, key)
 # Returns a Boolean value that indicates whether a given value for a given key
 # is in a dictionary, and returns that value into the last arg if it exists
-_csignature(libCF.CFDictionaryGetValueIfPresent, BOOL_t, Dictionary_t, c_void_p, c_void_p)  # (d, key, byref(val)
+_csignature(libCF.CFDictionaryGetValueIfPresent, BOOL_t, Dictionary_t, c_void_p, c_void_p)  # b = (d, key, byref(val))
 _csignature(libCF.CFDictionarySetValue, c_void, Dictionary_t, c_void_p, c_void_p)  # (d, key, val)
 # _csignature(libCF.CFDictionarySetValueForKey, c_void, Dictionary_t, c_void_p, c_void_p)  # (d, key, val)
 
@@ -640,11 +645,15 @@ NSTableViewDashedHorizontalGridLineMask = 1 << 3
 # NSTableViewVerticalGridLineMask?
 
 # <https://GitHub.com/gnustep/libs-gui/blob/master/Headers/AppKit/NSText.h>
-NSTextAlignmentLeft      = NSLeftTextAlignment      = 0
-NSTextAlignmentRight     = NSRightTextAlignment     = 1
-NSTextAlignmentCenter    = NSCenterTextAlignment    = 2
-NSTextAlignmentJustified = NSJustifiedTextAlignment = 3
-NSTextAlignmentNatural   = NSNaturalTextAlignment   = 4
+NSTextAlignmentLeft       = NSLeftTextAlignment      = 0  # == CTTextAlignment.left
+if _Apple_Si:  # XXX fswap NSTextAlignmentRight and -Center
+    NSTextAlignmentRight  = NSRightTextAlignment     = 2
+    NSTextAlignmentCenter = NSCenterTextAlignment    = 1
+else:
+    NSTextAlignmentRight  = NSRightTextAlignment     = 1  # == CTTextAlignment.right
+    NSTextAlignmentCenter = NSCenterTextAlignment    = 2  # == CTTextAlignment.center
+NSTextAlignmentJustified  = NSJustifiedTextAlignment = 3  # == CTTextAlignment.justified
+NSTextAlignmentNatural    = NSNaturalTextAlignment   = 4  # == CTTextAlignment.natural
 
 NSTextWritingDirectionEmbedding = 0
 NSTextWritingDirectionOverride  = 2  # 1 << 1
@@ -950,7 +959,7 @@ _csignature(libobjc.class_getIvarLayout, c_char_p, Class_t)
 # IMP_t class_getMethodImplementation(Class_t cls, SEL_t name)
 _csignature(libobjc.class_getMethodImplementation, IMP_t, Class_t, SEL_t)
 # IMP_t class_getMethodImplementation_stret(Class_t cls, SEL_t name)
-_csignature(libobjc.class_getMethodImplementation_stret, IMP_t, Class_t, SEL_t)
+# M1 _csignature(libobjc.class_getMethodImplementation_stret, IMP_t, Class_t, SEL_t)
 # const char *class_getName(Class_t cls)
 _csignature(libobjc.class_getName, c_char_p, Class_t)
 # objc_property_t class_getProperty(Class_t cls, const char *name)
@@ -1038,12 +1047,13 @@ _csignature(libobjc.objc_getProtocol, Protocol_t, c_char_p)
 # You should set return and argument types depending on context.
 # Id_t objc_msgSend(Id_t theReceiver, SEL_t theSelector, ...)
 # Id_t objc_msgSendSuper(struct objc_super_t *super, SEL_t op,  ...)
-# void objc_msgSendSuper_stret(struct objc_super_t *super, SEL_t op, ...)
-_csignature_variadic(libobjc.objc_msgSendSuper_stret, c_void)
-# double objc_msgSend_fpret(Id_t self, SEL_t op, ...)
-_csignature_variadic(libobjc.objc_msgSend_fpret, c_float)  # c_float, c_longdouble
-# void objc_msgSend_stret(void * stretAddr, Id_t theReceiver, SEL_t theSelector,  ...)
-_csignature_variadic(libobjc.objc_msgSend_stret, c_void)
+if __i386__ or __x86_64__:  # only for Intel processor
+    # void objc_msgSendSuper_stret(struct objc_super_t *super, SEL_t op, ...)
+    _csignature_variadic(libobjc.objc_msgSendSuper_stret, c_void)
+    # double objc_msgSend_fpret(Id_t self, SEL_t op, ...)
+    _csignature_variadic(libobjc.objc_msgSend_fpret, c_float)  # c_float, c_longdouble
+    # void objc_msgSend_stret(void * stretAddr, Id_t theReceiver, SEL_t theSelector,  ...)
+    _csignature_variadic(libobjc.objc_msgSend_stret, c_void)
 
 # Id_t object_copy(Id_t obj, size_t size)
 _csignature(libobjc.object_copy, Id_t, Id_t, c_size_t)

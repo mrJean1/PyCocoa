@@ -37,7 +37,7 @@
 '''
 # all imports listed explicitly to help PyChecker
 from pycocoa.bases   import _Type0
-from pycocoa.lazily  import _ALL_LAZY, _NN_
+from pycocoa.lazily  import _ALL_LAZY, _NN_, _SPACE_
 from pycocoa.nstypes import isNone, NSFont, nsIter, nsIter2, NSMain, \
                             NSStr, nsString2str
 from pycocoa.oslibs  import NSFontBoldMask, NSFontItalicMask, \
@@ -50,10 +50,10 @@ from pycocoa.runtime import isObjCInstanceOf, release
 from pycocoa.strs    import Str
 from pycocoa.utils   import Adict, bytes2str, _ByteStrs, _Constants, flint, \
                            _Ints, isinstanceOf, property_RO, _Singletons, \
-                           _SPACE_, _Types
+                           _Types
 
 __all__ = _ALL_LAZY.fonts
-__version__ = '20.11.28'
+__version__ = '21.08.18'
 
 # <https://Developer.Apple.com/documentation/appkit/nsfont.weight>
 # _NSFontWeigthHeavy      = 13 ?

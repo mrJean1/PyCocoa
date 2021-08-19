@@ -21,7 +21,8 @@ in a terminal window.  Alternatively, download C{PyCocoa-y.m.d.zip} from
 U{PyPI<https://PyPI.org/project/PyCocoa>} or
 U{GitHub<https://GitHub.com/mrJean1/PyCocoa>}, C{unzip} the downloaded file,
 C{cd} to directory C{PyCocoa-y.m.d} and type C{python setup.py install}.  To
-run the PyCocoa tests, type C{python setup.py test} before installation.
+run the PyCocoa tests, type C{python setup.py test} or C{python test/run.py}
+before or after installation.
 
 Examples U{cocoavlc.py<https://GitHub.com/oaubert/python-vlc/tree/master/examples>}
 and I{simple_VLCplayer.py} require installation of the U{VLC App
@@ -40,16 +41,18 @@ C{epydoc --html --no-private --no-source --name=PyCocoa --url=... -v pycocoa}).
 Tests
 =====
 
-The tests and examples have only been run with 64-bit Python 3.9.0, 3.8.6, 3.7.6,
-2.7.18 and macOS' 2.7.16 using U{Python-VLC<https://PyPI.org/project/python-vlc>}
-3.0.11, 3.0.10, 3.0.8, 3.0.6, 3.0.4 and 2.2.8 (with the compatible U{VLC App
-<https://www.VideoLan.org/vlc>}) on macOS 11.0.1 (10.16) Big Sur, 10.15.7 Catalina,
+The tests and examples have only been run with 64-bit Python 3.10.0rc1, 3.9.6, 3.8.10,
+3.7.6, 2.7.18 and macOS' 2.7.16 using U{Python-VLC<https://PyPI.org/project/python-vlc>}
+3.0.12, 3.0.11, 3.0.10, 3.0.8, 3.0.6, 3.0.4 and 2.2.8 (with the compatible U{VLC App
+<https://www.VideoLan.org/vlc>}) on macOS 11.5.2 Big Sur (aka 10.16), 10.15.7 Catalina,
 10.14.6 Mojave or 10.13.6 High Sierra.  The tests run with and without C{lazy import}
-in Python 3.9.0, 3.8.6 and 3.7.6.
+in Python 3.  Python 3.10.0rc1, 3.9.6 and macOS' Python 2.7.16 run on Apple Silicon
+(C{arm64}), all other Python versions run on Intel (C{x86_64}) or I{emulated} Intel
+(C{"arm64_x86_64"}, see function L{machine}).
 
-Previously, PyCocoa was tested with 64-bit Python 3.8.3, 3.8.1, 3.7.5, 3.7.4,
-2.7.17 and 2.7.16.  PyCocoa has I{not been tested} on iOS nor with 32-bit Python
-and I{does not work} with U{PyPy<https://PyPy.org>} nor with U{Intel(R) Python
+Previously, PyCocoa was tested with 64-bit Python 3.9.1, 3.8.6, 3.8.3, 3.8.1, 3.7.5,
+3.7.4, 2.7.17 and 2.7.16.  PyCocoa has I{not been tested} on iOS nor with 32-bit
+Python and I{does not work} with U{PyPy<https://PyPy.org>} nor with U{Intel(R) Python
 <https://Software.Intel.com/en-us/distribution-for-python>}.
 
 Notes
@@ -61,8 +64,8 @@ with U{PyChecker<https://PyPI.org/project/pychecker>},
 U{PyFlakes<https://PyPI.org/project/pyflakes>},
 U{PyCodeStyle<https://PyPI.org/project/pycodestyle>} (formerly Pep8) and
 U{McCabe<https://PyPI.org/project/mccabe>} using 64-bit Python 2.7.18 and with
-U{Flake8<https://PyPI.org/project/flake8>} using 64-bit Python 3.9.0 on macOS
-11.0.1 (10.16) Big Sur.
+U{Flake8<https://PyPI.org/project/flake8>} using 64-bit Python 3.9.6 on macOS
+11.5.2 Big Sur (aka 10.16).
 
 Some alternatives to PyCocoa are (a) U{PyObjC<https://PyPI.org/project/pyobjc>},
 the most comprehensive Python to Objective-C bridge (and included in
@@ -141,7 +144,7 @@ _isfrozen       = getattr(sys, 'frozen', False)
 pycocoa_abspath = dirname(abspath(__file__))  # sys._MEIPASS + '/pycocoa'
 _pycocoa        = __package__ or basename(pycocoa_abspath)
 
-__version__ = '20.12.10'
+__version__ = '21.08.18'
 # see setup.py for similar logic
 version = '.'.join(map(str, map(int, __version__.split('.'))))
 

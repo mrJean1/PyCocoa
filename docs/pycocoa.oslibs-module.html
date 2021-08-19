@@ -67,7 +67,7 @@
         also installed, but only exported as <code>Libs.C</code>.
       </p>
       <p><strong>Version:</strong>
-        20.11.28
+        21.08.18
       </p>
 </div><!-- ==================== CLASSES ==================== -->
 <a name="section-Classes"></a>
@@ -116,8 +116,10 @@
     </td><td class="summary">
       <table width="100%" cellpadding="0" cellspacing="0" border="0">
         <tr>
-          <td><span class="summary-sig"><a href="pycocoa.oslibs-module.html#get_libs" class="summary-sig-name">get_libs</a>()</span><br />
-      Return the <code>.dylib</code> libraries loaded so far.</td>
+          <td><span class="summary-sig"><a href="pycocoa.oslibs-module.html#get_lib_framework" class="summary-sig-name">get_lib_framework</a>(<span class="summary-sig-arg">name</span>,
+        <span class="summary-sig-arg">services</span>=<span class="summary-sig-default"><code class="variable-quote">'</code><code class="variable-string">ApplicationServices</code><code class="variable-quote">'</code></span>,
+        <span class="summary-sig-arg">version</span>=<span class="summary-sig-default">''</span>)</span><br />
+      Load a <code>Frameworks services .framework</code> library.</td>
           <td align="right" valign="top">
             
             
@@ -133,10 +135,8 @@
     </td><td class="summary">
       <table width="100%" cellpadding="0" cellspacing="0" border="0">
         <tr>
-          <td><span class="summary-sig"><a href="pycocoa.oslibs-module.html#get_lib_framework" class="summary-sig-name">get_lib_framework</a>(<span class="summary-sig-arg">name</span>,
-        <span class="summary-sig-arg">services</span>=<span class="summary-sig-default"><code class="variable-quote">'</code><code class="variable-string">ApplicationServices</code><code class="variable-quote">'</code></span>,
-        <span class="summary-sig-arg">version</span>=<span class="summary-sig-default">''</span>)</span><br />
-      Load a <code>Frameworks services .framework</code> library.</td>
+          <td><span class="summary-sig"><a href="pycocoa.oslibs-module.html#get_libs" class="summary-sig-name">get_libs</a>()</span><br />
+      Return the <code>.dylib</code> libraries loaded so far.</td>
           <td align="right" valign="top">
             
             
@@ -199,43 +199,43 @@
     <td width="15%" align="right" valign="top" class="summary">
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
-        <a href="pycocoa.oslibs-module.html#libCF" class="summary-name">libCF</a> = <code title="&lt;CDLL 'CoreFoundation.framework/CoreFoundation', handle 1094a3910 at 7\
-f887fc1e210&gt;">&lt;CDLL 'CoreFoundation.framework/CoreFoundation', handl<code class="variable-ellipsis">...</code></code>
+        <a href="pycocoa.oslibs-module.html#libCF" class="summary-name">libCF</a> = <code title="&lt;CDLL 'CoreFoundation.framework/CoreFoundation', handle 204551990 at 7\
+f91587598d0&gt;">&lt;CDLL 'CoreFoundation.framework/CoreFoundation', handl<code class="variable-ellipsis">...</code></code>
     </td>
   </tr>
 <tr>
     <td width="15%" align="right" valign="top" class="summary">
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
-        <a href="pycocoa.oslibs-module.html#libAppKit" class="summary-name">libAppKit</a> = <code title="&lt;CDLL 'AppKit.framework/AppKit', handle 7f887c60e5e0 at 7f887fc1ed90&gt;">&lt;CDLL 'AppKit.framework/AppKit', handle 7f887c60e5<code class="variable-ellipsis">...</code></code>
+        <a href="pycocoa.oslibs-module.html#libAppKit" class="summary-name">libAppKit</a> = <code title="&lt;CDLL 'AppKit.framework/AppKit', handle 7f9154e2a470 at 7f9158763490&gt;">&lt;CDLL 'AppKit.framework/AppKit', handle 7f9154e2a4<code class="variable-ellipsis">...</code></code>
     </td>
   </tr>
 <tr>
     <td width="15%" align="right" valign="top" class="summary">
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
-        <a name="NSApplicationDidHideNotification"></a><span class="summary-name">NSApplicationDidHideNotification</span> = <code title="c_void_p(140735346492760)">c_void_p(140735346492760)</code>
+        <a name="NSApplicationDidHideNotification"></a><span class="summary-name">NSApplicationDidHideNotification</span> = <code title="c_void_p(140735460531720)">c_void_p(140735460531720)</code>
     </td>
   </tr>
 <tr>
     <td width="15%" align="right" valign="top" class="summary">
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
-        <a name="NSApplicationDidUnhideNotification"></a><span class="summary-name">NSApplicationDidUnhideNotification</span> = <code title="c_void_p(140735346492856)">c_void_p(140735346492856)</code>
+        <a name="NSApplicationDidUnhideNotification"></a><span class="summary-name">NSApplicationDidUnhideNotification</span> = <code title="c_void_p(140735460531816)">c_void_p(140735460531816)</code>
     </td>
   </tr>
 <tr>
     <td width="15%" align="right" valign="top" class="summary">
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
-        <a name="NSDefaultRunLoopMode"></a><span class="summary-name">NSDefaultRunLoopMode</span> = <code title="c_void_p(140735342951376)">c_void_p(140735342951376)</code>
+        <a name="NSDefaultRunLoopMode"></a><span class="summary-name">NSDefaultRunLoopMode</span> = <code title="c_void_p(140735349725072)">c_void_p(140735349725072)</code>
     </td>
   </tr>
 <tr>
     <td width="15%" align="right" valign="top" class="summary">
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
-        <a name="NSEventTrackingRunLoopMode"></a><span class="summary-name">NSEventTrackingRunLoopMode</span> = <code title="c_void_p(140735346487960)">c_void_p(140735346487960)</code>
+        <a name="NSEventTrackingRunLoopMode"></a><span class="summary-name">NSEventTrackingRunLoopMode</span> = <code title="c_void_p(140735460526920)">c_void_p(140735460526920)</code>
     </td>
   </tr>
 <tr>
@@ -1040,16 +1040,16 @@ f887fc1e210&gt;">&lt;CDLL 'CoreFoundation.framework/CoreFoundation', handl<code 
     <td width="15%" align="right" valign="top" class="summary">
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
-        <a href="pycocoa.oslibs-module.html#libCG" class="summary-name">libCG</a> = <code title="&lt;CDLL 'CoreGraphics.framework/CoreGraphics', handle 7f887c625910 at 7f\
-887fc1ee50&gt;">&lt;CDLL 'CoreGraphics.framework/CoreGraphics', handle 7f<code class="variable-ellipsis">...</code></code>
+        <a href="pycocoa.oslibs-module.html#libCG" class="summary-name">libCG</a> = <code title="&lt;CDLL 'CoreGraphics.framework/CoreGraphics', handle 7f9154e280b0 at 7f\
+9158763790&gt;">&lt;CDLL 'CoreGraphics.framework/CoreGraphics', handle 7f<code class="variable-ellipsis">...</code></code>
     </td>
   </tr>
 <tr>
     <td width="15%" align="right" valign="top" class="summary">
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
-        <a href="pycocoa.oslibs-module.html#libCT" class="summary-name">libCT</a> = <code title="&lt;CDLL 'CoreText.framework/CoreText', handle 7f887c6276c0 at 7f887fc32e\
-50&gt;">&lt;CDLL 'CoreText.framework/CoreText', handle 7f887c6276<code class="variable-ellipsis">...</code></code>
+        <a href="pycocoa.oslibs-module.html#libCT" class="summary-name">libCT</a> = <code title="&lt;CDLL 'CoreText.framework/CoreText', handle 7f9154e31380 at 7f91587725\
+50&gt;">&lt;CDLL 'CoreText.framework/CoreText', handle 7f9154e313<code class="variable-ellipsis">...</code></code>
     </td>
   </tr>
 <tr>
@@ -1252,30 +1252,30 @@ f887fc1e210&gt;">&lt;CDLL 'CoreFoundation.framework/CoreFoundation', handl<code 
     <td width="15%" align="right" valign="top" class="summary">
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
-        <a href="pycocoa.oslibs-module.html#libFoundation" class="summary-name">libFoundation</a> = <code title="&lt;CDLL 'Foundation.framework/Foundation', handle 7f887c626320 at 7f887f\
-c3f390&gt;">&lt;CDLL 'Foundation.framework/Foundation', handl<code class="variable-ellipsis">...</code></code>
+        <a href="pycocoa.oslibs-module.html#libFoundation" class="summary-name">libFoundation</a> = <code title="&lt;CDLL 'Foundation.framework/Foundation', handle 7f9154e2fed0 at 7f9158\
+772a50&gt;">&lt;CDLL 'Foundation.framework/Foundation', handl<code class="variable-ellipsis">...</code></code>
     </td>
   </tr>
 <tr>
     <td width="15%" align="right" valign="top" class="summary">
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
-        <a href="pycocoa.oslibs-module.html#libobjc" class="summary-name">libobjc</a> = <code title="&lt;CDLL 'libobjc.dylib', handle 1094a6080 at 7f887fc3f3d0&gt;">&lt;CDLL 'libobjc.dylib', handle 1094a6080 at 7f887fc3f<code class="variable-ellipsis">...</code></code>
+        <a href="pycocoa.oslibs-module.html#libobjc" class="summary-name">libobjc</a> = <code title="&lt;CDLL 'libobjc.dylib', handle 204554100 at 7f9158772a90&gt;">&lt;CDLL 'libobjc.dylib', handle 204554100 at 7f9158772<code class="variable-ellipsis">...</code></code>
     </td>
   </tr>
 <tr>
     <td width="15%" align="right" valign="top" class="summary">
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
-        <a href="pycocoa.oslibs-module.html#Libs" class="summary-name">Libs</a> = <code title="Libs.AppKit=&lt;CDLL 'AppKit.framework/AppKit', handle 7f887c60e5e0 at 7f\
-887fc1ed90&gt;,
-    .C=&lt;CDLL 'libc.dylib', handle 1094a3730 at 7f887fc1e4d0&gt;,
+        <a href="pycocoa.oslibs-module.html#Libs" class="summary-name">Libs</a> = <code title="Libs.AppKit=&lt;CDLL 'AppKit.framework/AppKit', handle 7f9154e2a470 at 7f\
+9158763490&gt;,
+    .C=&lt;CDLL 'libc.dylib', handle 2045517b0 at 7f9158759b90&gt;,
     .CoreFoundation=&lt;CDLL 'CoreFoundation.framework/CoreFoundation', h\
-andle 1094a3910 at 7f887fc1e210&gt;,
+andle 204551990 at 7f91587598d0&gt;,
     .CoreGraphics=&lt;CDLL 'CoreGraphics.framework/CoreGraphics', handle \
-7f887c625910 at 7f887fc1ee50&gt;,
-    .CoreText=&lt;CDLL 'CoreText.framework/CoreText', handle 7f887c6276c0\
-...">Libs.AppKit=&lt;CDLL 'AppKit.framework/AppKit', handle 7f8<code class="variable-ellipsis">...</code></code><br />
+7f9154e280b0 at 7f9158763790&gt;,
+    .CoreText=&lt;CDLL 'CoreText.framework/CoreText', handle 7f9154e31380\
+...">Libs.AppKit=&lt;CDLL 'AppKit.framework/AppKit', handle 7f9<code class="variable-ellipsis">...</code></code><br />
       The loaded <code>macOS</code> libraries, all <code>.dylib</code>.
     </td>
   </tr>
@@ -1373,27 +1373,6 @@ andle 1094a3910 at 7f887fc1e210&gt;,
       </p>
 </div></td></tr></table>
 </div>
-<a name="get_libs"></a>
-<div>
-<table class="details" border="1" cellpadding="3"
-       cellspacing="0" width="100%" bgcolor="white">
-<tr><td>
-  <table width="100%" cellpadding="0" cellspacing="0" border="0">
-  <tr valign="top"><td>
-  <h3 class="epydoc"><span class="sig"><span class="sig-name">get_libs</span>()</span>
-  </h3>
-  </td><td align="right" valign="top"
-    >&nbsp;
-    </td>
-  </tr></table>
-  
-  <p>Return the <code>.dylib</code> libraries loaded so far.</p>
-  <dl class="fields">
-    <dt>Returns:</dt>
-        <dd>The libraries cached (<code>Adict</code>).</dd>
-  </dl>
-</td></tr></table>
-</div>
 <a name="get_lib_framework"></a>
 <div>
 <table class="details" border="1" cellpadding="3"
@@ -1435,6 +1414,27 @@ andle 1094a3910 at 7f887fc1e210&gt;,
         </ul>
       </p>
 </div></td></tr></table>
+</div>
+<a name="get_libs"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">get_libs</span>()</span>
+  </h3>
+  </td><td align="right" valign="top"
+    >&nbsp;
+    </td>
+  </tr></table>
+  
+  <p>Return the <code>.dylib</code> libraries loaded so far.</p>
+  <dl class="fields">
+    <dt>Returns:</dt>
+        <dd>The libraries cached (<code>Adict</code>).</dd>
+  </dl>
+</td></tr></table>
 </div>
 <a name="leaked2"></a>
 <div>
@@ -1480,8 +1480,8 @@ andle 1094a3910 at 7f887fc1e210&gt;,
   <dl class="fields">
     <dt>Value:</dt>
       <dd><table><tr><td><pre class="variable">
-&lt;CDLL 'CoreFoundation.framework/CoreFoundation', handle 1094a3910 at 7<span class="variable-linewrap"><img src="crarr.png" alt="\" /></span>
-f887fc1e210&gt;
+&lt;CDLL 'CoreFoundation.framework/CoreFoundation', handle 204551990 at 7<span class="variable-linewrap"><img src="crarr.png" alt="\" /></span>
+f91587598d0&gt;
 </pre></td></tr></table>
 </dd>
   </dl>
@@ -1499,7 +1499,7 @@ f887fc1e210&gt;
   <dl class="fields">
     <dt>Value:</dt>
       <dd><table><tr><td><pre class="variable">
-&lt;CDLL 'AppKit.framework/AppKit', handle 7f887c60e5e0 at 7f887fc1ed90&gt;
+&lt;CDLL 'AppKit.framework/AppKit', handle 7f9154e2a470 at 7f9158763490&gt;
 </pre></td></tr></table>
 </dd>
   </dl>
@@ -1517,8 +1517,8 @@ f887fc1e210&gt;
   <dl class="fields">
     <dt>Value:</dt>
       <dd><table><tr><td><pre class="variable">
-&lt;CDLL 'CoreGraphics.framework/CoreGraphics', handle 7f887c625910 at 7f<span class="variable-linewrap"><img src="crarr.png" alt="\" /></span>
-887fc1ee50&gt;
+&lt;CDLL 'CoreGraphics.framework/CoreGraphics', handle 7f9154e280b0 at 7f<span class="variable-linewrap"><img src="crarr.png" alt="\" /></span>
+9158763790&gt;
 </pre></td></tr></table>
 </dd>
   </dl>
@@ -1536,7 +1536,7 @@ f887fc1e210&gt;
   <dl class="fields">
     <dt>Value:</dt>
       <dd><table><tr><td><pre class="variable">
-&lt;CDLL 'CoreText.framework/CoreText', handle 7f887c6276c0 at 7f887fc32e<span class="variable-linewrap"><img src="crarr.png" alt="\" /></span>
+&lt;CDLL 'CoreText.framework/CoreText', handle 7f9154e31380 at 7f91587725<span class="variable-linewrap"><img src="crarr.png" alt="\" /></span>
 50&gt;
 </pre></td></tr></table>
 </dd>
@@ -1555,8 +1555,8 @@ f887fc1e210&gt;
   <dl class="fields">
     <dt>Value:</dt>
       <dd><table><tr><td><pre class="variable">
-&lt;CDLL 'Foundation.framework/Foundation', handle 7f887c626320 at 7f887f<span class="variable-linewrap"><img src="crarr.png" alt="\" /></span>
-c3f390&gt;
+&lt;CDLL 'Foundation.framework/Foundation', handle 7f9154e2fed0 at 7f9158<span class="variable-linewrap"><img src="crarr.png" alt="\" /></span>
+772a50&gt;
 </pre></td></tr></table>
 </dd>
   </dl>
@@ -1574,7 +1574,7 @@ c3f390&gt;
   <dl class="fields">
     <dt>Value:</dt>
       <dd><table><tr><td><pre class="variable">
-&lt;CDLL 'libobjc.dylib', handle 1094a6080 at 7f887fc3f3d0&gt;
+&lt;CDLL 'libobjc.dylib', handle 204554100 at 7f9158772a90&gt;
 </pre></td></tr></table>
 </dd>
   </dl>
@@ -1592,14 +1592,14 @@ c3f390&gt;
   <dl class="fields">
     <dt>Value:</dt>
       <dd><table><tr><td><pre class="variable">
-Libs.AppKit=&lt;CDLL 'AppKit.framework/AppKit', handle 7f887c60e5e0 at 7f<span class="variable-linewrap"><img src="crarr.png" alt="\" /></span>
-887fc1ed90&gt;,
-    .C=&lt;CDLL 'libc.dylib', handle 1094a3730 at 7f887fc1e4d0&gt;,
+Libs.AppKit=&lt;CDLL 'AppKit.framework/AppKit', handle 7f9154e2a470 at 7f<span class="variable-linewrap"><img src="crarr.png" alt="\" /></span>
+9158763490&gt;,
+    .C=&lt;CDLL 'libc.dylib', handle 2045517b0 at 7f9158759b90&gt;,
     .CoreFoundation=&lt;CDLL 'CoreFoundation.framework/CoreFoundation', h<span class="variable-linewrap"><img src="crarr.png" alt="\" /></span>
-andle 1094a3910 at 7f887fc1e210&gt;,
+andle 204551990 at 7f91587598d0&gt;,
     .CoreGraphics=&lt;CDLL 'CoreGraphics.framework/CoreGraphics', handle <span class="variable-linewrap"><img src="crarr.png" alt="\" /></span>
-7f887c625910 at 7f887fc1ee50&gt;,
-    .CoreText=&lt;CDLL 'CoreText.framework/CoreText', handle 7f887c6276c0<span class="variable-linewrap"><img src="crarr.png" alt="\" /></span>
+7f9154e280b0 at 7f9158763790&gt;,
+    .CoreText=&lt;CDLL 'CoreText.framework/CoreText', handle 7f9154e31380<span class="variable-linewrap"><img src="crarr.png" alt="\" /></span>
 <code class="variable-ellipsis">...</code>
 </pre></td></tr></table>
 </dd>
@@ -1638,7 +1638,7 @@ andle 1094a3910 at 7f887fc1e210&gt;,
 <table border="0" cellpadding="0" cellspacing="0" width="100%%">
   <tr>
     <td align="left" class="footer">
-    Generated by Epydoc 3.0.1 on Tue Dec  8 12:57:55 2020
+    Generated by Epydoc 3.0.1 on Thu Aug 19 12:07:21 2021
     </td>
     <td align="right" class="footer">
       <a target="mainFrame" href="http://epydoc.sourceforge.net"

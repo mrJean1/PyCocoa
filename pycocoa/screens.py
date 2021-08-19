@@ -17,7 +17,7 @@ from pycocoa.utils import _Ints, isinstanceOf, property_RO, \
                           _Singletons, _Types
 
 __all__ = _ALL_LAZY.screens
-__version__ = '20.12.10'
+__version__ = '21.08.18'
 
 
 class Frame(Rect):
@@ -63,9 +63,9 @@ class Frame(Rect):
 class Screen(_Type0):
     '''Screen Python Type, wrapping ObjC L{NSRect_t}.
     '''
-    _deviceDict = None
-    _name       = ''
-    _NScascade  = None  # .windows.Window.cascade
+    _deviceDescription = None
+    _name              = ''
+    _NScascade         = None  # .windows.Window.cascade
 
     def __new__(cls, screen=None, name=''):
         if screen is None:
@@ -75,8 +75,8 @@ class Screen(_Type0):
         elif isinstanceOf(screen, Screen):
             self = _Type0.__new__(cls)
             self.NS = screen.NS
-            if screen._deviceDict:
-                self._deviceDict = screen._deviceDict  # XXX copy
+            if screen._deviceDescription:
+                self._deviceDescription = screen._deviceDescription  # XXX copy
         elif isObjCInstanceOf(screen, NSScreen, name='screen'):
             self = _Type0.__new__(cls)
             self.NS = screen
@@ -131,7 +131,7 @@ class Screen(_Type0):
         '''Get the device color space (C{str}).
         '''
 
-        return self.deviceDict.NSDeviceColorSpaceName  # self.NS.colorSpace()?
+        return self.deviceDescription.NSDeviceColorSpaceName  # self.NS.colorSpace()?
 
 #   @property_RO
 #   def depth(self):
@@ -140,18 +140,20 @@ class Screen(_Type0):
 #       return self.NS.depth()
 
     @property_RO
-    def deviceDict(self):
+    def deviceDescription(self):
         '''Get the device descriptions (L{Adict}).
         '''
-        if self._deviceDict is None:
-            self._deviceDict = ns2py(self.NS.deviceDescription())
-        return self._deviceDict
+        if self._deviceDescription is None:
+            self._deviceDescription = ns2py(self.NS.deviceDescription())
+        return self._deviceDescription
+
+    deviceDict = deviceDescription
 
     @property_RO
     def displayID(self):
         '''Get the C{displayID} aka C{NSScreenNumber} of this screen (C{int}).
         '''
-        return self.deviceDict.NSScreenNumber
+        return self.deviceDescription.NSScreenNumber
 
     @property
     def frame(self):
@@ -183,7 +185,7 @@ class Screen(_Type0):
         '''Is this screen a printer (C{bool} or C{None})?
         '''
         try:
-            return bool(self.deviceDict.NSDeviceIsPrinter)
+            return bool(self.deviceDescription.NSDeviceIsPrinter)
         except (AttributeError, KeyError):
             return None
 
@@ -192,7 +194,7 @@ class Screen(_Type0):
         '''Is this screen a monitor (C{bool} or C{None})?
         '''
         try:
-            return bool(self.deviceDict.NSDeviceIsScreen)
+            return bool(self.deviceDescription.NSDeviceIsScreen)
         except (AttributeError, KeyError):
             return None
 
@@ -224,7 +226,7 @@ class Screen(_Type0):
     def pixels(self):
         '''Get the device width and height pixel count (C{Size}).
         '''
-        return Size(self.NS.devicePixelCounts())  # deviceDict.NSDeviceSize
+        return Size(self.NS.devicePixelCounts())  # deviceDescription.NSDeviceSize
 
     @property_RO
     def ratio(self):
@@ -236,7 +238,7 @@ class Screen(_Type0):
     def resolutions(self):
         '''Get the device width and height resolution in DPI (C{Size}).
         '''
-        return Size(self.deviceDict.NSDeviceResolution)
+        return Size(self.deviceDescription.NSDeviceResolution)
 
     @property_RO
     def right(self):
@@ -426,44 +428,44 @@ if __name__ == '__main__':
 #
 # pycocoa BuiltInScreen(NSScreen, name='BuiltIn')
 # pycocoa   colorSpace: 'NSCalibratedRGBColorSpace'
-# pycocoa   displayID: 69734464
-# pycocoa   frame: Rect(origin=Point(x=0.0, y=0.0), size=Size(width=1440.0, height=900.0)) at 0x7f9020caadf0
+# pycocoa   displayID: 1
+# pycocoa   frame: Rect(origin=Point(x=0.0, y=0.0), size=Size(width=1440.0, height=900.0)) at 0x101332a90
 # pycocoa   named: 'Built-in Retina Display'
-# pycocoa   pixels: Size(width=2560.0, height=1600.0) at 0x7f9020caaac0
+# pycocoa   pixels: Size(width=2560.0, height=1600.0) at 0x101332dc0
 # pycocoa   ratio: (8, 5)
-# pycocoa   resolutions: Size(width=144.0, height=144.0) at 0x7f9020caaa90
-# pycocoa   visibleFrame: Rect(origin=Point(x=0.0, y=0.0), size=Size(width=1440.0, height=875.0)) at 0x7f9020caaa30
+# pycocoa   resolutions: Size(width=144.0, height=144.0) at 0x101332df0
+# pycocoa   visibleFrame: Rect(origin=Point(x=0.0, y=0.0), size=Size(width=1440.0, height=875.0)) at 0x101332fd0
 #
 # pycocoa ExternalScreen(NSScreen, name='External')
 # pycocoa   colorSpace: 'NSCalibratedRGBColorSpace'
-# pycocoa   displayID: 731490753
-# pycocoa   frame: Rect(origin=Point(x=-2560.0, y=-540.0), size=Size(width=2560.0, height=1440.0)) at 0x7f9020caaac0
+# pycocoa   displayID: 2
+# pycocoa   frame: Rect(origin=Point(x=-2560.0, y=-540.0), size=Size(width=2560.0, height=1440.0)) at 0x101332fa0
 # pycocoa   named: '...'
-# pycocoa   pixels: Size(width=2560.0, height=1440.0) at 0x7f9022a09220
+# pycocoa   pixels: Size(width=2560.0, height=1440.0) at 0x10134a190
 # pycocoa   ratio: (16, 9)
-# pycocoa   resolutions: Size(width=72.0, height=72.0) at 0x7f9022a09100
-# pycocoa   visibleFrame: Rect(origin=Point(x=-2511.0, y=-540.0), size=Size(width=2511.0, height=1440.0)) at 0x7f9022a09100
+# pycocoa   resolutions: Size(width=72.0, height=72.0) at 0x10134a1c0
+# pycocoa   visibleFrame: Rect(origin=Point(x=-2511.0, y=-540.0), size=Size(width=2511.0, height=1440.0)) at 0x10134a1c0
 #
 # pycocoa DeepestScreen(NSScreen, name='Deepest')
 # pycocoa   colorSpace: 'NSCalibratedRGBColorSpace'
-# pycocoa   displayID: 69734464
-# pycocoa   frame: Rect(origin=Point(x=0.0, y=0.0), size=Size(width=1440.0, height=900.0)) at 0x7f9022a094c0
+# pycocoa   displayID: 1
+# pycocoa   frame: Rect(origin=Point(x=0.0, y=0.0), size=Size(width=1440.0, height=900.0)) at 0x10134a370
 # pycocoa   named: 'Built-in Retina Display'
-# pycocoa   pixels: Size(width=2560.0, height=1600.0) at 0x7f9022a09490
+# pycocoa   pixels: Size(width=2560.0, height=1600.0) at 0x10134a3d0
 # pycocoa   ratio: (8, 5)
-# pycocoa   resolutions: Size(width=144.0, height=144.0) at 0x7f9022a09430
-# pycocoa   visibleFrame: Rect(origin=Point(x=0.0, y=0.0), size=Size(width=1440.0, height=875.0)) at 0x7f9022a09430
+# pycocoa   resolutions: Size(width=144.0, height=144.0) at 0x10134a3a0
+# pycocoa   visibleFrame: Rect(origin=Point(x=0.0, y=0.0), size=Size(width=1440.0, height=875.0)) at 0x10134a3a0
 #
 # pycocoa MainScreen(NSScreen, name='Main')
 # pycocoa   colorSpace: 'NSCalibratedRGBColorSpace'
-# pycocoa   displayID: 69734464
-# pycocoa   frame: Rect(origin=Point(x=0.0, y=0.0), size=Size(width=1440.0, height=900.0)) at 0x7f9022a098e0
+# pycocoa   displayID: 1
+# pycocoa   frame: Rect(origin=Point(x=0.0, y=0.0), size=Size(width=1440.0, height=900.0)) at 0x101332c40
 # pycocoa   named: 'Built-in Retina Display'
-# pycocoa   pixels: Size(width=2560.0, height=1600.0) at 0x7f9022a098b0
+# pycocoa   pixels: Size(width=2560.0, height=1600.0) at 0x101332c10
 # pycocoa   ratio: (8, 5)
-# pycocoa   resolutions: Size(width=144.0, height=144.0) at 0x7f9022a095b0
-# pycocoa   visibleFrame: Rect(origin=Point(x=0.0, y=0.0), size=Size(width=1440.0, height=875.0)) at 0x7f9022a095b0
-#
+# pycocoa   resolutions: Size(width=144.0, height=144.0) at 0x101332430
+# pycocoa   visibleFrame: Rect(origin=Point(x=0.0, y=0.0), size=Size(width=1440.0, height=875.0)) at 0x101332430
+
 # pycocoa.screens.__all__ = tuple(
 #  pycocoa.screens.BuiltInScreen is <class .BuiltInScreen>,
 #  pycocoa.screens.DeepestScreen is <class .DeepestScreen>,
@@ -471,9 +473,9 @@ if __name__ == '__main__':
 #  pycocoa.screens.Frame is <class .Frame>,
 #  pycocoa.screens.MainScreen is <class .MainScreen>,
 #  pycocoa.screens.Screen is <class .Screen>,
-#  pycocoa.screens.Screens is [BuiltInScreen(NSScreen, name='BuiltIn'), ExternalScreen(NSScreen, name='External')],
+#  pycocoa.screens.Screens is (BuiltInScreen(NSScreen, name='BuiltIn'), ExternalScreen(NSScreen, name='External')),
 # )[7]
-# pycocoa.screens.version 20.11.29, .isLazy 1, Python 3.9.0 64bit, macOS 10.16
+# pycocoa.screens.version 21.08.17, .isLazy 1, Python 3.9.6 64bit arm64, macOS 11.5.2
 
 # MIT License <https://OpenSource.org/licenses/MIT>
 #

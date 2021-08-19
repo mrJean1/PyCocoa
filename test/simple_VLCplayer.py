@@ -34,7 +34,7 @@ except ImportError:
     raise _ImportError('pycocoa', 'PyCocoa')
 
 # the imports listed explicitly to help PyChecker
-from pycocoa import aspect_ratio, gcd, get_selector, \
+from pycocoa import aspect_ratio, gcd, get_selector, machine, \
                     NSAlternateKeyMask, NSApplication, \
                     NSBackingStoreBuffered, nsBundleRename, \
                     NSCommandKeyMask, NSControlKeyMask, \
@@ -46,7 +46,7 @@ from pycocoa import aspect_ratio, gcd, get_selector, \
                     terminating, __version__ as __PyCocoa__  # PYCHOK false
 
 __all__  = ('simpleVLCplay',)
-__version__ = '19.09.28'
+__version__ = '21.08.21'
 
 
 def mspf(fps):
@@ -141,7 +141,7 @@ class _Delegate_Implementation(object):
             # print Python, vlc, libVLC, media info
             printf('PyCocoa %s', __PyCocoa__)
             printf('Python %s %s', sys.version.split()[0], architecture()[0])
-            printf('macOS %s', ' '.join(mac_ver()[0:3:2]), nt=1)
+            printf('macOS %s %s', mac_ver()[0], machine(), nt=1)
 
             printf('vlc.py %s (%#x)', v.__version__, v.hex_version())
             printf('built: %s', v.build_date)

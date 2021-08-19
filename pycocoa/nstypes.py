@@ -35,7 +35,7 @@ from pycocoa.runtime import isObjCInstanceOf, ObjCClass, ObjCInstance, release, 
                             retain, send_message, _Xargs
 from pycocoa.utils   import Adict, _all_versionstr, bytes2str, _ByteStrs, clipstr, \
                            _Globals, isinstanceOf, iterbytes, lambda1, missing, \
-                           _Singletons, _Types, property_RO
+                           _Singletons, _Types, type2strepr, property_RO
 
 from ctypes import ArgumentError, byref, cast, c_byte, CFUNCTYPE, c_void_p
 from datetime import datetime as _datetime
@@ -44,7 +44,7 @@ from os import linesep, path as os_path
 from time import time as _timestamp
 
 __all__ = _ALL_LAZY.nstypes
-__version__ = '20.11.30'
+__version__ = '21.08.17'
 
 _not_given_ = 'not given'
 
@@ -72,6 +72,7 @@ NSDate                 = ObjCClass('NSDate')
 NSDecimalNumber        = ObjCClass('NSDecimalNumber')  # ** use NSDecimal
 NSDictionary           = ObjCClass('NSDictionary')  # immutable
 _NSDictionaryI         = ObjCClass('__NSDictionaryI')  # DUNDER, immutable
+_NSDictionaryM         = ObjCClass('__NSDictionaryM')  # DUNDER, mutable
 NSDockTile             = ObjCClass('NSDockTile')
 NSEnumerator           = ObjCClass('NSEnumerator')
 NSError                = ObjCClass('NSError')
@@ -130,7 +131,7 @@ NSLong     = NSNumber.numberWithLong_
 NSLongLong = NSNumber.numberWithLongLong_
 
 
-def _ns2ctype2py(ns, ctype):
+def _ns2ctype2py(ns, ctype):  # in .screens
     # helper function
     if not isinstance(ns, ctype):
         ns = ctype(ns)
@@ -681,6 +682,58 @@ def nsDecimal2decimal(ns):
     return ValueError('%s not %s: %r' % ('ns', 'NSDecimal', ns))
 
 
+def nsDescription2dict(ns, **defaults):
+    '''Create an I{immutable} C{dict} object with key I{and} attribute access to items by name.
+    '''
+    from pycocoa.bases import _Type0
+
+    class Description(_Type0, dict):
+        '''Immutable C{dict} typically used to wrap an I{immutable} C{Dictionary},
+           like an C{NSScreen.} or C{NSPrinter.deviceDescription}.
+
+           @note: Items are loaded from the C{Dictionary} on-demand I{only}.
+        '''
+        def __init__(self, ns, **defaults):
+            self.NS = ns  # NSDictionary, __NSDictionaryI
+            if defaults:
+                self.update(defaults)
+
+        def __getattr__(self, name):
+            '''Get the value of an attribute or item by B{C{name}}.
+            '''
+            v = self.get(name, missing)
+            if v is missing:
+                n = NSStr(name)
+                v = c_void_p(None)
+                if not libCF.CFDictionaryGetValueIfPresent(self.NS, n, byref(v)) or isNone(v):
+                    raise KeyError('no such item: %s.%r (%r)' % (self.name, name, n))
+                v = _ns2ctype2py(v, c_void_p)
+                dict.__setitem__(self, name, v)
+            return v
+
+        @property_RO
+        def name(self):
+            return dict.get(self, 'name', Description.__name__)
+
+        def __repr__(self):
+            return '%s %s' % (self.__class__.__name__, str(self))
+
+        def __setitem__(self, key, value):
+            raise TypeError('%s[%r] = %r' % (self.name, key, value))
+
+        def __str__(self):
+            '''Return this C{Description} as C{str}.
+            '''
+            return type2strepr(self, **self)
+
+#       def copy(self):
+#           '''Return a shallow copy.
+#           '''
+#           return self.__class__(self.NS, **self)
+
+    return Description(ns, **defaults)
+
+
 def nsDictionary2dict(ns, ctype_keys=c_void_p, ctype_vals=c_void_p):  # XXX an NS*Dictionary method?
     '''Create a Python C{dict} from an C{NS[Mutable]Dictionary}.
 
@@ -690,8 +743,8 @@ def nsDictionary2dict(ns, ctype_keys=c_void_p, ctype_vals=c_void_p):  # XXX an N
 
        @return: The dict (L{Adict}).
     '''
-    if isObjCInstanceOf(ns, _NSDictionaryI) and not ns.from_py2NS:  # NSScreen.description()
-        return Adict(map(ns2py, t) for t in nsDictionary2items(ns))
+#   if isObjCInstanceOf(ns, _NSDictionaryI) and not ns.from_py2NS:  # NSScreen.deviceDescription()
+#       return nsDescription2dict(ns)  # XXX Adict(map(ns2py, t) for t in nsDictionary2items(ns))
 
     # <https://Developer.Apple.com/documentation/corefoundation/cfdictionary-rum>
     n = libCF.CFDictionaryGetCount(ns)
@@ -1126,19 +1179,21 @@ def ns2Type(ns):
     except AttributeError:
         pass
 
-    # XXX order is critial, NSMutableArray first
+    # XXX order is critial, check for NSMutableArray first
     if isObjCInstanceOf(ns, NSMutableArray) is NSMutableArray:
         _Type = _Types.List
     elif isObjCInstanceOf(ns, NSArray) is NSArray:
         _Type = _Types.Tuple
 
-    # XXX order is critial, NSMutableDictionary first
-    elif isObjCInstanceOf(ns, NSMutableDictionary) is NSMutableDictionary:
+    # XXX order is critial, check for NSMutableDictionary first
+    elif isObjCInstanceOf(ns, NSMutableDictionary, _NSDictionaryM) in (
+                              NSMutableDictionary, _NSDictionaryM):
         _Type = _Types.Dict
-    elif isObjCInstanceOf(ns, NSDictionary) is NSDictionary:
+    elif isObjCInstanceOf(ns, NSDictionary, _NSDictionaryI) in (
+                              NSDictionary, _NSDictionaryI):
         _Type = _Types.FrozenDict
 
-    # XXX order is critial, NSMutableSet first
+    # XXX order is critial, check for NSMutableSet first
     elif isObjCInstanceOf(ns, NSMutableSet) is NSMutableSet:
         _Type = _Types.Set
     elif isObjCInstanceOf(ns, NSSet) is NSSet:
@@ -1200,122 +1255,123 @@ if __name__ == '__main__':
 #
 # pycocoa.nstypes.__all__ = tuple(
 #  pycocoa.nstypes.at is <class .at>,
-#  pycocoa.nstypes.isAlias is <function .isAlias at 0x7f86d3575280>,
-#  pycocoa.nstypes.isLink is <function .isLink at 0x7f86d35c08b0>,
-#  pycocoa.nstypes.isNone is <function .isNone at 0x7f86d35c0940>,
-#  pycocoa.nstypes.ns2py is <function .ns2py at 0x7f86d35c28b0>,
-#  pycocoa.nstypes.ns2Type is <function .ns2Type at 0x7f86d35c2940>,
-#  pycocoa.nstypes.ns2TypeID2 is <function .ns2TypeID2 at 0x7f86d35c29d0>,
-#  pycocoa.nstypes.NSAlert is <ObjCClass(NSAlert of 0x7fff8847b788) at 0x7f86d3299040>,
-#  pycocoa.nstypes.NSApplication is <ObjCClass(NSApplication of 0x7fff8847b8c8) at 0x7f86d32990a0>,
-#  pycocoa.nstypes.NSArray is <ObjCClass(NSArray of 0x7fff884abb30) at 0x7f86d3570670>,
-#  pycocoa.nstypes.nsArray2listuple is <function .nsArray2listuple at 0x7f86d35c09d0>,
-#  pycocoa.nstypes.nsArray2tuple is <function .nsArray2tuple at 0x7f86d35c0a60>,
-#  pycocoa.nstypes.NSAttributedString is <ObjCClass(NSAttributedString of 0x7fff884dd220) at 0x7f86d35a45b0>,
-#  pycocoa.nstypes.NSAutoreleasePool is <ObjCClass(NSAutoreleasePool of 0x7fff884dd248) at 0x7f86d35a4550>,
-#  pycocoa.nstypes.NSBezierPath is <ObjCClass(NSBezierPath of 0x7fff8847b9e0) at 0x7f86d35a44c0>,
-#  pycocoa.nstypes.NSBoolean is <ObjCBoundClassMethod(Class_t.numberWithBool_) at 0x7f86d3561820>,
-#  pycocoa.nstypes.nsBoolean2bool is <function .nsBoolean2bool at 0x7f86d35c0af0>,
-#  pycocoa.nstypes.NSBundle is <ObjCClass(NSBundle of 0x7fff884dd310) at 0x7f86d35a43a0>,
-#  pycocoa.nstypes.nsBundleRename is <function .nsBundleRename at 0x7f86d35c0b80>,
-#  pycocoa.nstypes.NSColor is <ObjCClass(NSColor of 0x7fff8847c138) at 0x7f86d35a4310>,
-#  pycocoa.nstypes.NSConcreteNotification is <ObjCClass(NSConcreteNotification of 0x7fff884dbe70) at 0x7f86d35a42b0>,
-#  pycocoa.nstypes.NSConcreteValue is <ObjCClass(NSConcreteValue of 0x7fff884dd4c8) at 0x7f86d35a41c0>,
-#  pycocoa.nstypes.NSConstantString is <ObjCClass(NSConstantString of 0x7fff884dd540) at 0x7f86d35a4130>,
-#  pycocoa.nstypes.NSData is <ObjCClass(NSData of 0x7fff884abbf8) at 0x7f86d35a4040>,
-#  pycocoa.nstypes.nsData2bytes is <function .nsData2bytes at 0x7f86d35c0c10>,
-#  pycocoa.nstypes.NSDate is <ObjCClass(NSDate of 0x7fff884abc20) at 0x7f86d35a4880>,
+#  pycocoa.nstypes.isAlias is <function .isAlias at 0x104d5e3a0>,
+#  pycocoa.nstypes.isLink is <function .isLink at 0x104e31a60>,
+#  pycocoa.nstypes.isNone is <function .isNone at 0x104e31af0>,
+#  pycocoa.nstypes.ns2py is <function .ns2py at 0x104e33af0>,
+#  pycocoa.nstypes.ns2Type is <function .ns2Type at 0x104e33b80>,
+#  pycocoa.nstypes.ns2TypeID2 is <function .ns2TypeID2 at 0x104e33c10>,
+#  pycocoa.nstypes.NSAlert is <ObjCClass(NSAlert of 0x1f4ab7cf0) at 0x104a59340>,
+#  pycocoa.nstypes.NSApplication is <ObjCClass(NSApplication of 0x1f4ab7e30) at 0x104a593a0>,
+#  pycocoa.nstypes.NSArray is <ObjCClass(NSArray of 0x1f4aed510) at 0x104d5c400>,
+#  pycocoa.nstypes.nsArray2listuple is <function .nsArray2listuple at 0x104e31b80>,
+#  pycocoa.nstypes.nsArray2tuple is <function .nsArray2tuple at 0x104e31c10>,
+#  pycocoa.nstypes.NSAttributedString is <ObjCClass(NSAttributedString of 0x1f4b1f890) at 0x104e1a1f0>,
+#  pycocoa.nstypes.NSAutoreleasePool is <ObjCClass(NSAutoreleasePool of 0x1f4b1f8b8) at 0x104e1a250>,
+#  pycocoa.nstypes.NSBezierPath is <ObjCClass(NSBezierPath of 0x1f4ab7f48) at 0x104e1a2e0>,
+#  pycocoa.nstypes.NSBoolean is <ObjCBoundClassMethod(Class_t.numberWithBool_) at 0x104d6bfa0>,
+#  pycocoa.nstypes.nsBoolean2bool is <function .nsBoolean2bool at 0x104e31ca0>,
+#  pycocoa.nstypes.NSBundle is <ObjCClass(NSBundle of 0x1f4b1f980) at 0x104e1a370>,
+#  pycocoa.nstypes.nsBundleRename is <function .nsBundleRename at 0x104e31d30>,
+#  pycocoa.nstypes.NSColor is <ObjCClass(NSColor of 0x1f4ab86a0) at 0x104e1a400>,
+#  pycocoa.nstypes.NSConcreteNotification is <ObjCClass(NSConcreteNotification of 0x1f4b1e4e0) at 0x104e1a460>,
+#  pycocoa.nstypes.NSConcreteValue is <ObjCClass(NSConcreteValue of 0x1f4b1fb38) at 0x104e1a4f0>,
+#  pycocoa.nstypes.NSConstantString is <ObjCClass(NSConstantString of 0x1f4b1fbb0) at 0x104e1a550>,
+#  pycocoa.nstypes.NSData is <ObjCClass(NSData of 0x1f4aed5d8) at 0x104e1a5e0>,
+#  pycocoa.nstypes.nsData2bytes is <function .nsData2bytes at 0x104e31dc0>,
+#  pycocoa.nstypes.NSDate is <ObjCClass(NSDate of 0x1f4aed600) at 0x104e1a670>,
 #  pycocoa.nstypes.NSDecimal is <class .NSDecimal>,
-#  pycocoa.nstypes.nsDecimal2decimal is <function .nsDecimal2decimal at 0x7f86d35c0d30>,
-#  pycocoa.nstypes.NSDecimalNumber is <ObjCClass(NSDecimalNumber of 0x7fff884dd608) at 0x7f86d35a4910>,
-#  pycocoa.nstypes.NSDictionary is <ObjCClass(NSDictionary of 0x7fff884abc70) at 0x7f86d35a49a0>,
-#  pycocoa.nstypes.nsDictionary2dict is <function .nsDictionary2dict at 0x7f86d35c0dc0>,
-#  pycocoa.nstypes.nsDictionary2items is <function .nsDictionary2items at 0x7f86d35c0e50>,
-#  pycocoa.nstypes.NSDockTile is <ObjCClass(NSDockTile of 0x7fff8846c030) at 0x7f86d35a4ac0>,
-#  pycocoa.nstypes.NSDouble is <ObjCBoundClassMethod(Class_t.numberWithDouble_) at 0x7f86d3561880>,
-#  pycocoa.nstypes.NSEnumerator is <ObjCClass(NSEnumerator of 0x7fff884abc98) at 0x7f86d35a4b50>,
-#  pycocoa.nstypes.NSError is <ObjCClass(NSError of 0x7fff884dd6a8) at 0x7f86d35a4be0>,
-#  pycocoa.nstypes.NSException is <ObjCClass(NSException of 0x7fff884abcc0) at 0x7f86d35a4c70>,
-#  pycocoa.nstypes.nsException is <function .nsException at 0x7f86d35c0ee0>,
+#  pycocoa.nstypes.nsDecimal2decimal is <function .nsDecimal2decimal at 0x104e31ee0>,
+#  pycocoa.nstypes.NSDecimalNumber is <ObjCClass(NSDecimalNumber of 0x1f4b1fc78) at 0x104e1a700>,
+#  pycocoa.nstypes.nsDescription2dict is <function .nsDescription2dict at 0x104e31f70>,
+#  pycocoa.nstypes.NSDictionary is <ObjCClass(NSDictionary of 0x1f4aed650) at 0x104e1a790>,
+#  pycocoa.nstypes.nsDictionary2dict is <function .nsDictionary2dict at 0x104e33040>,
+#  pycocoa.nstypes.nsDictionary2items is <function .nsDictionary2items at 0x104e330d0>,
+#  pycocoa.nstypes.NSDockTile is <ObjCClass(NSDockTile of 0x1f4aa8598) at 0x104e1a940>,
+#  pycocoa.nstypes.NSDouble is <ObjCBoundClassMethod(Class_t.numberWithDouble_) at 0x104e27040>,
+#  pycocoa.nstypes.NSEnumerator is <ObjCClass(NSEnumerator of 0x1f4aed678) at 0x104e1a9d0>,
+#  pycocoa.nstypes.NSError is <ObjCClass(NSError of 0x1f4b1fd18) at 0x104e1aa60>,
+#  pycocoa.nstypes.NSException is <ObjCClass(NSException of 0x1f4aed6a0) at 0x104e1aaf0>,
+#  pycocoa.nstypes.nsException is <function .nsException at 0x104e33160>,
 #  pycocoa.nstypes.NSExceptionError is <class .NSExceptionError>,
-#  pycocoa.nstypes.NSFloat is <ObjCBoundClassMethod(Class_t.numberWithDouble_) at 0x7f86d35618e0>,
-#  pycocoa.nstypes.NSFont is <ObjCClass(NSFont of 0x7fff8887a5b0) at 0x7f86d35a4d00>,
-#  pycocoa.nstypes.NSFontDescriptor is <ObjCClass(NSFontDescriptor of 0x7fff8887a600) at 0x7f86d35a4d60>,
-#  pycocoa.nstypes.NSFontManager is <ObjCClass(NSFontManager of 0x7fff8846c698) at 0x7f86d35a4df0>,
-#  pycocoa.nstypes.NSFontPanel is <ObjCClass(NSFontPanel of 0x7fff8846c6e8) at 0x7f86d35a4e80>,
-#  pycocoa.nstypes.NSImage is <ObjCClass(NSImage of 0x7fff8846cc38) at 0x7f86d35a4f10>,
-#  pycocoa.nstypes.NSImageView is <ObjCClass(NSImageView of 0x7fff8846cda0) at 0x7f86d35a4fa0>,
-#  pycocoa.nstypes.NSInt is <ObjCBoundClassMethod(Class_t.numberWithInt_) at 0x7f86d3561940>,
-#  pycocoa.nstypes.nsIter is <function .nsIter at 0x7f86d35c0f70>,
-#  pycocoa.nstypes.nsIter2 is <function .nsIter2 at 0x7f86d35c2040>,
-#  pycocoa.nstypes.NSLayoutManager is <ObjCClass(NSLayoutManager of 0x7fff8887a790) at 0x7f86d35ad070>,
-#  pycocoa.nstypes.nsLog is <function .nsLog at 0x7f86d35c20d0>,
-#  pycocoa.nstypes.nsLogf is <function .nsLogf at 0x7f86d35c2160>,
-#  pycocoa.nstypes.NSLong is <ObjCBoundClassMethod(Class_t.numberWithLong_) at 0x7f86d35619a0>,
-#  pycocoa.nstypes.NSLongLong is <ObjCBoundClassMethod(Class_t.numberWithLongLong_) at 0x7f86d3561a00>,
-#  pycocoa.nstypes.NSMain.Application=NSApplication(<Id_t at 0x7f86d35b1d40>) of 0x7f86d1c140e0,
-#                        .BooleanNO=NSBoolean(<Id_t at 0x7f86d35c94c0>) of 0x7fff80036620,
-#                        .BooleanYES=NSBoolean(<Id_t at 0x7f86d35c9740>) of 0x7fff80036610,
-#                        .Bundle=NSBundle(<Id_t at 0x7f86d35c9840>) of 0x7f86d3039a10,
+#  pycocoa.nstypes.NSFloat is <ObjCBoundClassMethod(Class_t.numberWithDouble_) at 0x104e270a0>,
+#  pycocoa.nstypes.NSFont is <ObjCClass(NSFont of 0x1f4ee6150) at 0x104e1ab80>,
+#  pycocoa.nstypes.NSFontDescriptor is <ObjCClass(NSFontDescriptor of 0x1f4ee61a0) at 0x104e1abe0>,
+#  pycocoa.nstypes.NSFontManager is <ObjCClass(NSFontManager of 0x1f4aa8c00) at 0x104e1ac70>,
+#  pycocoa.nstypes.NSFontPanel is <ObjCClass(NSFontPanel of 0x1f4aa8c50) at 0x104e1ad00>,
+#  pycocoa.nstypes.NSImage is <ObjCClass(NSImage of 0x1f4aa91a0) at 0x104e1ad90>,
+#  pycocoa.nstypes.NSImageView is <ObjCClass(NSImageView of 0x1f4aa9308) at 0x104e1ae20>,
+#  pycocoa.nstypes.NSInt is <ObjCBoundClassMethod(Class_t.numberWithInt_) at 0x104e27100>,
+#  pycocoa.nstypes.nsIter is <function .nsIter at 0x104e331f0>,
+#  pycocoa.nstypes.nsIter2 is <function .nsIter2 at 0x104e33280>,
+#  pycocoa.nstypes.NSLayoutManager is <ObjCClass(NSLayoutManager of 0x1f4ee6330) at 0x104e1aeb0>,
+#  pycocoa.nstypes.nsLog is <function .nsLog at 0x104e33310>,
+#  pycocoa.nstypes.nsLogf is <function .nsLogf at 0x104e333a0>,
+#  pycocoa.nstypes.NSLong is <ObjCBoundClassMethod(Class_t.numberWithLong_) at 0x104e27160>,
+#  pycocoa.nstypes.NSLongLong is <ObjCBoundClassMethod(Class_t.numberWithLongLong_) at 0x104e271c0>,
+#  pycocoa.nstypes.NSMain.Application=NSApplication(<Id_t at 0x104e24ac0>) of 0x1407c4230,
+#                        .BooleanNO=NSBoolean(<Id_t at 0x104e3a240>) of 0x1f5144f90,
+#                        .BooleanYES=NSBoolean(<Id_t at 0x104e3a4c0>) of 0x1f5144f80,
+#                        .Bundle=NSBundle(<Id_t at 0x104e3a5c0>) of 0x1407a5580,
 #                        .BundleName=NSConstantString('CFBundleName'),
-#                        .FontManager=NSFontManager(<Id_t at 0x7f86d35d0140>) of 0x7f86d1eb7a30,
-#                        .LayoutManager=NSLayoutManager(<Id_t at 0x7f86d35c9ec0>) of 0x7f86d1eb8b70,
+#                        .FontManager=NSFontManager(<Id_t at 0x104e3ae40>) of 0x140622040,
+#                        .LayoutManager=NSLayoutManager(<Id_t at 0x104e422c0>) of 0x140623b70,
 #                        .nil=None,
 #                        .NO_false=False,
-#                        .Null=NSNull(<Id_t at 0x7f86d35d0540>) of 0x7fff80036290,
-#                        .PrintInfo=NSPrintInfo(<Id_t at 0x7f86d35d0a40>) of 0x7f86d1eba590,
-#                        .Screen=NSScreen(<Id_t at 0x7f86d35e5cc0>) of 0x7f86d1eb0080,
+#                        .Null=NSNull(<Id_t at 0x104e427c0>) of 0x1f5144c00,
+#                        .PrintInfo=NSPrintInfo(<Id_t at 0x104e3a940>) of 0x14062a600,
+#                        .Screen=NSScreen(<Id_t at 0x10c2ae140>) of 0x14061f670,
 #                        .stdlog=<_io.TextIOWrapper name='<stdout>' mode='w' encoding='utf-8'>,
-#                        .TableColumn=NSTableColumn(<Id_t at 0x7f86d35e5e40>) of 0x7f86d1ebb0d0,
-#                        .versionstr=pycocoa.version 20.11.30, .isLazy 1, Python 3.9.0 64bit, macOS 10.16,
+#                        .TableColumn=NSTableColumn(<Id_t at 0x10c2ae440>) of 0x1407d8e80,
+#                        .versionstr=pycocoa.version 21.8.16, .isLazy 1, Python 3.9.6 64bit arm64, macOS 11.5.2,
 #                        .YES_true=True,
-#  pycocoa.nstypes.NSMenu is <ObjCClass(NSMenu of 0x7fff8846d250) at 0x7f86d35ad100>,
-#  pycocoa.nstypes.NSMenuItem is <ObjCClass(NSMenuItem of 0x7fff8846d2a0) at 0x7f86d35ad190>,
-#  pycocoa.nstypes.NSMutableArray is <ObjCClass(NSMutableArray of 0x7fff884abd88) at 0x7f86d35ad220>,
-#  pycocoa.nstypes.NSMutableData is <ObjCClass(NSMutableData of 0x7fff884abdb0) at 0x7f86d35ad2b0>,
-#  pycocoa.nstypes.NSMutableDictionary is <ObjCClass(NSMutableDictionary of 0x7fff884abdd8) at 0x7f86d35ad310>,
-#  pycocoa.nstypes.NSMutableSet is <ObjCClass(NSMutableSet of 0x7fff884abe28) at 0x7f86d35ad3a0>,
-#  pycocoa.nstypes.NSMutableString is <ObjCClass(NSMutableString of 0x7fff884ddbd0) at 0x7f86d35ad430>,
-#  pycocoa.nstypes.NSNotification is <ObjCClass(NSNotification of 0x7fff884ddbf8) at 0x7f86d35ad4c0>,
-#  pycocoa.nstypes.NSNotificationCenter is <ObjCClass(NSNotificationCenter of 0x7fff884ddc20) at 0x7f86d35ad520>,
-#  pycocoa.nstypes.NSNull is <ObjCClass(NSNull of 0x7fff884abe50) at 0x7f86d35ad5b0>,
-#  pycocoa.nstypes.nsNull2none is <function .nsNull2none at 0x7f86d35c21f0>,
-#  pycocoa.nstypes.NSNumber is <ObjCClass(NSNumber of 0x7fff884ddc48) at 0x7f86d35ad640>,
-#  pycocoa.nstypes.nsNumber2num is <function .nsNumber2num at 0x7f86d35c2280>,
-#  pycocoa.nstypes.NSObject is <ObjCClass(NSObject of 0x7fff88a64e08) at 0x7f86d35ad6d0>,
-#  pycocoa.nstypes.nsOf is <function .nsOf at 0x7f86d35c2310>,
-#  pycocoa.nstypes.NSOpenPanel is <ObjCClass(NSOpenPanel of 0x7fff8846d9a8) at 0x7f86d35ad760>,
-#  pycocoa.nstypes.NSPageLayout is <ObjCClass(NSPageLayout of 0x7fff8846dc00) at 0x7f86d35ad7f0>,
-#  pycocoa.nstypes.NSPrinter is <ObjCClass(NSPrinter of 0x7fff8846e380) at 0x7f86d35ad880>,
-#  pycocoa.nstypes.NSPrintInfo is <ObjCClass(NSPrintInfo of 0x7fff8846e1c8) at 0x7f86d35ad910>,
-#  pycocoa.nstypes.NSPrintOperation is <ObjCClass(NSPrintOperation of 0x7fff8846e240) at 0x7f86d35ad970>,
-#  pycocoa.nstypes.NSPrintPanel is <ObjCClass(NSPrintPanel of 0x7fff8846e290) at 0x7f86d35ada00>,
-#  pycocoa.nstypes.nsRaise is <function .nsRaise at 0x7f86d35c23a0>,
-#  pycocoa.nstypes.NSSavePanel is <ObjCClass(NSSavePanel of 0x7fff8846e830) at 0x7f86d35ada90>,
-#  pycocoa.nstypes.NSScreen is <ObjCClass(NSScreen of 0x7fff8846e8a8) at 0x7f86d35adb20>,
-#  pycocoa.nstypes.NSScrollView is <ObjCClass(NSScrollView of 0x7fff8846e920) at 0x7f86d35adbb0>,
-#  pycocoa.nstypes.NSSet is <ObjCClass(NSSet of 0x7fff884abef0) at 0x7f86d35adc40>,
-#  pycocoa.nstypes.nsSet2set is <function .nsSet2set at 0x7f86d35c2430>,
-#  pycocoa.nstypes.NSStatusBar is <ObjCClass(NSStatusBar of 0x7fff8846f398) at 0x7f86d35adcd0>,
+#  pycocoa.nstypes.NSMenu is <ObjCClass(NSMenu of 0x1f4aa97b8) at 0x104e1af40>,
+#  pycocoa.nstypes.NSMenuItem is <ObjCClass(NSMenuItem of 0x1f4aa9808) at 0x104e1afd0>,
+#  pycocoa.nstypes.NSMutableArray is <ObjCClass(NSMutableArray of 0x1f4aed768) at 0x104e200a0>,
+#  pycocoa.nstypes.NSMutableData is <ObjCClass(NSMutableData of 0x1f4aed790) at 0x104e20130>,
+#  pycocoa.nstypes.NSMutableDictionary is <ObjCClass(NSMutableDictionary of 0x1f4aed7b8) at 0x104e20190>,
+#  pycocoa.nstypes.NSMutableSet is <ObjCClass(NSMutableSet of 0x1f4aed808) at 0x104e20220>,
+#  pycocoa.nstypes.NSMutableString is <ObjCClass(NSMutableString of 0x1f4b20240) at 0x104e202b0>,
+#  pycocoa.nstypes.NSNotification is <ObjCClass(NSNotification of 0x1f4b20268) at 0x104e20340>,
+#  pycocoa.nstypes.NSNotificationCenter is <ObjCClass(NSNotificationCenter of 0x1f4b20290) at 0x104e203a0>,
+#  pycocoa.nstypes.NSNull is <ObjCClass(NSNull of 0x1f4aed830) at 0x104e20430>,
+#  pycocoa.nstypes.nsNull2none is <function .nsNull2none at 0x104e33430>,
+#  pycocoa.nstypes.NSNumber is <ObjCClass(NSNumber of 0x1f4b202b8) at 0x104e204c0>,
+#  pycocoa.nstypes.nsNumber2num is <function .nsNumber2num at 0x104e334c0>,
+#  pycocoa.nstypes.NSObject is <ObjCClass(NSObject of 0x1f50e8d08) at 0x104e20550>,
+#  pycocoa.nstypes.nsOf is <function .nsOf at 0x104e33550>,
+#  pycocoa.nstypes.NSOpenPanel is <ObjCClass(NSOpenPanel of 0x1f4aa9f10) at 0x104e205e0>,
+#  pycocoa.nstypes.NSPageLayout is <ObjCClass(NSPageLayout of 0x1f4aaa168) at 0x104e20670>,
+#  pycocoa.nstypes.NSPrinter is <ObjCClass(NSPrinter of 0x1f4aaa8e8) at 0x104e20700>,
+#  pycocoa.nstypes.NSPrintInfo is <ObjCClass(NSPrintInfo of 0x1f4aaa730) at 0x104e20790>,
+#  pycocoa.nstypes.NSPrintOperation is <ObjCClass(NSPrintOperation of 0x1f4aaa7a8) at 0x104e207f0>,
+#  pycocoa.nstypes.NSPrintPanel is <ObjCClass(NSPrintPanel of 0x1f4aaa7f8) at 0x104e20880>,
+#  pycocoa.nstypes.nsRaise is <function .nsRaise at 0x104e335e0>,
+#  pycocoa.nstypes.NSSavePanel is <ObjCClass(NSSavePanel of 0x1f4aaad98) at 0x104e20910>,
+#  pycocoa.nstypes.NSScreen is <ObjCClass(NSScreen of 0x1f4aaae10) at 0x104e209a0>,
+#  pycocoa.nstypes.NSScrollView is <ObjCClass(NSScrollView of 0x1f4aaae88) at 0x104e20a30>,
+#  pycocoa.nstypes.NSSet is <ObjCClass(NSSet of 0x1f4aed8d0) at 0x104e20ac0>,
+#  pycocoa.nstypes.nsSet2set is <function .nsSet2set at 0x104e33670>,
+#  pycocoa.nstypes.NSStatusBar is <ObjCClass(NSStatusBar of 0x1f4aab900) at 0x104e20b50>,
 #  pycocoa.nstypes.NSStr is <class .NSStr>,
-#  pycocoa.nstypes.NSString is <ObjCClass(NSString of 0x7fff884de170) at 0x7f86d35add60>,
-#  pycocoa.nstypes.nsString2str is <function .nsString2str at 0x7f86d35c24c0>,
-#  pycocoa.nstypes.NSTableColumn is <ObjCClass(NSTableColumn of 0x7fff8846f898) at 0x7f86d35addf0>,
-#  pycocoa.nstypes.NSTableView is <ObjCClass(NSTableView of 0x7fff8846f9b0) at 0x7f86d35ade80>,
-#  pycocoa.nstypes.NSTextField is <ObjCClass(NSTextField of 0x7fff8846fc08) at 0x7f86d35adf10>,
-#  pycocoa.nstypes.nsTextSize3 is <function .nsTextSize3 at 0x7f86d35c2550>,
-#  pycocoa.nstypes.nsTextView is <function .nsTextView at 0x7f86d35c25e0>,
-#  pycocoa.nstypes.NSTextView is <ObjCClass(NSTextView of 0x7fff8846fdc0) at 0x7f86d35adfa0>,
-#  pycocoa.nstypes.NSThread is <ObjCClass(NSThread of 0x7fff884de260) at 0x7f86d35b3070>,
-#  pycocoa.nstypes.nsThrow is <function .nsThrow at 0x7f86d35c2670>,
-#  pycocoa.nstypes.NSURL is <ObjCClass(NSURL of 0x7fff884ac008) at 0x7f86d35b3100>,
-#  pycocoa.nstypes.nsURL2str is <function .nsURL2str at 0x7f86d35c2700>,
-#  pycocoa.nstypes.NSValue is <ObjCClass(NSValue of 0x7fff884de418) at 0x7f86d35b3190>,
-#  pycocoa.nstypes.nsValue2py is <function .nsValue2py at 0x7f86d35c2790>,
-#  pycocoa.nstypes.NSView is <ObjCClass(NSView of 0x7fff88470a68) at 0x7f86d35b3220>,
-#  pycocoa.nstypes.NSWindow is <ObjCClass(NSWindow of 0x7fff88470c70) at 0x7f86d35b32b0>,
-# )[100]
-# pycocoa.nstypes.version 20.11.28, .isLazy 1, Python 3.9.0 64bit, macOS 10.16
+#  pycocoa.nstypes.NSString is <ObjCClass(NSString of 0x1f4b207e0) at 0x104e20be0>,
+#  pycocoa.nstypes.nsString2str is <function .nsString2str at 0x104e33700>,
+#  pycocoa.nstypes.NSTableColumn is <ObjCClass(NSTableColumn of 0x1f4aabe00) at 0x104e20c70>,
+#  pycocoa.nstypes.NSTableView is <ObjCClass(NSTableView of 0x1f4aabf18) at 0x104e20d00>,
+#  pycocoa.nstypes.NSTextField is <ObjCClass(NSTextField of 0x1f4aac170) at 0x104e20d90>,
+#  pycocoa.nstypes.nsTextSize3 is <function .nsTextSize3 at 0x104e33790>,
+#  pycocoa.nstypes.nsTextView is <function .nsTextView at 0x104e33820>,
+#  pycocoa.nstypes.NSTextView is <ObjCClass(NSTextView of 0x1f4aac328) at 0x104e20e20>,
+#  pycocoa.nstypes.NSThread is <ObjCClass(NSThread of 0x1f4b208d0) at 0x104e20eb0>,
+#  pycocoa.nstypes.nsThrow is <function .nsThrow at 0x104e338b0>,
+#  pycocoa.nstypes.NSURL is <ObjCClass(NSURL of 0x1f4aed9e8) at 0x104e20f40>,
+#  pycocoa.nstypes.nsURL2str is <function .nsURL2str at 0x104e33940>,
+#  pycocoa.nstypes.NSValue is <ObjCClass(NSValue of 0x1f4b20a88) at 0x104e20fd0>,
+#  pycocoa.nstypes.nsValue2py is <function .nsValue2py at 0x104e339d0>,
+#  pycocoa.nstypes.NSView is <ObjCClass(NSView of 0x1f4aacfd0) at 0x104e250a0>,
+#  pycocoa.nstypes.NSWindow is <ObjCClass(NSWindow of 0x1f4aad1d8) at 0x104e25130>,
+# )[101]
+# pycocoa.nstypes.version 21.08.17, .isLazy 1, Python 3.9.6 64bit arm64, macOS 11.5.2
 
 # MIT License <https://OpenSource.org/licenses/MIT>
 #

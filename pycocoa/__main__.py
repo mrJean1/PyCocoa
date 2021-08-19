@@ -20,25 +20,25 @@ from pycocoa.runtime import _nsDeallocObserverIvar1
 _nsDeallocObserverIvar1()  # check the _NSDeallocObserver class
 
 __all__ = ()
-__version__ = '20.11.14'
+__version__ = '21.08.14'
 
 # % python3 -m pycocoa
-# pycocoa.version 20.11.16, .isLazy 1, Python 3.9.0 64bit, macOS 10.15.7
+# pycocoa.version 21.08.14, .isLazy 1, Python 3.9.6 64bit, arm64, macOS 11.5.2
 
 # % python3.8 -m pycocoa
-# pycocoa.version 20.11.16, .isLazy 1, Python 3.8.6 64bit, macOS 10.15.7
+# pycocoa.version 21.08.14, .isLazy 1, Python 3.8.10 64bit, x86_64, macOS 10.16
 
 # % python3.7 -m pycocoa
-# pycocoa.version 20.11.16, .isLazy 1, Python 3.7.6 64bit, macOS 10.15.7
+# pycocoa.version 21.08.14, .isLazy 1, Python 3.7.6 64bit, x86_64, macOS 10.16
 
 # % python3.6 -m pycocoa
-# pycocoa.version 20.11.16, .isLazy None, Python 3.6.5 64bit, macOS 10.15.7
+# pycocoa.version 21.08.14, .isLazy None, 3.6.5 64bit, x86_64, macOS 10.16
 
 # % python -m pycocoa
-# pycocoa.version 20.11.16, .isLazy None, Python 2.7.18 64bit, macOS 10.15.7
+# pycocoa.version 21.08.14, .isLazy None, 2.7.18 64bit, x86_64, macOS 10.16
 
 # % python2.7macOS -m pycocoa
-# pycocoa.version 20.11.16, .isLazy None, Python 2.7.16 64bit, macOS 10.15.7
+# pycocoa.version 21.08.14, .isLazy None, Python 2.7.16 64bit, arm64, macOS 10.16
 
 # MIT License <https://OpenSource.org/licenses/MIT>
 #

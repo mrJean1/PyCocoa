@@ -29,7 +29,7 @@ from pycocoa.utils import _Globals, isinstanceOf, module_property_RO, \
 from pycocoa.windows import Window, WindowStyle
 
 __all__ = _ALL_LAZY.tables
-__version__ = '20.12.10'
+__version__ = '21.08.18'
 
 _Alignment = dict(center=NSTextAlignmentCenter,
                justified=NSTextAlignmentJustified,
@@ -47,19 +47,20 @@ class _NS(object):
 
 def _format(header, col):
     # format a table column from the header string
-    # "title:<col_width>:left|center|right|justified:bold|italic"
-    t = header.rstrip().split(_COLON_)
-    while len(t) > 1:
-        try:
-            f = t.pop(1)
+    # " Title:<col_width>:left|center|right|justified:bold|italic"
+    try:
+        t = header.rstrip().split(_COLON_)
+        T = t.pop(0)  # title
+        while t:
+            f = t.pop(0)
             if f.islower():
-                c = col.dataCell()
+                c = col.dataCell()  # XXX DEPRECATED?
             else:  # cap means title row
                 c = col.headerCell()
                 f = f.lower()
 
             ns = _Alignment.get(f, None)
-            if ns:
+            if ns is not None:
                 c.setAlignment_(ns)
             elif f in ('bold', 'italic'):
                 ns = c.font()
@@ -68,9 +69,9 @@ def _format(header, col):
             else:
                 # col.sizeToFit()  # fits width of headerCell text!
                 col.setWidth_(float(f))
-        except (IndexError, TypeError, ValueError):
-            raise ValueError('invalid %s: %s' % ('header', header))
-    return t.pop()
+    except (IndexError, TypeError, ValueError):
+        raise ValueError('invalid %s: %s' % ('header', header))
+    return T
 
 
 def closeTables():

@@ -71,7 +71,7 @@ from pycocoa.utils import aspect_ratio, bytes2str, _Constants, _Globals, \
 # from enum   import Enum
 
 __all__ = _ALL_LAZY.windows
-__version__ = '20.12.10'
+__version__ = '20.12.14'
 
 
 class AutoResizeError(ValueError):
@@ -407,9 +407,11 @@ class Window(_Type2):
 
     @property
     def screen(self):
-        '''Get the screen of this window (L{Screen}).
+        '''Get the screen of this window (L{Screen}) or C{None}
+           if this window is off-screen.
         '''
-        return Screen(self.NS.screen())
+        s = self.NS.screen()
+        return Screen(s) if s else None
 
     @screen.setter  # PYCHOK property.setter
     def screen(self, screen):
@@ -440,9 +442,11 @@ class Window(_Type2):
         '''Make this window transparent or undo (C{bool}).
 
            @see: U{Custom<https://www.CocoaWithLove.com/2008/12/drawing-custom-window-on-mac-os-x.html>},
-                 and U{transparent<https://StackoOverflow.com/questions/34531118/
-                 how-can-i-create-a-window-with-transparent-background-with-swift-on-osx>} window
-                 on OS X and U{NSThemeFrame<https://Parmanoir.com/Custom_NSThemeFrame>}.
+                 U{transparent<https://StackoOverflow.com/questions/34531118/
+                 how-can-i-create-a-window-with-transparent-background-with-swift-on-osx>} window on
+                 OS X, U{RoundTransparentWindow<https://PyObjC.ReadTheDocs.io/en/latest/examples/
+                 Cocoa/AppKit/RoundTransparentWindow/index.html>} and U{NSThemeFrame
+                 <https://Parmanoir.com/Custom_NSThemeFrame>}.
         '''
         def _nset(ns, opaque, shadow, bgColor):
             ns.setOpaque_(opaque)

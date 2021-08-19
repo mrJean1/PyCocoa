@@ -123,7 +123,8 @@ _ALL_LAZY = _NamedEnum_RO(_name='_ALL_LAZY',
                                  'NSAttributedString', 'NSAutoreleasePool',
                                  'NSBezierPath', 'NSBoolean', 'nsBoolean2bool', 'NSBundle', 'nsBundleRename',
                                  'NSColor', 'NSConcreteNotification', 'NSConcreteValue', 'NSConstantString',
-                                 'NSData', 'nsData2bytes', 'NSDate', 'NSDecimal', 'nsDecimal2decimal', 'NSDecimalNumber',
+                                 'NSData', 'nsData2bytes', 'NSDate',
+                                 'NSDecimal', 'nsDecimal2decimal', 'NSDecimalNumber', 'nsDescription2dict',
                                  'NSDictionary', 'nsDictionary2dict', 'nsDictionary2items', 'NSDockTile', 'NSDouble',
                                  'NSEnumerator', 'NSError', 'NSException', 'nsException', 'NSExceptionError',
                                  'NSFloat', 'NSFont', 'NSFontDescriptor', 'NSFontManager', 'NSFontPanel',
@@ -215,7 +216,7 @@ _ALL_LAZY = _NamedEnum_RO(_name='_ALL_LAZY',
                                  'DEFAULT_UNICODE', 'flint', 'gcd',
                                  'inst2strepr', 'isinstanceOf', 'iterbytes',
                                  'lambda1', 'logf',
-                                 'missing', 'module_property_RO',
+                                 'machine', 'missing', 'module_property_RO',
                                  'name2objc', 'name2py', 'name2pymethod',
                                  'printf', 'properties', 'property2', 'property_RO',
                                  'sortuples', 'str2bytes', 'terminating', 'type2strepr',
@@ -228,7 +229,7 @@ _ALL_LAZY = _NamedEnum_RO(_name='_ALL_LAZY',
 _ALL_OVERRIDING = _NamedEnum_RO(_name='_ALL_OVERRIDING')  # all DEPRECATED
 
 __all__ = _ALL_LAZY.lazily
-__version__ = '20.11.27'
+__version__ = '21.08.18'
 
 
 def _all_imports(**more):
@@ -434,6 +435,7 @@ _COMMASPACE_ = _Str(', ')
 _DOT_        = _Str('.')
 _EQUALS_     = _Str('=')  # PYCHOK expected
 _NN_         = _Str('')   # empty string, I{Nomen Nescio}
+_SPACE_      = _Str(' ')  # PYCHOK expected
 _UNDER_      = _Str('_')
 
 

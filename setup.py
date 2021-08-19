@@ -23,7 +23,7 @@
 from setuptools import setup
 
 __all__ = ()
-__version__ = '20.12.10'
+__version__ = '21.08.18'
 
 
 def _c2(*names):
@@ -46,7 +46,8 @@ def _version():
                 return '.'.join(map(str, map(int, v.split('.'))))
 
 
-_KeyWords=('Cocoa', 'cocoa-python', 'cocoavlc', 'ctypes',
+_KeyWords=('Apple-Silicon',
+           'Cocoa', 'cocoa-python', 'cocoavlc', 'ctypes',
            'fault', 'faults', 'faulthandler',
            'macOS', 'MacOSX',
            'Objective-C',
@@ -78,7 +79,7 @@ setup(
     zip_safe=False,
     classifiers=[
         _c2('Development Status', '4 - Beta'),
-        _c2('Environment', 'MacOS X', 'Cocoa'),
+        _c2('Environment', 'MacOS', 'Cocoa'),
         _c2('Intended Audience', 'Developers'),
         _c2('License', 'OSI Approved', 'BSD License'),
         _c2('License', 'OSI Approved', 'MIT License'),
