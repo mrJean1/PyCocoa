@@ -6,6 +6,8 @@
 '''Handle I{uncaught} C{ObjC/NSExceptions} and other C{fault}s similar
 to standard module C{faulthandler} available since Python 3.3.
 
+B{I{Fault handling by this module is temporarily disabled for macOS 12.0.1 Monterey}}.
+
 By default, C{fault} handling is not enabled.  In Python 3.3 and
 later, the U{faulthandler<https://Docs.Python.org/3/library/faulthandler.html>}
 may be enabled by (a) calling function C{faulthandler.enable} or
@@ -35,7 +37,6 @@ are.
 # all imports listed explicitly to help PyChecker
 from pycocoa.lazily  import _ALL_DOCS, _ALL_LAZY, _NL_, _NN_, _PY_FH
 from pycocoa.nstypes import _not_given_, NSExceptionError, NSMain
-from pycocoa.oslibs  import _setUncaughtExceptionHandler, _UncaughtExceptionHandler_t
 from pycocoa.runtime import  ObjCInstance  # release
 from pycocoa.utils   import  Adict, _Globals, logf
 
@@ -44,7 +45,7 @@ import signal as _signal
 import sys
 
 __all__ = _ALL_LAZY.faults
-__version__ = '20.11.20'
+__version__ = '21.11.02'
 
 _exiting = -9  # default _exit and status
 # SIGnals handled by Python 3 C{faulthandler}
@@ -242,15 +243,21 @@ def getUncaughtExceptionHandler():
     '''Get the currently installed I{uncaught} C{ObjC/NSException}
        handler.
 
+       B{I{Fault handling is temporarily disabled for macOS 12.0.1 Monterey}}.
+
        @return: The installed handler (C{callable}) or C{None}
-                if no handler was installed.
+                if no handler was or couldn't be installed.
     '''
-    h, _ = _Globals.Xhandler2
+    h = _Globals.Xhandler2 or None
+    if h:
+        h, _ = h
     return h
 
 
 def setUncaughtExceptionHandler(handler, log=True, raiser=False):
     '''Install a callback to handle I{uncaught} C{ObjC/NSException}s.
+
+       B{I{Fault handling is temporarily disabled for macOS 12.0.1 Monterey}}.
 
        The C{B{handler}(error)} is called with one argument C{error},
        an L{NSExceptionError} instance.  It should return that same
@@ -270,7 +277,7 @@ def setUncaughtExceptionHandler(handler, log=True, raiser=False):
                         B{C{handler}}.
 
        @return: The previously installed I{uncaught} C{ObjC/NSException}
-                handler or C{None} if no handler was installed.
+                handler or C{None} if no handler was or couldn't be installed.
 
        @raise TypeError: The B{C{handler}} is not callable.
 
@@ -294,6 +301,11 @@ def setUncaughtExceptionHandler(handler, log=True, raiser=False):
              library/archive/documentation/Cocoa/Conceptual/ErrorHandlingCocoa/
              ErrorHandling/ErrorHandling.html#//apple_ref/doc/uid/TP40001806>}.
     '''
+    try:  # missing in macOS 12.0.1 Monterey
+        from pycocoa.oslibs import _setUncaughtExceptionHandler, _UncaughtExceptionHandler_t
+    except ImportError:
+        return None
+
     if not callable(handler):
         raise TypeError('non-callable %s: %r' % ('handler', handler))
 

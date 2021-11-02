@@ -52,7 +52,7 @@ from os.path import join as _join, sep as _SEP
 # import sys as _sys  # from pycocoa.utils
 
 __all__ = _ALL_LAZY.oslibs
-__version__ = '21.08.18'
+__version__ = '21.11.02'
 
 _framework_ = 'framework'
 _leaked2    = []  # leaked memory, 2-tuples (ptr, size)
@@ -236,11 +236,14 @@ else:  # ignore free, leaking some memory
 # from the libAppKit.NSExceptionHandler_t.  DO NOT use the latter for reasons
 # explaimed U{here(https://OpenSource.Apple.com/source/pyobjc/pyobjc-32/...
 # pyobjc/pyobjc-framework-ExceptionHandling/Lib/PyObjCTools/Debugging.py.auto.html)}
-_UncaughtExceptionHandler_t  =  CFUNCTYPE(None, c_void_p)
-_setUncaughtExceptionHandler = _libc.objc_setUncaughtExceptionHandler  # .NSSetUncaughtExceptionHandler
-# _UncaughtExceptionHandler_t* _setUncaughtExceptionHandler(_UncaughtExceptionHandler_t* h) installs
-# the given excpetion handler and returns the previously installed one (like signal.signal?).
-_csignature(_setUncaughtExceptionHandler, _UncaughtExceptionHandler_t, _UncaughtExceptionHandler_t)
+try:  # missing in 12.0.1 macOS Monterey
+    _UncaughtExceptionHandler_t  =  CFUNCTYPE(None, c_void_p)
+    _setUncaughtExceptionHandler = _libc.objc_setUncaughtExceptionHandler  # .NSSetUncaughtExceptionHandler
+    # _UncaughtExceptionHandler_t* _setUncaughtExceptionHandler(_UncaughtExceptionHandler_t* h) installs
+    # the given excpetion handler and returns the previously installed one (like signal.signal?).
+    _csignature(_setUncaughtExceptionHandler, _UncaughtExceptionHandler_t, _UncaughtExceptionHandler_t)
+except AttributeError:
+    pass
 
 
 def leaked2():
@@ -780,8 +783,11 @@ kCGBitmapByteOrderMask     = 7 << 12
 
 # /System/Library/Frameworks/ApplicationServices.framework/Frameworks/...
 #  ImageIO.framework/Headers/CGImageProperties.h
-kCGImagePropertyGIFDictionary = c_void_p.in_dll(libCG, 'kCGImagePropertyGIFDictionary')
-kCGImagePropertyGIFDelayTime  = c_void_p.in_dll(libCG, 'kCGImagePropertyGIFDelayTime')
+try:  # missing in 12.0.1 macOS Monterey
+    kCGImagePropertyGIFDictionary = c_void_p.in_dll(libCG, 'kCGImagePropertyGIFDictionary')
+    kCGImagePropertyGIFDelayTime  = c_void_p.in_dll(libCG, 'kCGImagePropertyGIFDelayTime')
+except ValueError:
+    pass
 # /System/Library/Frameworks/ApplicationServices.framework/Frameworks/...
 #  CoreGraphics.framework/Headers/CGColorSpace.h
 kCGRenderingIntentDefault = 0
@@ -826,9 +832,12 @@ _csignature(libCG.CGImageGetDataProvider, c_void_p, c_void_p)
 _csignature(libCG.CGImageGetHeight, c_size_t, c_void_p)
 _csignature(libCG.CGImageGetWidth, c_size_t, c_void_p)
 _csignature(libCG.CGImageRelease, c_void, c_void_p)
-_csignature(libCG.CGImageSourceCopyPropertiesAtIndex, c_void_p, c_void_p, c_size_t, c_void_p)
-_csignature(libCG.CGImageSourceCreateImageAtIndex, c_void_p, c_void_p, c_size_t, c_void_p)
-_csignature(libCG.CGImageSourceCreateWithData, c_void_p, c_void_p, c_void_p)
+try:  # missing in 12.0.1 macOS Monterey
+    _csignature(libCG.CGImageSourceCopyPropertiesAtIndex, c_void_p, c_void_p, c_size_t, c_void_p)
+    _csignature(libCG.CGImageSourceCreateImageAtIndex, c_void_p, c_void_p, c_size_t, c_void_p)
+    _csignature(libCG.CGImageSourceCreateWithData, c_void_p, c_void_p, c_void_p)
+except AttributeError:
+    pass
 _csignature(libCG.CGMainDisplayID, CGDirectDisplayID_t)
 _csignature(libCG.CGShieldingWindowLevel, c_int32)
 _csignature(libCG.CGWarpMouseCursorPosition, CGError_t, CGPoint_t)
