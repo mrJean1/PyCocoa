@@ -479,7 +479,7 @@ pycocoa.dicts.nsIter2	pycocoa.nstypes-module.html#nsIter2
 pycocoa.faults	pycocoa.faults-module.html
 pycocoa.faults._SIGraise	pycocoa.faults-module.html#_SIGraise
 pycocoa.faults._SIGenabled	pycocoa.faults-module.html#_SIGenabled
-pycocoa.faults._bye	pycocoa.faults-module.html#_bye
+pycocoa.faults._SIGhandler	pycocoa.faults-module.html#_SIGhandler
 pycocoa.faults._unCatcher	pycocoa.faults-module.html#_unCatcher
 pycocoa.faults._ALL_DOCS	pycocoa.lazily-module.html#_ALL_DOCS
 pycocoa.faults._SIGdict	pycocoa.faults-module.html#_SIGdict
@@ -495,8 +495,8 @@ pycocoa.faults.SIGs_enabled	pycocoa.faults-module.html#SIGs_enabled
 pycocoa.faults._exiting	pycocoa.faults-module.html#_exiting
 pycocoa.faults._SIGnals	pycocoa.faults-module.html#_SIGnals
 pycocoa.faults.logf	pycocoa.utils-module.html#logf
-pycocoa.faults._SIGhandler	pycocoa.faults-module.html#_SIGhandler
 pycocoa.faults.exiting	pycocoa.faults-module.html#exiting
+pycocoa.faults._bye	pycocoa.faults-module.html#_bye
 pycocoa.fonts	pycocoa.fonts-module.html
 pycocoa.fonts._familyTraits	pycocoa.fonts-module.html#_familyTraits
 pycocoa.fonts.fontfamilies	pycocoa.fonts-module.html#fontfamilies

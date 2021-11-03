@@ -232,18 +232,18 @@ if _libc:  # macOS, linux, etc.
 else:  # ignore free, leaking some memory
     _libc_free = None
 
+_UncaughtExceptionHandler_t = CFUNCTYPE(None, c_void_p)
 # callback to handle so-called uncaught ObjC exceptions from libc, different
 # from the libAppKit.NSExceptionHandler_t.  DO NOT use the latter for reasons
 # explaimed U{here(https://OpenSource.Apple.com/source/pyobjc/pyobjc-32/...
 # pyobjc/pyobjc-framework-ExceptionHandling/Lib/PyObjCTools/Debugging.py.auto.html)}
-try:  # missing in 12.0.1 macOS Monterey
-    _UncaughtExceptionHandler_t  =  CFUNCTYPE(None, c_void_p)
+try:  # missing in 12.0.1 macOS Monterey, see pycocoa.faults
     _setUncaughtExceptionHandler = _libc.objc_setUncaughtExceptionHandler  # .NSSetUncaughtExceptionHandler
     # _UncaughtExceptionHandler_t* _setUncaughtExceptionHandler(_UncaughtExceptionHandler_t* h) installs
-    # the given excpetion handler and returns the previously installed one (like signal.signal?).
+    # the given exception handler and returns the previously installed one (like signal.signal?).
     _csignature(_setUncaughtExceptionHandler, _UncaughtExceptionHandler_t, _UncaughtExceptionHandler_t)
 except AttributeError:
-    pass
+    _setUncaughtExceptionHandler = None
 
 
 def leaked2():
