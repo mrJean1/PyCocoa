@@ -33,6 +33,7 @@ import sys as _sys
 _C_XTYPES = 'c_ptrdiff_t', 'c_struct_t', 'c_void'  # exported
 _FOR_DOCS = _environ.get('PYCOCOA_FOR_DOCS', None)
 _N_A      =  object()
+_pycocoa_ = 'pycocoa'
 _PY_FH    = _environ.get('PYTHONFAULTHANDLER', None)  # PYCHOK .faults, .__init__
 
 # @module_property[_RO?] <https://GitHub.com/jtushman/proxy_tools/>
@@ -173,7 +174,7 @@ _ALL_LAZY = _NamedEnum_RO(_name='_ALL_LAZY',
                                  'NSDeviceControl1Character', 'NSDeviceControl2Character', 'NSDeviceControl3Character', 'NSDeviceControl4Character',
                                  'NSDownArrowFunctionKey', 'NSEndFunctionKey', 'NSEndOfMediumCharacter', 'NSEndOfTextCharacter', 'NSEndOfTransmitBlockCharacter',
                                  'NSEndOfTransmitCharacter', 'NSEnquiryCharacter', 'NSEnterCharacter', 'NSEscapeCharacter', 'NSEventTrackingRunLoopMode',
-                                 'NSExceptionHandler_t', 'NSF19FunctionKey', 'NSF1FunctionKey', 'NSFileHandlingPanelCancelButton', 'NSFileHandlingPanelOKButton',
+                                 'NSF19FunctionKey', 'NSF1FunctionKey', 'NSFileHandlingPanelCancelButton', 'NSFileHandlingPanelOKButton',
                                  'NSFileSeparatorCharacter', 'NSFlagsChanged', 'NSFontBoldMask', 'NSFontClarendonSerifsClass', 'NSFontClassMask',
                                  'NSFontColorGlyphsMask', 'NSFontCompositeMask', 'NSFontCompressedMask', 'NSFontCondensedMask', 'NSFontExpandedMask',
                                  'NSFontFreeformSerifsClass', 'NSFontItalicMask', 'NSFontModernSerifsClass', 'NSFontMonoSpaceMask', 'NSFontNarrowMask',
@@ -229,7 +230,7 @@ _ALL_LAZY = _NamedEnum_RO(_name='_ALL_LAZY',
 _ALL_OVERRIDING = _NamedEnum_RO(_name='_ALL_OVERRIDING')  # all DEPRECATED
 
 __all__ = _ALL_LAZY.lazily
-__version__ = '21.08.18'
+__version__ = '21.11.04'
 
 
 def _all_imports(**more):
@@ -267,7 +268,7 @@ def _all_missing2(_all):
     '''
     _imp = _all_imports(**_NamedEnum_RO((a, ()) for a in _ALL_INIT))
     return ((_DOT_('lazily', _all_imports.__name__), _all_missing(_all, _imp)),
-            (_DOT_('pycocoa', '__all__'),            _all_missing(_imp, _all)))
+            (_DOT_(_pycocoa_, '__all__'),            _all_missing(_imp, _all)))
 
 
 def _caller3(up):  # in .named
@@ -392,8 +393,8 @@ def _lazy_init3(_package_):
     '''
     global isLazy
 
-    if _package_ != 'pycocoa':
-        raise LazyImportError('%s: %r, not %r', 'package', _package_, 'pycocoa')
+    if _package_ != _pycocoa_:
+        raise LazyImportError('%s: %r, not %r', 'package', _package_, _pycocoa_)
 
     z = _environ.get('PYCOCOA_LAZY_IMPORT', None)
     if z is None:  # PYCOCOA_LAZY_IMPORT not set
@@ -438,7 +439,6 @@ _NN_         = _Str('')   # empty string, I{Nomen Nescio}
 _SPACE_      = _Str(' ')  # PYCHOK expected
 _UNDER_      = _Str('_')
 
-
 if __name__ == '__main__':
 
     # the following warning appears when running this module with Python 3.7 or later as ...
@@ -452,11 +452,12 @@ if __name__ == '__main__':
     # <https://StackOverflow.com/questions/43393764/python-3-6-project-structure-leads-to-runtimewarning>
 
     for n, m in _sys.modules.items():  # show any pre-loaded modules
-        if n in _ALL_LAZY or getattr(m, '__package__', None) == 'pycocoa':
+        if n in _ALL_LAZY or getattr(m, '__package__', None) == _pycocoa_:
             print('pre-loaded %s: %s?' % (n, getattr(m, '__file__', '?')))
 
 # % python3 -m pycocoa.lazily
-# /Library/Frameworks/Python.framework/Versions/3.9/lib/python3.9/runpy.py:127: RuntimeWarning: 'pycocoa.lazily' found in sys.modules after import of package 'pycocoa', but prior to execution of 'pycocoa.lazily'; this may result in unpredictable behaviour
+#
+# /Library/.../python3.10/runpy.py:126: RuntimeWarning: ...
 #   warn(RuntimeWarning(msg))
 # pre-loaded __main__: .../PyCocoa/pycocoa/lazily.py?
 # pre-loaded pycocoa.lazily: .../PyCocoa/pycocoa/lazily.py?
@@ -464,7 +465,7 @@ if __name__ == '__main__':
 
 # MIT License <https://OpenSource.org/licenses/MIT>
 #
-# Copyright (C) 2018-2021  -- mrJean1 at Gmail -- All Rights Reserved.
+# Copyright (C) 2018-2022 -- mrJean1 at Gmail -- All Rights Reserved.
 #
 # Permission is hereby granted, free of charge, to any person obtaining a
 # copy of this software and associated documentation files (the "Software"),

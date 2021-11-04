@@ -26,7 +26,7 @@ except AttributeError:
 del itertools
 
 __all__ = _ALL_LAZY.getters
-__version__ = '20.11.17'
+__version__ = '21.11.04'
 
 _c_func_t_cache = {}
 _SEL_t_cache = Cache2(limit2=128)
@@ -464,33 +464,33 @@ if __name__ == '__main__':
 # % python3 -m pycocoa.getters
 #
 # pycocoa.getters.__all__ = tuple(
-#  pycocoa.getters.get_c_func_t is <function .get_c_func_t at 0x7fc3d44e49d0>,
-#  pycocoa.getters.get_class is <function .get_class at 0x7fc3d44e4af0>,
-#  pycocoa.getters.get_classes is <function .get_classes at 0x7fc3d44e4b80>,
-#  pycocoa.getters.get_classname is <function .get_classname at 0x7fc3d44e4c10>,
-#  pycocoa.getters.get_classnameof is <function .get_classnameof at 0x7fc3d44e4ca0>,
-#  pycocoa.getters.get_classof is <function .get_classof at 0x7fc3d44e4d30>,
-#  pycocoa.getters.get_inheritance is <function .get_inheritance at 0x7fc3d44e4ee0>,
-#  pycocoa.getters.get_ivar is <function .get_ivar at 0x7fc3d44e4dc0>,
-#  pycocoa.getters.get_ivars is <function .get_ivars at 0x7fc3d44e4e50>,
-#  pycocoa.getters.get_metaclass is <function .get_metaclass at 0x7fc3d44e4f70>,
-#  pycocoa.getters.get_method is <function .get_method at 0x7fc3d4510040>,
-#  pycocoa.getters.get_methods is <function .get_methods at 0x7fc3d45100d0>,
-#  pycocoa.getters.get_properties is <function .get_properties at 0x7fc3d4510160>,
-#  pycocoa.getters.get_protocol is <function .get_protocol at 0x7fc3d45101f0>,
-#  pycocoa.getters.get_protocols is <function .get_protocols at 0x7fc3d4510280>,
-#  pycocoa.getters.get_selector is <function .get_selector at 0x7fc3d4510310>,
-#  pycocoa.getters.get_selectorname_permutations is <function .get_selectorname_permutations at 0x7fc3d45103a0>,
-#  pycocoa.getters.get_selectornameof is <function .get_selectornameof at 0x7fc3d4510430>,
-#  pycocoa.getters.get_superclass is <function .get_superclass at 0x7fc3d45104c0>,
-#  pycocoa.getters.get_superclassnameof is <function .get_superclassnameof at 0x7fc3d45105e0>,
-#  pycocoa.getters.get_superclassof is <function .get_superclassof at 0x7fc3d4510550>,
+#  pycocoa.getters.get_c_func_t is <function .get_c_func_t at 0x10290f760>,
+#  pycocoa.getters.get_class is <function .get_class at 0x10290f6d0>,
+#  pycocoa.getters.get_classes is <function .get_classes at 0x10290f640>,
+#  pycocoa.getters.get_classname is <function .get_classname at 0x10290f490>,
+#  pycocoa.getters.get_classnameof is <function .get_classnameof at 0x10290f400>,
+#  pycocoa.getters.get_classof is <function .get_classof at 0x10290f370>,
+#  pycocoa.getters.get_inheritance is <function .get_inheritance at 0x10293feb0>,
+#  pycocoa.getters.get_ivar is <function .get_ivar at 0x10290f2e0>,
+#  pycocoa.getters.get_ivars is <function .get_ivars at 0x10293ff40>,
+#  pycocoa.getters.get_metaclass is <function .get_metaclass at 0x10293fe20>,
+#  pycocoa.getters.get_method is <function .get_method at 0x10293fd90>,
+#  pycocoa.getters.get_methods is <function .get_methods at 0x10293fd00>,
+#  pycocoa.getters.get_properties is <function .get_properties at 0x10293fc70>,
+#  pycocoa.getters.get_protocol is <function .get_protocol at 0x10293fbe0>,
+#  pycocoa.getters.get_protocols is <function .get_protocols at 0x10293fb50>,
+#  pycocoa.getters.get_selector is <function .get_selector at 0x10293fac0>,
+#  pycocoa.getters.get_selectorname_permutations is <function .get_selectorname_permutations at 0x10293fa30>,
+#  pycocoa.getters.get_selectornameof is <function .get_selectornameof at 0x10293f9a0>,
+#  pycocoa.getters.get_superclass is <function .get_superclass at 0x10293f910>,
+#  pycocoa.getters.get_superclassnameof is <function .get_superclassnameof at 0x10293f7f0>,
+#  pycocoa.getters.get_superclassof is <function .get_superclassof at 0x10293f880>,
 # )[21]
-# pycocoa.getters.version 20.11.17, .isLazy 1, Python 3.9.0 64bit, macOS 10.16
+# pycocoa.getters.version 21.11.04, .isLazy 1, Python 3.10.0 64bit arm64, macOS 12.0.1
 
 # MIT License <https://OpenSource.org/licenses/MIT>
 #
-# Copyright (C) 2017-2021  -- mrJean1 at Gmail -- All Rights Reserved.
+# Copyright (C) 2017-2022 -- mrJean1 at Gmail -- All Rights Reserved.
 #
 # Permission is hereby granted, free of charge, to any person obtaining
 # a copy of this software and associated documentation files (the "Software"),

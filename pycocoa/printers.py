@@ -28,7 +28,7 @@ from ctypes  import ArgumentError, byref, cast, c_char_p, c_double, \
 import os
 
 __all__ = _ALL_LAZY.printers
-__version__ = '21.08.18'
+__version__ = '21.11.04'
 
 libPC = None  # loaded on-demand
 kPMServerLocal = None
@@ -946,19 +946,19 @@ if __name__ == '__main__':
 #  1 Printer('Color'): ID 'Brother_MFC_...', makemodel 'Brother MFC-... CUPS', URI 'usb://...'
 
 # default (True) printer: Printer('Color MFC-...')...
-#  Printer('Color MFC-9340CDW').name: 'Color MFC-...'
-#  Printer('Color MFC-9340CDW').ID: 'Brother_MFC_...'
-#  Printer('Color MFC-9340CDW').makemodel: 'Brother MFC-...CUPS'
-#  Printer('Color MFC-9340CDW').isColor: True
-#  Printer('Color MFC-9340CDW').location: '....'
-#  Printer('Color MFC-9340CDW').psCapable: True
-#  Printer('Color MFC-9340CDW').psLevel: 3
-#  Printer('Color MFC-9340CDW').isRemote: False
-#  Printer('Color MFC-9340CDW').deviceURI: 'usb://Brother/MFC-...?serial=...'
-#  Printer('Color MFC-9340CDW').deviceDescription: {'NSDeviceIsPrinter': 'YES'}
-#  Printer('Color MFC-9340CDW').description: '{\n    "Device Description" =     {\n        NSDeviceIsPrinter = YES;\n    };\n    "Language Level" = 3;\n    Name = "Color MFC-...";\n    Type = "Brother MFC-... CUPS";\n}'
-#  Printer('Color MFC-9340CDW').PPD: 'file:///var/folders/nx/.../...'
-#  Printer('Color MFC-9340CDW').resolution: (300.0, 300.0)
+#  Printer('Color ...').name: 'Color MFC-...'
+#  Printer('Color ...').ID: 'Brother_MFC_...'
+#  Printer('Color ...').makemodel: 'Brother MFC-...CUPS'
+#  Printer('Color ...').isColor: True
+#  Printer('Color ...').location: '....'
+#  Printer('Color ...').psCapable: True
+#  Printer('Color ...').psLevel: 3
+#  Printer('Color ...').isRemote: False
+#  Printer('Color ...').deviceURI: 'usb://Brother/MFC-...?serial=...'
+#  Printer('Color ...').deviceDescription: {'NSDeviceIsPrinter': 'YES'}
+#  Printer('Color ...').description: '{\n    "Device Description" =     {\n        NSDeviceIsPrinter = YES;\n    };\n    "Language Level" = 3;\n    Name = "Color MFC-...";\n    Type = "Brother MFC-... CUPS";\n}'
+#  Printer('Color ...').PPD: 'file:///var/folders/nx/.../...'
+#  Printer('Color ...').resolution: (300.0, 300.0)
 #
 #  1 Paper('A4'): ID 'iso-a4', 595x842 (8.264X11.694)
 #  2 Paper('US Letter'): ID 'na-letter', 612x792 (8.5X11)
@@ -990,23 +990,23 @@ if __name__ == '__main__':
 
 
 # pycocoa.printers.__all__ = tuple(
-#  pycocoa.printers.get_libPC is <function .get_libPC at 0x1030b8700>,
-#  pycocoa.printers.get_papers is <function .get_papers at 0x10349e0d0>,
-#  pycocoa.printers.get_printer is <function .get_printer at 0x10349e160>,
-#  pycocoa.printers.get_printer_browser is <function .get_printer_browser at 0x10349e1f0>,
-#  pycocoa.printers.get_printers is <function .get_printers at 0x10349e280>,
-#  pycocoa.printers.get_resolutions is <function .get_resolutions at 0x10349e310>,
-#  pycocoa.printers.libPC is <CDLL '/System/Library/Frameworks/ApplicationServices.framework/Frameworks/PrintCore.framework/PrintCore', handle 13eeae5b0 at 0x10349d280>,
+#  pycocoa.printers.get_libPC is <function .get_libPC at 0x100fa9ea0>,
+#  pycocoa.printers.get_papers is <function .get_papers at 0x1014b05e0>,
+#  pycocoa.printers.get_printer is <function .get_printer at 0x1014b0670>,
+#  pycocoa.printers.get_printer_browser is <function .get_printer_browser at 0x1014b0700>,
+#  pycocoa.printers.get_printers is <function .get_printers at 0x1014b0790>,
+#  pycocoa.printers.get_resolutions is <function .get_resolutions at 0x1014b0820>,
+#  pycocoa.printers.libPC is <CDLL '/System/Library/Frameworks/ApplicationServices.framework/Frameworks/PrintCore.framework/PrintCore', handle 46e129760 at 0x1014aca00>,
 #  pycocoa.printers.Paper is <class .Paper>,
 #  pycocoa.printers.PaperCustom is <class .PaperCustom>,
 #  pycocoa.printers.PaperMargins is <class .PaperMargins>,
 #  pycocoa.printers.Printer is <class .Printer>,
 # )[11]
-# pycocoa.printers.version 21.08.17, .isLazy 1, Python 3.9.6 64bit arm64, macOS 11.5.2
+# pycocoa.printers.version 21.11.04, .isLazy 1, Python 3.10.0 64bit arm64, macOS 12.0.1
 
 # MIT License <https://OpenSource.org/licenses/MIT>
 #
-# Copyright (C) 2017-2021  -- mrJean1 at Gmail -- All Rights Reserved.
+# Copyright (C) 2017-2022 -- mrJean1 at Gmail -- All Rights Reserved.
 #
 # Permission is hereby granted, free of charge, to any person obtaining
 # a copy of this software and associated documentation files (the "Software"),

@@ -16,7 +16,7 @@ from pycocoa.runtime import isImmutable, isObjCInstanceOf, \
 from pycocoa.utils   import isinstanceOf, missing, _Types
 
 __all__ = _ALL_LAZY.dicts
-__version__ = '20.11.18'
+__version__ = '21.11.04'
 
 
 def _dict_cmp(dict1, dict2):
@@ -281,11 +281,11 @@ if __name__ == '__main__':
 #  pycocoa.dicts.Dict is <class .Dict>,
 #  pycocoa.dicts.FrozenDict is <class .FrozenDict>,
 # )[2]
-# pycocoa.dicts.version 20.11.18, .isLazy 1, Python 3.9.0 64bit, macOS 10.16
+# pycocoa.dicts.version 21.11.04, .isLazy 1, Python 3.10.0 64bit arm64, macOS 12.0.1
 
 # MIT License <https://OpenSource.org/licenses/MIT>
 #
-# Copyright (C) 2017-2021  -- mrJean1 at Gmail -- All Rights Reserved.
+# Copyright (C) 2017-2022 -- mrJean1 at Gmail -- All Rights Reserved.
 #
 # Permission is hereby granted, free of charge, to any person obtaining
 # a copy of this software and associated documentation files (the "Software"),

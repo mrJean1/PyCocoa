@@ -589,6 +589,7 @@ pycocoa.lazily._NN_	pycocoa.lazily-module.html#_NN_
 pycocoa.lazily._all_missing	pycocoa.lazily-module.html#_all_missing
 pycocoa.lazily._COMMASPACE_	pycocoa.lazily-module.html#_COMMASPACE_
 pycocoa.lazily._C_XTYPES	pycocoa.lazily-module.html#_C_XTYPES
+pycocoa.lazily._pycocoa_	pycocoa.lazily-module.html#_pycocoa_
 pycocoa.lazily._SPACE_	pycocoa.lazily-module.html#_SPACE_
 pycocoa.lazily._all_imports	pycocoa.lazily-module.html#_all_imports
 pycocoa.lazily._ALL_OVERRIDING	pycocoa.lazily-module.html#_ALL_OVERRIDING
@@ -1418,10 +1419,6 @@ ctypes.c_void_p._type_	ctypes.c_void_p-class.html#_type_
 ctypes.c_void_p.from_param	ctypes.c_void_p-class.html#from_param
 ctypes.c_wchar	ctypes.c_wchar-class.html
 ctypes.c_wchar._type_	ctypes.c_wchar-class.html#_type_
-pycocoa.NSExceptionHandler_t	pycocoa.NSExceptionHandler_t-class.html
-pycocoa.NSExceptionHandler_t._argtypes_	pycocoa.NSExceptionHandler_t-class.html#_argtypes_
-pycocoa.NSExceptionHandler_t._restype_	pycocoa.NSExceptionHandler_t-class.html#_restype_
-pycocoa.NSExceptionHandler_t._flags_	pycocoa.NSExceptionHandler_t-class.html#_flags_
 pycocoa.apps.App	pycocoa.apps.App-class.html
 pycocoa.apps.App.menuHide_	pycocoa.apps.App-class.html#menuHide_
 pycocoa.apps.App._keyWindow	pycocoa.apps.App-class.html#_keyWindow

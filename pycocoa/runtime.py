@@ -47,7 +47,7 @@ from ctypes import alignment, ArgumentError, byref, cast, c_buffer, \
 #                  # very end of this module.
 
 __all__ = _ALL_LAZY.runtime
-__version__ = '21.08.17'
+__version__ = '21.11.04'
 
 # <https://Developer.Apple.com/documentation/objectivec/
 #        objc_associationpolicy?language=objc>
@@ -1582,14 +1582,14 @@ if __name__ == '__main__':
 # % python3 -m pycocoa.runtime
 #
 # pycocoa.runtime.__all__ = tuple(
-#  pycocoa.runtime.add_ivar is <function .add_ivar at 0x7f7f325254c0>,
-#  pycocoa.runtime.add_method is <function .add_method at 0x7f7f3252af70>,
-#  pycocoa.runtime.add_protocol is <function .add_protocol at 0x7f7f3252c040>,
-#  pycocoa.runtime.add_subclass is <function .add_subclass at 0x7f7f3252c0d0>,
-#  pycocoa.runtime.isClass is <function .isClass at 0x7f7f3252c160>,
-#  pycocoa.runtime.isImmutable is <function .isImmutable at 0x7f7f3252c1f0>,
-#  pycocoa.runtime.isMetaClass is <function .isMetaClass at 0x7f7f3252c310>,
-#  pycocoa.runtime.isObjCInstanceOf is <function .isObjCInstanceOf at 0x7f7f3252c280>,
+#  pycocoa.runtime.add_ivar is <function .add_ivar at 0x1051e13f0>,
+#  pycocoa.runtime.add_method is <function .add_method at 0x1051f4ee0>,
+#  pycocoa.runtime.add_protocol is <function .add_protocol at 0x1051f4f70>,
+#  pycocoa.runtime.add_subclass is <function .add_subclass at 0x1051f5000>,
+#  pycocoa.runtime.isClass is <function .isClass at 0x1051f5090>,
+#  pycocoa.runtime.isImmutable is <function .isImmutable at 0x1051f5120>,
+#  pycocoa.runtime.isMetaClass is <function .isMetaClass at 0x1051f5240>,
+#  pycocoa.runtime.isObjCInstanceOf is <function .isObjCInstanceOf at 0x1051f51b0>,
 #  pycocoa.runtime.OBJC_ASSOCIATION_COPY is 771 or 0x303,
 #  pycocoa.runtime.OBJC_ASSOCIATION_COPY_NONATOMIC is 3 or 0x3,
 #  pycocoa.runtime.OBJC_ASSOCIATION_RETAIN is 769 or 0x301,
@@ -1603,19 +1603,19 @@ if __name__ == '__main__':
 #  pycocoa.runtime.ObjCInstance is <class .ObjCInstance>,
 #  pycocoa.runtime.ObjCMethod is <class .ObjCMethod>,
 #  pycocoa.runtime.ObjCSubclass is <class .ObjCSubclass>,
-#  pycocoa.runtime.register_subclass is <function .register_subclass at 0x7f7f3252c430>,
-#  pycocoa.runtime.release is <function .release at 0x7f7f3252c3a0>,
-#  pycocoa.runtime.retain is <function .retain at 0x7f7f3252c4c0>,
-#  pycocoa.runtime.send_message is <function .send_message at 0x7f7f3252c5e0>,
-#  pycocoa.runtime.send_super is <function .send_super at 0x7f7f3252c670>,
-#  pycocoa.runtime.send_super_init is <function .send_super_init at 0x7f7f3252c700>,
-#  pycocoa.runtime.set_ivar is <function .set_ivar at 0x7f7f3252c790>,
+#  pycocoa.runtime.register_subclass is <function .register_subclass at 0x1051f5360>,
+#  pycocoa.runtime.release is <function .release at 0x1051f52d0>,
+#  pycocoa.runtime.retain is <function .retain at 0x1051f53f0>,
+#  pycocoa.runtime.send_message is <function .send_message at 0x1051f5510>,
+#  pycocoa.runtime.send_super is <function .send_super at 0x1051f55a0>,
+#  pycocoa.runtime.send_super_init is <function .send_super_init at 0x1051f5630>,
+#  pycocoa.runtime.set_ivar is <function .set_ivar at 0x1051f56c0>,
 # )[28]
-# pycocoa.runtime.version 20.11.22, .isLazy 1, Python 3.9.0 64bit, macOS 10.16
+# pycocoa.runtime.version 21.11.04, .isLazy 1, Python 3.10.0 64bit arm64, macOS 12.0.1
 
 # MIT License <https://OpenSource.org/licenses/MIT>
 #
-# Copyright (C) 2017-2021  -- mrJean1 at Gmail -- All Rights Reserved.
+# Copyright (C) 2017-2022 -- mrJean1 at Gmail -- All Rights Reserved.
 #
 # Permission is hereby granted, free of charge, to any person obtaining
 # a copy of this software and associated documentation files (the "Software"),

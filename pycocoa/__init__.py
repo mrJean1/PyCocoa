@@ -42,15 +42,15 @@ Tests
 =====
 
 The tests and examples have only been run with 64-bit Python 3.10.0, 3.9.6, 3.8.10,
-3.7.6 and 2.7.18 using U{Python-VLC<https://PyPI.org/project/python-vlc>} 3.0.16,
-3.0.12, 3.0.11, 3.0.10, 3.0.8, 3.0.6, 3.0.4 and 2.2.8 (with the compatible
-U{VLC App<https://www.VideoLan.org/vlc>}) on macOS 12.0.1 Monterey, 11.6.1 and
+3.7.6 and 2.7.18 using U{Python-VLC<https://PyPI.org/project/python-vlc>} 3.0.12,
+3.0.11, 3.0.10, 3.0.8, 3.0.6, 3.0.4 and 2.2.8 (with the compatible U{VLC App
+<https://www.VideoLan.org/vlc>} and 3.0.16) on macOS 12.0.1 Monterey, 11.6.1 and
 11.5.2 Big Sur (aka 10.16), 10.15.7 Catalina, 10.14.6 Mojave or 10.13.6 High
 Sierra.  The tests run with and without C{lazy import} in Python 3.
 
 Python 3.10.0 and 3.9.6 run on Apple Silicon (C{arm64} I{natively}), all other
 Python versions run on Intel (C{x86_64}) or Intel I{emulation} (C{"arm64_x86_64"},
-see function L{machine}).
+see function L{pycocoa.machine}).
 
 Previously, PyCocoa was tested with 64-bit Python 3.9.1, 3.8.6, 3.8.3, 3.8.1, 3.7.5,
 3.7.4, 2.7.17 and macOS' 2.7.16.  PyCocoa has I{not been tested} on iOS nor with 32-bit
@@ -69,8 +69,6 @@ U{McCabe<https://PyPI.org/project/mccabe>} using 64-bit Python 2.7.18 and with
 U{Flake8<https://PyPI.org/project/flake8>} using 64-bit Python 3.10.0 on macOS
 12.0.1 Monterey.
 
-Fault handling by C{pycocoa.faults} is unavailable on macOS 12.0.1 Monterey.
-
 Some alternatives to PyCocoa are (a) U{PyObjC<https://PyPI.org/project/pyobjc>},
 the most comprehensive Python to Objective-C bridge (and included in
 U{macOS' Python<https://WikiPedia.org/wiki/PyObjC#History>}), (b)
@@ -83,7 +81,7 @@ and (d) U{wxPython<https://wxPython.org/pages/overview/index.html>}.
 Licenses
 ========
 
-U{Copyright (C) 2017-2021 -- mrJean1 at Gmail -- All Rights Reserved
+U{Copyright (C) 2017-2022 -- mrJean1 at Gmail -- All Rights Reserved
 <https://OpenSource.org/licenses/MIT>}.
 
 C{Permission is hereby granted, free of charge, to any person obtaining a
@@ -148,7 +146,7 @@ _isfrozen       = getattr(sys, 'frozen', False)
 pycocoa_abspath = dirname(abspath(__file__))  # sys._MEIPASS + '/pycocoa'
 _pycocoa        = __package__ or basename(pycocoa_abspath)
 
-__version__ = '21.11.03'
+__version__ = '21.11.04'
 # see setup.py for similar logic
 version = '.'.join(map(str, map(int, __version__.split('.'))))
 

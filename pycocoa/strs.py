@@ -14,7 +14,7 @@ from pycocoa.pytypes import dict2NS, str2NS
 from pycocoa.utils   import isinstanceOf, property_RO, _Strs, _Types
 
 __all__ = _ALL_LAZY.strs
-__version__ = '20.11.17'
+__version__ = '21.11.04'
 
 
 class Str(str, _Type0):  # str, first to maintain str behavior
@@ -266,11 +266,11 @@ if __name__ == '__main__':
 #  pycocoa.strs.Str is <class .Str>,
 #  pycocoa.strs.StrAttd is <class .StrAttd>,
 # )[2]
-# pycocoa.strs.version 20.11.17, .isLazy 1, Python 3.9.0 64bit, macOS 10.16
+# pycocoa.strs.version 21.11.04, .isLazy 1, Python 3.10.0 64bit arm64, macOS 12.0.1
 
 # MIT License <https://OpenSource.org/licenses/MIT>
 #
-# Copyright (C) 2017-2021  -- mrJean1 at Gmail -- All Rights Reserved.
+# Copyright (C) 2017-2022 -- mrJean1 at Gmail -- All Rights Reserved.
 #
 # Permission is hereby granted, free of charge, to any person obtaining
 # a copy of this software and associated documentation files (the "Software"),

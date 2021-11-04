@@ -125,7 +125,7 @@ from inspect import isfunction, ismethod
 # from types import FunctionType, MethodType
 
 __all__ = _ALL_LAZY.menus
-__version__ = '20.11.28'
+__version__ = '21.11.04'
 
 # Method _NSApplicationDelegate.handleMenuItem_ in .apps.py
 # is the handler ('selector') for all menu items specified
@@ -1679,14 +1679,14 @@ if __name__ == '__main__':
 #                    .VT=0xb,
 #  pycocoa.menus.Menu is <class .Menu>,
 #  pycocoa.menus.MenuBar is <class .MenuBar>,
-#  pycocoa.menus.ns2Item is <function .ns2Item at 0x7fa73ce6c940>,
-#  pycocoa.menus.title2action is <function .title2action at 0x7fa73ce78940>,
+#  pycocoa.menus.ns2Item is <function .ns2Item at 0x1031eae60>,
+#  pycocoa.menus.title2action is <function .title2action at 0x1031efd90>,
 # )[7]
-# pycocoa.menus.version 20.11.28, .isLazy 1, Python 3.9.0 64bit, macOS 10.16
-#
+# pycocoa.menus.version 21.11.04, .isLazy 1, Python 3.10.0 64bit arm64, macOS 12.0.1
+
 # Item('Quit', 'menuTerminate_', Cmd+q) properties:
-#   NS = <ObjCInstance(NSMenuItem(<Id_t at 0x7fcffb47aa70>) of 0x7fcff8c735e0) at 0x7fcffb47b250>
-#   NSDelegate = 'AttributeError("use \'NSd-\' not \'NSD-\'",)'
+#   NS = <ObjCInstance(NSMenuItem(<Id_t at 0x10320cac0>) of 0x600002e84150) at 0x102c68520>
+#   NSDelegate = 'AttributeError("use \'NSd-\' not \'NSD-\'")'
 #   NSdelegate = None
 #   action = 'menuTerminate_'
 #   allowsKeyWhenHidden = False
@@ -1704,10 +1704,10 @@ if __name__ == '__main__':
 #   isSeparator = False
 #   key = 'q'
 #   keyEquivalent = 'q'
-#   keyEquivalentModifiers = {'shift': False, 'alt': False, 'cmd': True, 'ctrl': False}
-#   keyModifiers = {'shift': False, 'alt': False, 'cmd': True, 'ctrl': False}
+#   keyEquivalentModifiers = {'alt': False, 'cmd': True, 'ctrl': False, 'shift': False}
+#   keyModifiers = {'alt': False, 'cmd': True, 'ctrl': False, 'shift': False}
 #   nsTarget = None
-#   parent = Menu('Test') at 0x7fcffb029e50
+#   parent = Menu('Test') at 0x102cae260
 #   shift = False
 #   state = 0
 #   subMenu = None
@@ -1716,8 +1716,8 @@ if __name__ == '__main__':
 #   toolTip = ''
 #
 # Menu('Test') properties:
-#   NS = <ObjCInstance(NSMenu(<Id_t at 0x7fcffb010d40>) of 0x7fcff8c6fd30) at 0x7fcffb029dd0>
-#   NSDelegate = 'AttributeError("use \'NSd-\' not \'NSD-\'",)'
+#   NS = <ObjCInstance(NSMenu(<Id_t at 0x102de5340>) of 0x600001084700) at 0x102cadd50>
+#   NSDelegate = 'AttributeError("use \'NSd-\' not \'NSD-\'")'
 #   NSdelegate = None
 #   action = None
 #   app = None
@@ -1730,17 +1730,17 @@ if __name__ == '__main__':
 #   isTornOff = False
 #   isVisible = None
 #   minWidth = 0.0
-#   nsMenuItem = <ObjCInstance(NSMenuItem(<Id_t at 0x7fcffb47d9e0>) of 0x7fcff8c78800) at 0x7fcffb47b750>
-#   parent = MenuBar(None) at 0x7fcffb029c50
+#   nsMenuItem = <ObjCInstance(NSMenuItem(<Id_t at 0x10320d7c0>) of 0x600002e84700) at 0x102c69c90>
+#   parent = MenuBar(None) at 0x102cac8e0
 #   showsState = True
-#   size = <NSSize_t(width=100.0, height=29.0) at 0x7fcffb48d830>
+#   size = <NSSize_t(width=99.0, height=32.0) at 0x10320f440>
 #   tag = 2
 #   tags = 2
 #   title = 'Test'
 #
 # MenuBar(None) properties:
-#   NS = <ObjCInstance(NSMenu(<Id_t at 0x7fcffa7b2200>) of 0x7fcff8c70000) at 0x7fcffb029e90>
-#   NSDelegate = 'AttributeError("use \'NSd-\' not \'NSD-\'",)'
+#   NS = <ObjCInstance(NSMenu(<Id_t at 0x1030637c0>) of 0x6000010846c0) at 0x102cad570>
+#   NSDelegate = 'AttributeError("use \'NSd-\' not \'NSD-\'")'
 #   NSdelegate = None
 #   action = None
 #   app = None
@@ -1753,14 +1753,14 @@ if __name__ == '__main__':
 #   minWidth = 0.0
 #   parent = None
 #   showsState = True
-#   size = <NSSize_t(width=107.0, height=29.0) at 0x7fcffb48db90>
+#   size = <NSSize_t(width=85.0, height=32.0) at 0x10320f740>
 #   tag = None
 #   tags = 2
 #   title = None
 
 # MIT License <https://OpenSource.org/licenses/MIT>
 #
-# Copyright (C) 2017-2021  -- mrJean1 at Gmail -- All Rights Reserved.
+# Copyright (C) 2017-2022 -- mrJean1 at Gmail -- All Rights Reserved.
 #
 # Permission is hereby granted, free of charge, to any person obtaining a
 # copy of this software and associated documentation files (the "Software"),

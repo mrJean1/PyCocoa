@@ -17,7 +17,7 @@ from pycocoa.utils import _Ints, isinstanceOf, property_RO, \
                           _Singletons, _Types
 
 __all__ = _ALL_LAZY.screens
-__version__ = '21.08.18'
+__version__ = '21.11.04'
 
 
 class Frame(Rect):
@@ -475,11 +475,11 @@ if __name__ == '__main__':
 #  pycocoa.screens.Screen is <class .Screen>,
 #  pycocoa.screens.Screens is (BuiltInScreen(NSScreen, name='BuiltIn'), ExternalScreen(NSScreen, name='External')),
 # )[7]
-# pycocoa.screens.version 21.08.17, .isLazy 1, Python 3.9.6 64bit arm64, macOS 11.5.2
+# pycocoa.screens.version 21.11.04, .isLazy 1, Python 3.10.0 64bit arm64, macOS 12.0.1
 
 # MIT License <https://OpenSource.org/licenses/MIT>
 #
-# Copyright (C) 2017-2021  -- mrJean1 at Gmail -- All Rights Reserved.
+# Copyright (C) 2017-2022 -- mrJean1 at Gmail -- All Rights Reserved.
 #
 # Permission is hereby granted, free of charge, to any person obtaining a
 # copy of this software and associated documentation files (the "Software"),

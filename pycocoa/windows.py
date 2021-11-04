@@ -71,7 +71,7 @@ from pycocoa.utils import aspect_ratio, bytes2str, _Constants, _Globals, \
 # from enum   import Enum
 
 __all__ = _ALL_LAZY.windows
-__version__ = '20.12.14'
+__version__ = '21.11.04'
 
 
 class AutoResizeError(ValueError):
@@ -894,7 +894,7 @@ if __name__ == '__main__':
 #                            .Sizable=18,
 #                            .WidthSizable=2,
 #  pycocoa.windows.AutoResizeError is <class .AutoResizeError>,
-#  pycocoa.windows.autoResizes is <function .autoResizes at 0x7fd2a7590820>,
+#  pycocoa.windows.autoResizes is <function .autoResizes at 0x102fd1ab0>,
 #  pycocoa.windows.BezelStyle.Disclosure=5,
 #                            .HelpButton=9,
 #                            .Inline=15,
@@ -913,8 +913,8 @@ if __name__ == '__main__':
 #                        .Line=1,
 #                        .No=0,
 #  pycocoa.windows.MediaWindow is <class .MediaWindow>,
-#  pycocoa.windows.ns2Window is <function .ns2Window at 0x7fd2a75a91f0>,
-#  pycocoa.windows.NSWindowDelegate is <pycocoa.utils.module_property_RO object at 0x7fd2a75a6fa0>,
+#  pycocoa.windows.ns2Window is <function .ns2Window at 0x102fec670>,
+#  pycocoa.windows.NSWindowDelegate is <pycocoa.utils.module_property_RO object at 0x102c03160>,
 #  pycocoa.windows.TextWindow is <class .TextWindow>,
 #  pycocoa.windows.Window is <class .Window>,
 #  pycocoa.windows.WindowError is <class .WindowError>,
@@ -925,13 +925,13 @@ if __name__ == '__main__':
 #                             .Typical=15,
 #                             .Utility=1<<4,
 #  pycocoa.windows.WindowStyleError is <class .WindowStyleError>,
-#  pycocoa.windows.windowStyles is <function .windowStyles at 0x7fd2a759ae50>,
+#  pycocoa.windows.windowStyles is <function .windowStyles at 0x102bd9e10>,
 # )[14]
-# pycocoa.windows.version 20.11.28, .isLazy 1, Python 3.9.0 64bit, macOS 10.16
+# pycocoa.windows.version 21.11.04, .isLazy 1, Python 3.10.0 64bit arm64, macOS 12.0.1
 
 # MIT License <https://OpenSource.org/licenses/MIT>
 #
-# Copyright (C) 2017-2021  -- mrJean1 at Gmail -- All Rights Reserved.
+# Copyright (C) 2017-2022 -- mrJean1 at Gmail -- All Rights Reserved.
 #
 # Permission is hereby granted, free of charge, to any person obtaining a
 # copy of this software and associated documentation files (the "Software"),

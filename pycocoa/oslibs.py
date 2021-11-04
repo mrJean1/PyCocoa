@@ -14,7 +14,7 @@
 @var Libs.Foundation: The 'Foundation.framework/Foundation' library.
 @var Libs.ObjC: The 'libobjc.dylib' library.
 
-@note: The macOS C{libc} library (C{ctypes.CDLL}) is also installed,
+@note: The macOS C{libc.dylib} library (C{ctypes.CDLL}) is also installed,
 but only exported as C{Libs.C}.
 
 @var NO:  ObjC's False (C{const c_byte}).
@@ -52,7 +52,7 @@ from os.path import join as _join, sep as _SEP
 # import sys as _sys  # from pycocoa.utils
 
 __all__ = _ALL_LAZY.oslibs
-__version__ = '21.11.02'
+__version__ = '21.11.04'
 
 _framework_ = 'framework'
 _leaked2    = []  # leaked memory, 2-tuples (ptr, size)
@@ -231,19 +231,6 @@ if _libc:  # macOS, linux, etc.
     _csignature(_libc_free, c_void, c_void_p)
 else:  # ignore free, leaking some memory
     _libc_free = None
-
-_UncaughtExceptionHandler_t = CFUNCTYPE(None, c_void_p)
-# callback to handle so-called uncaught ObjC exceptions from libc, different
-# from the libAppKit.NSExceptionHandler_t.  DO NOT use the latter for reasons
-# explaimed U{here(https://OpenSource.Apple.com/source/pyobjc/pyobjc-32/...
-# pyobjc/pyobjc-framework-ExceptionHandling/Lib/PyObjCTools/Debugging.py.auto.html)}
-try:  # missing in 12.0.1 macOS Monterey, see pycocoa.faults
-    _setUncaughtExceptionHandler = _libc.objc_setUncaughtExceptionHandler  # .NSSetUncaughtExceptionHandler
-    # _UncaughtExceptionHandler_t* _setUncaughtExceptionHandler(_UncaughtExceptionHandler_t* h) installs
-    # the given exception handler and returns the previously installed one (like signal.signal?).
-    _csignature(_setUncaughtExceptionHandler, _UncaughtExceptionHandler_t, _UncaughtExceptionHandler_t)
-except AttributeError:
-    _setUncaughtExceptionHandler = None
 
 
 def leaked2():
@@ -538,11 +525,6 @@ NSApplicationActivationPolicyRegular    = 0
 NSApplicationActivationPolicyAccessory  = 1
 NSApplicationActivationPolicyProhibited = 2
 
-# DO NOT USE the NS-definitions, see C{_UncaughtExceptionHandler_t} above to see why!
-# <https://Developer.Apple.com/documentation/exceptionhandling/nsexceptionhandler>
-NSExceptionHandler_t = _UncaughtExceptionHandler_t  #
-# _csignature(libAppKit.NSSetUncaughtExceptionHandler, NSExceptionHandler_t, NSExceptionHandler_t)
-
 # <https://GitHub.com/gnustep/libs-gui/blob/master/Headers/AppKit/NSPanel.h>
 # <https://GitHub.com/gnustep/libs-gui/blob/master/Headers/AppKit/NSSavePanel.h>
 NSFileHandlingPanelCancelButton = NSCancelButton = 0
@@ -754,6 +736,18 @@ NSWindowDocumentIconButton = 4
 
 # <https://Developer.Apple.com/documentation/appkit/1473652-nsrectfill>
 _csignature(libAppKit.NSRectFill, c_void, POINTER(NSRect_t))
+
+# callback to handle so-called uncaught ObjC exceptions from libc, different from
+# the libAppKit.NSExceptionHandler, see for example <https://Developer.Apple.com/
+# documentation/exceptionhandling/nsexceptionhandler>.  DO NOT use the latter, for
+# an example see here <https://OpenSource.Apple.com/source/pyobjc/pyobjc-32/pyobjc/
+# pyobjc-framework-ExceptionHandling/Lib/PyObjCTools/Debugging.py.auto.html>.
+try:
+    _setUncaughtExceptionHandler = _libc.objc_setUncaughtExceptionHandler
+except AttributeError:  # macOS 12.0.1 Monterey
+    _setUncaughtExceptionHandler = libAppKit.NSSetUncaughtExceptionHandler
+_UncaughtExceptionHandler_t = CFUNCTYPE(None, c_void_p)
+_csignature(_setUncaughtExceptionHandler, _UncaughtExceptionHandler_t, _UncaughtExceptionHandler_t)
 
 # COREGRAPHICS / aka QUARTZ
 libCG = get_lib('CoreGraphics')
@@ -1163,23 +1157,23 @@ if __name__ == '__main__':
 # % python3 -m pycocoa.oslibs
 #
 # pycocoa.oslibs.__all__ = tuple(
-#  pycocoa.oslibs.get_lib is <function .get_lib at 0x7fa4903ec160>,
-#  pycocoa.oslibs.get_lib_framework is <function .get_lib_framework at 0x7fa4903ec280>,
-#  pycocoa.oslibs.get_libs is <function .get_libs at 0x7fa4903ec1f0>,
-#  pycocoa.oslibs.leaked2 is <function .leaked2 at 0x7fa4903ec310>,
-#  pycocoa.oslibs.libAppKit is <CDLL 'AppKit.framework/AppKit', handle 7fa48e71c6b0 at 0x7fa4903f35b0>,
-#  pycocoa.oslibs.libCF is <CDLL 'CoreFoundation.framework/CoreFoundation', handle 11a53d660 at 0x7fa49028ca60>,
-#  pycocoa.oslibs.libCG is <CDLL 'CoreGraphics.framework/CoreGraphics', handle 7fa48e717de0 at 0x7fa4903f36d0>,
-#  pycocoa.oslibs.libCT is <CDLL 'CoreText.framework/CoreText', handle 7fa48e4070d0 at 0x7fa4903fda30>,
-#  pycocoa.oslibs.libFoundation is <CDLL 'Foundation.framework/Foundation', handle 7fa48e7296e0 at 0x7fa490404040>,
-#  pycocoa.oslibs.libobjc is <CDLL 'libobjc.dylib', handle 11a53da50 at 0x7fa490404130>,
-#  pycocoa.oslibs.Libs.AppKit=<CDLL 'AppKit.framework/AppKit', handle 7fa48e71c6b0 at 0x7fa4903f35b0>,
-#                     .C=<CDLL 'libc.dylib', handle 11a53d870 at 0x7fa49028ec10>,
-#                     .CoreFoundation=<CDLL 'CoreFoundation.framework/CoreFoundation', handle 11a53d660 at 0x7fa49028ca60>,
-#                     .CoreGraphics=<CDLL 'CoreGraphics.framework/CoreGraphics', handle 7fa48e717de0 at 0x7fa4903f36d0>,
-#                     .CoreText=<CDLL 'CoreText.framework/CoreText', handle 7fa48e4070d0 at 0x7fa4903fda30>,
-#                     .Foundation=<CDLL 'Foundation.framework/Foundation', handle 7fa48e7296e0 at 0x7fa490404040>,
-#                     .ObjC=<CDLL 'libobjc.dylib', handle 11a53da50 at 0x7fa490404130>,
+#  pycocoa.oslibs.get_lib is <function .get_lib at 0x1051d9ea0>,
+#  pycocoa.oslibs.get_lib_framework is <function .get_lib_framework at 0x1051d9e10>,
+#  pycocoa.oslibs.get_libs is <function .get_libs at 0x1051d9d80>,
+#  pycocoa.oslibs.leaked2 is <function .leaked2 at 0x1051d9cf0>,
+#  pycocoa.oslibs.libAppKit is <CDLL '/System/Library/Frameworks/AppKit.framework/AppKit', handle 46e10edd0 at 0x105084c70>,
+#  pycocoa.oslibs.libCF is <CDLL '/System/Library/Frameworks/CoreFoundation.framework/CoreFoundation', handle 46e10b530 at 0x105086140>,
+#  pycocoa.oslibs.libCG is <CDLL '/System/Library/Frameworks/CoreGraphics.framework/CoreGraphics', handle 46e111190 at 0x105084d90>,
+#  pycocoa.oslibs.libCT is <CDLL '/System/Library/Frameworks/CoreText.framework/CoreText', handle 46e10d4e0 at 0x105083520>,
+#  pycocoa.oslibs.libFoundation is <CDLL '/System/Library/Frameworks/Foundation.framework/Foundation', handle 46e10ca50 at 0x105082650>,
+#  pycocoa.oslibs.libobjc is <CDLL '/usr/lib/libobjc.dylib', handle 46e10a180 at 0x105082590>,
+#  pycocoa.oslibs.Libs.AppKit=<CDLL '/System/Library/Frameworks/AppKit.framework/AppKit', handle 46e10edd0 at 0x105084c70>,
+#                     .C=<CDLL '/usr/lib/libc.dylib', handle 46e120c70 at 0x105085750>,
+#                     .CoreFoundation=<CDLL '/System/Library/Frameworks/CoreFoundation.framework/CoreFoundation', handle 46e10b530 at 0x105086140>,
+#                     .CoreGraphics=<CDLL '/System/Library/Frameworks/CoreGraphics.framework/CoreGraphics', handle 46e111190 at 0x105084d90>,
+#                     .CoreText=<CDLL '/System/Library/Frameworks/CoreText.framework/CoreText', handle 46e10d4e0 at 0x105083520>,
+#                     .Foundation=<CDLL '/System/Library/Frameworks/Foundation.framework/Foundation', handle 46e10ca50 at 0x105082650>,
+#                     .ObjC=<CDLL '/usr/lib/libobjc.dylib', handle 46e10a180 at 0x105082590>,
 #  pycocoa.oslibs.NO is False or 0x0,
 #  pycocoa.oslibs.NSAcknowledgeCharacter is 6 or 0x6,
 #  pycocoa.oslibs.NSAlphaShiftKeyMask is 65536 or 0x10000 or 1 << 16,
@@ -1189,8 +1183,8 @@ if __name__ == '__main__':
 #  pycocoa.oslibs.NSApplicationActivationPolicyProhibited is 2 or 0x2,
 #  pycocoa.oslibs.NSApplicationActivationPolicyRegular is 0 or 0x0,
 #  pycocoa.oslibs.NSApplicationDefined is 15 or 0xF,
-#  pycocoa.oslibs.NSApplicationDidHideNotification is c_void_p(140735346402648),
-#  pycocoa.oslibs.NSApplicationDidUnhideNotification is c_void_p(140735346402744),
+#  pycocoa.oslibs.NSApplicationDidHideNotification is c_void_p(7975918144),
+#  pycocoa.oslibs.NSApplicationDidUnhideNotification is c_void_p(7975918240),
 #  pycocoa.oslibs.NSApplicationPresentationDefault is 0 or 0x0,
 #  pycocoa.oslibs.NSApplicationPresentationDisableHideApplication is 256 or 0x100 or 1 << 8,
 #  pycocoa.oslibs.NSApplicationPresentationDisableProcessSwitching is 32 or 0x20 or 1 << 5,
@@ -1205,12 +1199,12 @@ if __name__ == '__main__':
 #  pycocoa.oslibs.NSCancelButton is 0 or 0x0,
 #  pycocoa.oslibs.NSCancelCharacter is 24 or 0x18 or 3 << 3,
 #  pycocoa.oslibs.NSCarriageReturnCharacter is 13 or 0xD,
-#  pycocoa.oslibs.NSCenterTextAlignment is 2 or 0x2,
+#  pycocoa.oslibs.NSCenterTextAlignment is 1 or 0x1,
 #  pycocoa.oslibs.NSClearLineFunctionKey is 63289 or 0xF739,
 #  pycocoa.oslibs.NSCommandKeyMask is 1048576 or 0x100000 or 1 << 20,
 #  pycocoa.oslibs.NSControlKeyMask is 262144 or 0x40000 or 1 << 18,
 #  pycocoa.oslibs.NSDataLineEscapeCharacter is 16 or 0x10 or 1 << 4,
-#  pycocoa.oslibs.NSDefaultRunLoopMode is c_void_p(140735342861264),
+#  pycocoa.oslibs.NSDefaultRunLoopMode is c_void_p(7963298440),
 #  pycocoa.oslibs.NSDeleteCharacter is 127 or 0x7F,
 #  pycocoa.oslibs.NSDeleteFunctionKey is 63272 or 0xF728 or 7909 << 3,
 #  pycocoa.oslibs.NSDeviceControl1Character is 17 or 0x11,
@@ -1226,8 +1220,7 @@ if __name__ == '__main__':
 #  pycocoa.oslibs.NSEnquiryCharacter is 5 or 0x5,
 #  pycocoa.oslibs.NSEnterCharacter is 3 or 0x3,
 #  pycocoa.oslibs.NSEscapeCharacter is 27 or 0x1B,
-#  pycocoa.oslibs.NSEventTrackingRunLoopMode is c_void_p(140735346397848),
-#  pycocoa.oslibs.NSExceptionHandler_t is <class ctypes.CFUNCTYPE.<locals>.CFunctionType>,
+#  pycocoa.oslibs.NSEventTrackingRunLoopMode is c_void_p(7975913344),
 #  pycocoa.oslibs.NSF19FunctionKey is 63254 or 0xF716,
 #  pycocoa.oslibs.NSF1FunctionKey is 63236 or 0xF704,
 #  pycocoa.oslibs.NSFileHandlingPanelCancelButton is 0 or 0x0,
@@ -1287,7 +1280,7 @@ if __name__ == '__main__':
 #  pycocoa.oslibs.NSParagraphSeparatorCharacter is 8233 or 0x2029,
 #  pycocoa.oslibs.NSRecordSeparatorCharacter is 30 or 0x1E,
 #  pycocoa.oslibs.NSRightArrowFunctionKey is 63235 or 0xF703,
-#  pycocoa.oslibs.NSRightTextAlignment is 1 or 0x1,
+#  pycocoa.oslibs.NSRightTextAlignment is 2 or 0x2,
 #  pycocoa.oslibs.NSShiftInCharacter is 15 or 0xF,
 #  pycocoa.oslibs.NSShiftKeyMask is 131072 or 0x20000 or 1 << 17,
 #  pycocoa.oslibs.NSShiftOutCharacter is 14 or 0xE,
@@ -1302,11 +1295,11 @@ if __name__ == '__main__':
 #  pycocoa.oslibs.NSTableViewGridNone is 0 or 0x0,
 #  pycocoa.oslibs.NSTableViewSolidHorizontalGridLineMask is 2 or 0x2,
 #  pycocoa.oslibs.NSTableViewSolidVerticalGridLineMask is 1 or 0x1,
-#  pycocoa.oslibs.NSTextAlignmentCenter is 2 or 0x2,
+#  pycocoa.oslibs.NSTextAlignmentCenter is 1 or 0x1,
 #  pycocoa.oslibs.NSTextAlignmentJustified is 3 or 0x3,
 #  pycocoa.oslibs.NSTextAlignmentLeft is 0 or 0x0,
 #  pycocoa.oslibs.NSTextAlignmentNatural is 4 or 0x4,
-#  pycocoa.oslibs.NSTextAlignmentRight is 1 or 0x1,
+#  pycocoa.oslibs.NSTextAlignmentRight is 2 or 0x2,
 #  pycocoa.oslibs.NSTextWritingDirectionEmbedding is 0 or 0x0,
 #  pycocoa.oslibs.NSTextWritingDirectionOverride is 2 or 0x2,
 #  pycocoa.oslibs.NSTrackingActiveInActiveApp is 64 or 0x40 or 1 << 6,
@@ -1329,12 +1322,12 @@ if __name__ == '__main__':
 #  pycocoa.oslibs.NSWindowToolbarButton is 3 or 0x3,
 #  pycocoa.oslibs.NSWindowZoomButton is 2 or 0x2,
 #  pycocoa.oslibs.YES is True or 0x1,
-# )[160]
-# pycocoa.oslibs.version 20.11.28, .isLazy 1, Python 3.9.0 64bit, macOS 10.16
+# )[159]
+# pycocoa.oslibs.version 21.11.04, .isLazy 1, Python 3.10.0 64bit arm64, macOS 12.0.1
 
 # MIT License <https://OpenSource.org/licenses/MIT>
 #
-# Copyright (C) 2017-2021  -- mrJean1 at Gmail -- All Rights Reserved.
+# Copyright (C) 2017-2022 -- mrJean1 at Gmail -- All Rights Reserved.
 #
 # Permission is hereby granted, free of charge, to any person obtaining
 # a copy of this software and associated documentation files (the "Software"),

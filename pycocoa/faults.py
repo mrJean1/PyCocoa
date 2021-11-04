@@ -24,8 +24,7 @@ available in older Python versions.
 B{NOTE, if in Python 3.3 or later,} the environment variable is defined as
 B{U{PYTHONFAULTHANDLER=pycocoa
 <https://Docs.Python.org/3/using/cmdline.html#envvar-PYTHONFAULTHANDLER>}},
-the Python C{faulthandler} will be overridden by this module L{pycocoa.faults},
-I{except when running on macOS 12.0.1 Monterey}.
+the Python C{faulthandler} will be overridden by this module L{pycocoa.faults}.
 
 @note: Functions L{faults.disable}, L{faults.enable}, L{faults.exiting},
 L{faults.is_enabled} and L{faults.SIGs_enabled} are not exported publicly
@@ -34,7 +33,7 @@ functions L{getUncaughtExceptionHandler} and L{setUncaughtExceptionHandler}
 are.
 '''
 # all imports listed explicitly to help PyChecker
-from pycocoa.lazily  import _ALL_DOCS, _ALL_LAZY, _NL_, _NN_, _PY_FH
+from pycocoa.lazily  import _ALL_DOCS, _ALL_LAZY, _NL_, _NN_, _pycocoa_, _PY_FH
 from pycocoa.nstypes import _not_given_, NSExceptionError, NSMain
 from pycocoa.oslibs  import _setUncaughtExceptionHandler, _UncaughtExceptionHandler_t
 from pycocoa.runtime import  ObjCInstance  # release
@@ -45,7 +44,7 @@ import signal as _signal
 import sys
 
 __all__ = _ALL_LAZY.faults
-__version__ = '21.11.03'
+__version__ = '21.11.04'
 
 _exiting = -9  # default _exit and status
 # SIGnals handled by Python 3 C{faulthandler}
@@ -85,7 +84,7 @@ def _SIGname(sig):
 
 
 try:  # MCCABE 26
-    if _setUncaughtExceptionHandler and _PY_FH == 'pycocoa':
+    if _setUncaughtExceptionHandler and _PY_FH == _pycocoa_:
         raise ImportError
 
     import faulthandler as _fh  # Python 3.3+
@@ -277,9 +276,8 @@ def setUncaughtExceptionHandler(handler, log=True, raiser=False):
        @return: The previously installed I{uncaught} C{ObjC/NSException}
                 handler or C{None} if no handler was or couldn't be installed.
 
-       @raise RuntimeError: Setting uncaught exception handlers unavailable
-                            (on macOS 12.0.1 Monterey for example) and only
-                            thrown if B{C{raiser}=True}.
+       @raise RuntimeError: Setting uncaught exception handlers unavailable,
+                            but only thrown if B{C{raiser}=True}.
 
        @raise TypeError: The B{C{handler}} is not callable.
 
@@ -394,14 +392,14 @@ if __name__ == '__main__':
 # % [env PYTHONFAULTHANDLER=pycocoa] python[3] -m pycocoa.faults [-X]
 #
 # pycocoa.faults.__all__ = tuple(
-#  pycocoa.faults.getUncaughtExceptionHandler is <function .getUncaughtExceptionHandler at 0x7f8cab477040>,
-#  pycocoa.faults.setUncaughtExceptionHandler is <function .setUncaughtExceptionHandler at 0x7f8cab4770d0>,
+#  pycocoa.faults.getUncaughtExceptionHandler is <function .getUncaughtExceptionHandler at 0x10541fe20>,
+#  pycocoa.faults.setUncaughtExceptionHandler is <function .setUncaughtExceptionHandler at 0x10541feb0>,
 # )[2]
-# pycocoa.faults.version 20.11.20, .isLazy 1, Python 3.9.0 64bit, macOS 10.16
+# pycocoa.faults.version 21.11.04, .isLazy 1, Python 3.10.0 64bit arm64, macOS 12.0.1
 
 # MIT License <https://OpenSource.org/licenses/MIT>
 #
-# Copyright (C) 2017-2021  -- mrJean1 at Gmail -- All Rights Reserved.
+# Copyright (C) 2017-2022 -- mrJean1 at Gmail -- All Rights Reserved.
 #
 # Permission is hereby granted, free of charge, to any person obtaining
 # a copy of this software and associated documentation files (the "Software"),

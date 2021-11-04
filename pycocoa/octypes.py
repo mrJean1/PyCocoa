@@ -21,7 +21,6 @@ are ObjC types defined in terms of a C{ctypes} C{c_} type.
 @var Data_t:                 ObjC C{CFDataRef} ctype.
 @var Dictionary_t:           ObjC C{NSDictionary} ctype.
 @var NSDoubl_t:              ObjC C{CFDataRef} ctype.
-@var NSExceptionHandler_t:   ObjC C{NSExceptionHandler} ctype.
 @var NSFloat_t:              ObjC C{NSFloat} ctype.
 @var NSInteger_t:            ObjC C{NSInteger} ctype.
 @var NSTimeInterval_t:       ObjC C{NSTimeInterval} ctype.
@@ -55,7 +54,7 @@ except ImportError:
     c_void = None
 
 __all__ = _ALL_LAZY.octypes
-__version__ = '21.08.18'
+__version__ = '21.11.04'
 
 z = sizeof(c_void_p)
 if z == 4:
@@ -969,7 +968,7 @@ if __name__ == '__main__':
 #  pycocoa.octypes.NSNotFound is 9223372036854775807 or 0x7FFFFFFFFFFFFFFF,
 #  pycocoa.octypes.NSPoint_t is <class .NSPoint_t>,
 #  pycocoa.octypes.NSPointEncoding is b'{CGPoint=dd}',
-#  pycocoa.octypes.NSPointZero is <NSPoint_t(x=0.0, y=0.0) at 0x7fecef272440>,
+#  pycocoa.octypes.NSPointZero is <NSPoint_t(x=0.0, y=0.0) at 0x1030a8fc0>,
 #  pycocoa.octypes.NSRange_t is <class .NSRange_t>,
 #  pycocoa.octypes.NSRangeEncoding is b'{_NSRange=QQ}',
 #  pycocoa.octypes.NSRect4_t is <class .NSRect4_t>,
@@ -994,8 +993,8 @@ if __name__ == '__main__':
 #  pycocoa.octypes.RunLoop_t is <class .RunLoop_t>,
 #  pycocoa.octypes.SEL_t is <class .SEL_t>,
 #  pycocoa.octypes.Set_t is <class ctypes.c_void_p>,
-#  pycocoa.octypes.split_emcoding2 is <function .split_emcoding2 at 0x7fecef5775e0>,
-#  pycocoa.octypes.split_encoding is <function .split_encoding at 0x7fecef577670>,
+#  pycocoa.octypes.split_emcoding2 is <function .split_emcoding2 at 0x1032405e0>,
+#  pycocoa.octypes.split_encoding is <function .split_encoding at 0x103240670>,
 #  pycocoa.octypes.String_t is <class ctypes.c_void_p>,
 #  pycocoa.octypes.Struct_t is <class .Struct_t>,
 #  pycocoa.octypes.TimeInterval_t is <class ctypes.c_double>,
@@ -1010,11 +1009,11 @@ if __name__ == '__main__':
 #  pycocoa.octypes.URL_t is <class .URL_t>,
 #  pycocoa.octypes.VoidPtr_t is <class .VoidPtr_t>,
 # )[83]
-# pycocoa.octypes.version 20.11.22, .isLazy 1, Python 3.9.0 64bit, macOS 10.16
+# pycocoa.octypes.version 21.11.04, .isLazy 1, Python 3.10.0 64bit arm64, macOS 12.0.1
 
 # MIT License <https://OpenSource.org/licenses/MIT>
 #
-# Copyright (C) 2017-2021  -- mrJean1 at Gmail -- All Rights Reserved.
+# Copyright (C) 2017-2022 -- mrJean1 at Gmail -- All Rights Reserved.
 #
 # Permission is hereby granted, free of charge, to any person obtaining
 # a copy of this software and associated documentation files (the "Software"),

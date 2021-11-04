@@ -24,7 +24,7 @@ from threading import Thread
 from time import sleep
 
 __all__ = _ALL_LAZY.apps
-__version__ = '20.11.30'
+__version__ = '21.11.04'
 
 
 class App(_Type2):
@@ -630,16 +630,16 @@ if __name__ == '__main__':
 #
 # pycocoa.apps.__all__ = tuple(
 #  pycocoa.apps.App is <class .App>,
-#  pycocoa.apps.app_title is <function .app_title at 0x7fe73474b3a0>,
-#  pycocoa.apps.ns2App is <function .ns2App at 0x7fe73474bb80>,
-#  pycocoa.apps.NSApplicationDelegate is <pycocoa.utils.module_property_RO object at 0x7fe734785280>,
+#  pycocoa.apps.app_title is <function .app_title at 0x1012e7b50>,
+#  pycocoa.apps.ns2App is <function .ns2App at 0x1012e03a0>,
+#  pycocoa.apps.NSApplicationDelegate is <pycocoa.utils.module_property_RO object at 0x1012ce6b0>,
 #  pycocoa.apps.Tile is <class .Tile>,
 # )[5]
-# pycocoa.apps.version 20.11.25, .isLazy 1, Python 3.9.0 64bit, macOS 10.16
+# pycocoa.apps.version 21.11.04, .isLazy 1, Python 3.10.0 64bit arm64, macOS 12.0.1
 
 # MIT License <https://OpenSource.org/licenses/MIT>
 #
-# Copyright (C) 2017-2021 -- mrJean1 at Gmail -- All Rights Reserved.
+# Copyright (C) 2017-2022 -- mrJean1 at Gmail -- All Rights Reserved.
 #
 # Permission is hereby granted, free of charge, to any person obtaining a
 # copy of this software and associated documentation files (the "Software"),

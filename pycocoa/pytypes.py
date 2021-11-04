@@ -22,7 +22,7 @@ from decimal import Decimal as _Decimal
 from types   import GeneratorType as _Generator
 
 __all__ = _ALL_LAZY.pytypes
-__version__ = '20.11.22'
+__version__ = '21.11.04'
 
 _Numbers  = _Ints  + (float, _Decimal)
 
@@ -424,31 +424,31 @@ if __name__ == '__main__':
 # % python3 -m pycocoa.pytypes
 #
 # pycocoa.pytypes.__all__ = tuple(
-#  pycocoa.pytypes.bool2NS is <function .bool2NS at 0x7f924a577d30>,
-#  pycocoa.pytypes.bytes2NS is <function .bytes2NS at 0x7f924a577dc0>,
-#  pycocoa.pytypes.dict2NS is <function .dict2NS at 0x7f924a577e50>,
-#  pycocoa.pytypes.float2NS is <function .float2NS at 0x7f924a577ee0>,
-#  pycocoa.pytypes.frozenset2NS is <function .frozenset2NS at 0x7f924a577f70>,
-#  pycocoa.pytypes.generator2NS is <function .generator2NS at 0x7f924a579040>,
-#  pycocoa.pytypes.int2NS is <function .int2NS at 0x7f924a5790d0>,
-#  pycocoa.pytypes.list2NS is <function .list2NS at 0x7f924a579160>,
-#  pycocoa.pytypes.map2NS is <function .map2NS at 0x7f924a5791f0>,
-#  pycocoa.pytypes.None2NS is <function .None2NS at 0x7f924a579280>,
-#  pycocoa.pytypes.py2NS is <function .py2NS at 0x7f924a579700>,
-#  pycocoa.pytypes.range2NS is <function .range2NS at 0x7f924a579310>,
-#  pycocoa.pytypes.set2NS is <function .set2NS at 0x7f924a5793a0>,
-#  pycocoa.pytypes.str2NS is <function .str2NS at 0x7f924a579430>,
-#  pycocoa.pytypes.time2NS is <function .time2NS at 0x7f924a5794c0>,
-#  pycocoa.pytypes.tuple2NS is <function .tuple2NS at 0x7f924a579550>,
-#  pycocoa.pytypes.type2NS is <function .type2NS at 0x7f924a579790>,
-#  pycocoa.pytypes.unicode2NS is <function .unicode2NS at 0x7f924a5795e0>,
-#  pycocoa.pytypes.url2NS is <function .url2NS at 0x7f924a579670>,
+#  pycocoa.pytypes.bool2NS is <function .bool2NS at 0x10567bbe0>,
+#  pycocoa.pytypes.bytes2NS is <function .bytes2NS at 0x10567bc70>,
+#  pycocoa.pytypes.dict2NS is <function .dict2NS at 0x10567bd00>,
+#  pycocoa.pytypes.float2NS is <function .float2NS at 0x10567bd90>,
+#  pycocoa.pytypes.frozenset2NS is <function .frozenset2NS at 0x10567be20>,
+#  pycocoa.pytypes.generator2NS is <function .generator2NS at 0x10567beb0>,
+#  pycocoa.pytypes.int2NS is <function .int2NS at 0x10567bf40>,
+#  pycocoa.pytypes.list2NS is <function .list2NS at 0x10569c040>,
+#  pycocoa.pytypes.map2NS is <function .map2NS at 0x10569c0d0>,
+#  pycocoa.pytypes.None2NS is <function .None2NS at 0x10569c160>,
+#  pycocoa.pytypes.py2NS is <function .py2NS at 0x10569c5e0>,
+#  pycocoa.pytypes.range2NS is <function .range2NS at 0x10569c1f0>,
+#  pycocoa.pytypes.set2NS is <function .set2NS at 0x10569c280>,
+#  pycocoa.pytypes.str2NS is <function .str2NS at 0x10569c310>,
+#  pycocoa.pytypes.time2NS is <function .time2NS at 0x10569c3a0>,
+#  pycocoa.pytypes.tuple2NS is <function .tuple2NS at 0x10569c430>,
+#  pycocoa.pytypes.type2NS is <function .type2NS at 0x10569c670>,
+#  pycocoa.pytypes.unicode2NS is <function .unicode2NS at 0x10569c4c0>,
+#  pycocoa.pytypes.url2NS is <function .url2NS at 0x10569c550>,
 # )[19]
-# pycocoa.pytypes.version 20.11.22, .isLazy 1, Python 3.9.0 64bit, macOS 10.16
+# pycocoa.pytypes.version 21.11.04, .isLazy 1, Python 3.10.0 64bit arm64, macOS 12.0.1
 
 # MIT License <https://OpenSource.org/licenses/MIT>
 #
-# Copyright (C) 2017-2021  -- mrJean1 at Gmail -- All Rights Reserved.
+# Copyright (C) 2017-2022 -- mrJean1 at Gmail -- All Rights Reserved.
 #
 # Permission is hereby granted, free of charge, to any person obtaining
 # a copy of this software and associated documentation files (the "Software"),

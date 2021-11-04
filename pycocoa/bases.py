@@ -13,7 +13,7 @@ from pycocoa.runtime import ObjCInstance, release
 from pycocoa.utils   import bytes2str, isinstanceOf, type2strepr
 
 __all__ = _ALL_LAZY.bases
-__version__ = '20.01.08'
+__version__ = '21.11.04'
 
 
 class _Type0(object):
@@ -146,11 +146,11 @@ if __name__ == '__main__':
 #
 # pycocoa.bases.__all__ = tuple(
 # )[0]
-# pycocoa.bases.version 20.01.08, .isLazy 1, Python 3.9.0 64bit, macOS 10.16
+# pycocoa.bases.version 21.11.04, .isLazy 1, Python 3.10.0 64bit arm64, macOS 12.0.1
 
 # MIT License <https://OpenSource.org/licenses/MIT>
 #
-# Copyright (C) 2017-2021  -- mrJean1 at Gmail -- All Rights Reserved.
+# Copyright (C) 2017-2022 -- mrJean1 at Gmail -- All Rights Reserved.
 #
 # Permission is hereby granted, free of charge, to any person obtaining a
 # copy of this software and associated documentation files (the "Software"),

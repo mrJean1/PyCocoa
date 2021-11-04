@@ -29,7 +29,7 @@ from pycocoa.utils import _Globals, isinstanceOf, module_property_RO, \
 from pycocoa.windows import Window, WindowStyle
 
 __all__ = _ALL_LAZY.tables
-__version__ = '21.08.18'
+__version__ = '21.11.04'
 
 _Alignment = dict(center=NSTextAlignmentCenter,
                justified=NSTextAlignmentJustified,
@@ -392,16 +392,16 @@ if __name__ == '__main__':
 # % python3 -m pycocoa.tables
 #
 # pycocoa.tables.__all__ = tuple(
-#  pycocoa.tables.closeTables is <function .closeTables at 0x7f9ad7ee3160>,
-#  pycocoa.tables.NSTableViewDelegate is <pycocoa.utils.module_property_RO object at 0x7f9ad7ec70a0>,
+#  pycocoa.tables.closeTables is <function .closeTables at 0x1029a9900>,
+#  pycocoa.tables.NSTableViewDelegate is <pycocoa.utils.module_property_RO object at 0x1029d34f0>,
 #  pycocoa.tables.Table is <class .Table>,
 #  pycocoa.tables.TableWindow is <class .TableWindow>,
 # )[4]
-# pycocoa.tables.version 20.11.17, .isLazy 1, Python 3.9.0 64bit, macOS 10.16
+# pycocoa.tables.version 21.11.04, .isLazy 1, Python 3.10.0 64bit arm64, macOS 12.0.1
 
 # MIT License <https://OpenSource.org/licenses/MIT>
 #
-# Copyright (C) 2017-2021  -- mrJean1 at Gmail -- All Rights Reserved.
+# Copyright (C) 2017-2022 -- mrJean1 at Gmail -- All Rights Reserved.
 #
 # Permission is hereby granted, free of charge, to any person obtaining a
 # copy of this software and associated documentation files (the "Software"),

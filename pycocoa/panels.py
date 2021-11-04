@@ -46,7 +46,7 @@ except ImportError:
     _Browser, _BrowserError = None, ImportError
 
 __all__ = _ALL_LAZY.panels
-__version__ = '20.11.18'
+__version__ = '21.11.04'
 
 
 class AlertStyle(_Constants):  # Enum?
@@ -538,11 +538,11 @@ if __name__ == '__main__':
 #  pycocoa.panels.SavePanel is <class .SavePanel>,
 #  pycocoa.panels.TextPanel is <class .TextPanel>,
 # )[8]
-# pycocoa.panels.version 20.11.18, .isLazy 1, Python 3.9.0 64bit, macOS 10.16
+# pycocoa.panels.version 21.11.04, .isLazy 1, Python 3.10.0 64bit arm64, macOS 12.0.1
 
 # MIT License <https://OpenSource.org/licenses/MIT>
 #
-# Copyright (C) 2017-2021  -- mrJean1 at Gmail -- All Rights Reserved.
+# Copyright (C) 2017-2022 -- mrJean1 at Gmail -- All Rights Reserved.
 #
 # Permission is hereby granted, free of charge, to any person obtaining a
 # copy of this software and associated documentation files (the "Software"),

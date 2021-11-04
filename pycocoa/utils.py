@@ -20,7 +20,7 @@ _Python2 = sys.version_info.major < 3  # PYCHOK internal
 _Python3 = sys.version_info.major > 2  # PYCHOK internal
 
 __all__ = _ALL_LAZY.utils
-__version__ = '21.08.18'
+__version__ = '21.11.04'
 
 _bCOLON_ = b':'
 _bUNDER_ = b'_'
@@ -1165,41 +1165,42 @@ if __name__ == '__main__':
 #
 # pycocoa.utils.__all__ = tuple(
 #  pycocoa.utils.Adict is <class .Adict>,
-#  pycocoa.utils.aspect_ratio is <function .aspect_ratio at 0x7f92a2adff70>,
+#  pycocoa.utils.aspect_ratio is <function .aspect_ratio at 0x1050ad000>,
 #  pycocoa.utils.bytes2repr is <built-in function repr>,
-#  pycocoa.utils.bytes2str is <function .bytes2str at 0x7f92a2adf310>,
+#  pycocoa.utils.bytes2str is <function .bytes2str at 0x1050ac3a0>,
 #  pycocoa.utils.Cache2 is <class .Cache2>,
-#  pycocoa.utils.clipstr is <function .clipstr at 0x7f92a2ae0040>,
+#  pycocoa.utils.clipstr is <function .clipstr at 0x1050ad090>,
 #  pycocoa.utils.DEFAULT_UNICODE is 'utf-8',
-#  pycocoa.utils.flint is <function .flint at 0x7f92a2ae0160>,
+#  pycocoa.utils.flint is <function .flint at 0x1050ad1b0>,
 #  pycocoa.utils.gcd is <built-in function gcd>,
-#  pycocoa.utils.inst2strepr is <function .inst2strepr at 0x7f92a2ae01f0>,
-#  pycocoa.utils.isinstanceOf is <function .isinstanceOf at 0x7f92a2ae03a0>,
-#  pycocoa.utils.iterbytes is <function .iterbytes at 0x7f92a2adfca0>,
-#  pycocoa.utils.lambda1 is <function .lambda1 at 0x7f92a2ae0430>,
-#  pycocoa.utils.logf is <function .logf at 0x7f92a2ae04c0>,
+#  pycocoa.utils.inst2strepr is <function .inst2strepr at 0x1050ad240>,
+#  pycocoa.utils.isinstanceOf is <function .isinstanceOf at 0x1050ad3f0>,
+#  pycocoa.utils.iterbytes is <function .iterbytes at 0x1050acd30>,
+#  pycocoa.utils.lambda1 is <function .lambda1 at 0x1050ad480>,
+#  pycocoa.utils.logf is <function .logf at 0x1050ad510>,
+#  pycocoa.utils.machine is <function .machine at 0x1050ad5a0>,
 #  pycocoa.utils.missing is missing,
 #  pycocoa.utils.module_property_RO is <class .module_property_RO>,
-#  pycocoa.utils.name2objc is <function .name2objc at 0x7f92a2ae05e0>,
-#  pycocoa.utils.name2py is <function .name2py at 0x7f92a2ae0670>,
-#  pycocoa.utils.name2pymethod is <function .name2pymethod at 0x7f92a2ae0700>,
-#  pycocoa.utils.printf is <function .printf at 0x7f92a2ae0790>,
-#  pycocoa.utils.properties is <function .properties at 0x7f92a2ae0820>,
-#  pycocoa.utils.property2 is <function .property2 at 0x7f92a2ae08b0>,
-#  pycocoa.utils.property_RO is <function .property_RO at 0x7f92a2a6f9d0>,
-#  pycocoa.utils.sortuples is <function .sortuples at 0x7f92a2ae0940>,
-#  pycocoa.utils.str2bytes is <function .str2bytes at 0x7f92a2adfd30>,
-#  pycocoa.utils.terminating is <function .terminating at 0x7f92a2ae09d0>,
-#  pycocoa.utils.type2strepr is <function .type2strepr at 0x7f92a2ae0af0>,
-#  pycocoa.utils.z1000str is <function .z1000str at 0x7f92a2ae0ca0>,
-#  pycocoa.utils.zfstr is <function .zfstr at 0x7f92a2ae0d30>,
-#  pycocoa.utils.zSIstr is <function .zSIstr at 0x7f92a2ae0dc0>,
-# )[30]
-# pycocoa.utils.version 20.11.27, .isLazy 1, Python 3.9.0 64bit, macOS 10.16
+#  pycocoa.utils.name2objc is <function .name2objc at 0x1050ad750>,
+#  pycocoa.utils.name2py is <function .name2py at 0x1050ad7e0>,
+#  pycocoa.utils.name2pymethod is <function .name2pymethod at 0x1050ad870>,
+#  pycocoa.utils.printf is <function .printf at 0x1050ad900>,
+#  pycocoa.utils.properties is <function .properties at 0x1050ad990>,
+#  pycocoa.utils.property2 is <function .property2 at 0x1050ada20>,
+#  pycocoa.utils.property_RO is <function .property_RO at 0x104fb5bd0>,
+#  pycocoa.utils.sortuples is <function .sortuples at 0x1050adab0>,
+#  pycocoa.utils.str2bytes is <function .str2bytes at 0x1050acdc0>,
+#  pycocoa.utils.terminating is <function .terminating at 0x1050adbd0>,
+#  pycocoa.utils.type2strepr is <function .type2strepr at 0x1050adcf0>,
+#  pycocoa.utils.z1000str is <function .z1000str at 0x1050adea0>,
+#  pycocoa.utils.zfstr is <function .zfstr at 0x1050adf30>,
+#  pycocoa.utils.zSIstr is <function .zSIstr at 0x1050adfc0>,
+# )[31]
+# pycocoa.utils.version 21.11.04, .isLazy 1, Python 3.10.0 64bit arm64, macOS 12.0.1
 
 # MIT License <https://OpenSource.org/licenses/MIT>
 #
-# Copyright (C) 2017-2021  -- mrJean1 at Gmail -- All Rights Reserved.
+# Copyright (C) 2017-2022 -- mrJean1 at Gmail -- All Rights Reserved.
 #
 # Permission is hereby granted, free of charge, to any person obtaining
 # a copy of this software and associated documentation files (the "Software"),
