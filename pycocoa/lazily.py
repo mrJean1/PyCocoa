@@ -457,7 +457,7 @@ if __name__ == '__main__':
 
 # % python3 -m pycocoa.lazily
 #
-# /Library/.../python3.10/runpy.py:126: RuntimeWarning: ...
+# /Library/.../python3.11/runpy.py:126: RuntimeWarning: ...
 #   warn(RuntimeWarning(msg))
 # pre-loaded __main__: .../PyCocoa/pycocoa/lazily.py?
 # pre-loaded pycocoa.lazily: .../PyCocoa/pycocoa/lazily.py?
@@ -465,7 +465,7 @@ if __name__ == '__main__':
 
 # MIT License <https://OpenSource.org/licenses/MIT>
 #
-# Copyright (C) 2018-2022 -- mrJean1 at Gmail -- All Rights Reserved.
+# Copyright (C) 2018-2023 -- mrJean1 at Gmail -- All Rights Reserved.
 #
 # Permission is hereby granted, free of charge, to any person obtaining a
 # copy of this software and associated documentation files (the "Software"),

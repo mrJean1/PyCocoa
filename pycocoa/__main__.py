@@ -20,29 +20,32 @@ from pycocoa.runtime import _nsDeallocObserverIvar1
 _nsDeallocObserverIvar1()  # check the _NSDeallocObserver class
 
 __all__ = ()
-__version__ = '21.11.04'
+__version__ = '23.01.06'
 
 # % python3 -m pycocoa
-# pycocoa.version 21.11.04, .isLazy 1, Python 3.10.0 64bit arm64, macOS 12.0.1
+# pycocoa.version 23.01.06, .isLazy 1, Python 3.11.0 64bit arm64, macOS 13.0.1
+
+# % python3.10 -m pycocoa
+# pycocoa.version 23.1.6, .isLazy 1, Python 3.10.8 64bit arm64, macOS 13.0.1
 
 # % python3.9 -m pycocoa
-# pycocoa.version 21.11.04, .isLazy 1, Python 3.9.6 64bit arm64, macOS 12.0.1
+# pycocoa.version 23.1.6, .isLazy 1, Python 3.9.6 64bit arm64, macOS 13.0.1
 
 # % python3.8 -m pycocoa
-# pycocoa.version 21.11.4, .isLazy 1, Python 3.8.10 64bit arm64_x86_64, macOS 10.16
+# pycocoa.version 23.1.6, .isLazy 1, Python 3.8.10 64bit arm64_x86_64, macOS 10.16
 
 # % python3.7 -m pycocoa
-# pycocoa.version 21.11.4, .isLazy 1, Python 3.7.6 64bit arm64_x86_64, macOS 10.16
+# pycocoa.version 23.1.6, .isLazy 1, Python 3.7.6 64bit arm64_x86_64, macOS 10.16
 
 # % python3.6 -m pycocoa
-# pycocoa.version 21.11.4, .isLazy None, Python 3.6.5 64bit arm64_x86_64, macOS 10.16
+# pycocoa.version 23.1.6, .isLazy None, Python 3.6.5 64bit arm64_x86_64, macOS 10.16
 
 # % python2.7 -m pycocoa
-# pycocoa.version 21.11.4, .isLazy None, Python 2.7.18 64bit arm64_x86_64, macOS 10.16
+# pycocoa.version 23.1.6, .isLazy None, Python 2.7.18 64bit arm64_x86_64, macOS 10.16
 
 # MIT License <https://OpenSource.org/licenses/MIT>
 #
-# Copyright (C) 2018-2021 -- mrJean1 at Gmail -- All Rights Reserved.
+# Copyright (C) 2018-2023 -- mrJean1 at Gmail -- All Rights Reserved.
 #
 # Permission is hereby granted, free of charge, to any person obtaining a
 # copy of this software and associated documentation files (the "Software"),

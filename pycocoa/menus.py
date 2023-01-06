@@ -1682,7 +1682,7 @@ if __name__ == '__main__':
 #  pycocoa.menus.ns2Item is <function .ns2Item at 0x1031eae60>,
 #  pycocoa.menus.title2action is <function .title2action at 0x1031efd90>,
 # )[7]
-# pycocoa.menus.version 21.11.04, .isLazy 1, Python 3.10.0 64bit arm64, macOS 12.0.1
+# pycocoa.menus.version 21.11.04, .isLazy 1, Python 3.11.0 64bit arm64, macOS 13.0.1
 
 # Item('Quit', 'menuTerminate_', Cmd+q) properties:
 #   NS = <ObjCInstance(NSMenuItem(<Id_t at 0x10320cac0>) of 0x600002e84150) at 0x102c68520>
@@ -1760,7 +1760,7 @@ if __name__ == '__main__':
 
 # MIT License <https://OpenSource.org/licenses/MIT>
 #
-# Copyright (C) 2017-2022 -- mrJean1 at Gmail -- All Rights Reserved.
+# Copyright (C) 2017-2023 -- mrJean1 at Gmail -- All Rights Reserved.
 #
 # Permission is hereby granted, free of charge, to any person obtaining a
 # copy of this software and associated documentation files (the "Software"),

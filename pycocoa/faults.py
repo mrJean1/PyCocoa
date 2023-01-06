@@ -395,11 +395,11 @@ if __name__ == '__main__':
 #  pycocoa.faults.getUncaughtExceptionHandler is <function .getUncaughtExceptionHandler at 0x10541fe20>,
 #  pycocoa.faults.setUncaughtExceptionHandler is <function .setUncaughtExceptionHandler at 0x10541feb0>,
 # )[2]
-# pycocoa.faults.version 21.11.04, .isLazy 1, Python 3.10.0 64bit arm64, macOS 12.0.1
+# pycocoa.faults.version 21.11.04, .isLazy 1, Python 3.11.0 64bit arm64, macOS 13.0.1
 
 # MIT License <https://OpenSource.org/licenses/MIT>
 #
-# Copyright (C) 2017-2022 -- mrJean1 at Gmail -- All Rights Reserved.
+# Copyright (C) 2017-2023 -- mrJean1 at Gmail -- All Rights Reserved.
 #
 # Permission is hereby granted, free of charge, to any person obtaining
 # a copy of this software and associated documentation files (the "Software"),
