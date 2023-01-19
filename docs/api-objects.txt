@@ -310,6 +310,7 @@ pycocoa.url2NS	pycocoa-module.html#url2NS
 pycocoa.NSAlert	pycocoa-module.html#NSAlert
 pycocoa.NSDeviceControl2Character	pycocoa-module.html#NSDeviceControl2Character
 pycocoa.NSFontUnitalicMask	pycocoa-module.html#NSFontUnitalicMask
+pycocoa.drain	pycocoa-module.html#drain
 pycocoa.FontTrait	pycocoa-module.html#FontTrait
 pycocoa.isImmutable	pycocoa-module.html#isImmutable
 pycocoa._PY_FH	pycocoa-module.html#_PY_FH
@@ -709,6 +710,7 @@ pycocoa.nstypes.nsNull2none	pycocoa.nstypes-module.html#nsNull2none
 pycocoa.nstypes.nsData2bytes	pycocoa.nstypes-module.html#nsData2bytes
 pycocoa.nstypes.bytes2str	pycocoa.utils-module.html#bytes2str
 pycocoa.nstypes.ns2py	pycocoa.nstypes-module.html#ns2py
+pycocoa.nstypes.drain	pycocoa.nstypes-module.html#drain
 pycocoa.nstypes.nsIter2	pycocoa.nstypes-module.html#nsIter2
 pycocoa.nstypes.NSArray	pycocoa.nstypes-module.html#NSArray
 pycocoa.nstypes.nsDate2time	pycocoa.nstypes-module.html#nsDate2time
@@ -1162,6 +1164,7 @@ pycocoa.runtime	pycocoa.runtime-module.html
 pycocoa.runtime._object_setInstanceVariable	pycocoa.runtime-module.html#_object_setInstanceVariable
 pycocoa.runtime.OBJC_ASSOCIATION_RETAIN_NONATOMIC	pycocoa.runtime-module.html#OBJC_ASSOCIATION_RETAIN_NONATOMIC
 pycocoa.runtime.send_message	pycocoa.runtime-module.html#send_message
+pycocoa.runtime._isPython2	pycocoa.runtime-module.html#_isPython2
 pycocoa.runtime._pyargs	pycocoa.runtime-module.html#_pyargs
 pycocoa.runtime.emcoding2ctype	pycocoa.octypes-module.html#emcoding2ctype
 pycocoa.runtime.get_ivar	pycocoa.getters-module.html#get_ivar
@@ -1920,6 +1923,7 @@ pycocoa.menus.MenuBar.isVisible	pycocoa.menus.MenuBar-class.html#isVisible
 pycocoa.menus.MenuBar.highlight	pycocoa.menus.MenuBar-class.html#highlight
 pycocoa.nstypes.NSDecimal	pycocoa.nstypes.NSDecimal-class.html
 pycocoa.nstypes.NSDecimal.__str__	pycocoa.nstypes.NSDecimal-class.html#__str__
+pycocoa.runtime.ObjCInstance._NSAutoPool	pycocoa.runtime.ObjCInstance-class.html#_NSAutoPool
 pycocoa.nstypes.NSDecimal._Class	pycocoa.nstypes.NSDecimal-class.html#_Class
 pycocoa.runtime.ObjCInstance.Type	pycocoa.runtime.ObjCInstance-class.html#Type
 pycocoa.runtime.ObjCInstance.ptr	pycocoa.runtime.ObjCInstance-class.html#ptr
@@ -1933,6 +1937,7 @@ pycocoa.runtime.ObjCInstance._objc_cache	pycocoa.runtime.ObjCInstance-class.html
 pycocoa.nstypes.NSDecimal._SEL	pycocoa.nstypes.NSDecimal-class.html#_SEL
 pycocoa.nstypes.NSDecimal._IMP	pycocoa.nstypes.NSDecimal-class.html#_IMP
 pycocoa.nstypes.NSDecimal.Decimal	pycocoa.nstypes.NSDecimal-class.html#Decimal
+pycocoa.runtime.ObjCInstance._cache_clear	pycocoa.runtime.ObjCInstance-class.html#_cache_clear
 pycocoa.runtime.ObjCInstance.objc_class	pycocoa.runtime.ObjCInstance-class.html#objc_class
 pycocoa.runtime.ObjCInstance._dealloc_d	pycocoa.runtime.ObjCInstance-class.html#_dealloc_d
 pycocoa.runtime.ObjCInstance.name	pycocoa.runtime.ObjCInstance-class.html#name
@@ -1958,6 +1963,7 @@ pycocoa.nstypes.NSStr	pycocoa.nstypes.NSStr-class.html
 pycocoa.runtime.ObjCInstance._objc_cache	pycocoa.runtime.ObjCInstance-class.html#_objc_cache
 pycocoa.nstypes.NSStr.__str__	pycocoa.nstypes.NSStr-class.html#__str__
 pycocoa.nstypes.NSStr._str	pycocoa.nstypes.NSStr-class.html#_str
+pycocoa.runtime.ObjCInstance._NSAutoPool	pycocoa.runtime.ObjCInstance-class.html#_NSAutoPool
 pycocoa.runtime.ObjCInstance.Type	pycocoa.runtime.ObjCInstance-class.html#Type
 pycocoa.runtime.ObjCInstance.ptr	pycocoa.runtime.ObjCInstance-class.html#ptr
 pycocoa.nstypes.NSStr._Type	pycocoa.strs.Str-class.html
@@ -1968,6 +1974,7 @@ pycocoa.runtime.ObjCInstance.objc_description	pycocoa.runtime.ObjCInstance-class
 pycocoa.runtime.ObjCInstance.__getattr__	pycocoa.runtime.ObjCInstance-class.html#__getattr__
 pycocoa.runtime.ObjCInstance.from_py2NS	pycocoa.runtime.ObjCInstance-class.html#from_py2NS
 pycocoa.nstypes.NSStr.__ne__	pycocoa.nstypes.NSStr-class.html#__ne__
+pycocoa.runtime.ObjCInstance._cache_clear	pycocoa.runtime.ObjCInstance-class.html#_cache_clear
 pycocoa.runtime.ObjCInstance.objc_class	pycocoa.runtime.ObjCInstance-class.html#objc_class
 pycocoa.nstypes.NSStr.__eq__	pycocoa.nstypes.NSStr-class.html#__eq__
 pycocoa.runtime.ObjCInstance._dealloc_d	pycocoa.runtime.ObjCInstance-class.html#_dealloc_d
@@ -1982,6 +1989,7 @@ pycocoa.nstypes.at	pycocoa.nstypes.at-class.html
 pycocoa.runtime.ObjCInstance._objc_cache	pycocoa.runtime.ObjCInstance-class.html#_objc_cache
 pycocoa.nstypes.NSStr.__str__	pycocoa.nstypes.NSStr-class.html#__str__
 pycocoa.nstypes.NSStr._str	pycocoa.nstypes.NSStr-class.html#_str
+pycocoa.runtime.ObjCInstance._NSAutoPool	pycocoa.runtime.ObjCInstance-class.html#_NSAutoPool
 pycocoa.runtime.ObjCInstance.Type	pycocoa.runtime.ObjCInstance-class.html#Type
 pycocoa.runtime.ObjCInstance.ptr	pycocoa.runtime.ObjCInstance-class.html#ptr
 pycocoa.nstypes.NSStr._Type	pycocoa.strs.Str-class.html
@@ -1992,6 +2000,7 @@ pycocoa.runtime.ObjCInstance.objc_description	pycocoa.runtime.ObjCInstance-class
 pycocoa.runtime.ObjCInstance.__getattr__	pycocoa.runtime.ObjCInstance-class.html#__getattr__
 pycocoa.runtime.ObjCInstance.from_py2NS	pycocoa.runtime.ObjCInstance-class.html#from_py2NS
 pycocoa.nstypes.NSStr.__ne__	pycocoa.nstypes.NSStr-class.html#__ne__
+pycocoa.runtime.ObjCInstance._cache_clear	pycocoa.runtime.ObjCInstance-class.html#_cache_clear
 pycocoa.runtime.ObjCInstance.objc_class	pycocoa.runtime.ObjCInstance-class.html#objc_class
 pycocoa.nstypes.NSStr.__eq__	pycocoa.nstypes.NSStr-class.html#__eq__
 pycocoa.runtime.ObjCInstance._dealloc_d	pycocoa.runtime.ObjCInstance-class.html#_dealloc_d
@@ -2335,6 +2344,7 @@ pycocoa.runtime.ObjCMethod._name	pycocoa.runtime.ObjCMethod-class.html#_name
 pycocoa.runtime.ObjCMethod._argtypes	pycocoa.runtime.ObjCMethod-class.html#_argtypes
 pycocoa.runtime.ObjCConstant	pycocoa.runtime.ObjCConstant-class.html
 pycocoa.runtime.ObjCInstance.__str__	pycocoa.runtime.ObjCInstance-class.html#__str__
+pycocoa.runtime.ObjCInstance._NSAutoPool	pycocoa.runtime.ObjCInstance-class.html#_NSAutoPool
 pycocoa.runtime.ObjCInstance.Type	pycocoa.runtime.ObjCInstance-class.html#Type
 pycocoa.runtime.ObjCInstance.ptr	pycocoa.runtime.ObjCInstance-class.html#ptr
 pycocoa.runtime.ObjCConstant.__new__	pycocoa.runtime.ObjCConstant-class.html#__new__
@@ -2344,6 +2354,7 @@ pycocoa.runtime.ObjCInstance.objc_description	pycocoa.runtime.ObjCInstance-class
 pycocoa.runtime.ObjCInstance.__getattr__	pycocoa.runtime.ObjCInstance-class.html#__getattr__
 pycocoa.runtime.ObjCInstance.from_py2NS	pycocoa.runtime.ObjCInstance-class.html#from_py2NS
 pycocoa.runtime.ObjCInstance._objc_cache	pycocoa.runtime.ObjCInstance-class.html#_objc_cache
+pycocoa.runtime.ObjCInstance._cache_clear	pycocoa.runtime.ObjCInstance-class.html#_cache_clear
 pycocoa.runtime.ObjCInstance.objc_class	pycocoa.runtime.ObjCInstance-class.html#objc_class
 pycocoa.runtime.ObjCInstance._dealloc_d	pycocoa.runtime.ObjCInstance-class.html#_dealloc_d
 pycocoa.runtime.ObjCInstance.name	pycocoa.runtime.ObjCInstance-class.html#name
@@ -2371,6 +2382,7 @@ pycocoa.runtime.ObjCClass._name	pycocoa.runtime.ObjCClass-class.html#_name
 pycocoa.runtime.ObjCClass._methods	pycocoa.runtime.ObjCClass-class.html#_methods
 pycocoa.runtime.ObjCInstance	pycocoa.runtime.ObjCInstance-class.html
 pycocoa.runtime.ObjCInstance.__str__	pycocoa.runtime.ObjCInstance-class.html#__str__
+pycocoa.runtime.ObjCInstance._NSAutoPool	pycocoa.runtime.ObjCInstance-class.html#_NSAutoPool
 pycocoa.runtime.ObjCInstance.Type	pycocoa.runtime.ObjCInstance-class.html#Type
 pycocoa.runtime.ObjCInstance.ptr	pycocoa.runtime.ObjCInstance-class.html#ptr
 pycocoa.runtime.ObjCInstance.__new__	pycocoa.runtime.ObjCInstance-class.html#__new__
@@ -2380,6 +2392,7 @@ pycocoa.runtime.ObjCInstance.objc_description	pycocoa.runtime.ObjCInstance-class
 pycocoa.runtime.ObjCInstance.__getattr__	pycocoa.runtime.ObjCInstance-class.html#__getattr__
 pycocoa.runtime.ObjCInstance.from_py2NS	pycocoa.runtime.ObjCInstance-class.html#from_py2NS
 pycocoa.runtime.ObjCInstance._objc_cache	pycocoa.runtime.ObjCInstance-class.html#_objc_cache
+pycocoa.runtime.ObjCInstance._cache_clear	pycocoa.runtime.ObjCInstance-class.html#_cache_clear
 pycocoa.runtime.ObjCInstance.objc_class	pycocoa.runtime.ObjCInstance-class.html#objc_class
 pycocoa.runtime.ObjCInstance._dealloc_d	pycocoa.runtime.ObjCInstance-class.html#_dealloc_d
 pycocoa.runtime.ObjCInstance.name	pycocoa.runtime.ObjCInstance-class.html#name

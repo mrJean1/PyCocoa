@@ -5,13 +5,11 @@
 
 # List all methods of an Objective-C class.
 
-from pycocoa import get_class, get_methods, leaked2, sortuples
-
-__version__ = '19.09.27'
-
+__version__ = '23.01.18'
 
 if __name__ == '__main__':
 
+    from run import pycocoa
     import sys
 
     if len(sys.argv) < 2:
@@ -20,20 +18,19 @@ if __name__ == '__main__':
 
     clstr, prefs = sys.argv[1], sys.argv[2:]
 
-    cls, n = get_class(clstr), 0
+    cls, n = pycocoa.get_class(clstr), 0
     if cls is None:  # and clstr.endswith('Delegate')
-        import pycocoa  # PYCHOK expected
         cls = pycocoa.__dict__.get(clstr, cls)  # inlieu of __import__ ...
-    for name, encoding, rargtypes, _ in sortuples(get_methods(cls, *prefs)):
+    for name, encoding, rargtypes, _ in pycocoa.sortuples(pycocoa.get_methods(cls, *prefs)):
         n += 1
         rargtypes = [getattr(rarg, '__name__', rarg) for rarg in rargtypes]
         print('%s %s (%s)' % (name, encoding, ', '.join(map(str, rargtypes))))
 
-    print('%s %s methods total %s' % (n, clstr, leaked2()))
+    print('%s %s methods total %s' % (n, clstr, pycocoa.leaked2()))
 
 # MIT License <https://OpenSource.org/licenses/MIT>
 #
-# Copyright (C) 2017-2021 -- mrJean1 at Gmail -- All Rights Reserved.
+# Copyright (C) 2017-2023 -- mrJean1 at Gmail -- All Rights Reserved.
 #
 # Permission is hereby granted, free of charge, to any person obtaining a
 # copy of this software and associated documentation files (the "Software"),

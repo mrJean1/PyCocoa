@@ -3,29 +3,31 @@
 
 # Test the lazy import module lazily.
 
-__version__ = '20.11.10'
-
-import os
-import pycocoa
-import sys
-
-_all_      = pycocoa.__all__
-isPython37 = sys.version_info[:2] >= (3, 7)
-lazily     = pycocoa.lazily
-PythonX    = sys.executable  # python or Pythonista path
-
-_cmd = PythonX + " -c 'import pycocoa, sys; " \
-                      "sys.exit(0 if pycocoa.isLazy == %s else 1)'"
-_env_cmd = 'env %s ' + _cmd + ' >>/dev/null'
-
-_HOME = os.environ.get('HOME', '')
-if _HOME and _cmd.startswith(_HOME):
-    _cmd = '~' + _cmd[len(_HOME):]
-del _HOME
+__version__ = '23.01.18'
 
 if __name__ == '__main__':
 
-    for a in sorted(_all_, key=str.lower):
+    import sys
+    if sys.version_info[:2] < (3, 7):
+        sys.exit(0)
+    isPython37 = True
+
+    from run import pycocoa, PyCocoa_dir, pythonX_
+    import os
+
+    _cmd = pythonX_ + " -c 'from test.run import pycocoa, sys; " + \
+                           "sys.exit(0 if pycocoa.isLazy == %s else 1)'"
+    _env_cmd = 'env %s ' + _cmd + ' >>/dev/null'
+
+    _HOME = os.environ.get('HOME', '')
+    if _HOME:
+        if _cmd.startswith(_HOME):
+            _cmd = '~' + _cmd[len(_HOME):]
+        if PyCocoa_dir.startswith(_HOME):
+            PyCocoa_dir = '~' + PyCocoa_dir[len(_HOME):]
+    del _HOME
+
+    for a in sorted(pycocoa.__all__, key=str.lower):
         v = getattr(pycocoa, a, None)
         v = pycocoa.type2strepr(v).replace('()', '').strip()
         print('pycocoa.%s: %s' % (a, v))
@@ -34,7 +36,7 @@ if __name__ == '__main__':
     z = pycocoa.isLazy
     print('%s: %s' % ('isLazy', z))
     if not z:
-        for a, m in lazily._all_missing2(_all_):
+        for a, m in pycocoa.lazily._all_missing2(pycocoa.__all__):
             print('missing in %s: %s' % (a, m or None))
             if m:
                 t += len(m.split(', '))
@@ -42,7 +44,7 @@ if __name__ == '__main__':
     # simple lazy_import enable tests
     print('cmd: %s' % (_cmd,))
     for z in range(5):
-        e = 'PYCOCOA_LAZY_IMPORT=%s' % (z,)
+        e = 'PYCOCOA_LAZY_IMPORT=%s PYTHONPATH=%s' % (z, PyCocoa_dir)
         c = _env_cmd % (e, z if isPython37 else None)
         x = os.system(c) >> 8  # exit status in high byte
         print('%s: %s' % (e, x))
@@ -53,7 +55,7 @@ if __name__ == '__main__':
 
 # MIT License <https://OpenSource.org/licenses/MIT>
 #
-# Copyright (C) 2017-2021 -- mrJean1 at Gmail -- All Rights Reserved.
+# Copyright (C) 2017-2023 -- mrJean1 at Gmail -- All Rights Reserved.
 #
 # Permission is hereby granted, free of charge, to any person obtaining a
 # copy of this software and associated documentation files (the "Software"),

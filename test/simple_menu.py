@@ -6,13 +6,14 @@
 # Example of using PyCocoa to create an NSWindow with
 # an application menu item for quitting.
 
+import run as _  # PYCHOK sys.path
 # all imports listed explicitly to help PyChecker
 from pycocoa import NSAlternateKeyMask, NSApplication, NSAutoreleasePool, \
                     NSBackingStoreBuffered, NSControlKeyMask, NSMakeRect, \
                     NSMenu, NSMenuItem, NSStr, NSWindowStyleMaskUsual, \
                     NSWindow, get_selector, terminating
 
-__version__ = '19.09.27'
+__version__ = '23.01.18'
 
 
 def create_window(title=''):
@@ -90,7 +91,7 @@ if __name__ == '__main__':
 
 # MIT License <https://OpenSource.org/licenses/MIT>
 #
-# Copyright (C) 2017-2021 -- mrJean1 at Gmail -- All Rights Reserved.
+# Copyright (C) 2017-2023 -- mrJean1 at Gmail -- All Rights Reserved.
 #
 # Permission is hereby granted, free of charge, to any person obtaining a
 # copy of this software and associated documentation files (the "Software"),

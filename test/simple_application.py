@@ -4,6 +4,7 @@
 # <https://StackOverflow.com/questions/1517342/basic-cocoa-application-
 #         using-dock-in-python-but-not-xcode-and-all-that-extras>
 
+import run as _  # PYCHOK sys.path
 # generic Python imports
 # import datetime
 # import os
@@ -18,7 +19,7 @@ from pycocoa import get_selector, NSApplication, NSAutoreleasePool, \
                     PyObjectEncoding, ObjCClass, ObjCInstance, \
                     ObjCSubclass, send_super, terminating
 
-__version__ = '21.08.18'
+__version__ = '23.01.18'
 
 # <https://StackOverflow.com/questions/24024723/swift-using-
 #  nsstatusbar-statusitemwithlength-and-nsvariablestatusitemlength>
@@ -128,7 +129,7 @@ if __name__ == '__main__':
 
 # MIT License <https://OpenSource.org/licenses/MIT>
 #
-# Copyright (C) 2017-2021 -- mrJean1 at Gmail -- All Rights Reserved.
+# Copyright (C) 2017-2023 -- mrJean1 at Gmail -- All Rights Reserved.
 #
 # Permission is hereby granted, free of charge, to any person obtaining a
 # copy of this software and associated documentation files (the "Software"),

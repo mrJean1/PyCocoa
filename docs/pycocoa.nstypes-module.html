@@ -139,6 +139,23 @@
     </td><td class="summary">
       <table width="100%" cellpadding="0" cellspacing="0" border="0">
         <tr>
+          <td><span class="summary-sig"><a href="pycocoa.nstypes-module.html#drain" class="summary-sig-name">drain</a>(<span class="summary-sig-arg">objc</span>)</span><br />
+      Release all objects in an <code>NSAutoreleasePool</code> instance.</td>
+          <td align="right" valign="top">
+            
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
           <td><span class="summary-sig"><a href="pycocoa.nstypes-module.html#isLink" class="summary-sig-name">isLink</a>(<span class="summary-sig-arg">path</span>)</span><br />
       Resolve a file or folder link or alias.</td>
           <td align="right" valign="top">
@@ -732,7 +749,7 @@
     <td width="15%" align="right" valign="top" class="summary">
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
-        <a name="NSAutoreleasePool"></a><span class="summary-name">NSAutoreleasePool</span> = <code title="ObjCClass('NSAutoreleasePool')">ObjCClass('NSAutoreleasePool')</code>
+        <a name="NSAutoreleasePool"></a><span class="summary-name">NSAutoreleasePool</span> = <code title="None">None</code>
     </td>
   </tr>
 <tr>
@@ -1159,15 +1176,15 @@
     <td width="15%" align="right" valign="top" class="summary">
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
-        <a href="pycocoa.nstypes-module.html#NSMain" class="summary-name">NSMain</a> = <code title="NSMain.Application=NSApplication(&lt;Id_t at 0x7fee60f7f8c0&gt;) of 0x7fee2b\
-39e4f0,
-      .BooleanNO=NSBoolean(&lt;Id_t at 0x7fee60f7f290&gt;) of 0x7ff85e33c990\
+        <a href="pycocoa.nstypes-module.html#NSMain" class="summary-name">NSMain</a> = <code title="NSMain.Application=NSApplication(&lt;Id_t at 0x7f8530dcc290&gt;) of 0x7f850b\
+bd67c0,
+      .BooleanNO=NSBoolean(&lt;Id_t at 0x7f8530dc07a0&gt;) of 0x7ff85724d130\
 ,
-      .BooleanYES=NSBoolean(&lt;Id_t at 0x7fee60f7f5f0&gt;) of 0x7ff85e33c98\
+      .BooleanYES=NSBoolean(&lt;Id_t at 0x7f85413dfd40&gt;) of 0x7ff85724d12\
 0,
-      .Bundle=NSBundle(&lt;Id_t at 0x7fee30583170&gt;) of 0x600000c38190,
+      .Bundle=NSBundle(&lt;Id_t at 0x7f8530ddb560&gt;) of 0x6000033ac370,
       .BundleName=NSConstantString('CFBundleName'),
-...">NSMain.Application=NSApplication(&lt;Id_t at 0x7fee60f7f<code class="variable-ellipsis">...</code></code><br />
+...">NSMain.Application=NSApplication(&lt;Id_t at 0x7f8530dcc<code class="variable-ellipsis">...</code></code><br />
       Global <code>ObjC/NS/CF...</code> singletons.
     </td>
   </tr>
@@ -1340,6 +1357,30 @@
         target="_top">mac-alias</a> and <a 
         href="https://StackOverflow.com/questions/21150169" 
         target="_top">here</a>.
+      </p>
+</div></td></tr></table>
+</div>
+<a name="drain"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">drain</span>(<span class="sig-arg">objc</span>)</span>
+  </h3>
+  </td><td align="right" valign="top"
+    >&nbsp;
+    </td>
+  </tr></table>
+  
+  <p>Release all objects in an <code>NSAutoreleasePool</code> instance.</p>
+  <dl class="fields">
+  </dl>
+<div class="fields">      <p><strong>Note:</strong>
+        <code>NSAutoreleasePool.drain</code> invokes the 
+        <code>dealloc</code> method only for the pool itself, <i>not</i> 
+        for any of the objects held in the pool.
       </p>
 </div></td></tr></table>
 </div>
@@ -2320,13 +2361,13 @@
   <dl class="fields">
     <dt>Value:</dt>
       <dd><table><tr><td><pre class="variable">
-NSMain.Application=NSApplication(&lt;Id_t at 0x7fee60f7f8c0&gt;) of 0x7fee2b<span class="variable-linewrap"><img src="crarr.png" alt="\" /></span>
-39e4f0,
-      .BooleanNO=NSBoolean(&lt;Id_t at 0x7fee60f7f290&gt;) of 0x7ff85e33c990<span class="variable-linewrap"><img src="crarr.png" alt="\" /></span>
+NSMain.Application=NSApplication(&lt;Id_t at 0x7f8530dcc290&gt;) of 0x7f850b<span class="variable-linewrap"><img src="crarr.png" alt="\" /></span>
+bd67c0,
+      .BooleanNO=NSBoolean(&lt;Id_t at 0x7f8530dc07a0&gt;) of 0x7ff85724d130<span class="variable-linewrap"><img src="crarr.png" alt="\" /></span>
 ,
-      .BooleanYES=NSBoolean(&lt;Id_t at 0x7fee60f7f5f0&gt;) of 0x7ff85e33c98<span class="variable-linewrap"><img src="crarr.png" alt="\" /></span>
+      .BooleanYES=NSBoolean(&lt;Id_t at 0x7f85413dfd40&gt;) of 0x7ff85724d12<span class="variable-linewrap"><img src="crarr.png" alt="\" /></span>
 0,
-      .Bundle=NSBundle(&lt;Id_t at 0x7fee30583170&gt;) of 0x600000c38190,
+      .Bundle=NSBundle(&lt;Id_t at 0x7f8530ddb560&gt;) of 0x6000033ac370,
       .BundleName=NSConstantString('CFBundleName'),
 <code class="variable-ellipsis">...</code>
 </pre></td></tr></table>
@@ -2366,7 +2407,7 @@ NSMain.Application=NSApplication(&lt;Id_t at 0x7fee60f7f8c0&gt;) of 0x7fee2b<spa
 <table border="0" cellpadding="0" cellspacing="0" width="100%%">
   <tr>
     <td align="left" class="footer">
-    Generated by Epydoc 3.0.1 on Fri Jan  6 11:08:00 2023
+    Generated by Epydoc 3.0.1 on Thu Jan 19 09:31:16 2023
     </td>
     <td align="right" class="footer">
       <a target="mainFrame" href="http://epydoc.sourceforge.net"

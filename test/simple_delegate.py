@@ -4,6 +4,7 @@
 # Reworked from <https://Gist.GitHub.com/kaloprominat/6105220>
 # showing the need to set the delegate for the NSWindow.
 
+import run as _  # PYCHOK sys.path
 # all imports listed explicitly to help PyChecker
 from pycocoa import NSApplication, NSBackingStoreBuffered, \
                     NSMakeRect, NSStr, NSWindow, \
@@ -11,7 +12,7 @@ from pycocoa import NSApplication, NSBackingStoreBuffered, \
                     ObjCClass, ObjCInstance, ObjCSubclass, \
                     send_super, terminating
 
-__version__ = '19.09.27'
+__version__ = '23.01.18'
 
 
 class _Delegate_Implementation(object):
@@ -91,7 +92,7 @@ if __name__ == '__main__':
 
 # MIT License <https://OpenSource.org/licenses/MIT>
 #
-# Copyright (C) 2017-2021 -- mrJean1 at Gmail -- All Rights Reserved.
+# Copyright (C) 2017-2023 -- mrJean1 at Gmail -- All Rights Reserved.
 #
 # Permission is hereby granted, free of charge, to any person obtaining a
 # copy of this software and associated documentation files (the "Software"),

@@ -118,10 +118,9 @@ _ALL_LAZY = _NamedEnum_RO(_name='_ALL_LAZY',
                          lazily=('LazyImportError', 'isLazy'),
                           lists=('List',),
                           menus=('Item', 'ItemSeparator', 'Keys', 'Menu', 'MenuBar', 'ns2Item', 'title2action'),
-                        nstypes=('at', 'isAlias', 'isLink', 'isNone',
+                        nstypes=('at', 'drain', 'isAlias', 'isLink', 'isNone',
                                  'NSAlert', 'NSApplication',
-                                 'NSArray', 'nsArray2listuple', 'nsArray2tuple',
-                                 'NSAttributedString', 'NSAutoreleasePool',
+                                 'NSArray', 'nsArray2listuple', 'nsArray2tuple', 'NSAttributedString', 'NSAutoreleasePool',
                                  'NSBezierPath', 'NSBoolean', 'nsBoolean2bool', 'NSBundle', 'nsBundleRename',
                                  'NSColor', 'NSConcreteNotification', 'NSConcreteValue', 'NSConstantString',
                                  'NSData', 'nsData2bytes', 'NSDate',
@@ -230,7 +229,7 @@ _ALL_LAZY = _NamedEnum_RO(_name='_ALL_LAZY',
 _ALL_OVERRIDING = _NamedEnum_RO(_name='_ALL_OVERRIDING')  # all DEPRECATED
 
 __all__ = _ALL_LAZY.lazily
-__version__ = '21.11.04'
+__version__ = '23.01.18'
 
 
 def _all_imports(**more):

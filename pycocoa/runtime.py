@@ -47,7 +47,7 @@ from ctypes import alignment, ArgumentError, byref, cast, c_buffer, \
 #                  # very end of this module.
 
 __all__ = _ALL_LAZY.runtime
-__version__ = '21.11.04'
+__version__ = '23.01.18'
 
 # <https://Developer.Apple.com/documentation/objectivec/
 #        objc_associationpolicy?language=objc>
@@ -75,6 +75,9 @@ import os
 _OBJC_ENV = 'PYCOCOA_OBJC_LOG'
 _OBJC_LOG = dict((_, 0) for _ in os.environ.get(_OBJC_ENV, _NN_).upper())
 del os
+import sys
+_isPython2 = sys.version_info[:2] < (3, 7)
+del sys
 
 
 def _c_tstr(*c_ts):
@@ -247,7 +250,8 @@ class ObjCBoundMethod(_ObjCBase):
               new C{ObjCBound[Class]Method} instance which is discarded
               immediately thereafter.
     '''
-    __slots__ = ('_inst', '_method', '_objc_id')
+    if _isPython2:
+        __slots__ = ('_inst', '_method', '_objc_id')
 
     def __init__(self, method, objc_id, inst):
         '''Initialize with an ObjC instance or class method.
@@ -305,7 +309,8 @@ class ObjCBoundClassMethod(ObjCBoundMethod):
     # O'Reilly, 2016, also at <https://Books.Google.ie/books?
     # id=bIZHCgAAQBAJ&lpg=PP1&dq=fluent%20python&pg=PT364#
     # v=onepage&q=“Problems%20with%20__slots__”&f=false>
-    __slots__ = ObjCBoundMethod.__slots__
+    if _isPython2:
+        __slots__ = ObjCBoundMethod.__slots__
 
 
 class ObjCClass(_ObjCBase):
@@ -313,10 +318,9 @@ class ObjCClass(_ObjCBase):
     '''
     _classmethods = {}  # shut PyChecker up
     _methods = {}
-
-    _name = _bNN_  # shut PyChecker up
-    _ptr  =  None
-    _Type =  None  # Python Type, e.g. Dict, List, Tuple, etc.
+    _name    = _bNN_  # shut PyChecker up
+    _ptr     =  None
+    _Type    =  None  # Python Type, e.g. Dict, List, Tuple, etc.
 
     # Only one Python object is created for each ObjC class.  Any
     # future calls with the same class will return the previously
@@ -494,7 +498,7 @@ class ObjCDelegate(ObjCClass):
                              (C{str}s or L{Protocol_t} instances).
         '''
         name = _NS_Delegate.__name__
-        # IbjCDelegate classes cached in parent _objc_cache
+        # ObjCDelegate classes cached in parent _objc_cache
         if name not in ObjCClass._objc_cache:
             _ObjC = _NS_Delegate._ObjC
             if not isinstance(_ObjC, ObjCSubclass):
@@ -516,8 +520,8 @@ class ObjCInstance(_ObjCBase):
     _objc_class = None
     _objc_ptr   = None  # shut PyChecker up
     _from_py2NS = False
-
-    _dealloc_d = False
+    _NSAutoPool = None  # see .nstypes
+    _dealloc_d  = False
 
     def __new__(cls, objc_ptr, cached=True):
         '''New L{ObjCInstance} or a previously created, cached one.
@@ -563,14 +567,18 @@ class ObjCInstance(_ObjCBase):
                 # key used for the _objc_cache dict
                 _nsDeallocObserver(objc_ptr.value)
 
+#       print('new', self)
         return self
 
-    # def __eq__(self, other):
-    #     return True if (isinstance(other, ObjCInstance) and
-    #                     self.isEqualTo_(other)) else False
+#   def __del__(self):
+#       print('del', self)
 
-    # def __ne__(self, other):
-    #     return not self.__eq__(other)
+#   def __eq__(self, other):
+#       return True if (isinstance(other, ObjCInstance) and
+#                       self.isEqualTo_(other)) else False
+#
+#   def __ne__(self, other):
+#       return not self.__eq__(other)
 
     def __getattr__(self, name):
         '''Return a callable ObjC method or Python property
@@ -630,6 +638,13 @@ class ObjCInstance(_ObjCBase):
 
     def __str__(self):
         return '%s(%r) of %#x' % (self.objc_classname, self.ptr, self.ptr.value)
+
+    def _cache_clear(self):
+        if isObjCInstanceOf(self, ObjCInstance._NSAutoPool):
+            cache = ObjCInstance._objc_cache
+            while cache:
+                cache.popitem()
+#           print('drained', self)
 
     @property_RO
     def from_py2NS(self):
@@ -1463,11 +1478,13 @@ def _objc_cache_pop(nso, sel_name_):
                          (C{str} or C{bytes}).
     '''
     objc_ptr_value = get_ivar(nso, _Ivar1.name, ctype=_Ivar1.c_t)
+#   print(sel_name_, hex(objc_ptr_value))
     if objc_ptr_value:
         # dis-associate the observer from ObjC objc_ptr_value
         # libobjc.objc_removeAssociatedObjects(objc_ptr_value)
         objc = ObjCInstance._objc_cache.pop(objc_ptr_value, None)
         if objc:
+            objc._cache_clear()
             objc._dealloc_d = True
     send_super(nso, sel_name_)
 
@@ -1529,7 +1546,7 @@ def _nsDeallocObserver(objc_ptr_value):
 
        @note: When the observed ObjC instance is de-allocated, the
               C{_NSDeallocObserver} removes the corresponding
-              L{ObjCInstance} from thecached objects dictionary
+              L{ObjCInstance} from the cached objects dictionary
               L{ObjCInstance}C{._objc_cache_}, effectively destroying
               the L{ObjCInstance}.
     '''

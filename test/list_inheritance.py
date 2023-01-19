@@ -5,25 +5,24 @@
 
 # Print the inheritance chain for a given class.
 
-from pycocoa import get_class, get_classname, get_inheritance
-
-__version__ = '19.09.27'
+__version__ = '23.01.18'
 
 if __name__ == '__main__':
 
+    from run import pycocoa
     import sys
 
     if len(sys.argv) < 2:
         print('USAGE: python inheritance.py <Obj-C Class>')
         exit(1)
 
-    cls = get_class(sys.argv[1])
-    for cls in get_inheritance(cls):
-        print(get_classname(cls))
+    cls = pycocoa.get_class(sys.argv[1])
+    for cls in pycocoa.get_inheritance(cls):
+        print(pycocoa.get_classname(cls))
 
 # MIT License <https://OpenSource.org/licenses/MIT>
 #
-# Copyright (C) 2017-2021 -- mrJean1 at Gmail -- All Rights Reserved.
+# Copyright (C) 2017-2023 -- mrJean1 at Gmail -- All Rights Reserved.
 #
 # Permission is hereby granted, free of charge, to any person obtaining a
 # copy of this software and associated documentation files (the "Software"),

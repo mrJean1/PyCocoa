@@ -3,13 +3,11 @@
 
 # List the protocols of an Objective-C class.
 
-from pycocoa import get_class, get_protocols, leaked2, sortuples
-
-__version__ = '19.09.272'
-
+__version__ = '23.01.18'
 
 if __name__ == '__main__':
 
+    from run import pycocoa
     import sys
 
     if len(sys.argv) < 2:
@@ -17,16 +15,16 @@ if __name__ == '__main__':
 
     clstr, prefs = sys.argv[1], sys.argv[2:]
 
-    n, cls = 0, get_class(clstr)
-    for name, _ in sortuples(get_protocols(cls, *prefs)):
+    n, cls = 0, pycocoa.get_class(clstr)
+    for name, _ in pycocoa.sortuples(pycocoa.get_protocols(cls, *prefs)):
         n += 1
         print(name)
 
-    print('%s %s protocols total %s' % (n, clstr, leaked2()))
+    print('%s %s protocols total %s' % (n, clstr, pycocoa.leaked2()))
 
 # MIT License <https://OpenSource.org/licenses/MIT>
 #
-# Copyright (C) 2017-2021 -- mrJean1 at Gmail -- All Rights Reserved.
+# Copyright (C) 2017-2023 -- mrJean1 at Gmail -- All Rights Reserved.
 #
 # Permission is hereby granted, free of charge, to any person obtaining a
 # copy of this software and associated documentation files (the "Software"),

@@ -6,12 +6,13 @@
 # Complete attempt at wrapping Objective-C objects in Python.
 # ObjCClass and ObjCInstance use cached objects with __new__
 
+import run as _  # PYCHOK sys.path
 # all imports listed explicitly to help PyChecker
 from pycocoa import NSApplication, NSBackingStoreBuffered, NSRect4_t, \
                     NSStr, NSWindow, NSWindowStyleMaskUsual, libobjc, \
                     ObjCClass, ObjCInstance, ObjCSubclass
 
-__version__ = '19.09.27'
+__version__ = '23.01.18'
 
 
 class MySubclassImplementation(object):
@@ -110,7 +111,7 @@ if __name__ == '__main__':
 
 # MIT License <https://OpenSource.org/licenses/MIT>
 #
-# Copyright (C) 2017-2021 -- mrJean1 at Gmail -- All Rights Reserved.
+# Copyright (C) 2017-2023 -- mrJean1 at Gmail -- All Rights Reserved.
 #
 # Permission is hereby granted, free of charge, to any person obtaining a
 # copy of this software and associated documentation files (the "Software"),

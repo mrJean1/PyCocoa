@@ -3,12 +3,11 @@
 
 # List the protocols of an Objective-C class.
 
-import pycocoa
-
-__version__ = '19.09.27'
+__version__ = '23.01.18'
 
 if __name__ == '__main__':
 
+    from run import pycocoa
     import sys
 
     i = 0
@@ -31,7 +30,7 @@ if __name__ == '__main__':
 
 # MIT License <https://OpenSource.org/licenses/MIT>
 #
-# Copyright (C) 2017-2021 -- mrJean1 at Gmail -- All Rights Reserved.
+# Copyright (C) 2017-2023 -- mrJean1 at Gmail -- All Rights Reserved.
 #
 # Permission is hereby granted, free of charge, to any person obtaining a
 # copy of this software and associated documentation files (the "Software"),

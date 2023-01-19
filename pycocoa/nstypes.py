@@ -53,74 +53,75 @@ _not_given_ = 'not given'
 
 # NS... classes marked ** have Python versions, like NSStr, for
 # for use by runtime.isObjCInstanceOf repectively utils.isinstanceOf
-NSAlert                = ObjCClass('NSAlert')
-NSApplication          = ObjCClass('NSApplication')
+NSAlert                  = ObjCClass('NSAlert')
+NSApplication            = ObjCClass('NSApplication')
 # NSApplicationDelegate defined in .apps
-NSArray                = ObjCClass('NSArray')  # immutable
-_NSArrayI              = ObjCClass('__NSArrayI')  # DUNDER, immutable
-_NS1ArrayI             = ObjCClass('__NSSingleObjectArrayI')  # DUNDER, immutable
-NSAttributedString     = ObjCClass('NSAttributedString')
-NSAutoreleasePool      = ObjCClass('NSAutoreleasePool')
-NSBezierPath           = ObjCClass('NSBezierPath')
-NSBundle               = ObjCClass('NSBundle')
-NSColor                = ObjCClass('NSColor')
-NSConcreteNotification = ObjCClass('NSConcreteNotification')
-NSConcreteValue        = ObjCClass('NSConcreteValue')
-NSConstantString       = ObjCClass('NSConstantString')  # use NSStr
-NSData                 = ObjCClass('NSData')
-NSDate                 = ObjCClass('NSDate')
-NSDecimalNumber        = ObjCClass('NSDecimalNumber')  # ** use NSDecimal
-NSDictionary           = ObjCClass('NSDictionary')  # immutable
-_NSDictionaryI         = ObjCClass('__NSDictionaryI')  # DUNDER, immutable
-_NSDictionaryM         = ObjCClass('__NSDictionaryM')  # DUNDER, mutable
-NSDockTile             = ObjCClass('NSDockTile')
-NSEnumerator           = ObjCClass('NSEnumerator')
-NSError                = ObjCClass('NSError')
-NSException            = ObjCClass('NSException')
-NSFont                 = ObjCClass('NSFont')
-NSFontDescriptor       = ObjCClass('NSFontDescriptor')
-NSFontManager          = ObjCClass('NSFontManager')
-NSFontPanel            = ObjCClass('NSFontPanel')
-NSImage                = ObjCClass('NSImage')
-NSImageView            = ObjCClass('NSImageView')
-NSLayoutManager        = ObjCClass('NSLayoutManager')
-NSMenu                 = ObjCClass('NSMenu')
-NSMenuItem             = ObjCClass('NSMenuItem')
-NSMutableArray         = ObjCClass('NSMutableArray')
-NSMutableData          = ObjCClass('NSMutableData')
-NSMutableDictionary    = ObjCClass('NSMutableDictionary')
-NSMutableSet           = ObjCClass('NSMutableSet')
-NSMutableString        = ObjCClass('NSMutableString')
-NSNotification         = ObjCClass('NSNotification')
-NSNotificationCenter   = ObjCClass('NSNotificationCenter')
-NSNull                 = ObjCClass('NSNull')
-NSNumber               = ObjCClass('NSNumber')
-NSObject               = ObjCClass('NSObject')
-NSOpenPanel            = ObjCClass('NSOpenPanel')
-NSPageLayout           = ObjCClass('NSPageLayout')
-# NSPoint              = ObjCClass('NSPoint')  # doesn't exist, use NSPoint_t
-NSPrinter              = ObjCClass('NSPrinter')
-NSPrintInfo            = ObjCClass('NSPrintInfo')
-NSPrintOperation       = ObjCClass('NSPrintOperation')
-NSPrintPanel           = ObjCClass('NSPrintPanel')
-# NSRect               = ObjCClass('NSRect')  # doesn't exist, use NSRect_t
-# NSRange              = ObjCClass('NSRange')  # doesn't exist, use NSRange_t
-NSSavePanel            = ObjCClass('NSSavePanel')
-NSScreen               = ObjCClass('NSScreen')
-NSScrollView           = ObjCClass('NSScrollView')
-NSSet                  = ObjCClass('NSSet')
-# NSSize               = ObjCClass('NSSize')  # doesn't exist, use NSSize_t
-NSStatusBar            = ObjCClass('NSStatusBar')
-NSString               = ObjCClass('NSString')  # ** use NSStr or 'at'
-NSTableColumn          = ObjCClass('NSTableColumn')
-NSTableView            = ObjCClass('NSTableView')
-NSTextField            = ObjCClass('NSTextField')
-NSTextView             = ObjCClass('NSTextView')
-NSThread               = ObjCClass('NSThread')
-NSURL                  = ObjCClass('NSURL')
-NSValue                = ObjCClass('NSValue')
-NSView                 = ObjCClass('NSView')
-NSWindow               = ObjCClass('NSWindow')
+NSArray                  = ObjCClass('NSArray')  # immutable
+_NSArrayI                = ObjCClass('__NSArrayI')  # DUNDER, immutable
+_NS1ArrayI               = ObjCClass('__NSSingleObjectArrayI')  # DUNDER, immutable
+NSAttributedString       = ObjCClass('NSAttributedString')
+ObjCInstance._NSAutoPool = \
+NSAutoreleasePool        = ObjCClass('NSAutoreleasePool')
+NSBezierPath             = ObjCClass('NSBezierPath')
+NSBundle                 = ObjCClass('NSBundle')
+NSColor                  = ObjCClass('NSColor')
+NSConcreteNotification   = ObjCClass('NSConcreteNotification')
+NSConcreteValue          = ObjCClass('NSConcreteValue')
+NSConstantString         = ObjCClass('NSConstantString')  # use NSStr
+NSData                   = ObjCClass('NSData')
+NSDate                   = ObjCClass('NSDate')
+NSDecimalNumber          = ObjCClass('NSDecimalNumber')  # ** use NSDecimal
+NSDictionary             = ObjCClass('NSDictionary')  # immutable
+_NSDictionaryI           = ObjCClass('__NSDictionaryI')  # DUNDER, immutable
+_NSDictionaryM           = ObjCClass('__NSDictionaryM')  # DUNDER, mutable
+NSDockTile               = ObjCClass('NSDockTile')
+NSEnumerator             = ObjCClass('NSEnumerator')
+NSError                  = ObjCClass('NSError')
+NSException              = ObjCClass('NSException')
+NSFont                   = ObjCClass('NSFont')
+NSFontDescriptor         = ObjCClass('NSFontDescriptor')
+NSFontManager            = ObjCClass('NSFontManager')
+NSFontPanel              = ObjCClass('NSFontPanel')
+NSImage                  = ObjCClass('NSImage')
+NSImageView              = ObjCClass('NSImageView')
+NSLayoutManager          = ObjCClass('NSLayoutManager')
+NSMenu                   = ObjCClass('NSMenu')
+NSMenuItem               = ObjCClass('NSMenuItem')
+NSMutableArray           = ObjCClass('NSMutableArray')
+NSMutableData            = ObjCClass('NSMutableData')
+NSMutableDictionary      = ObjCClass('NSMutableDictionary')
+NSMutableSet             = ObjCClass('NSMutableSet')
+NSMutableString          = ObjCClass('NSMutableString')
+NSNotification           = ObjCClass('NSNotification')
+NSNotificationCenter     = ObjCClass('NSNotificationCenter')
+NSNull                   = ObjCClass('NSNull')
+NSNumber                 = ObjCClass('NSNumber')
+NSObject                 = ObjCClass('NSObject')
+NSOpenPanel              = ObjCClass('NSOpenPanel')
+NSPageLayout             = ObjCClass('NSPageLayout')
+# NSPoint                = ObjCClass('NSPoint')  # doesn't exist, use NSPoint_t
+NSPrinter                = ObjCClass('NSPrinter')
+NSPrintInfo              = ObjCClass('NSPrintInfo')
+NSPrintOperation         = ObjCClass('NSPrintOperation')
+NSPrintPanel             = ObjCClass('NSPrintPanel')
+# NSRect                 = ObjCClass('NSRect')  # doesn't exist, use NSRect_t
+# NSRange                = ObjCClass('NSRange')  # doesn't exist, use NSRange_t
+NSSavePanel              = ObjCClass('NSSavePanel')
+NSScreen                 = ObjCClass('NSScreen')
+NSScrollView             = ObjCClass('NSScrollView')
+NSSet                    = ObjCClass('NSSet')
+# NSSize                 = ObjCClass('NSSize')  # doesn't exist, use NSSize_t
+NSStatusBar              = ObjCClass('NSStatusBar')
+NSString                 = ObjCClass('NSString')  # ** use NSStr or 'at'
+NSTableColumn            = ObjCClass('NSTableColumn')
+NSTableView              = ObjCClass('NSTableView')
+NSTextField              = ObjCClass('NSTextField')
+NSTextView               = ObjCClass('NSTextView')
+NSThread                 = ObjCClass('NSThread')
+NSURL                    = ObjCClass('NSURL')
+NSValue                  = ObjCClass('NSValue')
+NSView                   = ObjCClass('NSView')
+NSWindow                 = ObjCClass('NSWindow')
 
 # some other NS... types
 NSBoolean  = NSNumber.numberWithBool_
@@ -521,6 +522,26 @@ def isAlias(path):
         r = cfString2str(u.path())
         u.release()
     return r
+
+
+def drain(objc):
+    '''Release all objects in an C{NSAutoreleasePool} instance.
+
+       @note: C{NSAutoreleasePool.drain} invokes the C{dealloc}
+              method only for the pool itself, I{not} for any
+              of the objects held in the pool.
+    '''
+    if isObjCInstanceOf(objc, NSAutoreleasePool):
+        objc.drain()
+        objc._cache_clear()
+        return objc
+    else:
+        return None
+
+
+import pycocoa.runtime as runtime  # PYCHOK export drain
+runtime._drainAutoreleasePool = drain
+del runtime
 
 
 def isLink(path):

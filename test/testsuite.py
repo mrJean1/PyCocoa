@@ -8,7 +8,7 @@ import sys
 import unittest
 
 __all__ = ('TestSuite',)
-__version__ = '20.11.10'
+__version__ = '23.01.18'
 
 _python_exe = sys.executable
 
@@ -82,6 +82,9 @@ class TestSuite(unittest.TestCase):
     def test_Dicts(self):
         self._run('test_Dicts')
 
+    def test_drain(self):
+        self._run('test_drain')
+
     def test_Fonts(self):
         self._run('test_Fonts')
 
@@ -110,7 +113,7 @@ if __name__ == '__main__':
 
 # MIT License <https://OpenSource.org/licenses/MIT>
 #
-# Copyright (C) 2017-2021 -- mrJean1 at Gmail -- All Rights Reserved.
+# Copyright (C) 2017-2023 -- mrJean1 at Gmail -- All Rights Reserved.
 #
 # Permission is hereby granted, free of charge, to any person obtaining a
 # copy of this software and associated documentation files (the "Software"),

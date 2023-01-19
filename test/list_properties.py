@@ -3,13 +3,11 @@
 
 # List the properties of an Objective-C class or protocol.
 
-from pycocoa import get_class, get_properties, get_protocol, leaked2, sortuples
-
-__version__ = '19.09.27'
-
+__version__ = '23.01.18'
 
 if __name__ == '__main__':
 
+    from run import pycocoa
     import sys
 
     if len(sys.argv) < 2:
@@ -17,18 +15,18 @@ if __name__ == '__main__':
 
     cls_protostr, prefs = sys.argv[1], sys.argv[2:]
 
-    n, cls_proto = 0, get_class(cls_protostr) or get_protocol(cls_protostr)
+    n, cls_proto = 0, pycocoa.get_class(cls_protostr) or pycocoa.get_protocol(cls_protostr)
     # avoid sorting the prop object in prop[3]
-    for name, attrs, setter in sortuples((prop[:3] for prop in
-                                          get_properties(cls_proto, *prefs))):
+    for name, attrs, setter in pycocoa.sortuples((prop[:3] for prop in
+                               pycocoa.get_properties(cls_proto, *prefs))):
         n += 1
         print(' '.join((name, attrs, setter)))
 
-    print('%s %s properties total %s' % (n, cls_protostr, leaked2()))
+    print('%s %s properties total %s' % (n, cls_protostr, pycocoa.leaked2()))
 
 # MIT License <https://OpenSource.org/licenses/MIT>
 #
-# Copyright (C) 2017-2021 -- mrJean1 at Gmail -- All Rights Reserved.
+# Copyright (C) 2017-20231 -- mrJean1 at Gmail -- All Rights Reserved.
 #
 # Permission is hereby granted, free of charge, to any person obtaining a
 # copy of this software and associated documentation files (the "Software"),

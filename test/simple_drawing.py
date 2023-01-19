@@ -4,7 +4,7 @@
 # Reworked from <https://GitHub.com/ActiveState/code/tree/master/recipes/Python/303058_Simple_PyObjC_Example>
 # showing an NSWindow with a basic, drawable NSView.
 
-from math import sin, cos, pi as PI
+import run as _  # PYCHOK sys.path
 # all imports listed explicitly to help PyChecker
 from pycocoa import NSApplication, NSBackingStoreBuffered, \
                     NSBezierPath, NSColor, NSMakeRect, NSPoint_t, \
@@ -13,7 +13,9 @@ from pycocoa import NSApplication, NSBackingStoreBuffered, \
                     ObjCSubclass, send_super, terminating
 from pycocoa.oslibs import libAppKit
 
-__version__ = '19.09.27'
+from math import sin, cos, pi as PI
+
+__version__ = '23.01.18'
 
 NSRectFill = libAppKit.NSRectFill
 
@@ -113,7 +115,7 @@ if __name__ == '__main__':
 
 # MIT License <https://OpenSource.org/licenses/MIT>
 #
-# Copyright (C) 2017-2021 -- mrJean1 at Gmail -- All Rights Reserved.
+# Copyright (C) 2017-2023 -- mrJean1 at Gmail -- All Rights Reserved.
 #
 # Permission is hereby granted, free of charge, to any person obtaining a
 # copy of this software and associated documentation files (the "Software"),

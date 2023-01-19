@@ -5,13 +5,11 @@
 
 # List the instance variables of an Objective-C class.
 
-from pycocoa import get_class, get_ivars, leaked2, sortuples
-
-__version__ = '19.09.27'
-
+__version__ = '23.01.18'
 
 if __name__ == '__main__':
 
+    from run import pycocoa
     import sys
 
     if len(sys.argv) < 2:
@@ -20,17 +18,17 @@ if __name__ == '__main__':
 
     clstr, prefs = sys.argv[1], sys.argv[2:]
 
-    cls, n = get_class(clstr), 0
-    for name, encoding, ctype, _ in sortuples(get_ivars(cls, *prefs)):
+    cls, n = pycocoa.get_class(clstr), 0
+    for name, encoding, ctype, _ in pycocoa.sortuples(pycocoa.get_ivars(cls, *prefs)):
         n += 1
         t = getattr(ctype, '__name__', ctype)
         print('%s %s %s' % (name, encoding, t))
 
-    print('%s %s instance variables total %s' % (n, clstr, leaked2()))
+    print('%s %s instance variables total %s' % (n, clstr, pycocoa.leaked2()))
 
 # MIT License <https://OpenSource.org/licenses/MIT>
 #
-# Copyright (C) 2017-2021 -- mrJean1 at Gmail -- All Rights Reserved.
+# Copyright (C) 2017-2023 -- mrJean1 at Gmail -- All Rights Reserved.
 #
 # Permission is hereby granted, free of charge, to any person obtaining a
 # copy of this software and associated documentation files (the "Software"),

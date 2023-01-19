@@ -5,13 +5,11 @@
 
 # List all loaded Objective-C classes.
 
-from pycocoa import get_classes, leaked2, sortuples
-
-__version__ = '19.09.27'
-
+__version__ = '23.01.18'
 
 if __name__ == '__main__':
 
+    from run import pycocoa
     import sys
 
     if len(sys.argv) < 2:
@@ -19,15 +17,15 @@ if __name__ == '__main__':
 
     n, prefs = 0, sys.argv[1:]
 
-    for name, _ in sortuples(get_classes(*prefs)):
+    for name, _ in pycocoa.sortuples(pycocoa.get_classes(*prefs)):
         n += 1
         print(name)
 
-    print('%s %s classes total %s' % (n, ', '.join(prefs), leaked2()))
+    print('%s %s classes total %s' % (n, ', '.join(prefs), pycocoa.leaked2()))
 
 # MIT License <https://OpenSource.org/licenses/MIT>
 #
-# Copyright (C) 2017-2021 -- mrJean1 at Gmail -- All Rights Reserved.
+# Copyright (C) 2017-2023 -- mrJean1 at Gmail -- All Rights Reserved.
 #
 # Permission is hereby granted, free of charge, to any person obtaining a
 # copy of this software and associated documentation files (the "Software"),
