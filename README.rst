@@ -60,7 +60,7 @@ for Python 3.5+, taking advantage of Python\'s new typing_ annotations, (c)
 PyGUI_ for macOS_ and (d) wxPython_.
 
 
-*Last updated: Jan 18, 2023.*
+*Last updated: Jan 20, 2023.*
 
 .. image:: https://Img.Shields.io/pypi/pyversions/PyCocoa.svg?label=Python
   :target: https://PyPI.org/project/PyCocoa

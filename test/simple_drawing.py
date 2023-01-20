@@ -10,12 +10,14 @@ from pycocoa import NSApplication, NSBackingStoreBuffered, \
                     NSBezierPath, NSColor, NSMakeRect, NSPoint_t, \
                     NSStr, NSWindow, NSWindowStyleMaskUsual, \
                     PyObjectEncoding, ObjCClass, ObjCInstance, \
-                    ObjCSubclass, send_super, terminating
+                    ObjCSubclass, send_super, terminating, \
+                    NSAutoreleasePool, NSDate
+
 from pycocoa.oslibs import libAppKit
 
 from math import sin, cos, pi as PI
 
-__version__ = '23.01.18'
+__version__ = '23.01.19'
 
 NSRectFill = libAppKit.NSRectFill
 
@@ -25,14 +27,11 @@ class _View_Implementation(object):
 
     @_View.method(b'@' + PyObjectEncoding * 2)
     def initWithFrame_(self, frame, n):
-        self = ObjCInstance(send_super(self, 'initWithFrame:', frame))
-        self.n = n
-        # set up the angles loop
-        step = 2 * PI / self.n
-        self.loop = [i * step for i in range(self.n)]
-        return self
+        objc = ObjCInstance(send_super(self, 'initWithFrame:', frame))
+        self._n = n
+        return objc  # objc is self
 
-    @_View.method('v@')
+    @_View.method(b'v@')
     def drawRect_(self, rect):
 
         # w, h = self.boundsSize().width, -.height
@@ -40,21 +39,32 @@ class _View_Implementation(object):
         w = b.size.width * 0.5
         h = b.size.height * 0.5
 
-        def _x(t, w):
-            return (sin(t) + 1.) * w
-
-        def _y(t, h):
-            return (cos(t) + 1.) * h
-
         NSColor.whiteColor().set()
         NSRectFill(b)  # not a class
 
+        # set up the points
+        n = max(self._n, 4)
+        s = 2 * PI / n
+        ps = []
+        for r in range(n):
+            x, y = w, h
+            r *= s
+            x *= sin(r) + 1.0
+            y *= cos(r) + 1.0
+            p = NSPoint_t(x, y)
+            ps.append(p)
+
         NSColor.blackColor().set()
-        for f in self.loop:
-            p1 = NSPoint_t(_x(f, w), _y(f, h))
-            for g in self.loop:
-                p2 = NSPoint_t(_x(g, w), _y(g, h))
+        for i, p1 in enumerate(ps):
+            for i in range(i + 1, n):
+                p2 = ps[i]
                 NSBezierPath.strokeLineFromPoint_toPoint_(p1, p2)
+
+        # double check _objc_cache clearance/retention
+        pool = NSAutoreleasePool.alloc().init()
+        date = NSDate.dateWithTimeIntervalSinceNow_(0.0)
+        pool.drain()
+        del date
 
 
 _View = ObjCClass('_View')  # the actual class
@@ -65,13 +75,13 @@ class _Delegate_Implementation(object):
 
     @_Delegate.method(b'@' + PyObjectEncoding)
     def init(self, app):
-        self = ObjCInstance(send_super(self, 'init'))
-        self.app = app
-        return self
+        objc = ObjCInstance(send_super(self, 'init'))
+        self._app = app
+        return objc  # objc is self
 
     @_Delegate.method(b'v@')
     def windowWillClose_(self, notification):
-        self.app.terminate_(self)
+        self._app.terminate_(self)
 
 
 _Delegate = ObjCClass('_Delegate')  # the actual class
@@ -89,7 +99,7 @@ def main(timeout=None):
                               False)
     window.setTitle_(NSStr('Drawing - Close window to Quit'))
 
-    view = _View.alloc().initWithFrame_(frame, 10)
+    view = _View.alloc().initWithFrame_(frame, 11)
     window.setContentView_(view)
 
     delegate = _Delegate.alloc().init(app)

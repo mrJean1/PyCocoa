@@ -7,7 +7,7 @@
 # (aka 10.16) and Apple Silicon (arm64) and Intel emulation (x86_64),
 # all in 64-bit only.
 
-__version__ = '23.01.18'
+__version__ = '23.01.20'
 
 import os
 from os.path import abspath, dirname
@@ -24,7 +24,7 @@ pythonx  = sys.executable if sys.version_info[0] > 2 else 'python2'
 _OO      = '' if __debug__ else ' -OO'
 pythonX_ = pythonx + _OO  # python or Pythonista path
 if sys.version_info[:2] > (3, 3):
-   pythonX_ += ' -X faulthandler'
+    pythonX_ += ' -X faulthandler'
 
 if __name__ == '__main__':
 

@@ -45,16 +45,22 @@ from ctypes import alignment, ArgumentError, byref, cast, c_buffer, \
 #                  # NameError in function add_ivar below and class
 #                  # _NSDeallocObserver.  sizeof is imported at the
 #                  # very end of this module.
+import sys
+import os
 
 __all__ = _ALL_LAZY.runtime
-__version__ = '23.01.18'
+__version__ = '23.01.20'
 
+_isPython2 = sys.version_info[:2] < (3, 7)
 # <https://Developer.Apple.com/documentation/objectivec/
 #        objc_associationpolicy?language=objc>
 OBJC_ASSOCIATION_COPY             = 0x303  # 01403
 OBJC_ASSOCIATION_COPY_NONATOMIC   = 3
 OBJC_ASSOCIATION_RETAIN           = 0x301  # 01401
 OBJC_ASSOCIATION_RETAIN_NONATOMIC = 1
+
+_OBJC_ENV = 'PYCOCOA_OBJC_LOG'
+_OBJC_LOG = dict((_, 0) for _ in os.environ.get(_OBJC_ENV, _NN_).upper())
 
 _objc_msgSend_      = 'objc_msgSend'
 _objc_msgSendSuper_ = 'objc_msgSendSuper'
@@ -70,14 +76,6 @@ else:
 # <https://Developer.Apple.com/documentation/objectivec/
 #        1441499-object_getinstancevariable>
 _object_setInstanceVariable = 'object_setInstanceVariable'
-
-import os
-_OBJC_ENV = 'PYCOCOA_OBJC_LOG'
-_OBJC_LOG = dict((_, 0) for _ in os.environ.get(_OBJC_ENV, _NN_).upper())
-del os
-import sys
-_isPython2 = sys.version_info[:2] < (3, 7)
-del sys
 
 
 def _c_tstr(*c_ts):
@@ -520,8 +518,9 @@ class ObjCInstance(_ObjCBase):
     _objc_class = None
     _objc_ptr   = None  # shut PyChecker up
     _from_py2NS = False
-    _NSAutoPool = None  # see .nstypes
     _dealloc_d  = False
+    _NSAutoPool = None  # see .nstypes
+    _retained   = None
 
     def __new__(cls, objc_ptr, cached=True):
         '''New L{ObjCInstance} or a previously created, cached one.
@@ -533,7 +532,8 @@ class ObjCInstance(_ObjCBase):
         if not isinstance(objc_ptr, Id_t):
             objc_ptr = cast(objc_ptr, Id_t)
 
-        if not objc_ptr.value:
+        ptr = objc_ptr.value  # actual ObjC address
+        if not ptr:
             return None  # nil pointer
 
         if cached:
@@ -544,7 +544,7 @@ class ObjCInstance(_ObjCBase):
             # allocated by ObjC, see _ns/NSDeallocObserver below.
             try:
                 # cls._objc_cache == ObjCInstance._objc_cache
-                return cls._objc_cache[objc_ptr.value]
+                return cls._objc_cache[ptr]
             except KeyError:
                 pass
 
@@ -561,17 +561,19 @@ class ObjCInstance(_ObjCBase):
             # store new object in the dictionary of cached objects,
             # keyed by the (integer) memory address pointed to by the
             # obj_ptr (cls._objc_cache == ObjCInstance._objc_cache)
-            cls._objc_cache[objc_ptr.value] = self
+            cls._objc_cache[ptr] = self
             if not isClass(self):
                 # observe the objc_ptr.value, the
                 # key used for the _objc_cache dict
-                _nsDeallocObserver(objc_ptr.value)
+                _nsDeallocObserver(ptr)
 
-#       print('new', self)
+        # print('new', self, cached, self.objc_classname)
         return self
 
-#   def __del__(self):
-#       print('del', self)
+    def __del__(self):
+        # remove from _objc_cache
+        # print('del', self)
+        self._objc_cache.pop(self._objc_ptr.value, None)
 
 #   def __eq__(self, other):
 #       return True if (isinstance(other, ObjCInstance) and
@@ -641,10 +643,19 @@ class ObjCInstance(_ObjCBase):
 
     def _cache_clear(self):
         if isObjCInstanceOf(self, ObjCInstance._NSAutoPool):
-            cache = ObjCInstance._objc_cache
+            cache, retained = self._objc_cache, {}
+            # self._cache_print('cached')
             while cache:
-                cache.popitem()
-#           print('drained', self)
+                ptr, objc = cache.popitem()
+                if objc.retained():
+                    retained[ptr] = objc
+            cache.update(retained)
+            # self._cache_print('retained')
+
+    def _cache_print(self, label):
+        cache, _r = self._objc_cache, sys.getrefcount
+        vs = ('%r %d' % (v, _r(v)) for v in cache.values())
+        print(label, len(cache), ', '.join(vs))
 
     @property_RO
     def from_py2NS(self):
@@ -682,6 +693,22 @@ class ObjCInstance(_ObjCBase):
         '''Get this instance' ObjC object (L{Id_t}).
         '''
         return self._objc_ptr
+
+    def retained(self, *retain):
+        '''Get/set this instance' cache retention (C{bool}).
+
+           @arg retain: If C{True} retain, if C{False} do not
+                        retain this instance.
+
+           @return: The previous value (C{bool}).
+
+           @note: Use sel/method C{retain}, to retain this
+                  instance in L{NSAutoreleasePool}s.
+        '''
+        r = self._retained
+        if retain:
+            self._retained = bool(retain[0])
+        return r
 
     def set_ivar(self, name, value, ctype=None):
         '''Set an instance variable (ivar) to the given value.
@@ -1005,6 +1032,7 @@ class ObjCSubclass(_ObjCBase):
         def decorator(m):
             def objc_method(objc_self, objc_cmd, *args):  # PYCHOK expected
                 _pyself = ObjCInstance(objc_self)
+                _pyself.retained(True)
                 _pyself.objc_cmd = objc_cmd
                 return _pyresult(m(_pyself, *_pyargs(codes3, args)))
             n = m.__name__
