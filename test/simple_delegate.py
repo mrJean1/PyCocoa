@@ -24,7 +24,6 @@ class _Delegate_Implementation(object):
     @_Delegate.method(b'@' + PyObjectEncoding)
     def init(self, app):
         self = ObjCInstance(send_super(self, 'init'))
-#       self = ObjCInstance(send_message('NSObject', 'alloc'))
 #       print(self)  # <ObjCInstance ...: _Delegate at ...>
         self.app = app
         return self

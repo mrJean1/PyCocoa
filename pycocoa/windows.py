@@ -48,7 +48,7 @@ L{WindowStyle}, wrapping ObjC C{NSWindow}, etc.
 # all imports listed explicitly to help PyChecker
 from pycocoa.bases import _Type2
 from pycocoa.geometry import Rect
-from pycocoa.lazily import _ALL_LAZY, _COLON_  # PYCHOK used!
+from pycocoa.lazily import _ALL_LAZY, _COLON_, _isPython3  # PYCHOK used!
 from pycocoa.nstypes import isNone, NSConcreteNotification, NSFont, \
                             NSImageView, NSMain, NSNotification, \
                             NSScreen, NSScrollView, NSStr, NSTableView, \
@@ -66,12 +66,12 @@ from pycocoa.runtime import isObjCInstanceOf, ObjCDelegate, ObjCInstance, \
 from pycocoa.screens import Frame, Screen, Screens
 from pycocoa.utils import aspect_ratio, bytes2str, _Constants, _Globals, \
                           isinstanceOf, _Ints, module_property_RO, \
-                          property_RO, _Python3, _text_title2, _Types
+                          property_RO, _text_title2, _Types
 
 # from enum   import Enum
 
 __all__ = _ALL_LAZY.windows
-__version__ = '21.11.04'
+__version__ = '23.02.02'
 
 
 class AutoResizeError(ValueError):
@@ -619,7 +619,7 @@ class MediaWindow(Window):
         # <https://GitHub.com/ariabuckles/pyobjc-framework-Cocoa/blob/master/Examples/AppKit/DotView/DotView.py>
         self.NSview = v = NSView.alloc().initWithFrame_(self.frame.NS)
         # XXX printView(VLC, toPDF=...) crashes on Python 2, an empty box on Python 3
-        self.PMview = v if _Python3 else None
+        self.PMview = v if _isPython3 else None
 
 
 class TextWindow(Window):

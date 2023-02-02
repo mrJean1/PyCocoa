@@ -9,18 +9,43 @@ from pycocoa import NSDate, NSAutoreleasePool, ObjCInstance  # drain
 
 import sys
 
-__version__ = '23.01.20'
+__version__ = '23.02.02'
 
 objc_cache = ObjCInstance._objc_cache
+_verbose   = '-verbose'.startswith(sys.argv[1] if len(sys.argv) > 1 else '')
 
-for i in range(1, 17):
+t = []
+for i in range(1, 10):
+    p = len(objc_cache)
+    pool = NSAutoreleasePool.alloc().init()
+    date = NSDate.alloc().init()  # .timeIntervalSinceNow(0.0)
+    t.append((p, pool))
+    n = len(objc_cache)
+    if _verbose:
+        print(i, pool.inPool, date.inPool, p, n)
+    if date.inPool != pool.inPool:
+        sys.exit('%s: inPool %s vs %s' % (i, date.inPool, pool.inPool))
+    if not n > p:
+        sys.exit('%s: len1 before %s vs after %s' % (i, p, n))
+while t:
+    p, pool = t.pop()
+    pool.drain()
+    n = len(objc_cache)
+    if _verbose:
+        print(i, pool.inPool, n, p)
+    if pool.inPool != i:
+        sys.exit('%s: inPool %s vs %s' % (len(t), pool.inPool, i))
+    if n != p:
+        sys.exit('%s: len2 drained %s vs expected %s' % (len(t), n, p))
+    i -= 1
 
+for i in range(1, 21):
     pool = NSAutoreleasePool.alloc().init()
     date = NSDate.alloc().init()  # .timeIntervalSinceNow(0.0)
 
     p = len(objc_cache)
     if p < 0:
-        sys.exit('%s: len1 %d' % (i, p))
+        sys.exit('%s: len3 %s negative' % (i, p))
 
     pool.drain()  # or drain(pool)
     # del pool  # does NOT drain the pool!
@@ -29,4 +54,4 @@ for i in range(1, 17):
     if n > p:
         for p, q in objc_cache.items():
             print('cache', hex(p), q)
-        sys.exit('%s: len2 %d' % (i, n))
+        sys.exit('%s: len4 %s above %s' % (i, n, p))

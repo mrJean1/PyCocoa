@@ -14,12 +14,11 @@ import sys
 import threading
 import time
 # all imports listed explicitly to help PyChecker
-from pycocoa import get_selector, NSApplication, NSAutoreleasePool, \
-                    NSMenu, NSMenuItem, NSStatusBar, NSStr, \
-                    PyObjectEncoding, ObjCClass, ObjCInstance, \
-                    ObjCSubclass, send_super, terminating
+from pycocoa import get_selector, NSApplication, NSMenu, NSMenuItem, \
+                    NSStatusBar, NSStr, PyObjectEncoding, ObjCClass, \
+                    ObjCInstance, ObjCSubclass, send_super, terminating
 
-__version__ = '23.01.18'
+__version__ = '23.02.02'
 
 # <https://StackOverflow.com/questions/24024723/swift-using-
 #  nsstatusbar-statusitemwithlength-and-nsvariablestatusitemlength>
@@ -43,30 +42,29 @@ def tick(n, writer):
 
 
 def schedule(writer):
-    pool = NSAutoreleasePool.alloc().init()  # PYCHOK expected
+    # pool = NSAutoreleasePool.alloc().init()  # PYCHOK expected
     thesched.enter(0.0, 2, tick, (1, writer))
     thesched.run()
     # normally you'd want pool.drain() here, but since this
     # function never ends until end of program (thesched.run
-    # never returns since each tick schedules a new one), that
-    # pool.drain call would never execute here ;-).
+    # never returns since each tick schedules a new one),
+    # that pool.drain call would never execute here ;-).
 
 
 # objc-related stuff
 class TheDelegate_Implementation(object):  # NSObject):
     TheDelegate = ObjCSubclass('NSObject', 'TheDelegate')
 
-    @TheDelegate.method('@')
-    def init(self):
-        # self = ObjCInstance(send_message('NSObject', 'alloc'))
+    @TheDelegate.method(b'@' + PyObjectEncoding)
+    def init(self, app):
         self = ObjCInstance(send_super(self, 'init'))
         # print(self)  # <ObjCInstance 0x...: TheDelegate at ...>
+        self.app = app
+        self.badge = app.dockTile()
         return self
 
-    app = None
-    badge = None
 #   statusbar = None
-    state = 'idle'
+#   state = 'idle'
 
     @TheDelegate.method('v@')
     def applicationDidFinishLaunching_(self, notification):
@@ -92,19 +90,17 @@ class TheDelegate_Implementation(object):  # NSObject):
             self.app.terminate_(self)
 
 
+TheDelegate = ObjCClass('TheDelegate')  # the actual class
+
+
 def main(timeout=None):
 
     # prepare and set our delegate
     app = NSApplication.sharedApplication()
 
-    TheDelegate = ObjCClass('TheDelegate')  # the actual class
-
-    delegate = TheDelegate.alloc().init()  # PYCHOK expected
+    delegate = TheDelegate.alloc().init(app)  # PYCHOK expected
     app.setDelegate_(delegate)
-    delegate.app = app
-
-    delegate.badge = app.dockTile()
-    delegate.writer(0)
+    # delegate.writer(0)
 
     # on a separate thread, run the scheduler
     t = threading.Thread(target=schedule, args=(delegate.writer,))

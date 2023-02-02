@@ -22,7 +22,7 @@ but only exported as C{Libs.C}.
 
 '''
 # all imports listed explicitly to help PyChecker
-from pycocoa.lazily import _ALL_LAZY, _bNN_, _DOT_, _NN_
+from pycocoa.lazily import _ALL_LAZY, _bNN_, _isPython39, _DOT_, _NN_
 from pycocoa.octypes import Allocator_t, __arm64__, Array_t, BOOL_t, CFIndex_t, \
                             CFRange_t, CGBitmapInfo_t, CGDirectDisplayID_t, \
                             CGError_t, CGFloat_t, CGGlyph_t, CGPoint_t, \
@@ -35,8 +35,7 @@ from pycocoa.octypes import Allocator_t, __arm64__, Array_t, BOOL_t, CFIndex_t, 
                             objc_property_attribute_t, Protocol_t, \
                             SEL_t, Set_t, String_t, TypeRef_t, \
                             UniChar_t, URL_t, __x86_64__
-from pycocoa.utils import Adict, bytes2str, _Constants, _macOSver2, \
-                          str2bytes, sys as _sys
+from pycocoa.utils import Adict, bytes2str, _Constants, _macOSver2, str2bytes
 
 from ctypes import byref, cast, CDLL, c_buffer, c_byte, c_char, \
                    c_char_p, c_double, c_float, c_int, c_int8, c_int16, \
@@ -49,10 +48,9 @@ except ImportError:  # XXX Pythonista/iOS
     def _find_library(*unused):  # PYCHOK expected
         return None  # not found
 from os.path import join as _join, sep as _SEP
-# import sys as _sys  # from pycocoa.utils
 
 __all__ = _ALL_LAZY.oslibs
-__version__ = '21.11.04'
+__version__ = '23.02.02'
 
 _framework_ = 'framework'
 _leaked2    = []  # leaked memory, 2-tuples (ptr, size)
@@ -138,7 +136,7 @@ if _macOSver2() > (10, 15):  # Big Sur and later
            (qualified) name of the library.
         '''
         ns = _find_library(name), name
-        if _sys.version_info[:2] < (3, 9):  # and \
+        if _isPython39:  # and \
 #          _sys.platform[:6] == 'darwin':  # PYCHOK indent
             ns += (_DOT_(name, 'dylib'),
                    _DOT_(name, _framework_), _join(
@@ -510,8 +508,12 @@ libAppKit = get_lib('AppKit')
 
 NSApplicationDidHideNotification   = c_void_p.in_dll(libAppKit, 'NSApplicationDidHideNotification')
 NSApplicationDidUnhideNotification = c_void_p.in_dll(libAppKit, 'NSApplicationDidUnhideNotification')
-NSDefaultRunLoopMode               = c_void_p.in_dll(libAppKit, 'NSDefaultRunLoopMode')
-NSEventTrackingRunLoopMode         = c_void_p.in_dll(libAppKit, 'NSEventTrackingRunLoopMode')
+
+# see NSApplication.nextEventMatchingMask:untilDate:inMode:dequeue:
+NSDefaultRunLoopMode       = Id_t.in_dll(libAppKit, 'NSDefaultRunLoopMode')
+NSEventTrackingRunLoopMode = Id_t.in_dll(libAppKit, 'NSEventTrackingRunLoopMode')
+NSModalPanelRunLoopMode    = Id_t.in_dll(libAppKit, 'NSModalPanelRunLoopMode')
+# UITrackingRunLoopMode    = Id_t.in_dll(libAppKit, 'UITrackingRunLoopMode')
 
 # NSApplication.h
 NSApplicationPresentationDefault                 = 0

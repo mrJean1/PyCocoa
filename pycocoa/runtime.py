@@ -24,19 +24,19 @@ from pycocoa.getters import _ivar_ctype, get_c_func_t, get_class, \
                             get_classname, get_classof, get_ivar, \
                             get_metaclass, get_protocol, get_selector, \
                             get_superclassof
-from pycocoa.lazily  import _ALL_LAZY, _bNN_, _COMMASPACE_, _NL_, \
-                            _NN_  # _UNDER_
+from pycocoa.lazily import _ALL_LAZY, _bNN_, _COMMASPACE_, _isPython2, \
+                           _NL_, _NN_  # _UNDER_
 from pycocoa.octypes import __i386__, __LP64__, c_struct_t, c_void, \
                             ctype2encoding, emcoding2ctype, \
                             encoding2ctype, Class_t, Id_t, IMP_t, \
                             Ivar_t, objc_super_t, objc_super_t_ptr, \
                             ObjC_t, SEL_t, split_emcoding2, \
                             TypeCodeError
-from pycocoa.oslibs  import cfString2str, _csignature, libobjc
-from pycocoa.utils   import Adict, bytes2str, _ByteStrs, _Constants, \
-                            isinstanceOf, lambda1, missing, name2py, \
-                            printf, property2, property_RO, \
-                            str2bytes, _TypeError
+from pycocoa.oslibs import cfString2str, _csignature, libobjc
+from pycocoa.utils import Adict, bytes2str, _ByteStrs, _Constants, \
+                          isinstanceOf, lambda1, missing, name2py, \
+                          printf, property2, property_RO, \
+                          str2bytes, _TypeError
 
 from ctypes import alignment, ArgumentError, byref, cast, c_buffer, \
                    c_char_p, c_double, c_float, CFUNCTYPE, c_longdouble, \
@@ -49,9 +49,8 @@ import sys
 import os
 
 __all__ = _ALL_LAZY.runtime
-__version__ = '23.01.20'
+__version__ = '23.02.02'
 
-_isPython2 = sys.version_info[:2] < (3, 7)
 # <https://Developer.Apple.com/documentation/objectivec/
 #        objc_associationpolicy?language=objc>
 OBJC_ASSOCIATION_COPY             = 0x303  # 01403
@@ -76,6 +75,13 @@ else:
 # <https://Developer.Apple.com/documentation/objectivec/
 #        1441499-object_getinstancevariable>
 _object_setInstanceVariable = 'object_setInstanceVariable'
+
+
+class _NSAutorelease(object):
+    Pool  = None  # see .nstypes
+    Pools = 0     # see ObjCInstance
+
+_NSAutorelease = _NSAutorelease()  # PYCHOK singleton
 
 
 def _c_tstr(*c_ts):
@@ -315,16 +321,16 @@ class ObjCClass(_ObjCBase):
     '''Python wrapper for an ObjC class.
     '''
     _classmethods = {}  # shut PyChecker up
-    _methods = {}
-    _name    = _bNN_  # shut PyChecker up
-    _ptr     =  None
-    _Type    =  None  # Python Type, e.g. Dict, List, Tuple, etc.
+    _methods      = {}
+    _name         = _bNN_  # shut PyChecker up
+    _ptr          =  None
+    _Type         =  None  # Python Type, e.g. Dict, List, Tuple, etc.
 
     # Only one Python object is created for each ObjC class.  Any
     # future calls with the same class will return the previously
     # created Python object.  Note that these aren't weak references,
     # each ObjCClass created will exist until the end of the program.
-    _objc_cache = {}
+    _objc_class_cache = {}
 
     def __new__(cls, name_or_ptr, *protocols):
         '''Create a new L{ObjCClass} instance or return a previously
@@ -349,7 +355,7 @@ class ObjCClass(_ObjCBase):
         # Check if we've already created a Python object for this class
         # and if so, return it rather than making a new one.
         try:
-            return cls._objc_cache[name]
+            return cls._objc_class_cache[name]
         except KeyError:
             pass
 
@@ -372,7 +378,7 @@ class ObjCClass(_ObjCBase):
             add_protocol(ptr, p)
 
         # Store the new class in the cache of (registered) classes.
-        cls._objc_cache[name] = self
+        cls._objc_class_cache[name] = self
 
         return self
 
@@ -497,7 +503,7 @@ class ObjCDelegate(ObjCClass):
         '''
         name = _NS_Delegate.__name__
         # ObjCDelegate classes cached in parent _objc_cache
-        if name not in ObjCClass._objc_cache:
+        if name not in ObjCClass._objc_class_cache:
             _ObjC = _NS_Delegate._ObjC
             if not isinstance(_ObjC, ObjCSubclass):
                 raise TypeError('%s.%s not %s' % (name, '_ObjC', ObjCSubclass.__name__))
@@ -514,12 +520,12 @@ class ObjCDelegate(ObjCClass):
 class ObjCInstance(_ObjCBase):
     '''Python wrapper for an ObjC instance.
     '''
+    _autoPool   = 0
+    _dealloc_d  = False
+    _from_py2NS = False
     _objc_cache = {}  # see _NSDeallocObserver, example class_wrapper4.py
     _objc_class = None
     _objc_ptr   = None  # shut PyChecker up
-    _from_py2NS = False
-    _dealloc_d  = False
-    _NSAutoPool = None  # see .nstypes
     _retained   = None
 
     def __new__(cls, objc_ptr, cached=True):
@@ -552,8 +558,8 @@ class ObjCInstance(_ObjCBase):
         self = super(ObjCInstance, cls).__new__(cls)  # objc_instance
         self._objc_ptr = self._as_parameter_ = objc_ptr  # for ctypes
 
-        # Determine class of this object.
-        self._objc_class = ObjCClass(get_classof(objc_ptr))
+        # Determine and hold the class of this object.
+        self._objc_class = NS_ = ObjCClass(get_classof(objc_ptr))
 
         _ObjC_log(self, 'new', 'I')
 
@@ -564,16 +570,26 @@ class ObjCInstance(_ObjCBase):
             cls._objc_cache[ptr] = self
             if not isClass(self):
                 # observe the objc_ptr.value, the
-                # key used for the _objc_cache dict
+                # key into the _objc_cache dict
                 _nsDeallocObserver(ptr)
 
-        # print('new', self, cached, self.objc_classname)
+            auto = _NSAutorelease.Pools
+            if NS_ is _NSAutorelease.Pool:
+                # i.e. isObjCInstanceOf(self, _NSAutoreleasePool)
+                self._autoPool = _NSAutorelease.Pools = auto + 1
+            elif auto:
+                self._autoPool = auto
+
+        # print('new', self, cached, self.inPool, self.objc_classname)
         return self
 
     def __del__(self):
         # remove from _objc_cache
         # print('del', self)
-        self._objc_cache.pop(self._objc_ptr.value, None)
+        # if self.retained():  # or self._autoPool < _NSAutorelease.Pools
+        #     raise RuntimeError("%r is retained, can't be deleted" % (self,))
+        self._objc_cache.pop(self.ptr.value, None)
+        # self._cache_clear()
 
 #   def __eq__(self, other):
 #       return True if (isinstance(other, ObjCInstance) and
@@ -642,15 +658,17 @@ class ObjCInstance(_ObjCBase):
         return '%s(%r) of %#x' % (self.objc_classname, self.ptr, self.ptr.value)
 
     def _cache_clear(self):
-        if isObjCInstanceOf(self, ObjCInstance._NSAutoPool):
-            cache, retained = self._objc_cache, {}
+        if self._objc_class is _NSAutorelease.Pool:
+            # i.e. isObjCInstanceOf(self, NSAutoreleasePool)
+            cache, retained, auto = self._objc_cache, {}, self.inPool
             # self._cache_print('cached')
             while cache:
                 ptr, objc = cache.popitem()
-                if objc.retained():
+                if objc.retained() or objc.inPool < auto:
                     retained[ptr] = objc
             cache.update(retained)
             # self._cache_print('retained')
+            _NSAutorelease.Pools = max(0, auto - 1)
 
     def _cache_print(self, label):
         cache, _r = self._objc_cache, sys.getrefcount
@@ -662,6 +680,12 @@ class ObjCInstance(_ObjCBase):
         '''Get this instance' origin (C{bool}).
         '''
         return self._from_py2NS
+
+    @property_RO
+    def inPool(self):
+        '''Get this instance' C{NSAutoreleasePool} identifier (C{int} or C{0} iff global).
+        '''
+        return self._autoPool
 
     @property_RO
     def objc_class(self):
@@ -707,7 +731,9 @@ class ObjCInstance(_ObjCBase):
         '''
         r = self._retained
         if retain:
-            self._retained = bool(retain[0])
+            self._retained = b = bool(retain[0])
+            if b and self.ptr.value not in self._objc_cache:
+                raise RuntimeError("%r not cached, can't be retained" % (self,))
         return r
 
     def set_ivar(self, name, value, ctype=None):
@@ -1031,7 +1057,7 @@ class ObjCSubclass(_ObjCBase):
 
         def decorator(m):
             def objc_method(objc_self, objc_cmd, *args):  # PYCHOK expected
-                _pyself = ObjCInstance(objc_self)
+                _pyself = ObjCInstance(objc_self, cached=True)
                 _pyself.retained(True)
                 _pyself.objc_cmd = objc_cmd
                 return _pyresult(m(_pyself, *_pyargs(codes3, args)))
@@ -1050,16 +1076,16 @@ class ObjCSubclass(_ObjCBase):
         return bytes2str(self._name)
 
     @property_RO
-    def obj_class(self):
+    def objc_class(self):
         '''Get the ObjC class.
         '''
-        return self._obj_class
+        return self._objc_class
 
     @property_RO
-    def obj_metaclass(self):
+    def objc_metaclass(self):
         '''Get the ObjC metaclass, or None if un-registered.
         '''
-        return self._obj_metaclass
+        return self._objc_metaclass
 
     def rawmethod(self, encoding):
         '''Decorator for instance methods without any fancy shenanigans.
@@ -1497,7 +1523,7 @@ class _Ivar1(_Constants):
     c_t  = Id_t
 
 
-def _objc_cache_pop(nso, sel_name_):
+def _nsobjc_dealloc(nso, sel_name_):
     '''(INTERNAL) Remove an L{ObjCInstance} from the instances cache
        called by the instance' associated C{dealloc/finalize} observer.
 
@@ -1507,9 +1533,9 @@ def _objc_cache_pop(nso, sel_name_):
     '''
     objc_ptr_value = get_ivar(nso, _Ivar1.name, ctype=_Ivar1.c_t)
 #   print(sel_name_, hex(objc_ptr_value))
+    # dis-associate the observer from ObjC objc_ptr_value
+    # libobjc.objc_removeAssociatedObjects(objc_ptr_value)
     if objc_ptr_value:
-        # dis-associate the observer from ObjC objc_ptr_value
-        # libobjc.objc_removeAssociatedObjects(objc_ptr_value)
         objc = ObjCInstance._objc_cache.pop(objc_ptr_value, None)
         if objc:
             objc._cache_clear()
@@ -1546,14 +1572,14 @@ class _NSDeallocObserver(object):  # XXX (_ObjCBase):
 
     @_ObjC.rawmethod('@@')
     def initWithObject_(self, unused, objc_ptr_value):
-        self = send_super_init(self).value
-        set_ivar(self, _Ivar1.name, objc_ptr_value, ctype=_Ivar1.c_t)
-        return self
+        ptr = send_super_init(self).value
+        set_ivar(ptr, _Ivar1.name, objc_ptr_value, ctype=_Ivar1.c_t)
+        return ptr
 
     @_ObjC.rawmethod('@')
     def dealloc(self, sel):
         # called before the observer is destroyed
-        _objc_cache_pop(self, sel)  # sel.name = 'dealloc'
+        _nsobjc_dealloc(self, sel)  # sel.name = 'dealloc'
 
     @_ObjC.rawmethod('@')
     def finalize(self, sel):
@@ -1561,7 +1587,7 @@ class _NSDeallocObserver(object):  # XXX (_ObjCBase):
         # (which would have to be explicitly started with
         # objc_startCollectorThread(), so probably not much
         # reason to have this here, but it can't hurt)
-        _objc_cache_pop(self, sel)  # sel.name = 'finalize'
+        _nsobjc_dealloc(self, sel)  # sel.name = 'finalize'
 
 
 def _nsDeallocObserver(objc_ptr_value):

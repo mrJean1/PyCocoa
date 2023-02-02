@@ -37,7 +37,14 @@ _pycocoa_ = 'pycocoa'
 _PY_FH    = _environ.get('PYTHONFAULTHANDLER', None)  # PYCHOK .faults, .__init__
 
 # @module_property[_RO?] <https://GitHub.com/jtushman/proxy_tools/>
-isLazy = None  # see @var isLazy above
+isLazy    = None  # see @var isLazy above
+
+_isPython2  = _sys.version_info.major < 3  # PYCHOK in .runtime
+_isPython3  = _sys.version_info.major > 2  # PYCHOK in .utils, .windows
+_isPython37 = _sys.version_info[:2] < (3, 7)  # older than 3.7
+_isPython39 = _sys.version_info[:2] < (3, 9)  # PYCHOK in .oslibs
+
+_Python_version = _sys.version.split()[0]
 
 
 class LazyImportError(ImportError):
@@ -229,7 +236,7 @@ _ALL_LAZY = _NamedEnum_RO(_name='_ALL_LAZY',
 _ALL_OVERRIDING = _NamedEnum_RO(_name='_ALL_OVERRIDING')  # all DEPRECATED
 
 __all__ = _ALL_LAZY.lazily
-__version__ = '23.01.18'
+__version__ = '23.02.02'
 
 
 def _all_imports(**more):
@@ -315,9 +322,9 @@ def _lazy_import2(_package_):  # MCCABE 15
     '''
     global isLazy
 
-    if _sys.version_info[:2] < (3, 7):  # not supported
+    if _isPython37:  # not supported
         raise LazyImportError('no %s for Python %s', _DOT_(_package_,
-                              _lazy_import2.__name__), _sys.version.split()[0])
+                              _lazy_import2.__name__), _Python_version)
 
     import_module, package, parent = _lazy_init3(_package_)
 

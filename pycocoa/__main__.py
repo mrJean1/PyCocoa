@@ -4,23 +4,22 @@
 u'''Print L{pycocoa} all public attributes, PyCocoa version, Python
 release, etc. by using C{python -m pycocoa [-all]} from the command line.
 '''
-import sys
-
 from pycocoa import __all__ as _all_, _locals, _pycocoa as _package
-from pycocoa.utils import _all_listing, _all_versions, _Python3  # PYCHOK expected
+from pycocoa.lazily import _isPython3, _sys
+from pycocoa.utils import _all_listing, _all_versions  # PYCHOK expected
 
-if _Python3:  # get pycocoa.__all__ from .lazily
+if _isPython3:  # get pycocoa.__all__ from .lazily
     from pycocoa import *  # PYCHOK expected
 
 _all_versions(_file_=_package)
-if len(sys.argv) > 1 and '-all'.startswith(sys.argv[-1]):
+if len(_sys.argv) > 1 and '-all'.startswith(_sys.argv[-1]):
     _all_listing(_all_, _locals(), libs=True, _file_=_package)
 
 from pycocoa.runtime import _nsDeallocObserverIvar1
 _nsDeallocObserverIvar1()  # check the _NSDeallocObserver class
 
 __all__ = ()
-__version__ = '23.01.06'
+__version__ = '23.02.02'
 
 # % python3 -m pycocoa
 # pycocoa.version 23.01.06, .isLazy 1, Python 3.11.0 64bit arm64, macOS 13.0.1

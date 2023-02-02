@@ -8,19 +8,17 @@
 @var missing: Missing keyword argument value.
 '''
 
-from pycocoa.lazily import _ALL_LAZY, _COLON_, _COMMASPACE_, \
-                           _DOT_, _EQUALS_, _lazy_import, \
-                           _NL_, _NN_, _SPACE_, _UNDER_, isLazy
+from pycocoa.lazily import _ALL_LAZY, _COLON_, _COMMASPACE_, _DOT_, \
+                           _EQUALS_, isLazy, _lazy_import, _NL_, _NN_, \
+                           _Python_version, _SPACE_, _sys,_UNDER_, \
+                           _isPython3  # PYCHOK used!
 
-import os
+import os.path as _os_path
 import platform as _platform
-import sys  # in pycocoa.oslibs.py
-_Python_ = sys.version.split()[0]  # PYCHOK internal
-_Python2 = sys.version_info.major < 3  # PYCHOK internal
-_Python3 = sys.version_info.major > 2  # PYCHOK internal
+# import sys as _sys  # from .lazily
 
 __all__ = _ALL_LAZY.utils
-__version__ = '21.11.04'
+__version__ = '23.02.02'
 
 _bCOLON_ = b':'
 _bUNDER_ = b'_'
@@ -186,16 +184,16 @@ class Adict(dict):
 class _Globals(object):
     '''(INTERNAL) Some PyCocoa globals
     '''
-    App       = None        # set by .apps.App.__init__, not an NSApplication!
-    argv0     = 'pycocoa'   # set by .nstypes.nsBundleRename, _allisting, test/simple_VLCplayer
-    Items     = {}          # set by .menus.Item.__init__, gotten by .menus.ns2Item
-    MenuBar   = None        # set by .menus.MenuBar.__init__
-#   Menus     = {}          # set by .menus._Menu_Type2._initM
-    raiser    = False       # set by .apps.App.__init__
-    stdlog    = sys.stdout  # set by .faults
-    Tables    = []          # set by .tables.TableWindow.__init__
-    Windows   = {}          # set by .windows.Window.__init__
-    Xhandler2 = None        # set by .faults.setUncaughtExceptionHandler
+    App       =  None         # set by .apps.App.__init__, not an NSApplication!
+    argv0     = 'pycocoa'     # set by .nstypes.nsBundleRename, _allisting, test/simple_VLCplayer
+    Items     = {}            # set by .menus.Item.__init__, gotten by .menus.ns2Item
+    MenuBar   =  None         # set by .menus.MenuBar.__init__
+#   Menus     = {}            # set by .menus._Menu_Type2._initM
+    raiser    =  False        # set by .apps.App.__init__
+    stdlog    = _sys .stdout  # set by .faults
+    Tables    = []            # set by .tables.TableWindow.__init__
+    Windows   = {}            # set by .windows.Window.__init__
+    Xhandler2 =  None         # set by .faults.setUncaughtExceptionHandler
 
 
 class _Singletons(_MutableConstants):
@@ -252,7 +250,7 @@ class _Types(_MutableConstants):
     Tuple         = None  # set by .tuples.py
     Window        = None  # set by .windows.py
 
-    if _Python3 and isLazy:
+    if _isPython3 and isLazy:
         def __getattribute__(self, name):
             '''(INTERNAL) Lazily import any missing _Types.
             '''
@@ -605,7 +603,7 @@ def _all_versionstr(libs=False, _file_=_NN_, _version_=_NN_):
 
     t = (('version', _version_ or _version),  # PYCHOK shadow
          ('.isLazy',  str(isLazy)),
-         ('Python',  _Python_, _platform.architecture()[0], machine()),
+         ('Python',  _Python_version, _platform.architecture()[0], machine()),
          ('macOS',   _macOSver()))
     if libs:
         t += ('oslibs', str(sorted(oslibs.get_libs().keys())).replace("'", _NN_)),
@@ -690,13 +688,13 @@ def clipstr(bytestr, limit=50):
 def _dirbasename2(filename, sep=_DOT_):
     '''(INTERNAL) get the dir and base name of a C{filename} without extension.
     '''
-    f = os.path.splitext(filename)[0]
-    d, b = os.path.split(f.strip())
+    f = _os_path.splitext(filename)[0]
+    d, b = _os_path.split(f.strip())
     while d and not b:  # ended with '/'
-        d, b = os.path.split(d)
-    _, d = os.path.split(d)
+        d, b = _os_path.split(d)
+    _, d = _os_path.split(d)
     if d and b:
-        m = sep.join((d, b)) if sep else os.path.join(d, b)
+        m = sep.join((d, b)) if sep else _os_path.join(d, b)
         n = b
     else:
         m = n = d or b
@@ -1067,7 +1065,7 @@ def _varstr(constants, strepr=None):
     return _NL_.join(v)
 
 
-def _writestr(fmtxt, args=(), file=sys.stdout, flush=False,
+def _writestr(fmtxt, args=(), file=_sys.stdout, flush=False,
                               nl=0, nt=0, **argv0):
     '''(INTERNAL) Write C{text} to C{file}.
     '''

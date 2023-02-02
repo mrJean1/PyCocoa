@@ -146,7 +146,7 @@ _isfrozen       = getattr(sys, 'frozen', False)
 pycocoa_abspath = dirname(abspath(__file__))  # sys._MEIPASS + '/pycocoa'
 _pycocoa        = __package__ or basename(pycocoa_abspath)
 
-__version__ = '23.01.20'
+__version__ = '23.02.03'
 # see setup.py for similar logic
 version = '.'.join(map(str, map(int, __version__.split('.'))))
 
