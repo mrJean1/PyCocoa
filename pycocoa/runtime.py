@@ -320,17 +320,17 @@ class ObjCBoundClassMethod(ObjCBoundMethod):
 class ObjCClass(_ObjCBase):
     '''Python wrapper for an ObjC class.
     '''
-    _classmethods = {}  # shut PyChecker up
-    _methods      = {}
-    _name         = _bNN_  # shut PyChecker up
-    _ptr          =  None
-    _Type         =  None  # Python Type, e.g. Dict, List, Tuple, etc.
+    _classmethods_cache = {}  # local cache per class
+    _methods_cache      = {}  # local cache per class
+    _name               = _bNN_  # shut PyChecker up
+    _objc_classes_cache = {}  # global cache **)
+    _ptr                =  None
+    _Type               =  None  # Python Type, e.g. Dict, List, Tuple, etc.
 
-    # Only one Python object is created for each ObjC class.  Any
-    # future calls with the same class will return the previously
-    # created Python object.  Note that these aren't weak references,
+    # **) Only one ObjCClass instance is created for each ObjC class.
+    # Any future calls with the same class will return the previously
+    # created ObjCClass instance.  Note, these aren't weak references,
     # each ObjCClass created will exist until the end of the program.
-    _objc_class_cache = {}
 
     def __new__(cls, name_or_ptr, *protocols):
         '''Create a new L{ObjCClass} instance or return a previously
@@ -341,7 +341,7 @@ class ObjCClass(_ObjCBase):
            @param protocols: None, one or more protocol to add (C{str}s
                              or L{Protocol_t} instances).
         '''
-        # Determine name and ptr values from passed in argument.
+        # Determine name and ptr values from C{name_or_ptr}.
         ptr, name = _obj_and_name(name_or_ptr, get_class)
         if name is None:
             # Make sure that ptr is wrapped in a Class_t,
@@ -355,7 +355,7 @@ class ObjCClass(_ObjCBase):
         # Check if we've already created a Python object for this class
         # and if so, return it rather than making a new one.
         try:
-            return cls._objc_class_cache[name]
+            return cls._objc_classes_cache[name]
         except KeyError:
             pass
 
@@ -366,19 +366,19 @@ class ObjCClass(_ObjCBase):
 
         _ObjC_log(self, 'new', 'C')
 
-        # Cache Python representations of all instance methods from
-        # by this class (but does not find methods of superclass).
-        self._methods = self._cache_methods(ptr, ObjCMethod)
-        # Cache Python representations of all class methods from
-        # by this class (but does not find methods of superclass)
-        self._classmethods = self._cache_methods(get_classof(ptr), ObjCClassMethod)
+        # Cache the Python version of all instance methods of
+        # this class (but does not find methods of superclass).
+        self._methods_cache = self._cache_methods(ptr, ObjCMethod)
+        # Cache the Python version of all class methods of this
+        # class (but does not find class methods of superclass).
+        self._classmethods_cache = self._cache_methods(get_classof(ptr), ObjCClassMethod)
 
         # add any protocols
         for p in protocols:
             add_protocol(ptr, p)
 
-        # Store the new class in the cache of (registered) classes.
-        cls._objc_class_cache[name] = self
+        # Add the class to the (registered) classes cache.
+        cls._objc_classes_cache[name] = self
 
         return self
 
@@ -445,10 +445,10 @@ class ObjCClass(_ObjCBase):
            @return: The class method wrapper (L{ObjCClassMethod}) or None.
         '''
         try:
-            return self._classmethods[name2py(name)]
+            return self._classmethods_cache[name2py(name)]
         except KeyError:
             return self._cache_method(name, ObjCClassMethod,
-                   self._classmethods, libobjc.class_getClassMethod)
+                   self._classmethods_cache, libobjc.class_getClassMethod)
 
     def get_method(self, name):
         '''Find an instance method.
@@ -458,10 +458,10 @@ class ObjCClass(_ObjCBase):
            @return: The instance method wrapper (L{ObjCMethod}) or None.
         '''
         try:
-            return self._methods[name2py(name)]
+            return self._methods_cache[name2py(name)]
         except KeyError:
             return self._cache_method(name, ObjCMethod,
-                   self._methods, libobjc.class_getInstanceMethod)
+                   self._methods_cache, libobjc.class_getInstanceMethod)
 
     @property_RO
     def name(self):
@@ -500,10 +500,15 @@ class ObjCDelegate(ObjCClass):
                                 L{ObjCSubclass}.
            @param protocols: None, one or more protocol to add
                              (C{str}s or L{Protocol_t} instances).
+
+           @raise TypeError: Attribute C{B{_NS_Delegate}._ObjC} is not
+                             a sub-class of L{ObjCSubclass} or the name
+                             of C{B{_NS_Delegate}} does not start with
+                             C{_NS} or end with C{Delegate}.
         '''
         name = _NS_Delegate.__name__
         # ObjCDelegate classes cached in parent _objc_cache
-        if name not in ObjCClass._objc_class_cache:
+        if name not in ObjCClass._objc_classes_cache:
             _ObjC = _NS_Delegate._ObjC
             if not isinstance(_ObjC, ObjCSubclass):
                 raise TypeError('%s.%s not %s' % (name, '_ObjC', ObjCSubclass.__name__))
@@ -543,11 +548,12 @@ class ObjCInstance(_ObjCBase):
             return None  # nil pointer
 
         if cached:
-            # Check if we've already created an ObjCInstance for this
-            # Id_t(objc_ptr) and if so, return it.  Otherwise, create
-            # an ObjCInstance any object pointer first encountered.
-            # That ObjCInstance will persist until the object is de-
-            # allocated by ObjC, see _ns/NSDeallocObserver below.
+            # Check whether an ObjCInstance was already for the C{Id_t}
+            # and if so, return it.  Otherwise, create an ObjCInstance
+            # for the C{Id_t} and that will persist until the object is
+            # de-allocated by ObjC (see C{_ns/NSDeallocObserver} below)
+            # or C{drain}ed from the pool it was allocated in (see
+            # method C{_cache_clear} below).
             try:
                 # cls._objc_cache == ObjCInstance._objc_cache
                 return cls._objc_cache[ptr]
@@ -574,10 +580,10 @@ class ObjCInstance(_ObjCBase):
                 _nsDeallocObserver(ptr)
 
             auto = _NSAutorelease.Pools
-            if NS_ is _NSAutorelease.Pool:
+            if NS_ is _NSAutorelease.Pool:  # new pool instance
                 # i.e. isObjCInstanceOf(self, _NSAutoreleasePool)
                 self._autoPool = _NSAutorelease.Pools = auto + 1
-            elif auto:
+            elif auto:  # hold the current pool identifier
                 self._autoPool = auto
 
         # print('new', self, cached, self.inPool, self.objc_classname)
@@ -586,7 +592,7 @@ class ObjCInstance(_ObjCBase):
     def __del__(self):
         # remove from _objc_cache
         # print('del', self)
-        # if self.retained():  # or self._autoPool < _NSAutorelease.Pools
+        # if self.retained():  # or self.inPool < _NSAutorelease.Pools
         #     raise RuntimeError("%r is retained, can't be deleted" % (self,))
         self._objc_cache.pop(self.ptr.value, None)
         # self._cache_clear()
@@ -673,7 +679,7 @@ class ObjCInstance(_ObjCBase):
     def _cache_print(self, label):
         cache, _r = self._objc_cache, sys.getrefcount
         vs = ('%r %d' % (v, _r(v)) for v in cache.values())
-        print(label, len(cache), ', '.join(vs))
+        print(label, len(cache), _COMMASPACE_.join(vs))
 
     @property_RO
     def from_py2NS(self):
@@ -955,9 +961,8 @@ class ObjCSubclass(_ObjCBase):
        >>> myclass = ObjCClass('MySubclassName')
        >>> myinstance = myclass.alloc().init()
     '''
-    _imp_cache = {}  # decorated class/method cache
-    _name      = _bNN_
-
+    _imp_cache      = {}  # local, decorated class/method cache
+    _name           = _bNN_
     _objc_class     = None
     _objc_metaclass = None  # None means, not (yet) registered
 
@@ -1241,6 +1246,16 @@ def isImmutable(objc, mutableClass, immutableClass, name='ns'):
     return isObjCInstanceOf(objc, immutableClass, name=name) is immutableClass
 
 
+def isMetaClass(objc):
+    '''Check whether an object is an ObjC metaclass.
+
+       @param objc: Object to check (C{Object} or C{Class}).
+
+       @return: True if the I{objc} is a metaclass, False otherwise.
+    '''
+    return bool(libobjc.class_isMetaClass(objc))
+
+
 def isObjCInstanceOf(objc, *Classes, **name_missing):
     '''Check whether an ObjC object is an instance of some ObjC class.
 
@@ -1285,16 +1300,6 @@ def isObjCInstanceOf(objc, *Classes, **name_missing):
         return None
 
     raise _TypeError(name, objc, isObjCInstanceOf, Classes)
-
-
-def isMetaClass(objc):
-    '''Check whether an object is an ObjC metaclass.
-
-       @param objc: Object to check (C{Object} or C{Class}).
-
-       @return: True if the I{objc} is a metaclass, False otherwise.
-    '''
-    return bool(libobjc.class_isMetaClass(objc))
 
 
 def release(objc):
