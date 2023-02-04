@@ -24,7 +24,7 @@
 from setuptools import setup
 
 __all__ = ()
-__version__ = '23.01.06'
+__version__ = '23.02.04'
 
 
 def _c2(*names):
@@ -91,6 +91,7 @@ setup(
         _c2('Programming Language', 'Python', '3.8'),
         _c2('Programming Language', 'Python', '3.9'),
         _c2('Programming Language', 'Python', '3.10'),
+        _c2('Programming Language', 'Python', '3.11'),
         _c2('Topic', 'Software Development'),
         _c2('Topic', 'Software Development', 'User Interfaces'),
         _c2('Topic', 'Scientific/Engineering', 'Human Machine Interfaces'),
