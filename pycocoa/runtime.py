@@ -49,7 +49,7 @@ import sys
 import os
 
 __all__ = _ALL_LAZY.runtime
-__version__ = '23.02.02'
+__version__ = '23.02.04'
 
 # <https://Developer.Apple.com/documentation/objectivec/
 #        objc_associationpolicy?language=objc>
@@ -371,7 +371,8 @@ class ObjCClass(_ObjCBase):
         self._methods_cache = self._cache_methods(ptr, ObjCMethod)
         # Cache the Python version of all class methods of this
         # class (but does not find class methods of superclass).
-        self._classmethods_cache = self._cache_methods(get_classof(ptr), ObjCClassMethod)
+        p = get_classof(ptr)
+        self._classmethods_cache = self._cache_methods(p, ObjCClassMethod)
 
         # add any protocols
         for p in protocols:
@@ -422,10 +423,10 @@ class ObjCClass(_ObjCBase):
         cache = {}
         if False:  # not __debug__:
             n = c_uint()
-            for method in libobjc.class_copyMethodList(which, byref(n)):
-                method = Class(method)
-                cache[method.name] = method
-                _ObjC_log(method, 'new', 'M')
+            for m in libobjc.class_copyMethodList(which, byref(n)):
+                m = Class(m)
+                cache[m.name] = m
+                _ObjC_log(m, 'new', 'M')
         return cache
 
     def add_protocol(self, protocol):
@@ -525,19 +526,23 @@ class ObjCDelegate(ObjCClass):
 class ObjCInstance(_ObjCBase):
     '''Python wrapper for an ObjC instance.
     '''
-    _autoPool   = 0
+    _autoPool   = 0  # pool id, see property .inPool
     _dealloc_d  = False
     _from_py2NS = False
     _objc_cache = {}  # see _NSDeallocObserver, example class_wrapper4.py
     _objc_class = None
     _objc_ptr   = None  # shut PyChecker up
-    _retained   = None
+    _retained   = None  # False or True
 
     def __new__(cls, objc_ptr, cached=True):
         '''New L{ObjCInstance} or a previously created, cached one.
 
            @param objc_ptr: The ObjC instance (L{Id_t} or C{c_void_p}).
-           @keyword cached: Cache the new instance (C{bool}).
+           @keyword cached: Cache the new instance (C{bool}), required
+                            for most objects.
+
+           @raise RuntimeError: An L{NSAutoreleasePool} ObjC instance
+                                is created with C{B{cached}=False}.
         '''
         # Make sure that obj_ptr is wrapped in an Id_t.
         if not isinstance(objc_ptr, Id_t):
@@ -570,21 +575,29 @@ class ObjCInstance(_ObjCBase):
         _ObjC_log(self, 'new', 'I')
 
         if cached:
-            # store new object in the dictionary of cached objects,
-            # keyed by the (integer) memory address pointed to by the
+            # store the object in the cached objects dict, keyed
+            # by the (integer) memory address pointed to by the
             # obj_ptr (cls._objc_cache == ObjCInstance._objc_cache)
             cls._objc_cache[ptr] = self
-            if not isClass(self):
-                # observe the objc_ptr.value, the
-                # key into the _objc_cache dict
-                _nsDeallocObserver(ptr)
 
             auto = _NSAutorelease.Pools
             if NS_ is _NSAutorelease.Pool:  # new pool instance
                 # i.e. isObjCInstanceOf(self, _NSAutoreleasePool)
+                _nsDeallocObserver(ptr)  # needed for _cache_clear
                 self._autoPool = _NSAutorelease.Pools = auto + 1
-            elif auto:  # hold the current pool identifier
+            elif auto:  # hold current, non-zero pool identifier
                 self._autoPool = auto
+            elif not isClass(self):
+                # observe the C{objc_ptr.value}, the key into the
+                # C{cls._objc_cache} dict, but only for objects not
+                # allocated in an C{NSAutoreleasePool} since those
+                # never receive a C{dealloc} or C{finalize} message
+                # anyway (courtesy caffeinepills in U{issue #6
+                # <https://GitHub.com/mrJean1/PyCocoa/issues/6>})
+                _nsDeallocObserver(ptr)
+
+        elif NS_ is _NSAutorelease.Pool:  # must be cached!
+            raise RuntimeError('not cached: %r' % (self,))
 
         # print('new', self, cached, self.inPool, self.objc_classname)
         return self
@@ -619,7 +632,7 @@ class ObjCInstance(_ObjCBase):
                                 deallocated and no longer exists.
         '''
         if self._dealloc_d:
-            raise RuntimeError('%r no longer exists' % (self,))
+            raise RuntimeError('no longer exists: %r' % (self,))
 
         clas = self._objc_class
         # Get the named instance method in the class object and if it
@@ -655,7 +668,7 @@ class ObjCInstance(_ObjCBase):
             return get(self)
 
         # ... otherwise raise error
-        raise AttributeError('no %r [class]method or property: %s' % (name, self))
+        raise AttributeError('no %r [class]method or property: %r' % (name, self))
 
 #   def __repr__(self):
 #       return '<%s %#x: %s>' % (ObjCInstance.__name__, id(self), self)
@@ -739,7 +752,7 @@ class ObjCInstance(_ObjCBase):
         if retain:
             self._retained = b = bool(retain[0])
             if b and self.ptr.value not in self._objc_cache:
-                raise RuntimeError("%r not cached, can't be retained" % (self,))
+                raise RuntimeError("not cached, can't be retained: %r" % (self,))
         return r
 
     def set_ivar(self, name, value, ctype=None):
@@ -1302,6 +1315,18 @@ def isObjCInstanceOf(objc, *Classes, **name_missing):
     raise _TypeError(name, objc, isObjCInstanceOf, Classes)
 
 
+def register_subclass(subclas):
+    '''Register an ObjC sub-class.
+
+       @param subclas: Class to be registered (C{Class}).
+
+       @see: L{ObjCSubclass}C{.register}.
+    '''
+    if not isinstance(subclas, Class_t):
+        subclas = Class_t(subclas)
+    libobjc.objc_registerClassPair(subclas)
+
+
 def release(objc):
     '''Release an ObjC instance to be deleted, eventually.
 
@@ -1313,25 +1338,13 @@ def release(objc):
 
        @note: May result in Python memory errors, aborts and/or
               segfaults.  Use 'python3 -X faulthandler ...' to
-              get a Python traceback.
+              get a Python traceback in such circumstances.
     '''
     try:
         objc.autorelease()  # XXX or objc.release()?
     except (AttributeError, TypeError):
         raise TypeError('not releasable: %r' % (objc,))
     return objc
-
-
-def register_subclass(subclas):
-    '''Register an ObjC sub-class.
-
-       @param subclas: Class to be registered (C{Class}).
-
-       @see: L{ObjCSubclass}C{.register}.
-    '''
-    if not isinstance(subclas, Class_t):
-        subclas = Class_t(subclas)
-    libobjc.objc_registerClassPair(subclas)
 
 
 def retain(objc):
@@ -1345,7 +1358,7 @@ def retain(objc):
 
        @note: May result in Python memory errors, aborts and/or
               segfaults.  Use 'python3 -X faulthandler ...' to
-              get a Python traceback.
+              get a Python traceback in such circumstances.
     '''
     try:
         objc.retain()  # L{ObjCMethod}
@@ -1549,20 +1562,20 @@ def _nsobjc_dealloc(nso, sel_name_):
 
 
 class _NSDeallocObserver(object):  # XXX (_ObjCBase):
-    '''Instances of C{_NSDeallocObserver} are associated with every
-       ObjC object that is wrapped and cached by an L{ObjCInstance}.
+    '''A separate C{_NSDeallocObserver} instance is associated with each
+       ObjC object that is cached by an L{ObjCInstance}, except when the
+       latter is allocated within an L{NSAutoreleasePool}.
 
-       Their sole purpose is to watch when the ObjC object is de-allocated,
+       The sole purpose is to watch when the ObjC object is de-allocated,
        and then remove the object from the L{ObjCInstance}C{._objc_cache_}
        dictionary kept by the L{ObjCInstance} class.
 
-       The methods of the class defined below are decorated with
-       C{.rawmethod} instead of C{.method} because C{_NSDeallocObserver}
-       instances are created inside the L{ObjCInstance}C{.__new__} method
-       and we must be careful to not create another L{ObjCInstance} here
-       (which happens when the usual method decorator turns the C{self}
-       argument into an L{ObjCInstance}) and get trapped in an infinite
-       recursion.
+       The methods of the class below are decorated with C{.rawmethod}
+       instead of C{.method} because C{_NSDeallocObserver} instances are
+       created inside the L{ObjCInstance}C{.__new__} method and we must
+       be careful to not create another L{ObjCInstance} here (which happens
+       when the usual method decorator turns the C{self} argument into an
+       L{ObjCInstance}) and gets trapped in an infinite recursion.
 
        The I{sel} argument in all decorated methods below represents
        the C{SEL/cmd} C{SEL_t}, see L{ObjCSubclass}C{.rawmethod}.
