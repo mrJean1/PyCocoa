@@ -18,6 +18,15 @@
 # <https://GitHub.com/gnustep/libs-gui/tree/master/Headers>
 
 '''Classes C{ObjCClass}, C{ObjCInstance}, C{ObjCMethod}, C{ObjCSubclass}, etc.
+
+For debugging purposes, enable logging to the console by setting env variable
+C{PYCOCOA_OBJC_LOG} to a string of one or more of the following letters:
+
+C{% env  PYCOCOA_OBJC_LOG=ICSMBDX  python3  ...}
+
+where C{I} logs __new__ and __del__ Instance calls, C{C} new Classes, C{S}
+new Subclasses, C{M} new Methods, C{B} new BoundMethods, C{D} draining of
+C{NSAutoreleasePool}s and C{X} send_message, send_super calls.
 '''
 # all imports listed explicitly to help PyChecker
 from pycocoa.getters import _ivar_ctype, get_c_func_t, get_class, \
@@ -49,10 +58,11 @@ import sys
 import os
 
 __all__ = _ALL_LAZY.runtime
-__version__ = '23.02.04'
+__version__ = '23.02.05'
 
 # <https://Developer.Apple.com/documentation/objectivec/
 #        objc_associationpolicy?language=objc>
+OBJC_ASSOCIATION_ASSIGN           = 0      # weak reference
 OBJC_ASSOCIATION_COPY             = 0x303  # 01403
 OBJC_ASSOCIATION_COPY_NONATOMIC   = 3
 OBJC_ASSOCIATION_RETAIN           = 0x301  # 01401
@@ -61,20 +71,15 @@ OBJC_ASSOCIATION_RETAIN_NONATOMIC = 1
 _OBJC_ENV = 'PYCOCOA_OBJC_LOG'
 _OBJC_LOG = dict((_, 0) for _ in os.environ.get(_OBJC_ENV, _NN_).upper())
 
-_objc_msgSend_      = 'objc_msgSend'
-_objc_msgSendSuper_ = 'objc_msgSendSuper'
+_objc_msgSend_fpret_      = \
+_objc_msgSend_stret_      = \
+_objc_msgSend_            = 'objc_msgSend'
+_objc_msgSendSuper_stret_ = \
+_objc_msgSendSuper_       = 'objc_msgSendSuper'
 if __i386__:
-    _objc_msgSend_fpret_      = _objc_msgSend_ + '_fpret'
-    _objc_msgSend_stret_      = _objc_msgSend_ + '_stret'
-    _objc_msgSendSuper_stret_ = _objc_msgSendSuper_ + '_stret'
-else:
-    _objc_msgSend_fpret_      = _objc_msgSend_
-    _objc_msgSend_stret_      = _objc_msgSend_
-    _objc_msgSendSuper_stret_ = _objc_msgSendSuper_
-
-# <https://Developer.Apple.com/documentation/objectivec/
-#        1441499-object_getinstancevariable>
-_object_setInstanceVariable = 'object_setInstanceVariable'
+    _objc_msgSend_fpret_      += '_fpret'
+    _objc_msgSend_stret_      += '_stret'
+    _objc_msgSendSuper_stret_ += '_stret'
 
 
 class _NSAutorelease(object):
@@ -82,6 +87,7 @@ class _NSAutorelease(object):
     Pools = 0     # see ObjCInstance
 
 _NSAutorelease = _NSAutorelease()  # PYCHOK singleton
+_NSnil         =  None  # see nstypes.NSMain.nil
 
 
 def _c_tstr(*c_ts):
@@ -139,26 +145,29 @@ def _objc_cast(objc):
     raise TypeError('invalid %s: %r' % ('objc', objc))
 
 
-def _ObjC_log(inst, what, T, *args):  # B, C, I, M, S
-    '''(INTERNAL) Log a new instance, method or call to the console.
+def _ObjC_log(inst, what, T, *args, **kwds):  # B, C, D, I, M, S
+    '''(INTERNAL) Log a new/del Instance, Sub-/Class, Bound-/Method
+       call or pool/cache Drain to the console.
     '''
     if inst and T in _OBJC_LOG:
-        _OBJC_LOG[T] += 1
-        r = repr(inst)
+        r, t = repr(inst), _NN_
         if args:  # insert method call args
             a = _COMMASPACE_.join(map(repr, args))
-            r = r.replace('))',  '), %s)' % (a,))
-        printf('%s %s %d', what, r, _OBJC_LOG[T])
+            r = r.replace('))', '), %s)' % (a,))
+        if kwds:
+            t = _COMMASPACE_.join('%s %s' % t for t in kwds.items())
+        _OBJC_LOG[T] += 1
+        printf('%s %s %d %s', what, r, _OBJC_LOG[T], t)
 
 
 def _ObjC_logf(fmt, *args):
     '''(INTERNAL) Log a message to the console.
     '''
     if 'X' in _OBJC_LOG:
-        _OBJC_LOG['X'] += 1
         t = fmt
         if args:
-            t = fmt % args
+            t %= args
+        _OBJC_LOG['X'] += 1
         printf('%s %s %d', 'call', t, _OBJC_LOG['X'])
 
 
@@ -232,7 +241,8 @@ def _Xargs(x, name, argtypes, restype='void'):  # imported by nstypes.py, printe
 class _ObjCBase(object):
     '''(INTERNAL) Base class for C{runtime.ObjC...} classes.
     '''
-    _as_parameter_ = None  # for ctypes
+    _as_parameter_ =  None  # for ctypes
+    _name          = _bNN_  # shut PyChecker up
 
     def __repr__(self):
         return '<%s(%s) at %#x>' % (self.__class__.__name__, self, id(self))
@@ -322,7 +332,6 @@ class ObjCClass(_ObjCBase):
     '''
     _classmethods_cache = {}  # local cache per class
     _methods_cache      = {}  # local cache per class
-    _name               = _bNN_  # shut PyChecker up
     _objc_classes_cache = {}  # global cache **)
     _ptr                =  None
     _Type               =  None  # Python Type, e.g. Dict, List, Tuple, etc.
@@ -572,8 +581,6 @@ class ObjCInstance(_ObjCBase):
         # Determine and hold the class of this object.
         self._objc_class = NS_ = ObjCClass(get_classof(objc_ptr))
 
-        _ObjC_log(self, 'new', 'I')
-
         if cached:
             # store the object in the cached objects dict, keyed
             # by the (integer) memory address pointed to by the
@@ -599,15 +606,15 @@ class ObjCInstance(_ObjCBase):
         elif NS_ is _NSAutorelease.Pool:  # must be cached!
             raise RuntimeError('not cached: %r' % (self,))
 
-        # print('new', self, cached, self.inPool, self.objc_classname)
+        _ObjC_log(self, 'new', 'I', auto=self.inPool, cached=cached)
         return self
 
     def __del__(self):
         # remove from _objc_cache
-        # print('del', self)
         # if self.retained():  # or self.inPool < _NSAutorelease.Pools
         #     raise RuntimeError("%r is retained, can't be deleted" % (self,))
-        self._objc_cache.pop(self.ptr.value, None)
+        objc = self._objc_cache.pop(self.ptr.value, None)
+        _ObjC_log(self, 'del', 'I', auto=self.inPool, cached=objc is self)
         # self._cache_clear()
 
 #   def __eq__(self, other):
@@ -677,17 +684,24 @@ class ObjCInstance(_ObjCBase):
         return '%s(%r) of %#x' % (self.objc_classname, self.ptr, self.ptr.value)
 
     def _cache_clear(self):
+        # clear the _objc_cache and return the number of cleared C{ObjcInstance}s
         if self._objc_class is _NSAutorelease.Pool:
             # i.e. isObjCInstanceOf(self, NSAutoreleasePool)
-            cache, retained, auto = self._objc_cache, {}, self.inPool
+            cache, auto, keep = self._objc_cache, self.inPool, {}
             # self._cache_print('cached')
+            n, _popitem = len(cache), cache.popitem
             while cache:
-                ptr, objc = cache.popitem()
+                ptr, objc = _popitem()
                 if objc.retained() or objc.inPool < auto:
-                    retained[ptr] = objc
-            cache.update(retained)
+                    keep[ptr] = objc
+            cache.update(keep)
+            n -= len(cache)
             # self._cache_print('retained')
             _NSAutorelease.Pools = max(0, auto - 1)
+            _ObjC_log(self, 'drain', 'D', auto=auto, cleared=n)
+        else:
+            n  = 0
+        return n
 
     def _cache_print(self, label):
         cache, _r = self._objc_cache, sys.getrefcount
@@ -806,7 +820,6 @@ class ObjCMethod(_ObjCBase):
     _callable =  None
     _encoding = _bNN_
     _IMP      =  None
-    _name     = _bNN_
     _pyresult =  None  # None, ObjCClass or ObjCInstance
     _SEL      =  None
     _restype  =  None  # None (i.e. c_void), Class_t or Id_t
@@ -816,8 +829,8 @@ class ObjCMethod(_ObjCBase):
 
            @param method: The method pointer (L{IMP_t}).
         '''
-        self._IMP = libobjc.method_getImplementation(method)
-        self._SEL = libobjc.method_getName(method)
+        self._IMP  = libobjc.method_getImplementation(method)
+        self._SEL  = libobjc.method_getName(method)
         self._name = libobjc.sel_getName(self._SEL)  # bytes
 
         # determine the return and argument types of the method
@@ -975,9 +988,8 @@ class ObjCSubclass(_ObjCBase):
        >>> myinstance = myclass.alloc().init()
     '''
     _imp_cache      = {}  # local, decorated class/method cache
-    _name           = _bNN_
-    _objc_class     = None
-    _objc_metaclass = None  # None means, not (yet) registered
+    _objc_class     =  None
+    _objc_metaclass =  None  # None means, not (yet) registered
 
     def __init__(self, parent, name, register=True, **ivars):
         '''New sub-class of the given (super-)class.
@@ -1226,6 +1238,23 @@ def add_subclass(superclas, name, register=False):
     if clas and register:
         register_subclass(clas)
     return clas or None
+
+
+def drain(objc):
+    '''Release all objects in an C{NSAutoreleasePool} instance.
+
+       @return: The number og C{ObjC} objects cleared.
+
+       @note: C{NSAutoreleasePool.drain} invokes the C{dealloc}
+              method only for the pool itself, I{not} for any
+              of the objects held/allocated in the pool.
+    '''
+    if isObjCInstanceOf(objc, _NSAutorelease.Pool):
+        objc.drain()
+        n = objc._cache_clear()
+    else:
+        n = 0
+    return n
 
 
 def isClass(objc):
@@ -1529,9 +1558,11 @@ def set_ivar(objc, name, value, ctype=None):
     '''
     if ctype is None or ctype is missing:
         ctype = _ivar_ctype(objc, name)
-
+    # <https://Developer.Apple.com/documentation/objectivec/
+    #        1441499-object_getinstancevariable>
     argtypes = [Ivar_t, c_char_p, ctype]
-    return _libobjcall(_object_setInstanceVariable, c_void, argtypes,
+    # returns the same ptr value for all ivar's
+    return _libobjcall('object_setInstanceVariable', c_void_p, argtypes,
                         objc, str2bytes(name), value)
 
 
@@ -1551,9 +1582,18 @@ def _nsobjc_dealloc(nso, sel_name_):
     '''
     objc_ptr_value = get_ivar(nso, _Ivar1.name, ctype=_Ivar1.c_t)
 #   print(sel_name_, hex(objc_ptr_value))
-    # dis-associate the observer from ObjC objc_ptr_value
-    # libobjc.objc_removeAssociatedObjects(objc_ptr_value)
     if objc_ptr_value:
+        # dis-associate the observer from ObjC C{objc_ptr_value}
+        # by remove all associations (but just one in this case)
+        # libobjc.objc_removeAssociatedObjects(objc_ptr_value)
+
+        # U{preferably<https://Developer.Apple.com/documentation/
+        # objectivec/1418683-objc_removeassociatedobjects> set the
+        # association C{target} to C{nil} (courtesy caffeinepills
+        # U{issue #6<https://GitHub.com/mrJean1/ PyCocoa/issues/6>},
+        # also see <https://StackOverflow.com/questions/41827988>)
+        libobjc.objc_setAssociatedObject(objc_ptr_value, nso, _NSnil,
+                                         OBJC_ASSOCIATION_RETAIN)
         objc = ObjCInstance._objc_cache.pop(objc_ptr_value, None)
         if objc:
             objc._cache_clear()
@@ -1563,8 +1603,8 @@ def _nsobjc_dealloc(nso, sel_name_):
 
 class _NSDeallocObserver(object):  # XXX (_ObjCBase):
     '''A separate C{_NSDeallocObserver} instance is associated with each
-       ObjC object that is cached by an L{ObjCInstance}, except when the
-       latter is allocated within an L{NSAutoreleasePool}.
+       ObjC object that is cached by L{ObjCInstance}, I{except} when the
+       ObjC object is created within an L{NSAutoreleasePool}.
 
        The sole purpose is to watch when the ObjC object is de-allocated,
        and then remove the object from the L{ObjCInstance}C{._objc_cache_}
@@ -1658,7 +1698,7 @@ def _nsDeallocObserverIvar1():
                              _Ivar1.name, _Ivar1.c_t))
 
 
-from ctypes import sizeof
+from ctypes import sizeof  # see from ctypes ... comments at the top
 # _nsDeallocObserverIvar1()  # PYCHOK expected
 # del _nsDeallocObserverIvar1  # PYCHOK expected
 
@@ -1671,14 +1711,16 @@ if __name__ == '__main__':
 # % python3 -m pycocoa.runtime
 #
 # pycocoa.runtime.__all__ = tuple(
-#  pycocoa.runtime.add_ivar is <function .add_ivar at 0x1051e13f0>,
-#  pycocoa.runtime.add_method is <function .add_method at 0x1051f4ee0>,
-#  pycocoa.runtime.add_protocol is <function .add_protocol at 0x1051f4f70>,
-#  pycocoa.runtime.add_subclass is <function .add_subclass at 0x1051f5000>,
-#  pycocoa.runtime.isClass is <function .isClass at 0x1051f5090>,
-#  pycocoa.runtime.isImmutable is <function .isImmutable at 0x1051f5120>,
-#  pycocoa.runtime.isMetaClass is <function .isMetaClass at 0x1051f5240>,
-#  pycocoa.runtime.isObjCInstanceOf is <function .isObjCInstanceOf at 0x1051f51b0>,
+#  pycocoa.runtime.add_ivar is <function .add_ivar at 0x104895080>,
+#  pycocoa.runtime.add_method is <function .add_method at 0x104896ca0>,
+#  pycocoa.runtime.add_protocol is <function .add_protocol at 0x104896c00>,
+#  pycocoa.runtime.add_subclass is <function .add_subclass at 0x104896b60>,
+#  pycocoa.runtime.drain is <function .drain at 0x104896ac0>,
+#  pycocoa.runtime.isClass is <function .isClass at 0x104896a20>,
+#  pycocoa.runtime.isImmutable is <function .isImmutable at 0x104896980>,
+#  pycocoa.runtime.isMetaClass is <function .isMetaClass at 0x1048968e0>,
+#  pycocoa.runtime.isObjCInstanceOf is <function .isObjCInstanceOf at 0x104896840>,
+#  pycocoa.runtime.OBJC_ASSOCIATION_ASSIGN is 0 or 0x0,
 #  pycocoa.runtime.OBJC_ASSOCIATION_COPY is 771 or 0x303,
 #  pycocoa.runtime.OBJC_ASSOCIATION_COPY_NONATOMIC is 3 or 0x3,
 #  pycocoa.runtime.OBJC_ASSOCIATION_RETAIN is 769 or 0x301,
@@ -1692,15 +1734,15 @@ if __name__ == '__main__':
 #  pycocoa.runtime.ObjCInstance is <class .ObjCInstance>,
 #  pycocoa.runtime.ObjCMethod is <class .ObjCMethod>,
 #  pycocoa.runtime.ObjCSubclass is <class .ObjCSubclass>,
-#  pycocoa.runtime.register_subclass is <function .register_subclass at 0x1051f5360>,
-#  pycocoa.runtime.release is <function .release at 0x1051f52d0>,
-#  pycocoa.runtime.retain is <function .retain at 0x1051f53f0>,
-#  pycocoa.runtime.send_message is <function .send_message at 0x1051f5510>,
-#  pycocoa.runtime.send_super is <function .send_super at 0x1051f55a0>,
-#  pycocoa.runtime.send_super_init is <function .send_super_init at 0x1051f5630>,
-#  pycocoa.runtime.set_ivar is <function .set_ivar at 0x1051f56c0>,
-# )[28]
-# pycocoa.runtime.version 21.11.04, .isLazy 1, Python 3.11.0 64bit arm64, macOS 13.0.1
+#  pycocoa.runtime.register_subclass is <function .register_subclass at 0x1048967a0>,
+#  pycocoa.runtime.release is <function .release at 0x104896700>,
+#  pycocoa.runtime.retain is <function .retain at 0x104896660>,
+#  pycocoa.runtime.send_message is <function .send_message at 0x104896520>,
+#  pycocoa.runtime.send_super is <function .send_super at 0x104896480>,
+#  pycocoa.runtime.send_super_init is <function .send_super_init at 0x1048963e0>,
+#  pycocoa.runtime.set_ivar is <function .set_ivar at 0x104896340>,
+# )[30]
+# pycocoa.runtime.version 23.02.05, .isLazy 1, Python 3.11.1 64bit arm64, macOS 13.2
 
 # MIT License <https://OpenSource.org/licenses/MIT>
 #

@@ -6,14 +6,14 @@
 '''C{get_...} functions to obtain ObjC classes, methods, protocols, etc.
 '''
 # all imports listed explicitly to help PyChecker
-from pycocoa.lazily  import _ALL_LAZY, _COLON_, _COMMASPACE_, \
-                            _NN_, _UNDER_
+from pycocoa.lazily import _ALL_LAZY, _COLON_, _COMMASPACE_, \
+                           _NN_, _UNDER_
 from pycocoa.octypes import emcoding2ctype, encoding2ctype, \
                             Class_t, Id_t, IMP_t, Ivar_t, Protocol_t, \
                             SEL_t, split_encoding
-from pycocoa.oslibs  import libobjc  # get_lib
-from pycocoa.utils   import bytes2str, Cache2, isinstanceOf, \
-                            missing, name2objc, str2bytes
+from pycocoa.oslibs import libobjc  # get_lib
+from pycocoa.utils import bytes2str, Cache2, isinstanceOf, \
+                          missing, name2objc, str2bytes
 
 from ctypes import ArgumentError, byref, c_uint, cast, CFUNCTYPE
 import itertools
@@ -26,7 +26,7 @@ except AttributeError:
 del itertools
 
 __all__ = _ALL_LAZY.getters
-__version__ = '21.11.04'
+__version__ = '23.02.05'
 
 _c_func_t_cache = {}
 _SEL_t_cache = Cache2(limit2=128)
@@ -464,29 +464,29 @@ if __name__ == '__main__':
 # % python3 -m pycocoa.getters
 #
 # pycocoa.getters.__all__ = tuple(
-#  pycocoa.getters.get_c_func_t is <function .get_c_func_t at 0x10290f760>,
-#  pycocoa.getters.get_class is <function .get_class at 0x10290f6d0>,
-#  pycocoa.getters.get_classes is <function .get_classes at 0x10290f640>,
-#  pycocoa.getters.get_classname is <function .get_classname at 0x10290f490>,
-#  pycocoa.getters.get_classnameof is <function .get_classnameof at 0x10290f400>,
-#  pycocoa.getters.get_classof is <function .get_classof at 0x10290f370>,
-#  pycocoa.getters.get_inheritance is <function .get_inheritance at 0x10293feb0>,
-#  pycocoa.getters.get_ivar is <function .get_ivar at 0x10290f2e0>,
-#  pycocoa.getters.get_ivars is <function .get_ivars at 0x10293ff40>,
-#  pycocoa.getters.get_metaclass is <function .get_metaclass at 0x10293fe20>,
-#  pycocoa.getters.get_method is <function .get_method at 0x10293fd90>,
-#  pycocoa.getters.get_methods is <function .get_methods at 0x10293fd00>,
-#  pycocoa.getters.get_properties is <function .get_properties at 0x10293fc70>,
-#  pycocoa.getters.get_protocol is <function .get_protocol at 0x10293fbe0>,
-#  pycocoa.getters.get_protocols is <function .get_protocols at 0x10293fb50>,
-#  pycocoa.getters.get_selector is <function .get_selector at 0x10293fac0>,
-#  pycocoa.getters.get_selectorname_permutations is <function .get_selectorname_permutations at 0x10293fa30>,
-#  pycocoa.getters.get_selectornameof is <function .get_selectornameof at 0x10293f9a0>,
-#  pycocoa.getters.get_superclass is <function .get_superclass at 0x10293f910>,
-#  pycocoa.getters.get_superclassnameof is <function .get_superclassnameof at 0x10293f7f0>,
-#  pycocoa.getters.get_superclassof is <function .get_superclassof at 0x10293f880>,
+#  pycocoa.getters.get_c_func_t is <function .get_c_func_t at 0x1011b8900>,
+#  pycocoa.getters.get_class is <function .get_class at 0x10118e0c0>,
+#  pycocoa.getters.get_classes is <function .get_classes at 0x101445bc0>,
+#  pycocoa.getters.get_classname is <function .get_classname at 0x101445c60>,
+#  pycocoa.getters.get_classnameof is <function .get_classnameof at 0x101445d00>,
+#  pycocoa.getters.get_classof is <function .get_classof at 0x101445da0>,
+#  pycocoa.getters.get_inheritance is <function .get_inheritance at 0x101445f80>,
+#  pycocoa.getters.get_ivar is <function .get_ivar at 0x101445e40>,
+#  pycocoa.getters.get_ivars is <function .get_ivars at 0x101445ee0>,
+#  pycocoa.getters.get_metaclass is <function .get_metaclass at 0x101446020>,
+#  pycocoa.getters.get_method is <function .get_method at 0x1014460c0>,
+#  pycocoa.getters.get_methods is <function .get_methods at 0x101446160>,
+#  pycocoa.getters.get_properties is <function .get_properties at 0x101446200>,
+#  pycocoa.getters.get_protocol is <function .get_protocol at 0x1014462a0>,
+#  pycocoa.getters.get_protocols is <function .get_protocols at 0x101446340>,
+#  pycocoa.getters.get_selector is <function .get_selector at 0x1014463e0>,
+#  pycocoa.getters.get_selectorname_permutations is <function .get_selectorname_permutations at 0x101446480>,
+#  pycocoa.getters.get_selectornameof is <function .get_selectornameof at 0x101446520>,
+#  pycocoa.getters.get_superclass is <function .get_superclass at 0x1014465c0>,
+#  pycocoa.getters.get_superclassnameof is <function .get_superclassnameof at 0x101446700>,
+#  pycocoa.getters.get_superclassof is <function .get_superclassof at 0x101446660>,
 # )[21]
-# pycocoa.getters.version 21.11.04, .isLazy 1, Python 3.11.0 64bit arm64, macOS 13.0.1
+# pycocoa.getters.version 23.02.05, .isLazy 1, Python 3.11.1 64bit arm64, macOS 13.2
 
 # MIT License <https://OpenSource.org/licenses/MIT>
 #

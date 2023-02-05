@@ -125,7 +125,7 @@ _ALL_LAZY = _NamedEnum_RO(_name='_ALL_LAZY',
                          lazily=('LazyImportError', 'isLazy'),
                           lists=('List',),
                           menus=('Item', 'ItemSeparator', 'Keys', 'Menu', 'MenuBar', 'ns2Item', 'title2action'),
-                        nstypes=('at', 'drain', 'isAlias', 'isLink', 'isNone',
+                        nstypes=('at', 'isAlias', 'isLink', 'isNone',
                                  'NSAlert', 'NSApplication',
                                  'NSArray', 'nsArray2listuple', 'nsArray2tuple', 'NSAttributedString', 'NSAutoreleasePool',
                                  'NSBezierPath', 'NSBoolean', 'nsBoolean2bool', 'NSBundle', 'nsBundleRename',
@@ -208,8 +208,8 @@ _ALL_LAZY = _NamedEnum_RO(_name='_ALL_LAZY',
                                  'Paper', 'PaperCustom', 'PaperMargins', 'Printer'),
                         pytypes=('bool2NS', 'bytes2NS', 'dict2NS', 'float2NS', 'frozenset2NS', 'generator2NS', 'int2NS', 'list2NS', 'map2NS',
                                  'None2NS', 'py2NS', 'range2NS', 'set2NS', 'str2NS', 'time2NS', 'tuple2NS', 'type2NS', 'unicode2NS', 'url2NS'),
-                        runtime=('add_ivar', 'add_method', 'add_protocol', 'add_subclass', 'isClass', 'isImmutable',
-                                 'isMetaClass', 'isObjCInstanceOf', 'OBJC_ASSOCIATION_COPY', 'OBJC_ASSOCIATION_COPY_NONATOMIC',
+                        runtime=('add_ivar', 'add_method', 'add_protocol', 'add_subclass', 'drain', 'isClass', 'isImmutable',
+                                 'isMetaClass', 'isObjCInstanceOf', 'OBJC_ASSOCIATION_ASSIGN', 'OBJC_ASSOCIATION_COPY', 'OBJC_ASSOCIATION_COPY_NONATOMIC',
                                  'OBJC_ASSOCIATION_RETAIN', 'OBJC_ASSOCIATION_RETAIN_NONATOMIC', 'ObjCBoundClassMethod', 'ObjCBoundMethod',
                                  'ObjCClass', 'ObjCClassMethod', 'ObjCConstant', 'ObjCDelegate', 'ObjCInstance', 'ObjCMethod', 'ObjCSubclass',
                                  'register_subclass', 'release', 'retain', 'send_message', 'send_super', 'send_super_init', 'set_ivar'),
@@ -236,7 +236,7 @@ _ALL_LAZY = _NamedEnum_RO(_name='_ALL_LAZY',
 _ALL_OVERRIDING = _NamedEnum_RO(_name='_ALL_OVERRIDING')  # all DEPRECATED
 
 __all__ = _ALL_LAZY.lazily
-__version__ = '23.02.02'
+__version__ = '23.02.05'
 
 
 def _all_imports(**more):

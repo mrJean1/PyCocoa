@@ -44,7 +44,7 @@ Tests
 The tests and examples have only been run with 64-bit Python 3.11.1, 3.9.6, 3.8.10,
 and 2.7.18 using U{Python-VLC<https://PyPI.org/project/python-vlc>} 3.0.18, 3.0.12,
 3.0.11, 3.0.10, 3.0.8, 3.0.6, 3.0.4 and 2.2.8 (with the compatible U{VLC App
-<https://www.VideoLan.org/vlc>} and 3.0.16) on macOS 13.1 Ventura, 12.0.1 Monterey,
+<https://www.VideoLan.org/vlc>} and 3.0.16) on macOS 13.2 Ventura, 12.0.1 Monterey,
 11.6.1 and 11.5.2 Big Sur (aka 10.16), 10.15.7 Catalina, 10.14.6 Mojave or 10.13.6
 High Sierra.  The tests run with and without C{lazy import} in Python 3.
 
@@ -67,7 +67,7 @@ U{PyFlakes<https://PyPI.org/project/pyflakes>},
 U{PyCodeStyle<https://PyPI.org/project/pycodestyle>} (formerly Pep8) and
 U{McCabe<https://PyPI.org/project/mccabe>} using 64-bit Python 2.7.18 and with
 U{Flake8<https://PyPI.org/project/flake8>} using 64-bit Python 3.11.1 on macOS
-13.1 Ventura.
+13.2 Ventura.
 
 Some alternatives to PyCocoa are (a) U{PyObjC<https://PyPI.org/project/pyobjc>},
 the most comprehensive Python to Objective-C bridge (and included in
@@ -146,7 +146,7 @@ _isfrozen       = getattr(sys, 'frozen', False)
 pycocoa_abspath = dirname(abspath(__file__))  # sys._MEIPASS + '/pycocoa'
 _pycocoa        = __package__ or basename(pycocoa_abspath)
 
-__version__ = '23.02.04'
+__version__ = '23.02.05'
 # see setup.py for similar logic
 version = '.'.join(map(str, map(int, __version__.split('.'))))
 
