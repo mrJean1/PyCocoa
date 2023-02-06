@@ -32,7 +32,7 @@ from pycocoa.octypes import Allocator_t, __arm64__, Array_t, BOOL_t, CFIndex_t, 
                             IMP_t, Ivar_t, Method_t, Number_t, NumberType_t, \
                             TypeID_t, NSInteger_t, NSRect_t, \
                             objc_method_description_t, objc_property_t, \
-                            objc_property_attribute_t, Protocol_t, \
+                            objc_property_attribute_t, Protocol_t, RunLoop_t, \
                             SEL_t, Set_t, String_t, TypeRef_t, \
                             UniChar_t, URL_t, __x86_64__
 from pycocoa.utils import Adict, bytes2str, _Constants, _macOSver2, str2bytes
@@ -50,11 +50,11 @@ except ImportError:  # XXX Pythonista/iOS
 from os.path import join as _join, sep as _SEP
 
 __all__ = _ALL_LAZY.oslibs
-__version__ = '23.02.02'
+__version__ = '23.02.06'
 
 _framework_ = 'framework'
 _leaked2    = []  # leaked memory, 2-tuples (ptr, size)
-_libs_cache = Adict()  # loaded libraries, by name
+_libs_cache =  Adict()  # loaded libraries, by name
 
 NO  = False  # c_byte(0)
 YES = True   # c_byte(1)
@@ -510,10 +510,10 @@ NSApplicationDidHideNotification   = c_void_p.in_dll(libAppKit, 'NSApplicationDi
 NSApplicationDidUnhideNotification = c_void_p.in_dll(libAppKit, 'NSApplicationDidUnhideNotification')
 
 # see NSApplication.nextEventMatchingMask:untilDate:inMode:dequeue:
-NSDefaultRunLoopMode       = Id_t.in_dll(libAppKit, 'NSDefaultRunLoopMode')
-NSEventTrackingRunLoopMode = Id_t.in_dll(libAppKit, 'NSEventTrackingRunLoopMode')
-NSModalPanelRunLoopMode    = Id_t.in_dll(libAppKit, 'NSModalPanelRunLoopMode')
-# UITrackingRunLoopMode    = Id_t.in_dll(libAppKit, 'UITrackingRunLoopMode')
+NSDefaultRunLoopMode       = RunLoop_t.in_dll(libAppKit, 'NSDefaultRunLoopMode')
+NSEventTrackingRunLoopMode = RunLoop_t.in_dll(libAppKit, 'NSEventTrackingRunLoopMode')
+NSModalPanelRunLoopMode    = RunLoop_t.in_dll(libAppKit, 'NSModalPanelRunLoopMode')
+# UITrackingRunLoopMode    = RunLoop_t.in_dll(libAppKit, 'UITrackingRunLoopMode')
 
 # NSApplication.h
 NSApplicationPresentationDefault                 = 0
@@ -542,21 +542,20 @@ NSFileHandlingPanelOKButton     = NSOKButton     = 1
 
 # <https://GitHub.com/gnustep/libs-gui/blob/master/Headers/AppKit/NSEvent.h
 # <https://Developer.Apple.com/documentation/appkit/nsevent/1535851-function-key_unicodes>
-NSAnyEventMask = 0xFFFFFFFF     # NSUIntegerMax
+NSAlphaShiftKeyMask =  1 << 16
+NSShiftKeyMask      =  1 << 17
+NSControlKeyMask    =  1 << 18
+NSAlternateKeyMask  =  1 << 19
+NSCommandKeyMask    =  1 << 20
+NSNumericPadKeyMask =  1 << 21
+NSHelpKeyMask       =  1 << 22
+NSFunctionKeyMask   =  1 << 23
+NSAnyEventMask      = (1 << 32) - 1  # NSUIntegerMax
 
 NSKeyDown            = 10
 NSKeyUp              = 11
 NSFlagsChanged       = 12
 NSApplicationDefined = 15
-
-NSAlphaShiftKeyMask = 1 << 16
-NSShiftKeyMask      = 1 << 17
-NSControlKeyMask    = 1 << 18
-NSAlternateKeyMask  = 1 << 19
-NSCommandKeyMask    = 1 << 20
-NSNumericPadKeyMask = 1 << 21
-NSHelpKeyMask       = 1 << 22
-NSFunctionKeyMask   = 1 << 23
 
 NSUpArrowFunctionKey    = 0xF700  # 0x7E
 NSDownArrowFunctionKey  = 0xF701  # 0x7D
@@ -767,8 +766,8 @@ kCGImageAlphaOnly               = 7
 
 kCGImageAlphaPremultipliedLast = 1
 
-kCGBitmapAlphaInfoMask   = 0x1F
-kCGBitmapFloatComponents = 1 << 8
+kCGBitmapAlphaInfoMask     = 0x1F
+kCGBitmapFloatComponents   = 1 << 8
 
 kCGBitmapByteOrderDefault  = 0 << 12
 kCGBitmapByteOrder16Little = 1 << 12
@@ -885,18 +884,18 @@ NSFontUnitalicMask                              = 1 << 24  # 0x01000000
 # 4 bits of the CTFontSymbolicTraits and can be obtained via the
 # kCTFontClassMaskTrait.
 # <https://Developer.Apple.com/documentation/appkit/nsfontfamilyclass>
-kCTFontClassUnknown             = NSFontUnknownClass            =  0 << kCTFontClassMaskShift
-kCTFontClassOldStyleSerifs      = NSFontOldStyleSerifsClass     =  1 << kCTFontClassMaskShift
-kCTFontClassTransitionalSerifs  = NSFontTransitionalSerifsClass =  2 << kCTFontClassMaskShift
-kCTFontClassModernSerifs        = NSFontModernSerifsClass       =  3 << kCTFontClassMaskShift
-kCTFontClassClarendonSerifs     = NSFontClarendonSerifsClass    =  4 << kCTFontClassMaskShift
-kCTFontClassSlabSerifs          = NSFontSlabSerifsClass         =  5 << kCTFontClassMaskShift
-kCTFontClassFreeformSerifs      = NSFontFreeformSerifsClass     =  7 << kCTFontClassMaskShift
-kCTFontClassSansSerif           = NSFontSansSerifClass          =  8 << kCTFontClassMaskShift
-kCTFontClassOrnamentals         = NSFontOrnamentalsClass        =  9 << kCTFontClassMaskShift
-kCTFontClassScripts             = NSFontScriptsClass            = 10 << kCTFontClassMaskShift
-kCTFontClassSymbolic            = NSFontSymbolicClass           = 12 << kCTFontClassMaskShift
-kCTFontClassMaskTrait           = NSFontClassMask               = 15 << kCTFontClassMaskShift
+kCTFontClassUnknown            = NSFontUnknownClass            =  0 << kCTFontClassMaskShift
+kCTFontClassOldStyleSerifs     = NSFontOldStyleSerifsClass     =  1 << kCTFontClassMaskShift
+kCTFontClassTransitionalSerifs = NSFontTransitionalSerifsClass =  2 << kCTFontClassMaskShift
+kCTFontClassModernSerifs       = NSFontModernSerifsClass       =  3 << kCTFontClassMaskShift
+kCTFontClassClarendonSerifs    = NSFontClarendonSerifsClass    =  4 << kCTFontClassMaskShift
+kCTFontClassSlabSerifs         = NSFontSlabSerifsClass         =  5 << kCTFontClassMaskShift
+kCTFontClassFreeformSerifs     = NSFontFreeformSerifsClass     =  7 << kCTFontClassMaskShift
+kCTFontClassSansSerif          = NSFontSansSerifClass          =  8 << kCTFontClassMaskShift
+kCTFontClassOrnamentals        = NSFontOrnamentalsClass        =  9 << kCTFontClassMaskShift
+kCTFontClassScripts            = NSFontScriptsClass            = 10 << kCTFontClassMaskShift
+kCTFontClassSymbolic           = NSFontSymbolicClass           = 12 << kCTFontClassMaskShift
+kCTFontClassMaskTrait          = NSFontClassMask               = 15 << kCTFontClassMaskShift
 
 _csignature(libCT.CTFontCreateWithGraphicsFont, c_void_p, c_void_p, CGFloat_t, c_void_p, c_void_p)
 _csignature(libCT.CTFontCopyFamilyName, c_void_p, c_void_p)
