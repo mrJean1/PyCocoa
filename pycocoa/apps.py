@@ -13,7 +13,7 @@ from pycocoa.lazily  import _ALL_LAZY, _NN_
 from pycocoa.nstypes import NSApplication, nsBundleRename, \
                             NSConcreteNotification, NSMain, \
                             NSNotification, nsOf, NSStr
-# from pycocoa.oslibs  import YES
+from pycocoa.oslibs  import YES
 from pycocoa.runtime import isObjCInstanceOf, ObjCDelegate, ObjCInstance, \
                             ObjCSubclass, _ObjC_log_totals, release, retain, \
                             send_super_init
@@ -24,7 +24,7 @@ from threading import Thread
 from time import sleep
 
 __all__ = _ALL_LAZY.apps
-__version__ = '21.11.04'
+__version__ = '23.12.28'
 
 
 class App(_Type2):
@@ -458,7 +458,13 @@ class _NSApplicationDelegate(object):
 #   def applicationShouldTerminateAfterLastWindowClosed_(self, ns_application):
 #       return YES
 
-    # <https://developer.apple.com/documentation/uikit/
+    # <https://Developer.Apple.com/documentation/appkit/nsapplicationdelegate/
+    #          3762521-applicationsupportssecurerestora?language=objc>
+    @_ObjC.method('B@')
+    def applicationSupportsSecureRestorableState_(self, ns_application):
+        return YES  # recommended
+
+    # <https://Developer.Apple.com/documentation/uikit/
     #          uiapplicationdelegate/1623076-applicationwillenterforeground>
 #   @_ObjC.method('v@')
 #   def applicationWillEnterForeground_(self, ui_application):
@@ -639,7 +645,7 @@ if __name__ == '__main__':
 
 # MIT License <https://OpenSource.org/licenses/MIT>
 #
-# Copyright (C) 2017-2023 -- mrJean1 at Gmail -- All Rights Reserved.
+# Copyright (C) 2017-2024 -- mrJean1 at Gmail -- All Rights Reserved.
 #
 # Permission is hereby granted, free of charge, to any person obtaining a
 # copy of this software and associated documentation files (the "Software"),
