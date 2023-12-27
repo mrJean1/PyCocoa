@@ -3,8 +3,8 @@
 PyCocoa
 =======
 
-A basic, ctypes_-based Python binding to the macOS_ Objective-C Cocoa runtime
-and several other macOS_ libraries.
+A basic, ctypes_-based Python binding to the macOS_ Objective-C Cocoa runtime and
+several other macOS_ libraries.
 
 This is package `cocoa-python`_ by *Phillip Nguyen (C) 2011*, modified, extended,
 tested, documented and published with permission under both the `MIT License`_ and
@@ -16,8 +16,8 @@ Installation
 To install PyCocoa, type ``pip install PyCocoa`` or ``easy_install PyCocoa`` in a
 terminal window.  Alternatively, download ``PyCocoa-y.m.d.zip`` from PyPI_ or
 GitHub_, ``unzip`` the downloaded file, ``cd`` to directory ``PyCocoa-y.m.d`` and
-type ``python setup.py install``.  To run all PyCocoa tests, type ``python setup.py
-test`` or ``python test/run.py`` before or after installation.
+type ``python setup.py install``.  To run all PyCocoa tests, type
+``python setup.py test`` or ``python test/run.py`` before or after installation.
 
 Examples `cocoavlc.py`_ and *simple_VLCplayer.py* require installation of the
 `VLC App`_ and the corresponding `Python-VLC`_ binding.
@@ -36,11 +36,11 @@ The tests and examples have only been run with 64-bit Python 3.12.0, 3.11.5, 3.8
 and 2.7.18 using `Python-VLC`_ 3.0.18, 3.0.12, 3.0.11, 3.0.10, 3.0.8, 3.0.6, 3.0.4
 and 2.2.8 (with the compatible `VLC App`_ and 3.0.16) on macOS 14.1.2 Sonoma, 13.2
 Ventura, 12.0.1 Monterey, 11.6.1 and 11.5.2 Big Sur (aka 10.16), 10.15.7 Catalina,
-10.14.6 Mojave or 10.13.6 High Sierra.  The tests run *with and without* ``lazy
-import`` in Python 3.
+10.14.6 Mojave or 10.13.6 High Sierra.  The tests run *with and without*
+``lazy import`` in Python 3.
 
 Python 3.12.0 and 3.11.5 run on Apple Silicon (``arm64`` *natively*), other Python
-versions run on Intel (``x86_64``) or Intel *emulation* (``\"arm64_x86_64\"``, see
+versions run on Intel (``x86_64``) or Intel *emulation* (``arm64_x86_64``, see
 function ``pycocoa.machine``).
 
 Previously, PyCocoa was tested with 64-bit Python 3.10.0, 3.9.6, 3.8.6, 3.8.3, 3.8.1,
