@@ -598,7 +598,6 @@ pycocoa.lazily._SPACE_	pycocoa.lazily-module.html#_SPACE_
 pycocoa.lazily._all_imports	pycocoa.lazily-module.html#_all_imports
 pycocoa.lazily._ALL_OVERRIDING	pycocoa.lazily-module.html#_ALL_OVERRIDING
 pycocoa.lazily._lazy_import	pycocoa.lazily-module.html#_lazy_import
-pycocoa.lazily._isPython39	pycocoa.lazily-module.html#_isPython39
 pycocoa.lazily._isPython37	pycocoa.lazily-module.html#_isPython37
 pycocoa.lazily._lazy_init3	pycocoa.lazily-module.html#_lazy_init3
 pycocoa.lazily._PY_FH	pycocoa.lazily-module.html#_PY_FH
@@ -1167,6 +1166,7 @@ pycocoa.pytypes.range2NS	pycocoa.pytypes-module.html#range2NS
 pycocoa.pytypes.frozenset2NS	pycocoa.pytypes-module.html#frozenset2NS
 pycocoa.pytypes.unicode2NS	pycocoa.pytypes-module.html#unicode2NS
 pycocoa.runtime	pycocoa.runtime-module.html
+pycocoa.runtime._object_setInstanceVariable	pycocoa.runtime-module.html#_object_setInstanceVariable
 pycocoa.runtime.OBJC_ASSOCIATION_RETAIN_NONATOMIC	pycocoa.runtime-module.html#OBJC_ASSOCIATION_RETAIN_NONATOMIC
 pycocoa.runtime.send_message	pycocoa.runtime-module.html#send_message
 pycocoa.runtime._pyargs	pycocoa.runtime-module.html#_pyargs

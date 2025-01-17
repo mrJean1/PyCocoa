@@ -1,7 +1,7 @@
 
 # -*- coding: utf-8 -*-
 
-u'''Print L{pycocoa} all public attributes, PyCocoa version, Python
+u'''Print L{pycocoa} all public attributes, pycocoa version, Python
 release, etc. by using C{python -m pycocoa [-all]} from the command line.
 '''
 from pycocoa import __all__ as _all_, _locals, _pycocoa as _package
@@ -21,7 +21,13 @@ _nsDeallocObserverIvar1()  # check the _NSDeallocObserver class
 __all__ = ()
 __version__ = '23.02.02'
 
-# % python3 -m pycocoa
+# % python3.13 -m pycocoa
+# pycocoa.version 25.1.16, .isLazy 1, Python 3.13.1 64bit arm64, macOS 14.6.1
+
+# % python3.12 -m pycocoa
+# pycocoa.version 25.1.16, .isLazy 1, Python 3.12.7 64bit arm64, macOS 14.6.1
+
+# % python3.11 -m pycocoa
 # pycocoa.version 23.01.06, .isLazy 1, Python 3.11.0 64bit arm64, macOS 13.0.1
 
 # % python3.10 -m pycocoa
@@ -44,7 +50,7 @@ __version__ = '23.02.02'
 
 # MIT License <https://OpenSource.org/licenses/MIT>
 #
-# Copyright (C) 2018-2023 -- mrJean1 at Gmail -- All Rights Reserved.
+# Copyright (C) 2018-2024 -- mrJean1 at Gmail -- All Rights Reserved.
 #
 # Permission is hereby granted, free of charge, to any person obtaining a
 # copy of this software and associated documentation files (the "Software"),

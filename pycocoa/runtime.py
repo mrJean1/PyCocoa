@@ -58,7 +58,7 @@ import sys
 import os
 
 __all__ = _ALL_LAZY.runtime
-__version__ = '23.02.05'
+__version__ = '25.01.16'
 
 # <https://Developer.Apple.com/documentation/objectivec/
 #        objc_associationpolicy?language=objc>
@@ -80,6 +80,10 @@ if __i386__:
     _objc_msgSend_fpret_      += '_fpret'
     _objc_msgSend_stret_      += '_stret'
     _objc_msgSendSuper_stret_ += '_stret'
+
+# <https://Developer.Apple.com/documentation/objectivec/
+#        1441499-object_getinstancevariable>
+_object_setInstanceVariable = 'object_setInstanceVariable'
 
 
 class _NSAutorelease(object):
@@ -1562,7 +1566,7 @@ def set_ivar(objc, name, value, ctype=None):
     #        1441499-object_getinstancevariable>
     argtypes = [Ivar_t, c_char_p, ctype]
     # returns the same ptr value for all ivar's
-    return _libobjcall('object_setInstanceVariable', c_void_p, argtypes,
+    return _libobjcall(_object_setInstanceVariable, c_void_p, argtypes,
                         objc, str2bytes(name), value)
 
 
@@ -1746,7 +1750,7 @@ if __name__ == '__main__':
 
 # MIT License <https://OpenSource.org/licenses/MIT>
 #
-# Copyright (C) 2017-2024 -- mrJean1 at Gmail -- All Rights Reserved.
+# Copyright (C) 2017-2025 -- mrJean1 at Gmail -- All Rights Reserved.
 #
 # Permission is hereby granted, free of charge, to any person obtaining
 # a copy of this software and associated documentation files (the "Software"),

@@ -22,7 +22,7 @@ but only exported as C{Libs.C}.
 
 '''
 # all imports listed explicitly to help PyChecker
-from pycocoa.lazily import _ALL_LAZY, _bNN_, _isPython39, _DOT_, _NN_
+from pycocoa.lazily import _ALL_LAZY, _bNN_, _DOT_, _NN_
 from pycocoa.octypes import Allocator_t, __arm64__, Array_t, BOOL_t, CFIndex_t, \
                             CFRange_t, CGBitmapInfo_t, CGDirectDisplayID_t, \
                             CGError_t, CGFloat_t, CGGlyph_t, CGPoint_t, \
@@ -50,7 +50,7 @@ except ImportError:  # XXX Pythonista/iOS
 from os.path import join as _join, sep as _SEP
 
 __all__ = _ALL_LAZY.oslibs
-__version__ = '23.02.06'
+__version__ = '25.01.16'
 
 _framework_ = 'framework'
 _leaked2    = []  # leaked memory, 2-tuples (ptr, size)
@@ -95,9 +95,15 @@ def _csignature_str(libfunc, restype, *argtypes):
         libfunc.errcheck = _strdup
 
 
-def _csignature_variadic(libfunc, restype, *unused):
-    # set only the result type of a variadic function
+def _csignature_variadic(libfunc, restype, *argtypes):
+    # set the result type of a variadic function PLUS
+    # the types of any fixed arguments, REQUIRED for
+    # Apple Silicon!  See issue U{#92892: ARM64 macOS
+    # variadic arguments not passed properly in ctypes
+    # <https://GitHub.com/python/cpython/issues/92892>}
     libfunc.restype = restype
+    if argtypes:
+        libfunc.argtypes = argtypes
 
 
 def _dup(result, ctype):
@@ -124,7 +130,7 @@ def _free_memory(ptr, size):
 
 
 if _macOSver2() > (10, 15):  # Big Sur and later
-    # macOS 11 (aka 10.16) no longer provides direct loading of
+    # macOS 11+ (aka 10.16) no longer provides direct loading of
     # system libraries, instead it installs the library after a
     # low-level dlopen(name) call with the library base name,
     # as a result, ctypes.util.find_library may not find any
@@ -135,13 +141,10 @@ if _macOSver2() > (10, 15):  # Big Sur and later
         '''Mimick C{ctype.util.find_library}, return the
            (qualified) name of the library.
         '''
-        ns = _find_library(name), name
-        if _isPython39:  # and \
-#          _sys.platform[:6] == 'darwin':  # PYCHOK indent
-            ns += (_DOT_(name, 'dylib'),
-                   _DOT_(name, _framework_), _join(
-                   _DOT_(name, _framework_), name))
-        for n in ns:
+        for n in (_find_library(name), name,
+                          _DOT_(name, 'dylib'),
+                          _DOT_(name, _framework_), _join(
+                          _DOT_(name, _framework_), name)):
             try:
                 if n and _dlopen(n):  # handle OK
                     return n
@@ -227,6 +230,7 @@ _libc = get_lib('libc')  # in pycocoa.utils.machine, NOT 'c'
 if _libc:  # macOS, linux, etc.
     _libc_free = _libc.free
     _csignature(_libc_free, c_void, c_void_p)
+#   _csignature_variadic(_libc.printf, c_int, c_char_p)  # printf(format, ...)
 else:  # ignore free, leaking some memory
     _libc_free = None
 
@@ -378,14 +382,12 @@ def cfNumber2bool(ns, dflt=None):
 
        @return: The bool (C{bool}) or I{dflt}.
     '''
-    numType = libCF.CFNumberGetType(ns)
-    if numType != kCFNumberCharType:
-        raise TypeError('unexpected %s(%r): %r' % ('NumberType', ns, numType))
-    num = c_byte()  # c_ubyte, see octypes._encoding2ctype!
-    if libCF.CFNumberGetValue(ns, numType, byref(num)):
-        return True if num.value else False
-    else:
-        return dflt
+    nType = libCF.CFNumberGetType(ns)
+    if nType != kCFNumberCharType:
+        raise TypeError('unexpected %s(%r): %r' % ('NumberType', ns, nType))
+    n = c_byte()  # c_ubyte, see octypes._encoding2ctype!
+    r = libCF.CFNumberGetValue(ns, nType, byref(n))
+    return bool(n.value) if r else dflt
 
 
 def cfNumber2num(ns, dflt=None):
@@ -398,16 +400,13 @@ def cfNumber2num(ns, dflt=None):
 
        @return: The number (C{int} or C{float}) or I{dflt}.
     '''
-    numType = libCF.CFNumberGetType(ns)
+    nType = libCF.CFNumberGetType(ns)
     try:
-        ctype = _CFNumberType2ctype[numType]
-        num = ctype()
-        if libCF.CFNumberGetValue(ns, numType, byref(num)):
-            return num.value
-        else:
-            return dflt
-    except KeyError:
-        raise TypeError('unhandled %s(%r): %r' % ('NumberType', ns, numType))
+        n = _CFNumberType2ctype[nType]()
+    except (KeyError, TypeError):
+        raise TypeError('unhandled %s(%r): %r' % ('NumberType', ns, nType))
+    r = libCF.CFNumberGetValue(ns, nType, byref(n))
+    return n.value if r else dflt
 
 
 def cfString2str(ns, dflt=None):  # XXX an NS*String method
@@ -419,12 +418,11 @@ def cfString2str(ns, dflt=None):  # XXX an NS*String method
     '''
     n = libCF.CFStringGetLength(ns)
     u = libCF.CFStringGetMaximumSizeForEncoding(n, CFStringEncoding)
-    buf = c_buffer(u + 2)
-    if libCF.CFStringGetCString(ns, buf, len(buf), CFStringEncoding):
-        # XXX assert isinstance(buf.value, _Bytes), 'bytes expected'
-        # bytes to unicode in Python 2, to str in Python 3+
-        return bytes2str(buf.value)  # XXX was .decode(DEFAULT_UNICODE)
-    return dflt
+    b = c_buffer(u + 2)
+    r = libCF.CFStringGetCString(ns, b, len(b), CFStringEncoding)
+    # XXX if r: assert isinstance(b.value, _Bytes), 'bytes expected'
+    # bytes to unicode in Python 2, to str in Python 3+
+    return bytes2str(b.value) if r else dflt  # XXX was .decode(DEFAULT_UNICODE)
 
 
 def cfString(ustr):
@@ -1074,8 +1072,8 @@ _csignature(libobjc.object_getIvar, Id_t, Id_t, Ivar_t)
 # Class_t object_setClass(Id_t object, Class_t cls)
 _csignature(libobjc.object_setClass, c_void_p, c_void_p, c_void_p)
 # Ivar_t object_setInstanceVariable(Id_t obj, const char *name, void *value)
-# Set argtypes based on the data type of the instance variable.
-_csignature_variadic(libobjc.object_setInstanceVariable, Ivar_t)
+# Set argtypes based on the data type of the instance variable, see .runtime.set_ivar
+_csignature_variadic(libobjc.object_setInstanceVariable, Ivar_t)  # Id_t, c_char_p, c_void_p
 # void object_setIvar(Id_t object, Ivar_t ivar, Id_t value)
 _csignature(libobjc.object_setIvar, c_void, Id_t, Ivar_t, Id_t)
 
@@ -1326,7 +1324,7 @@ if __name__ == '__main__':
 
 # MIT License <https://OpenSource.org/licenses/MIT>
 #
-# Copyright (C) 2017-2024 -- mrJean1 at Gmail -- All Rights Reserved.
+# Copyright (C) 2017-2025 -- mrJean1 at Gmail -- All Rights Reserved.
 #
 # Permission is hereby granted, free of charge, to any person obtaining
 # a copy of this software and associated documentation files (the "Software"),

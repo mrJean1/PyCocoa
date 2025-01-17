@@ -42,7 +42,6 @@ isLazy    = None  # see @var isLazy above
 _isPython2  = _sys.version_info.major < 3  # PYCHOK in .runtime
 _isPython3  = _sys.version_info.major > 2  # PYCHOK in .utils, .windows
 _isPython37 = _sys.version_info[:2] < (3, 7)  # older than 3.7
-_isPython39 = _sys.version_info[:2] < (3, 9)  # PYCHOK in .oslibs
 
 _Python_version = _sys.version.split()[0]
 
@@ -236,7 +235,7 @@ _ALL_LAZY = _NamedEnum_RO(_name='_ALL_LAZY',
 _ALL_OVERRIDING = _NamedEnum_RO(_name='_ALL_OVERRIDING')  # all DEPRECATED
 
 __all__ = _ALL_LAZY.lazily
-__version__ = '23.02.05'
+__version__ = '25.01.16'
 
 
 def _all_imports(**more):
@@ -471,7 +470,7 @@ if __name__ == '__main__':
 
 # MIT License <https://OpenSource.org/licenses/MIT>
 #
-# Copyright (C) 2018-2024 -- mrJean1 at Gmail -- All Rights Reserved.
+# Copyright (C) 2018-2025 -- mrJean1 at Gmail -- All Rights Reserved.
 #
 # Permission is hereby granted, free of charge, to any person obtaining a
 # copy of this software and associated documentation files (the "Software"),

@@ -18,7 +18,7 @@ import platform as _platform
 # import sys as _sys  # from .lazily
 
 __all__ = _ALL_LAZY.utils
-__version__ = '23.02.02'
+__version__ = '25.01.17'
 
 _bCOLON_ = b':'
 _bUNDER_ = b'_'
@@ -1091,7 +1091,7 @@ def z1000str(size, sep=_UNDER_):
     '''Convert a size to string with 1_000's seperator.
 
        @param size: Value to convert (C{float} or C{int}).
-       @keyword sep: 1_000's separator (C{str}),
+       @keyword sep: 1_000's separator (C{str}).
 
        @return: "<1or2digits><sep><3digits>..." or "-" if
                 I{size} is negative (C{str}).
@@ -1198,7 +1198,7 @@ if __name__ == '__main__':
 
 # MIT License <https://OpenSource.org/licenses/MIT>
 #
-# Copyright (C) 2017-2024 -- mrJean1 at Gmail -- All Rights Reserved.
+# Copyright (C) 2017-2025 -- mrJean1 at Gmail -- All Rights Reserved.
 #
 # Permission is hereby granted, free of charge, to any person obtaining
 # a copy of this software and associated documentation files (the "Software"),
