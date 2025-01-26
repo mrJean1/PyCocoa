@@ -35,7 +35,8 @@ from pycocoa.octypes import Allocator_t, __arm64__, Array_t, BOOL_t, CFIndex_t, 
                             objc_property_attribute_t, Protocol_t, RunLoop_t, \
                             SEL_t, Set_t, String_t, TypeRef_t, \
                             UniChar_t, URL_t, __x86_64__
-from pycocoa.utils import Adict, bytes2str, _Constants, _macOSver2, str2bytes
+from pycocoa.utils import Adict, bytes2str, _Constants, _fmt, _macOSver2, \
+                          str2bytes
 
 from ctypes import byref, cast, CDLL, c_buffer, c_byte, c_char, \
                    c_char_p, c_double, c_float, c_int, c_int8, c_int16, \
@@ -50,11 +51,14 @@ except ImportError:  # XXX Pythonista/iOS
 from os.path import join as _join, sep as _SEP
 
 __all__ = _ALL_LAZY.oslibs
-__version__ = '25.01.16'
+__version__ = '25.01.25'
 
 _framework_ = 'framework'
 _leaked2    = []  # leaked memory, 2-tuples (ptr, size)
 _libs_cache =  Adict()  # loaded libraries, by name
+# 'PointerType' in Python 2.6-, 'PyCPointerType' later
+_POINTER_ts =  set(type(POINTER(_t)) for _t in (Ivar_t, Method_t, Protocol_t,
+               objc_method_description_t, objc_property_t, objc_property_attribute_t))
 
 NO  = False  # c_byte(0)
 YES = True   # c_byte(1)
@@ -74,10 +78,9 @@ def _csignature_list(libfunc, restype, *argtypes):
     libfunc.restype = restype
     if argtypes:
         libfunc.argtypes = argtypes
-    # the result type must be a pointer to some other type,
-    # 'PointerType' in Python 2.6-, 'PyCPointerType' later
+    # the result type must be a pointer to some other type
     # and the result must be a NULL-terminated array
-    if restype.__class__.__name__ in ('PyCPointerType', 'PointerType'):
+    if type(restype) in _POINTER_ts:
         # ... and/or restype.__name__.startswith('LP_'):
         libfunc.errcheck = _listdup
 
@@ -141,22 +144,29 @@ if _macOSver2() > (10, 15):  # Big Sur and later
         '''Mimick C{ctype.util.find_library}, return the
            (qualified) name of the library.
         '''
+        ns = []
         for n in (_find_library(name), name,
                           _DOT_(name, 'dylib'),
                           _DOT_(name, _framework_), _join(
                           _DOT_(name, _framework_), name)):
-            try:
-                if n and _dlopen(n):  # handle OK
-                    return n
-            except (OSError, TypeError):
-                pass
-        ns = '%r as %r' % (name, ns)
-        raise OSError("couldn't %s lib %s" % ('find', ns))
+            if n:
+                try:
+                    if _dlopen(n):  # handle OK
+                        return n
+                except (OSError, TypeError):
+                    pass
+                ns.append(n)
+        ns = _fmt('%r as %s', name, ", ".join(ns))
+        raise _lib_Error('find', ns)
 
     _Apple_Si = __arm64__  # and _macOSver2() > (11, 0)
 else:
     _Apple_Si =  False
     _find_lib = _find_library
+
+
+def _lib_Error(verb, ns):  # helper for _find_lib and _load_lib
+    return OSError(_fmt("couldn't %s lib %s", verb, ns))
 
 
 def _load_lib(name):  # PYCHOK expected
@@ -172,7 +182,7 @@ def _load_lib(name):  # PYCHOK expected
         v = 'load'
     else:
         v = 'find'
-    raise OSError("couldn't %s lib %s" % (v, repr(name)))
+    raise _lib_Error(v, repr(name))
 
 
 def get_lib(name):
@@ -384,10 +394,14 @@ def cfNumber2bool(ns, dflt=None):
     '''
     nType = libCF.CFNumberGetType(ns)
     if nType != kCFNumberCharType:
-        raise TypeError('unexpected %s(%r): %r' % ('NumberType', ns, nType))
+        raise _cfNumberError(ns, nType)
     n = c_byte()  # c_ubyte, see octypes._encoding2ctype!
     r = libCF.CFNumberGetValue(ns, nType, byref(n))
     return bool(n.value) if r else dflt
+
+
+def _cfNumberError(ns, nType):  # helper for cfNumber2bool and cfNumber2num
+    return TypeError(_fmt('unexpected %s(%r): %r', 'NumberType', ns, nType))
 
 
 def cfNumber2num(ns, dflt=None):
@@ -404,7 +418,7 @@ def cfNumber2num(ns, dflt=None):
     try:
         n = _CFNumberType2ctype[nType]()
     except (KeyError, TypeError):
-        raise TypeError('unhandled %s(%r): %r' % ('NumberType', ns, nType))
+        raise _cfNumberError(ns, nType)
     r = libCF.CFNumberGetValue(ns, nType, byref(n))
     return n.value if r else dflt
 

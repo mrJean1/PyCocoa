@@ -6,14 +6,14 @@
 '''C{get_...} functions to obtain ObjC classes, methods, protocols, etc.
 '''
 # all imports listed explicitly to help PyChecker
-from pycocoa.lazily import _ALL_LAZY, _COLON_, _COMMASPACE_, \
-                           _NN_, _UNDER_
+from pycocoa.lazily import _ALL_LAZY, _COLON_, _COMMASPACE_, _fmt, \
+                           _fmt_invalid, _NN_, _UNDER_
 from pycocoa.octypes import emcoding2ctype, encoding2ctype, \
                             Class_t, Id_t, IMP_t, Ivar_t, Protocol_t, \
                             SEL_t, split_encoding
 from pycocoa.oslibs import libobjc  # get_lib
-from pycocoa.utils import bytes2str, Cache2, isinstanceOf, \
-                          missing, name2objc, str2bytes
+from pycocoa.utils import bytes2str, Cache2, isinstanceOf, missing, \
+                          name2objc, str2bytes
 
 from ctypes import ArgumentError, byref, c_uint, cast, CFUNCTYPE
 import itertools
@@ -26,7 +26,7 @@ except AttributeError:
 del itertools
 
 __all__ = _ALL_LAZY.getters
-__version__ = '23.02.05'
+__version__ = '25.01.25'
 
 _c_func_t_cache = {}
 _SEL_t_cache = Cache2(limit2=128)
@@ -48,7 +48,7 @@ def _ivar_ctype(objc, name):
                 return ctype
     except ArgumentError:
         pass
-    raise ValueError('no %r ivar: %r' % (name, objc))
+    raise ValueError(_fmt('no %r ivar: %r', name, objc))
 
 
 def get_c_func_t(encoding, codes=None):
@@ -117,7 +117,7 @@ def get_classname(clas, dflt=missing):
     if clas and isinstanceOf(clas, Class_t, name='clas'):
         return bytes2str(libobjc.class_getName(clas))
     if dflt is missing:
-        raise ValueError('no such %s: %r' % ('Class', clas))
+        raise ValueError(_fmt_invalid(Class=repr(clas)))
     return dflt
 
 
@@ -266,6 +266,10 @@ _PropertyAttributes = {'C': 'copy',      'D': '@dynamic',
                        't': 'encoding=', 'V': 'Var=',
                        'W': '__weak',    '&': 'retain'}
 
+def _xPA(attr):  # PYCHOK yield an extended PropertyAttribute
+    a = attr[:1]
+    return _NN_(_PropertyAttributes.get(a, a), attr[1:])
+
 
 def get_properties(clas_or_proto, *prefixes):
     '''Yield all properties of an ObjC class or protocol
@@ -306,8 +310,7 @@ def get_properties(clas_or_proto, *prefixes):
         props = libobjc.protocol_copyPropertyList(clas_or_proto, byref(n))
         setters = []
     else:
-        raise TypeError('%s not a %s nor %s: %r' % ('clas_or_proto',
-                        Class_t.__name__, Protocol_t.__name__, clas_or_proto))
+        raise TypeError(_fmt_invalid(clas_or_proto=clas_or_proto))
 
     for prop in props:
         name = bytes2str(libobjc.property_getName(prop))
@@ -315,14 +318,13 @@ def get_properties(clas_or_proto, *prefixes):
             # XXX should yield name, ObjCProperty instance
             # attrs T@"type",&,C,D,G<name>,N,P,R,S<name>,W,t<encoding>,V<varname>
             attrs = bytes2str(libobjc.property_getAttributes(prop))
-            attrs = '%s=(%s)' % (attrs, _COMMASPACE_.join(_PropertyAttributes
-                       .get(_[:1], _[:1]) + _[1:] for _ in attrs.split(',')))
+            astrs = _COMMASPACE_.join(map(_xPA, attrs.split(',')))
             setter = _NN_
             if setters:
                 set_ = _NN_('set', name.capitalize(), _COLON_)
                 if set_ in setters:
                     setter = _NN_(_PropertyAttributes['S'], set_)
-            yield name, attrs, setter, prop
+            yield name, _fmt('%s=(%s)', attrs, astrs), setter, prop
 
 
 def get_protocol(name):
@@ -369,6 +371,17 @@ def get_selector(name_):
     return sel
 
 
+def get_selectornameof(sel):
+    '''Get the name of an ObjC selector.
+
+       @param sel: The selector (L{SEL_t}).
+
+       @return: The selector name (C{str}) if found, C{""} otherwise.
+    '''
+    isinstanceOf(sel, SEL_t, name='sel')
+    return bytes2str(libobjc.sel_getName(sel)) or _NN_
+
+
 def get_selectorname_permutations(name_, leading=False):
     '''Yield all permutations of a Python-style selector name.
 
@@ -401,17 +414,6 @@ def get_selectorname_permutations(name_, leading=False):
             n = _NN_.join(_iter_chain(_iter_zip(s, p, fillvalue=_NN_)))
             if n != name_:
                 yield n
-
-
-def get_selectornameof(sel):
-    '''Get the name of an ObjC selector.
-
-       @param sel: The selector (L{SEL_t}).
-
-       @return: The selector name (C{str}) if found, C{""} otherwise.
-    '''
-    isinstanceOf(sel, SEL_t, name='sel')
-    return bytes2str(libobjc.sel_getName(sel)) or _NN_
 
 
 def get_superclass(clas):

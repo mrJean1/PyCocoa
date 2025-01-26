@@ -9,7 +9,7 @@
 from pycocoa.bases   import _Type2
 from pycocoa.menus   import _callMenuItem_name, _handleMenuItem_name, \
                              Item, ItemSeparator, Menu, MenuBar, ns2Item
-from pycocoa.lazily  import _ALL_LAZY, _NN_
+from pycocoa.lazily  import _ALL_LAZY, _fmt, _NN_
 from pycocoa.nstypes import NSApplication, nsBundleRename, \
                             NSConcreteNotification, NSMain, \
                             NSNotification, nsOf, NSStr
@@ -24,7 +24,7 @@ from threading import Thread
 from time import sleep
 
 __all__ = _ALL_LAZY.apps
-__version__ = '23.12.28'
+__version__ = '25.01.25'
 
 
 class App(_Type2):
@@ -48,7 +48,7 @@ class App(_Type2):
            @raise RuntimeError: Duplicate L{App}s.
         '''
         if _Globals.App:
-            raise RuntimeError('%s already exists' % (_Globals.App,))
+            raise RuntimeError(_fmt('%s already exists', _Globals.App))
         _Globals.App = self
         if raiser:
             _Globals.raiser = raiser
@@ -621,7 +621,7 @@ def ns2App(ns):
         ns = ns.object()
     if ns == _Globals.App.NS:
         return _Globals.App
-    raise RuntimeError('%s %r vs %r' % ('ns', ns, _Globals.App.NS))
+    raise RuntimeError(_fmt('%s %r vs %r', 'ns', ns, _Globals.App.NS))
 
 
 NSApplication._Type = _Types.App = App

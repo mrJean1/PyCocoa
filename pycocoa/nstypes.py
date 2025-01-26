@@ -25,7 +25,7 @@
 '''
 # all imports listed explicitly to help PyChecker
 from pycocoa.getters import get_selector
-from pycocoa.lazily  import _ALL_LAZY, _bNN_, _COMMASPACE_, _NN_
+from pycocoa.lazily  import _ALL_LAZY, _bNN_, _COMMASPACE_, _fmt, _NN_
 from pycocoa.octypes import Array_t, Class_t, c_struct_t, _encoding2ctype, Id_t, \
                             NSRect4_t, ObjC_t, SEL_t, Set_t  # NSPoint_t
 from pycocoa.oslibs  import cfNumber2bool, cfNumber2num, cfString, cfString2str, \
@@ -44,7 +44,7 @@ from os import linesep, path as os_path
 from time import time as _timestamp
 
 __all__ = _ALL_LAZY.nstypes
-__version__ = '23.02.05'
+__version__ = '25.01.25'
 
 _not_given_ = 'not given'
 
@@ -178,7 +178,7 @@ class NSDecimal(ObjCInstance):
         return self
 
     def __str__(self):
-        return '%s(%s)' % (self.objc_classname, self.value)
+        return _fmt('%s(%s)', self.objc_classname, self.value)
 
     @property_RO
     def double(self):
@@ -219,7 +219,7 @@ class NSExceptionError(RuntimeError):
         self._timestamp = _timestamp()
         n = self.name or NSExceptionError.__name__
         r = self.reason or 'not given'
-        RuntimeError.__init__(self, 'ObjC/%s: %s' % (n, r))
+        RuntimeError.__init__(self, _fmt('ObjC/%s: %s', n, r))
 
     @property_RO
     def datetime(self):
@@ -295,8 +295,9 @@ class _NSMain(_Singletons):
 
     def __getattr__(self, name):
         if len(name) > 6 and name.startswith('Screen'):
-            raise AttributeError('.%s obsolete, see .Screens.Main.%s'
-                                 % (name, name[6:].lower()))
+            t =  name[6:].lower()
+            t = _fmt('.%s obsolete, see .Screens.Main.%s', name, t)
+            raise AttributeError(t)
         return super(_NSMain, self).__getattr__(name)
 
     @property_RO
@@ -411,7 +412,7 @@ class _NSMain(_Singletons):
             else:
                 raise AttributeError('non-callable')
         except AttributeError as x:
-            raise TypeError('%s %s: %r' % (str(x), 'file', file))
+            raise TypeError(_fmt('%s %s: %r', x, 'file', file))
 
     @property_RO
     def TableColumn(self):
@@ -471,7 +472,7 @@ class NSStr(ObjCInstance):
         return not self.__eq__(other)
 
     def __str__(self):
-        return '%s(%r)' % (self.objc_classname, clipstr(self.value))
+        return _fmt('%s(%r)', self.objc_classname, clipstr(self.value))
 
 #   @property_RO
 #   def objc_classname(self):
@@ -680,7 +681,7 @@ def nsDecimal2decimal(ns):
     '''
     if isinstance(ns, NSDecimal):
         return ns.Decimal
-    return ValueError('%s not %s: %r' % ('ns', 'NSDecimal', ns))
+    return ValueError(_fmt('%s not %s: %r', 'ns', 'NSDecimal', ns))
 
 
 def nsDescription2dict(ns, **defaults):
@@ -707,7 +708,7 @@ def nsDescription2dict(ns, **defaults):
                 n = NSStr(name)
                 v = c_void_p(None)
                 if not libCF.CFDictionaryGetValueIfPresent(self.NS, n, byref(v)) or isNone(v):
-                    raise KeyError('no such item: %s.%r (%r)' % (self.name, name, n))
+                    raise KeyError(_fmt('no such item: %s.%r (%r)', self.name, name, n))
                 v = _ns2ctype2py(v, c_void_p)
                 dict.__setitem__(self, name, v)
             return v
@@ -717,10 +718,10 @@ def nsDescription2dict(ns, **defaults):
             return dict.get(self, 'name', Description.__name__)
 
         def __repr__(self):
-            return '%s %s' % (self.__class__.__name__, str(self))
+            return _fmt('%s %s', self.__class__.__name__, self)
 
         def __setitem__(self, key, value):
-            raise TypeError('%s[%r] = %r' % (self.name, key, value))
+            raise TypeError(_fmt('%s[%r] = %r', self.name, key, value))
 
         def __str__(self):
             '''Return this C{Description} as C{str}.
@@ -816,7 +817,7 @@ def nsIter(ns, reverse=False):
             else:
                 it = ns.objectEnumerator()
         except AttributeError:
-            raise TypeError('non-iterable: %r' % (ns,))
+            raise TypeError(_fmt('non-iterable: %r', ns))
 
         while True:
             ns = it.nextObject()  # nil for end
@@ -852,7 +853,7 @@ def nsLog(ns_fmt, *ns_args):
     if isinstanceOf(ns_fmt, NSStr, name='ns_fmt'):
         for n, ns in enumerate(ns_args):
             if not isinstance(ns, (ObjCInstance, c_void_p)):
-                n = 'ns_arg[%s]' % (n,)  # raise error
+                n = _fmt('ns_arg[%s]', n)  # raise error
                 if not isinstanceOf(ns, ObjCInstance, name=n):
                     break
         else:  # XXX all ns_fmt %-types should be %@?
@@ -868,9 +869,8 @@ def nsLogf(fmt, *args):
        @see: L{nsLog}.
     '''
     if isinstanceOf(fmt, _ByteStrs, name='fmt'):
-        if args:
-            fmt %= args
-        libFoundation.NSLog(NSStr(fmt))  # variadic, printf-like
+        ns = NSStr(_fmt(fmt, *args))
+        libFoundation.NSLog(ns)  # variadic, printf-like
 
 
 def nsNull2none(ns):
@@ -884,7 +884,7 @@ def nsNull2none(ns):
     '''
     if isObjCInstanceOf(ns, NSNull, c_void_p, name='ns') or isNone(ns):
         return None
-    return ValueError('%s not %s: %r' % ('ns', 'isNone', ns))
+    return ValueError(_fmt('%s not %s: %r', 'ns', 'isNone', ns))
 
 
 def nsNumber2num(ns, dflt=missing):  # XXX an NSNumber method?
@@ -906,7 +906,7 @@ def nsNumber2num(ns, dflt=missing):  # XXX an NSNumber method?
     # XXX need c_void_p for nested numbers in lists, sets, etc.?
     if isObjCInstanceOf(ns, NSNumber, c_void_p, name='ns'):
         return cfNumber2num(ns, dflt=dflt)
-    return ValueError('%s not %s: %r' % ('ns', 'NSNumber', ns))
+    return ValueError(_fmt('%s not %s: %r', 'ns', 'NSNumber', ns))
 
 
 def nsOf(inst):
@@ -923,7 +923,7 @@ def nsOf(inst):
     except AttributeError:  # see also .bases.NS.setter
         if isinstance(inst, (ObjCInstance, c_struct_t, ObjC_t)):
             return inst  # XXXX ????
-    raise TypeError('%s without .NS: %r' % ('inst', inst))
+    raise TypeError(_fmt('%s without .NS: %r', 'inst', inst))
 
 
 def nsRaise(name=None, reason=_not_given_, **info):
@@ -1098,7 +1098,7 @@ def nsValue2py(ns, dflt=missing):
         pass
 
     if dflt is missing:
-        raise TypeError('unhandled %s(%r): %r' % ('NSValue', ns, objCType))
+        raise TypeError(_fmt('unhandled %s(%r): %r', 'NSValue', ns, objCType))
     return dflt
 
 
@@ -1237,10 +1237,9 @@ def ns2TypeID2(ns, dflt=None):
 
     except KeyError:
         if dflt is missing:
-            t = _COMMASPACE_.join('TypeID[%d]: %s' % t for t in
-                                  sorted(_CFTypeID2py_items()))
-            raise TypeError('unhandled %s[%r]: %r {%s}' %
-                           ('TypeID', i, ns, t))
+            t = (_fmt('TypeID[%d]: %s', *t) for t in sorted(_CFTypeID2py_items()))
+            t =  _fmt('TypeID[%r] unhandled: %r {%s}', i, ns, _COMMASPACE_.join(t))
+            raise TypeError(t)
         return i, dflt
 
 

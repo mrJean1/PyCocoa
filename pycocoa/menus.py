@@ -85,10 +85,10 @@ from pycocoa.bases import _Type2
 from pycocoa.fonts import Font
 from pycocoa.geometry import Size
 from pycocoa.getters import get_selector, get_selectornameof
-from pycocoa.lazily import _ALL_LAZY, _COMMASPACE_, _DOT_, _NN_, \
-                           _NL_, _UNDER_
-from pycocoa.nstypes import isNone, NSMain, NSMenu, NSMenuItem, nsOf, \
-                            NSStr, nsString2str
+from pycocoa.lazily import _ALL_LAZY, _COMMASPACE_, _DOT_, _fmt, _fmt_invalid, \
+                           _NN_, _NL_, _UNDER_
+from pycocoa.nstypes import isNone, NSMain, NSMenu, NSMenuItem, nsOf, NSStr, \
+                            nsString2str
 from pycocoa.pytypes import int2NS
 from pycocoa.octypes import SEL_t
 from pycocoa.oslibs import NO, NSAlternateKeyMask, NSCommandKeyMask, \
@@ -113,10 +113,9 @@ from pycocoa.oslibs import NSAcknowledgeCharacter, NSBackSpaceCharacter, \
                            NSUnitSeparatorCharacter, NSVerticalTabCharacter
 from pycocoa.runtime import isObjCInstanceOf  # , ObjCInstance
 from pycocoa.screens import Screens
-from pycocoa.utils import Adict, bytes2str, _ByteStrs, _Constants, _Globals, _Ints, \
-                          isinstanceOf, missing, name2pymethod, printf, property2, \
-                          property_RO, _Strs, _Types
-
+from pycocoa.utils import Adict, bytes2str, _ByteStrs, _Constants, _Globals, \
+                         _Ints, isinstanceOf, missing, name2pymethod, printf,  \
+                         _Strs, property2, property_RO, _Types
 try:
     from inspect import getfullargspec as getargspec  # Python 3+
 except ImportError:
@@ -125,7 +124,7 @@ from inspect import isfunction, ismethod
 # from types import FunctionType, MethodType
 
 __all__ = _ALL_LAZY.menus
-__version__ = '21.11.04'
+__version__ = '25.01.25'
 
 # Method _NSApplicationDelegate.handleMenuItem_ in .apps.py
 # is the handler ('selector') for all menu items specified
@@ -158,7 +157,7 @@ def _bindM(inst, parent):
     # <https://Developer.Apple.com/documentation/appkit/nsmenuitem/1514817-hassubmenu>
     # <https://Developer.Apple.com/documentation/appkit/nsmenuitem/1514845-submenu>
     if inst.parent:
-        raise ValueError('%r bound to: %r' % (inst, inst.parent))
+        raise ValueError(_fmt('%r bound to: %r', inst, inst.parent))
     inst._parent = parent
 
 
@@ -190,7 +189,7 @@ def _nsKey2(key):
     for n, v in Keys.items():
         if k in (n, v) or u in (n.upper(), v):
             return NSStr(v), n
-    raise ValueError('invalid %s: %r' % ('key', key))
+    raise ValueError(_fmt_invalid(key=repr(key)))
 
 
 def _nsMenuItem(inst, sel=0, nskey=_NoKey):
@@ -211,7 +210,7 @@ def _setTag(inst, tag, ns=None):
     '''
     if isinstanceOf(tag, _Ints, name='tag'):
         if not tag:  # XXX zero tag invalid
-            raise ValueError('invalid %s: %r' % ('tag', tag))
+            raise ValueError(_fmt_invalid(tag=repr(tag)))
         inst._tag = tag
         if ns:
             ns.setTag_(tag)
@@ -293,7 +292,7 @@ class Item(_Item_Type2):
         else:  # str or bytes
             a = name2pymethod(action)
             if a[-1:] not in ':_':
-                raise ValueError('invalid %s: %r' % ('action', action))
+                raise ValueError(_fmt_invalid(action=repr(action)))
         self.action = a  # double checked in .action.setter below
 
         ns, key = _nsKey2(key)
@@ -312,8 +311,8 @@ class Item(_Item_Type2):
                     s(self, v)
                 else:
                     g = 'read-only' if g else 'invalid'
-                    raise NameError('%s %s property: %s' % (g,
-                                        self.__class__.__name__, p))
+                    n =  self.__class__.__name__
+                    raise NameError(_fmt('%s %s property: %s', g, n, p))
             except Exception as x:
                 if _Globals.raiser:
                     x = x.__class__.__name__
@@ -322,10 +321,9 @@ class Item(_Item_Type2):
                     raise
 
     def __str__(self):
-        k = '+'.join([M for M, ns in _Modifiers2 if (self._mask & ns)]
-                   + [self.key])
-        return '%s(%r, %r, %s)' % (self.__class__.__name__,
-                                   self.title, self.action, k)
+        k = [M for M, ns in _Modifiers2 if (self._mask & ns)] + [self.key]
+        n = self.__class__.__name__
+        return _fmt('%s(%r, %r, %s)', n, self.title, self.action, '+'.join(k))
 
 #   def copy(self, other):
 #       '''Duplicate an item.
@@ -362,7 +360,7 @@ class Item(_Item_Type2):
            (isfunction(action) and len(getargspec(action).args) > 0)):
             self._action = action
         else:
-            raise TypeError('invalid %s: %r' % ('action', action))
+            raise TypeError(_fmt_invalid(action=repr(action)))
 
     @property
     def allowsKeyWhenHidden(self):
@@ -441,7 +439,7 @@ class Item(_Item_Type2):
         '''
         if isinstanceOf(indent, _Ints, name='indent') and indent != self.indentationLevel:
             if not 0 <= indent < 16:
-                raise ValueError('%s: %r' % ('indent', indent))
+                raise ValueError(_fmt('%s: %r', 'indent', indent))
             self.NS.setIndentationLevel_(indent)
 
     @property
@@ -542,7 +540,7 @@ class Item(_Item_Type2):
         d = self._keyModifiers(**modifiers)
         if d:
             self._mask = m  # restore
-            raise KeyError('%s(%s)' % (self, Adict(d)))
+            raise KeyError(_fmt('%s(%s)', self, Adict(d)))
 
     def _keyModifiers(self, **kwds):
         '''(INTERNAL) Set the item's shortcut key modifiers.
@@ -742,9 +740,9 @@ class Keys(_Constants):
     VerticalTab         = VT  = chr(NSVerticalTabCharacter)
 
     def __repr__(self):
-        def _fmt(n, v):
-            return '%s=%s' % (n, hex(ord(v)))
-        return self._strepr(_fmt)
+        def _fmt2(n, v):
+            return _fmt('%s=%s', n, hex(ord(v)))
+        return self._strepr(_fmt2)
 
 Keys = Keys()  # PYCHOK constants
 
@@ -793,7 +791,7 @@ class _Menu_Type2(_Type2):
 
     def _assertM(self, n, m):
         if n != m:
-            raise RuntimeError('len(%s) %r vs %r' % (self, n, m))
+            raise RuntimeError(_fmt('len(%s) %r vs %r', self, n, m))
 
     def _find(self, inst, *classes):
         if isinstanceOf(inst, *classes, name=self._nameM):
@@ -835,7 +833,7 @@ class _Menu_Type2(_Type2):
             t = _NN_
 
         if dflt is missing:
-            raise ValueError('no such %s(%s)' % (_DOT_(self, self._nameM), t))
+            raise ValueError(_fmt('no %s.%s(%s)', self, self._nameM, t))
         return dflt
 
     def _getiteM(self, index, bytitle=None):
@@ -850,7 +848,7 @@ class _Menu_Type2(_Type2):
                 return self._listM[self._indexM(index)]
         except (IndexError, TypeError, ValueError):
             pass
-        raise IndexError('invalid %s[%r]' % (self, index))
+        raise IndexError(_fmt('no %s[%r]', self, index))
 
     def _index(self, inst, *classes):
         if isinstanceOf(inst, *classes, name=self._nameM):
@@ -858,7 +856,7 @@ class _Menu_Type2(_Type2):
                 return self._listM.index(inst)
             except ValueError:
                 pass
-        raise ValueError('invalid %s: %r' % (self._nameM, inst))
+        raise ValueError(_fmt('no %s: %r', self._nameM, inst))
 
     def _indexM(self, index):
         if isinstance(index, _Ints):
@@ -868,7 +866,7 @@ class _Menu_Type2(_Type2):
             # ... but not out of range, like list.append
             if 0 <= i < len(self):
                 return i
-        raise IndexError('invalid %s: %r' % ('index', index))
+        raise IndexError(_fmt('no %s[%r]', self, index))
 
     def _initM(self):
         self._listM = []
@@ -893,7 +891,7 @@ class _Menu_Type2(_Type2):
             self._assertM(len(self), m)
             return inst
         except (IndexError, TypeError):
-            raise IndexError('%s.%s(%r)' % (self, 'pop', index))
+            raise IndexError(_fmt('no %s.%s(%r)', self, 'pop', index))
 
     def _removeM(self, insts, *classes):
         for inst in insts:
@@ -901,7 +899,7 @@ class _Menu_Type2(_Type2):
                 try:
                     self._popM(self._listM.index(inst))
                 except (IndexError, ValueError):
-                    raise ValueError('%s.%s(%s)' % (self, 'remove', inst))
+                    raise ValueError(_fmt('no %s.%s(%s)', self, 'remove', inst))
 
     def _tagM(self, inst, ns):
         # only L{Item} tags are settable
@@ -913,11 +911,12 @@ class _Menu_Type2(_Type2):
                 inst.tag = _Menu_Type2._tagNr
             ns.setTag_(inst.tag)  # always an NSMenuItem
         elif not isinstance(inst, ItemSeparator):
-            raise RuntimeError('set %s.%s in %s' % (inst, 'tag', self))
+            raise RuntimeError(_fmt('set %s.%s in %s', inst, 'tag', self))
 
     def _validM(self, inst):
         if inst in self._listM:
-            raise ValueError('duplicate %s %s: %r' % (self, self._nameM, inst))
+            t = _fmt('duplicate %s %s: %r', self, self._nameM, inst)
+            raise ValueError(t)
         _bindM(inst, self)
         if isinstance(inst, Menu):
             inst._NSiMI = ns = _nsMenuItem(inst)
@@ -1066,7 +1065,7 @@ class Menu(_Menu_Type2):
         if item._SEL_ is _CALL_:  # .callMenuItem_
             item._action(item)
         else:  # if item._SEL_ is _HANDLE_:  # .handleMenuItem_
-            raise NotImplementedError('%s(%s)' % ('click', item))
+            raise NotImplementedError(_fmt('%s(%s)', 'click', item))
         if highlight:
             # <https://Stackoverflow.com/questions/6169930/
             #        remove-highlight-from-nsmenuitem-after-click>
@@ -1215,7 +1214,7 @@ class Menu(_Menu_Type2):
         '''
         def _raise(Error, prefix, kwds):
             t = _COMMASPACE_(Adict(key=key), Adict(kwds))
-            raise Error('%s%s(%s)' % (prefix, _DOT_(self, 'item'), t))
+            raise Error(_fmt('%s%s.%s(%s)', prefix, self, 'item', t))
 
         if key:  # find by key and modifiers
             m, d = _modifiedMask2(0, modifiers)
@@ -1261,7 +1260,8 @@ class Menu(_Menu_Type2):
         if ns:
             m = ns2Item(ns)
             if m is not self:  # or m.NS != ns.subMenu()
-                raise RuntimeError('%s(%s): %r' % ('ns2Item', self, m))
+                t = _fmt('%s(%s): %r', 'ns2Item', self, m)
+                raise RuntimeError(t)
         return ns or None
 
     def pop(self, index=-1):

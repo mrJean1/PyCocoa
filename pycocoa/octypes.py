@@ -38,9 +38,8 @@ are ObjC types defined in terms of a C{ctypes} C{c_} type.
 # all imports listed explicitly to help PyChecker
 # from pycocoa.getters import get_selectornameof
 from pycocoa.lazily import _ALL_LAZY, _bNN_, _NN_
-from pycocoa.utils  import _bCOLON_, bytes2str, inst2strepr, \
-                            iterbytes, missing, property_RO, \
-                            str2bytes
+from pycocoa.utils  import _bCOLON_, bytes2str, _fmt, inst2strepr, \
+                            iterbytes, missing, property_RO, str2bytes
 
 from ctypes import c_bool, c_byte, c_char, c_char_p, c_double, \
                    c_float, c_int, c_int32, c_int64, c_long, \
@@ -54,7 +53,7 @@ except ImportError:
     c_void = None
 
 __all__ = _ALL_LAZY.octypes
-__version__ = '21.11.04'
+__version__ = '25.01.25'
 
 z = sizeof(c_void_p)
 if z == 4:
@@ -64,7 +63,7 @@ elif z == 8:
     c_ptrdiff_t = c_int64
     __LP64__ = True
 else:
-    raise ValueError('sizeof(c_void_p): %s' % (z,))
+    raise ValueError(_fmt('sizeof(c_void_p): %s', z))
 del z
 
 from platform import machine as m
@@ -87,7 +86,7 @@ class c_struct_t(Structure):
 
     def __repr__(self):
         r = inst2strepr(self, repr, *self._attrs())
-        return '<%s at %#x>' % (r, id(self))
+        return _fmt('<%s at %#x>', r, id(self))
 
     def __str__(self):
         return inst2strepr(self, str, *self._attrs())
@@ -97,7 +96,7 @@ class ObjC_t(c_void_p):
     '''Base type to pretty-print I{ctypes} C{c_void_p}.
     '''
     def __repr__(self):
-        return '<%s at %#x>' % (self, id(self))
+        return _fmt('<%s at %#x>', self, id(self))
 
     def __str__(self):
         return self.__class__.__name__
@@ -106,7 +105,11 @@ class ObjC_t(c_void_p):
 class TypeCodeError(ValueError):
     '''Error in ObjC type encoding.
     '''
-    pass
+    def __init__(self, kind, coderr, name=_NN_):
+        t = _fmt('encoding %s: %r', kind, coderr)
+        if name:
+            t = _fmt('%s %s', bytes2str(name), t)
+        ValueError.__init__(self, t)
 
 
 def _bJoin(codes):
@@ -241,7 +244,7 @@ class SEL_t(ObjC_t):
 #       return self
 
     def __repr__(self):
-        return '<%s(%s)>' % (self.__class__.__name__, self)
+        return _fmt('<%s(%s)>', self.__class__.__name__, self)
 
     def __str__(self):
         return 'None' if self.value is None else bytes2str(self.name_)
@@ -250,7 +253,7 @@ class SEL_t(ObjC_t):
     def name_(self):
         if self._name_ is None:
             if self.value is None:
-                raise ValueError('Null %r' % (self,))
+                raise ValueError(_fmt('Null %r', self))
             from pycocoa.getters import get_selectornameof
             self._name_ = get_selectornameof(self) or 'SEL_t'
         return self._name_
@@ -535,7 +538,8 @@ _encoding2ctype = {b'c': c_char,     b'C': c_ubyte,
 for c_, code in _ctype2encoding.items():
     f_ = _encoding2ctype.get(code, 'missing')
     if c_ != f_ and code not in (b'@',):
-        raise RuntimeError('code %r ctype %r vs %r' % (code, c_, f_))
+        t = _fmt('code %r ctype %r vs %r', code, c_, f_)
+        raise RuntimeError(t)
 del c_, code, f_
 
 # map 'c' to c_byte rather than c_char, because
@@ -637,12 +641,12 @@ def encoding2ctype(code, dflt=missing, name='type'):  # MCCABE 20
             raise TypeCodeError
 
     except TypeCodeError:
-        raise TypeCodeError('%s encoding %s: %r' % (bytes2str(name), 'invalid', coderr))
+        raise TypeCodeError('invalid', coderr, name)
     except KeyError:
         pass
 
     if dflt is missing:
-        raise TypeCodeError('%s encoding %s: %r' % (bytes2str(name), 'unknown', coderr))
+        raise TypeCodeError('unknown', coderr, name)
     elif code[:1] == b'^':
         return POINTER(dflt)
     else:
@@ -776,8 +780,7 @@ def split_encoding(encoding):  # MCCABE 18
         elif b in _TYPECLOSERS:
             code.append(b)
             if not opened or b != opened.pop():
-                raise TypeCodeError('encoding %s: %r' % ('unbalanced',
-                                    bytes2str(_bJoin(code))))
+                raise TypeCodeError('unbalanced', bytes2str(_bJoin(code)))
             if not opened:
                 codes.append(_bJoin(code))
                 code = []
@@ -797,8 +800,7 @@ def split_encoding(encoding):  # MCCABE 18
                 elif code[:1] == b'"':
                     pass  # ignore prefix "name"
                 else:
-                    raise TypeCodeError('encoding %s: %r' % ('invalid',
-                                        bytes2str(code)))
+                    raise TypeCodeError('invalid', bytes2str(code))
                 code = []
             quoted = not quoted
 
@@ -817,7 +819,7 @@ def split_encoding(encoding):  # MCCABE 18
             pass  # ignore type, width and offsets
 
     if opened:
-        raise TypeCodeError('encoding %s: %r' % ('unbalanced', bytes2str(encoding)))
+        raise TypeCodeError('unbalanced', bytes2str(encoding))
 
     if code:  # final type code
         codes.append(_bJoin(code))

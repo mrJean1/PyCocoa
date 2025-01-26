@@ -33,8 +33,7 @@ from pycocoa.getters import _ivar_ctype, get_c_func_t, get_class, \
                             get_classname, get_classof, get_ivar, \
                             get_metaclass, get_protocol, get_selector, \
                             get_superclassof
-from pycocoa.lazily import _ALL_LAZY, _bNN_, _COMMASPACE_, _isPython2, \
-                           _NL_, _NN_  # _UNDER_
+from pycocoa.lazily import _ALL_LAZY, _bNN_, _COMMASPACE_, _NL_, _NN_  # _UNDER_
 from pycocoa.octypes import __i386__, __LP64__, c_struct_t, c_void, \
                             ctype2encoding, emcoding2ctype, \
                             encoding2ctype, Class_t, Id_t, IMP_t, \
@@ -42,7 +41,7 @@ from pycocoa.octypes import __i386__, __LP64__, c_struct_t, c_void, \
                             ObjC_t, SEL_t, split_emcoding2, \
                             TypeCodeError
 from pycocoa.oslibs import cfString2str, _csignature, libobjc
-from pycocoa.utils import Adict, bytes2str, _ByteStrs, _Constants, \
+from pycocoa.utils import Adict, bytes2str, _ByteStrs, _Constants, _fmt, \
                           isinstanceOf, lambda1, missing, name2py, \
                           printf, property2, property_RO, \
                           str2bytes, _TypeError
@@ -58,7 +57,7 @@ import sys
 import os
 
 __all__ = _ALL_LAZY.runtime
-__version__ = '25.01.16'
+__version__ = '25.01.25'
 
 # <https://Developer.Apple.com/documentation/objectivec/
 #        objc_associationpolicy?language=objc>
@@ -202,9 +201,8 @@ def _pyresult(result):
        method to the corresponding Python type/value.
     '''
     if isinstance(result, (ObjCInstance, ObjCClass)):
-        return result.ptr.value
-    else:
-        return result
+        result = result.ptr.value
+    return result
 
 
 def _signature3(objc_t, sel_name_, args, restype=c_void_p,
@@ -249,14 +247,14 @@ class _ObjCBase(object):
     _name          = _bNN_  # shut PyChecker up
 
     def __repr__(self):
-        return '<%s(%s) at %#x>' % (self.__class__.__name__, self, id(self))
+        return _fmt('<%s(%s) at %#x>', self.__class__.__name__, self, id(self))
 
     @property_RO
     def description(self):
         '''Return this ObjC's description, first line of C{__doc__}.
         '''
         n = getattr(self, 'name', self.__class__.__name__)
-        d = '%s: %s' % (n, getattr(self, '__doc__', 'n/a').strip())
+        d = _fmt('%s: %s', n, getattr(self, '__doc__', 'n/a').strip())
         n = d.find(_NL_)
         return d if n < 0 else d[:n]
 
@@ -268,8 +266,8 @@ class ObjCBoundMethod(_ObjCBase):
               new C{ObjCBound[Class]Method} instance which is discarded
               immediately thereafter.
     '''
-    if _isPython2:
-        __slots__ = ('_inst', '_method', '_objc_id')
+    # if _isPython2:
+    #     __slots__ = ('_inst', '_method', '_objc_id')
 
     def __init__(self, method, objc_id, inst):
         '''Initialize with an ObjC instance or class method.
@@ -285,7 +283,7 @@ class ObjCBoundMethod(_ObjCBase):
         self._objc_id = objc_id
 
     def __str__(self):
-        return '%s.%s' % (self._objc_id, self._method.name)
+        return _fmt('%s.%s', self._objc_id, self._method.name)
 
     def __call__(self, *args):
         '''Call the method with the given arguments.
@@ -327,8 +325,9 @@ class ObjCBoundClassMethod(ObjCBoundMethod):
     # O'Reilly, 2016, also at <https://Books.Google.ie/books?
     # id=bIZHCgAAQBAJ&lpg=PP1&dq=fluent%20python&pg=PT364#
     # v=onepage&q=“Problems%20with%20__slots__”&f=false>
-    if _isPython2:
-        __slots__ = ObjCBoundMethod.__slots__
+    pass
+    # if _isPython2:
+    #     __slots__ = ObjCBoundMethod.__slots__
 
 
 class ObjCClass(_ObjCBase):
@@ -415,7 +414,7 @@ class ObjCClass(_ObjCBase):
         raise AttributeError('no %r [class]method: %s ' % (name, self))
 
     def __str__(self):
-        return '%s of %#x' % (self.name, self.ptr.value)
+        return _fmt('%s of %#x', self.name, self.ptr.value)
 
     def _cache_method(self, name, Class, cache, getter):
         # get and cache a class or instance method
@@ -525,14 +524,14 @@ class ObjCDelegate(ObjCClass):
         if name not in ObjCClass._objc_classes_cache:
             _ObjC = _NS_Delegate._ObjC
             if not isinstance(_ObjC, ObjCSubclass):
-                raise TypeError('%s.%s not %s' % (name, '_ObjC', ObjCSubclass.__name__))
+                raise TypeError(_fmt('%s.%s not %s', name, '_ObjC', ObjCSubclass.__name__))
             if not _ObjC.isregistered:
                 _ObjC.register()
                 # catch class and naming mistakes
                 if not name.startswith('_NS'):
-                    raise TypeError('%s not %s' % (name, 'private'))
+                    raise TypeError(_fmt('%s not %s', name, 'private'))
                 elif not name.endswith('Delegate'):
-                    raise TypeError('%s not %s' % (name, 'Delegate'))
+                    raise TypeError(_fmt('%s not %s', name, 'Delegate'))
         return ObjCClass.__new__(cls, name, *protocols)
 
 
@@ -608,7 +607,7 @@ class ObjCInstance(_ObjCBase):
                 _nsDeallocObserver(ptr)
 
         elif NS_ is _NSAutorelease.Pool:  # must be cached!
-            raise RuntimeError('not cached: %r' % (self,))
+            raise RuntimeError(_fmt('not cached: %r', self))
 
         _ObjC_log(self, 'new', 'I', auto=self.inPool, cached=cached)
         return self
@@ -685,7 +684,7 @@ class ObjCInstance(_ObjCBase):
 #       return '<%s %#x: %s>' % (ObjCInstance.__name__, id(self), self)
 
     def __str__(self):
-        return '%s(%r) of %#x' % (self.objc_classname, self.ptr, self.ptr.value)
+        return _fmt('%s(%r) of %#x', self.objc_classname, self.ptr, self.ptr.value)
 
     def _cache_clear(self):
         # clear the _objc_cache and return the number of cleared C{ObjcInstance}s
@@ -709,8 +708,8 @@ class ObjCInstance(_ObjCBase):
 
     def _cache_print(self, label):
         cache, _r = self._objc_cache, sys.getrefcount
-        vs = ('%r %d' % (v, _r(v)) for v in cache.values())
-        print(label, len(cache), _COMMASPACE_.join(vs))
+        t = (_fmt('%r %d', v, _r(v)) for v in cache.values())
+        print(label, len(cache), _COMMASPACE_.join(t))
 
     @property_RO
     def from_py2NS(self):
@@ -770,7 +769,7 @@ class ObjCInstance(_ObjCBase):
         if retain:
             self._retained = b = bool(retain[0])
             if b and self.ptr.value not in self._objc_cache:
-                raise RuntimeError("not cached, can't be retained: %r" % (self,))
+                raise RuntimeError(_fmt("not cached, can't be retained: %r", self))
         return r
 
     def set_ivar(self, name, value, ctype=None):
@@ -795,7 +794,7 @@ class ObjCInstance(_ObjCBase):
         ty = self._objc_class.Type
         if ty and callable(ty):
             return ty
-        raise AttributeError('Type(%r): %r' % (self, ty or missing))
+        raise AttributeError(_fmt('Type(%r): %r', self, ty or missing))
 
 
 _PyRes_t2 = {b'@': (ObjCInstance, Id_t),
@@ -897,8 +896,8 @@ class ObjCMethod(_ObjCBase):
 #                                  bytes2str(self.encoding))
 
     def __str__(self):
-        return '%s(%s) %s %s' % (self.name, _c_tstr(*self.argtypes),
-                         _c_tstr(self.restype), bytes2str(self.encoding))
+        return _fmt('%s(%s) %s %s', self.name, _c_tstr(*self.argtypes),
+                    _c_tstr(self.restype), bytes2str(self.encoding))
 
     @property_RO
     def argtypes(self):
@@ -1021,14 +1020,18 @@ class ObjCSubclass(_ObjCBase):
         _ObjC_log(self, 'new', 'S')
 
     def __str__(self):
-        return '%s(%r)' % ('sub-class', self.name)
+        return _fmt('%s(%r)', 'sub-class', self.name)
 
     def _add_classmethod(self, method, name, encoding):
         if not self._objc_metaclass:
-            raise ValueError('add method %s to unregistered %s %r' %
-                            (bytes2str(name), 'sub-class', self.name,))
+            raise self._add_Error('method', name, 'un')
         imp = add_method(self._objc_metaclass, name, method, encoding)
         self._imp_cache[name] = imp
+
+    def _add_Error(self, kind, name, un=_NN_):  # helper for _classmethod, _ivar
+        t = _fmt('add %s %s to %sregistered %s %r', kind,
+                  bytes2str(name), un, 'sub-class', self.name)
+        return ValueError(t)
 
     def _add_method(self, method, name, encoding):
         imp = add_method(self._objc_class, name, method, encoding)
@@ -1046,8 +1049,7 @@ class ObjCSubclass(_ObjCBase):
                   BEFORE the class is registered.
         '''
         if self._objc_metaclass:
-            raise ValueError('add ivar %r to registered %s %r' %
-                            (bytes2str(name), 'sub-class', self.name))
+            raise self._add_Error('ivar', name)
         return add_ivar(self._objc_class, name, ctype)
 
     def classmethod(self, encoding):
@@ -1067,7 +1069,7 @@ class ObjCSubclass(_ObjCBase):
                 return _pyresult(m(_pycls, *_pyargs(codes3, args)))
             n = m.__name__
 #           if n.startswith(_UNDER_):
-#               raise NameError('%s: %r' % ('classmethod', n))
+#               raise NameError(_fmt('%s: %r, 'classmethod', n))
             self._add_classmethod(objc_classmethod, n, encoding)
             objc_classmethod.name = n  # preserve name
             return objc_classmethod
@@ -1097,7 +1099,7 @@ class ObjCSubclass(_ObjCBase):
                 return _pyresult(m(_pyself, *_pyargs(codes3, args)))
             n = m.__name__
 #           if n.startswith(_UNDER_):
-#               raise NameError('%s: %r' % ('method', n))
+#               raise NameError(_fmt('%s: %r', 'method', n))
             self._add_method(objc_method, n, encoding)
             objc_method.name = n  # preserve name
             return objc_method
@@ -1144,7 +1146,8 @@ class ObjCSubclass(_ObjCBase):
         '''Register this new class with the ObjC runtime.
         '''
         if self._objc_metaclass:
-            raise ValueError('%s %r already registered' % ('sub-class', self))
+            t = _fmt('already registered: %s %r', 'sub-class', self)
+            raise ValueError(t)
 
         register_subclass(self._objc_class)
         # We can't get the metaclass before the class is registered.
@@ -1172,7 +1175,7 @@ def add_ivar(clas, name, ctype):
         if code is None:
             code, ctype = ctype, encoding2ctype(str2bytes(ctype))
     except TypeError:
-        raise TypeCodeError('%s %s type invalid: %r' % ('type', name, ctype))
+        raise TypeCodeError('ivar', ctype, name=name)
 
     try:
         z = sizeof(ctype)
@@ -1197,7 +1200,8 @@ def add_method(clas, name_, method, encoding):
        @raise TypeError: If I{method} is not a Python callable.
     '''
     if isinstance(method, _ObjCBase) or not callable(method):
-        raise TypeError('%s not a %s: %r' % ('method', 'callable', method))
+        t = _fmt('%s a %s: %r', 'method', 'callable', method)
+        raise TypeError(t)
 
     codes, signature = split_emcoding2(encoding)
 
@@ -1288,7 +1292,7 @@ def isImmutable(objc, mutableClass, immutableClass, name='ns'):
     # check for the NSMutable- class first, since the mutable
     # classes seem to be sub-class of the immutable one
     if isObjCInstanceOf(objc, mutableClass):
-        raise TypeError('classof(%s) is mutable: %r' % (name, objc))
+        raise TypeError(_fmt('classof(%s) is mutable: %r', name, objc))
     return isObjCInstanceOf(objc, immutableClass, name=name) is immutableClass
 
 
@@ -1339,7 +1343,7 @@ def isObjCInstanceOf(objc, *Classes, **name_missing):
     else:
         name = name_missing.get('name', 'objc')
         t = ObjCInstance.__name__
-        raise TypeError('%s not an %s: %r' % (name, t, objc))
+        raise TypeError(_fmt('%s not an %s: %r', name, t, objc))
 
     name = name_missing.get('name', missing)
     if name is missing:
@@ -1376,7 +1380,7 @@ def release(objc):
     try:
         objc.autorelease()  # XXX or objc.release()?
     except (AttributeError, TypeError):
-        raise TypeError('not releasable: %r' % (objc,))
+        raise TypeError(_fmt('not releasable: %r', objc))
     return objc
 
 
@@ -1396,7 +1400,7 @@ def retain(objc):
     try:
         objc.retain()  # L{ObjCMethod}
     except (AttributeError, TypeError):
-        raise TypeError('not retainable: %r' % (objc,))
+        raise TypeError(_fmt('not retainable: %r', objc))
     return objc
 
 
@@ -1695,11 +1699,11 @@ def _nsDeallocObserverIvar1():
     i = None
     for n, _, c, i in get_ivars(get_class(_NSDeallocObserver.__name__)):
         if n != _Ivar1.name or c != _Ivar1.c_t:
-            raise AssertionError('%r %s != %r %s' % (n, c,
-                                 _Ivar1.name, _Ivar1.c_t))
+            raise AssertionError(_fmt('%r %s != %r %s', n, c,
+                                      _Ivar1.name, _Ivar1.c_t))
     if i is None:
-        raise AssertionError('%s %s: %r %s' % ('missing', 'ivar',
-                             _Ivar1.name, _Ivar1.c_t))
+        raise AssertionError(_fmt('%s %s: %r %s', 'missing', 'ivar',
+                                  _Ivar1.name, _Ivar1.c_t))
 
 
 from ctypes import sizeof  # see from ctypes ... comments at the top

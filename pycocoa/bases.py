@@ -6,14 +6,14 @@
 '''(INTERNAL) Base classes for Python C{Types}.
 '''
 # all imports listed explicitly to help PyChecker
-from pycocoa.lazily  import _ALL_LAZY
+from pycocoa.lazily  import _ALL_LAZY, _fmt
 from pycocoa.nstypes import isNone, NSStr, nsString2str
 from pycocoa.octypes import c_struct_t, ObjC_t
 from pycocoa.runtime import ObjCInstance, release
 from pycocoa.utils   import bytes2str, isinstanceOf, type2strepr
 
 __all__ = _ALL_LAZY.bases
-__version__ = '21.11.04'
+__version__ = '25.01.25'
 
 
 class _Type0(object):
@@ -28,10 +28,10 @@ class _Type0(object):
                 if not hasattr(self, a):
                     setattr(self, a, v)
                 elif getattr(self, a) != v:
-                    raise AttributeError('%s=%r exists' % (a, v))
+                    raise AttributeError(_fmt('%s=%r exists', a, v))
 
     def __repr__(self):
-        return '%s at %#x' % (self, id(self))
+        return _fmt('%s at %#x', self, id(self))
 
     def __str__(self):
         return type2strepr(self)
@@ -57,11 +57,11 @@ class _Type0(object):
 
     @property
     def NSDelegate(self):  # to catch typos
-        raise AttributeError('use %r not %r' % ('NSd-', 'NSD-'))
+        raise AttributeError("use 'NSd-', not 'NSD-'")
 
     @NSDelegate.setter  # PYCHOK property.setter
     def NSDelegate(self, unused):
-        raise AttributeError('use %r not %r' % ('NSd-', 'NSD-'))
+        raise AttributeError("use 'NSd-', not 'NSD-'")
 
 
 class _Type1(_Type0):
@@ -108,7 +108,7 @@ class _Type2(_Type1):
     _title = None
 
     def __str__(self):
-        return '%s(%r)' % (self.__class__.__name__, self._title)
+        return _fmt('%s(%r)', self.__class__.__name__, self._title)
 
     @property
     def title(self):

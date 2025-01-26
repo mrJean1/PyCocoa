@@ -21,11 +21,11 @@
 '''
 # all imports listed explicitly to help PyChecker
 from pycocoa.bases   import _Type2
-from pycocoa.lazily  import _ALL_LAZY, _DOT_, _NN_
+from pycocoa.lazily  import _ALL_LAZY, _DOT_, _fmt, _fmt_invalid
 from pycocoa.nstypes import NSAlert, NSError, NSFont, NSMain, \
                             NSNotificationCenter, NSOpenPanel, \
                             NSSavePanel, NSStr, nsString2str, \
-                            nsTextView
+                            nsTextView,  _NN_  # lazily
 from pycocoa.pytypes import dict2NS, py2NS, url2NS
 from pycocoa.oslibs  import NO, NSCancelButton, NSOKButton, YES
 from pycocoa.runtime import isObjCInstanceOf, release
@@ -46,7 +46,7 @@ except ImportError:
     _Browser, _BrowserError = None, ImportError
 
 __all__ = _ALL_LAZY.panels
-__version__ = '21.11.04'
+__version__ = '25.01.25'
 
 
 class AlertStyle(_Constants):  # Enum?
@@ -93,7 +93,7 @@ class AlertPanel(_Type2):
         '''
         if info and isinstance(info, _Strs):
             if len(info) > 50 or linesep in info:
-                raise ValueError('invalid %s: %r' % ('info', info))
+                raise ValueError(_fmt_invalid(info=repr(info)))
             self._info = info
 
         self._ok = ok if isinstance(ok, _Strs) else 'OK'
@@ -109,7 +109,7 @@ class AlertPanel(_Type2):
         s = _AlertStyleStr.get(style, _NN_)
         t = s or 'Alert '
         if title:
-            t = '%s- %s' % (t, title)
+            t = _fmt('%s- %s', t, title)
         self.title = t
 
     def show(self, text=_NN_, font=None, timeout=None):
@@ -198,7 +198,7 @@ class BrowserPanel(_Type2):
             try:
                 self._browser = _Browser(name)
             except _BrowserError:
-                raise ValueError('no %s type %r' % ('browser', name))
+                raise ValueError(_fmt('no %s type %r', 'browser', name))
         else:
             self.NS = NSNotificationCenter.defaultCenter()
         self.title = title or name or 'default'
@@ -222,7 +222,7 @@ class BrowserPanel(_Type2):
         ns = url2NS(url)
         sc = nsString2str(ns.scheme())
         if sc.lower() not in ('http', 'https', 'file'):
-            raise ValueError('%s scheme %r invalid: %r' % ('url', sc, url))
+            raise ValueError(_fmt('invalid %s %s: %r', 'scheme', sc, url))
         if self._browser:
             self._browser.open(url, new=2 if tab else 1)
         elif self.NS:
@@ -302,7 +302,7 @@ class OpenPanel(_Type2):
            @return: The selected file name path (C{str}) or I{dflt}.
         '''
         if multiple:  # setAllowsMultipleSelection_
-            raise NotImplementedError('multiple %s' % (multiple,))
+            raise NotImplementedError(_fmt('multiple %s', multiple))
 
         ns = NSOpenPanel.openPanel()
 #       ns.setTitleHidden_(NO)  # "does nothing now"
@@ -489,7 +489,7 @@ class TextPanel(AlertPanel):
         ns.addButtonWithTitle_(release(NSStr('Close')))
 
         if not text_or_file:
-            raise ValueError('no %s: %r' % ('text_or_file', text_or_file))
+            raise ValueError(_fmt('no %s: %r', 'text_or_file', text_or_file))
 
         text, t = _text_title2(text_or_file, self.title)
         if t:

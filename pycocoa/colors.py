@@ -71,7 +71,7 @@ accessible by color space acronym like C{CMY}, C{GS}, C{RGB}, etc.
 '''
 # all imports listed explicitly to help PyChecker
 from pycocoa.bases   import _Type0
-from pycocoa.lazily  import _ALL_LAZY, _NN_
+from pycocoa.lazily  import _ALL_LAZY, _fmt, _fmt_invalid, _NN_
 from pycocoa.nstypes import  NSColor
 from pycocoa.utils   import _Constants, property_RO, _Types
 
@@ -79,7 +79,7 @@ from copy import copy as _copy
 # from enum   import Enum
 
 __all__ = _ALL_LAZY.colors
-__version__ = '21.11.04'
+__version__ = '25.01.25'
 
 
 def _Xhandler(unused):
@@ -132,12 +132,12 @@ class Color(_Type0):
         if nsColor:
             c = nsColor
         elif name.endswith('Color'):
-            raise ColorError('name %r invalid' % (name,))
+            raise ColorError(_fmt_invalid(name=repr(name)))
         else:
             c = name + 'Color'
         ns = getattr(NSColor, c, None)
         if ns is None or not callable(ns):
-            raise ColorError("color %r doesn't exist" % (c,))
+            raise ColorError(_fmt_invalid(color=repr(c)))
         self.NS = ns()
         self.name = name  # capitalized
         self._nsColor = c
@@ -505,9 +505,9 @@ class Colors(_Constants):
 #   sRGB = None
 
     def __repr__(self):
-        def _fmt(n, v):  # just XYZColor class names
-            return '%s=%s' % (n, v.__class__.__name__)
-        return self._strepr(_fmt)
+        def _fmt2(n, v):  # just XYZColor class names
+            return _fmt('%s=%s', n, v.__class__.__name__)
+        return self._strepr(_fmt2)
 
 Colors = Colors()  # PYCHOK singleton
 

@@ -8,7 +8,8 @@
 # all imports listed explicitly to help PyChecker
 from pycocoa.bases import _Type0
 from pycocoa.geometry import Point, Rect, Size
-from pycocoa.lazily import _ALL_LAZY, _COMMASPACE_  # PYCHOK used!
+from pycocoa.lazily import _ALL_LAZY, _fmt, _fmt_invalid, \
+                           _COMMASPACE_  # PYCHOK used!
 from pycocoa.nstypes import ns2py, NSScreen, nsString2str
 from pycocoa.octypes import NSRect_t
 from pycocoa.oslibs import libCG
@@ -17,7 +18,7 @@ from pycocoa.utils import _Ints, isinstanceOf, property_RO, \
                           _Singletons, _Types
 
 __all__ = _ALL_LAZY.screens
-__version__ = '21.11.04'
+__version__ = '25.01.25'
 
 
 class Frame(Rect):
@@ -56,7 +57,8 @@ class Frame(Rect):
                 c = min(max(0, cascade), min(z.width, z.height))
                 f = f.origin.x + c, f.origin.y + c, w, h
             elif fraction < 0 or fraction > 1:
-                raise ValueError('invalid %s: %.2f' % ('fraction', fraction))
+                t = _fmt('%.2f', fraction)
+                raise ValueError(_fmt_invalid(fraction=t))
         self.rect = f
 
 
@@ -320,7 +322,7 @@ class Screens(_Singletons):
             return self.screens[n]
         except (KeyError, TypeError, ValueError):
             pass
-        raise ValueError('invalid %s: %s' % ('screen', n))
+        raise ValueError(_fmt_invalid(screen=n))
 
     def __getitem__(self, n):
         '''Objects __getitem__, __len__ and 0-based indices are iterable.
@@ -329,7 +331,7 @@ class Screens(_Singletons):
             return self.Main
         elif 0 <= n < len(self):
             return self.screens[n]
-        raise IndexError('invalid %s: %s' % ('screen', n))
+        raise IndexError(_fmt_invalid(screen=n))
 
     def __len__(self):
         '''Return the total number of screens present,

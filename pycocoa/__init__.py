@@ -145,7 +145,7 @@ _isfrozen       = getattr(_sys, 'frozen', False)
 pycocoa_abspath = _pth.dirname(_pth.abspath(__file__))  # _sys._MEIPASS + '/pycocoa'
 _pycocoa        = __package__ or _pth.basename(pycocoa_abspath)
 
-__version__ = '25.01.18'
+__version__ = '25.01.25'
 # see setup.py for similar logic
 version = '.'.join(map(str, map(int, __version__.split('.'))))
 

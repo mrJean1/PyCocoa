@@ -12,7 +12,7 @@
 from pycocoa.bases import _Type2
 from pycocoa.fonts import Font
 from pycocoa.geometry import Rect4
-from pycocoa.lazily import _ALL_LAZY, _COLON_, _NN_
+from pycocoa.lazily import _ALL_LAZY, _COLON_, _fmt, _fmt_invalid, _NN_
 from pycocoa.nstypes import NSMain, NSScrollView, NSStr, NSTableColumn, \
                             NSTableView  # isNone, NSTextField
 from pycocoa.octypes import NSSize_t
@@ -29,7 +29,7 @@ from pycocoa.utils import _Globals, isinstanceOf, module_property_RO, \
 from pycocoa.windows import Window, WindowStyle
 
 __all__ = _ALL_LAZY.tables
-__version__ = '21.11.04'
+__version__ = '25.01.25'
 
 _Alignment = dict(center=NSTextAlignmentCenter,
                justified=NSTextAlignmentJustified,
@@ -70,7 +70,7 @@ def _format(header, col):
                 # col.sizeToFit()  # fits width of headerCell text!
                 col.setWidth_(float(f))
     except (IndexError, TypeError, ValueError):
-        raise ValueError('invalid %s: %s' % ('header', header))
+        raise ValueError(_fmt_invalid(header=header))
     return T
 
 
@@ -263,7 +263,7 @@ class _NSTableViewDelegate(object):
             return r[c] if 0 <= c < len(r) else _NS.EmptyCell
         except (IndexError, KeyError):  # TypeError, ValueError
             c = col.identifier()
-        return release(NSStr('[C%r, R%s]' % (c, row)))
+        return release(NSStr(_fmt('[C%r, R%s]', c, row)))
 
     # XXX never called, NSCell- vs NSView-based NSTableView?
 #   @_ObjC.method('@@i')

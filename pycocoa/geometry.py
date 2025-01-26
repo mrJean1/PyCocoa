@@ -7,14 +7,14 @@
 '''
 # all imports listed explicitly to help PyChecker
 from pycocoa.bases import _Type0
-from pycocoa.lazily import _ALL_LAZY
+from pycocoa.lazily import _ALL_LAZY, _fmt_invalid
 from pycocoa.nstypes import nsValue2py
 from pycocoa.octypes import NSPoint_t, NSRect_t, NSRect4_t, NSSize_t
 from pycocoa.utils import aspect_ratio, isinstanceOf, property_RO, \
                           type2strepr
 
 __all__ = _ALL_LAZY.geometry
-__version__ = '21.11.04'
+__version__ = '25.01.25'
 
 
 class Point(_Type0):
@@ -38,7 +38,7 @@ class Point(_Type0):
     def point(self, point):
         if isinstance(point, (tuple, list)):
             if len(point) != 2:
-                raise ValueError('invalid %s: %r' % ('point', point))
+                raise ValueError(_fmt_invalid(point=repr(point)))
             self.NS = NSPoint_t(*point)
         elif isinstance(point, Point):
             self.NS = point.NS
@@ -185,7 +185,7 @@ class Rect(_Type0):
             if len(rect) == 2:  # assume (w, h)
                 rect = (self._x, self._y) + tuple(rect)
             elif len(rect) != 4:
-                raise ValueError('invalid %s: %r' % ('rect', rect))
+                raise ValueError(_fmt_invalid(rect=repr(rect)))
             self.NS = NSRect4_t(*rect)
         elif isinstance(rect, Rect):
             self.NS = rect.NS
@@ -356,7 +356,7 @@ class Size(_Type0):
         '''
         if isinstance(size, (tuple, list)):
             if len(size) != 2:
-                raise ValueError('invalid %s: %r' % ('size', size))
+                raise ValueError(_fmt_invalid(size=repr(size)))
             self.NS = NSSize_t(*size)
         elif isinstance(size, Size):
             self.NS = size.NS

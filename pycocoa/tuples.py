@@ -13,21 +13,21 @@ from pycocoa.oslibs  import libCF
 from pycocoa.nstypes import ns2Type, NSArray, nsIter2, NSMutableArray
 from pycocoa.pytypes import py2NS, tuple2NS
 from pycocoa.runtime import isImmutable
-from pycocoa.utils   import isinstanceOf, _Ints, _Types
+from pycocoa.utils   import _fmt, isinstanceOf, _Ints, _Types
 
 __all__ = _ALL_LAZY.tuples
-__version__ = '21.11.04'
+__version__ = '25.01.25'
 
 
 def _at(inst, index):
     if not isinstance(index, _Ints):
-        raise TypeError('%s not an %s: %r' % (inst, 'index', index))
+        raise TypeError(_fmt('%s not an %s: %r', inst, 'index', index))
     i, n = index, len(inst)
     if i < 0:
         i += n
     if 0 <= i < n:
         return i
-    raise IndexError('%s out of range: %r' % (inst, index))
+    raise IndexError(_fmt('%s out of range: %r', inst, index))
 
 
 class Tuple(_Type0):  # note, List subclasses Tuple
@@ -66,7 +66,7 @@ class Tuple(_Type0):  # note, List subclasses Tuple
         return self.NS.containsObject_(py2NS(value))
 
     def __delitem__(self, key):
-        raise TypeError('%s %s[%r]' % ('del', self, key))
+        raise TypeError(_fmt('%s %s[%r]', 'del', self, key))
 
     def __eq__(self, other):
         isinstanceOf(other, _Types.List, Tuple, list, tuple, name='other')
@@ -117,10 +117,10 @@ class Tuple(_Type0):  # note, List subclasses Tuple
         raise TypeError('%s[%r] = %r' % (self, index, value))
 
     def append(self, value):
-        raise TypeError('%s.%s(%r)' % (self, 'append', value))
+        raise TypeError(_fmt('%s.%s(%r)', self, 'append', value))
 
     def clear(self):
-        raise TypeError('%s.%s()' % (self, 'clear'))
+        raise TypeError(_fmt('%s.%s()', self, 'clear'))
 
     def copy(self, *ranged):
         '''Make a shallow copy of this tuple.
@@ -139,11 +139,10 @@ class Tuple(_Type0):  # note, List subclasses Tuple
         v = py2NS(value)
         n = len(self)
         c = i = 0
+        indx_ = self.NS.indexOfObject_inRange_ if not identical else \
+                self.NS.indexOfObjectIdenticalTo_inRange_
         while i < n:
-            if identical:
-                i = self.NS.indexOfObjectIdenticalTo_inRange_(v, NSRange_t(i, n - i))
-            else:
-                i = self.NS.indexOfObject_inRange_(v, NSRange_t(i, n - i))
+            i = indx_(v, NSRange_t(i, n - i))
             if i == NSNotFound:
                 break
             i += 1
@@ -151,26 +150,25 @@ class Tuple(_Type0):  # note, List subclasses Tuple
         return c
 
     def extend(self, values):
-        raise TypeError('%s.%s(%r)' % (self, 'extend', values))
+        raise TypeError(_fmt('%s.%s(%r)', self, 'extend', values))
 
     def index(self, value, identical=False):
         '''Find an item, like C{tuple./list.index}.
 
            @keyword idential: Use ObjC C{idential} as comparison (bool).
         '''
-        if identical:
-            i = self.NS.indexOfObjectIdenticalTo_(py2NS(value))
-        else:
-            i = self.NS.indexOfObject_(py2NS(value))
+        v = py2NS(value)
+        i = self.NS.indexOfObject_(v) if not identical else \
+            self.NS.indexOfObjectIdenticalTo_(v)
         if i == NSNotFound:
-            raise ValueError('%s no such value: %r' % (self, value))
+            raise ValueError(_fmt('%s no such value: %r', self, value))
         return i
 
     def insert(self, index, value):
-        raise TypeError('%s.%s(%r, %r)' % (self, 'insert', index, value))
+        raise TypeError(_fmt('%s.%s(%r, %r)', self, 'insert', index, value))
 
     def pop(self, index=-1):
-        raise TypeError('%s.%s(%r)' % (self, 'pop', index))
+        raise TypeError(_fmt('%s.%s(%r)', self, 'pop', index))
 
     def _NS_copy(self, mutable, *ranged):
         '''(INTERNAL) Copy into an ObjC C{NS[Mutable]Array}.

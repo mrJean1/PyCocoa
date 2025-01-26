@@ -20,7 +20,7 @@ from pycocoa.oslibs  import cfNumber2bool, cfString, cfString2str, \
                             cfURL2str, _csignature, _free_memory, \
                             get_lib_framework, libCF, YES
 from pycocoa.runtime import isObjCInstanceOf, send_message, _Xargs
-from pycocoa.utils   import Adict, isinstanceOf, property_RO, \
+from pycocoa.utils   import Adict, _fmt, isinstanceOf, property_RO, \
                            _Strs, _Types, zfstr
 
 from ctypes  import ArgumentError, byref, cast, c_char_p, c_double, \
@@ -28,7 +28,7 @@ from ctypes  import ArgumentError, byref, cast, c_char_p, c_double, \
 import os
 
 __all__ = _ALL_LAZY.printers
-__version__ = '21.11.04'
+__version__ = '25.01.25'
 
 libPC = None  # loaded on-demand
 kPMServerLocal = None
@@ -135,7 +135,7 @@ class _PM_Type0(_Type0):
             get_libPC()
 
     def __str__(self):
-        return '%s(%r)' % (self.__class__.__name__, self.name)
+        return _fmt('%s(%r)', self.__class__.__name__, self.name)
 
     def _libPCcall(self, func, *args):  # like runtime._libobjcall
         try:
@@ -248,7 +248,8 @@ class Paper(_PM_Type0):
                     pm = p.PM
                     break
             else:
-                raise PrintError('no such %s: %r' % (Paper.__name__, name_pm))
+                t = _fmt('no such %s: %r', Paper.__name__, name_pm)
+                raise PrintError(t)
         elif isinstanceOf(name_pm, PMPaper_t, name='name_pm'):
             pm = name_pm
         _PM_Type0.__init__(self, pm)
@@ -421,7 +422,8 @@ class Printer(_PM_Type0):
                     ns = _nsPrinter(p.name, pm)
                     break
             else:
-                raise PrintError('no such %s: %r' % (Printer.__name__, name_ns_pm))
+                t = _fmt('no such %s: %r' % (Printer.__name__, name_ns_pm))
+                raise PrintError(t)
 
         elif isinstanceOf(name_ns_pm, PMPrinter_t):
             pm = name_ns_pm
@@ -563,7 +565,7 @@ class Printer(_PM_Type0):
 #         # <https://StackOverflow.com/questions/6452144/
 #         #        how-to-make-a-print-dialog-with-preview-for-printing-an-image-file>
 #         if not os.access(image, os.R_OK):
-#             raise PrintError('no such %s: %r' % ('image file', image))
+#             raise PrintError(_fmt('no such %s: %r', 'image file', image))
 #         im = NSImage.alloc().initWithContentsOfFile_(NSStr(image))
 #         vw = NSImageView.alloc().initWithFrame_(NSRect4_t(width=nim.size.width,
 #                                                          height=nim.size.height))
@@ -594,7 +596,7 @@ class Printer(_PM_Type0):
 
             if toPDF:
                 if os.access(toPDF, os.F_OK):
-                    raise PrintError('%s exists: %r' % ('PDF file', toPDF))
+                    raise PrintError(_fmt('%s exists: %r', 'PDF file', toPDF))
                 # <https://Developer.Apple.com/documentation/appkit/
                 #        nsprintoperation/1534130-pdfoperationwithview>
                 po = NSPrintOperation.PDFOperationWithView_insideRect_toPath_printInfo_(
@@ -771,7 +773,7 @@ class _StatusError(PrintError):
                 break
         else:
             k = 'OSStatus'
-        PrintError.__init__(self, '%s (%s) %s' % (k, sts, name))
+        PrintError.__init__(self, _fmt('%s (%s) %s', k, sts, name))
 
 
 # <https://www.OSStatus.com/search/results?platform=all&framework=all&search=0>

@@ -48,7 +48,8 @@ L{WindowStyle}, wrapping ObjC C{NSWindow}, etc.
 # all imports listed explicitly to help PyChecker
 from pycocoa.bases import _Type2
 from pycocoa.geometry import Rect
-from pycocoa.lazily import _ALL_LAZY, _COLON_, _isPython3  # PYCHOK used!
+from pycocoa.lazily import _ALL_LAZY, _COLON_, _fmt, _fmt_invalid, \
+                           _isPython3  # PYCHOK used!
 from pycocoa.nstypes import isNone, NSConcreteNotification, NSFont, \
                             NSImageView, NSMain, NSNotification, \
                             NSScreen, NSScrollView, NSStr, NSTableView, \
@@ -68,10 +69,10 @@ from pycocoa.utils import aspect_ratio, bytes2str, _Constants, _Globals, \
                           isinstanceOf, _Ints, module_property_RO, \
                           property_RO, _text_title2, _Types
 
-# from enum   import Enum
+# from enum import Enum
 
 __all__ = _ALL_LAZY.windows
-__version__ = '23.02.02'
+__version__ = '25.01.25'
 
 
 class AutoResizeError(ValueError):
@@ -108,7 +109,7 @@ def autoResizes(*options):
     c, e = AutoResize._masks(*options)
     if e is None:
         return c
-    raise AutoResizeError('invalid %s: %s' % ('option', e))
+    raise AutoResizeError(_fmt_invalid(option=e))
 
 
 # <https://Developer.Apple.com/documentation/appkit/nsbezelstyle>
@@ -199,7 +200,8 @@ class Window(_Type2):
         # XXX self.NS.setIdentifier_(int2NS(id(self)))
         self._NSuniqID = u = self.NS.uniqueID()
         if u in _Globals.Windows:
-            raise WindowError('%s %r exists: %r' % ('.uniqueID', u,  _Globals.Windows[u]))
+            t = _fmt('%s %r exists: %r', '.uniqueID', u, _Globals.Windows[u])
+            raise WindowError(t)
         elif u:
             _Globals.Windows[u] = self
 
@@ -599,7 +601,7 @@ def windowStyles(*styles):
     c, e = WindowStyle._masks(*styles)
     if e is None:
         return c
-    raise WindowStyleError('invalid %s: %s' % ('styles', e))
+    raise WindowStyleError(_fmt_invalid(styles=e))
 
 
 class MediaWindow(Window):
@@ -637,10 +639,7 @@ class TextWindow(Window):
         text, t = _text_title2(text_or_file, title)
         super(TextWindow, self).__init__(title=t, fraction=fraction, **kwds)
 
-        if font is None:
-            f = NSFont.userFixedPitchFontOfSize_(12)
-        else:
-            f = font.NS
+        f = NSFont.userFixedPitchFontOfSize_(12) if font is None else font.NS
         w, _, _ = nsTextSize3(text, f)
         # <https://Developer.Apple.com/library/content/documentation/
         #        Cocoa/Conceptual/TextUILayer/Tasks/CreateTextViewProg.html>
@@ -729,7 +728,7 @@ class _NSWindowDelegate(object):
     def _ns2w(self, ns):
         w = ns2Window(ns)
         if self.window != w:
-            raise RuntimeError('%r vs %r' % (self.window, w))
+            raise RuntimeError(_fmt('%r vs %r', self.window, w))
 
     @_ObjC.method('v@')
     def windowDidBecomeKey_(self, ns_notification):
@@ -861,10 +860,10 @@ def ns2Window(ns):
         w = _Globals.Windows[u]
         if w._NSuniqID == u:
             return w
-        t = '%r of %r' % (w._NSuniqID, w)
+        t = _fmt('%r of %r', w._NSuniqID, w)
     except KeyError:
         t = None
-    raise RuntimeError('%s %s %r vs %s' % (ns, '.uniqueID', u, t))
+    raise RuntimeError(_fmt('%s %s %r vs %s', ns, '.uniqueID', u, t))
 
 
 _Types.Window = NSWindow._Type = Window

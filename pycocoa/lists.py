@@ -6,7 +6,7 @@
 '''Type L{List}, wrapping ObjC C{NSMutableArray}.
 '''
 # all imports listed explicitly to help PyChecker
-from pycocoa.lazily  import _ALL_LAZY
+from pycocoa.lazily  import _ALL_LAZY, _fmt
 from pycocoa.nstypes import NSMutableArray
 from pycocoa.pytypes import list2NS, py2NS
 from pycocoa.runtime import isObjCInstanceOf
@@ -19,7 +19,7 @@ except ImportError:  # Python 2-
     from itertools import izip_longest as zip_longest
 
 __all__ = _ALL_LAZY.lists
-__version__ = '21.11.04'
+__version__ = '25.01.25'
 
 
 class List(Tuple):
@@ -42,8 +42,8 @@ class List(Tuple):
             indices = range(*index.indices(len(self)))
             for i, val in zip_longest(indices, value, fillvalue=missing):
                 if missing in (i, val):  # XXX only if val is missing?
-                    raise ValueError('%s len() mismatch %r vs %r' %
-                                     (self, index, value))
+                    t = _fmt('%s len() %r vs %r', self, index, value)
+                    raise ValueError(t)
                 self.NS.replaceObjectAtIndex_withObject_(i, py2NS(val))
         else:
             self.NS.replaceObjectAtIndex_withObject_(_at(self, index), py2NS(value))

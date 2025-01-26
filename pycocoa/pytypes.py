@@ -6,7 +6,7 @@
 '''Conversions from C{NS...} ObjC instances to Python.
 '''
 # all imports listed explicitly to help PyChecker
-from pycocoa.lazily  import _ALL_LAZY, _COLON_
+from pycocoa.lazily  import _ALL_LAZY, _COLON_, _fmt, _fmt_invalid
 from pycocoa.nstypes import NSArray, NSData, NSDate, NSDecimal, \
                             NSDictionary, NSDouble, NSInt, NSLong, \
                             NSLongLong, NSMain, NSMutableArray, \
@@ -22,7 +22,7 @@ from decimal import Decimal as _Decimal
 from types   import GeneratorType as _Generator
 
 __all__ = _ALL_LAZY.pytypes
-__version__ = '21.11.04'
+__version__ = '25.01.25'
 
 _Numbers  = _Ints  + (float, _Decimal)
 
@@ -42,8 +42,9 @@ def _len2NS(py, ns, getCount):
     '''
     n, m = len(py), getCount(ns)
     if m != n:
-        t = (ns.objc_classname, m, clipstr(repr(py)), n)
-        raise RuntimeError('%s[%s] vs %s[%s]' % t)
+        t = _fmt('%s[%s] vs %s[%s]', ns.objc_classname, m,
+                                     clipstr(repr(py)), n)
+        raise RuntimeError(t)
     return ns
 
 
@@ -164,9 +165,9 @@ def int2NS(py):
        @raise TypeError: If C{py} not an C{int} or C{long}.
     '''
     if isinstanceOf(py, _Ints, name='py'):
-        if abs(py) < 1 << 31:
+        if abs(py) < (1 << 31):
             return NSInt(py)
-        elif abs(py) < 1 << 63:
+        elif abs(py) < (1 << 63):
             return NSLong(py)
         else:
             return NSLongLong(py)
@@ -209,7 +210,8 @@ def None2NS(py):
     '''
     if py is None:
         return NSMain.Null
-    raise ValueError('invalid %s: %r, not %s' % ('py', py, 'None'))
+    t = _fmt_invalid(py=repr(py))
+    raise ValueError(_fmt('s, not %s', t, None))
 
 
 def range2NS(py):
@@ -260,16 +262,14 @@ def time2NS(py=None, since=1970):
               or C{B{py}=time.time(), B{since}=1970}.
     '''
     if py is None:
-        ns = NSDate.alloc().initWithTimeIntervalSinceNow_(0.0)
+        s = t = 0.0
     elif isinstanceOf(py, name='py', *_Numbers):
-        t = float(py)
-        if since == 1970:
-            ns = NSDate.alloc().initWithTimeIntervalSince1970_(t)
-        elif since == 2001:
-            ns = NSDate.alloc().initWithTimeIntervalSinceReferenceDate_(t)
-        else:
-            ns = NSDate.alloc().initWithTimeIntervalSinceNow_(t)
-    return ns
+        s, t = since, float(py)
+    NS = NSDate.alloc()
+    m_ = NS.initWithTimeIntervalSince1970_ if s == 1970 else (
+         NS.initWithTimeIntervalSinceReferenceDate_ if s == 2001 else
+         NS.initWithTimeIntervalSinceNow_)
+    return m_(t)
 
 
 def tuple2NS(py):
@@ -310,15 +310,15 @@ def url2NS(py, url2=None):
              for parsing an C{NSURL}.
     '''
     ns = release(NSStr(py))
+    NS = NSURL.alloc()
     if _COLON_ in bytes2str(py):
-        if url2:
-            return NSURL.alloc().initWithString_relativeToURL_(ns, url2NS(url2))
-        else:
-            return NSURL.alloc().initWithString_(ns)
+        nu = NS.initWithString_(ns) if not url2 else \
+             NS.initWithString_relativeToURL_(ns, url2NS(url2))
     elif url2:
-        return NSURL.alloc().initFileURLWithPath_relativeToURL_(ns, url2NS(url2))
+        nu = NS.initFileURLWithPath_relativeToURL_(ns, url2NS(url2))
     else:
-        return NSURL.alloc().initFileURLWithPath_(ns)
+        nu = NS.initFileURLWithPath_(ns)
+    return nu
 
 
 _py2NS = {bool:       bool2NS,
@@ -393,7 +393,7 @@ def py2NS(py):
             if isinstance(py, ty):
                 break
         else:
-            raise TypeError('unhandled %s(%s): %r' % ('type', 'py', py))
+            raise TypeError(_fmt('unhandled %s(%s): %r', 'type', 'py', py))
         _py2NS[type(py)] = ns
     return ns(py)
 

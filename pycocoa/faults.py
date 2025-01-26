@@ -33,7 +33,7 @@ functions L{getUncaughtExceptionHandler} and L{setUncaughtExceptionHandler}
 are.
 '''
 # all imports listed explicitly to help PyChecker
-from pycocoa.lazily  import _ALL_DOCS, _ALL_LAZY, _NL_, _NN_, _pycocoa_, _PY_FH
+from pycocoa.lazily  import _ALL_DOCS, _ALL_LAZY, _fmt, _NL_, _NN_, _pycocoa_, _PY_FH
 from pycocoa.nstypes import _not_given_, NSExceptionError, NSMain
 from pycocoa.oslibs  import _setUncaughtExceptionHandler, _UncaughtExceptionHandler_t
 from pycocoa.runtime import  ObjCInstance  # release
@@ -44,7 +44,7 @@ import signal as _signal
 import sys
 
 __all__ = _ALL_LAZY.faults
-__version__ = '21.11.04'
+__version__ = '25.01.25'
 
 _exiting = -9  # default _exit and status
 # SIGnals handled by Python 3 C{faulthandler}
@@ -333,7 +333,7 @@ def setUncaughtExceptionHandler(handler, log=True, raiser=False):
             del _h  # release(_h)
         _Globals.Xhandler2 = (handler, _handler)  # retain(_handler)
     elif raiser:
-        raise RuntimeError('no %s' % (setUncaughtExceptionHandler.__name__,))
+        raise RuntimeError(_fmt('no %s', setUncaughtExceptionHandler.__name__,))
     return h  # previous
 
 

@@ -37,7 +37,7 @@
 '''
 # all imports listed explicitly to help PyChecker
 from pycocoa.bases   import _Type0
-from pycocoa.lazily  import _ALL_LAZY, _NN_, _SPACE_
+from pycocoa.lazily  import _ALL_LAZY, _fmt, _fmt_invalid, _NN_, _SPACE_
 from pycocoa.nstypes import isNone, NSFont, nsIter, nsIter2, NSMain, \
                             NSStr, nsString2str
 from pycocoa.oslibs  import NSFontBoldMask, NSFontItalicMask, \
@@ -53,7 +53,7 @@ from pycocoa.utils   import Adict, bytes2str, _ByteStrs, _Constants, flint, \
                            _Types
 
 __all__ = _ALL_LAZY.fonts
-__version__ = '21.11.04'
+__version__ = '25.01.25'
 
 # <https://Developer.Apple.com/documentation/appkit/nsfont.weight>
 # _NSFontWeigthHeavy      = 13 ?
@@ -149,14 +149,14 @@ def _traitsin(traits, raiser=True):
             if m:
                 ts |= m
             elif raiser and m is None:
-                raise FontTraitError('invalid %s: %r' % ('trait', t))
+                raise FontTraitError(_fmt_invalid(trait=repr(t)))
     else:
-        raise FontTraitError('invalid %s: %r' % ('traits', traits))
+        raise FontTraitError(_fmt_invalid(traits=repr(traits)))
     # check for mutually exclusive traits
     if _traitex(ts, FontTrait.Condensed | FontTrait.Expanded) or \
        _traitex(ts, FontTrait.Italic    | FontTrait.UnItalic) or \
        _traitex(ts, FontTrait.Bold      | FontTrait.UnBold):
-        raise FontTraitError('incompatible %s: %r' % ('traits', traits))
+        raise FontTraitError(_fmt('incompatible %s: %r', 'traits', traits))
     return ts
 
 
@@ -167,7 +167,7 @@ def _weightin(weight):
             return int(weight)
     except (TypeError, ValueError):
         pass
-    raise ValueError('invalid %s: %r' % ('weight', weight))
+    raise ValueError(_fmt_invalid(weight=repr(weight)))
 
 
 class Font(_Type0):
@@ -238,7 +238,7 @@ class Font(_Type0):
             if isNone(ns):
                 self._family = py
                 self._size   = flint(size)
-                raise FontError('no such %s: %s' % ('font', self._argstr()))
+                raise FontError(_fmt_invalid(font=self._argstr()))
 
         self._NS = ns  # _RO
         # <https://Developer.Apple.com/library/content/documentation/
@@ -256,8 +256,8 @@ class Font(_Type0):
         self._weight = NSMain.FontManager.weightOfFont_(ns)
 
     def __str__(self):
-        return '%s(%s)' % (self.__class__.__name__,
-                           self._argstr(name=self.name))
+        return _fmt('%s(%s)', self.__class__.__name__,
+                              self._argstr(name=self.name))
 
     def _argstr(self, name=_NN_):
         td = Adict(family=self.family, size=self.size)

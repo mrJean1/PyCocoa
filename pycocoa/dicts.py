@@ -7,7 +7,7 @@
 '''
 # all imports listed explicitly to help PyChecker
 from pycocoa.bases   import _Type0
-from pycocoa.lazily  import _ALL_LAZY, _DOT_
+from pycocoa.lazily  import _ALL_LAZY, _DOT_, _fmt, _SPACE_
 from pycocoa.nstypes import isNone, NSDictionary, nsIter2, \
                             NSMutableDictionary, ns2Type
 from pycocoa.pytypes import py2NS, type2NS
@@ -16,7 +16,7 @@ from pycocoa.runtime import isImmutable, isObjCInstanceOf, \
 from pycocoa.utils   import isinstanceOf, missing, _Types
 
 __all__ = _ALL_LAZY.dicts
-__version__ = '21.11.04'
+__version__ = '25.01.25'
 
 
 def _dict_cmp(dict1, dict2):
@@ -33,15 +33,14 @@ def _dict_kwds(args, kwds, name):
         return kwds, {}
     try:
         if len(args) != 1:
-            raise ValueError
+            raise ValueError('invalid')
         arg0 = args[0]
         if not isinstance(arg0, (Dict, FrozenDict,
                                  ObjCClass, ObjCInstance)):
             arg0 = dict(arg0)  # tuple, list to dict
-    except TypeError:
-        raise TypeError('%s() invalid: %r' % (name, args))
-    except ValueError:
-        raise ValueError('%s() invalid: %r' % (name, args))
+    except (TypeError, ValueError) as x:
+        E = type(x)
+        raise E(_fmt('%s() %r: %s', name, args, x))
     return arg0, kwds
 
 
@@ -83,7 +82,7 @@ class FrozenDict(_Type0):
                                            and _dict_cmp(other, self)
 
     def __delitem__(self, key):
-        raise TypeError('%s %s[%r]' % ('del', self, key))
+        raise TypeError(_fmt('%s %s[%r]', 'del', self, key))
 
     def __getitem__(self, key):
         k, _, value = self._NS_get3(key)
@@ -102,10 +101,10 @@ class FrozenDict(_Type0):
         return not self.__eq__(other)
 
     def __setitem__(self, key, value):
-        raise TypeError('%s[%r] = %r' % (self, key, value))
+        raise TypeError(_fmt('%s[%r] = %r', self, key, value))
 
     def clear(self):
-        raise TypeError('%s()' % (_DOT_(self, 'clear'),))
+        raise TypeError(_fmt('%s()', _DOT_(self, 'clear')))
 
     def copy(self):
         '''Make a shallow copy.
@@ -140,7 +139,8 @@ class FrozenDict(_Type0):
     __iter__ = keys
 
     def pop(self, key, **unused):
-        raise TypeError('%s(%r)' % (_DOT_(self, self.pop.__name__), key))
+        n = _DOT_(self, self.pop.__name__)
+        raise TypeError(_fmt('%s(%r)', n, key))
 
     def values(self):
         '''Yield the values, like C{dict.values}.
@@ -165,7 +165,7 @@ class FrozenDict(_Type0):
 
     def _NS_KeyError(self, key, k):
         # XXX KeyError(key) prints repr(key), adding "..."
-        raise KeyError('%s no such key: %s (%r)' % (self, key, k))
+        raise KeyError(_fmt('%s no such key: %s (%r)', self, key, k))
 
 
 class Dict(FrozenDict):
@@ -241,7 +241,7 @@ class Dict(FrozenDict):
         if value is not missing:
             return value
         elif default is missing:
-            raise ValueError('%s missing' % ('default',))
+            raise ValueError(_SPACE_('default', missing))
         self.NS.setObject_forKey_(type2NS(default), k)
         return default
 
