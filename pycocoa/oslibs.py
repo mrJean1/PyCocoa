@@ -6,23 +6,21 @@
 '''Various ObjC and macOS libraries, signatures, constants, etc.
 
 @var Libs: The loaded C{macOS} libraries, all C{.dylib}.
-@var Libs.AppKit: The 'AppKit.framework/AppKit' library.
-@var Libs.C: The 'libc.dylib' library.
-@var Libs.CoreFoundation: The 'CoreFoundation.framework/CoreFoundation' library.
-@var Libs.CoreGraphics: The 'CoreGraphics.framework/CoreGraphics' library.
-@var Libs.CoreText: The 'CoreText.framework/CoreText' library.
-@var Libs.Foundation: The 'Foundation.framework/Foundation' library.
-@var Libs.ObjC: The 'libobjc.dylib' library.
-
-@note: The macOS C{libc.dylib} library (C{ctypes.CDLL}) is also installed,
-but only exported as C{Libs.C}.
+@var Libs.AppKit: The '/System/Library/Frameworks/AppKit.framework/AppKit' library.
+@var Libs.C: The '/usr/lib/libc.dylib' library.
+@var Libs.CoreFoundation: The '/System/Library/Frameworks/CoreFoundation.framework/CoreFoundation' library.
+@var Libs.CoreGraphics: The '/System/Library/Frameworks/CoreGraphics.framework/CoreGraphics' library.
+@var Libs.CoreText: The '/System/Library/Frameworks/CoreText.framework/CoreText' library.
+@var Libs.Foundation: The '/System/Library/Frameworks/Foundation.framework/Foundation' library.
+@var Libs.ObjC: The '/usr/lib/libobjc.dylib' library.
 
 @var NO:  ObjC's False (C{const c_byte}).
 @var YES: ObjC's True (C{const c_byte}).
 
 '''
 # all imports listed explicitly to help PyChecker
-from pycocoa.lazily import _ALL_LAZY, _bNN_, _DOT_, _NN_
+from pycocoa.lazily import _ALL_LAZY, _bNN_, _COMMASPACE_, _Dmain_, _DOT_, \
+                           _EQUALS_, _fmt_invalid, _NN_  # _sys
 from pycocoa.octypes import Allocator_t, __arm64__, Array_t, BOOL_t, CFIndex_t, \
                             CFRange_t, CGBitmapInfo_t, CGDirectDisplayID_t, \
                             CGError_t, CGFloat_t, CGGlyph_t, CGPoint_t, \
@@ -38,6 +36,7 @@ from pycocoa.octypes import Allocator_t, __arm64__, Array_t, BOOL_t, CFIndex_t, 
 from pycocoa.utils import Adict, bytes2str, _Constants, _fmt, _macOSver2, \
                           str2bytes
 
+from copy import copy
 from ctypes import byref, cast, CDLL, c_buffer, c_byte, c_char, \
                    c_char_p, c_double, c_float, c_int, c_int8, c_int16, \
                    c_int32, c_int64, CFUNCTYPE, c_long, c_longlong, \
@@ -46,12 +45,13 @@ from ctypes import byref, cast, CDLL, c_buffer, c_byte, c_char, \
 try:
     from ctypes.util import find_library as _find_library
 except ImportError:  # XXX Pythonista/iOS
-    def _find_library(*unused):  # PYCHOK expected
+    def _find_library(*unused):  # PYCHOK redef
         return None  # not found
 from os.path import join as _join, sep as _SEP
+# import sys as _sys  # from .lazily
 
 __all__ = _ALL_LAZY.oslibs
-__version__ = '25.01.25'
+__version__ = '25.01.31'
 
 _framework_ = 'framework'
 _leaked2    = []  # leaked memory, 2-tuples (ptr, size)
@@ -59,16 +59,35 @@ _libs_cache =  Adict()  # loaded libraries, by name
 # 'PointerType' in Python 2.6-, 'PyCPointerType' later
 _POINTER_ts =  set(type(POINTER(_t)) for _t in (Ivar_t, Method_t, Protocol_t,
                objc_method_description_t, objc_property_t, objc_property_attribute_t))
+# _thismodule = _sys.modules[__name__]
 
 NO  = False  # c_byte(0)
 YES = True   # c_byte(1)
 
 
-def _csignature(libfunc, restype, *argtypes):
+class OSlibError(OSError):
+    '''Couldn't find or load a macOS C{.dylib} library.
+    '''
+    def __init__(self, verb, name, *ns):
+        t = _fmt("couldn't %s lib %r", verb, name)
+        if ns:
+            ns = _COMMASPACE_(*map(repr, ns))
+            t  = _fmt('%s as %s', t, ns)
+        OSError.__init__(self, t)
+
+
+def _csignature(libfunc, restype, *argtypes, **rescheck):
     # set the result and argument ctypes of a library function
+    # plus optionally a 1-argument result function
     libfunc.restype = restype
     if argtypes:
         libfunc.argtypes = argtypes
+    if rescheck:
+        n, f = rescheck.popitem()
+        if not callable(f):
+            t = _EQUALS_(n, f)
+            raise TypeError(_fmt_invalid(rescheck=t))
+        libfunc.errcheck = f
 
 
 def _csignature_list(libfunc, restype, *argtypes):
@@ -109,20 +128,32 @@ def _csignature_variadic(libfunc, restype, *argtypes):
         libfunc.argtypes = argtypes
 
 
+def _dllattr(dll, *arg_ctype, **kwd_ctype):  # in .runtime
+    # duplicate a C{dll} attribute
+    n,  _t = arg_ctype or kwd_ctype.popitem()
+    v = _t.in_dll(dll, n)
+    # setattr(_thismodule, n, v)  # into C{this module}
+    return v
+
+
 def _dup(result, ctype):
     # duplicate a NULL- or nul-terminated array of pointers
     # or string of bytes, leaking the original temporarily
-    n = 0
-    while result[n]:
-        n += 1
-    dup = result[:n]  # [result[i] for i in range(n)]
+    for n, r in enumerate(result):
+        if not r:
+            dup = result[:n]  # [result[i] for i in range(n)]
+            n  += 1
+            break
+    else:
+        dup = copy(result)
+        n = len(result)
     # leak the original memory
-    _free_memory(result, (n + 1) * sizeof(ctype))
+    _free_memory(result, n * sizeof(ctype))
     return dup
 
 
 def _free_memory(ptr, size):
-    # leak freed memory, only temporarily
+    # leak freed memory, but only temporarily
     _leaked2.append((ptr, size))
     # free several, previously leaked memory, but
     # this segfaults or produces erratic results,
@@ -141,8 +172,8 @@ if _macOSver2() > (10, 15):  # Big Sur and later
     from ctypes import _dlopen
 
     def _find_lib(name):
-        '''Mimick C{ctype.util.find_library}, return the
-           (qualified) name of the library.
+        '''Mimick C{ctype.util.find_library}, return
+           the (fully-qualified) name of the library.
         '''
         ns = []
         for n in (_find_library(name), name,
@@ -156,17 +187,12 @@ if _macOSver2() > (10, 15):  # Big Sur and later
                 except (OSError, TypeError):
                     pass
                 ns.append(n)
-        ns = _fmt('%r as %s', name, ", ".join(ns))
-        raise _lib_Error('find', ns)
+        raise OSlibError('find', name, *ns)
 
     _Apple_Si = __arm64__  # and _macOSver2() > (11, 0)
 else:
     _Apple_Si =  False
     _find_lib = _find_library
-
-
-def _lib_Error(verb, ns):  # helper for _find_lib and _load_lib
-    return OSError(_fmt("couldn't %s lib %s", verb, ns))
 
 
 def _load_lib(name):  # PYCHOK expected
@@ -182,7 +208,7 @@ def _load_lib(name):  # PYCHOK expected
         v = 'load'
     else:
         v = 'find'
-    raise _lib_Error(v, repr(name))
+    raise OSlibError(v, name)
 
 
 def get_lib(name):
@@ -192,21 +218,28 @@ def get_lib(name):
 
        @return: The library (C{ctypes.CDLL}).
 
+       @raise OSlibError: No C{B{name}.dylib} library.
+
        @note: Private attribute C{._name} shows the library path.
     '''
-    if name not in _libs_cache:
-        _libs_cache[name] = _load_lib(_find_lib(name))
-    return _libs_cache[name]
+    try:
+        lib = _libs_cache[name]
+    except KeyError:
+        _libs_cache[name] = lib = _load_lib(_find_lib(name))
+    return lib
 
 
 def get_lib_framework(name, services='ApplicationServices', version=_NN_):
-    '''Load a C{Frameworks services .framework} library.
+    '''Load a C{Frameworks B{services} B{name}.framework} library.
 
        @param name: Library base name (C{str}).
        @keyword services: Services framework base name (C{str}).
-       @keyword version: Framework version (C{str}), if not 'Current'.
+       @keyword version: C{Framework/Versions/B{version}}, overriding
+                         C{'Current'} (C{str}).
 
        @return: The library (C{ctypes.CDLL}).
+
+       @raise OSlibError: No C{B{name}.framework} library.
 
        @note: Private attribute C{._name} shows the library path.
 
@@ -215,14 +248,16 @@ def get_lib_framework(name, services='ApplicationServices', version=_NN_):
         - get_lib_framework('Metadata', services='CoreServices')
     '''
     n_fw = _DOT_(name, _framework_)
-    if n_fw not in _libs_cache:
+    try:
+        lib = _libs_cache[n_fw]
+    except KeyError:
         s_fw = _DOT_(services, _framework_)
         if version:  # PYCHOK not 'Current'
             name = _join('Versions', version, name)  # PYCHOK version
         p = _join(_SEP, 'System', 'Library', 'Frameworks',
                   s_fw, 'Frameworks', n_fw, name)
-        _libs_cache[n_fw] = _load_lib(p)
-    return _libs_cache[n_fw]
+        _libs_cache[n_fw] = lib = _load_lib(p)
+    return lib
 
 
 def get_libs():
@@ -251,7 +286,7 @@ def leaked2():
        @return: 2-Tuple (I{number}, I{size}) with the I{number} of
                 memory leaks and total I{size} leaked, in bytes.
     '''
-    return len(_leaked2), sum(t[1] for t in _leaked2)
+    return len(_leaked2), sum(z for _, z in _leaked2)
 
 
 def _listdup(result, *unused):  # func, args
@@ -272,8 +307,8 @@ libCF = get_lib('CoreFoundation')
 # see also framework_constants_via_ctypes.py and -_pyobjc.py
 # <https://Gist.GitHub.com/pudquick/8f65bb9b306f91eafdcc> and
 # <https://Gist.GitHub.com/pudquick/ac8f22326f095ed2690e>
-kCFAllocatorDefault   = Allocator_t.in_dll(libCF, 'kCFAllocatorDefault')  # XXX or NULL
-kCFRunLoopDefaultMode =    c_void_p.in_dll(libCF, 'kCFRunLoopDefaultMode')
+kCFAllocatorDefault   = _dllattr(libCF, kCFAllocatorDefault=Allocator_t)  # XXX or NULL
+kCFRunLoopDefaultMode = _dllattr(libCF, kCFRunLoopDefaultMode=c_void_p)
 
 # <https://Developer.Apple.com/documentation/corefoundation/
 #          cfstringbuiltinencodings?language=objc>
@@ -496,10 +531,11 @@ def cfURLResolveAlias(alias):
 
        @return: The alias' target (C{NSURL}) or C{None}.
     '''
-    ns = libCF.CFURLCreateBookmarkDataFromFile(kCFAllocatorDefault, cast(alias, URL_t), 0) or None
+    kA = kCFAllocatorDefault
+    ns = libCF.CFURLCreateBookmarkDataFromFile(kA, cast(alias, URL_t), 0) or None
     if ns:
-        ns = libCF.CFURLCreateByResolvingBookmarkData(kCFAllocatorDefault, ns,
-                                                      kCFURLBookmarkResolutionWithoutUIMask, 0, 0, NO, 0)
+        kM = kCFURLBookmarkResolutionWithoutUIMask
+        ns = libCF.CFURLCreateByResolvingBookmarkData(kA, ns, kM, 0, 0, NO, 0)
     return ns
 
 
@@ -518,14 +554,14 @@ def cfURL2str(url):
 # we can find the NSApplication, NSWindow, and NSView classes.
 libAppKit = get_lib('AppKit')
 
-NSApplicationDidHideNotification   = c_void_p.in_dll(libAppKit, 'NSApplicationDidHideNotification')
-NSApplicationDidUnhideNotification = c_void_p.in_dll(libAppKit, 'NSApplicationDidUnhideNotification')
+NSApplicationDidHideNotification   = _dllattr(libAppKit, NSApplicationDidHideNotification=c_void_p)
+NSApplicationDidUnhideNotification = _dllattr(libAppKit, NSApplicationDidUnhideNotification=c_void_p)
 
 # see NSApplication.nextEventMatchingMask:untilDate:inMode:dequeue:
-NSDefaultRunLoopMode       = RunLoop_t.in_dll(libAppKit, 'NSDefaultRunLoopMode')
-NSEventTrackingRunLoopMode = RunLoop_t.in_dll(libAppKit, 'NSEventTrackingRunLoopMode')
-NSModalPanelRunLoopMode    = RunLoop_t.in_dll(libAppKit, 'NSModalPanelRunLoopMode')
-# UITrackingRunLoopMode    = RunLoop_t.in_dll(libAppKit, 'UITrackingRunLoopMode')
+NSDefaultRunLoopMode       = _dllattr(libAppKit, NSDefaultRunLoopMode=RunLoop_t)
+NSEventTrackingRunLoopMode = _dllattr(libAppKit, NSEventTrackingRunLoopMode=RunLoop_t)
+NSModalPanelRunLoopMode    = _dllattr(libAppKit, NSModalPanelRunLoopMode=RunLoop_t)
+# UITrackingRunLoopMode    = _dllattr(libAppKit, UITrackingRunLoopMode=RunLoop_t)
 
 # NSApplication.h
 NSApplicationPresentationDefault                 = 0
@@ -791,8 +827,8 @@ kCGBitmapByteOrderMask     = 7 << 12
 # /System/Library/Frameworks/ApplicationServices.framework/Frameworks/...
 #  ImageIO.framework/Headers/CGImageProperties.h
 try:  # missing in 12.0.1 macOS Monterey
-    kCGImagePropertyGIFDictionary = c_void_p.in_dll(libCG, 'kCGImagePropertyGIFDictionary')
-    kCGImagePropertyGIFDelayTime  = c_void_p.in_dll(libCG, 'kCGImagePropertyGIFDelayTime')
+    kCGImagePropertyGIFDictionary = _dllattr(libCG, kCGImagePropertyGIFDictionary=c_void_p)
+    kCGImagePropertyGIFDelayTime  = _dllattr(libCG, kCGImagePropertyGIFDelayTime=c_void_p)
 except ValueError:
     pass
 # /System/Library/Frameworks/ApplicationServices.framework/Frameworks/...
@@ -853,14 +889,14 @@ _csignature(libCG.CGWarpMouseCursorPosition, CGError_t, CGPoint_t)
 libCT = get_lib('CoreText')
 
 # CoreText constants
-kCTFontAttributeName       = c_void_p.in_dll(libCT, 'kCTFontAttributeName')
-kCTFontFamilyNameAttribute = c_void_p.in_dll(libCT, 'kCTFontFamilyNameAttribute')
-kCTFontTraitsAttribute     = c_void_p.in_dll(libCT, 'kCTFontTraitsAttribute')
+kCTFontAttributeName       = _dllattr(libCT, kCTFontAttributeName=c_void_p)
+kCTFontFamilyNameAttribute = _dllattr(libCT, kCTFontFamilyNameAttribute=c_void_p)
+kCTFontTraitsAttribute     = _dllattr(libCT, kCTFontTraitsAttribute=c_void_p)
 
-kCTFontSlantTrait          = c_void_p.in_dll(libCT, 'kCTFontSlantTrait')  # traits dict key -> -1.0..+1.0
-kCTFontSymbolicTrait       = c_void_p.in_dll(libCT, 'kCTFontSymbolicTrait')  # traits dict key -> 0
-kCTFontWeightTrait         = c_void_p.in_dll(libCT, 'kCTFontWeightTrait')  # traits dict key -> -1.0..+1.0
-kCTFontWidthTrait          = c_void_p.in_dll(libCT, 'kCTFontWidthTrait')  # traits dict key -> -1.0..+1.0
+kCTFontSlantTrait          = _dllattr(libCT, kCTFontSlantTrait=c_void_p)  # traits dict key -> -1.0..+1.0
+kCTFontSymbolicTrait       = _dllattr(libCT, kCTFontSymbolicTrait=c_void_p)  # traits dict key -> 0
+kCTFontWeightTrait         = _dllattr(libCT, kCTFontWeightTrait=c_void_p)  # traits dict key -> -1.0..+1.0
+kCTFontWidthTrait          = _dllattr(libCT, kCTFontWidthTrait=c_void_p)  # traits dict key -> -1.0..+1.0
 
 # constants from CTFontTraits.h
 kCTFontClassMaskShift = 28
@@ -1053,7 +1089,7 @@ _csignature(libobjc.objc_setAssociatedObject, c_void, Id_t, c_void_p, Id_t, c_in
 # Class_t objc_getClass(const char *name)
 _csignature(libobjc.objc_getClass, Class_t, c_char_p)
 # int objc_getClassList(Class_t *buffer, int bufferLen)
-# Pass None for buffer to obtain just the total number of classes.
+# Pass C{None} for buffer to obtain just the total number of classes.
 _csignature(libobjc.objc_getClassList, c_int, Class_t, c_int)
 # Class_t objc_getMetaClass(const char *name)
 _csignature(libobjc.objc_getMetaClass, Class_t, c_char_p)
@@ -1159,7 +1195,7 @@ class Libs(_Constants):
 
 Libs = Libs()  # PYCHOK singleton
 
-if __name__ == '__main__':
+if __name__ == _Dmain_:
 
     from pycocoa.utils import _all_listing, _varstr
 
@@ -1167,24 +1203,26 @@ if __name__ == '__main__':
 
     _all_listing(__all__, locals())
 
+# python3 -m pycocoa.oslibs
+#
 # pycocoa.oslibs.__all__ = tuple(
-#  pycocoa.oslibs.get_lib is <function .get_lib at 0x100663740>,
-#  pycocoa.oslibs.get_lib_framework is <function .get_lib_framework at 0x1006637e0>,
-#  pycocoa.oslibs.get_libs is <function .get_libs at 0x100663880>,
-#  pycocoa.oslibs.leaked2 is <function .leaked2 at 0x1006632e0>,
-#  pycocoa.oslibs.libAppKit is <CDLL '/System/Library/Frameworks/AppKit.framework/AppKit', handle 3a0e1b7e8 at 0x10083d710>,
-#  pycocoa.oslibs.libCF is <CDLL '/System/Library/Frameworks/CoreFoundation.framework/CoreFoundation', handle 3a0e1dbd0 at 0x1005daed0>,
-#  pycocoa.oslibs.libCG is <CDLL '/System/Library/Frameworks/CoreGraphics.framework/CoreGraphics', handle 3a0e18938 at 0x10083d750>,
-#  pycocoa.oslibs.libCT is <CDLL '/System/Library/Frameworks/CoreText.framework/CoreText', handle 3a0e1ab90 at 0x100833250>,
-#  pycocoa.oslibs.libFoundation is <CDLL '/System/Library/Frameworks/Foundation.framework/Foundation', handle 3a0e1a630 at 0x100858290>,
-#  pycocoa.oslibs.libobjc is <CDLL '/usr/lib/libobjc.dylib', handle 3a0e1cb68 at 0x1007ea090>,
-#  pycocoa.oslibs.Libs.AppKit=<CDLL '/System/Library/Frameworks/AppKit.framework/AppKit', handle 3a0e1b7e8 at 0x10083d710>,
-#                     .C=<CDLL '/usr/lib/libc.dylib', handle 3a0e10700 at 0x100832d10>,
-#                     .CoreFoundation=<CDLL '/System/Library/Frameworks/CoreFoundation.framework/CoreFoundation', handle 3a0e1dbd0 at 0x1005daed0>,
-#                     .CoreGraphics=<CDLL '/System/Library/Frameworks/CoreGraphics.framework/CoreGraphics', handle 3a0e18938 at 0x10083d750>,
-#                     .CoreText=<CDLL '/System/Library/Frameworks/CoreText.framework/CoreText', handle 3a0e1ab90 at 0x100833250>,
-#                     .Foundation=<CDLL '/System/Library/Frameworks/Foundation.framework/Foundation', handle 3a0e1a630 at 0x100858290>,
-#                     .ObjC=<CDLL '/usr/lib/libobjc.dylib', handle 3a0e1cb68 at 0x1007ea090>,
+#  pycocoa.oslibs.get_lib is <function .get_lib at 0x1029dc220>,
+#  pycocoa.oslibs.get_lib_framework is <function .get_lib_framework at 0x1029dc2c0>,
+#  pycocoa.oslibs.get_libs is <function .get_libs at 0x1029dc360>,
+#  pycocoa.oslibs.leaked2 is <function .leaked2 at 0x1029dc400>,
+#  pycocoa.oslibs.libAppKit is <CDLL '/System/Library/Frameworks/AppKit.framework/AppKit', handle 3e65e7ae8 at 0x1026b3610>,
+#  pycocoa.oslibs.libCF is <CDLL '/System/Library/Frameworks/CoreFoundation.framework/CoreFoundation', handle 3e65e3f40 at 0x1026b3390>,
+#  pycocoa.oslibs.libCG is <CDLL '/System/Library/Frameworks/CoreGraphics.framework/CoreGraphics', handle 3e6518008 at 0x1026b39d0>,
+#  pycocoa.oslibs.libCT is <CDLL '/System/Library/Frameworks/CoreText.framework/CoreText', handle 3e65e5ff8 at 0x1026b3b10>,
+#  pycocoa.oslibs.libFoundation is <CDLL '/System/Library/Frameworks/Foundation.framework/Foundation', handle 3e65e5570 at 0x1026b3c50>,
+#  pycocoa.oslibs.libobjc is <CDLL '/usr/lib/libobjc.dylib', handle 3e65e184c at 0x1026b3d90>,
+#  pycocoa.oslibs.Libs.AppKit=<CDLL '/System/Library/Frameworks/AppKit.framework/AppKit', handle 3e65e7ae8 at 0x1026b3610>,
+#                     .C=<CDLL '/usr/lib/libc.dylib', handle 3e650b570 at 0x10272ae40>,
+#                     .CoreFoundation=<CDLL '/System/Library/Frameworks/CoreFoundation.framework/CoreFoundation', handle 3e65e3f40 at 0x1026b3390>,
+#                     .CoreGraphics=<CDLL '/System/Library/Frameworks/CoreGraphics.framework/CoreGraphics', handle 3e6518008 at 0x1026b39d0>,
+#                     .CoreText=<CDLL '/System/Library/Frameworks/CoreText.framework/CoreText', handle 3e65e5ff8 at 0x1026b3b10>,
+#                     .Foundation=<CDLL '/System/Library/Frameworks/Foundation.framework/Foundation', handle 3e65e5570 at 0x1026b3c50>,
+#                     .ObjC=<CDLL '/usr/lib/libobjc.dylib', handle 3e65e184c at 0x1026b3d90>,
 #  pycocoa.oslibs.NO is False or 0x0,
 #  pycocoa.oslibs.NSAcknowledgeCharacter is 6 or 0x6,
 #  pycocoa.oslibs.NSAlphaShiftKeyMask is 65536 or 0x10000 or 1 << 16,
@@ -1194,8 +1232,8 @@ if __name__ == '__main__':
 #  pycocoa.oslibs.NSApplicationActivationPolicyProhibited is 2 or 0x2,
 #  pycocoa.oslibs.NSApplicationActivationPolicyRegular is 0 or 0x0,
 #  pycocoa.oslibs.NSApplicationDefined is 15 or 0xF,
-#  pycocoa.oslibs.NSApplicationDidHideNotification is c_void_p(8154866160),
-#  pycocoa.oslibs.NSApplicationDidUnhideNotification is c_void_p(8154866256),
+#  pycocoa.oslibs.NSApplicationDidHideNotification is c_void_p(8503584744),
+#  pycocoa.oslibs.NSApplicationDidUnhideNotification is c_void_p(8503584840),
 #  pycocoa.oslibs.NSApplicationPresentationDefault is 0 or 0x0,
 #  pycocoa.oslibs.NSApplicationPresentationDisableHideApplication is 256 or 0x100 or 1 << 8,
 #  pycocoa.oslibs.NSApplicationPresentationDisableProcessSwitching is 32 or 0x20 or 1 << 5,
@@ -1215,7 +1253,7 @@ if __name__ == '__main__':
 #  pycocoa.oslibs.NSCommandKeyMask is 1048576 or 0x100000 or 1 << 20,
 #  pycocoa.oslibs.NSControlKeyMask is 262144 or 0x40000 or 1 << 18,
 #  pycocoa.oslibs.NSDataLineEscapeCharacter is 16 or 0x10 or 1 << 4,
-#  pycocoa.oslibs.NSDefaultRunLoopMode is c_void_p(8141208592),
+#  pycocoa.oslibs.NSDefaultRunLoopMode is <RunLoop_t at 0x1029c1cd0>,
 #  pycocoa.oslibs.NSDeleteCharacter is 127 or 0x7F,
 #  pycocoa.oslibs.NSDeleteFunctionKey is 63272 or 0xF728 or 7909 << 3,
 #  pycocoa.oslibs.NSDeviceControl1Character is 17 or 0x11,
@@ -1231,7 +1269,7 @@ if __name__ == '__main__':
 #  pycocoa.oslibs.NSEnquiryCharacter is 5 or 0x5,
 #  pycocoa.oslibs.NSEnterCharacter is 3 or 0x3,
 #  pycocoa.oslibs.NSEscapeCharacter is 27 or 0x1B,
-#  pycocoa.oslibs.NSEventTrackingRunLoopMode is c_void_p(8154861360),
+#  pycocoa.oslibs.NSEventTrackingRunLoopMode is <RunLoop_t at 0x1029c1d50>,
 #  pycocoa.oslibs.NSF19FunctionKey is 63254 or 0xF716,
 #  pycocoa.oslibs.NSF1FunctionKey is 63236 or 0xF704,
 #  pycocoa.oslibs.NSFileHandlingPanelCancelButton is 0 or 0x0,
@@ -1332,9 +1370,10 @@ if __name__ == '__main__':
 #  pycocoa.oslibs.NSWindowStyleMaskUtilityWindow is 16 or 0x10 or 1 << 4,
 #  pycocoa.oslibs.NSWindowToolbarButton is 3 or 0x3,
 #  pycocoa.oslibs.NSWindowZoomButton is 2 or 0x2,
+#  pycocoa.oslibs.OSlibError is <class .OSlibError>,
 #  pycocoa.oslibs.YES is True or 0x1,
-# )[159]
-# pycocoa.oslibs.version 21.11.04, .isLazy 1, Python 3.11.0 64bit arm64, macOS 13.0.1
+# )[160]
+# pycocoa.oslibs.version 25.1.31, .isLazy 1, Python 3.13.1 64bit arm64, macOS 14.6.1
 
 # MIT License <https://OpenSource.org/licenses/MIT>
 #

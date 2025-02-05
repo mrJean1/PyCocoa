@@ -12,7 +12,7 @@
 from pycocoa.bases import _Type2
 from pycocoa.fonts import Font
 from pycocoa.geometry import Rect4
-from pycocoa.lazily import _ALL_LAZY, _COLON_, _fmt, _fmt_invalid, _NN_
+from pycocoa.lazily import _ALL_LAZY, _COLON_, _Dmain_, _fmt, _fmt_invalid, _NN_
 from pycocoa.nstypes import NSMain, NSScrollView, NSStr, NSTableColumn, \
                             NSTableView  # isNone, NSTextField
 from pycocoa.octypes import NSSize_t
@@ -29,7 +29,7 @@ from pycocoa.utils import _Globals, isinstanceOf, module_property_RO, \
 from pycocoa.windows import Window, WindowStyle
 
 __all__ = _ALL_LAZY.tables
-__version__ = '25.01.25'
+__version__ = '25.01.31'
 
 _Alignment = dict(center=NSTextAlignmentCenter,
                justified=NSTextAlignmentJustified,
@@ -383,7 +383,7 @@ class TableWindow(Window):
 _Types.Table = NSTableView._Type = Table
 _Types.TableWindow               = TableWindow
 
-if __name__ == '__main__':
+if __name__ == _Dmain_:
 
     from pycocoa.utils import _all_listing
 
@@ -392,12 +392,12 @@ if __name__ == '__main__':
 # % python3 -m pycocoa.tables
 #
 # pycocoa.tables.__all__ = tuple(
-#  pycocoa.tables.closeTables is <function .closeTables at 0x1029a9900>,
-#  pycocoa.tables.NSTableViewDelegate is <pycocoa.utils.module_property_RO object at 0x1029d34f0>,
+#  pycocoa.tables.closeTables is <function .closeTables at 0x100c768e0>,
+#  pycocoa.tables.NSTableViewDelegate is <pycocoa.utils.module_property_RO object at 0x100c6c050>,
 #  pycocoa.tables.Table is <class .Table>,
 #  pycocoa.tables.TableWindow is <class .TableWindow>,
 # )[4]
-# pycocoa.tables.version 21.11.04, .isLazy 1, Python 3.11.0 64bit arm64, macOS 13.0.1
+# pycocoa.tables.version 25.1.31, .isLazy 1, Python 3.13.1 64bit arm64, macOS 14.6.1
 
 # MIT License <https://OpenSource.org/licenses/MIT>
 #

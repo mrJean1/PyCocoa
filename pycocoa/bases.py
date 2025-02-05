@@ -6,14 +6,17 @@
 '''(INTERNAL) Base classes for Python C{Types}.
 '''
 # all imports listed explicitly to help PyChecker
-from pycocoa.lazily  import _ALL_LAZY, _fmt
+from pycocoa.lazily import _ALL_LAZY, _Dmain_, _fmt, _instr
 from pycocoa.nstypes import isNone, NSStr, nsString2str
 from pycocoa.octypes import c_struct_t, ObjC_t
 from pycocoa.runtime import ObjCInstance, release
-from pycocoa.utils   import bytes2str, isinstanceOf, type2strepr
+from pycocoa.utils import bytes2str, isinstanceOf, \
+                          property_RO, type2strepr
 
 __all__ = _ALL_LAZY.bases
-__version__ = '25.01.25'
+__version__ = '25.02.03'
+
+_NSD_Error = NameError("use 'NSd-', not 'NSD-'")  # PYCHOK used!
 
 
 class _Type0(object):
@@ -28,7 +31,8 @@ class _Type0(object):
                 if not hasattr(self, a):
                     setattr(self, a, v)
                 elif getattr(self, a) != v:
-                    raise AttributeError(_fmt('%s=%r exists', a, v))
+                    t = _fmt('%s=%r exists', a, v)
+                    raise AttributeError(t)
 
     def __repr__(self):
         return _fmt('%s at %#x', self, id(self))
@@ -51,17 +55,22 @@ class _Type0(object):
         if not isNone(ns):  # see also .nstypes.nsOf
             isinstanceOf(ns, ObjCInstance, c_struct_t, ObjC_t, name='ns')
         elif isinstanceOf(self.NS, ObjCInstance):
-            # self.NS.release()
-            pass
+            pass  # self.NS.release()
         self._NS = ns
 
     @property
-    def NSDelegate(self):  # to catch typos
-        raise AttributeError("use 'NSd-', not 'NSD-'")
+    def NSDelegate(self):  # to catch 'D' typos
+        raise _NSD_Error
 
     @NSDelegate.setter  # PYCHOK property.setter
     def NSDelegate(self, unused):
-        raise AttributeError("use 'NSd-', not 'NSD-'")
+        raise _NSD_Error
+
+    @property_RO
+    def typename(self):
+        '''Get this instance' Python class name (C{str}).
+        '''
+        return type(self).__name__
 
 
 class _Type1(_Type0):
@@ -108,7 +117,7 @@ class _Type2(_Type1):
     _title = None
 
     def __str__(self):
-        return _fmt('%s(%r)', self.__class__.__name__, self._title)
+        return _instr(self.typename, repr(self._title))
 
     @property
     def title(self):
@@ -136,7 +145,7 @@ class _Type2(_Type1):
         self._title = bytes2str(title)
 
 
-if __name__ == '__main__':
+if __name__ == _Dmain_:
 
     from pycocoa.utils import _all_listing
 
@@ -146,7 +155,7 @@ if __name__ == '__main__':
 #
 # pycocoa.bases.__all__ = tuple(
 # )[0]
-# pycocoa.bases.version 21.11.04, .isLazy 1, Python 3.11.0 64bit arm64, macOS 13.0.1
+# pycocoa.bases.version 25.2.3, .isLazy 1, Python 3.13.1 64bit arm64, macOS 14.6.1
 
 # MIT License <https://OpenSource.org/licenses/MIT>
 #

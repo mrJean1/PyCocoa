@@ -145,13 +145,13 @@ _isfrozen       = getattr(_sys, 'frozen', False)
 pycocoa_abspath = _pth.dirname(_pth.abspath(__file__))  # _sys._MEIPASS + '/pycocoa'
 _pycocoa        = __package__ or _pth.basename(pycocoa_abspath)
 
-__version__ = '25.01.25'
+__version__ = '25.02.05'
 # see setup.py for similar logic
 version = '.'.join(map(str, map(int, __version__.split('.'))))
 
 def _Error(what, only):  # PYCHOK expected
     return NotImplementedError('%s not supported by %s %s, only %s'
-                               % (what, _pycocoa, version, only))
+                                % (what, _pycocoa, version, only))
 
 _ = _sys.platform  # PYCHOK iOS?
 if not _.startswith('darwin'):

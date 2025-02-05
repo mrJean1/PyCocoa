@@ -6,15 +6,15 @@
 '''Types L{FrozenSet} and L{Set}, wrapping ObjC C{NS[Mutable]Set}.
 '''
 # all imports listed explicitly to help PyChecker
-from pycocoa.bases   import _Type0
-from pycocoa.lazily  import _ALL_LAZY
+from pycocoa.bases import _Type0
+from pycocoa.lazily import _ALL_LAZY, _Dmain_
 from pycocoa.nstypes import ns2py, NSMutableSet, nsSet2set, NSSet
 from pycocoa.pytypes import frozenset2NS, set2NS
 from pycocoa.runtime import isImmutable, isObjCInstanceOf, ObjCInstance
-from pycocoa.utils   import property_RO, _Types
+from pycocoa.utils import property_RO, _Types
 
 __all__ = _ALL_LAZY.sets
-__version__ = '21.11.04'
+__version__ = '25.01.31'
 
 if True:  # MCCABE 71
 
@@ -47,7 +47,7 @@ if True:  # MCCABE 71
 
                @return: The copy (L{FrozenSet}).
             '''
-            return self.__class__(self)
+            return type(self)(self)
 
         @property_RO
         def NS(self):
@@ -84,7 +84,7 @@ if True:  # MCCABE 71
 
                @return: The copy (L{Set}).
             '''
-            return self.__class__(self)
+            return type(self)(self)
 
         @property_RO
         def NS(self):
@@ -112,7 +112,7 @@ else:  # XXX far too much duplication
             elif isinstance(ns_set, Set):
                 self._set = frozenset(ns_set._set)
             elif isImmutable(ns_set, NSMutableSet,  # mutable first
-                                     NSSet, name=self.__class__.__name__):
+                                     NSSet, name=self.typename):
                 self._set = nsSet2set(ns_set)
 
         def __contains__(self, elem):
@@ -179,21 +179,21 @@ else:  # XXX far too much duplication
 
                @return: The copy (L{FrozenSet} or L{Set}).
             '''
-            return self.__class__(self._set)
+            return type(self)(self._set)
 
         def difference(self, *others):
             '''Like C{frozen/set.difference}.
 
                @return: New instance (L{FrozenSet} or L{Set}).
             '''
-            return self.__class__(self._set.difference(*others))
+            return type(self)(self._set.difference(*others))
 
         def intersection(self, *others):  # &
             '''Like C{frozen/set.intersection}.
 
                @return: New instance (L{FrozenSet} or L{Set}).
             '''
-            return self.__class__(self._set.intersection(*others))
+            return type(self)(self._set.intersection(*others))
 
         def isdisjoint(self, other):
             '''Like C{frozen/set.isdisjoint}.
@@ -223,14 +223,14 @@ else:  # XXX far too much duplication
 
                @return: New instance (L{FrozenSet} or L{Set}).
             '''
-            return self.__class__(self._set.symmetric_difference(other))
+            return type(self)(self._set.symmetric_difference(other))
 
         def union(self, *others):  # |
             '''Like C{frozen/set.union}.
 
                @return: New instance (L{FrozenSet} or L{Set}).
             '''
-            return self.__class__(self._set.union(*others))
+            return type(self)(self._set.union(*others))
 
     class Set(FrozenSet):  # PYCHOK expected
         '''Python C{Set} Type, wrapping an ObjC C{NSMutableSet}.
@@ -316,7 +316,7 @@ else:  # XXX far too much duplication
 NSSet._Type        = _Types.FrozenSet = FrozenSet
 NSMutableSet._Type = _Types.Set       = Set
 
-if __name__ == '__main__':
+if __name__ == _Dmain_:
 
     from pycocoa.utils import _all_listing
 
@@ -328,7 +328,7 @@ if __name__ == '__main__':
 #  pycocoa.sets.FrozenSet is <class .FrozenSet>,
 #  pycocoa.sets.Set is <class .Set>,
 # )[2]
-# pycocoa.sets.version 21.11.04, .isLazy 1, Python 3.11.0 64bit arm64, macOS 13.0.1
+# pycocoa.sets.version 25.1.31, .isLazy 1, Python 3.13.1 64bit arm64, macOS 14.6.1
 
 # MIT License <https://OpenSource.org/licenses/MIT>
 #

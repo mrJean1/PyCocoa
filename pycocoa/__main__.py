@@ -4,7 +4,7 @@
 u'''Print L{pycocoa} all public attributes, pycocoa version, Python
 release, etc. by using C{python -m pycocoa [-all]} from the command line.
 '''
-from pycocoa import __all__ as _ALL_, _locals, _pycocoa as _package
+from pycocoa import __all__ as _alls, _locals, _pycocoa as _package
 from pycocoa.lazily import _isPython3, _sys
 from pycocoa.utils import _all_listing, _all_versions  # PYCHOK expected
 
@@ -13,7 +13,7 @@ if _isPython3:  # get pycocoa.__all__ from .lazily
 
 _all_versions(_file_=_package)
 if len(_sys.argv) > 1 and '-all'.startswith(_sys.argv[-1]):
-    _all_listing(_ALL_, _locals(), libs=True, _file_=_package)
+    _all_listing(_alls, _locals(), libs=True, _file_=_package)
 
 from pycocoa.runtime import _nsDeallocObserverIvar1
 _nsDeallocObserverIvar1()  # check the _NSDeallocObserver class
@@ -22,7 +22,8 @@ __all__ = ()
 __version__ = '25.01.25'
 
 # % python3.13 -m pycocoa -all
-# pycocoa.version 25.1.25, .isLazy 1, Python 3.13.1 64bit arm64, macOS 14.6.1
+#
+# pycocoa.version 25.1.31, .isLazy 1, Python 3.13.1 64bit arm64, macOS 14.6.1
 #
 # pycocoa.__all__ = tuple(
 #  pycocoa.add_ivar is <function pycocoa.runtime.add_ivar>,
@@ -50,7 +51,9 @@ __version__ = '25.01.25'
 #                    .Sizable=18,
 #                    .WidthSizable=2,
 #  pycocoa.AutoResizeError is <class pycocoa.windows.AutoResizeError>,
+
 #  ... <deleted> ...
+
 #  pycocoa.unichar_t is <class ctypes.c_wchar>,
 #  pycocoa.unicode2NS is <function pycocoa.pytypes.unicode2NS>,
 #  pycocoa.Union_t is <class pycocoa.octypes.Union_t>,
@@ -76,17 +79,17 @@ __version__ = '25.01.25'
 #  pycocoa.z1000str is <function pycocoa.utils.z1000str>,
 #  pycocoa.zfstr is <function pycocoa.utils.zfstr>,
 #  pycocoa.zSIstr is <function pycocoa.utils.zSIstr>,
-# )[572]
-# pycocoa.version 25.01.25, .isLazy 1, Python 3.13.1 64bit arm64, macOS 14.6.1, oslibs [AppKit, CoreFoundation, CoreGraphics, CoreText, Foundation, libc, libobjc]
+# )[573]
+# pycocoa.version 25.1.31, .isLazy 1, Python 3.13.1 64bit arm64, macOS 14.6.1, oslibs [AppKit, CoreFoundation, CoreGraphics, CoreText, Foundation, libc, libobjc]
 
 # % python3.13 -m pycocoa
-# pycocoa.version 25.1.25, .isLazy 1, Python 3.13.1 64bit arm64, macOS 14.6.1
+# pycocoa.version 25.1.31, .isLazy 1, Python 3.13.1 64bit arm64, macOS 14.6.1
 
 # % python3.12 -m pycocoa
 # pycocoa.version 25.1.16, .isLazy 1, Python 3.12.7 64bit arm64, macOS 14.6.1
 
 # % python3.11 -m pycocoa
-# pycocoa.version 23.01.06, .isLazy 1, Python 3.11.0 64bit arm64, macOS 13.0.1
+# pycocoa.version 23.1.06, .isLazy 1, Python 3.11.0 64bit arm64, macOS 13.0.1
 
 # % python3.10 -m pycocoa
 # pycocoa.version 23.1.6, .isLazy 1, Python 3.10.8 64bit arm64, macOS 13.0.1

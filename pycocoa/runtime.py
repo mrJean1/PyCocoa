@@ -33,31 +33,32 @@ from pycocoa.getters import _ivar_ctype, get_c_func_t, get_class, \
                             get_classname, get_classof, get_ivar, \
                             get_metaclass, get_protocol, get_selector, \
                             get_superclassof
-from pycocoa.lazily import _ALL_LAZY, _bNN_, _COMMASPACE_, _NL_, _NN_  # _UNDER_
+from pycocoa.lazily import _ALL_LAZY, _bNN_, _COMMASPACE_, _Dmain_, \
+                           _Dname_, _DOT_, _fmt, _fmt_invalid, _instr, \
+                           _NA_, _NL_, _NN_, _no, _SPACE_,  _Ddoc_  # PYCHOK used!
 from pycocoa.octypes import __i386__, __LP64__, c_struct_t, c_void, \
                             ctype2encoding, emcoding2ctype, \
                             encoding2ctype, Class_t, Id_t, IMP_t, \
                             Ivar_t, objc_super_t, objc_super_t_ptr, \
                             ObjC_t, SEL_t, split_emcoding2, \
                             TypeCodeError
-from pycocoa.oslibs import cfString2str, _csignature, libobjc
-from pycocoa.utils import Adict, bytes2str, _ByteStrs, _Constants, _fmt, \
+from pycocoa.oslibs import cfString2str, _csignature, _dllattr, libobjc
+from pycocoa.utils import Adict, bytes2str, _ByteStrs, _Constants, \
                           isinstanceOf, lambda1, missing, name2py, \
                           printf, property2, property_RO, \
                           str2bytes, _TypeError
 
 from ctypes import alignment, ArgumentError, byref, cast, c_buffer, \
                    c_char_p, c_double, c_float, CFUNCTYPE, c_longdouble, \
-                   c_uint, c_void_p, POINTER  # XXX , sizeof removed
+                   c_void_p, POINTER  # XXX c_uint, sizeof removed
 #                  # to avoid segfault in PyChecker, by forcing an
 #                  # NameError in function add_ivar below and class
 #                  # _NSDeallocObserver.  sizeof is imported at the
 #                  # very end of this module.
-import sys
-import os
+from os import environ as _environ  # from .lazily
 
 __all__ = _ALL_LAZY.runtime
-__version__ = '25.01.25'
+__version__ = '25.02.03'
 
 # <https://Developer.Apple.com/documentation/objectivec/
 #        objc_associationpolicy?language=objc>
@@ -68,7 +69,9 @@ OBJC_ASSOCIATION_RETAIN           = 0x301  # 01401
 OBJC_ASSOCIATION_RETAIN_NONATOMIC = 1
 
 _OBJC_ENV = 'PYCOCOA_OBJC_LOG'
-_OBJC_LOG = dict((_, 0) for _ in os.environ.get(_OBJC_ENV, _NN_).upper())
+_OBJC_LOG =  dict((_, 0) for _ in _environ.get(_OBJC_ENV, _NN_).upper()
+                          if _.isalpha())
+del _environ
 
 _objc_msgSend_fpret_      = \
 _objc_msgSend_stret_      = \
@@ -96,10 +99,10 @@ _NSnil         =  None  # see nstypes.NSMain.nil
 def _c_tstr(*c_ts):
     '''(INTERNAL) Simplify names of c_..._t result or argument types.
     '''
-    return _COMMASPACE_.join(getattr(t, '__name__', str(t)) for t in c_ts)
+    return _COMMASPACE_.join(getattr(t, _Dname_, str(t)) for t in c_ts)
 
 
-def _libobjcall(name, restype, argtypes, *args):  # see printer.py
+def _libobjcall(name, restype, argtypes, *args):  # in printer.py
     '''(INTERNAL) Call an ObjC library function and return the result.
 
        @return: The result (C{any}).
@@ -115,14 +118,14 @@ def _libobjcall(name, restype, argtypes, *args):  # see printer.py
         objc_func.restype  = restype  # or c_void
         objc_func.argtypes = argtypes or []
 
-        result = objc_func(*args)
+        r = objc_func(*args)
     except (ArgumentError, KeyError, TypeError) as x:
         raise _Xargs(x, objc_func.__name__, argtypes, restype)
 
     if restype is c_void_p or (restype and issubclass(restype, ObjC_t)
-                                   and not isinstance(result, ObjC_t)):
-        result = restype(result)
-    return result
+                                   and not isinstance(r, ObjC_t)):
+        r = restype(r)
+    return r
 
 
 def _obj_and_name(name_or_obj, getter):
@@ -145,7 +148,7 @@ def _objc_cast(objc):
         return cast(objc, Id_t)
 #   elif isinstance(objc, _Strs):
 #       return cast(get_class(objc), Id_t)
-    raise TypeError('invalid %s: %r' % ('objc', objc))
+    raise TypeError(_fmt_invalid(objc=repr(objc)))
 
 
 def _ObjC_log(inst, what, T, *args, **kwds):  # B, C, D, I, M, S
@@ -156,22 +159,21 @@ def _ObjC_log(inst, what, T, *args, **kwds):  # B, C, D, I, M, S
         r, t = repr(inst), _NN_
         if args:  # insert method call args
             a = _COMMASPACE_.join(map(repr, args))
-            r = r.replace('))', '), %s)' % (a,))
+            r =  r.replace('))', _fmt('), %s)', a))
         if kwds:
             t = _COMMASPACE_.join('%s %s' % t for t in kwds.items())
         _OBJC_LOG[T] += 1
         printf('%s %s %d %s', what, r, _OBJC_LOG[T], t)
 
 
-def _ObjC_logf(fmt, *args):
+def _ObjC_logf(fmtxt, *args):
     '''(INTERNAL) Log a message to the console.
     '''
     if 'X' in _OBJC_LOG:
-        t = fmt
         if args:
-            t %= args
+            fmtxt %= args
         _OBJC_LOG['X'] += 1
-        printf('%s %s %d', 'call', t, _OBJC_LOG['X'])
+        printf('%s %s %d', 'call', fmtxt, _OBJC_LOG['X'])
 
 
 def _ObjC_log_totals():
@@ -185,11 +187,11 @@ def _ObjC_log_totals():
 
 def _pyargs(codes3, args):
     '''(INTERNAL) Used by L{ObjCSubclass} to convert ObjC method arguments
-       to the corresponding Python type/value before passing
-       those to the decorated Python method.
+       to the corresponding Python type/value before passing those to
+       the decorated Python method.
     '''
     if len(codes3) != len(args):
-        raise ValueError('mismatch codes3 %r and args %r' % (codes3, args))
+        raise ValueError(_fmt_invalid(len(codes3), args=len(args)))
 
     for code, arg in zip(codes3, args):
         ObjC, _ = _PyRes_t2.get(code, (lambda1, None))
@@ -214,13 +216,14 @@ def _signature3(objc_t, sel_name_, args, restype=c_void_p,
        [I{objc_t}, C{SEL_t}].
     '''
     if extra:  # must be empty
-        raise ValueError('extra %s kwds %s' % (sel_name_, Adict(extra)))
+        raise ValueError(_fmt('extra %s kwds %s',
+                               sel_name_, Adict(extra)))
 
     if argtypes:  # allow varargs
         if len(argtypes) != len(args):
-            raise ValueError('mismatch %s%r[%d] vs argtypes[%s][%d]' %
-                             (sel_name_, tuple(args), len(args),
-                             _c_tstr(*argtypes), len(argtypes)))
+            raise ValueError(_fmt('len %s%r[%d] vs argtypes[%s][%d]',
+                                   sel_name_, tuple(args), len(args),
+                                  _c_tstr(*argtypes), len(argtypes)))
         argtypes = [objc_t, SEL_t] + argtypes
 
     if isinstance(sel_name_, _ByteStrs):
@@ -233,10 +236,14 @@ def _signature3(objc_t, sel_name_, args, restype=c_void_p,
 def _Xargs(x, name, argtypes, restype='void'):  # imported by nstypes.py, printers.py
     '''(INTERNAL) Expand the args of an C{ctypes.ArgumentError} I{x}.
     '''
-    # x.args = tuple(x.args) + ('%s(%s) %s' % (name, _c_tstr(*argtypes),
-    #                                                _c_tstr(restype)),)
-    x.args = ('%s: %s(%s) %s' % (_COMMASPACE_.join(map(str, x.args)), name,
-                                 _c_tstr(*argtypes), _c_tstr(restype)),)
+    # x.args = tuple(x.args) + (_fmt('%s(%s) %s', name, _c_tstr(*argtypes),
+    #                                                   _c_tstr(restype)),)
+    c = _SPACE_(_instr(name, _c_tstr(*argtypes)), _c_tstr(restype))
+    try:
+        t = _COMMASPACE_(*x.args)
+    except AttributeError:
+        t =  str(x)
+    x.args = _COMMASPACE_(t, c)
     return x
 
 
@@ -247,16 +254,28 @@ class _ObjCBase(object):
     _name          = _bNN_  # shut PyChecker up
 
     def __repr__(self):
-        return _fmt('<%s(%s) at %#x>', self.__class__.__name__, self, id(self))
+        t = _instr(self.typename, self)
+        return _fmt('<%s at %#x>', t, id(self))
+
+    def _AttributeError(self, name, _or_other):
+        # no classmethod, method or property attr
+        t = _DOT_(self, name)
+        t = _fmt('[class]method%s: %s', _or_other, t)
+        return AttributeError(_no(t))
 
     @property_RO
     def description(self):
         '''Return this ObjC's description, first line of C{__doc__}.
         '''
-        n = getattr(self, 'name', self.__class__.__name__)
-        d = _fmt('%s: %s', n, getattr(self, '__doc__', 'n/a').strip())
-        n = d.find(_NL_)
-        return d if n < 0 else d[:n]
+        n = getattr(self, 'name', self.typename)
+        d = getattr(self, _Ddoc_, _NA_).strip()
+        return _fmt('%s: %s', n, d).split(_NL_, 1)[0]
+
+    @property_RO
+    def typename(self):
+        '''Get this instance' Python class name (C{str}).
+        '''
+        return type(self).__name__
 
 
 class ObjCBoundMethod(_ObjCBase):
@@ -283,7 +302,7 @@ class ObjCBoundMethod(_ObjCBase):
         self._objc_id = objc_id
 
     def __str__(self):
-        return _fmt('%s.%s', self._objc_id, self._method.name)
+        return _DOT_(self._objc_id, self._method.name)
 
     def __call__(self, *args):
         '''Call the method with the given arguments.
@@ -325,9 +344,9 @@ class ObjCBoundClassMethod(ObjCBoundMethod):
     # O'Reilly, 2016, also at <https://Books.Google.ie/books?
     # id=bIZHCgAAQBAJ&lpg=PP1&dq=fluent%20python&pg=PT364#
     # v=onepage&q=“Problems%20with%20__slots__”&f=false>
-    pass
     # if _isPython2:
     #     __slots__ = ObjCBoundMethod.__slots__
+    pass
 
 
 class ObjCClass(_ObjCBase):
@@ -335,14 +354,14 @@ class ObjCClass(_ObjCBase):
     '''
     _classmethods_cache = {}  # local cache per class
     _methods_cache      = {}  # local cache per class
-    _objc_classes_cache = {}  # global cache **)
+    _ObjCClasses_cache  = {}  # global cache **)
     _ptr                =  None
     _Type               =  None  # Python Type, e.g. Dict, List, Tuple, etc.
 
     # **) Only one ObjCClass instance is created for each ObjC class.
     # Any future calls with the same class will return the previously
     # created ObjCClass instance.  Note, these aren't weak references,
-    # each ObjCClass created will exist until the end of the program.
+    # each ObjCClass created will exist till the end of the process.
 
     def __new__(cls, name_or_ptr, *protocols):
         '''Create a new L{ObjCClass} instance or return a previously
@@ -350,7 +369,7 @@ class ObjCClass(_ObjCBase):
 
            @param name_or_ptr: Either the name of or a pointer to the
                                class to retrieve (C{str} or L{Class_t}).
-           @param protocols: None, one or more protocol to add (C{str}s
+           @param protocols: C{None}, one or more protocol to add (C{str}s
                              or L{Protocol_t} instances).
         '''
         # Determine name and ptr values from C{name_or_ptr}.
@@ -362,12 +381,12 @@ class ObjCClass(_ObjCBase):
             name = str2bytes(get_classname(ptr, dflt='nil'))
 
         if ptr is None or ptr.value is None:
-            raise ValueError('no such %s: %r' % ('Class', bytes2str(name)))
+            raise ValueError(_fmt_invalid(Class=bytes2str(name)))
 
         # Check if we've already created a Python object for this class
         # and if so, return it rather than making a new one.
         try:
-            return cls._objc_classes_cache[name]
+            return cls._ObjCClasses_cache[name]
         except KeyError:
             pass
 
@@ -391,7 +410,7 @@ class ObjCClass(_ObjCBase):
             add_protocol(ptr, p)
 
         # Add the class to the (registered) classes cache.
-        cls._objc_classes_cache[name] = self
+        cls._ObjCClasses_cache[name] = self
 
         return self
 
@@ -410,8 +429,8 @@ class ObjCClass(_ObjCBase):
         if method:
             return method
 
-        # Otherwise, raise an exception.
-        raise AttributeError('no %r [class]method: %s ' % (name, self))
+        # Otherwise, throw an error.
+        raise self._AttributeError(name, _NN_)
 
     def __str__(self):
         return _fmt('%s of %#x', self.name, self.ptr.value)
@@ -419,27 +438,26 @@ class ObjCClass(_ObjCBase):
     def _cache_method(self, name, Class, cache, getter):
         # get and cache a class or instance method
         # XXX get_selector_permutations(name2py(name))?
-        method = getter(self._ptr, get_selector(name))
+        m = getter(self._ptr, get_selector(name))
         # XXX add a check that .alloc() was called
         # before .init() for any I{NSDelegate} class
         # printf('%s.%s', self.name, name)
-        if method and method.value:
-            method = Class(method)
-            cache[method.name] = method
-            _ObjC_log(method, 'new', 'M')
-            return method
+        if m and m.value:
+            m = Class(m)
+            cache[m.name] = m
+            _ObjC_log(m, 'new', 'M')
+            return m
         return None
 
-    def _cache_methods(self, which, Class):
+    def _cache_methods(self, which, Class):  # PYCHOK unused
         # build a cache of all class or instance methods
-        cache = {}
-        if False:  # not __debug__:
-            n = c_uint()
-            for m in libobjc.class_copyMethodList(which, byref(n)):
-                m = Class(m)
-                cache[m.name] = m
-                _ObjC_log(m, 'new', 'M')
-        return cache
+        # def _nm2(which, Class):
+        #     n = c_uint()
+        #     for m in libobjc.class_copyMethodList(which, byref(n)):
+        #         m = Class(m)
+        #         _ObjC_log(m, 'new', 'M')
+        #         yield m.name, m
+        return {}  # dict(_nms(which, Class))
 
     def add_protocol(self, protocol):
         '''Add a protocol to this class.
@@ -511,7 +529,7 @@ class ObjCDelegate(ObjCClass):
                                 L{ObjCDelegate} with class attribute
                                 C{._ObjC}, an I{un-}registered
                                 L{ObjCSubclass}.
-           @param protocols: None, one or more protocol to add
+           @param protocols: C{None}, one or more protocol to add
                              (C{str}s or L{Protocol_t} instances).
 
            @raise TypeError: Attribute C{B{_NS_Delegate}._ObjC} is not
@@ -521,18 +539,23 @@ class ObjCDelegate(ObjCClass):
         '''
         name = _NS_Delegate.__name__
         # ObjCDelegate classes cached in parent _objc_cache
-        if name not in ObjCClass._objc_classes_cache:
+        if name not in ObjCClass._ObjCClasses_cache:
             _ObjC = _NS_Delegate._ObjC
             if not isinstance(_ObjC, ObjCSubclass):
-                raise TypeError(_fmt('%s.%s not %s', name, '_ObjC', ObjCSubclass.__name__))
+                n = _DOT_(name, '_ObjC')
+                raise _ObjCDelegateError(n, ObjCSubclass.__name__)
             if not _ObjC.isregistered:
                 _ObjC.register()
                 # catch class and naming mistakes
                 if not name.startswith('_NS'):
-                    raise TypeError(_fmt('%s not %s', name, 'private'))
+                    raise _ObjCDelegateError(name, 'private')
                 elif not name.endswith('Delegate'):
-                    raise TypeError(_fmt('%s not %s', name, 'Delegate'))
+                    raise _ObjCDelegateError(name, 'Delegate')
         return ObjCClass.__new__(cls, name, *protocols)
+
+
+def _ObjCDelegateError(name, wrong):  # helper for __new__ above
+    return TypeError(_fmt('%s not %s', name, wrong))
 
 
 class ObjCInstance(_ObjCBase):
@@ -615,7 +638,7 @@ class ObjCInstance(_ObjCBase):
     def __del__(self):
         # remove from _objc_cache
         # if self.retained():  # or self.inPool < _NSAutorelease.Pools
-        #     raise RuntimeError("%r is retained, can't be deleted" % (self,))
+        #     raise RuntimeError(_fmt("%r is retained, can't be deleted", self))
         objc = self._objc_cache.pop(self.ptr.value, None)
         _ObjC_log(self, 'del', 'I', auto=self.inPool, cached=objc is self)
         # self._cache_clear()
@@ -642,7 +665,8 @@ class ObjCInstance(_ObjCBase):
                                 deallocated and no longer exists.
         '''
         if self._dealloc_d:
-            raise RuntimeError('no longer exists: %r' % (self,))
+            t = _fmt('longer exists: %r', self)
+            raise RuntimeError(_no(t))
 
         clas = self._objc_class
         # Get the named instance method in the class object and if it
@@ -656,8 +680,8 @@ class ObjCInstance(_ObjCBase):
             return ObjCBoundMethod(method, self, self)
 
         # Otherwise, get the class method with given name in the class
-        # object.  If that exists, return callable object (with a pointer
-        # to the class as the hidden argument).
+        # object.  If that exists, return callable object (with a
+        # pointer to the class as the hidden argument).
         method = clas.get_classmethod(name)
         if method:
             return ObjCBoundClassMethod(method, clas.ptr, self)
@@ -672,19 +696,20 @@ class ObjCInstance(_ObjCBase):
 #       if subst:
 #           return self.__getattr__(subst)
 
-        # Try this class' property, ...
+        # Try this class' property.
         get, _ = property2(self, bytes2str(name))
         if get:
             return get(self)
 
-        # ... otherwise raise error
-        raise AttributeError('no %r [class]method or property: %r' % (name, self))
+        # Otherwise, throw an error.
+        raise self._AttributeError(name, ' or property')
 
 #   def __repr__(self):
-#       return '<%s %#x: %s>' % (ObjCInstance.__name__, id(self), self)
+#       return _fmt('<%s %#x: %s>', ObjCInstance.__name__, id(self), self)
 
     def __str__(self):
-        return _fmt('%s(%r) of %#x', self.objc_classname, self.ptr, self.ptr.value)
+        t = _instr(self.objc_classname, repr(self.ptr))
+        return _fmt('%s of %#x', t, self.ptr.value)
 
     def _cache_clear(self):
         # clear the _objc_cache and return the number of cleared C{ObjcInstance}s
@@ -707,9 +732,10 @@ class ObjCInstance(_ObjCBase):
         return n
 
     def _cache_print(self, label):
-        cache, _r = self._objc_cache, sys.getrefcount
-        t = (_fmt('%r %d', v, _r(v)) for v in cache.values())
-        print(label, len(cache), _COMMASPACE_.join(t))
+        from sys import getrefcount as _rc
+        c = self._objc_cache
+        t = (_fmt('%r %d', v, _rc(v)) for v in c.values())
+        print(label, len(c), _COMMASPACE_.join(t))
 
     @property_RO
     def from_py2NS(self):
@@ -744,7 +770,7 @@ class ObjCInstance(_ObjCBase):
         '''
         # XXX conflicts with NSPrinter.description()
         d = send_message(self.ptr, 'description', restype=Id_t)
-        s = cfString2str(d, dflt='N/A')
+        s = cfString2str(d, dflt=_NA_)
         # d.release()
         return s
 
@@ -769,7 +795,8 @@ class ObjCInstance(_ObjCBase):
         if retain:
             self._retained = b = bool(retain[0])
             if b and self.ptr.value not in self._objc_cache:
-                raise RuntimeError(_fmt("not cached, can't be retained: %r", self))
+                t = _fmt("can't be retained: %r, not cached", self)
+                raise RuntimeError(t)
         return r
 
     def set_ivar(self, name, value, ctype=None):
@@ -811,8 +838,9 @@ class ObjCConstant(ObjCInstance):
            @param name: The constant's name (C{str} or C{bytes}).
            @keyword const_t: C type (C{ObjC_t} or other C{ctypes}_t).
         '''
-        o = const_t.in_dll(dylib, bytes2str(name, name='name'))
-        return super(ObjCConstant, cls).__new__(cls, o)
+        n =  bytes2str(name, name='name')
+        c = _dllattr(dylib, n, const_t)  # **{n: const_t}
+        return super(ObjCConstant, cls).__new__(cls, c)
 
 
 class ObjCMethod(_ObjCBase):
@@ -885,19 +913,19 @@ class ObjCMethod(_ObjCBase):
             r = self._callable(objc_id, self._SEL, *args)
             if self._pyresult:
                 r = self._pyresult(r)
-            return r
         except (ArgumentError, TypeError) as x:
-            n = '%s.%s' % (inst.name, self.name)
+            n = _DOT_(inst.name, self.name)
             raise _Xargs(x, n, self.argtypes, self.restype)
+        return r
 
 #   def __repr__(self):
-#       return '<%s %s(%s) %s>' % (ObjCMethod.__name__, self.name,
-#                                 _c_tstr(*self.argtypes),
-#                                  bytes2str(self.encoding))
+#       return _fmt('<%s %s(%s) %s>', ObjCMethod.__name__,
+#                                     self.name, _c_tstr(*self.argtypes),
+#                                     bytes2str(self.encoding))
 
     def __str__(self):
-        return _fmt('%s(%s) %s %s', self.name, _c_tstr(*self.argtypes),
-                    _c_tstr(self.restype), bytes2str(self.encoding))
+        t = _instr(self.name, _c_tstr(*self.argtypes))
+        return _SPACE_(t, _c_tstr(self.restype), bytes2str(self.encoding))
 
     @property_RO
     def argtypes(self):
@@ -1020,7 +1048,7 @@ class ObjCSubclass(_ObjCBase):
         _ObjC_log(self, 'new', 'S')
 
     def __str__(self):
-        return _fmt('%s(%r)', 'sub-class', self.name)
+        return _instr('sub-class', repr(self.name))
 
     def _add_classmethod(self, method, name, encoding):
         if not self._objc_metaclass:
@@ -1069,7 +1097,7 @@ class ObjCSubclass(_ObjCBase):
                 return _pyresult(m(_pycls, *_pyargs(codes3, args)))
             n = m.__name__
 #           if n.startswith(_UNDER_):
-#               raise NameError(_fmt('%s: %r, 'classmethod', n))
+#               raise NameError(_fmt_invalid(classmethod=n))
             self._add_classmethod(objc_classmethod, n, encoding)
             objc_classmethod.name = n  # preserve name
             return objc_classmethod
@@ -1099,7 +1127,7 @@ class ObjCSubclass(_ObjCBase):
                 return _pyresult(m(_pyself, *_pyargs(codes3, args)))
             n = m.__name__
 #           if n.startswith(_UNDER_):
-#               raise NameError(_fmt('%s: %r', 'method', n))
+#               raise NameError(_fmt_invalid(method=n))
             self._add_method(objc_method, n, encoding)
             objc_method.name = n  # preserve name
             return objc_method
@@ -1119,7 +1147,7 @@ class ObjCSubclass(_ObjCBase):
 
     @property_RO
     def objc_metaclass(self):
-        '''Get the ObjC metaclass, or None if un-registered.
+        '''Get the ObjC metaclass, or C{None} if un-registered.
         '''
         return self._objc_metaclass
 
@@ -1146,7 +1174,7 @@ class ObjCSubclass(_ObjCBase):
         '''Register this new class with the ObjC runtime.
         '''
         if self._objc_metaclass:
-            t = _fmt('already registered: %s %r', 'sub-class', self)
+            t = _fmt('already registered %s: %r', 'sub-class', self)
             raise ValueError(t)
 
         register_subclass(self._objc_class)
@@ -1200,8 +1228,8 @@ def add_method(clas, name_, method, encoding):
        @raise TypeError: If I{method} is not a Python callable.
     '''
     if isinstance(method, _ObjCBase) or not callable(method):
-        t = _fmt('%s a %s: %r', 'method', 'callable', method)
-        raise TypeError(t)
+        t = callable.__name__
+        raise TypeError(_fmt_invalid(t, method=method))
 
     codes, signature = split_emcoding2(encoding)
 
@@ -1292,7 +1320,7 @@ def isImmutable(objc, mutableClass, immutableClass, name='ns'):
     # check for the NSMutable- class first, since the mutable
     # classes seem to be sub-class of the immutable one
     if isObjCInstanceOf(objc, mutableClass):
-        raise TypeError(_fmt('classof(%s) is mutable: %r', name, objc))
+        raise TypeError(_fmt('classof(%s) mutable: %r', name, objc))
     return isObjCInstanceOf(objc, immutableClass, name=name) is immutableClass
 
 
@@ -1313,7 +1341,7 @@ def isObjCInstanceOf(objc, *Classes, **name_missing):
        @param Classes: One or several ObjC classes (C{Object}).
        @keyword name: The name of the instance (C{str}).
 
-       @return: The matching I{Class} from I{Classes}, None otherwise.
+       @return: The matching I{Class} from I{Classes}, C{None} otherwise.
 
        @raise TypeError: If I{objc} is not an L{ObjCInstance} or C{c_void_p}
                          or if I{objc} does not match any of the I{Classes}
@@ -1343,13 +1371,13 @@ def isObjCInstanceOf(objc, *Classes, **name_missing):
     else:
         name = name_missing.get('name', 'objc')
         t = ObjCInstance.__name__
-        raise TypeError(_fmt('%s not an %s: %r', name, t, objc))
+        raise TypeError(_fmt('%s: %r, not %s', name, objc, t))
 
     name = name_missing.get('name', missing)
     if name is missing:
         return None
 
-    raise _TypeError(name, objc, isObjCInstanceOf, Classes)
+    raise _TypeError(name, objc, isObjCInstanceOf, *Classes)
 
 
 def register_subclass(subclas):
@@ -1380,7 +1408,7 @@ def release(objc):
     try:
         objc.autorelease()  # XXX or objc.release()?
     except (AttributeError, TypeError):
-        raise TypeError(_fmt('not releasable: %r', objc))
+        raise TypeError(_fmt_invalid('releasable', objc=objc))
     return objc
 
 
@@ -1400,7 +1428,7 @@ def retain(objc):
     try:
         objc.retain()  # L{ObjCMethod}
     except (AttributeError, TypeError):
-        raise TypeError(_fmt('not retainable: %r', objc))
+        raise TypeError(_fmt_invalid('retainable', objc=objc))
     return objc
 
 
@@ -1710,7 +1738,7 @@ from ctypes import sizeof  # see from ctypes ... comments at the top
 # _nsDeallocObserverIvar1()  # PYCHOK expected
 # del _nsDeallocObserverIvar1  # PYCHOK expected
 
-if __name__ == '__main__':
+if __name__ == _Dmain_:
 
     from pycocoa.utils import _all_listing
 
@@ -1719,15 +1747,15 @@ if __name__ == '__main__':
 # % python3 -m pycocoa.runtime
 #
 # pycocoa.runtime.__all__ = tuple(
-#  pycocoa.runtime.add_ivar is <function .add_ivar at 0x104895080>,
-#  pycocoa.runtime.add_method is <function .add_method at 0x104896ca0>,
-#  pycocoa.runtime.add_protocol is <function .add_protocol at 0x104896c00>,
-#  pycocoa.runtime.add_subclass is <function .add_subclass at 0x104896b60>,
-#  pycocoa.runtime.drain is <function .drain at 0x104896ac0>,
-#  pycocoa.runtime.isClass is <function .isClass at 0x104896a20>,
-#  pycocoa.runtime.isImmutable is <function .isImmutable at 0x104896980>,
-#  pycocoa.runtime.isMetaClass is <function .isMetaClass at 0x1048968e0>,
-#  pycocoa.runtime.isObjCInstanceOf is <function .isObjCInstanceOf at 0x104896840>,
+#  pycocoa.runtime.add_ivar is <function .add_ivar at 0x1047d8d60>,
+#  pycocoa.runtime.add_method is <function .add_method at 0x1047da200>,
+#  pycocoa.runtime.add_protocol is <function .add_protocol at 0x1047da2a0>,
+#  pycocoa.runtime.add_subclass is <function .add_subclass at 0x1047da340>,
+#  pycocoa.runtime.drain is <function .drain at 0x1047da3e0>,
+#  pycocoa.runtime.isClass is <function .isClass at 0x1047da480>,
+#  pycocoa.runtime.isImmutable is <function .isImmutable at 0x1047da520>,
+#  pycocoa.runtime.isMetaClass is <function .isMetaClass at 0x1047da5c0>,
+#  pycocoa.runtime.isObjCInstanceOf is <function .isObjCInstanceOf at 0x1047da660>,
 #  pycocoa.runtime.OBJC_ASSOCIATION_ASSIGN is 0 or 0x0,
 #  pycocoa.runtime.OBJC_ASSOCIATION_COPY is 771 or 0x303,
 #  pycocoa.runtime.OBJC_ASSOCIATION_COPY_NONATOMIC is 3 or 0x3,
@@ -1742,15 +1770,15 @@ if __name__ == '__main__':
 #  pycocoa.runtime.ObjCInstance is <class .ObjCInstance>,
 #  pycocoa.runtime.ObjCMethod is <class .ObjCMethod>,
 #  pycocoa.runtime.ObjCSubclass is <class .ObjCSubclass>,
-#  pycocoa.runtime.register_subclass is <function .register_subclass at 0x1048967a0>,
-#  pycocoa.runtime.release is <function .release at 0x104896700>,
-#  pycocoa.runtime.retain is <function .retain at 0x104896660>,
-#  pycocoa.runtime.send_message is <function .send_message at 0x104896520>,
-#  pycocoa.runtime.send_super is <function .send_super at 0x104896480>,
-#  pycocoa.runtime.send_super_init is <function .send_super_init at 0x1048963e0>,
-#  pycocoa.runtime.set_ivar is <function .set_ivar at 0x104896340>,
+#  pycocoa.runtime.register_subclass is <function .register_subclass at 0x1047da700>,
+#  pycocoa.runtime.release is <function .release at 0x1047da7a0>,
+#  pycocoa.runtime.retain is <function .retain at 0x1047da840>,
+#  pycocoa.runtime.send_message is <function .send_message at 0x1047da980>,
+#  pycocoa.runtime.send_super is <function .send_super at 0x1047daa20>,
+#  pycocoa.runtime.send_super_init is <function .send_super_init at 0x1047daac0>,
+#  pycocoa.runtime.set_ivar is <function .set_ivar at 0x1047dab60>,
 # )[30]
-# pycocoa.runtime.version 23.02.05, .isLazy 1, Python 3.11.1 64bit arm64, macOS 13.2
+# pycocoa.runtime.version 25.2.3, .isLazy 1, Python 3.13.1 64bit arm64, macOS 14.6.1
 
 # MIT License <https://OpenSource.org/licenses/MIT>
 #

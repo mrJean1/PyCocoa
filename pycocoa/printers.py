@@ -9,26 +9,27 @@ C{PMPaperMargins} plus several C{get_...} print functions.
 
 @var libPC: The macOS C{PrintCore} framework library (C{ctypes.CDLL}) or C{None}.
 '''
-from pycocoa.bases   import _Type0
-from pycocoa.lazily  import _ALL_LAZY, _DOT_, _NN_
+from pycocoa.bases import _Type0
+from pycocoa.lazily import _ALL_LAZY, _Dmain_, _DOT_, _fmt, \
+                           _fmt_invalid, _instr, _NN_
 from pycocoa.nstypes import nsDictionary2dict, NSImageView, NSMain, \
                             NSPrinter, NSPrintInfo, NSPrintOperation, \
                             ns2py, NSStr, NSTableView, NSTextView
 from pycocoa.octypes import Array_t, BOOL_t, c_struct_t, Dictionary_t, \
                             Id_t, ObjC_t, String_t, URL_t
-from pycocoa.oslibs  import cfNumber2bool, cfString, cfString2str, \
-                            cfURL2str, _csignature, _free_memory, \
-                            get_lib_framework, libCF, YES
+from pycocoa.oslibs import cfNumber2bool, cfString, cfString2str, \
+                           cfURL2str, _csignature, _free_memory, \
+                           get_lib_framework, libCF, YES
 from pycocoa.runtime import isObjCInstanceOf, send_message, _Xargs
-from pycocoa.utils   import Adict, _fmt, isinstanceOf, property_RO, \
-                           _Strs, _Types, zfstr
+from pycocoa.utils import Adict, isinstanceOf, property_RO, _Strs, \
+                         _Types, zfstr
 
-from ctypes  import ArgumentError, byref, cast, c_char_p, c_double, \
-                    c_int, c_void_p, POINTER, sizeof
+from ctypes import ArgumentError, byref, cast, c_char_p, c_double, \
+                   c_int, c_void_p, POINTER, sizeof
 import os
 
 __all__ = _ALL_LAZY.printers
-__version__ = '25.01.25'
+__version__ = '25.01.31'
 
 libPC = None  # loaded on-demand
 kPMServerLocal = None
@@ -135,7 +136,7 @@ class _PM_Type0(_Type0):
             get_libPC()
 
     def __str__(self):
-        return _fmt('%s(%r)', self.__class__.__name__, self.name)
+        return _instr(self.typename, repr(self.name))
 
     def _libPCcall(self, func, *args):  # like runtime._libobjcall
         try:
@@ -248,8 +249,7 @@ class Paper(_PM_Type0):
                     pm = p.PM
                     break
             else:
-                t = _fmt('no such %s: %r', Paper.__name__, name_pm)
-                raise PrintError(t)
+                raise PrintError(_fmt_invalid(Paper=name_pm))
         elif isinstanceOf(name_pm, PMPaper_t, name='name_pm'):
             pm = name_pm
         _PM_Type0.__init__(self, pm)
@@ -422,8 +422,7 @@ class Printer(_PM_Type0):
                     ns = _nsPrinter(p.name, pm)
                     break
             else:
-                t = _fmt('no such %s: %r' % (Printer.__name__, name_ns_pm))
-                raise PrintError(t)
+                raise PrintError(_fmt_invalid(Printer=name_ns_pm))
 
         elif isinstanceOf(name_ns_pm, PMPrinter_t):
             pm = name_ns_pm
@@ -565,7 +564,7 @@ class Printer(_PM_Type0):
 #         # <https://StackOverflow.com/questions/6452144/
 #         #        how-to-make-a-print-dialog-with-preview-for-printing-an-image-file>
 #         if not os.access(image, os.R_OK):
-#             raise PrintError(_fmt('no such %s: %r', 'image file', image))
+#             raise PrintError(_fmt_invalid(image=image))
 #         im = NSImage.alloc().initWithContentsOfFile_(NSStr(image))
 #         vw = NSImageView.alloc().initWithFrame_(NSRect4_t(width=nim.size.width,
 #                                                          height=nim.size.height))
@@ -596,7 +595,7 @@ class Printer(_PM_Type0):
 
             if toPDF:
                 if os.access(toPDF, os.F_OK):
-                    raise PrintError(_fmt('%s exists: %r', 'PDF file', toPDF))
+                    raise PrintError(_fmt_invalid(toPDF=toPDF))
                 # <https://Developer.Apple.com/documentation/appkit/
                 #        nsprintoperation/1534130-pdfoperationwithview>
                 po = NSPrintOperation.PDFOperationWithView_insideRect_toPath_printInfo_(
@@ -908,7 +907,7 @@ _Types.PaperCustom  = PaperCustom
 _Types.PaperMargins = PaperMargins
 _Types.Printer      = Printer
 
-if __name__ == '__main__':
+if __name__ == _Dmain_:
 
     from pycocoa.utils import _all_listing, _Globals, printf
 
@@ -945,23 +944,25 @@ if __name__ == '__main__':
     # get_printer_browser()
 
 # % python3 -m pycocoa.printers
-#  1 Printer('Color'): ID 'Brother_MFC_...', makemodel 'Brother MFC-... CUPS', URI 'usb://...'
-
-# default (True) printer: Printer('Color MFC-...')...
-#  Printer('Color ...').name: 'Color MFC-...'
-#  Printer('Color ...').ID: 'Brother_MFC_...'
-#  Printer('Color ...').makemodel: 'Brother MFC-...CUPS'
-#  Printer('Color ...').isColor: True
-#  Printer('Color ...').location: '....'
-#  Printer('Color ...').psCapable: True
-#  Printer('Color ...').psLevel: 3
-#  Printer('Color ...').isRemote: False
-#  Printer('Color ...').deviceURI: 'usb://Brother/MFC-...?serial=...'
-#  Printer('Color ...').deviceDescription: {'NSDeviceIsPrinter': 'YES'}
-#  Printer('Color ...').description: '{\n    "Device Description" =     {\n        NSDeviceIsPrinter = YES;\n    };\n    "Language Level" = 3;\n    Name = "Color MFC-...";\n    Type = "Brother MFC-... CUPS";\n}'
-#  Printer('Color ...').PPD: 'file:///var/folders/nx/.../...'
-#  Printer('Color ...').resolution: (300.0, 300.0)
 #
+#  1 Printer('WiFi MFC-...'): ID 'WiFi_MFC_...', makemodel 'Brother MFC-...-AirPrint', URI 'dnssd://...'
+#  2 Printer('Wired MFC-...'): ID 'Wired_MFC_...', makemodel 'Brother MFC-...-AirPrint', URI 'dnssd://...'
+
+# default (True) printer: Printer('WiFi MFC-...')...
+#  Printer('WiFi ...').name: 'WiFi MFC-...'
+#  Printer('WiFi ...').ID: 'Brother_MFC_...'
+#  Printer('WiFi ...').makemodel: 'Brother MFC-...CUPS'
+#  Printer('WiFi ...').isColor: True
+#  Printer('WiFi ...').location: '....'
+#  Printer('WiFi ...').psCapable: True
+#  Printer('WiFi ...').psLevel: 3
+#  Printer('WiFi ...').isRemote: False
+#  Printer('WiFi ...').deviceURI: 'usb://Brother/MFC-...?serial=...'
+#  Printer('WiFi ...').deviceDescription: {'NSDeviceIsPrinter': 'YES'}
+#  Printer('WiFi ...').description: '{\n    "Device Description" =     {\n        NSDeviceIsPrinter = YES;\n    };\n    "Language Level" = 3;\n    Name = "WiFi MFC-...";\n    Type = "Brother MFC-...-AirPrint";\n}'
+#  Printer('WiFi ...').PPD: 'file:///var/folders/nx/.../...'
+#  Printer('WiFi ...').resolution: (300.0, 300.0)
+
 #  1 Paper('A4'): ID 'iso-a4', 595x842 (8.264X11.694)
 #  2 Paper('US Letter'): ID 'na-letter', 612x792 (8.5X11)
 #  3 Paper('US Legal'): ID 'na-legal', 612x1008 (8.5X14)
@@ -978,7 +979,7 @@ if __name__ == '__main__':
 # 14 Paper('3 x 5'): ID '3 x 5', 216x360 (3X5)
 # 15 Paper('8.5 x 13'): ID 'Folio', 612x936 (8.5X13)
 # 16 Paper('Envelope PRC5 Long Edge'): ID 'DL Long Edge', 624x312 (8.667X4.333)
-#
+
 # paper: Paper('A4')...
 #  Paper('A4').name: 'A4'
 #  Paper('A4').ID: 'iso-a4'
@@ -987,24 +988,24 @@ if __name__ == '__main__':
 #  Paper('A4').size2inch: (8.26388888888889, 11.694444444444445)
 #  Paper('A4').size2mm: (209.90277777777774, 297.03888888888883)
 #  Paper('A4').PPD: 'A4'
-#  Paper('A4').printer: Printer('Color MFC-...') at 0x1034bd9d0
+#  Paper('A4').printer: Printer('WiFi MFC-...') at 0x1034bd9d0
 #  Paper('A4').localname: 'A4'
 
 
 # pycocoa.printers.__all__ = tuple(
-#  pycocoa.printers.get_libPC is <function .get_libPC at 0x100fa9ea0>,
-#  pycocoa.printers.get_papers is <function .get_papers at 0x1014b05e0>,
-#  pycocoa.printers.get_printer is <function .get_printer at 0x1014b0670>,
-#  pycocoa.printers.get_printer_browser is <function .get_printer_browser at 0x1014b0700>,
-#  pycocoa.printers.get_printers is <function .get_printers at 0x1014b0790>,
-#  pycocoa.printers.get_resolutions is <function .get_resolutions at 0x1014b0820>,
-#  pycocoa.printers.libPC is <CDLL '/System/Library/Frameworks/ApplicationServices.framework/Frameworks/PrintCore.framework/PrintCore', handle 46e129760 at 0x1014aca00>,
+#  pycocoa.printers.get_libPC is <function .get_libPC at 0x102dfc4a0>,
+#  pycocoa.printers.get_papers is <function .get_papers at 0x103345b20>,
+#  pycocoa.printers.get_printer is <function .get_printer at 0x103345bc0>,
+#  pycocoa.printers.get_printer_browser is <function .get_printer_browser at 0x103345c60>,
+#  pycocoa.printers.get_printers is <function .get_printers at 0x103345d00>,
+#  pycocoa.printers.get_resolutions is <function .get_resolutions at 0x103345da0>,
+#  pycocoa.printers.libPC is <CDLL '/System/Library/Frameworks/ApplicationServices.framework/Frameworks/PrintCore.framework/PrintCore', handle 3e6505580 at 0x103176e90>,
 #  pycocoa.printers.Paper is <class .Paper>,
 #  pycocoa.printers.PaperCustom is <class .PaperCustom>,
 #  pycocoa.printers.PaperMargins is <class .PaperMargins>,
 #  pycocoa.printers.Printer is <class .Printer>,
 # )[11]
-# pycocoa.printers.version 21.11.04, .isLazy 1, Python 3.11.0 64bit arm64, macOS 13.0.1
+# pycocoa.printers.version 25.1.31, .isLazy 1, Python 3.13.1 64bit arm64, macOS 14.6.1
 
 # MIT License <https://OpenSource.org/licenses/MIT>
 #

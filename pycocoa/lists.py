@@ -6,7 +6,7 @@
 '''Type L{List}, wrapping ObjC C{NSMutableArray}.
 '''
 # all imports listed explicitly to help PyChecker
-from pycocoa.lazily  import _ALL_LAZY, _fmt
+from pycocoa.lazily  import _ALL_LAZY, _Dmain_, _fmt
 from pycocoa.nstypes import NSMutableArray
 from pycocoa.pytypes import list2NS, py2NS
 from pycocoa.runtime import isObjCInstanceOf
@@ -19,7 +19,7 @@ except ImportError:  # Python 2-
     from itertools import izip_longest as zip_longest
 
 __all__ = _ALL_LAZY.lists
-__version__ = '25.01.25'
+__version__ = '25.01.31'
 
 
 class List(Tuple):
@@ -73,7 +73,7 @@ class List(Tuple):
 
           @return: The copy (L{List}).
         '''
-        return self.__class__(self._NS_copy(True, *ranged))
+        return type(self)(self._NS_copy(True, *ranged))
 
     def extend(self, values):
         '''Add one or more items to this list, like C{list.extend}.
@@ -122,7 +122,7 @@ class List(Tuple):
 
 NSMutableArray._Type = _Types.List = List
 
-if __name__ == '__main__':
+if __name__ == _Dmain_:
 
     from pycocoa.utils import _all_listing
 
@@ -133,7 +133,7 @@ if __name__ == '__main__':
 # pycocoa.lists.__all__ = tuple(
 #  pycocoa.lists.List is <class .List>,
 # )[1]
-# pycocoa.lists.version 21.11.04, .isLazy 1, Python 3.11.0 64bit arm64, macOS 13.0.1
+# pycocoa.lists.version 25.1.31, .isLazy 1, Python 3.13.1 64bit arm64, macOS 14.6.1
 
 # MIT License <https://OpenSource.org/licenses/MIT>
 #

@@ -63,7 +63,7 @@
 
 <hr />
 <div class="fields">      <p><strong>Version:</strong>
-        25.01.25
+        25.02.04
       </p>
 </div><!-- ==================== CLASSES ==================== -->
 <a name="section-Classes"></a>
@@ -187,11 +187,11 @@
     </td><td class="summary">
       <table width="100%" cellpadding="0" cellspacing="0" border="0">
         <tr>
-          <td><span class="summary-sig"><a href="pycocoa.utils-module.html#str2bytes" class="summary-sig-name">str2bytes</a>(<span class="summary-sig-arg">bytestr</span>,
+          <td><span class="summary-sig"><a href="pycocoa.utils-module.html#str2bytes" class="summary-sig-name">str2bytes</a>(<span class="summary-sig-arg">strbytes</span>,
         <span class="summary-sig-arg">dflt</span>=<span class="summary-sig-default">missing</span>,
         <span class="summary-sig-arg">name</span>=<span class="summary-sig-default">''</span>)</span><br />
-      Convert <code>str</code> to <code>bytes</code>/<code>unicode</code> 
-      if needed.</td>
+      Convert <code>strbytes</code> to 
+      <code>bytes</code>/<code>unicode</code> if needed.</td>
           <td align="right" valign="top">
             
             
@@ -229,6 +229,26 @@
           <td><span class="summary-sig"><a href="pycocoa.utils-module.html#clipstr" class="summary-sig-name">clipstr</a>(<span class="summary-sig-arg">bytestr</span>,
         <span class="summary-sig-arg">limit</span>=<span class="summary-sig-default">50</span>)</span><br />
       Clip a string to the given length limit.</td>
+          <td align="right" valign="top">
+            
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a name="errorf"></a><span class="summary-sig-name">errorf</span>(<span class="summary-sig-arg">fmtxt</span>,
+        <span class="summary-sig-arg">*args</span>,
+        <span class="summary-sig-arg">**file_flush_nl_nt_argv0</span>)</span><br />
+      like <code><b>printf</b>(<b>fmtxt</b>, *<b>args</b>, ..., 
+      <b>file</b>=sys.stderr)</code>.</td>
           <td align="right" valign="top">
             
             
@@ -317,6 +337,24 @@
     </td><td class="summary">
       <table width="100%" cellpadding="0" cellspacing="0" border="0">
         <tr>
+          <td><span class="summary-sig"><a href="pycocoa.utils-module.html#islistuple" class="summary-sig-name">islistuple</a>(<span class="summary-sig-arg">inst</span>)</span><br />
+      Is <b><code>inst</code></b>ance a <code>list</code> or 
+      <code>tuple</code>?</td>
+          <td align="right" valign="top">
+            
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
           <td><span class="summary-sig"><a name="lambda1"></a><span class="summary-sig-name">lambda1</span>(<span class="summary-sig-arg">arg</span>)</span><br />
       Inlieu of using <i class="math">lambda arg: arg</i>.</td>
           <td align="right" valign="top">
@@ -334,10 +372,10 @@
     </td><td class="summary">
       <table width="100%" cellpadding="0" cellspacing="0" border="0">
         <tr>
-          <td><span class="summary-sig"><a href="pycocoa.utils-module.html#logf" class="summary-sig-name">logf</a>(<span class="summary-sig-arg">fmt</span>,
+          <td><span class="summary-sig"><a href="pycocoa.utils-module.html#logf" class="summary-sig-name">logf</a>(<span class="summary-sig-arg">fmtxt</span>,
         <span class="summary-sig-arg">*args</span>,
-        <span class="summary-sig-arg">**kwds</span>)</span><br />
-      Formatted log <i>fmt % args</i> with optional keywords.</td>
+        <span class="summary-sig-arg">**file_flush_nl_nt_argv0</span>)</span><br />
+      Formatted log <i>fmtxt % args</i> with optional keywords.</td>
           <td align="right" valign="top">
             
             
@@ -424,9 +462,9 @@
     </td><td class="summary">
       <table width="100%" cellpadding="0" cellspacing="0" border="0">
         <tr>
-          <td><span class="summary-sig"><a href="pycocoa.utils-module.html#printf" class="summary-sig-name">printf</a>(<span class="summary-sig-arg">fmt</span>,
+          <td><span class="summary-sig"><a href="pycocoa.utils-module.html#printf" class="summary-sig-name">printf</a>(<span class="summary-sig-arg">fmtxt</span>,
         <span class="summary-sig-arg">*args</span>,
-        <span class="summary-sig-arg">**kwds</span>)</span><br />
+        <span class="summary-sig-arg">**file_flush_nl_nt_argv0</span>)</span><br />
       Formatted print <i>fmt % args</i> with optional keywords.</td>
           <td align="right" valign="top">
             
@@ -642,13 +680,13 @@
   <dl class="fields">
     <dt>Parameters:</dt>
     <dd><ul class="nomargin-top">
-        <li><strong class="pname"><code>method</code></strong> - The callable to be decorated as <code>property</code>.</li>
+        <li><strong class="pname"><code>method</code></strong> - The callable to be decorated as <code>Read_Only property</code>.</li>
     </ul></dd>
   </dl>
 <div class="fields">      <p><strong>Note:</strong>
         Like standard Python <code>property</code> without a 
-        <code>property.setter</code> with a more descriptive error message 
-        when set.
+        <code>property.setter</code> and with a more descriptive error 
+        message when set.
       </p>
 </div></td></tr></table>
 </div>
@@ -699,16 +737,17 @@
   <dl class="fields">
     <dt>Parameters:</dt>
     <dd><ul class="nomargin-top">
-        <li><strong class="pname"><code>bytestr</code></strong> - <code>bytes</code>, <code>str</code> or <code>unicode</code>.</li>
+        <li><strong class="pname"><code>bytestr</code></strong> - Original <code>bytes</code>, <code>str</code> or 
+          <code>unicode</code>.</li>
         <li><strong class="pname"><code>dflt</code></strong> - Optional, default return value.</li>
         <li><strong class="pname"><code>name</code></strong> - Optional name of <i>bytestr</i> argument.</li>
     </ul></dd>
     <dt>Returns:</dt>
-        <dd><code>str</code> or <i>dflt</i>.</dd>
+        <dd>The <code>str</code> or <i>dflt</i>.</dd>
     <dt>Raises:</dt>
     <dd><ul class="nomargin-top">
         <li><code><strong class='fraise'>TypeError</strong></code> - If neither <code>str</code> nor <code>bytes</code>, but only if no 
-        <i>dflt</i> is provided.</li>
+        <i>dflt</i> is specified.</li>
     </ul></dd>
   </dl>
 </td></tr></table>
@@ -743,7 +782,7 @@
 <tr><td>
   <table width="100%" cellpadding="0" cellspacing="0" border="0">
   <tr valign="top"><td>
-  <h3 class="epydoc"><span class="sig"><span class="sig-name">str2bytes</span>(<span class="sig-arg">bytestr</span>,
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">str2bytes</span>(<span class="sig-arg">strbytes</span>,
         <span class="sig-arg">dflt</span>=<span class="sig-default">missing</span>,
         <span class="sig-arg">name</span>=<span class="sig-default">''</span>)</span>
   </h3>
@@ -752,21 +791,22 @@
     </td>
   </tr></table>
   
-  <p>Convert <code>str</code> to <code>bytes</code>/<code>unicode</code> if
-  needed.</p>
+  <p>Convert <code>strbytes</code> to 
+  <code>bytes</code>/<code>unicode</code> if needed.</p>
   <dl class="fields">
     <dt>Parameters:</dt>
     <dd><ul class="nomargin-top">
-        <li><strong class="pname"><code>bytestr</code></strong> - <code>bytes</code>, <code>str</code> or <code>unicode</code>.</li>
+        <li><strong class="pname"><code>strbytes</code></strong> - Original <code>str</code>, <code>bytes</code> or 
+          <code>unicode</code>.</li>
         <li><strong class="pname"><code>dflt</code></strong> - Optional, default return value.</li>
         <li><strong class="pname"><code>name</code></strong> - Optional name of <i>bytestr</i> argument.</li>
     </ul></dd>
     <dt>Returns:</dt>
-        <dd><code>bytes</code> or <i>dflt</i>.</dd>
+        <dd>The <code>bytes</code> or <i>dflt</i>.</dd>
     <dt>Raises:</dt>
     <dd><ul class="nomargin-top">
         <li><code><strong class='fraise'>TypeError</strong></code> - If neither <code>bytes</code> nor <code>str</code>, but only if no 
-        <i>dflt</i> is provided.</li>
+        <i>dflt</i> is specified.</li>
     </ul></dd>
   </dl>
 </td></tr></table>
@@ -887,7 +927,7 @@
   <dl class="fields">
     <dt>Parameters:</dt>
     <dd><ul class="nomargin-top">
-        <li><strong class="pname"><code>inst</code></strong> - Instance (<code>any</code>).</li>
+        <li><strong class="pname"><code>inst</code></strong> - Instance (<code>any</code>, incl. <code>ctypes</code>).</li>
         <li><strong class="pname"><code>strepr</code></strong> - Conversion (<code>repr</code> or <code>str</code>).</li>
         <li><strong class="pname"><code>attrs</code></strong> - Instance attribute names (<i>all positional</i>).</li>
     </ul></dd>
@@ -921,11 +961,12 @@
         <li><strong class="pname"><code>name</code></strong> - The name of the instance (<code>str</code>).</li>
     </ul></dd>
     <dt>Returns:</dt>
-        <dd>The matching <i>class</i> from <i>classes</i>, None otherwise.</dd>
+        <dd>The matching <i>class</i> from <i>classes</i>, <code>None</code> 
+          otherwise.</dd>
     <dt>Raises:</dt>
     <dd><ul class="nomargin-top">
-        <li><code><strong class='fraise'>TypeError</strong></code> - If <i>inst</i> does not match any of the <i>classes</i>, but iff 
-        keyword <i>name='...'</i> is provided.</li>
+        <li><code><strong class='fraise'>TypeError</strong></code> - If <i>inst</i> does not match any of the <i>classes</i>, but only 
+        if <i>name='...'</i> is specified.</li>
     </ul></dd>
   </dl>
 <div class="fields">      <p><strong>See Also:</strong>
@@ -934,6 +975,34 @@
       </p>
 </div></td></tr></table>
 </div>
+<a name="islistuple"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">islistuple</span>(<span class="sig-arg">inst</span>)</span>
+  </h3>
+  </td><td align="right" valign="top"
+    >&nbsp;
+    </td>
+  </tr></table>
+  
+  <p>Is <b><code>inst</code></b>ance a <code>list</code> or 
+  <code>tuple</code>?</p>
+  <dl class="fields">
+    <dt>Parameters:</dt>
+    <dd><ul class="nomargin-top">
+        <li><strong class="pname"><code>inst</code></strong> - The object (any <code>type</code>).</li>
+    </ul></dd>
+    <dt>Returns:</dt>
+        <dd><code>True</code> if <code><b>inst</b></code> is a 
+          <code>list</code> or <code>tuple</code>, <code>False</code> 
+          otherwise.</dd>
+  </dl>
+</td></tr></table>
+</div>
 <a name="logf"></a>
 <div>
 <table class="details" border="1" cellpadding="3"
@@ -941,28 +1010,28 @@
 <tr><td>
   <table width="100%" cellpadding="0" cellspacing="0" border="0">
   <tr valign="top"><td>
-  <h3 class="epydoc"><span class="sig"><span class="sig-name">logf</span>(<span class="sig-arg">fmt</span>,
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">logf</span>(<span class="sig-arg">fmtxt</span>,
         <span class="sig-arg">*args</span>,
-        <span class="sig-arg">**kwds</span>)</span>
+        <span class="sig-arg">**file_flush_nl_nt_argv0</span>)</span>
   </h3>
   </td><td align="right" valign="top"
     >&nbsp;
     </td>
   </tr></table>
   
-  <p>Formatted log <i>fmt % args</i> with optional keywords.</p>
+  <p>Formatted log <i>fmtxt % args</i> with optional keywords.</p>
   <dl class="fields">
     <dt>Parameters:</dt>
     <dd><ul class="nomargin-top">
-        <li><strong class="pname"><code>fmt</code></strong> - Print-like format or plain string (<code>str</code>).</li>
+        <li><strong class="pname"><code>fmtxt</code></strong> - Print-like format or plain string (<code>str</code>).</li>
         <li><strong class="pname"><code>args</code></strong> - Optional arguments to format (<i>all positional</i>).</li>
-        <li><strong class="pname"><code>argv0</code></strong> - Optional prefix (<code>str</code>).</li>
         <li><strong class="pname"><code>file</code></strong> - Alternate file to write to (<code>file</code>-type), default 
           <code>NSMain.stdlog</code>.</li>
         <li><strong class="pname"><code>flush</code></strong> - Flush <b><code>file</code></b> after writing (<code>bool</code>),
           default C(True).</li>
         <li><strong class="pname"><code>nl</code></strong> - Number of leading blank lines (<code>int</code>).</li>
         <li><strong class="pname"><code>nt</code></strong> - Number of trailing blank lines (<code>int</code>).</li>
+        <li><strong class="pname"><code>argv0</code></strong> - Optional prefix (<code>str</code>).</li>
     </ul></dd>
   </dl>
 </td></tr></table>
@@ -1086,9 +1155,9 @@
 <tr><td>
   <table width="100%" cellpadding="0" cellspacing="0" border="0">
   <tr valign="top"><td>
-  <h3 class="epydoc"><span class="sig"><span class="sig-name">printf</span>(<span class="sig-arg">fmt</span>,
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">printf</span>(<span class="sig-arg">fmtxt</span>,
         <span class="sig-arg">*args</span>,
-        <span class="sig-arg">**kwds</span>)</span>
+        <span class="sig-arg">**file_flush_nl_nt_argv0</span>)</span>
   </h3>
   </td><td align="right" valign="top"
     >&nbsp;
@@ -1099,15 +1168,15 @@
   <dl class="fields">
     <dt>Parameters:</dt>
     <dd><ul class="nomargin-top">
-        <li><strong class="pname"><code>fmt</code></strong> - Print-like format or plain string (<code>str</code>).</li>
+        <li><strong class="pname"><code>fmtxt</code></strong> - Print-like format or plain string (<code>str</code>).</li>
         <li><strong class="pname"><code>args</code></strong> - Optional arguments to format (<i>all positional</i>).</li>
-        <li><strong class="pname"><code>argv0</code></strong> - Optional prefix (<code>str</code>).</li>
         <li><strong class="pname"><code>file</code></strong> - Alternate file to write to (<code>file</code>-type), default 
           <code>sys.stdout</code>.</li>
         <li><strong class="pname"><code>flush</code></strong> - Flush <b><code>file</code></b> after writing (<code>bool</code>),
           default <code>False</code>.</li>
         <li><strong class="pname"><code>nl</code></strong> - Number of leading blank lines (<code>int</code>).</li>
         <li><strong class="pname"><code>nt</code></strong> - Number of trailing blank lines (<code>int</code>).</li>
+        <li><strong class="pname"><code>argv0</code></strong> - Optional prefix (<code>str</code>).</li>
     </ul></dd>
   </dl>
 </td></tr></table>
@@ -1218,6 +1287,7 @@
     <dd><ul class="nomargin-top">
         <li><strong class="pname"><code>inst</code></strong> - Instance (<code>any</code>).</li>
         <li><strong class="pname"><code>strepr</code></strong> - Representation function (<code>repr</code> or <code>str</code>).</li>
+        <li><strong class="pname"><code>kwds</code></strong> - Optional, additional <code>name=value</code> arguments.</li>
     </ul></dd>
     <dt>Returns:</dt>
         <dd>Instance representation (<code>str</code>).</dd>
@@ -1341,7 +1411,7 @@
 <table border="0" cellpadding="0" cellspacing="0" width="100%%">
   <tr>
     <td align="left" class="footer">
-    Generated by Epydoc 3.0.1 on Sun Jan 26 12:55:30 2025
+    Generated by Epydoc 3.0.1 on Wed Feb  5 15:29:03 2025
     </td>
     <td align="right" class="footer">
       <a target="mainFrame" href="http://epydoc.sourceforge.net"

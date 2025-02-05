@@ -20,18 +20,18 @@
 @var PanelButton.TimedOut: -1.
 '''
 # all imports listed explicitly to help PyChecker
-from pycocoa.bases   import _Type2
-from pycocoa.lazily  import _ALL_LAZY, _DOT_, _fmt, _fmt_invalid
+from pycocoa.bases import _Type2
+from pycocoa.lazily import _ALL_LAZY, _Dmain_, _DOT_, _fmt, \
+                           _fmt_invalid, _NN_
 from pycocoa.nstypes import NSAlert, NSError, NSFont, NSMain, \
                             NSNotificationCenter, NSOpenPanel, \
-                            NSSavePanel, NSStr, nsString2str, \
-                            nsTextView,  _NN_  # lazily
+                            NSSavePanel, NSStr, nsString2str, nsTextView
 from pycocoa.pytypes import dict2NS, py2NS, url2NS
-from pycocoa.oslibs  import NO, NSCancelButton, NSOKButton, YES
+from pycocoa.oslibs import NO, NSCancelButton, NSOKButton, YES
 from pycocoa.runtime import isObjCInstanceOf, release
 # from strs  import StrAttd
-from pycocoa.utils   import _Constants, property_RO, _Strs, \
-                            _text_title2, _Types
+from pycocoa.utils import _Constants, property_RO, _Strs, \
+                          _text_title2, _Types
 
 from os import linesep
 from threading import Thread
@@ -46,7 +46,7 @@ except ImportError:
     _Browser, _BrowserError = None, ImportError
 
 __all__ = _ALL_LAZY.panels
-__version__ = '25.01.25'
+__version__ = '25.01.31'
 
 
 class AlertStyle(_Constants):  # Enum?
@@ -198,7 +198,7 @@ class BrowserPanel(_Type2):
             try:
                 self._browser = _Browser(name)
             except _BrowserError:
-                raise ValueError(_fmt('no %s type %r', 'browser', name))
+                raise ValueError(_fmt_invalid(browser=name))
         else:
             self.NS = NSNotificationCenter.defaultCenter()
         self.title = title or name or 'default'
@@ -222,7 +222,7 @@ class BrowserPanel(_Type2):
         ns = url2NS(url)
         sc = nsString2str(ns.scheme())
         if sc.lower() not in ('http', 'https', 'file'):
-            raise ValueError(_fmt('invalid %s %s: %r', 'scheme', sc, url))
+            raise ValueError(_fmt_invalid(scheme=url))
         if self._browser:
             self._browser.open(url, new=2 if tab else 1)
         elif self.NS:
@@ -302,7 +302,7 @@ class OpenPanel(_Type2):
            @return: The selected file name path (C{str}) or I{dflt}.
         '''
         if multiple:  # setAllowsMultipleSelection_
-            raise NotImplementedError(_fmt('multiple %s', multiple))
+            raise NotImplementedError(_fmt('multiple=%s', multiple))
 
         ns = NSOpenPanel.openPanel()
 #       ns.setTitleHidden_(NO)  # "does nothing now"
@@ -489,7 +489,7 @@ class TextPanel(AlertPanel):
         ns.addButtonWithTitle_(release(NSStr('Close')))
 
         if not text_or_file:
-            raise ValueError(_fmt('no %s: %r', 'text_or_file', text_or_file))
+            raise ValueError(_fmt_invalid(text_or_file=repr(text_or_file)))
 
         text, t = _text_title2(text_or_file, self.title)
         if t:
@@ -509,7 +509,7 @@ _Types.OpenPanel  = NSOpenPanel._Type = OpenPanel
 _Types.SavePanel  = NSSavePanel._Type = SavePanel
 _Types.TextPanel  = TextPanel
 
-if __name__ == '__main__':
+if __name__ == _Dmain_:
 
     from pycocoa.utils import _all_listing, _varstr
 
@@ -538,7 +538,7 @@ if __name__ == '__main__':
 #  pycocoa.panels.SavePanel is <class .SavePanel>,
 #  pycocoa.panels.TextPanel is <class .TextPanel>,
 # )[8]
-# pycocoa.panels.version 21.11.04, .isLazy 1, Python 3.11.0 64bit arm64, macOS 13.0.1
+# pycocoa.panels.version 25.1.31, .isLazy 1, Python 3.13.1 64bit arm64, macOS 14.6.1
 
 # MIT License <https://OpenSource.org/licenses/MIT>
 #

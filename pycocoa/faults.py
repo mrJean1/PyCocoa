@@ -33,7 +33,8 @@ functions L{getUncaughtExceptionHandler} and L{setUncaughtExceptionHandler}
 are.
 '''
 # all imports listed explicitly to help PyChecker
-from pycocoa.lazily  import _ALL_DOCS, _ALL_LAZY, _fmt, _NL_, _NN_, _pycocoa_, _PY_FH
+from pycocoa.lazily  import _ALL_DOCS, _ALL_LAZY, _Dmain_, _instr, _NL_, _NN_, _no, \
+                            _pycocoa_, _PY_FH
 from pycocoa.nstypes import _not_given_, NSExceptionError, NSMain
 from pycocoa.oslibs  import _setUncaughtExceptionHandler, _UncaughtExceptionHandler_t
 from pycocoa.runtime import  ObjCInstance  # release
@@ -44,7 +45,7 @@ import signal as _signal
 import sys
 
 __all__ = _ALL_LAZY.faults
-__version__ = '25.01.25'
+__version__ = '25.01.31'
 
 _exiting = -9  # default _exit and status
 # SIGnals handled by Python 3 C{faulthandler}
@@ -56,9 +57,8 @@ _SIGnals = (_signal.SIGABRT,  # critical
 def _bye(name):
     '''(INTERNAL) Time to go ...
     '''
-    logf('%s(%s) %s %s %s', exiting.__name__, _exiting,
-                           'from', name, 'handler',
-                            nl=1, nt=1)
+    logf('%s %s %s %s', _instr(exiting.__name__, _exiting),
+                        'from', name, 'handler', nl=1, nt=1)
     if _exiting < 0:
         os._exit(-_exiting)  # force exit
     else:
@@ -139,7 +139,8 @@ except ImportError:  # and not macOS 12.0.1 Monterey
         '''(INTERNAL) Handler for the C{signal}s enabled by C{fault}.
         '''
         logf('traceback (most recent call last):')
-        for t in _NL_.join(traceback.format_stack(frame)).split(_NL_):
+        t = traceback.format_stack(frame)
+        for t in _NL_.join(t).split(_NL_):
             if t:
                 logf(t)
         _bye(_SIGname(sig))
@@ -333,7 +334,7 @@ def setUncaughtExceptionHandler(handler, log=True, raiser=False):
             del _h  # release(_h)
         _Globals.Xhandler2 = (handler, _handler)  # retain(_handler)
     elif raiser:
-        raise RuntimeError(_fmt('no %s', setUncaughtExceptionHandler.__name__,))
+        raise RuntimeError(_no(setUncaughtExceptionHandler.__name__))
     return h  # previous
 
 
@@ -343,7 +344,7 @@ if _PY_FH and not is_enabled():
 
 __all__ += _ALL_DOCS(disable, enable, exiting, is_enabled, SIGs_enabled)
 
-if __name__ == '__main__':
+if __name__ == _Dmain_:
 
     if is_enabled() and '-X' in sys.argv[1:]:
         # test fault handling
@@ -366,12 +367,12 @@ if __name__ == '__main__':
         # raise the NSExceptionError and then try to
         # catch that as a regular Python exception:
         # - doesn't work, the exception never forces
-        # return of control to Python, instead the
+        # return of control to Python: instead the
         # process terminates with Abrt
         # - even setting a SIGABRT handler inside the
-        # uncaught ObjC/NSException handler to try to
-        # override ObjC/NS does not help, same
-        # result, terminated by Abrt
+        # uncaught ObjC/NSException handler to try
+        # to override ObjC/NS does not help, same
+        # result: terminated by Abrt
         from pycocoa.nstypes import nsRaise  # PYCHOK twice
         logf('%s ...', 'try:')
 
@@ -389,13 +390,13 @@ if __name__ == '__main__':
 
     _all_listing(__all__, locals())
 
-# % [env PYTHONFAULTHANDLER=pycocoa] python[3] -m pycocoa.faults [-X]
+# % [env PYTHONFAULTHANDLER=pycocoa] python[3] -m pycocoa.faults [-X] | [-raise]
 #
 # pycocoa.faults.__all__ = tuple(
-#  pycocoa.faults.getUncaughtExceptionHandler is <function .getUncaughtExceptionHandler at 0x10541fe20>,
-#  pycocoa.faults.setUncaughtExceptionHandler is <function .setUncaughtExceptionHandler at 0x10541feb0>,
+#  pycocoa.faults.getUncaughtExceptionHandler is <function .getUncaughtExceptionHandler at 0x1016e9c60>,
+#  pycocoa.faults.setUncaughtExceptionHandler is <function .setUncaughtExceptionHandler at 0x1016e9d00>,
 # )[2]
-# pycocoa.faults.version 21.11.04, .isLazy 1, Python 3.11.0 64bit arm64, macOS 13.0.1
+# pycocoa.faults.version 25.1.31, .isLazy 1, Python 3.13.1 64bit arm64, macOS 14.6.1
 
 # MIT License <https://OpenSource.org/licenses/MIT>
 #

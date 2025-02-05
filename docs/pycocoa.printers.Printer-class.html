@@ -314,7 +314,8 @@ bases._Type0 --+
       <code>PM</code>
       </p>
     <p class="indent-wrapped-lines"><b>Inherited from <code>bases._Type0</code></b>:
-      <code>NSDelegate</code>
+      <code>NSDelegate</code>,
+      <code>typename</code>
       </p>
     <p class="indent-wrapped-lines"><b>Inherited from <code>object</code></b>:
       <code>__class__</code>
@@ -443,7 +444,7 @@ bases._Type0 --+
         - Get printer description (<code>json</code>).
     </dd>
     <dt>Set Method:</dt>
-    <dd class="value"><span class="summary-sig">Read_Only(<span class="summary-sig-arg">self</span>,
+    <dd class="value"><span class="summary-sig">Read_Only(<span class="summary-sig-arg">inst</span>,
         <span class="summary-sig-arg">ignored</span>)</span>
         - Throws an <code>AttributeError</code>, always.
     </dd>
@@ -465,7 +466,7 @@ bases._Type0 --+
 href="pycocoa.utils.Adict-class.html" class="link">Adict</a>).
     </dd>
     <dt>Set Method:</dt>
-    <dd class="value"><span class="summary-sig">Read_Only(<span class="summary-sig-arg">self</span>,
+    <dd class="value"><span class="summary-sig">Read_Only(<span class="summary-sig-arg">inst</span>,
         <span class="summary-sig-arg">ignored</span>)</span>
         - Throws an <code>AttributeError</code>, always.
     </dd>
@@ -486,7 +487,7 @@ href="pycocoa.utils.Adict-class.html" class="link">Adict</a>).
         - Get the printer device (<code>URI</code>) or <code>&quot;&quot;</code>.
     </dd>
     <dt>Set Method:</dt>
-    <dd class="value"><span class="summary-sig">Read_Only(<span class="summary-sig-arg">self</span>,
+    <dd class="value"><span class="summary-sig">Read_Only(<span class="summary-sig-arg">inst</span>,
         <span class="summary-sig-arg">ignored</span>)</span>
         - Throws an <code>AttributeError</code>, always.
     </dd>
@@ -507,7 +508,7 @@ href="pycocoa.utils.Adict-class.html" class="link">Adict</a>).
         - Get the printer IDentifier (<code>str</code>) or <code>&quot;&quot;</code>.
     </dd>
     <dt>Set Method:</dt>
-    <dd class="value"><span class="summary-sig">Read_Only(<span class="summary-sig-arg">self</span>,
+    <dd class="value"><span class="summary-sig">Read_Only(<span class="summary-sig-arg">inst</span>,
         <span class="summary-sig-arg">ignored</span>)</span>
         - Throws an <code>AttributeError</code>, always.
     </dd>
@@ -527,7 +528,7 @@ href="pycocoa.utils.Adict-class.html" class="link">Adict</a>).
         - Is printer color (<code>bool</code>).
     </dd>
     <dt>Set Method:</dt>
-    <dd class="value"><span class="summary-sig">Read_Only(<span class="summary-sig-arg">self</span>,
+    <dd class="value"><span class="summary-sig">Read_Only(<span class="summary-sig-arg">inst</span>,
         <span class="summary-sig-arg">ignored</span>)</span>
         - Throws an <code>AttributeError</code>, always.
     </dd>
@@ -547,7 +548,7 @@ href="pycocoa.utils.Adict-class.html" class="link">Adict</a>).
         - Is this the default printer (<code>bool</code>).
     </dd>
     <dt>Set Method:</dt>
-    <dd class="value"><span class="summary-sig">Read_Only(<span class="summary-sig-arg">self</span>,
+    <dd class="value"><span class="summary-sig">Read_Only(<span class="summary-sig-arg">inst</span>,
         <span class="summary-sig-arg">ignored</span>)</span>
         - Throws an <code>AttributeError</code>, always.
     </dd>
@@ -567,7 +568,7 @@ href="pycocoa.utils.Adict-class.html" class="link">Adict</a>).
         - Is this a remote printer (<code>bool</code>).
     </dd>
     <dt>Set Method:</dt>
-    <dd class="value"><span class="summary-sig">Read_Only(<span class="summary-sig-arg">self</span>,
+    <dd class="value"><span class="summary-sig">Read_Only(<span class="summary-sig-arg">inst</span>,
         <span class="summary-sig-arg">ignored</span>)</span>
         - Throws an <code>AttributeError</code>, always.
     </dd>
@@ -588,7 +589,7 @@ href="pycocoa.utils.Adict-class.html" class="link">Adict</a>).
         - Get the printer location (<code>str</code>) or <code>&quot;&quot;</code>.
     </dd>
     <dt>Set Method:</dt>
-    <dd class="value"><span class="summary-sig">Read_Only(<span class="summary-sig-arg">self</span>,
+    <dd class="value"><span class="summary-sig">Read_Only(<span class="summary-sig-arg">inst</span>,
         <span class="summary-sig-arg">ignored</span>)</span>
         - Throws an <code>AttributeError</code>, always.
     </dd>
@@ -610,7 +611,7 @@ href="pycocoa.utils.Adict-class.html" class="link">Adict</a>).
 <code>&quot;&quot;</code>.
     </dd>
     <dt>Set Method:</dt>
-    <dd class="value"><span class="summary-sig">Read_Only(<span class="summary-sig-arg">self</span>,
+    <dd class="value"><span class="summary-sig">Read_Only(<span class="summary-sig-arg">inst</span>,
         <span class="summary-sig-arg">ignored</span>)</span>
         - Throws an <code>AttributeError</code>, always.
     </dd>
@@ -631,7 +632,7 @@ href="pycocoa.utils.Adict-class.html" class="link">Adict</a>).
         - Get the printer name (<code>str</code>) or <code>&quot;&quot;</code>.
     </dd>
     <dt>Set Method:</dt>
-    <dd class="value"><span class="summary-sig">Read_Only(<span class="summary-sig-arg">self</span>,
+    <dd class="value"><span class="summary-sig">Read_Only(<span class="summary-sig-arg">inst</span>,
         <span class="summary-sig-arg">ignored</span>)</span>
         - Throws an <code>AttributeError</code>, always.
     </dd>
@@ -651,7 +652,7 @@ href="pycocoa.utils.Adict-class.html" class="link">Adict</a>).
         - Get the ObjC instance (<code>NSPrinter</code>).
     </dd>
     <dt>Set Method:</dt>
-    <dd class="value"><span class="summary-sig">Read_Only(<span class="summary-sig-arg">self</span>,
+    <dd class="value"><span class="summary-sig">Read_Only(<span class="summary-sig-arg">inst</span>,
         <span class="summary-sig-arg">ignored</span>)</span>
         - Throws an <code>AttributeError</code>, always.
     </dd>
@@ -673,7 +674,7 @@ href="pycocoa.utils.Adict-class.html" class="link">Adict</a>).
 class="link">Paper</a>).
     </dd>
     <dt>Set Method:</dt>
-    <dd class="value"><span class="summary-sig">Read_Only(<span class="summary-sig-arg">self</span>,
+    <dd class="value"><span class="summary-sig">Read_Only(<span class="summary-sig-arg">inst</span>,
         <span class="summary-sig-arg">ignored</span>)</span>
         - Throws an <code>AttributeError</code>, always.
     </dd>
@@ -693,7 +694,7 @@ class="link">Paper</a>).
         - Get the printer PPD description (<code>URL</code>).
     </dd>
     <dt>Set Method:</dt>
-    <dd class="value"><span class="summary-sig">Read_Only(<span class="summary-sig-arg">self</span>,
+    <dd class="value"><span class="summary-sig">Read_Only(<span class="summary-sig-arg">inst</span>,
         <span class="summary-sig-arg">ignored</span>)</span>
         - Throws an <code>AttributeError</code>, always.
     </dd>
@@ -713,7 +714,7 @@ class="link">Paper</a>).
         - Is the printer PostScript capable (<code>bool</code>).
     </dd>
     <dt>Set Method:</dt>
-    <dd class="value"><span class="summary-sig">Read_Only(<span class="summary-sig-arg">self</span>,
+    <dd class="value"><span class="summary-sig">Read_Only(<span class="summary-sig-arg">inst</span>,
         <span class="summary-sig-arg">ignored</span>)</span>
         - Throws an <code>AttributeError</code>, always.
     </dd>
@@ -733,7 +734,7 @@ class="link">Paper</a>).
         - Get the printer's PostScript language level (<code>int</code>).
     </dd>
     <dt>Set Method:</dt>
-    <dd class="value"><span class="summary-sig">Read_Only(<span class="summary-sig-arg">self</span>,
+    <dd class="value"><span class="summary-sig">Read_Only(<span class="summary-sig-arg">inst</span>,
         <span class="summary-sig-arg">ignored</span>)</span>
         - Throws an <code>AttributeError</code>, always.
     </dd>
@@ -755,7 +756,7 @@ class="link">Paper</a>).
 (<code>float</code>s, dots-per-inch).
     </dd>
     <dt>Set Method:</dt>
-    <dd class="value"><span class="summary-sig">Read_Only(<span class="summary-sig-arg">self</span>,
+    <dd class="value"><span class="summary-sig">Read_Only(<span class="summary-sig-arg">inst</span>,
         <span class="summary-sig-arg">ignored</span>)</span>
         - Throws an <code>AttributeError</code>, always.
     </dd>
@@ -794,7 +795,7 @@ class="link">Paper</a>).
 <table border="0" cellpadding="0" cellspacing="0" width="100%%">
   <tr>
     <td align="left" class="footer">
-    Generated by Epydoc 3.0.1 on Sun Jan 26 12:55:31 2025
+    Generated by Epydoc 3.0.1 on Wed Feb  5 15:29:04 2025
     </td>
     <td align="right" class="footer">
       <a target="mainFrame" href="http://epydoc.sourceforge.net"

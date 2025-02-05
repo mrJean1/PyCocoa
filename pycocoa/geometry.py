@@ -7,14 +7,14 @@
 '''
 # all imports listed explicitly to help PyChecker
 from pycocoa.bases import _Type0
-from pycocoa.lazily import _ALL_LAZY, _fmt_invalid
+from pycocoa.lazily import _ALL_LAZY, _Dmain_, _fmt_invalid
 from pycocoa.nstypes import nsValue2py
 from pycocoa.octypes import NSPoint_t, NSRect_t, NSRect4_t, NSSize_t
-from pycocoa.utils import aspect_ratio, isinstanceOf, property_RO, \
-                          type2strepr
+from pycocoa.utils import aspect_ratio, isinstanceOf, islistuple, \
+                          property_RO, type2strepr
 
 __all__ = _ALL_LAZY.geometry
-__version__ = '25.01.25'
+__version__ = '25.01.31'
 
 
 class Point(_Type0):
@@ -36,7 +36,7 @@ class Point(_Type0):
 
     @point.setter  # PYCHOK property.setter
     def point(self, point):
-        if isinstance(point, (tuple, list)):
+        if islistuple(point):
             if len(point) != 2:
                 raise ValueError(_fmt_invalid(point=repr(point)))
             self.NS = NSPoint_t(*point)
@@ -181,7 +181,7 @@ class Rect(_Type0):
         '''Set the rect (L{Rect}, C{2-list}, C{4-list},
            C{2-tuple}, C{4-tuple} or C{NSRect[4]_t}).
         '''
-        if isinstance(rect, (tuple, list)):
+        if islistuple(rect):
             if len(rect) == 2:  # assume (w, h)
                 rect = (self._x, self._y) + tuple(rect)
             elif len(rect) != 4:
@@ -354,7 +354,7 @@ class Size(_Type0):
     def size(self, size):
         '''Set the size (L{Size}, C{list}, C{tuple} or C{NSSize_t}).
         '''
-        if isinstance(size, (tuple, list)):
+        if islistuple(size):
             if len(size) != 2:
                 raise ValueError(_fmt_invalid(size=repr(size)))
             self.NS = NSSize_t(*size)
@@ -387,7 +387,7 @@ class Size2(Size):
         self.size = width, height
 
 
-if __name__ == '__main__':
+if __name__ == _Dmain_:
 
     from pycocoa.utils import _all_listing
 
@@ -403,7 +403,7 @@ if __name__ == '__main__':
 #  pycocoa.geometry.Size is <class .Size>,
 #  pycocoa.geometry.Size2 is <class .Size2>,
 # )[6]
-# pycocoa.geometry.version 21.11.04, .isLazy 1, Python 3.11.0 64bit arm64, macOS 13.0.1
+# pycocoa.geometry.version 25.1.31, .isLazy 1, Python 3.13.1 64bit arm64, macOS 14.6.1
 
 # MIT License <https://OpenSource.org/licenses/MIT>
 #

@@ -6,25 +6,26 @@
 '''Conversions from C{NS...} ObjC instances to Python.
 '''
 # all imports listed explicitly to help PyChecker
-from pycocoa.lazily  import _ALL_LAZY, _COLON_, _fmt, _fmt_invalid
+from pycocoa.lazily import _ALL_LAZY, _COLON_, _Dmain_, _fmt, \
+                           _fmt_invalid, _instr
 from pycocoa.nstypes import NSArray, NSData, NSDate, NSDecimal, \
-                            NSDictionary, NSDouble, NSInt, NSLong, \
-                            NSLongLong, NSMain, NSMutableArray, \
-                            NSMutableDictionary, NSMutableSet, \
-                            NSSet, NSStr, NSURL
-from pycocoa.oslibs  import libCF
+                            NSDictionary, NSDouble, NSLongLong, \
+                            NSMain, NSMutableArray, NSMutableSet, \
+                            NSMutableDictionary, NSSet, NSStr, NSURL
+from pycocoa.oslibs import libCF
 from pycocoa.runtime import ObjCInstance, release
-from pycocoa.utils   import bytes2str, _ByteStrs, clipstr, \
-                            DEFAULT_UNICODE, _Ints, isinstanceOf
+from pycocoa.utils import bytes2str, _ByteStrs, clipstr, \
+                          DEFAULT_UNICODE, _Ints, isinstanceOf
 
-from ctypes  import c_void_p
+from ctypes import c_void_p
 from decimal import Decimal as _Decimal
-from types   import GeneratorType as _Generator
+from types import GeneratorType as _Generator
 
 __all__ = _ALL_LAZY.pytypes
-__version__ = '25.01.25'
+__version__ = '25.02.04'
 
-_Numbers  = _Ints  + (float, _Decimal)
+_MAXLONG = (1 << 63)  # == _MAXLONGLONG!
+_Numbers = _Ints + (float, _Decimal)
 
 
 def _iter2NS(ns, py, getCount):
@@ -90,6 +91,27 @@ def bytes2NS(py):
                           _NSData_length)
 
 
+def decimal2NS(py):
+    '''Create an C{NSDecimal} instance from a Python C{Decimal}.
+
+       @param py: The value (C{Decimal}, C{float}, C{int} or C{str}).
+
+       @return: The instance ( C{NSDecimal}).
+
+       @raise TypeError: If C{py} not a C{Decimal}, C{float}, C{int}
+                         or C{str}.
+
+       @raise ValueError: Invalid decimal C{py}.
+    '''
+    if isinstanceOf(py, str, *_Numbers, name='py'):
+        try:
+            py = _Decimal(py)
+        except Exception:
+            t = _fmt_invalid(_Decimal.__name__, py=repr(py))
+            raise ValueError(t)
+        return NSDecimal(py)
+
+
 def dict2NS(py, frozen=False):
     '''Create an C{NS[Mutable]Dictionary} instance from a Python C{dict}.
 
@@ -114,7 +136,7 @@ def dict2NS(py, frozen=False):
 
 
 def float2NS(py):
-    '''Create an C{NSNumber} instance from a Python C{float} or C{int}.
+    '''Create an C{NSDouble} instance from a Python C{float} or C{int}.
 
        @param py: The value (C{float} or C{int}).
 
@@ -155,22 +177,28 @@ def generator2NS(py):
         return tuple2NS(tuple(py))
 
 
-def int2NS(py):
+def int2NS(py, NS=None):
     '''Create an C{NSNumber} instance from a Python C{int} or C{long}.
 
        @param py: The value (C{int} or C{long}).
+       @keyword NS: Alternate C{NSNumber} ObjC class to use when C{py}
+                    exceeds the C{NSLong} or C{NSLongLong} range, for
+                    example C{NS=NSDecimal}.
 
-       @return: The ObjC instance (C{NSInt}, C{NSLong}, or C{NSLongLong}).
+       @return: The ObjC instance (C{NSNumber} or C{NS} alternate).
 
        @raise TypeError: If C{py} not an C{int} or C{long}.
+
+       @raise ValueError: If C{py} exceeds C{NSLong} range and
+                          if no C{NS} alternate is specified.
     '''
     if isinstanceOf(py, _Ints, name='py'):
-        if abs(py) < (1 << 31):
-            return NSInt(py)
-        elif abs(py) < (1 << 63):
-            return NSLong(py)
-        else:
-            return NSLongLong(py)
+        if _MAXLONG > py >= -_MAXLONG:
+            NS = NSLongLong  # or NSLong
+        elif not callable(NS):
+            t = _fmt_invalid('NSLong', py=repr(py))
+            raise ValueError(t)
+        return NS(py)
 
 
 def list2NS(py):
@@ -210,8 +238,7 @@ def None2NS(py):
     '''
     if py is None:
         return NSMain.Null
-    t = _fmt_invalid(py=repr(py))
-    raise ValueError(_fmt('s, not %s', t, None))
+    raise ValueError(_fmt_invalid(None, py=repr(py)))
 
 
 def range2NS(py):
@@ -323,9 +350,9 @@ def url2NS(py, url2=None):
 
 _py2NS = {bool:       bool2NS,
           bytearray:  bytes2NS,
-         _Decimal:    NSDecimal,
+         _Decimal:    decimal2NS,
           dict:       dict2NS,
-          float:      NSDouble,
+          float:      float2NS,
           frozenset:  frozenset2NS,
          _Generator:  generator2NS,
           int:        int2NS,
@@ -393,7 +420,8 @@ def py2NS(py):
             if isinstance(py, ty):
                 break
         else:
-            raise TypeError(_fmt('unhandled %s(%s): %r', 'type', 'py', py))
+            t = _instr(type.__name__, 'py')
+            raise TypeError(_fmt('unhandled %s: %r', t, py))
         _py2NS[type(py)] = ns
     return ns(py)
 
@@ -415,7 +443,7 @@ def type2NS(py):
         return py2NS(py)
 
 
-if __name__ == '__main__':
+if __name__ == _Dmain_:
 
     from pycocoa.utils import _all_listing
 
@@ -424,27 +452,28 @@ if __name__ == '__main__':
 # % python3 -m pycocoa.pytypes
 #
 # pycocoa.pytypes.__all__ = tuple(
-#  pycocoa.pytypes.bool2NS is <function .bool2NS at 0x10567bbe0>,
-#  pycocoa.pytypes.bytes2NS is <function .bytes2NS at 0x10567bc70>,
-#  pycocoa.pytypes.dict2NS is <function .dict2NS at 0x10567bd00>,
-#  pycocoa.pytypes.float2NS is <function .float2NS at 0x10567bd90>,
-#  pycocoa.pytypes.frozenset2NS is <function .frozenset2NS at 0x10567be20>,
-#  pycocoa.pytypes.generator2NS is <function .generator2NS at 0x10567beb0>,
-#  pycocoa.pytypes.int2NS is <function .int2NS at 0x10567bf40>,
-#  pycocoa.pytypes.list2NS is <function .list2NS at 0x10569c040>,
-#  pycocoa.pytypes.map2NS is <function .map2NS at 0x10569c0d0>,
-#  pycocoa.pytypes.None2NS is <function .None2NS at 0x10569c160>,
-#  pycocoa.pytypes.py2NS is <function .py2NS at 0x10569c5e0>,
-#  pycocoa.pytypes.range2NS is <function .range2NS at 0x10569c1f0>,
-#  pycocoa.pytypes.set2NS is <function .set2NS at 0x10569c280>,
-#  pycocoa.pytypes.str2NS is <function .str2NS at 0x10569c310>,
-#  pycocoa.pytypes.time2NS is <function .time2NS at 0x10569c3a0>,
-#  pycocoa.pytypes.tuple2NS is <function .tuple2NS at 0x10569c430>,
-#  pycocoa.pytypes.type2NS is <function .type2NS at 0x10569c670>,
-#  pycocoa.pytypes.unicode2NS is <function .unicode2NS at 0x10569c4c0>,
-#  pycocoa.pytypes.url2NS is <function .url2NS at 0x10569c550>,
-# )[19]
-# pycocoa.pytypes.version 21.11.04, .isLazy 1, Python 3.11.0 64bit arm64, macOS 13.0.1
+#  pycocoa.pytypes.bool2NS is <function .bool2NS at 0x100ad14e0>,
+#  pycocoa.pytypes.bytes2NS is <function .bytes2NS at 0x100ad1580>,
+#  pycocoa.pytypes.decimal2NS is <function .decimal2NS at 0x100ad1620>,
+#  pycocoa.pytypes.dict2NS is <function .dict2NS at 0x100ad16c0>,
+#  pycocoa.pytypes.float2NS is <function .float2NS at 0x100ad1760>,
+#  pycocoa.pytypes.frozenset2NS is <function .frozenset2NS at 0x100ad1800>,
+#  pycocoa.pytypes.generator2NS is <function .generator2NS at 0x100ad18a0>,
+#  pycocoa.pytypes.int2NS is <function .int2NS at 0x100ad1940>,
+#  pycocoa.pytypes.list2NS is <function .list2NS at 0x100ad19e0>,
+#  pycocoa.pytypes.map2NS is <function .map2NS at 0x100ad1a80>,
+#  pycocoa.pytypes.None2NS is <function .None2NS at 0x100ad1b20>,
+#  pycocoa.pytypes.py2NS is <function .py2NS at 0x100ad2020>,
+#  pycocoa.pytypes.range2NS is <function .range2NS at 0x100ad1bc0>,
+#  pycocoa.pytypes.set2NS is <function .set2NS at 0x100ad1c60>,
+#  pycocoa.pytypes.str2NS is <function .str2NS at 0x100ad1d00>,
+#  pycocoa.pytypes.time2NS is <function .time2NS at 0x100ad1da0>,
+#  pycocoa.pytypes.tuple2NS is <function .tuple2NS at 0x100ad1e40>,
+#  pycocoa.pytypes.type2NS is <function .type2NS at 0x100ad20c0>,
+#  pycocoa.pytypes.unicode2NS is <function .unicode2NS at 0x100ad1ee0>,
+#  pycocoa.pytypes.url2NS is <function .url2NS at 0x100ad1f80>,
+# )[20]
+# pycocoa.pytypes.version 25.2.4, .isLazy 1, Python 3.13.1 64bit arm64, macOS 14.6.1
 
 # MIT License <https://OpenSource.org/licenses/MIT>
 #

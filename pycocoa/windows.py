@@ -48,8 +48,8 @@ L{WindowStyle}, wrapping ObjC C{NSWindow}, etc.
 # all imports listed explicitly to help PyChecker
 from pycocoa.bases import _Type2
 from pycocoa.geometry import Rect
-from pycocoa.lazily import _ALL_LAZY, _COLON_, _fmt, _fmt_invalid, \
-                           _isPython3  # PYCHOK used!
+from pycocoa.lazily import _ALL_LAZY, _Dmain_, _fmt, _fmt_invalid, \
+                           _isPython3
 from pycocoa.nstypes import isNone, NSConcreteNotification, NSFont, \
                             NSImageView, NSMain, NSNotification, \
                             NSScreen, NSScrollView, NSStr, NSTableView, \
@@ -72,7 +72,7 @@ from pycocoa.utils import aspect_ratio, bytes2str, _Constants, _Globals, \
 # from enum import Enum
 
 __all__ = _ALL_LAZY.windows
-__version__ = '25.01.25'
+__version__ = '25.01.31'
 
 
 class AutoResizeError(ValueError):
@@ -870,7 +870,7 @@ _Types.Window = NSWindow._Type = Window
 _Types.MediaWindow             = MediaWindow
 _Types.TextWindow              = TextWindow
 
-if __name__ == '__main__':
+if __name__ == _Dmain_:
 
     from pycocoa.utils import _all_listing, _varstr
 
@@ -893,7 +893,7 @@ if __name__ == '__main__':
 #                            .Sizable=18,
 #                            .WidthSizable=2,
 #  pycocoa.windows.AutoResizeError is <class .AutoResizeError>,
-#  pycocoa.windows.autoResizes is <function .autoResizes at 0x102fd1ab0>,
+#  pycocoa.windows.autoResizes is <function .autoResizes at 0x100850680>,
 #  pycocoa.windows.BezelStyle.Disclosure=5,
 #                            .HelpButton=9,
 #                            .Inline=15,
@@ -912,8 +912,8 @@ if __name__ == '__main__':
 #                        .Line=1,
 #                        .No=0,
 #  pycocoa.windows.MediaWindow is <class .MediaWindow>,
-#  pycocoa.windows.ns2Window is <function .ns2Window at 0x102fec670>,
-#  pycocoa.windows.NSWindowDelegate is <pycocoa.utils.module_property_RO object at 0x102c03160>,
+#  pycocoa.windows.ns2Window is <function .ns2Window at 0x100da3240>,
+#  pycocoa.windows.NSWindowDelegate is <pycocoa.utils.module_property_RO object at 0x100baa510>,
 #  pycocoa.windows.TextWindow is <class .TextWindow>,
 #  pycocoa.windows.Window is <class .Window>,
 #  pycocoa.windows.WindowError is <class .WindowError>,
@@ -924,9 +924,9 @@ if __name__ == '__main__':
 #                             .Typical=15,
 #                             .Utility=1<<4,
 #  pycocoa.windows.WindowStyleError is <class .WindowStyleError>,
-#  pycocoa.windows.windowStyles is <function .windowStyles at 0x102bd9e10>,
+#  pycocoa.windows.windowStyles is <function .windowStyles at 0x100d92200>,
 # )[14]
-# pycocoa.windows.version 21.11.04, .isLazy 1, Python 3.11.0 64bit arm64, macOS 13.0.1
+# pycocoa.windows.version 25.1.31, .isLazy 1, Python 3.13.1 64bit arm64, macOS 14.6.1
 
 # MIT License <https://OpenSource.org/licenses/MIT>
 #

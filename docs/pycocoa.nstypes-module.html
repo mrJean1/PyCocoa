@@ -64,7 +64,7 @@
 
 <hr />
 <div class="fields">      <p><strong>Version:</strong>
-        25.01.25
+        25.02.04
       </p>
 </div><!-- ==================== CLASSES ==================== -->
 <a name="section-Classes"></a>
@@ -267,8 +267,7 @@
       <table width="100%" cellpadding="0" cellspacing="0" border="0">
         <tr>
           <td><span class="summary-sig"><a href="pycocoa.nstypes-module.html#nsDecimal2decimal" class="summary-sig-name">nsDecimal2decimal</a>(<span class="summary-sig-arg">ns</span>)</span><br />
-      Create a Python <code>Decimal</code> from an 
-      <code>NSDecimalNumber</code>.</td>
+      Create a Python <code>Decimal</code> from an <code>NSDecimal</code>.</td>
           <td align="right" valign="top">
             
             
@@ -416,7 +415,7 @@
     </td><td class="summary">
       <table width="100%" cellpadding="0" cellspacing="0" border="0">
         <tr>
-          <td><span class="summary-sig"><a href="pycocoa.nstypes-module.html#nsLogf" class="summary-sig-name">nsLogf</a>(<span class="summary-sig-arg">fmt</span>,
+          <td><span class="summary-sig"><a href="pycocoa.nstypes-module.html#nsLogf" class="summary-sig-name">nsLogf</a>(<span class="summary-sig-arg">fmtxt</span>,
         <span class="summary-sig-arg">*args</span>)</span><br />
       Formatted write to the console.</td>
           <td align="right" valign="top">
@@ -1159,15 +1158,15 @@
     <td width="15%" align="right" valign="top" class="summary">
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
-        <a href="pycocoa.nstypes-module.html#NSMain" class="summary-name">NSMain</a> = <code title="NSMain.Application=NSApplication(&lt;Id_t at 0x7ff1b8cd4200&gt;) of 0x7ff1a1\
-92dca0,
-      .BooleanNO=NSBoolean(&lt;Id_t at 0x7ff1b8ce1c20&gt;) of 0x7ff84eea6c70\
+        <a href="pycocoa.nstypes-module.html#NSMain" class="summary-name">NSMain</a> = <code title="NSMain.Application=NSApplication(&lt;Id_t at 0x7f9a7880f680&gt;) of 0x7f9a66\
+350c20,
+      .BooleanNO=NSBoolean(&lt;Id_t at 0x7f9a482d40e0&gt;) of 0x7ff8475e6c70\
 ,
-      .BooleanYES=NSBoolean(&lt;Id_t at 0x7ff1a8c18170&gt;) of 0x7ff84eea6c6\
+      .BooleanYES=NSBoolean(&lt;Id_t at 0x7f9a78824950&gt;) of 0x7ff8475e6c6\
 0,
-      .Bundle=NSBundle(&lt;Id_t at 0x7ff1a8c18290&gt;) of 0x600003218190,
+      .Bundle=NSBundle(&lt;Id_t at 0x7f9a78824a70&gt;) of 0x600000ef4000,
       .BundleName=NSConstantString('CFBundleName'),
-...">NSMain.Application=NSApplication(&lt;Id_t at 0x7ff1b8cd4<code class="variable-ellipsis">...</code></code><br />
+...">NSMain.Application=NSApplication(&lt;Id_t at 0x7f9a7880f<code class="variable-ellipsis">...</code></code><br />
       Global <code>ObjC/NS/CF...</code> singletons.
     </td>
   </tr>
@@ -1567,11 +1566,11 @@
   </tr></table>
   
   <p>Create a Python <code>Decimal</code> from an 
-  <code>NSDecimalNumber</code>.</p>
+  <code>NSDecimal</code>.</p>
   <dl class="fields">
     <dt>Parameters:</dt>
     <dd><ul class="nomargin-top">
-        <li><strong class="pname"><code>ns</code></strong> - The <code>NSDecimalNumber</code> (<a 
+        <li><strong class="pname"><code>ns</code></strong> - The <code>NSDecimal</code> (<a 
           href="pycocoa.runtime.ObjCInstance-class.html" 
           class="link">ObjCInstance</a>).</li>
     </ul></dd>
@@ -1579,7 +1578,7 @@
         <dd>The decimal (<code>Decimal</code>).</dd>
     <dt>Raises:</dt>
     <dd><ul class="nomargin-top">
-        <li><code><strong class='fraise'>ValueError</strong></code> - If <i>ns</i> not an <code>NSNumber</code>.</li>
+        <li><code><strong class='fraise'>ValueError</strong></code> - If <i>ns</i> not an <code>NSDecimal</code>.</li>
     </ul></dd>
   </dl>
 </td></tr></table>
@@ -1800,7 +1799,7 @@
 <tr><td>
   <table width="100%" cellpadding="0" cellspacing="0" border="0">
   <tr valign="top"><td>
-  <h3 class="epydoc"><span class="sig"><span class="sig-name">nsLogf</span>(<span class="sig-arg">fmt</span>,
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">nsLogf</span>(<span class="sig-arg">fmtxt</span>,
         <span class="sig-arg">*args</span>)</span>
   </h3>
   </td><td align="right" valign="top"
@@ -1812,7 +1811,7 @@
   <dl class="fields">
     <dt>Parameters:</dt>
     <dd><ul class="nomargin-top">
-        <li><strong class="pname"><code>fmt</code></strong> - A printf-like format string (<code>str</code>).</li>
+        <li><strong class="pname"><code>fmtxt</code></strong> - A printf-like format string (<code>str</code>).</li>
         <li><strong class="pname"><code>args</code></strong> - Optional arguments to format (<code>all positional</code>).</li>
     </ul></dd>
   </dl>
@@ -2320,13 +2319,13 @@
   <dl class="fields">
     <dt>Value:</dt>
       <dd><table><tr><td><pre class="variable">
-NSMain.Application=NSApplication(&lt;Id_t at 0x7ff1b8cd4200&gt;) of 0x7ff1a1<span class="variable-linewrap"><img src="crarr.png" alt="\" /></span>
-92dca0,
-      .BooleanNO=NSBoolean(&lt;Id_t at 0x7ff1b8ce1c20&gt;) of 0x7ff84eea6c70<span class="variable-linewrap"><img src="crarr.png" alt="\" /></span>
+NSMain.Application=NSApplication(&lt;Id_t at 0x7f9a7880f680&gt;) of 0x7f9a66<span class="variable-linewrap"><img src="crarr.png" alt="\" /></span>
+350c20,
+      .BooleanNO=NSBoolean(&lt;Id_t at 0x7f9a482d40e0&gt;) of 0x7ff8475e6c70<span class="variable-linewrap"><img src="crarr.png" alt="\" /></span>
 ,
-      .BooleanYES=NSBoolean(&lt;Id_t at 0x7ff1a8c18170&gt;) of 0x7ff84eea6c6<span class="variable-linewrap"><img src="crarr.png" alt="\" /></span>
+      .BooleanYES=NSBoolean(&lt;Id_t at 0x7f9a78824950&gt;) of 0x7ff8475e6c6<span class="variable-linewrap"><img src="crarr.png" alt="\" /></span>
 0,
-      .Bundle=NSBundle(&lt;Id_t at 0x7ff1a8c18290&gt;) of 0x600003218190,
+      .Bundle=NSBundle(&lt;Id_t at 0x7f9a78824a70&gt;) of 0x600000ef4000,
       .BundleName=NSConstantString('CFBundleName'),
 <code class="variable-ellipsis">...</code>
 </pre></td></tr></table>
@@ -2366,7 +2365,7 @@ NSMain.Application=NSApplication(&lt;Id_t at 0x7ff1b8cd4200&gt;) of 0x7ff1a1<spa
 <table border="0" cellpadding="0" cellspacing="0" width="100%%">
   <tr>
     <td align="left" class="footer">
-    Generated by Epydoc 3.0.1 on Sun Jan 26 12:55:30 2025
+    Generated by Epydoc 3.0.1 on Wed Feb  5 15:29:03 2025
     </td>
     <td align="right" class="footer">
       <a target="mainFrame" href="http://epydoc.sourceforge.net"

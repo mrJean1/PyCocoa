@@ -9,22 +9,21 @@
 from pycocoa.bases   import _Type2
 from pycocoa.menus   import _callMenuItem_name, _handleMenuItem_name, \
                              Item, ItemSeparator, Menu, MenuBar, ns2Item
-from pycocoa.lazily  import _ALL_LAZY, _fmt, _NN_
-from pycocoa.nstypes import NSApplication, nsBundleRename, \
-                            NSConcreteNotification, NSMain, \
-                            NSNotification, nsOf, NSStr
+from pycocoa.lazily  import _ALL_LAZY, _Dmain_, _fmt, _fmt_invalid, _NN_
+from pycocoa.nstypes import NSApplication, nsBundleRename, nsOf, NSStr, \
+                            NSConcreteNotification, NSMain, NSNotification
 from pycocoa.oslibs  import YES
 from pycocoa.runtime import isObjCInstanceOf, ObjCDelegate, ObjCInstance, \
                             ObjCSubclass, _ObjC_log_totals, release, retain, \
                             send_super_init
-from pycocoa.utils   import _Globals, bytes2str, isinstanceOf, \
-                             module_property_RO, printf, property_RO, _Types
+from pycocoa.utils   import bytes2str, errorf, _Globals, isinstanceOf, \
+                            module_property_RO, property_RO, _Types
 
 from threading import Thread
 from time import sleep
 
 __all__ = _ALL_LAZY.apps
-__version__ = '25.01.25'
+__version__ = '25.01.31'
 
 
 class App(_Type2):
@@ -507,7 +506,7 @@ class _NSApplicationDelegate(object):
             act(item)
         except Exception:
             if _Globals.raiser:
-                printf('%s(%r): callable %r ...',
+                errorf('%s(%r): callable %r ...',
                        _callMenuItem_name, item, act)
                 raise
 
@@ -534,12 +533,12 @@ class _NSApplicationDelegate(object):
                     break
                 except Exception:
                     if _Globals.raiser:
-                        printf('%s(%r): %r method %s ...',
+                        errorf('%s(%r): %r method %s ...',
                                _handleMenuItem_name, i, t, act)
                         raise
         else:
             if _Globals.raiser:
-                raise RuntimeError('%s(%r): %s' % ('unhandled', item, act))
+                raise RuntimeError(_fmt('unhandled(%r): %s', item, act))
 
     @_ObjC.method('B@')
     def validateMenuItem_(self, ns_item):
@@ -619,14 +618,14 @@ def ns2App(ns):
         pass
     elif isObjCInstanceOf(ns, NSConcreteNotification, NSNotification, name='ns'):
         ns = ns.object()
-    if ns == _Globals.App.NS:
-        return _Globals.App
-    raise RuntimeError(_fmt('%s %r vs %r', 'ns', ns, _Globals.App.NS))
+    if ns != _Globals.App.NS:
+        raise RuntimeError(_fmt_invalid(repr(_Globals.App.NS), ns=ns))
+    return _Globals.App
 
 
 NSApplication._Type = _Types.App = App
 
-if __name__ == '__main__':
+if __name__ == _Dmain_:
 
     from pycocoa.utils import _all_listing
 
@@ -636,12 +635,12 @@ if __name__ == '__main__':
 #
 # pycocoa.apps.__all__ = tuple(
 #  pycocoa.apps.App is <class .App>,
-#  pycocoa.apps.app_title is <function .app_title at 0x1012e7b50>,
-#  pycocoa.apps.ns2App is <function .ns2App at 0x1012e03a0>,
-#  pycocoa.apps.NSApplicationDelegate is <pycocoa.utils.module_property_RO object at 0x1012ce6b0>,
+#  pycocoa.apps.app_title is <function .app_title at 0x100e91260>,
+#  pycocoa.apps.ns2App is <function .ns2App at 0x100e91c60>,
+#  pycocoa.apps.NSApplicationDelegate is <pycocoa.utils.module_property_RO object at 0x100ba96a0>,
 #  pycocoa.apps.Tile is <class .Tile>,
 # )[5]
-# pycocoa.apps.version 21.11.04, .isLazy 1, Python 3.11.0 64bit arm64, macOS 13.0.1
+# pycocoa.apps.version 25.1.31, .isLazy 1, Python 3.13.1 64bit arm64, macOS 14.6.1
 
 # MIT License <https://OpenSource.org/licenses/MIT>
 #

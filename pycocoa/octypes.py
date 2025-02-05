@@ -37,23 +37,29 @@ are ObjC types defined in terms of a C{ctypes} C{c_} type.
 '''
 # all imports listed explicitly to help PyChecker
 # from pycocoa.getters import get_selectornameof
-from pycocoa.lazily import _ALL_LAZY, _bNN_, _NN_
-from pycocoa.utils  import _bCOLON_, bytes2str, _fmt, inst2strepr, \
-                            iterbytes, missing, property_RO, str2bytes
+from pycocoa.lazily import _ALL_LAZY, _bNN_, _Dmain_, _fmt_invalid, \
+                           _NN_, _SPACE_
+from pycocoa.utils import bytes2str, _fmt, inst2strepr, iterbytes, \
+                          missing, property_RO, str2bytes
 
-from ctypes import c_bool, c_byte, c_char, c_char_p, c_double, \
-                   c_float, c_int, c_int32, c_int64, c_long, \
-                   c_longlong, c_short, c_ubyte, c_uint, c_uint16, \
-                   c_uint32, c_ulong, c_ulonglong, c_ushort, \
-                   c_void_p, c_wchar, \
-                   POINTER, py_object, sizeof, Structure
+from ctypes import c_bool, c_byte, c_char, c_char_p, c_double, c_float, \
+                   c_int, c_int32, c_int64, c_long, c_longlong, c_short, \
+                   c_ubyte, c_uint, c_uint16, c_uint32, c_ulonglong, \
+                   c_ulong, c_ushort, c_void_p, c_wchar, POINTER, \
+                   py_object, sizeof, Structure
 try:
     from ctypes import c_void
 except ImportError:
     c_void = None
+from platform import machine as m
+m = m()  # see .utils.machine
+__arm64__  = m == 'arm64'   # PYCHOK see .oslibs._Apple_Si
+__i386__   = m == 'i386'    # PYCHOK expected
+__x86_64__ = m == 'x86_64'  # PYCHOK also Intel emulation
+del m
 
 __all__ = _ALL_LAZY.octypes
-__version__ = '25.01.25'
+__version__ = '25.01.31'
 
 z = sizeof(c_void_p)
 if z == 4:
@@ -63,16 +69,9 @@ elif z == 8:
     c_ptrdiff_t = c_int64
     __LP64__ = True
 else:
-    raise ValueError(_fmt('sizeof(c_void_p): %s', z))
+    raise AssertionError(_fmt_invalid(sizeof=z))
 del z
-
-from platform import machine as m
-m = m()  # see .utils.machine
-__arm64__  = m == 'arm64'   # PYCHOK see .oslibs._Apple_Si
-__i386__   = m == 'i386'    # PYCHOK expected
-__x86_64__ = m == 'x86_64'  # PYCHOK also Intel emulation
-del m
-
+_bHAT     = b'^'
 unichar_t = c_wchar   # actually a c_ushort in NSString_.h,
 UniChar_t = c_ushort  # but need ctypes to convert properly
 
@@ -99,16 +98,22 @@ class ObjC_t(c_void_p):
         return _fmt('<%s at %#x>', self, id(self))
 
     def __str__(self):
-        return self.__class__.__name__
+        return self.typename
+
+    @property_RO
+    def typename(self):
+        '''Get this instance' Python class name (C{str}).
+        '''
+        return type(self).__name__
 
 
 class TypeCodeError(ValueError):
     '''Error in ObjC type encoding.
     '''
     def __init__(self, kind, coderr, name=_NN_):
-        t = _fmt('encoding %s: %r', kind, coderr)
         if name:
-            t = _fmt('%s %s', bytes2str(name), t)
+            kind = _SPACE_(kind, bytes2str(name))
+        t = _fmt('%s encoding: %r', kind, coderr)
         ValueError.__init__(self, t)
 
 
@@ -239,15 +244,16 @@ class SEL_t(ObjC_t):
     '''ObjC C{SELector/cmd} type, encoding C{b':'}.
     '''
     _name_ = None
+
 #   def __new__(cls, name_=None):
 #       self = libobjc.sel_registerName(str2bytes(name_))
 #       return self
 
     def __repr__(self):
-        return _fmt('<%s(%s)>', self.__class__.__name__, self)
+        return _fmt('<%s(%s)>', self.typename, self)
 
     def __str__(self):
-        return 'None' if self.value is None else bytes2str(self.name_)
+        return str(None) if self.value is None else bytes2str(self.name_)
 
     @property_RO
     def name_(self):
@@ -255,7 +261,7 @@ class SEL_t(ObjC_t):
             if self.value is None:
                 raise ValueError(_fmt('Null %r', self))
             from pycocoa.getters import get_selectornameof
-            self._name_ = get_selectornameof(self) or 'SEL_t'
+            self._name_ = get_selectornameof(self) or self.typename
         return self._name_
 
 
@@ -391,11 +397,10 @@ class NSRect4_t(NSRect_t):
         super(NSRect4_t, self).__init__(NSPoint_t(x, y), NSSize_t(width, height))
 
     def __repr__(self):
-        r = inst2strepr(self, repr, 'x', 'y', 'width', 'height')
-        return '<%s at %#x>' % (r, id(self))
+        return _fmt('<%s at %#x>', self._strepr(repr), id(self))
 
     def __str__(self):
-        return inst2strepr(self, str, 'x', 'y', 'width', 'height')
+        return self._strepr(str)
 
     @property_RO
     def bottom(self):
@@ -420,6 +425,9 @@ class NSRect4_t(NSRect_t):
         '''Get the upper x coordinate (C{float}).
         '''
         return self.x + self.width
+
+    def _strepr(self, strepr):  # helper for __repr__ and __str__
+        return inst2strepr(self, strepr, 'x', 'y', 'width', 'height')
 
     @property_RO
     def top(self):
@@ -469,22 +477,22 @@ NSPointZero = NSPoint_t(0, 0)
 NSTimeInterval_t = c_double  # a ctype, != TimeInterval_t
 
 # map ctypes type to ObjC encoding type code
-_ctype2encoding = {c_char:     b'c', c_ubyte:     b'C',
-                   c_int:      b'i', c_uint:      b'I',
-                   c_short:    b's', c_ushort:    b'S',
-                   c_long:     b'l', c_ulong:     b'L',
-                   c_float:    b'f', c_double:    b'd',
-                   c_bool:     b'B',
-                   c_char_p:   b'*',
-                   c_void_p:   b'@',  # c_void:   b'v',
-                   Class_t:    b'#',
-                   Id_t:       b'@',
-                   NSPoint_t:  NSPointEncoding,
-                   NSRange_t:  NSRangeEncoding,
-                   NSRect_t:   NSRectEncoding,
-                   NSSize_t:   NSSizeEncoding,
-                   SEL_t:     _bCOLON_,
-                   py_object:  PyObjectEncoding}
+_ctype2encoding = {c_char:    b'c', c_ubyte:   b'C',
+                   c_int:     b'i', c_uint:    b'I',
+                   c_short:   b's', c_ushort:  b'S',
+                   c_long:    b'l', c_ulong:   b'L',
+                   c_float:   b'f', c_double:  b'd',
+                   c_bool:    b'B',
+                   c_char_p:  b'*',
+                   c_void_p:  b'@',  # c_void: b'v',
+                   Class_t:   b'#',
+                   Id_t:      b'@',
+                   NSPoint_t: NSPointEncoding,
+                   NSRange_t: NSRangeEncoding,
+                   NSRect_t:  NSRectEncoding,
+                   NSSize_t:  NSSizeEncoding,
+                   SEL_t:     b':',
+                   py_object: PyObjectEncoding}
 
 # add c_?longlong only if different from c_?long
 if sizeof(c_longlong) != sizeof(c_long):
@@ -538,8 +546,8 @@ _encoding2ctype = {b'c': c_char,     b'C': c_ubyte,
 for c_, code in _ctype2encoding.items():
     f_ = _encoding2ctype.get(code, 'missing')
     if c_ != f_ and code not in (b'@',):
-        t = _fmt('code %r ctype %r vs %r', code, c_, f_)
-        raise RuntimeError(t)
+        c_ = _fmt('%r ctype %r', code, c_)
+        raise AssertionError(_fmt_invalid(repr(f_), code=c_))
 del c_, code, f_
 
 # map 'c' to c_byte rather than c_char, because
@@ -547,17 +555,16 @@ del c_, code, f_
 # string which is generally not what we want,
 # especially when the 'c' represents a bool
 _encoding2ctype[b'c'] = c_byte  # C_ubyte, see oslibs.cfNumber2bool!
-
-_emcoding2ctype = {b'Vv': c_void,
-                   b'^' + CGImageEncoding: c_void_p,
-                   b'^' + NSZoneEncoding:  c_void_p}
-
 if CGPointEncoding != NSPointEncoding:  # in 32-bit
     _encoding2ctype.update({CGPointEncoding: CGPoint_t})
 if CGRectEncoding  != NSRectEncoding:  # in 32-bit
     _encoding2ctype.update({CGRectEncoding:  CGRect_t})
 if CGSizeEncoding  != NSSizeEncoding:  # in 32-bit
     _encoding2ctype.update({CGSizeEncoding:  CGSize_t})
+
+_emcoding2ctype = {b'Vv': c_void,
+                  _bHAT + CGImageEncoding: c_void_p,
+                  _bHAT + NSZoneEncoding:  c_void_p}
 
 
 def emcoding2ctype(code, dflt=missing, name='type'):
@@ -609,18 +616,18 @@ def encoding2ctype(code, dflt=missing, name='type'):  # MCCABE 20
             code = code[:i]  # drop "name"
 
         elif c == b']':  # array ...[...]
-            i = code.find(b'[')
+            i = code.find(b'[')  # .rfind?
             if i < 0:
                 raise TypeCodeError
             elif i > 0:  # ignore array type
                 code = code[:i + 1] + c
             else:  # convert array to pointer
-                code = b'^' + code[1:-1].strip(b'0123456789')
+                code = _bHAT + code[1:-1].strip(b'0123456789')
 
         elif c in _TYPECLOSERS:  # Block, Struct or Union
             o = _TYPECLOSERS[c]
-            i = code.find(o)
-            if i < 0 or i > 4 or code[:i].strip(b'^'):  # != _bNN_
+            i = code.find(o)  # .rfind?
+            if i < 0 or i > 4 or code[:i].strip(_bHAT):  # != _bNN_
                 raise TypeCodeError
             # if i > 1 code should only contain a name, see ^^{example}
             # above Table 6-2 at <https://Developer.Apple.com/library/
@@ -628,29 +635,24 @@ def encoding2ctype(code, dflt=missing, name='type'):  # MCCABE 20
             # Articles/ocrtTypeEncodings.html>
             code = code[:i + 1] + c
 
-        if code[:1] == b'^':
+        if code[:1] == _bHAT:
             if len(code) < 2:
                 raise TypeCodeError
 #           ctype = POINTER(_encoding2ctype[code[1:]])  # breaks on '^^^...'
             ctype = POINTER(encoding2ctype(code[1:]))  # allows '^^^...'
             _encoding2ctype[code] = ctype
-            return ctype
         elif len(code):
-            return _encoding2ctype[code]
+            ctype = _encoding2ctype[code]
         else:
             raise TypeCodeError
 
     except TypeCodeError:
         raise TypeCodeError('invalid', coderr, name)
     except KeyError:
-        pass
-
-    if dflt is missing:
-        raise TypeCodeError('unknown', coderr, name)
-    elif code[:1] == b'^':
-        return POINTER(dflt)
-    else:
-        return dflt
+        if dflt is missing:
+            raise TypeCodeError('unknown', coderr, name)
+        ctype = POINTER(dflt) if code[:1] == _bHAT else dflt
+    return ctype
 
 
 def split_emcoding2(encoding, start=0):
@@ -677,10 +679,10 @@ def split_emcoding2(encoding, start=0):
        >>> (['v', '@', ':', '*'], 'v@:*')
     '''
     codes = split_encoding(encoding)
-    if codes[1:3] != [b'@', _bCOLON_]:
+    if codes[1:3] != [b'@', b':']:
         # Add codes for hidden arguments
-        codes.insert(1,  b'@')     # Id/self type encoding
-        codes.insert(2, _bCOLON_)  # SEL/cmd type encoding
+        codes.insert(1, b'@')  # Id/self type encoding
+        codes.insert(2, b':')  # SEL/cmd type encoding
 
     return codes[start:], _bJoin(codes)
 
@@ -689,7 +691,7 @@ _TYPECODESET = set(iterbytes(b'cCiIsSlLqQfdBvP*@#:b^?'))  # _emcoding2ctype.keys
 _TYPESKIPPED = set(iterbytes(b'0123456789 nNoOrRV'))  # type, width and offsets
 
 _TYPEOPENERS = {b'{': b'}', b'[': b']', b'(': b')', b'<': b'>'}  # opener->closer
-_TYPECLOSERS = dict(reversed(_) for _ in _TYPEOPENERS.items())   # closer->opener
+_TYPECLOSERS = dict(map(reversed, _TYPEOPENERS.items()))   # closer->opener
 
 
 def split_encoding(encoding):  # MCCABE 18
@@ -771,9 +773,9 @@ def split_encoding(encoding):  # MCCABE 18
     for b in iterbytes(str2bytes(encoding)):
 
         if b in _TYPEOPENERS:
-            if code and code[-1] != b'^' and not opened:
+            if code and code[-1] != _bHAT and not opened:
                 codes.append(_bJoin(code))
-                code = []
+                code[:] = []
             opened.append(_TYPEOPENERS[b])
             code.append(b)
 
@@ -783,7 +785,7 @@ def split_encoding(encoding):  # MCCABE 18
                 raise TypeCodeError('unbalanced', bytes2str(_bJoin(code)))
             if not opened:
                 codes.append(_bJoin(code))
-                code = []
+                code[:] = []
 
         elif opened:  # inside braces, etc
             # XXX ignore digits?
@@ -792,16 +794,16 @@ def split_encoding(encoding):  # MCCABE 18
         elif b == b'"':
             code.append(b)
             if quoted:  # closing quotes
-                code = _bJoin(code)
+                code[:] = _bJoin(code)
                 if code[:2] in (b'@"', b'#"'):
-                    # XXX only @"..." and #"..." are OK
+                    # XXX only @"..." and #"..." are OK, but
                     # XXX what about ^@"..." and ^#"..."?
                     codes.append(code)
                 elif code[:1] == b'"':
                     pass  # ignore prefix "name"
                 else:
                     raise TypeCodeError('invalid', bytes2str(code))
-                code = []
+                code[:] = []
             quoted = not quoted
 
         elif quoted:  # inside quotes
@@ -809,10 +811,10 @@ def split_encoding(encoding):  # MCCABE 18
             code.append(b)  # stick anything on
 
         elif b in _TYPECODESET:
-            if code and code[-1] != b'^':
+            if code and code[-1] != _bHAT:
                 # not a pointer, previous char != '^'
                 codes.append(_bJoin(code))
-                code = []
+                code[:] = []
             code.append(b)
 
         elif b in _TYPESKIPPED:
@@ -826,7 +828,7 @@ def split_encoding(encoding):  # MCCABE 18
     return codes
 
 
-if __name__ == '__main__':
+if __name__ == _Dmain_:
 
     from pycocoa.utils import _all_listing, bytes2repr, \
                               _Globals, printf
@@ -886,7 +888,7 @@ if __name__ == '__main__':
 #   19: c_ushort  -> b'S'
 #   20: c_void_p  -> b'@'
 #   21: py_object -> b'{PyObject=@}'
-#
+
 # encoding2ctype ...
 #    1: b'#'  -> Class_t
 #    2: b'()' -> Union_t
@@ -922,10 +924,10 @@ if __name__ == '__main__':
 #   32: b'{PyObject=@}' -> py_object
 #   33: b'{_NSRange=QQ}' -> NSRange_t
 #   34: b'{}' -> Struct_t
-#
+
 # checking NS...Encoding ...
 #   NSRange_t: b'=LL}' != b'{_NSRange=QQ}'
-#
+
 # pycocoa.octypes.__all__ = tuple(
 #  pycocoa.octypes.Allocator_t is <class .Allocator_t>,
 #  pycocoa.octypes.Array_t is <class ctypes.c_void_p>,
@@ -970,7 +972,7 @@ if __name__ == '__main__':
 #  pycocoa.octypes.NSNotFound is 9223372036854775807 or 0x7FFFFFFFFFFFFFFF,
 #  pycocoa.octypes.NSPoint_t is <class .NSPoint_t>,
 #  pycocoa.octypes.NSPointEncoding is b'{CGPoint=dd}',
-#  pycocoa.octypes.NSPointZero is <NSPoint_t(x=0.0, y=0.0) at 0x1030a8fc0>,
+#  pycocoa.octypes.NSPointZero is <NSPoint_t(x=0.0, y=0.0) at 0x104ef2450>,
 #  pycocoa.octypes.NSRange_t is <class .NSRange_t>,
 #  pycocoa.octypes.NSRangeEncoding is b'{_NSRange=QQ}',
 #  pycocoa.octypes.NSRect4_t is <class .NSRect4_t>,
@@ -995,8 +997,8 @@ if __name__ == '__main__':
 #  pycocoa.octypes.RunLoop_t is <class .RunLoop_t>,
 #  pycocoa.octypes.SEL_t is <class .SEL_t>,
 #  pycocoa.octypes.Set_t is <class ctypes.c_void_p>,
-#  pycocoa.octypes.split_emcoding2 is <function .split_emcoding2 at 0x1032405e0>,
-#  pycocoa.octypes.split_encoding is <function .split_encoding at 0x103240670>,
+#  pycocoa.octypes.split_emcoding2 is <function .split_emcoding2 at 0x104f00e00>,
+#  pycocoa.octypes.split_encoding is <function .split_encoding at 0x104f00fe0>,
 #  pycocoa.octypes.String_t is <class ctypes.c_void_p>,
 #  pycocoa.octypes.Struct_t is <class .Struct_t>,
 #  pycocoa.octypes.TimeInterval_t is <class ctypes.c_double>,
@@ -1011,7 +1013,7 @@ if __name__ == '__main__':
 #  pycocoa.octypes.URL_t is <class .URL_t>,
 #  pycocoa.octypes.VoidPtr_t is <class .VoidPtr_t>,
 # )[83]
-# pycocoa.octypes.version 21.11.04, .isLazy 1, Python 3.11.0 64bit arm64, macOS 13.0.1
+# pycocoa.octypes.version 25.1.31, .isLazy 1, Python 3.13.1 64bit arm64, macOS 14.6.1
 
 # MIT License <https://OpenSource.org/licenses/MIT>
 #

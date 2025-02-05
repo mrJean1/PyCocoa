@@ -85,8 +85,8 @@ from pycocoa.bases import _Type2
 from pycocoa.fonts import Font
 from pycocoa.geometry import Size
 from pycocoa.getters import get_selector, get_selectornameof
-from pycocoa.lazily import _ALL_LAZY, _COMMASPACE_, _DOT_, _fmt, _fmt_invalid, \
-                           _NN_, _NL_, _UNDER_
+from pycocoa.lazily import _ALL_LAZY, _Dmain_, _DOT_, _fmt, _fmt_invalid, \
+                           _instr, _NA_, _NN_, _no, _SPACE_, _UNDER_
 from pycocoa.nstypes import isNone, NSMain, NSMenu, NSMenuItem, nsOf, NSStr, \
                             nsString2str
 from pycocoa.pytypes import int2NS
@@ -113,8 +113,8 @@ from pycocoa.oslibs import NSAcknowledgeCharacter, NSBackSpaceCharacter, \
                            NSUnitSeparatorCharacter, NSVerticalTabCharacter
 from pycocoa.runtime import isObjCInstanceOf  # , ObjCInstance
 from pycocoa.screens import Screens
-from pycocoa.utils import Adict, bytes2str, _ByteStrs, _Constants, _Globals, \
-                         _Ints, isinstanceOf, missing, name2pymethod, printf,  \
+from pycocoa.utils import Adict, bytes2str, _ByteStrs, _Constants, errorf, \
+                         _Globals, _Ints, isinstanceOf, missing, name2pymethod,  \
                          _Strs, property2, property_RO, _Types
 try:
     from inspect import getfullargspec as getargspec  # Python 3+
@@ -124,7 +124,7 @@ from inspect import isfunction, ismethod
 # from types import FunctionType, MethodType
 
 __all__ = _ALL_LAZY.menus
-__version__ = '25.01.25'
+__version__ = '25.01.31'
 
 # Method _NSApplicationDelegate.handleMenuItem_ in .apps.py
 # is the handler ('selector') for all menu items specified
@@ -161,7 +161,7 @@ def _bindM(inst, parent):
     inst._parent = parent
 
 
-def _modifiedMask2(mask, kwds):
+def _modifierMask2(mask, kwds):
     '''(INTERNAL) Update modifier mask.
     '''
     # kwds = kwds.copy()
@@ -310,20 +310,20 @@ class Item(_Item_Type2):
                 if s and callable(s):
                     s(self, v)
                 else:
-                    g = 'read-only' if g else 'invalid'
-                    n =  self.__class__.__name__
-                    raise NameError(_fmt('%s %s property: %s', g, n, p))
+                    t = 'Read_Only' if g else 'invalid'
+                    t = _SPACE_(t, 'property', self.typename)
+                    raise NameError(_fmt('%s: %s', t, p))
             except Exception as x:
                 if _Globals.raiser:
-                    x = x.__class__.__name__
-                    printf('%s: %s(title=%r, ..., %s=%r) ...', x,
-                                self.__class__.__name__, self.title, p, v)
+                    x = type(x).__name__
+                    errorf('%s: %s(title=%r, ..., %s=%r) ...', x,
+                                self.typename, self.title, p, v)
                     raise
 
     def __str__(self):
         k = [M for M, ns in _Modifiers2 if (self._mask & ns)] + [self.key]
-        n = self.__class__.__name__
-        return _fmt('%s(%r, %r, %s)', n, self.title, self.action, '+'.join(k))
+        t = _fmt('(%r, %r, %s)', self.title, self.action, '+'.join(k))
+        return _NN_(self.typename, t)
 
 #   def copy(self, other):
 #       '''Duplicate an item.
@@ -439,7 +439,7 @@ class Item(_Item_Type2):
         '''
         if isinstanceOf(indent, _Ints, name='indent') and indent != self.indentationLevel:
             if not 0 <= indent < 16:
-                raise ValueError(_fmt('%s: %r', 'indent', indent))
+                raise ValueError(_fmt_invalid(indent=indent))
             self.NS.setIndentationLevel_(indent)
 
     @property
@@ -530,9 +530,7 @@ class Item(_Item_Type2):
     def keyModifiers(self, modifiers):
         '''Set the item's shortcut key C{modifiers} (C{dict}), see C{Item.__init__}.
 
-           @keyword modifiers: One or more C{key} I{modifier=}C{bool} pairs (C{dict}).
-
-           @return: Previous modifiers (C{dict}).
+           @param modifiers: One or more C{key} I{modifier=}C{bool} pairs (C{dict}).
 
            @raise KeyError: Invalid I{modifiers}.
         '''
@@ -540,12 +538,12 @@ class Item(_Item_Type2):
         d = self._keyModifiers(**modifiers)
         if d:
             self._mask = m  # restore
-            raise KeyError(_fmt('%s(%s)', self, Adict(d)))
+            raise KeyError(_instr(self, Adict(d)))
 
     def _keyModifiers(self, **kwds):
         '''(INTERNAL) Set the item's shortcut key modifiers.
         '''
-        mask, kwds = _modifiedMask2(self._mask, kwds)
+        mask, kwds = _modifierMask2(self._mask, kwds)
 
         if mask != self._mask:
             self.NS.setKeyEquivalentModifierMask_(mask)
@@ -762,9 +760,9 @@ class _Menu_Type2(_Type2):
     '''(INTERNAL) Base class for L{Menu} and L{MenuBar}.
     '''
     _listM  = []  # see ._initM()
-    _nameM  = 'n/a'
-    _parent = None  # see _Menu_Type2._validM
-    _tagNr  = 0  # for L{Item}s only
+    _nameM  = _NA_
+    _parent =  None  # see _Menu_Type2._validM
+    _tagNr  =  0  # for L{Item}s only
 
     def __contains__(self, inst):
         return inst in self._listM
@@ -791,7 +789,7 @@ class _Menu_Type2(_Type2):
 
     def _assertM(self, n, m):
         if n != m:
-            raise RuntimeError(_fmt('len(%s) %r vs %r', self, n, m))
+            raise RuntimeError(_fmt_invalid(str(m), len=n))
 
     def _find(self, inst, *classes):
         if isinstanceOf(inst, *classes, name=self._nameM):
@@ -833,7 +831,8 @@ class _Menu_Type2(_Type2):
             t = _NN_
 
         if dflt is missing:
-            raise ValueError(_fmt('no %s.%s(%s)', self, self._nameM, t))
+            t = _DOT_(self, _instr(self._nameM, t))
+            raise ValueError(_no(t))
         return dflt
 
     def _getiteM(self, index, bytitle=None):
@@ -848,7 +847,8 @@ class _Menu_Type2(_Type2):
                 return self._listM[self._indexM(index)]
         except (IndexError, TypeError, ValueError):
             pass
-        raise IndexError(_fmt('no %s[%r]', self, index))
+        t = _fmt('%s[%r]', self, index)
+        raise IndexError(_no(t))
 
     def _index(self, inst, *classes):
         if isinstanceOf(inst, *classes, name=self._nameM):
@@ -856,7 +856,8 @@ class _Menu_Type2(_Type2):
                 return self._listM.index(inst)
             except ValueError:
                 pass
-        raise ValueError(_fmt('no %s: %r', self._nameM, inst))
+        t = _fmt('%s: %r', self._nameM, inst)
+        raise ValueError(_no(t))
 
     def _indexM(self, index):
         if isinstance(index, _Ints):
@@ -866,7 +867,8 @@ class _Menu_Type2(_Type2):
             # ... but not out of range, like list.append
             if 0 <= i < len(self):
                 return i
-        raise IndexError(_fmt('no %s[%r]', self, index))
+        t = _fmt('%s[%r]', self, index)
+        raise IndexError(_no(t))
 
     def _initM(self):
         self._listM = []
@@ -889,9 +891,11 @@ class _Menu_Type2(_Type2):
             inst._parent = None
             self.NS.removeItemAtIndex_(i)
             self._assertM(len(self), m)
-            return inst
         except (IndexError, TypeError):
-            raise IndexError(_fmt('no %s.%s(%r)', self, 'pop', index))
+            t = _DOT_(self, 'pop')
+            t = _instr(t, repr(index))
+            raise IndexError(_no(t))  # cause=X
+        return inst
 
     def _removeM(self, insts, *classes):
         for inst in insts:
@@ -899,7 +903,9 @@ class _Menu_Type2(_Type2):
                 try:
                     self._popM(self._listM.index(inst))
                 except (IndexError, ValueError):
-                    raise ValueError(_fmt('no %s.%s(%s)', self, 'remove', inst))
+                    t = _DOT_(self, 'remove')
+                    t = _instr(t, repr(inst))
+                    raise ValueError(_no(t))  # cause=X
 
     def _tagM(self, inst, ns):
         # only L{Item} tags are settable
@@ -909,13 +915,16 @@ class _Menu_Type2(_Type2):
             else:
                 _Menu_Type2._tagNr += 1
                 inst.tag = _Menu_Type2._tagNr
-            ns.setTag_(inst.tag)  # always an NSMenuItem
         elif not isinstance(inst, ItemSeparator):
-            raise RuntimeError(_fmt('set %s.%s in %s', inst, 'tag', self))
+            t = _DOT_(inst, 'tag')
+            t = _SPACE_('set', t, 'in', self)
+            raise RuntimeError(t)
+        ns.setTag_(inst.tag)  # always an NSMenuItem
 
     def _validM(self, inst):
         if inst in self._listM:
-            t = _fmt('duplicate %s %s: %r', self, self._nameM, inst)
+            t = _SPACE_(self, self._nameM)
+            t = _fmt('duplicate %s: %r', t, inst)
             raise ValueError(t)
         _bindM(inst, self)
         if isinstance(inst, Menu):
@@ -1065,7 +1074,8 @@ class Menu(_Menu_Type2):
         if item._SEL_ is _CALL_:  # .callMenuItem_
             item._action(item)
         else:  # if item._SEL_ is _HANDLE_:  # .handleMenuItem_
-            raise NotImplementedError(_fmt('%s(%s)', 'click', item))
+            t = _DOT_(self, self.click.__name)
+            raise NotImplementedError(_instr(t, item))
         if highlight:
             # <https://Stackoverflow.com/questions/6169930/
             #        remove-highlight-from-nsmenuitem-after-click>
@@ -1212,15 +1222,14 @@ class Menu(_Menu_Type2):
            @raise ValueError: No I{dflt} provided and no I{title},
                               I{action} nor I{tag} match.
         '''
-        def _raise(Error, prefix, kwds):
-            t = _COMMASPACE_(Adict(key=key), Adict(kwds))
-            raise Error(_fmt('%s%s.%s(%s)', prefix, self, 'item', t))
+        def _error(kwds):
+            t = _instr('item', Adict(key=key), Adict(kwds))
+            return _DOT_(self, t)
 
         if key:  # find by key and modifiers
-            m, d = _modifiedMask2(0, modifiers)
+            m, d = _modifierMask2(0, modifiers)
             if d:  # can't have leftovers
-                _raise(ValueError, _NN_, d)
-
+                raise ValueError(_error(d))
             try:
                 _, k = _nsKey2(bytes2str(key))
                 for item in self.items():  # non-separators
@@ -1228,13 +1237,12 @@ class Menu(_Menu_Type2):
                         return item
             except ValueError:
                 pass
-
             if dflt is missing:
-                _raise(KeyError, 'no such ', modifiers)
+                raise KeyError(_no(_error(modifiers)))
             return dflt
 
-        elif modifiers:  # can't have modifiers
-            _raise(ValueError, _NN_, modifiers)
+        elif modifiers:  # can't have modifiers w/o key
+            raise ValueError(_error(modifiers))
 
         return self._findM(title, action, tag, dflt)
 
@@ -1260,8 +1268,8 @@ class Menu(_Menu_Type2):
         if ns:
             m = ns2Item(ns)
             if m is not self:  # or m.NS != ns.subMenu()
-                t = _fmt('%s(%s): %r', 'ns2Item', self, m)
-                raise RuntimeError(t)
+                t = _instr(ns2Item.__name__, self)
+                raise RuntimeError(_fmt('%s: %r', t, m))
         return ns or None
 
     def pop(self, index=-1):
@@ -1555,9 +1563,9 @@ _Types.ItemSeparator = ItemSeparator
 _Types.Menu          = Menu
 _Types.MenuBar       = MenuBar
 
-if __name__ == '__main__':
+if __name__ == _Dmain_:
 
-    from pycocoa.utils import _all_listing, properties, _varstr
+    from pycocoa.utils import _all_listing, properties, printf, _varstr
 
     print(_varstr(Keys, strepr=repr))
 
@@ -1578,9 +1586,9 @@ if __name__ == '__main__':
     assert item.parent is menu, item.parent
 
     for x in (item, menu, bar):
-        print('%s%s properties:' % (_NL_, x))
+        printf('%s properties:',x, nl=1, argv0='#')
         for p, v in sorted(properties(x).items()):
-            print('  %s = %r' % (p, v))
+            printf('%s = %r', p, v, argv0='#  ')
 
     bar.remove(menu)
     menu.remove(item)
@@ -1600,7 +1608,7 @@ if __name__ == '__main__':
     item.subMenu = None
     assert item.subMenu is None, item.subMenu
 
-# % python2 -m pycocoa.menus
+# % python3 -m pycocoa.menus
 #
 # pycocoa.menus.__all__ = tuple(
 #  pycocoa.menus.Item is <class .Item>,
@@ -1679,14 +1687,14 @@ if __name__ == '__main__':
 #                    .VT=0xb,
 #  pycocoa.menus.Menu is <class .Menu>,
 #  pycocoa.menus.MenuBar is <class .MenuBar>,
-#  pycocoa.menus.ns2Item is <function .ns2Item at 0x1031eae60>,
-#  pycocoa.menus.title2action is <function .title2action at 0x1031efd90>,
+#  pycocoa.menus.ns2Item is <function .ns2Item at 0x102f965c0>,
+#  pycocoa.menus.title2action is <function .title2action at 0x102f9ff60>,
 # )[7]
-# pycocoa.menus.version 21.11.04, .isLazy 1, Python 3.11.0 64bit arm64, macOS 13.0.1
+# pycocoa.menus.version 25.1.31, .isLazy 1, Python 3.13.1 64bit arm64, macOS 14.6.1
 
 # Item('Quit', 'menuTerminate_', Cmd+q) properties:
-#   NS = <ObjCInstance(NSMenuItem(<Id_t at 0x10320cac0>) of 0x600002e84150) at 0x102c68520>
-#   NSDelegate = 'AttributeError("use \'NSd-\' not \'NSD-\'")'
+#   NS = <ObjCInstance(NSMenuItem(<Id_t at 0x102f9bb50>) of 0x6000003e8000) at 0x102dce8b0>
+#   NSDelegate = 'NameError("use \'NSd-\', not \'NSD-\'")'
 #   NSdelegate = None
 #   action = 'menuTerminate_'
 #   allowsKeyWhenHidden = False
@@ -1707,17 +1715,18 @@ if __name__ == '__main__':
 #   keyEquivalentModifiers = {'alt': False, 'cmd': True, 'ctrl': False, 'shift': False}
 #   keyModifiers = {'alt': False, 'cmd': True, 'ctrl': False, 'shift': False}
 #   nsTarget = None
-#   parent = Menu('Test') at 0x102cae260
+#   parent = Menu('Test') at 0x102dbee40
 #   shift = False
 #   state = 0
 #   subMenu = None
 #   tag = 1
 #   title = 'Quit'
 #   toolTip = ''
-#
+#   typename = 'Item'
+
 # Menu('Test') properties:
-#   NS = <ObjCInstance(NSMenu(<Id_t at 0x102de5340>) of 0x600001084700) at 0x102cadd50>
-#   NSDelegate = 'AttributeError("use \'NSd-\' not \'NSD-\'")'
+#   NS = <ObjCInstance(NSMenu(<Id_t at 0x102f9aad0>) of 0x600003de83c0) at 0x102d8f390>
+#   NSDelegate = 'NameError("use \'NSd-\', not \'NSD-\'")'
 #   NSdelegate = None
 #   action = None
 #   app = None
@@ -1730,17 +1739,18 @@ if __name__ == '__main__':
 #   isTornOff = False
 #   isVisible = None
 #   minWidth = 0.0
-#   nsMenuItem = <ObjCInstance(NSMenuItem(<Id_t at 0x10320d7c0>) of 0x600002e84700) at 0x102c69c90>
-#   parent = MenuBar(None) at 0x102cac8e0
+#   nsMenuItem = <ObjCInstance(NSMenuItem(<Id_t at 0x102fd51d0>) of 0x6000003e51f0) at 0x102fcc290>
+#   parent = MenuBar(None) at 0x102dbdfd0
 #   showsState = True
-#   size = <NSSize_t(width=99.0, height=32.0) at 0x10320f440>
+#   size = <NSSize_t(width=101.0, height=32.0) at 0x102fe4ad0>
 #   tag = 2
 #   tags = 2
 #   title = 'Test'
-#
+#   typename = 'Menu'
+
 # MenuBar(None) properties:
-#   NS = <ObjCInstance(NSMenu(<Id_t at 0x1030637c0>) of 0x6000010846c0) at 0x102cad570>
-#   NSDelegate = 'AttributeError("use \'NSd-\' not \'NSD-\'")'
+#   NS = <ObjCInstance(NSMenu(<Id_t at 0x102f9a250>) of 0x600003de8400) at 0x102dbe510>
+#   NSDelegate = 'NameError("use \'NSd-\', not \'NSD-\'")'
 #   NSdelegate = None
 #   action = None
 #   app = None
@@ -1753,10 +1763,11 @@ if __name__ == '__main__':
 #   minWidth = 0.0
 #   parent = None
 #   showsState = True
-#   size = <NSSize_t(width=85.0, height=32.0) at 0x10320f740>
+#   size = <NSSize_t(width=85.0, height=32.0) at 0x102fe59d0>
 #   tag = None
 #   tags = 2
 #   title = None
+#   typename = 'MenuBar'
 
 # MIT License <https://OpenSource.org/licenses/MIT>
 #

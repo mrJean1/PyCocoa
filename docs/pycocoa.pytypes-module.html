@@ -63,7 +63,7 @@
 
 <hr />
 <div class="fields">      <p><strong>Version:</strong>
-        25.01.25
+        25.02.04
       </p>
 </div><!-- ==================== FUNCTIONS ==================== -->
 <a name="section-Functions"></a>
@@ -115,6 +115,24 @@
     </td><td class="summary">
       <table width="100%" cellpadding="0" cellspacing="0" border="0">
         <tr>
+          <td><span class="summary-sig"><a href="pycocoa.pytypes-module.html#decimal2NS" class="summary-sig-name">decimal2NS</a>(<span class="summary-sig-arg">py</span>)</span><br />
+      Create an <code>NSDecimal</code> instance from a Python 
+      <code>Decimal</code>.</td>
+          <td align="right" valign="top">
+            
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
           <td><span class="summary-sig"><a href="pycocoa.pytypes-module.html#dict2NS" class="summary-sig-name">dict2NS</a>(<span class="summary-sig-arg">py</span>,
         <span class="summary-sig-arg">frozen</span>=<span class="summary-sig-default">False</span>)</span><br />
       Create an <code>NS[Mutable]Dictionary</code> instance from a Python 
@@ -135,7 +153,7 @@
       <table width="100%" cellpadding="0" cellspacing="0" border="0">
         <tr>
           <td><span class="summary-sig"><a href="pycocoa.pytypes-module.html#float2NS" class="summary-sig-name">float2NS</a>(<span class="summary-sig-arg">py</span>)</span><br />
-      Create an <code>NSNumber</code> instance from a Python 
+      Create an <code>NSDouble</code> instance from a Python 
       <code>float</code> or <code>int</code>.</td>
           <td align="right" valign="top">
             
@@ -188,7 +206,8 @@
     </td><td class="summary">
       <table width="100%" cellpadding="0" cellspacing="0" border="0">
         <tr>
-          <td><span class="summary-sig"><a href="pycocoa.pytypes-module.html#int2NS" class="summary-sig-name">int2NS</a>(<span class="summary-sig-arg">py</span>)</span><br />
+          <td><span class="summary-sig"><a href="pycocoa.pytypes-module.html#int2NS" class="summary-sig-name">int2NS</a>(<span class="summary-sig-arg">py</span>,
+        <span class="summary-sig-arg">NS</span>=<span class="summary-sig-default">None</span>)</span><br />
       Create an <code>NSNumber</code> instance from a Python 
       <code>int</code> or <code>long</code>.</td>
           <td align="right" valign="top">
@@ -498,6 +517,39 @@
   </dl>
 </td></tr></table>
 </div>
+<a name="decimal2NS"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">decimal2NS</span>(<span class="sig-arg">py</span>)</span>
+  </h3>
+  </td><td align="right" valign="top"
+    >&nbsp;
+    </td>
+  </tr></table>
+  
+  <p>Create an <code>NSDecimal</code> instance from a Python 
+  <code>Decimal</code>.</p>
+  <dl class="fields">
+    <dt>Parameters:</dt>
+    <dd><ul class="nomargin-top">
+        <li><strong class="pname"><code>py</code></strong> - The value (<code>Decimal</code>, <code>float</code>, 
+          <code>int</code> or <code>str</code>).</li>
+    </ul></dd>
+    <dt>Returns:</dt>
+        <dd>The instance ( <code>NSDecimal</code>).</dd>
+    <dt>Raises:</dt>
+    <dd><ul class="nomargin-top">
+        <li><code><strong class='fraise'>TypeError</strong></code> - If <code>py</code> not a <code>Decimal</code>, <code>float</code>, 
+        <code>int</code> or <code>str</code>.</li>
+        <li><code><strong class='fraise'>ValueError</strong></code> - Invalid decimal <code>py</code>.</li>
+    </ul></dd>
+  </dl>
+</td></tr></table>
+</div>
 <a name="dict2NS"></a>
 <div>
 <table class="details" border="1" cellpadding="3"
@@ -545,7 +597,7 @@
     </td>
   </tr></table>
   
-  <p>Create an <code>NSNumber</code> instance from a Python 
+  <p>Create an <code>NSDouble</code> instance from a Python 
   <code>float</code> or <code>int</code>.</p>
   <dl class="fields">
     <dt>Parameters:</dt>
@@ -628,7 +680,8 @@
 <tr><td>
   <table width="100%" cellpadding="0" cellspacing="0" border="0">
   <tr valign="top"><td>
-  <h3 class="epydoc"><span class="sig"><span class="sig-name">int2NS</span>(<span class="sig-arg">py</span>)</span>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">int2NS</span>(<span class="sig-arg">py</span>,
+        <span class="sig-arg">NS</span>=<span class="sig-default">None</span>)</span>
   </h3>
   </td><td align="right" valign="top"
     >&nbsp;
@@ -641,13 +694,19 @@
     <dt>Parameters:</dt>
     <dd><ul class="nomargin-top">
         <li><strong class="pname"><code>py</code></strong> - The value (<code>int</code> or <code>long</code>).</li>
+        <li><strong class="pname"><code>NS</code></strong> - Alternate <code>NSNumber</code> ObjC class to use when 
+          <code>py</code> exceeds the <code>NSLong</code> or 
+          <code>NSLongLong</code> range, for example 
+          <code>NS=NSDecimal</code>.</li>
     </ul></dd>
     <dt>Returns:</dt>
-        <dd>The ObjC instance (<code>NSInt</code>, <code>NSLong</code>, or 
-          <code>NSLongLong</code>).</dd>
+        <dd>The ObjC instance (<code>NSNumber</code> or <code>NS</code> 
+          alternate).</dd>
     <dt>Raises:</dt>
     <dd><ul class="nomargin-top">
         <li><code><strong class='fraise'>TypeError</strong></code> - If <code>py</code> not an <code>int</code> or <code>long</code>.</li>
+        <li><code><strong class='fraise'>ValueError</strong></code> - If <code>py</code> exceeds <code>NSLong</code> range and if no 
+        <code>NS</code> alternate is specified.</li>
     </ul></dd>
   </dl>
 </td></tr></table>
@@ -1108,7 +1167,7 @@
 <table border="0" cellpadding="0" cellspacing="0" width="100%%">
   <tr>
     <td align="left" class="footer">
-    Generated by Epydoc 3.0.1 on Sun Jan 26 12:55:30 2025
+    Generated by Epydoc 3.0.1 on Wed Feb  5 15:29:03 2025
     </td>
     <td align="right" class="footer">
       <a target="mainFrame" href="http://epydoc.sourceforge.net"

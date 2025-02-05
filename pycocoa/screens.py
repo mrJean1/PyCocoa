@@ -8,8 +8,8 @@
 # all imports listed explicitly to help PyChecker
 from pycocoa.bases import _Type0
 from pycocoa.geometry import Point, Rect, Size
-from pycocoa.lazily import _ALL_LAZY, _fmt, _fmt_invalid, \
-                           _COMMASPACE_  # PYCHOK used!
+from pycocoa.lazily import _ALL_LAZY, _COMMASPACE_, _Dmain_, \
+                           _fmt, _fmt_invalid
 from pycocoa.nstypes import ns2py, NSScreen, nsString2str
 from pycocoa.octypes import NSRect_t
 from pycocoa.oslibs import libCG
@@ -18,7 +18,7 @@ from pycocoa.utils import _Ints, isinstanceOf, property_RO, \
                           _Singletons, _Types
 
 __all__ = _ALL_LAZY.screens
-__version__ = '25.01.25'
+__version__ = '25.02.04'
 
 
 class Frame(Rect):
@@ -340,10 +340,11 @@ class Screens(_Singletons):
         return self._len or len(self.screens) // 2
 
     def __repr__(self):
-        return '(%s)' % (self,)  # like tuple
+        return _fmt('(%s)', self)  # like tuple
 
     def __str__(self):
-        return _COMMASPACE_(*(s for _, s in self.items()))
+        t = (str(s) for _, s in self.items())
+        return _COMMASPACE_.join(t)
 
     @property_RO
     def AirPlay(self):
@@ -393,80 +394,80 @@ class Screens(_Singletons):
 
            @note: Each screen is represented twice and accessable by 2 C{int}
                   keys, a 0-based index and its C{displayID}.  The BuiltIn
-                  screen has index key 0, always.
+                  screen has index key C{0}, always.
 
            @see: Methods C{__call__} and C{items}.
         '''
         if not self._screens:
-            x, d = 1, {0: None}
+            n, d = 1, {0: None}
             for ns in ns2py(self.NS.screens()):
                 s = Screen(ns)
                 if s.isBuiltIn:
                     d[0] = d[s.displayID] = BuiltInScreen(s)
                 else:
-                    d[x] = d[s.displayID] = ExternalScreen(s)
-                    x += 1
+                    d[n] = d[s.displayID] = ExternalScreen(s)
+                    n += 1
             self._screens = d
-            self._len = x
+            self._len = n
         return self._screens
 
 Screens = Screens()  # PYCHOK tuple-like, singleton
 
 _Types.Screen = NSScreen._Type = Screen
 
-if __name__ == '__main__':
+if __name__ == _Dmain_:
 
     from pycocoa.utils import _all_listing, printf
 
     for s in tuple(Screens) + (Screens.Deepest, Screens.Main):
-        printf(str(s), nl=1)
+        printf(str(s), nl=1, argv0='#')
         for a in ('colorSpace', 'displayID', 'frame', 'named',
                   'pixels', 'ratio', 'resolutions', 'visibleFrame'):
-            printf('  %s: %r', a, getattr(s, a, None))
+            printf('.%s: %r', a, getattr(s, a, None), argv0='# ')
 
     _all_listing(__all__, locals())
 
 # % python3 -m pycocoa.screens
 #
-# pycocoa BuiltInScreen(NSScreen, name='BuiltIn')
-# pycocoa   colorSpace: 'NSCalibratedRGBColorSpace'
-# pycocoa   displayID: 1
-# pycocoa   frame: Rect(origin=Point(x=0.0, y=0.0), size=Size(width=1440.0, height=900.0)) at 0x101332a90
-# pycocoa   named: 'Built-in Retina Display'
-# pycocoa   pixels: Size(width=2560.0, height=1600.0) at 0x101332dc0
-# pycocoa   ratio: (8, 5)
-# pycocoa   resolutions: Size(width=144.0, height=144.0) at 0x101332df0
-# pycocoa   visibleFrame: Rect(origin=Point(x=0.0, y=0.0), size=Size(width=1440.0, height=875.0)) at 0x101332fd0
-#
-# pycocoa ExternalScreen(NSScreen, name='External')
-# pycocoa   colorSpace: 'NSCalibratedRGBColorSpace'
-# pycocoa   displayID: 2
-# pycocoa   frame: Rect(origin=Point(x=-2560.0, y=-540.0), size=Size(width=2560.0, height=1440.0)) at 0x101332fa0
-# pycocoa   named: '...'
-# pycocoa   pixels: Size(width=2560.0, height=1440.0) at 0x10134a190
-# pycocoa   ratio: (16, 9)
-# pycocoa   resolutions: Size(width=72.0, height=72.0) at 0x10134a1c0
-# pycocoa   visibleFrame: Rect(origin=Point(x=-2511.0, y=-540.0), size=Size(width=2511.0, height=1440.0)) at 0x10134a1c0
-#
-# pycocoa DeepestScreen(NSScreen, name='Deepest')
-# pycocoa   colorSpace: 'NSCalibratedRGBColorSpace'
-# pycocoa   displayID: 1
-# pycocoa   frame: Rect(origin=Point(x=0.0, y=0.0), size=Size(width=1440.0, height=900.0)) at 0x10134a370
-# pycocoa   named: 'Built-in Retina Display'
-# pycocoa   pixels: Size(width=2560.0, height=1600.0) at 0x10134a3d0
-# pycocoa   ratio: (8, 5)
-# pycocoa   resolutions: Size(width=144.0, height=144.0) at 0x10134a3a0
-# pycocoa   visibleFrame: Rect(origin=Point(x=0.0, y=0.0), size=Size(width=1440.0, height=875.0)) at 0x10134a3a0
-#
-# pycocoa MainScreen(NSScreen, name='Main')
-# pycocoa   colorSpace: 'NSCalibratedRGBColorSpace'
-# pycocoa   displayID: 1
-# pycocoa   frame: Rect(origin=Point(x=0.0, y=0.0), size=Size(width=1440.0, height=900.0)) at 0x101332c40
-# pycocoa   named: 'Built-in Retina Display'
-# pycocoa   pixels: Size(width=2560.0, height=1600.0) at 0x101332c10
-# pycocoa   ratio: (8, 5)
-# pycocoa   resolutions: Size(width=144.0, height=144.0) at 0x101332430
-# pycocoa   visibleFrame: Rect(origin=Point(x=0.0, y=0.0), size=Size(width=1440.0, height=875.0)) at 0x101332430
+# BuiltInScreen(NSScreen, name='BuiltIn')
+#  .colorSpace: 'NSCalibratedRGBColorSpace'
+#  .displayID: 1
+#  .frame: Rect(origin=Point(x=0.0, y=0.0), size=Size(width=1440.0, height=900.0)) at 0x101232660
+#  .named: 'Built-in Retina Display'
+#  .pixels: Size(width=2560.0, height=1600.0) at 0x1011f7c50
+#  .ratio: (8, 5)
+#  .resolutions: Size(width=144.0, height=144.0) at 0x10120efd0
+#  .visibleFrame: Rect(origin=Point(x=0.0, y=0.0), size=Size(width=1440.0, height=875.0)) at 0x1011f7d90
+
+# ExternalScreen(NSScreen, name='External')
+#  .colorSpace: 'NSCalibratedRGBColorSpace'
+#  .displayID: 2
+#  .frame: Rect(origin=Point(x=-2560.0, y=-540.0), size=Size(width=2560.0, height=1440.0)) at 0x10120efd0
+#  .named: 'LEN Q27h-10'
+#  .pixels: Size(width=2560.0, height=1440.0) at 0x1013f4160
+#  .ratio: (16, 9)
+#  .resolutions: Size(width=72.0, height=72.0) at 0x10137ae50
+#  .visibleFrame: Rect(origin=Point(x=-2511.0, y=-540.0), size=Size(width=2511.0, height=1440.0)) at 0x101384290
+
+# DeepestScreen(NSScreen, name='Deepest')
+#  .colorSpace: 'NSCalibratedRGBColorSpace'
+#  .displayID: 1
+#  .frame: Rect(origin=Point(x=0.0, y=0.0), size=Size(width=1440.0, height=900.0)) at 0x1013f4160
+#  .named: 'Built-in Retina Display'
+#  .pixels: Size(width=2560.0, height=1600.0) at 0x10122fc50
+#  .ratio: (8, 5)
+#  .resolutions: Size(width=144.0, height=144.0) at 0x1013a8e50
+#  .visibleFrame: Rect(origin=Point(x=0.0, y=0.0), size=Size(width=1440.0, height=875.0)) at 0x10137ae50
+
+# MainScreen(NSScreen, name='Main')
+#  .colorSpace: 'NSCalibratedRGBColorSpace'
+#  .displayID: 1
+#  .frame: Rect(origin=Point(x=0.0, y=0.0), size=Size(width=1440.0, height=900.0)) at 0x10137ae50
+#  .named: 'Built-in Retina Display'
+#  .pixels: Size(width=2560.0, height=1600.0) at 0x10138b050
+#  .ratio: (8, 5)
+#  .resolutions: Size(width=144.0, height=144.0) at 0x1011fd440
+#  .visibleFrame: Rect(origin=Point(x=0.0, y=0.0), size=Size(width=1440.0, height=875.0)) at 0x10122fc50
 
 # pycocoa.screens.__all__ = tuple(
 #  pycocoa.screens.BuiltInScreen is <class .BuiltInScreen>,
@@ -477,7 +478,7 @@ if __name__ == '__main__':
 #  pycocoa.screens.Screen is <class .Screen>,
 #  pycocoa.screens.Screens is (BuiltInScreen(NSScreen, name='BuiltIn'), ExternalScreen(NSScreen, name='External')),
 # )[7]
-# pycocoa.screens.version 21.11.04, .isLazy 1, Python 3.11.0 64bit arm64, macOS 13.0.1
+# pycocoa.screens.version 25.2.4, .isLazy 1, Python 3.13.1 64bit arm64, macOS 14.6.1
 
 # MIT License <https://OpenSource.org/licenses/MIT>
 #

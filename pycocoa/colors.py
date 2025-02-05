@@ -32,7 +32,7 @@ accessible by color space acronym like C{CMY}, C{GS}, C{RGB}, etc.
 @var GrayScaleColors.White: Color in the Gray-Scale space.
 
 @var HSBColors: I{No} standard C{Hue-Saturation-Brightness} colors, L{HSBColor} instances (C{enum}).
-@var HSBColors.NoneYet: .
+@var HSBColors.NoneYet: The type of the None singleton.
 
 @var RGBColors: Some standard C{Red-Green-Blue} colors, all L{RGBColor} instances (C{enum}).
 @var RGBColors.Blue: Color in the Red-Green-Blue space.
@@ -71,7 +71,7 @@ accessible by color space acronym like C{CMY}, C{GS}, C{RGB}, etc.
 '''
 # all imports listed explicitly to help PyChecker
 from pycocoa.bases   import _Type0
-from pycocoa.lazily  import _ALL_LAZY, _fmt, _fmt_invalid, _NN_
+from pycocoa.lazily  import _ALL_LAZY, _Dmain_, _EQUALS_, _fmt_invalid, _NN_
 from pycocoa.nstypes import  NSColor
 from pycocoa.utils   import _Constants, property_RO, _Types
 
@@ -79,7 +79,7 @@ from copy import copy as _copy
 # from enum   import Enum
 
 __all__ = _ALL_LAZY.colors
-__version__ = '25.01.25'
+__version__ = '25.01.31'
 
 
 def _Xhandler(unused):
@@ -434,7 +434,7 @@ class TintColor(_SystemColor):
     '''I{Dynamic} color, adaptable to vibrancy and accessibility settings.
     '''
     def __init__(self, name):
-        Color.__init__(self, 'system' + name)
+        Color.__init__(self, _NN_('system', name))
         self.name = name
 
 
@@ -506,14 +506,14 @@ class Colors(_Constants):
 
     def __repr__(self):
         def _fmt2(n, v):  # just XYZColor class names
-            return _fmt('%s=%s', n, v.__class__.__name__)
+            return _EQUALS_(n, type(v).__name__)
         return self._strepr(_fmt2)
 
 Colors = Colors()  # PYCHOK singleton
 
 NSColor._Type = _Types.Color = Color
 
-if __name__ == '__main__':
+if __name__ == _Dmain_:
 
     from pycocoa.utils import _all_listing, _varstr
 
@@ -585,7 +585,7 @@ if __name__ == '__main__':
 #                         .Text=UIColor(NSDynamicSystemColor, name='Text'),
 #                         .WindowBackground=UIColor(NSDynamicSystemColor, name='WindowBackground'),
 # )[15]
-# pycocoa.colors.version 21.11.04, .isLazy 1, Python 3.11.0 64bit arm64, macOS 13.0.1
+# pycocoa.colors.version 25.1.31, .isLazy 1, Python 3.13.1 64bit arm64, macOS 14.6.1
 
 # MIT License <https://OpenSource.org/licenses/MIT>
 #

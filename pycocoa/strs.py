@@ -6,15 +6,15 @@
 '''Type L{Str}, wrapping ObjC C{NSStr[ing]}.
 '''
 # all imports listed explicitly to help PyChecker
-from pycocoa.bases   import _Type0
-from pycocoa.lazily  import _ALL_LAZY, _NN_
+from pycocoa.bases import _Type0
+from pycocoa.lazily import _ALL_LAZY, _Dmain_, _NN_
 from pycocoa.nstypes import NSAttributedString, NSConstantString, \
                             NSStr, NSString, nsString2str
 from pycocoa.pytypes import dict2NS, str2NS
-from pycocoa.utils   import isinstanceOf, property_RO, _Strs, _Types
+from pycocoa.utils import isinstanceOf, property_RO, _Strs, _Types
 
 __all__ = _ALL_LAZY.strs
-__version__ = '21.11.04'
+__version__ = '25.01.31'
 
 
 class Str(str, _Type0):  # str, first to maintain str behavior
@@ -46,7 +46,7 @@ class Str(str, _Type0):  # str, first to maintain str behavior
             s = self[slice(*ranged)]
         else:
             s = self
-        return self.__class__(s)
+        return type(self)(s)
 
     @property_RO
     def NS(self):
@@ -254,7 +254,7 @@ class StrAttd(Str, _Type0):
 NSAttributedString._Type                              = _Types.StrAttd = StrAttd
 NSConstantString._Type = NSString._Type = NSStr._Type = _Types.Str     = Str
 
-if __name__ == '__main__':
+if __name__ == _Dmain_:
 
     from pycocoa.utils import _all_listing
 
@@ -266,7 +266,7 @@ if __name__ == '__main__':
 #  pycocoa.strs.Str is <class .Str>,
 #  pycocoa.strs.StrAttd is <class .StrAttd>,
 # )[2]
-# pycocoa.strs.version 21.11.04, .isLazy 1, Python 3.11.0 64bit arm64, macOS 13.0.1
+# pycocoa.strs.version 25.1.31, .isLazy 1, Python 3.13.1 64bit arm64, macOS 14.6.1
 
 # MIT License <https://OpenSource.org/licenses/MIT>
 #

@@ -6,8 +6,8 @@
 '''C{get_...} functions to obtain ObjC classes, methods, protocols, etc.
 '''
 # all imports listed explicitly to help PyChecker
-from pycocoa.lazily import _ALL_LAZY, _COLON_, _COMMASPACE_, _fmt, \
-                           _fmt_invalid, _NN_, _UNDER_
+from pycocoa.lazily import _ALL_LAZY, _COLON_, _COMMA_, _COMMASPACE_, \
+                           _Dmain_, _fmt, _fmt_invalid, _NN_, _no, _UNDER_
 from pycocoa.octypes import emcoding2ctype, encoding2ctype, \
                             Class_t, Id_t, IMP_t, Ivar_t, Protocol_t, \
                             SEL_t, split_encoding
@@ -26,7 +26,7 @@ except AttributeError:
 del itertools
 
 __all__ = _ALL_LAZY.getters
-__version__ = '25.01.25'
+__version__ = '25.01.31'
 
 _c_func_t_cache = {}
 _SEL_t_cache = Cache2(limit2=128)
@@ -48,7 +48,8 @@ def _ivar_ctype(objc, name):
                 return ctype
     except ArgumentError:
         pass
-    raise ValueError(_fmt('no %r ivar: %r', name, objc))
+    t = _fmt('%r %s: %r', name, 'ivar', objc)
+    raise ValueError(_no(t))
 
 
 def get_c_func_t(encoding, codes=None):
@@ -80,7 +81,7 @@ def get_class(name):
 
        @param name: The class name (C{str}).
 
-       @return: The class (L{Class_t}) if found, None otherwise.
+       @return: The class (L{Class_t}) if found, C{None} otherwise.
     '''
     return libobjc.objc_getClass(str2bytes(name)) or None
 
@@ -138,7 +139,7 @@ def get_classof(objc):
 
        @param objc: The object (C{Object} or L{Id_t}).
 
-       @return: The object's class (L{Class_t}) if found, None otherwise.
+       @return: The object's class (L{Class_t}) if found, C{None} otherwise.
     '''
     return libobjc.object_getClass(cast(objc, Id_t)) or None
 
@@ -150,7 +151,7 @@ def get_ivar(objc, name, ctype=None):
        @param name: The instance variable name (C{str}).
        @keyword ctype: The instance variable type (C{ctypes}),
 
-       @return: The ivar value (C{any}) if found, None otherwise.
+       @return: The ivar value (C{any}) if found, C{None} otherwise.
     '''
     if ctype is None:  # lookup ivar by name
         ctype = _ivar_ctype(objc, name)
@@ -205,7 +206,7 @@ def get_metaclass(name):
 
        @param name: The metaclass (C{str}).
 
-       @return: The metaclass (L{Class_t}) if found, None otherwise.
+       @return: The metaclass (L{Class_t}) if found, C{None} otherwise.
     '''
     return libobjc.objc_getMetaClass(str2bytes(name)) or None
 
@@ -216,7 +217,7 @@ def get_method(clas, name):
        @param clas: Class (L{Class_t}).
        @param name: Method name (C{str}).
 
-       @return: The method (L{Method_t}) if found, None otherwise.
+       @return: The method (L{Method_t}) if found, C{None} otherwise.
     '''
     n = c_uint()
     for method in libobjc.class_copyMethodList(clas, byref(n)):
@@ -318,7 +319,7 @@ def get_properties(clas_or_proto, *prefixes):
             # XXX should yield name, ObjCProperty instance
             # attrs T@"type",&,C,D,G<name>,N,P,R,S<name>,W,t<encoding>,V<varname>
             attrs = bytes2str(libobjc.property_getAttributes(prop))
-            astrs = _COMMASPACE_.join(map(_xPA, attrs.split(',')))
+            astrs = _COMMASPACE_.join(map(_xPA, attrs.split(_COMMA_)))
             setter = _NN_
             if setters:
                 set_ = _NN_('set', name.capitalize(), _COLON_)
@@ -332,7 +333,7 @@ def get_protocol(name):
 
        @param name: The protocol name (C{str}).
 
-       @return: The protocol (L{Protocol_t}) if found, None otherwise.
+       @return: The protocol (L{Protocol_t}) if found, C{None} otherwise.
     '''
     return libobjc.objc_getProtocol(str2bytes(name)) or None
 
@@ -421,7 +422,7 @@ def get_superclass(clas):
 
        @param clas: The class (L{Class_t}).
 
-       @return: The super-class (L{Class_t}), None otherwise.
+       @return: The super-class (L{Class_t}), C{None} otherwise.
     '''
     isinstanceOf(clas, Class_t, name='clas')
     try:
@@ -437,7 +438,7 @@ def get_superclassof(objc):
 
        @param objc: The object (C{Object} or L{Id_t}).
 
-       @return: The super-class (L{Class_t}), None otherwise.
+       @return: The super-class (L{Class_t}), C{None} otherwise.
     '''
     clas = get_classof(objc)
     if clas:
@@ -457,7 +458,7 @@ def get_superclassnameof(objc, dflt=missing):
     return get_classname(get_superclassof(objc), dflt=dflt)
 
 
-if __name__ == '__main__':
+if __name__ == _Dmain_:
 
     from pycocoa.utils import _all_listing
 
@@ -466,29 +467,29 @@ if __name__ == '__main__':
 # % python3 -m pycocoa.getters
 #
 # pycocoa.getters.__all__ = tuple(
-#  pycocoa.getters.get_c_func_t is <function .get_c_func_t at 0x1011b8900>,
-#  pycocoa.getters.get_class is <function .get_class at 0x10118e0c0>,
-#  pycocoa.getters.get_classes is <function .get_classes at 0x101445bc0>,
-#  pycocoa.getters.get_classname is <function .get_classname at 0x101445c60>,
-#  pycocoa.getters.get_classnameof is <function .get_classnameof at 0x101445d00>,
-#  pycocoa.getters.get_classof is <function .get_classof at 0x101445da0>,
-#  pycocoa.getters.get_inheritance is <function .get_inheritance at 0x101445f80>,
-#  pycocoa.getters.get_ivar is <function .get_ivar at 0x101445e40>,
-#  pycocoa.getters.get_ivars is <function .get_ivars at 0x101445ee0>,
-#  pycocoa.getters.get_metaclass is <function .get_metaclass at 0x101446020>,
-#  pycocoa.getters.get_method is <function .get_method at 0x1014460c0>,
-#  pycocoa.getters.get_methods is <function .get_methods at 0x101446160>,
-#  pycocoa.getters.get_properties is <function .get_properties at 0x101446200>,
-#  pycocoa.getters.get_protocol is <function .get_protocol at 0x1014462a0>,
-#  pycocoa.getters.get_protocols is <function .get_protocols at 0x101446340>,
-#  pycocoa.getters.get_selector is <function .get_selector at 0x1014463e0>,
-#  pycocoa.getters.get_selectorname_permutations is <function .get_selectorname_permutations at 0x101446480>,
-#  pycocoa.getters.get_selectornameof is <function .get_selectornameof at 0x101446520>,
-#  pycocoa.getters.get_superclass is <function .get_superclass at 0x1014465c0>,
-#  pycocoa.getters.get_superclassnameof is <function .get_superclassnameof at 0x101446700>,
-#  pycocoa.getters.get_superclassof is <function .get_superclassof at 0x101446660>,
+#  pycocoa.getters.get_c_func_t is <function .get_c_func_t at 0x102f09120>,
+#  pycocoa.getters.get_class is <function .get_class at 0x1031d1080>,
+#  pycocoa.getters.get_classes is <function .get_classes at 0x1031d1260>,
+#  pycocoa.getters.get_classname is <function .get_classname at 0x1031d1300>,
+#  pycocoa.getters.get_classnameof is <function .get_classnameof at 0x1031d13a0>,
+#  pycocoa.getters.get_classof is <function .get_classof at 0x1031d1440>,
+#  pycocoa.getters.get_inheritance is <function .get_inheritance at 0x1031d1620>,
+#  pycocoa.getters.get_ivar is <function .get_ivar at 0x1031d14e0>,
+#  pycocoa.getters.get_ivars is <function .get_ivars at 0x1031d1580>,
+#  pycocoa.getters.get_metaclass is <function .get_metaclass at 0x1031d16c0>,
+#  pycocoa.getters.get_method is <function .get_method at 0x1031d1760>,
+#  pycocoa.getters.get_methods is <function .get_methods at 0x1031d1800>,
+#  pycocoa.getters.get_properties is <function .get_properties at 0x1031d1940>,
+#  pycocoa.getters.get_protocol is <function .get_protocol at 0x1031d19e0>,
+#  pycocoa.getters.get_protocols is <function .get_protocols at 0x1031d1a80>,
+#  pycocoa.getters.get_selector is <function .get_selector at 0x1031d1b20>,
+#  pycocoa.getters.get_selectorname_permutations is <function .get_selectorname_permutations at 0x1031d1c60>,
+#  pycocoa.getters.get_selectornameof is <function .get_selectornameof at 0x1031d1bc0>,
+#  pycocoa.getters.get_superclass is <function .get_superclass at 0x1031d1d00>,
+#  pycocoa.getters.get_superclassnameof is <function .get_superclassnameof at 0x1031d1e40>,
+#  pycocoa.getters.get_superclassof is <function .get_superclassof at 0x1031d1da0>,
 # )[21]
-# pycocoa.getters.version 23.02.05, .isLazy 1, Python 3.11.1 64bit arm64, macOS 13.2
+# pycocoa.getters.version 25.1.31, .isLazy 1, Python 3.13.1 64bit arm64, macOS 14.6.1
 
 # MIT License <https://OpenSource.org/licenses/MIT>
 #

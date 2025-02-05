@@ -7,7 +7,8 @@
 '''
 # all imports listed explicitly to help PyChecker
 from pycocoa.bases   import _Type0
-from pycocoa.lazily  import _ALL_LAZY, _DOT_, _fmt, _SPACE_
+from pycocoa.lazily  import _ALL_LAZY, _Dmain_, _DOT_, _fmt, \
+                            _instr, _no, _SPACE_
 from pycocoa.nstypes import isNone, NSDictionary, nsIter2, \
                             NSMutableDictionary, ns2Type
 from pycocoa.pytypes import py2NS, type2NS
@@ -16,7 +17,7 @@ from pycocoa.runtime import isImmutable, isObjCInstanceOf, \
 from pycocoa.utils   import isinstanceOf, missing, _Types
 
 __all__ = _ALL_LAZY.dicts
-__version__ = '25.01.25'
+__version__ = '25.01.31'
 
 
 def _dict_cmp(dict1, dict2):
@@ -39,8 +40,8 @@ def _dict_kwds(args, kwds, name):
                                  ObjCClass, ObjCInstance)):
             arg0 = dict(arg0)  # tuple, list to dict
     except (TypeError, ValueError) as x:
-        E = type(x)
-        raise E(_fmt('%s() %r: %s', name, args, x))
+        t = _fmt('%s() %r: %s', name, args, x)
+        raise type(x)(t)
     return arg0, kwds
 
 
@@ -104,14 +105,15 @@ class FrozenDict(_Type0):
         raise TypeError(_fmt('%s[%r] = %r', self, key, value))
 
     def clear(self):
-        raise TypeError(_fmt('%s()', _DOT_(self, 'clear')))
+        n = _DOT_(self, self.clear.__name__)
+        raise TypeError(_instr(n))
 
     def copy(self):
         '''Make a shallow copy.
 
            @return: The copy (L{FrozenDict}).
         '''
-        return self.__class__(self._NS_copy(False))
+        return type(self)(self._NS_copy(False))
 
 #   def fromkeys(self):
 #       raise NotImplementedError('%s.%s' % (self, 'fromkeys'))
@@ -140,7 +142,7 @@ class FrozenDict(_Type0):
 
     def pop(self, key, **unused):
         n = _DOT_(self, self.pop.__name__)
-        raise TypeError(_fmt('%s(%r)', n, key))
+        raise TypeError(_instr(n, repr(key)))
 
     def values(self):
         '''Yield the values, like C{dict.values}.
@@ -165,7 +167,8 @@ class FrozenDict(_Type0):
 
     def _NS_KeyError(self, key, k):
         # XXX KeyError(key) prints repr(key), adding "..."
-        raise KeyError(_fmt('%s no such key: %s (%r)', self, key, k))
+        t = _fmt('%s key: %s (%r)', self, key, k)
+        raise KeyError(_no(t))
 
 
 class Dict(FrozenDict):
@@ -213,7 +216,7 @@ class Dict(FrozenDict):
 
            @return: The copy (L{Dict}).
         '''
-        return self.__class__(self._NS_copy(True))
+        return type(self)(self._NS_copy(True))
 
     def pop(self, key, default=missing):  # PYCHOK expected
         '''Remove an item, like C{dict.pop}.
@@ -269,7 +272,7 @@ class Dict(FrozenDict):
 NSDictionary._Type        = _Types.FrozenDict = FrozenDict
 NSMutableDictionary._Type = _Types.Dict       = Dict
 
-if __name__ == '__main__':
+if __name__ == _Dmain_:
 
     from pycocoa.utils import _all_listing
 
@@ -281,7 +284,7 @@ if __name__ == '__main__':
 #  pycocoa.dicts.Dict is <class .Dict>,
 #  pycocoa.dicts.FrozenDict is <class .FrozenDict>,
 # )[2]
-# pycocoa.dicts.version 21.11.04, .isLazy 1, Python 3.11.0 64bit arm64, macOS 13.0.1
+# pycocoa.dicts.version 25.1.31, .isLazy 1, Python 3.13.1 64bit arm64, macOS 14.6.1
 
 # MIT License <https://OpenSource.org/licenses/MIT>
 #

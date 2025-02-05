@@ -8,21 +8,21 @@
 @var missing: Missing keyword argument value.
 '''
 
-from pycocoa.lazily import _ALL_LAZY, _COLON_, _COMMASPACE_, _DOT_, \
-                           _EQUALS_, _fmt, _fmt_invalid, isLazy, \
-                           _lazy_import, _NL_, _NN_, _Python_version, \
-                           _SPACE_, _sys, _UNDER_, _isPython3  # PYCHOK used!
+from pycocoa.lazily import _ALL_LAZY, _COLON_, _COMMA_, _COMMASPACE_, \
+                           _Ddoc_, _Dmain_, _DOT_, _EQUALS_, _fmt, \
+                           _fmt_invalid, _instr, isLazy, _lazy_import, \
+                           _NA_, _NL_, _NN_, _Python_version, _SPACE_, \
+                           _sys, _UNDER_,  _isPython3  # PYCHOK used!
+# from pycocoa.lazily import _Dall_, _Dfile_, _Dversion_  # in ._all_listing below
 
 import os.path as _os_path
 import platform as _platform
 # import sys as _sys  # from .lazily
 
 __all__ = _ALL_LAZY.utils
-__version__ = '25.01.25'
+__version__ = '25.02.04'
 
-_bCOLON_ = b':'
-_bUNDER_ = b'_'
-_COMMA_  =  ','
+DEFAULT_UNICODE = 'utf-8'  # default Python encoding
 
 
 class module_property_RO(object):
@@ -52,19 +52,19 @@ class module_property_RO(object):
 def property_RO(method):
     '''Decorator for C{Read_Only} class/instance property.
 
-       @param method: The callable to be decorated as C{property}.
+       @param method: The callable to be decorated as C{Read_Only property}.
 
        @note: Like standard Python C{property} without a C{property.setter}
-              with a more descriptive error message when set.
+              and with a more descriptive error message when set.
     '''
-    def Read_Only(self, ignored):
+    def Read_Only(inst, ignored):
         '''Throws an C{AttributeError}, always.
         '''
-        t = _DOT_(self, method.__name__)
-        t = _fmt('Read_Only property: %s = %r', t, ignored)
+        t = _DOT_(inst, method.__name__)
+        t = _fmt('%s %s: %s = %r', Read_Only.__name__, 'property', t, ignored)
         raise AttributeError(t)
 
-    return property(method, Read_Only, None, method.__doc__ or 'N/A')
+    return property(method, Read_Only, None, method.__doc__ or _NA_)
 
 
 class _MutableConstants(object):
@@ -72,19 +72,13 @@ class _MutableConstants(object):
     '''
     def __setattr__(self, name, value):
         if not hasattr(self, name):
-            n = _DOT_(self.__class__.__name__, name)
-            raise NameError(_fmt('no such %s', n))
+            n = _DOT_(self.typename, name)
+            raise NameError(_fmt_invalid(constant=n))
         super(_MutableConstants, self).__setattr__(name, value)
-
-    def _strepr(self, _fmt2):
-        c =  self.__class__.__name__.lstrip(_UNDER_)
-        j = _NN_(',', _NL_, _SPACE_ * len(c), _DOT_)
-        t = (_fmt2(*t) for t in sortuples(self.items()))
-        return _DOT_(c, j.join(t))
 
     def __repr__(self):
         def _fmt2(n, v):
-            return _fmt('%s=%s', n, _intstr(v))
+            return _EQUALS_(n, _intstr(v))
         return self._strepr(_fmt2)
 
     def __str__(self):
@@ -117,6 +111,18 @@ class _MutableConstants(object):
             if n[:1].isupper():
                 yield n
 
+    def _strepr(self, _fmt2):  # helper for __repr__ and __str__
+        n =  self.typename.lstrip(_UNDER_)
+        j = _NN_(_COMMA_, _NL_, _SPACE_ * len(n), _DOT_)
+        t = (_fmt2(*t) for t in sortuples(self.items()))
+        return _DOT_(n, j.join(t))
+
+    @property_RO
+    def typename(self):
+        '''Get this instance' Python class name (C{str}).
+        '''
+        return type(self).__name__
+
     def values(self):
         '''Yield each constant value.
         '''
@@ -128,30 +134,26 @@ class _Constants(_MutableConstants):
     '''(INTERNAL) Enum-like, read-only constants.
     '''
     def __setattr__(self, name, value):
-        n = _DOT_(self.__class__.__name__, name)
+        n = _DOT_(self.typename, name)
         raise TypeError(_fmt('%s = %r', n, value))
 
     def _masks(self, *names):
         ns = []
         for n in names:
             ns.extend(n.strip().lower().split())
-
         ns, c = set(ns), 0
         for n, m in self.items():
             n = n.lower()
             if n in ns:
                 c |= m
                 ns.remove(n)
-
-        if ns:  # some invalid names
-            return c, _SPACE_.join(map(repr, ns))
-        else:
-            return c, None
+        ns = _SPACE_.join(map(repr, ns)) if ns else None
+        return c, ns  # some invalid names or None
 
     def astrs(self, mask):
         '''Return constants mask as names (C{str}s).
         '''
-        return _SPACE_.join(n for n, m in self.items() if mask & m)
+        return _SPACE_.join(n for n, m in self.items() if (mask & m))
 
 
 class Adict(dict):
@@ -181,7 +183,7 @@ class Adict(dict):
     def copy(self):
         '''Return a shallow copy.
         '''
-        return self.__class__(self)
+        return type(self)(self)
 
 
 class _Globals(object):
@@ -204,13 +206,13 @@ class _Singletons(_MutableConstants):
     '''
     def __repr__(self):
         def _fmt2(n, v):
-            return _fmt('%s=%s', n, v)
+            return _EQUALS_(n, v)
         return self._strepr(_fmt2)
 
     def items(self, *extra):  # PYCHOK signature
         '''Yield 2-tuple (name, value) for each singleton.
         '''
-        c = self.__class__
+        c = type(self)
         for n in dir(self):
             if not n.startswith(_UNDER_):
                 g, _ = property2(self, n)
@@ -262,17 +264,19 @@ class _Types(_MutableConstants):
 _Types = _Types()  # PYCHOK singleton
 
 
-def _TypeError(name, inst, func, classes=()):
+def _TypeError(name, inst, func, *classes):
     '''(INTERNAL) Format a TypeError for func(inst, *classes).
     '''
-    if classes:
-        c = [getattr(c, '__name__', str(c)) for c in classes]
-        c = _COMMASPACE_.join([_NN_] + c)
-    else:
-        c = _NN_
+    def _nm(c):
+        try:
+            return c.__name__
+        except AttributeError:
+            return str(c)
+
+    c = _COMMASPACE_(name, *map(_nm, classes))
     n =  func.__name__
-    t = _fmt('not %s(%s%s): %r', n, name, c, inst) if name else \
-        _fmt('invalid %s(%r, %s)', n, inst, c)
+    t = _fmt('not %s(%s): %r', n, c, inst) if name else \
+        _fmt('invalid %s(%r%s)', n, inst, c)
     return TypeError(t)
 
 
@@ -399,20 +403,27 @@ class missing(object):
     '''Singleton class (named like instance, to be lost on purpose)
     '''
     def __eq__(self, unused):  # avoid '==' comparison
-        raise SyntaxError(_fmt("use 'is %s'", self))
+        raise SyntaxError(self._use('is', '=='))
 
     def __ne__(self, unused):  # avoid '!=' comparison
-        raise SyntaxError(_fmt("use 'is not %s'", self))
+        raise SyntaxError(self._use('is not', '!='))
 
     def __repr__(self):
-        return missing.__class__.__name__
+        return self.typename
 
     def __str__(self):
-        return missing.__class__.__name__
+        return self.typename
 
+    @property_RO
+    def typename(self):
+        '''Get this instance' Python class name (C{str}).
+        '''
+        return type(self).__name__
 
-DEFAULT_UNICODE = 'utf-8'    # default Python encoding
-missing         = missing()  # private, singleton
+    def _use(self, is_not, neq):
+        return _fmt("use '%s %s', not '%s'", is_not, self, neq)
+
+missing = missing()  # PYCHOK private, singleton
 
 try:  # MCCABE 23
 
@@ -432,14 +443,14 @@ try:  # MCCABE 23
     def bytes2str(bytestr, dflt=missing, name=_NN_):
         '''Convert C{bytes}/C{unicode} to C{str} if needed.
 
-           @param bytestr: C{bytes}, C{str} or C{unicode}.
+           @param bytestr: Original C{bytes}, C{str} or C{unicode}.
            @keyword dflt: Optional, default return value.
            @keyword name: Optional name of I{bytestr} argument.
 
-           @return: C{str} or I{dflt}.
+           @return: The C{str} or I{dflt}.
 
            @raise TypeError: If neither C{str} nor C{bytes}, but
-                             only if no I{dflt} is provided.
+                             only if no I{dflt} is specified.
         '''
         # XXX see Python-Vlc's vlc.py
         if isinstance(bytestr, _Strs):
@@ -454,25 +465,25 @@ try:  # MCCABE 23
     # iter(bytes) yields a 1-charsstr/byte in Python 2-
     iterbytes = iter
 
-    def str2bytes(bytestr, dflt=missing, name=_NN_):
-        '''Convert C{str} to C{bytes}/C{unicode} if needed.
+    def str2bytes(strbytes, dflt=missing, name=_NN_):
+        '''Convert C{strbytes} to C{bytes}/C{unicode} if needed.
 
-           @param bytestr: C{bytes}, C{str} or C{unicode}.
+           @param strbytes: Original C{str}, C{bytes} or C{unicode}.
            @keyword dflt: Optional, default return value.
            @keyword name: Optional name of I{bytestr} argument.
 
-           @return: C{bytes} or I{dflt}.
+           @return: The C{bytes} or I{dflt}.
 
            @raise TypeError: If neither C{bytes} nor C{str}, but
-                             only if no I{dflt} is provided.
+                             only if no I{dflt} is specified.
         '''
         # XXX see Python-Vlc's vlc.py
-        if isinstance(bytestr, _Strs):
-            return bytestr
-        elif isinstance(bytestr, _Bytes):
-            return bytestr.encode(DEFAULT_UNICODE)
+        if isinstance(strbytes, _Strs):
+            return strbytes
+        elif isinstance(strbytes, _Bytes):
+            return strbytes.encode(DEFAULT_UNICODE)
         elif dflt is missing:
-            raise _TypeError(name, bytestr, str2bytes)
+            raise _TypeError(name, strbytes, str2bytes)
         return dflt
 
 except NameError:  # Python 3+
@@ -485,14 +496,14 @@ except NameError:  # Python 3+
     def bytes2str(bytestr, dflt=missing, name=_NN_):  # PYCHOK expected
         '''Convert C{bytes} to C{str} if needed.
 
-           @param bytestr: C{str} or C{bytes}.
+           @param bytestr: Original C{bytes}, C{str} or C{unicode}.
            @keyword dflt: Optional, default return value.
            @keyword name: Optional name of I{bytestr} argument.
 
-           @return: C{str} or I{dflt}.
+           @return: The C{str} or I{dflt}.
 
            @raise TypeError: If neither C{str} nor C{bytes}, but
-                             only if no I{dflt} is provided.
+                             only if no I{dflt} is specified.
         '''
         if isinstance(bytestr, _Strs):
             return bytestr
@@ -514,24 +525,24 @@ except NameError:  # Python 3+
         assert isinstance(b, bytes), 'iterbytes failed'
     del b
 
-    def str2bytes(bytestr, dflt=missing, name=_NN_):  # PYCHOK expected
-        '''Convert C{str} to C{bytes} if needed.
+    def str2bytes(strbytes, dflt=missing, name=_NN_):  # PYCHOK expected
+        '''Convert C{strbytes} to C{bytes} if needed.
 
-           @param bytestr: Original C{bytes} or C{str}.
+           @param strbytes: Original C{str}, C{bytes} or C{unicode}.
            @keyword dflt: Optional, default return value.
            @keyword name: Optional name of I{bytestr} argument.
 
-           @return: C{bytes} or I{dflt}.
+           @return: The C{bytes} or I{dflt}.
 
            @raise TypeError: If neither C{bytes} nor C{str}, but
-                             only if no I{dflt} is provided.
+                             only if no I{dflt} is specified.
         '''
-        if isinstance(bytestr, _Bytes):
-            return bytestr
-        elif isinstance(bytestr, _Strs):
-            return bytes(bytestr, DEFAULT_UNICODE)
+        if isinstance(strbytes, _Bytes):
+            return strbytes
+        elif isinstance(strbytes, _Strs):
+            return bytes(strbytes, DEFAULT_UNICODE)
         elif dflt is missing:
-            raise _TypeError(name, bytestr, str2bytes)
+            raise _TypeError(name, strbytes, str2bytes)
         return dflt
 
 _ByteStrs = _Bytes + _Strs  # bytes and/or str types
@@ -540,25 +551,29 @@ _ByteStrs = _Bytes + _Strs  # bytes and/or str types
 def _all_listing(alls, localls, libs=False, _file_=_NN_, argv0='#'):
     '''(INTERNAL) Print sorted __all__ names and values.
     '''
+    from pycocoa.lazily import _Dall_, _Dfile_, _Dversion_
+
     def _all_in(alls, inns, m, n):
         t = tuple(a for a in alls if a not in inns)
         if t:
-            t = _COMMASPACE_.join(t)
             n = _DOT_(m, n)
+            t = _COMMASPACE_.join(t)
             raise NameError(_fmt('missing %s: %s', n, t))
 
-    f = _file_ or localls.get('__file__', _NN_)
+    t =  alls.__class__.__name__
+    f = _file_ or localls.get(_Dfile_, _NN_)
     m, n = _dirbasename2(f)
-    printf('%s = %s(', _DOT_(m, '__all__'), alls.__class__.__name__, argv0=argv0, nl=1)
+    printf('%s = %s(', _DOT_(m, _Dall_), t, argv0=argv0, nl=1)
 
     lazy = _ALL_LAZY.get(n, ())
     if lazy:
         _all_in(alls, lazy,   'lazily', n)
-        _all_in(lazy, alls,    m, '__all__')
+        _all_in(lazy, alls,    m, _Dall_)
         _all_in(lazy, localls, m, 'locals()')
 
     d = i = 0
     p = _NN_
+    S = _SPACE_ * (len(m) + 2)
     for n in sorted(alls, key=str.lower):
         v = localls[n]
         r = repr(v)
@@ -571,7 +586,7 @@ def _all_listing(alls, localls, libs=False, _file_=_NN_, argv0='#'):
             r = r.replace("'", _NN_)
         elif r.startswith('<function '):
             r = r[:10] + _DOT_(v.__module__, r[10:])
-        r = r.replace('__main__', _NN_)  # .replace('__main__', m)
+        r = r.replace(_Dmain_, _NN_)  # .replace(_Dmain_, m)
         if n == p:
             d += 1
             r += ' DUPLICATE'
@@ -579,7 +594,8 @@ def _all_listing(alls, localls, libs=False, _file_=_NN_, argv0='#'):
             p = n
         if r.startswith(_DOT_(n, _NN_)):
             # increase indentation to align enums, constants, etc.
-            r = r.replace(_SPACE_ * len(n), _SPACE_ * (len(n) + len(m) + 2))
+            t = _SPACE_ * len(n)
+            r =  r.replace(t, t + S)
         else:
             r = _fmt('%s is %s', n, r)
         printf(' %s,', _DOT_(m, r), argv0=argv0)
@@ -589,7 +605,7 @@ def _all_listing(alls, localls, libs=False, _file_=_NN_, argv0='#'):
     else:
         d = _NN_
     printf(')[%d]%s', i, d, argv0=argv0)
-    v = localls.get('__version__', _NN_)
+    v = localls.get(_Dversion_, _NN_).replace('.0', _DOT_)
     _all_versions(libs=libs, _file_=f, _version_=v, argv0=argv0)  # PYCHOK kwargs
 
 
@@ -609,7 +625,8 @@ def _all_versionstr(libs=False, _file_=_NN_, _version_=_NN_):
          ('Python',  _Python_version, _platform.architecture()[0], machine()),
          ('macOS',   _macOSver()))
     if libs:
-        t += ('oslibs', str(sorted(oslibs.get_libs().keys())).replace("'", _NN_)),
+        ls = sorted(oslibs.get_libs().keys())
+        t += ('oslibs', str(ls).replace("'", _NN_)),
 
     m, _ = _dirbasename2(_file_ or _pycocoa)
     return _DOT_(m, _COMMASPACE_.join(map(_SPACE_.join, t)))
@@ -648,7 +665,7 @@ def aspect_ratio(width, *height, **Error_kwds):
         s = bytes2str(r, dflt=None)
         if s is not None:
             w, h = map(int, s.split(_COLON_))
-        elif isinstance(r, (tuple, list)) and len(r) == 2:
+        elif islistuple(r) and len(r) == 2:
             w, h = map(flint, r)
         else:  # NSSize_t
             w, h = flint(r.width), flint(r.height)
@@ -704,6 +721,13 @@ def _dirbasename2(filename, sep=_DOT_):
     return m, n
 
 
+def errorf(fmtxt, *args, **file_flush_nl_nt_argv0):
+    '''like C{B{printf}(B{fmtxt}, *B{args}, ..., B{file}=sys.stderr)}.
+    '''
+    _writef(fmtxt, args, **_xkwds(file_flush_nl_nt_argv0,
+                                  file=_sys.stderr, flush=True))
+
+
 def flint(f):
     '''Return C{int} for integer C{float}.
     '''
@@ -735,25 +759,27 @@ except ImportError:
 def inst2strepr(inst, strepr, *attrs):
     '''Convert an instance's attributes, maintaining the order.
 
-       @param inst: Instance (C{any}).
+       @param inst: Instance (C{any}, incl. C{ctypes}).
        @param strepr: Conversion (C{repr} or C{str}).
        @param attrs: Instance attribute names (I{all positional}).
 
        @return: Instance representation (C{str}).
     '''
-    def _strepr(v):
-        return repr(v) if isinstance(v, _ByteStrs) else strepr(v)
+    def _a_v(a):
+        v = getattr(inst, a)
+        t = repr(v) if isinstance(v, _ByteStrs) else strepr(v)
+        return _EQUALS_(a, t)
 
-    t = (_fmt('%s=%s', a, _strepr(getattr(inst, a))) for a in attrs)
-    return _fmt('%s(%s)', inst.__class__.__name__, _COMMASPACE_.join(t))
+    return _instr(type(inst).__name__, *map(_a_v, attrs))
 
 
 def _int2(i):
     '''(INTERNAL) Split an C{int} into 2-tuple (int, shift).
     '''
     s = 0
-    if isinstance(i, _Ints) and i > 0:
-        for m, n in ((255, 8), (15, 4), (1, 1)):
+    if isinstance(i, _Ints) and i > 0 and not (i & 1):
+        for n in (8, 4, 2, 1):
+            m = 2**n - 1
             while not (i & m):
                 i >>= n
                 s  += n
@@ -774,10 +800,10 @@ def isinstanceOf(inst, *classes, **name_missing):
        @param classes: One or several classes (I{all positional}).
        @keyword name: The name of the instance (C{str}).
 
-       @return: The matching I{class} from I{classes}, None otherwise.
+       @return: The matching I{class} from I{classes}, C{None} otherwise.
 
        @raise TypeError: If I{inst} does not match any of the I{classes},
-                         but iff keyword I{name='...'} is provided.
+                         but only if I{name='...'} is specified.
 
        @see: Function L{isObjCInstanceOf} for checking ObjC instances.
     '''
@@ -788,7 +814,18 @@ def isinstanceOf(inst, *classes, **name_missing):
     if name is missing:
         return None
 
-    raise _TypeError(name, inst, isinstanceOf, classes)
+    raise _TypeError(name, inst, isinstanceOf, *classes)
+
+
+def islistuple(inst):
+    '''Is B{C{inst}}ance a C{list} or C{tuple}?
+
+       @param inst: The object (any C{type}).
+
+       @return: C{True} if C{B{inst}} is a C{list} or
+                C{tuple}, C{False} otherwise.
+    '''
+    return isinstance(inst, (tuple, list))
 
 
 def lambda1(arg):
@@ -797,23 +834,21 @@ def lambda1(arg):
     return arg
 
 
-def logf(fmt, *args, **kwds):
-    '''Formatted log I{fmt % args} with optional keywords.
+def logf(fmtxt, *args, **file_flush_nl_nt_argv0):
+    '''Formatted log I{fmtxt % args} with optional keywords.
 
-       @param fmt: Print-like format or plain string (C{str}).
+       @param fmtxt: Print-like format or plain string (C{str}).
        @param args: Optional arguments to format (I{all positional}).
-       @keyword argv0: Optional prefix (C{str}).
        @keyword file: Alternate file to write to (C{file}-type),
                       default C{NSMain.stdlog}.
        @keyword flush: Flush B{C{file}} after writing (C{bool}),
                        default C(True).
        @keyword nl: Number of leading blank lines (C{int}).
        @keyword nt: Number of trailing blank lines (C{int}).
+       @keyword argv0: Optional prefix (C{str}).
     '''
-    opts = dict(file=_Globals.stdlog, flush=True)
-    if kwds:
-        opts.update(kwds)
-    _writestr(fmt, args, **opts)
+    _writef(fmtxt, args, **_xkwds(file_flush_nl_nt_argv0,
+                                  file=_Globals.stdlog, flush=True))
 
 
 def machine():
@@ -861,8 +896,8 @@ def name2objc(name_):
        @note: A I{name_} starting with an underscore is returned as-is.
     '''
     b = str2bytes(name_)
-    if not b.startswith(_bUNDER_):
-        b = b.replace(_bUNDER_, _bCOLON_)
+    if not b.startswith(b'_'):
+        b = b.replace(b'_', b':')
     return b
 
 
@@ -896,20 +931,20 @@ def name2pymethod(name_):
     raise ValueError(_fmt_invalid(name_=repr(name_)))
 
 
-def printf(fmt, *args, **kwds):
+def printf(fmtxt, *args, **file_flush_nl_nt_argv0):
     '''Formatted print I{fmt % args} with optional keywords.
 
-       @param fmt: Print-like format or plain string (C{str}).
+       @param fmtxt: Print-like format or plain string (C{str}).
        @param args: Optional arguments to format (I{all positional}).
-       @keyword argv0: Optional prefix (C{str}).
        @keyword file: Alternate file to write to (C{file}-type),
                       default C{sys.stdout}.
        @keyword flush: Flush B{C{file}} after writing (C{bool}),
                        default C{False}.
        @keyword nl: Number of leading blank lines (C{int}).
        @keyword nt: Number of trailing blank lines (C{int}).
+       @keyword argv0: Optional prefix (C{str}).
     '''
-    _writestr(fmt, args, **kwds)
+    _writef(fmtxt, args, **file_flush_nl_nt_argv0)
 
 
 def properties(inst):
@@ -919,9 +954,9 @@ def properties(inst):
 
        @return: The properties (C{dict}).
     '''
-    pd = {}
-    for a in dir(inst):
-        if type(getattr(inst.__class__, a)) is property:
+    pd, t= {}, type(inst)
+    for a in dir(inst):  # dir(t), t.__mro__?
+        if type(getattr(t, a)) is property:
             try:
                 pd[a] = getattr(inst, a)
             except Exception as x:
@@ -1028,29 +1063,29 @@ def type2strepr(inst, strepr=str, **kwds):
 
        @param inst: Instance (C{any}).
        @keyword strepr: Representation function (C{repr} or C{str}).
+       @keyword kwds: Optional, additional C{name=value} arguments.
 
        @return: Instance representation (C{str}).
     '''
     try:
-        t = getattr(inst.NS, 'objc_classname', _NN_)  # PYCHOK expected
+        t =  inst.NS.objc_classname  # PYCHOK expected
     except AttributeError:
         t = _NN_
     try:
-        t += _fmt('[%s]', len(inst))
+        t = _fmt('%s[%s]', t, len(inst))
     except TypeError:
         pass
     try:
-        d = dict(name=repr(inst.name))
-        d.update(kwds)
+        d = _xkwds(kwds, name=repr(inst.name))
     except AttributeError:
-        d = kwds
-    d = tuple(_EQUALS_(n, v) for n, v in d.items())
+        d =  kwds
     if d:
+        d = (_EQUALS_(*i) for i in d.items())
         t = _COMMASPACE_(strepr(t), *d) if t else \
             _COMMASPACE_.join(d)
     else:
-        t = strepr(t)
-    return _fmt('%s(%s)', inst.__class__.__name__, t)
+        t =  strepr(t)
+    return _instr(type(inst).__name__, t)
 
 
 def _varstr(constants, strepr=None):
@@ -1059,7 +1094,7 @@ def _varstr(constants, strepr=None):
     def _doc1(c, n, f):
         # get class c's 1st __doc__ line or value from f(c)
         d = f(c) if callable(f) else (
-            getattr(c, '__doc__') or _NN_)  # PYCHOK getattr
+            getattr(c, _Ddoc_) or _NN_)  # PYCHOK getattr
         t = d.split(_NL_)[0].strip().rstrip(_DOT_)
         return _fmt('@var %s: %s.', n, t)
 
@@ -1071,25 +1106,29 @@ def _varstr(constants, strepr=None):
     return _NL_.join(v)
 
 
-def _writestr(fmtxt, args=(), file=_sys.stdout, flush=False,
-                              nl=0, nt=0, **argv0):
-    '''(INTERNAL) Write C{text} to C{file}.
+def _writef(fmtxt, args, file=_sys.stdout, flush=False,
+                         nl=0, nt=0, argv0=missing):
+    '''(INTERNAL) Write a formatted string to C{file}.
     '''
-    t = fmtxt
-    if args:
-        try:
-            t = _fmt(t, *args)
-        except TypeError:
-            t += str(map(str, args))
-    a = argv0.get('argv0', _Globals.argv0)
+    t = _fmt(fmtxt, *args)
+    a = _Globals.argv0 if argv0 is missing else argv0
     if a:
-        a += _SPACE_
-        t  = t.replace(_NL_, _NN_(_NL_ + a))
-    t = _NN_(_NL_ * nl, a, t, _NL_ * (nt + 1))
-    n = file.write(t)
+        t =  t.replace(_NL_, _NN_(_NL_, a, _SPACE_))
+        t = _SPACE_(a, t)
+    t = _NN_(_NL_ * nl, t, _NL_, _NL_ * nt)
+    n =  file.write(t)
     if flush:
         file.flush()
     return n
+
+
+def _xkwds(kwds, **dflts):
+    # return dict C{kwds.update(dflts)}
+    d = dflts
+    if kwds:
+        d = d.copy()
+        d.update(kwds)
+    return d
 
 
 def z1000str(size, sep=_UNDER_):
@@ -1100,15 +1139,22 @@ def z1000str(size, sep=_UNDER_):
 
        @return: "<1or2digits><sep><3digits>..." or "-" if
                 I{size} is negative (C{str}).
-   '''
+    '''
+    def _z(z, S, s):
+        t = '{0:%s}' % (S,)
+        t = t.format(z)
+        if S != s:
+            t = t.replace(S, s)
+        return t
+
     z = int(size)
     if z < 0:
         return '-'
     try:  # '_' only in Python 3.6+
-        t = '{0:_}'.format(z).replace(_UNDER_, sep)
+        t = _z(z, _UNDER_, sep)
     except ValueError:
         try:  # ',' only in Python 3.1+
-            t = '{0:,}'.format(z).replace(',', sep)
+            t = _z(z, _COMMA_, sep)
         except ValueError:
             t = str(z)
             n = len(t)
@@ -1160,7 +1206,7 @@ def zSIstr(size, B='B', K=1024):
     return si
 
 
-if __name__ == '__main__':
+if __name__ == _Dmain_:
 
     _all_listing(__all__, locals())
 
@@ -1168,38 +1214,40 @@ if __name__ == '__main__':
 #
 # pycocoa.utils.__all__ = tuple(
 #  pycocoa.utils.Adict is <class .Adict>,
-#  pycocoa.utils.aspect_ratio is <function .aspect_ratio at 0x104a9c7c0>,
+#  pycocoa.utils.aspect_ratio is <function .aspect_ratio at 0x100cf4b80>,
 #  pycocoa.utils.bytes2repr is <built-in function repr>,
-#  pycocoa.utils.bytes2str is <function .bytes2str at 0x104a9b9c0>,
+#  pycocoa.utils.bytes2str is <function .bytes2str at 0x100cf3ba0>,
 #  pycocoa.utils.Cache2 is <class .Cache2>,
-#  pycocoa.utils.clipstr is <function .clipstr at 0x104a9c860>,
+#  pycocoa.utils.clipstr is <function .clipstr at 0x100cf4c20>,
 #  pycocoa.utils.DEFAULT_UNICODE is 'utf-8',
-#  pycocoa.utils.flint is <function .flint at 0x104a9c9a0>,
+#  pycocoa.utils.errorf is <function .errorf at 0x100cf4d60>,
+#  pycocoa.utils.flint is <function .flint at 0x100cf4e00>,
 #  pycocoa.utils.gcd is <built-in function gcd>,
-#  pycocoa.utils.inst2strepr is <function .inst2strepr at 0x104a9ca40>,
-#  pycocoa.utils.isinstanceOf is <function .isinstanceOf at 0x104a9cd60>,
-#  pycocoa.utils.iterbytes is <function .iterbytes at 0x104a9c4a0>,
-#  pycocoa.utils.lambda1 is <function .lambda1 at 0x104a9ce00>,
-#  pycocoa.utils.logf is <function .logf at 0x104a9cea0>,
-#  pycocoa.utils.machine is <function .machine at 0x104a9cf40>,
+#  pycocoa.utils.inst2strepr is <function .inst2strepr at 0x100cf4ea0>,
+#  pycocoa.utils.isinstanceOf is <function .isinstanceOf at 0x100cf51c0>,
+#  pycocoa.utils.islistuple is <function .islistuple at 0x100cf5260>,
+#  pycocoa.utils.iterbytes is <function .iterbytes at 0x100cf4860>,
+#  pycocoa.utils.lambda1 is <function .lambda1 at 0x100cf5300>,
+#  pycocoa.utils.logf is <function .logf at 0x100cf53a0>,
+#  pycocoa.utils.machine is <function .machine at 0x100cf5440>,
 #  pycocoa.utils.missing is missing,
 #  pycocoa.utils.module_property_RO is <class .module_property_RO>,
-#  pycocoa.utils.name2objc is <function .name2objc at 0x104a9d120>,
-#  pycocoa.utils.name2py is <function .name2py at 0x104a9d1c0>,
-#  pycocoa.utils.name2pymethod is <function .name2pymethod at 0x104a9d260>,
-#  pycocoa.utils.printf is <function .printf at 0x104a9d300>,
-#  pycocoa.utils.properties is <function .properties at 0x104a9d3a0>,
-#  pycocoa.utils.property2 is <function .property2 at 0x104a9d440>,
-#  pycocoa.utils.property_RO is <function .property_RO at 0x1049c4180>,
-#  pycocoa.utils.sortuples is <function .sortuples at 0x104a9d4e0>,
-#  pycocoa.utils.str2bytes is <function .str2bytes at 0x104a9c540>,
-#  pycocoa.utils.terminating is <function .terminating at 0x104a9d620>,
-#  pycocoa.utils.type2strepr is <function .type2strepr at 0x104a9d760>,
-#  pycocoa.utils.z1000str is <function .z1000str at 0x104a9d940>,
-#  pycocoa.utils.zfstr is <function .zfstr at 0x104a9d9e0>,
-#  pycocoa.utils.zSIstr is <function .zSIstr at 0x104a9da80>,
-# )[31]
-# pycocoa.utils.version 25.01.25, .isLazy 1, Python 3.13.1 64bit arm64, macOS 14.6.1
+#  pycocoa.utils.name2objc is <function .name2objc at 0x100cf5620>,
+#  pycocoa.utils.name2py is <function .name2py at 0x100cf56c0>,
+#  pycocoa.utils.name2pymethod is <function .name2pymethod at 0x100cf5760>,
+#  pycocoa.utils.printf is <function .printf at 0x100cf5800>,
+#  pycocoa.utils.properties is <function .properties at 0x100cf58a0>,
+#  pycocoa.utils.property2 is <function .property2 at 0x100cf5940>,
+#  pycocoa.utils.property_RO is <function .property_RO at 0x100c10040>,
+#  pycocoa.utils.sortuples is <function .sortuples at 0x100cf59e0>,
+#  pycocoa.utils.str2bytes is <function .str2bytes at 0x100cf4900>,
+#  pycocoa.utils.terminating is <function .terminating at 0x100cf5b20>,
+#  pycocoa.utils.type2strepr is <function .type2strepr at 0x100cf5c60>,
+#  pycocoa.utils.z1000str is <function .z1000str at 0x100cf5ee0>,
+#  pycocoa.utils.zfstr is <function .zfstr at 0x100cf5f80>,
+#  pycocoa.utils.zSIstr is <function .zSIstr at 0x100cf6020>,
+# )[33]
+# pycocoa.utils.version 25.2.4, .isLazy 1, Python 3.13.1 64bit arm64, macOS 14.6.1
 
 # MIT License <https://OpenSource.org/licenses/MIT>
 #

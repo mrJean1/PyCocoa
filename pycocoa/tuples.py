@@ -6,28 +6,31 @@
 '''Type L{Tuple}, wrapping (immutable) ObjC C{NSArray}.
 '''
 # all imports listed explicitly to help PyChecker
-from pycocoa.bases   import _Type0
-from pycocoa.lazily  import _ALL_LAZY
+from pycocoa.bases import _Type0
+from pycocoa.lazily import _ALL_LAZY, _Dmain_, _DOT_, _fmt, \
+                           _fmt_invalid, _instr
 from pycocoa.octypes import NSNotFound, NSRange_t
-from pycocoa.oslibs  import libCF
+from pycocoa.oslibs import libCF
 from pycocoa.nstypes import ns2Type, NSArray, nsIter2, NSMutableArray
 from pycocoa.pytypes import py2NS, tuple2NS
 from pycocoa.runtime import isImmutable
-from pycocoa.utils   import _fmt, isinstanceOf, _Ints, _Types
+from pycocoa.utils import isinstanceOf, _Ints, _Types
 
 __all__ = _ALL_LAZY.tuples
-__version__ = '25.01.25'
+__version__ = '25.01.31'
 
 
 def _at(inst, index):
     if not isinstance(index, _Ints):
-        raise TypeError(_fmt('%s not an %s: %r', inst, 'index', index))
-    i, n = index, len(inst)
+        i = ' or '.join(_.__name__ for _ in _Ints)
+        raise TypeError(_fmt_invalid(i, index=repr(index)))
+    n, i = len(inst), index
     if i < 0:
         i += n
     if 0 <= i < n:
         return i
-    raise IndexError(_fmt('%s out of range: %r', inst, index))
+    r = _fmt('in range(%s)', n)
+    raise IndexError(_fmt_invalid(r, index=index))
 
 
 class Tuple(_Type0):  # note, List subclasses Tuple
@@ -36,19 +39,19 @@ class Tuple(_Type0):  # note, List subclasses Tuple
     _type = tuple
 
 #   def __add__(self, *unused):
-#       raise NotImplementedError('%s.%s' % (self, '__add__'))
+#       raise NotImplementedError(_DOT_(self, _Dadd_))
 
 #   def __iadd__(self, *unused):
-#       raise NotImplementedError('%s.%s' % (self, '__iadd__'))
+#       raise NotImplementedError(_DOT_(self, _Diadd_))
 
 #   def __imul__(self, *unused):
-#       raise NotImplementedError('%s.%s' % (self, '__iadd__'))
+#       raise NotImplementedError(_DOT_(self, _Dimul_))
 
 #   def __mul__(self, *unused):
-#       raise NotImplementedError('%s.%s' % (self, '__add__'))
+#       raise NotImplementedError(_DOT_(self, _Dmul_))
 
 #   def __rmul__(self, *unused):
-#       raise NotImplementedError('%s.%s' % (self, '__iadd__'))
+#       raise NotImplementedError(_DOT_(self, _Drmul_))
 
     def __init__(self, ns_tuple=()):
         '''New L{Tuple} from a C{tupe}, L{Tuple}, L{List} or C{NS[Mutable]Array}.
@@ -114,13 +117,13 @@ class Tuple(_Type0):  # note, List subclasses Tuple
 #           yield ns2Type(self.NS.objectAtIndex_(i))
 
     def __setitem__(self, index, value):
-        raise TypeError('%s[%r] = %r' % (self, index, value))
+        raise TypeError(_fmt('%s[%r] = %r', self, index, value))
 
     def append(self, value):
-        raise TypeError(_fmt('%s.%s(%r)', self, 'append', value))
+        raise self._TypeError(self.append, value)
 
     def clear(self):
-        raise TypeError(_fmt('%s.%s()', self, 'clear'))
+        raise self._TypeError(self.clear)
 
     def copy(self, *ranged):
         '''Make a shallow copy of this tuple.
@@ -129,7 +132,7 @@ class Tuple(_Type0):  # note, List subclasses Tuple
 
           @return: The copy (L{Tuple}).
         '''
-        return self.__class__(self._NS_copy(False, *ranged))
+        return type(self)(self._NS_copy(False, *ranged))
 
     def count(self, value, identical=False):
         '''Count the number of occurances of an item, like C{tuple./list.count}.
@@ -150,7 +153,7 @@ class Tuple(_Type0):  # note, List subclasses Tuple
         return c
 
     def extend(self, values):
-        raise TypeError(_fmt('%s.%s(%r)', self, 'extend', values))
+        raise self._TypeError(self.extend, values)
 
     def index(self, value, identical=False):
         '''Find an item, like C{tuple./list.index}.
@@ -161,14 +164,15 @@ class Tuple(_Type0):  # note, List subclasses Tuple
         i = self.NS.indexOfObject_(v) if not identical else \
             self.NS.indexOfObjectIdenticalTo_(v)
         if i == NSNotFound:
-            raise ValueError(_fmt('%s no such value: %r', self, value))
+            t = self._TypeError(self.index, value)
+            raise ValueError(str(t))
         return i
 
     def insert(self, index, value):
-        raise TypeError(_fmt('%s.%s(%r, %r)', self, 'insert', index, value))
+        raise self._TypeError(self.insert, index, value)
 
     def pop(self, index=-1):
-        raise TypeError(_fmt('%s.%s(%r)', self, 'pop', index))
+        raise self._TypeError(self.pop, index)
 
     def _NS_copy(self, mutable, *ranged):
         '''(INTERNAL) Copy into an ObjC C{NS[Mutable]Array}.
@@ -185,10 +189,14 @@ class Tuple(_Type0):  # note, List subclasses Tuple
             ns = self.NS.copy()
         return ns
 
+    def _TypeError(self, where, *args):
+        m = _DOT_(self, where.__name__)
+        return TypeError(_instr(m, *map(repr, args)))
+
 
 NSArray._Type = _Types.Tuple = Tuple
 
-if __name__ == '__main__':
+if __name__ == _Dmain_:
 
     from pycocoa.utils import _all_listing
 
@@ -199,7 +207,7 @@ if __name__ == '__main__':
 # pycocoa.tuples.__all__ = tuple(
 #  pycocoa.tuples.Tuple is <class .Tuple>,
 # )[1]
-# pycocoa.tuples.version 21.11.04, .isLazy 1, Python 3.11.0 64bit arm64, macOS 13.0.1
+# pycocoa.tuples.version 25.1.31, .isLazy 1, Python 3.13.1 64bit arm64, macOS 14.6.1
 
 # MIT License <https://OpenSource.org/licenses/MIT>
 #
