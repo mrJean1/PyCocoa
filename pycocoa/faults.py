@@ -32,20 +32,19 @@ as C{pycocoa.disable}, C{pycocoa.enable}, C{pycocoa.exiting}, etc., only
 functions L{getUncaughtExceptionHandler} and L{setUncaughtExceptionHandler}
 are.
 '''
-# all imports listed explicitly to help PyChecker
-from pycocoa.lazily  import _ALL_DOCS, _ALL_LAZY, _Dmain_, _instr, _NL_, _NN_, _no, \
-                            _pycocoa_, _PY_FH
+from pycocoa.internals import Adict, _Dmain_, _Globals, _NL_, _NN_, _no, _pycocoa_
+from pycocoa.lazily import _ALL_DOCS, _ALL_LAZY, _instr, _PY_FH
 from pycocoa.nstypes import _not_given_, NSExceptionError, NSMain
-from pycocoa.oslibs  import _setUncaughtExceptionHandler, _UncaughtExceptionHandler_t
+from pycocoa.oslibs import _setUncaughtExceptionHandler, _UncaughtExceptionHandler_t
 from pycocoa.runtime import  ObjCInstance  # release
-from pycocoa.utils   import  Adict, _Globals, logf
+from pycocoa.utils import logf
 
 import os
 import signal as _signal
 import sys
 
 __all__ = _ALL_LAZY.faults
-__version__ = '25.01.31'
+__version__ = '25.02.09'
 
 _exiting = -9  # default _exit and status
 # SIGnals handled by Python 3 C{faulthandler}

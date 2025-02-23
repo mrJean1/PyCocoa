@@ -8,12 +8,13 @@
 # <https://StackOverflow.com/questions/15519296/pyobjc-crashes-by-using-nstableview>
 # <https://GitHub.com/versluis/Mac-TableViewCode/tree/master/Mac%20TableViewCode>
 
-# all imports listed explicitly to help PyChecker
 from pycocoa.bases import _Type2
 from pycocoa.fonts import Font
 from pycocoa.geometry import Rect4
-from pycocoa.lazily import _ALL_LAZY, _COLON_, _Dmain_, _fmt, _fmt_invalid, _NN_
-from pycocoa.nstypes import NSMain, NSScrollView, NSStr, NSTableColumn, \
+from pycocoa.internals import _COLON_, _Dmain_, _fmt, _fmt_invalid, _Globals, \
+                              _NN_, property_RO, proxy_RO
+from pycocoa.lazily import _ALL_LAZY, _Types
+from pycocoa.nstypes import NSMain, NSScrollView, NSStr, _NSStr, NSTableColumn, \
                             NSTableView  # isNone, NSTextField
 from pycocoa.octypes import NSSize_t
 from pycocoa.oslibs import NSTableViewSolidHorizontalGridLineMask, \
@@ -21,15 +22,14 @@ from pycocoa.oslibs import NSTableViewSolidHorizontalGridLineMask, \
                            NSTextAlignmentCenter, NSTextAlignmentJustified, \
                            NSTextAlignmentLeft, NSTextAlignmentNatural, \
                            NSTextAlignmentRight, YES
-from pycocoa.runtime import isObjCInstanceOf, ObjCDelegate, ObjCInstance, \
-                            ObjCSubclass, release, retain, send_super_init
-from pycocoa.screens import Screens
-from pycocoa.utils import _Globals, isinstanceOf, module_property_RO, \
-                           property_RO, _Types
+from pycocoa.runtime import isObjCInstanceOf, ObjCDelegate, _ObjCDelegate, \
+                            ObjCInstance, release, retain, send_super_init
+from pycocoa.screens import Screens,  isinstanceOf
+# from pycocoa.utils import isinstanceOf  # from .screens
 from pycocoa.windows import Window, WindowStyle
 
 __all__ = _ALL_LAZY.tables
-__version__ = '25.01.31'
+__version__ = '25.02.19'
 
 _Alignment = dict(center=NSTextAlignmentCenter,
                justified=NSTextAlignmentJustified,
@@ -164,7 +164,7 @@ class Table(_Type2):
             # <https://Developer.Apple.com/documentation/appkit/nscell>
             h = _format(h, c)
             cols.append(h)
-            c.setTitle_(release(NSStr(h)))  # == c.headerCell().setStringValue_(NSStr(h))
+            c.setTitle_(_NSStr(h))  # == c.headerCell().setStringValue_(NSStr(h))
             # <https://Developer.Apple.com/documentation/uikit/nstextalignment>
             v.addTableColumn_(c)
             # increase row height 1-2 points to show (bold) descenders
@@ -209,7 +209,7 @@ class _NSTableViewDelegate(object):
     '''
     # <https://Developer.Apple.com/documentation/appkit/nstableviewdatasource>
     # <https://Developer.Apple.com/documentation/appkit/nstableviewdelegate>
-    _ObjC = ObjCSubclass('NSObject', '_NSTableViewDelegate', register=False)  # defer
+    _ObjC = _ObjCDelegate('_NSTableViewDelegate')
 
     @_ObjC.method('@PPP')
     def init(self, cols, rows, id2i):
@@ -217,9 +217,9 @@ class _NSTableViewDelegate(object):
 
            @note: I{MUST} be called as C{.alloc().init(...)}.
         '''
-        isinstanceOf(cols, list, tuple, name='cols')
-        isinstanceOf(rows, list, tuple, name='rows')
-#       self = ObjCInstance(send_message('NSObject', 'alloc'))
+        isinstanceOf(cols, list, tuple, raiser='cols')
+        isinstanceOf(rows, list, tuple, raiser='rows')
+#       self = ObjCInstance(send_message(_NSObject_, _alloc_))
         self = ObjCInstance(send_super_init(self))
         self.cols = cols  # column headers/titles
         self.rows = rows
@@ -263,7 +263,7 @@ class _NSTableViewDelegate(object):
             return r[c] if 0 <= c < len(r) else _NS.EmptyCell
         except (IndexError, KeyError):  # TypeError, ValueError
             c = col.identifier()
-        return release(NSStr(_fmt('[C%r, R%s]', c, row)))
+        return _NSStr(_fmt('[C%r, R%s]', c, row))
 
     # XXX never called, NSCell- vs NSView-based NSTableView?
 #   @_ObjC.method('@@i')
@@ -306,7 +306,7 @@ class _NSTableViewDelegate(object):
 #       return cellView }
 
 
-@module_property_RO
+@proxy_RO
 def NSTableViewDelegate():
     '''The L{ObjCClass}C{(_NSTableViewDelegate.__name__)}.
     '''
@@ -328,11 +328,11 @@ class TableWindow(Window):
            @keyword table: Table data (L{Table}).
            @keyword frame: Optional window frame (L{Rect}).
         '''
-        isinstanceOf(table, Table, name='table')
+        isinstanceOf(table, Table, raiser='table')
         self._table = table
 
         tbl = getattr(table, 'NS', None)
-        isObjCInstanceOf(tbl, NSTableView, name='table')
+        isObjCInstanceOf(tbl, NSTableView, raiser='table')
 
         # <https://Developer.Apple.com/documentation/appkit/nswindow>
         n = tbl.dataSource().numberOfRowsInTableView_(tbl)
@@ -392,12 +392,12 @@ if __name__ == _Dmain_:
 # % python3 -m pycocoa.tables
 #
 # pycocoa.tables.__all__ = tuple(
-#  pycocoa.tables.closeTables is <function .closeTables at 0x100c768e0>,
-#  pycocoa.tables.NSTableViewDelegate is <pycocoa.utils.module_property_RO object at 0x100c6c050>,
+#  pycocoa.tables.closeTables is <function .closeTables at 0x100bb65c0>,
+#  pycocoa.tables.NSTableViewDelegate is <pycocoa.utils.proxy_RO object at 0x100b59e50>,
 #  pycocoa.tables.Table is <class .Table>,
 #  pycocoa.tables.TableWindow is <class .TableWindow>,
 # )[4]
-# pycocoa.tables.version 25.1.31, .isLazy 1, Python 3.13.1 64bit arm64, macOS 14.6.1
+# pycocoa.tables.version 25.2.19, .isLazy 1, Python 3.13.1 64bit arm64, macOS 14.7.3
 
 # MIT License <https://OpenSource.org/licenses/MIT>
 #

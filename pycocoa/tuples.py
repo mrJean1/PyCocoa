@@ -5,19 +5,19 @@
 
 '''Type L{Tuple}, wrapping (immutable) ObjC C{NSArray}.
 '''
-# all imports listed explicitly to help PyChecker
 from pycocoa.bases import _Type0
-from pycocoa.lazily import _ALL_LAZY, _Dmain_, _DOT_, _fmt, \
-                           _fmt_invalid, _instr
+from pycocoa.internals import _Dmain_, _DOT_, _fmt, _fmt_frozen, \
+                             _fmt_invalid, _Ints, _instr
+from pycocoa.lazily import _ALL_LAZY, _Types
 from pycocoa.octypes import NSNotFound, NSRange_t
 from pycocoa.oslibs import libCF
-from pycocoa.nstypes import ns2Type, NSArray, nsIter2, NSMutableArray
+from pycocoa.nstypes import NSArray, _NSImms, nsIter2, \
+                            NSMutableArray, ns2Type
 from pycocoa.pytypes import py2NS, tuple2NS
-from pycocoa.runtime import isImmutable
-from pycocoa.utils import isinstanceOf, _Ints, _Types
+from pycocoa.runtime import isImmutable, isinstanceOf
 
 __all__ = _ALL_LAZY.tuples
-__version__ = '25.01.31'
+__version__ = '25.02.16'
 
 
 def _at(inst, index):
@@ -61,8 +61,8 @@ class Tuple(_Type0):  # note, List subclasses Tuple
         elif isinstance(ns_tuple, Tuple):
             self.NS = ns_tuple.NS
         elif isinstance(ns_tuple, _Types.List):
-            self.NS = ns_tuple.NS.copy()
-        elif isImmutable(ns_tuple, NSMutableArray, NSArray, name='ns_tuple'):
+            self.NS = ns_tuple.NS.copy()  # immutableCopy?
+        elif isImmutable(ns_tuple, *_NSImms.Arrays, raiser='ns_tuple'):
             self.NS = ns_tuple
 
     def __contains__(self, value):
@@ -72,7 +72,7 @@ class Tuple(_Type0):  # note, List subclasses Tuple
         raise TypeError(_fmt('%s %s[%r]', 'del', self, key))
 
     def __eq__(self, other):
-        isinstanceOf(other, _Types.List, Tuple, list, tuple, name='other')
+        isinstanceOf(other, _Types.List, Tuple, list, tuple, raiser='other')
         if len(self) == len(other):
             for s, o in zip(self, other):
                 if o != s:
@@ -117,7 +117,7 @@ class Tuple(_Type0):  # note, List subclasses Tuple
 #           yield ns2Type(self.NS.objectAtIndex_(i))
 
     def __setitem__(self, index, value):
-        raise TypeError(_fmt('%s[%r] = %r', self, index, value))
+        raise TypeError(_fmt_frozen(self, index, value))
 
     def append(self, value):
         raise self._TypeError(self.append, value)
@@ -207,7 +207,7 @@ if __name__ == _Dmain_:
 # pycocoa.tuples.__all__ = tuple(
 #  pycocoa.tuples.Tuple is <class .Tuple>,
 # )[1]
-# pycocoa.tuples.version 25.1.31, .isLazy 1, Python 3.13.1 64bit arm64, macOS 14.6.1
+# pycocoa.tuples.version 25.2.15, .isLazy 1, Python 3.13.1 64bit arm64, macOS 14.7.3
 
 # MIT License <https://OpenSource.org/licenses/MIT>
 #

@@ -41,15 +41,15 @@ C{epydoc --html --no-private --no-source --name=pycocoa --url=... -v pycocoa}).
 Tests
 =====
 
-The tests and examples have only been run with 64-bit Python 3.13.1, 3.12.7. 3.11.5
+The tests and examples have only been run with 64-bit Python 3.13.2, 3.12.7. 3.11.5
 and 2.7.18 using U{Python-VLC<https://PyPI.org/project/python-vlc>} 3.0.21, 3.0.18,
 3.0.16, 3.0.12, 3.0.11, 3.0.10, 3.0.8, 3.0.6, 3.0.4 and 2.2.8 (with the compatible
-U{VLC App<https://www.VideoLan.org/vlc>}) on macOS 14.6.1 Sonoma, 13.2 Ventura,
+U{VLC App<https://www.VideoLan.org/vlc>}) on macOS 14.7.3 Sonoma, 13.2 Ventura,
 12.0.1 Monterey, 11.6.1 and 11.5.2 Big Sur (aka 10.16), 10.15.7 Catalina, 10.14.6
 Mojave or 10.13.6 High Sierra.  The tests run with and without C{lazy import} in
 Python 3.
 
-Python 3.13.1, 3.12.7 and 3.11.5 run on Apple Silicon (C{arm64} I{natively}), other
+Python 3.13.2, 3.12.7 and 3.11.5 run on Apple Silicon (C{arm64} I{natively}), other
 Python versions run on Intel (C{x86_64}) or Intel I{emulation} (C{"arm64_x86_64"},
 see function L{pycocoa.machine}).
 
@@ -66,8 +66,8 @@ All C{pycocoa} source code has been statically U{checked
 with U{PyChecker<https://PyPI.org/project/pychecker>}, U{PyFlakes
 <https://PyPI.org/project/pyflakes>}, U{PyCodeStyle<https://PyPI.org/project/pycodestyle>}
 (formerly Pep8) and U{McCabe<https://PyPI.org/project/mccabe>} using 64-bit Python 2.7.18
-and with U{Flake8<https://PyPI.org/project/flake8>} using 64-bit Python 3.12.01 on macOS
-14.1.2 Sonoma.
+and with U{Flake8<https://PyPI.org/project/flake8>} using 64-bit Python 3.13.2 on macOS
+14.7.3 Sonoma.
 
 Some alternatives to C{pycocoa} are (a) U{PyObjC<https://PyPI.org/project/pyobjc>}, the
 most comprehensive Python to Objective-C bridge (no longer included in U{macOS' Python
@@ -137,21 +137,21 @@ POSSIBILITY OF SUCH DAMAGE.}
 @newfield example: Example, Examples
 
 '''
-import os.path as _pth
+import os.path as _path
 import sys as _sys
 
 # <https://PyInstaller.ReadTheDocs.io/en/stable/runtime-information.html>
-_isfrozen       = getattr(_sys, 'frozen', False)
-pycocoa_abspath = _pth.dirname(_pth.abspath(__file__))  # _sys._MEIPASS + '/pycocoa'
-_pycocoa        = __package__ or _pth.basename(pycocoa_abspath)
+_isfrozen        =  getattr(_sys, 'frozen', False)
+pycocoa_abspath  = _path.dirname(_path.abspath(__file__))  # _sys._MEIPASS + '/pycocoa'
+_pycocoa_package = __package__ or _path.basename(pycocoa_abspath)
 
-__version__ = '25.02.05'
+__version__ = '25.02.22'
 # see setup.py for similar logic
 version = '.'.join(map(str, map(int, __version__.split('.'))))
 
 def _Error(what, only):  # PYCHOK expected
-    return NotImplementedError('%s not supported by %s %s, only %s'
-                                % (what, _pycocoa, version, only))
+    return NotImplementedError('%s not supported by %s %s, only %s' %
+                               (what, _pycocoa_package, version, only))
 
 _ = _sys.platform  # PYCHOK iOS?
 if not _.startswith('darwin'):
@@ -176,76 +176,80 @@ else:
     try:
         # lazily requires Python 3.7+, see lazily.__doc__
         from pycocoa.lazily import LazyImportError, _lazy_import2, _PY_FH  # PYCHOK expected
-        _, __getattr__ = _lazy_import2(_pycocoa)  # PYCHOK expected
+        _, __getattr__ = _lazy_import2(_pycocoa_package)  # PYCHOK expected
 
     except (ImportError, LazyImportError, NotImplementedError):
         _lazy_import2 = _PY_FH = None
 
-    if _PY_FH == _pycocoa:  # override Python 3.3+ faulthandler
+    if _PY_FH == _pycocoa_package:  # override Python 3.3+ faulthandler
         import pycocoa.faults as _
 
-del _, _Error, _pth, _sys  # exclude from globals(), __all__
+del _, _Error, _path, _sys  # exclude from globals(), __all__
 
 if not _lazy_import2:  # import and set __all__
 
-    import pycocoa.nstypes as nstypes  # PYCHOK exported
-    import pycocoa.octypes as octypes  # PYCHOK exported
-    import pycocoa.oslibs  as oslibs   # PYCHOK exported
-    import pycocoa.pytypes as pytypes  # PYCHOK exported
-    import pycocoa.runtime as runtime  # PYCHOK exported
+    import pycocoa.nstypes    as nstypes    # PYCHOK exported
+    import pycocoa.octypes    as octypes    # PYCHOK exported
+    import pycocoa.oslibs     as oslibs     # PYCHOK exported
+    import pycocoa.pytypes    as pytypes    # PYCHOK exported
+    import pycocoa.runtime    as runtime    # PYCHOK exported
 
     # Python Type wrappers
-    import pycocoa.apps     as apps      # PYCHOK exported
-    import pycocoa.bases    as bases     # PYCHOK exported
-    import pycocoa.bases    as bases     # PYCHOK exported
-    import pycocoa.colors   as colors    # PYCHOK exported
-    import pycocoa.faults   as faults    # PYCHOK exported
-    import pycocoa.fonts    as fonts     # PYCHOK exported
-    import pycocoa.getters  as getters   # PYCHOK exported
-    import pycocoa.geometry as geometry  # PYCHOK exported
-    import pycocoa.lazily   as lazily    # PYCHOK exported
-    import pycocoa.lists    as lists     # PYCHOK exported
-    import pycocoa.menus    as menus     # PYCHOK exported
-    import pycocoa.panels   as panels    # PYCHOK exported
-    import pycocoa.printers as printers  # PYCHOK exported
-    import pycocoa.screens  as screens   # PYCHOK exported
-    import pycocoa.sets     as sets      # PYCHOK exported
-    import pycocoa.strs     as strs      # PYCHOK exported
-    import pycocoa.tables   as tables    # PYCHOK exported
-    import pycocoa.tuples   as tuples    # PYCHOK exported
-    import pycocoa.utils    as utils     # PYCHOK exported
-    import pycocoa.windows  as windows   # PYCHOK exported
+    import pycocoa.apps       as apps        # PYCHOK exported
+    import pycocoa.bases      as bases       # PYCHOK exported
+    import pycocoa.bases      as bases       # PYCHOK exported
+    import pycocoa.colors     as colors      # PYCHOK exported
+    import pycocoa.deprecated as deprecated  # PYCHOK exported
+    import pycocoa.faults     as faults      # PYCHOK exported
+    import pycocoa.fonts      as fonts       # PYCHOK exported
+    import pycocoa.getters    as getters     # PYCHOK exported
+    import pycocoa.geometry   as geometry    # PYCHOK exported
+    import pycocoa.internals  as internals   # PYCHOK exported
+    import pycocoa.lazily     as lazily      # PYCHOK exported
+    import pycocoa.lists      as lists       # PYCHOK exported
+    import pycocoa.menus      as menus       # PYCHOK exported
+    import pycocoa.panels     as panels      # PYCHOK exported
+    import pycocoa.printers   as printers    # PYCHOK exported
+    import pycocoa.screens    as screens     # PYCHOK exported
+    import pycocoa.sets       as sets        # PYCHOK exported
+    import pycocoa.strs       as strs        # PYCHOK exported
+    import pycocoa.tables     as tables      # PYCHOK exported
+    import pycocoa.tuples     as tuples      # PYCHOK exported
+    import pycocoa.utils      as utils       # PYCHOK exported
+    import pycocoa.windows    as windows     # PYCHOK exported
 
     # lift all public classes, constants, functions,
     # etc. (see also David Beazley's talk
     # <https://DaBeaz.com/modulepackage/index.html>)
-    from pycocoa.nstypes import *  # PYCHOK __all__
-    from pycocoa.octypes import *  # PYCHOK __all__
-    from pycocoa.oslibs  import *  # PYCHOK __all__
-    from pycocoa.pytypes import *  # PYCHOK __all__
-    from pycocoa.runtime import *  # PYCHOK __all__
+    from pycocoa.nstypes    import *  # PYCHOK __all__
+    from pycocoa.octypes    import *  # PYCHOK __all__
+    from pycocoa.oslibs     import *  # PYCHOK __all__
+    from pycocoa.pytypes    import *  # PYCHOK __all__
+    from pycocoa.runtime    import *  # PYCHOK __all__
 
     # Python Type wrappers
-    from pycocoa.apps     import *  # PYCHOK __all__
-    from pycocoa.bases    import *  # PYCHOK __all__
-    from pycocoa.colors   import *  # PYCHOK __all__
-    from pycocoa.dicts    import *  # PYCHOK __all__
-    from pycocoa.fonts    import *  # PYCHOK __all__
-    from pycocoa.faults   import *  # PYCHOK __all__
-    from pycocoa.getters  import *  # PYCHOK __all__
-    from pycocoa.geometry import *  # PYCHOK __all__
-    from pycocoa.lazily   import *  # PYCHOK __all__
-    from pycocoa.lists    import *  # PYCHOK __all__
-    from pycocoa.menus    import *  # PYCHOK __all__
-    from pycocoa.panels   import *  # PYCHOK __all__
-    from pycocoa.printers import *  # PYCHOK __all__
-    from pycocoa.screens  import *  # PYCHOK __all__
-    from pycocoa.sets     import *  # PYCHOK __all__
-    from pycocoa.strs     import *  # PYCHOK __all__
-    from pycocoa.tables   import *  # PYCHOK __all__
-    from pycocoa.tuples   import *  # PYCHOK __all__
-    from pycocoa.utils    import *  # PYCHOK __all__
-    from pycocoa.windows  import *  # PYCHOK __all__
+    from pycocoa.apps       import *  # PYCHOK __all__
+    from pycocoa.bases      import *  # PYCHOK __all__
+    from pycocoa.colors     import *  # PYCHOK __all__
+    from pycocoa.deprecated import *  # PYCHOK __all__
+    from pycocoa.dicts      import *  # PYCHOK __all__
+    from pycocoa.fonts      import *  # PYCHOK __all__
+    from pycocoa.faults     import *  # PYCHOK __all__
+    from pycocoa.getters    import *  # PYCHOK __all__
+    from pycocoa.geometry   import *  # PYCHOK __all__
+    from pycocoa.internals  import *  # PYCHOK __all__
+    from pycocoa.lazily     import *  # PYCHOK __all__
+    from pycocoa.lists      import *  # PYCHOK __all__
+    from pycocoa.menus      import *  # PYCHOK __all__
+    from pycocoa.panels     import *  # PYCHOK __all__
+    from pycocoa.printers   import *  # PYCHOK __all__
+    from pycocoa.screens    import *  # PYCHOK __all__
+    from pycocoa.sets       import *  # PYCHOK __all__
+    from pycocoa.strs       import *  # PYCHOK __all__
+    from pycocoa.tables     import *  # PYCHOK __all__
+    from pycocoa.tuples     import *  # PYCHOK __all__
+    from pycocoa.utils      import *  # PYCHOK __all__
+    from pycocoa.windows    import *  # PYCHOK __all__
 
     # if needed, for backward compatibility with cocoa-python:
     # cfarray_to_list               = nsArray2listuple           # PYCHOK expected

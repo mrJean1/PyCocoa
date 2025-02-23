@@ -38,7 +38,6 @@ if __name__ == '__main__':
         assert(isinstance(nsD, _ObjCBase))
 
         D = ns2Type(nsD)
-        print('%s: %s' % ('D', _strepr(D)))
         assert(isinstance(D, Dict))
 
         for k, v in D.items():
@@ -53,25 +52,21 @@ if __name__ == '__main__':
         assert(v is None)
 
         print('D: %s[%s]' % (_strepr(D), len(D)))
-        t = dict(D.items())
-        print('%s: %s[%s]' % ('t', 'dict(D.items())', len(t)))
-        assert(len(t) == len(D))
-        assert(D == t)
 
-        t = dict(D)
-        print('%s: %s[%s]' % ('t', 'dict(D)', len(t)))
-        assert(len(t) == len(D))
-        assert(D == t)
+        def _assert(t, nt, nD):
+            print('%s: %s[%s]' % (nt, nD, len(t)))
+            assert(len(t) == len(D))
+            assert(t == D)
+
+        _assert(dict(D.items()), 't', 'dict(D.items())')
+
+        _assert(dict(D), 't', 'dict(D)')
 
         t = Dict(nsD)
-        print('%s: %s[%s]' % ('Dict', _strepr(t), len(t)))
-        assert(len(t) == len(D))
-        assert(D == t)
+        _assert(t, 'Dict', _strepr(t))
 
         t = ns2Type(nsD)
-        print('%s: %s[%s]' % ('nsD', _strepr(t), len(t)))
-        assert(len(t) == len(D))
-        assert(D == t)
+        _assert(t, 'nsD', _strepr(t))
 
         t = nsD.allKeys()
         print('%s: %s' % ('allKeys()', _strepr(t)))

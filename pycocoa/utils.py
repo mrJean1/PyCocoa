@@ -3,555 +3,30 @@
 
 # License at the end of this file.
 
-'''Utility functions, constants, internals, etc.
+'''Mostly public utility functions.
 
 @var missing: Missing keyword argument value.
 '''
-
-from pycocoa.lazily import _ALL_LAZY, _COLON_, _COMMA_, _COMMASPACE_, \
-                           _Ddoc_, _Dmain_, _DOT_, _EQUALS_, _fmt, \
-                           _fmt_invalid, _instr, isLazy, _lazy_import, \
-                           _NA_, _NL_, _NN_, _Python_version, _SPACE_, \
-                           _sys, _UNDER_,  _isPython3  # PYCHOK used!
-# from pycocoa.lazily import _Dall_, _Dfile_, _Dversion_  # in ._all_listing below
+from pycocoa.internals import bytes2str, _ByteStrs, _COLON_, _COMMA_, \
+                             _COMMASPACE_, _Ddoc_, _Dmain_, _DOT_, \
+                             _EQUALS_, _fmt, _fmt_invalid, _Globals, \
+                             _instr, _int2, _Ints, _kwdstr, missing, \
+                             _NL_, _NN_, _SPACE_, str2bytes, _sys, \
+                             _TypeError, _UNDER_   # _Dall_, _Dfile_, _Dversion_
+from pycocoa.lazily import _ALL_LAZY, isLazy, _Python_version
 
 import os.path as _os_path
 import platform as _platform
 # import sys as _sys  # from .lazily
 
 __all__ = _ALL_LAZY.utils
-__version__ = '25.02.04'
-
-DEFAULT_UNICODE = 'utf-8'  # default Python encoding
-
-
-class module_property_RO(object):
-    '''Decorator for a C{Read-Only} module property.
-
-       @example:
-
-         >>> @module_property_RO
-         >>> def mp():  # no args
-         >>>     return ro  # singleton or other
-
-       @see: U{Module Properties | the Proxy Pattern
-             <https://JTushman.GitHub.io/blog/2014/05/02/module-properties/>}.
-    '''
-    def __init__(self, func):
-        '''New L{module_property_RO}.
-
-           @param func: Function to be decorated as C{property}
-                        (C{callable, invoked without args}).
-        '''
-        self._func = func
-
-    def __getattr__(self, name):
-        return getattr(self._func(), name)
-
-
-def property_RO(method):
-    '''Decorator for C{Read_Only} class/instance property.
-
-       @param method: The callable to be decorated as C{Read_Only property}.
-
-       @note: Like standard Python C{property} without a C{property.setter}
-              and with a more descriptive error message when set.
-    '''
-    def Read_Only(inst, ignored):
-        '''Throws an C{AttributeError}, always.
-        '''
-        t = _DOT_(inst, method.__name__)
-        t = _fmt('%s %s: %s = %r', Read_Only.__name__, 'property', t, ignored)
-        raise AttributeError(t)
-
-    return property(method, Read_Only, None, method.__doc__ or _NA_)
-
-
-class _MutableConstants(object):
-    '''(INTERNAL) Enum-like, settable "constants".
-    '''
-    def __setattr__(self, name, value):
-        if not hasattr(self, name):
-            n = _DOT_(self.typename, name)
-            raise NameError(_fmt_invalid(constant=n))
-        super(_MutableConstants, self).__setattr__(name, value)
-
-    def __repr__(self):
-        def _fmt2(n, v):
-            return _EQUALS_(n, _intstr(v))
-        return self._strepr(_fmt2)
-
-    def __str__(self):
-        def _fmt2(n, unused):
-            return n
-        return self._strepr(_fmt2)
-
-    def get(self, name, *dflt):
-        return getattr(self, name, *dflt)
-
-    def items(self):
-        '''Yield 2-tuple (name, value) for each constant.
-        '''
-        for n in self.keys():
-            yield n, getattr(self, n)
-
-    def items_(self, *classes):
-        '''Yield 2-tuple (name, value) for each constant,
-           if an instance of one of the B{C{classes}}.
-        '''
-        if classes:
-            for n, v in self.items():
-                if isinstance(v, classes):
-                    yield n, v
-
-    def keys(self):
-        '''Yield each constant name.
-        '''
-        for n in dir(self):
-            if n[:1].isupper():
-                yield n
-
-    def _strepr(self, _fmt2):  # helper for __repr__ and __str__
-        n =  self.typename.lstrip(_UNDER_)
-        j = _NN_(_COMMA_, _NL_, _SPACE_ * len(n), _DOT_)
-        t = (_fmt2(*t) for t in sortuples(self.items()))
-        return _DOT_(n, j.join(t))
-
-    @property_RO
-    def typename(self):
-        '''Get this instance' Python class name (C{str}).
-        '''
-        return type(self).__name__
-
-    def values(self):
-        '''Yield each constant value.
-        '''
-        for n in self.keys():
-            yield getattr(self, n)
-
-
-class _Constants(_MutableConstants):
-    '''(INTERNAL) Enum-like, read-only constants.
-    '''
-    def __setattr__(self, name, value):
-        n = _DOT_(self.typename, name)
-        raise TypeError(_fmt('%s = %r', n, value))
-
-    def _masks(self, *names):
-        ns = []
-        for n in names:
-            ns.extend(n.strip().lower().split())
-        ns, c = set(ns), 0
-        for n, m in self.items():
-            n = n.lower()
-            if n in ns:
-                c |= m
-                ns.remove(n)
-        ns = _SPACE_.join(map(repr, ns)) if ns else None
-        return c, ns  # some invalid names or None
-
-    def astrs(self, mask):
-        '''Return constants mask as names (C{str}s).
-        '''
-        return _SPACE_.join(n for n, m in self.items() if (mask & m))
-
-
-class Adict(dict):
-    '''A C{dict} with key I{and} attribute access to the items
-       and callable to add items.
-    '''
-    def __call__(self, **kwds):
-        '''Equivalent to C{self.update(B{kwds})}.
-        '''
-        dict.update(self, kwds)
-        return self
-
-    def __getattr__(self, name):
-        '''Get the value of an attribute or item by B{C{name}}.
-        '''
-        try:
-            return self[name]
-        except KeyError:
-            return dict.__getattr__(self, name)
-
-    def __str__(self):
-        '''Return this C{Adict} as C{str}.
-        '''
-        t = (_fmt('%s=%r', *t) for t in sorted(self.items()))
-        return _fmt('{%s}', _COMMASPACE_(t))
-
-    def copy(self):
-        '''Return a shallow copy.
-        '''
-        return type(self)(self)
-
-
-class _Globals(object):
-    '''(INTERNAL) Some PyCocoa globals
-    '''
-    App       =  None         # set by .apps.App.__init__, not an NSApplication!
-    argv0     = 'pycocoa'     # set by .nstypes.nsBundleRename, _allisting, test/simple_VLCplayer
-    Items     = {}            # set by .menus.Item.__init__, gotten by .menus.ns2Item
-    MenuBar   =  None         # set by .menus.MenuBar.__init__
-#   Menus     = {}            # set by .menus._Menu_Type2._initM
-    raiser    =  False        # set by .apps.App.__init__
-    stdlog    = _sys .stdout  # set by .faults
-    Tables    = []            # set by .tables.TableWindow.__init__
-    Windows   = {}            # set by .windows.Window.__init__
-    Xhandler2 =  None         # set by .faults.setUncaughtExceptionHandler
-
-
-class _Singletons(_MutableConstants):
-    '''(INTERNAL) Global, single instances.
-    '''
-    def __repr__(self):
-        def _fmt2(n, v):
-            return _EQUALS_(n, v)
-        return self._strepr(_fmt2)
-
-    def items(self, *extra):  # PYCHOK signature
-        '''Yield 2-tuple (name, value) for each singleton.
-        '''
-        c = type(self)
-        for n in dir(self):
-            if not n.startswith(_UNDER_):
-                g, _ = property2(self, n)
-                if g and (n in extra or hasattr(c, _UNDER_(_NN_, n))):
-                    # XXX resolves the property
-                    yield n, g(self)
-
-
-class _Types(_MutableConstants):
-    '''Python Types, to avoid circular imports.
-    '''
-    AlertPanel    = None  # set by .panels.py
-    App           = None  # set by .apps.py
-    Color         = None  # set by .colors.py
-    Dict          = None  # set by .dicts.py
-    ErrorPanel    = None  # set by .panels.py
-    Font          = None  # sef by .fonts.py
-    FrozenDict    = None  # set by .dicts.py
-    FrozenSet     = None  # set by .sets.py
-    Item          = None  # set by .menus.py
-    ItemSeparator = None  # set by .menus.py
-    List          = None  # set by .lists.py
-    MediaWindow   = None  # set by .windows.py
-    Menu          = None  # set by .menus.py
-    MenuBar       = None  # set by .menus.py
-    OpenPanel     = None  # set by .panels.py
-    Paper         = None  # set by .printer.py
-    PaperCustom   = None  # set by .printer.py
-    PaperMargins  = None  # set by .printer.py
-    Printer       = None  # set by .printer.py
-    SavePanel     = None  # set by .panels.py
-    Screen        = None  # set by .screens.py
-    Set           = None  # set by .sets.py
-    Str           = None  # set by .strs.py
-    StrAttd       = None  # set by .strs.py
-    Table         = None  # set by .tables.py
-    TableWindow   = None  # set by .tables.py
-    TextPanel     = None  # set by .panels.py
-    TextWindow    = None  # set by .windows.py
-    Tuple         = None  # set by .tuples.py
-    Window        = None  # set by .windows.py
-
-    if _isPython3 and isLazy:
-        def __getattribute__(self, name):
-            '''(INTERNAL) Lazily import any missing _Types.
-            '''
-            return _MutableConstants.__getattribute__(self, name) or _lazy_import(name)
-
-_Types = _Types()  # PYCHOK singleton
-
-
-def _TypeError(name, inst, func, *classes):
-    '''(INTERNAL) Format a TypeError for func(inst, *classes).
-    '''
-    def _nm(c):
-        try:
-            return c.__name__
-        except AttributeError:
-            return str(c)
-
-    c = _COMMASPACE_(name, *map(_nm, classes))
-    n =  func.__name__
-    t = _fmt('not %s(%s): %r', n, c, inst) if name else \
-        _fmt('invalid %s(%r%s)', n, inst, c)
-    return TypeError(t)
-
-
-class Cache2(dict):
-    '''Two-level cache implemented by two C{dict}s, a primary
-       level-1 C{dict} and a secondary level-2 C{dict}.
-
-       Newly created key-value pairs are entered into the
-       secondary C{dict}.  Repeatedly gotten key-value items
-       are elevated from the secondadry to the primary C{dict}.
-
-       The secondary C{dict} can optionally be limited in size
-       to avoid excessive growth.
-    '''
-    def __init__(self, limit2=None):
-        '''New L{Cache2}, optionally limited in size.
-
-           @keyword limit2: Size limit for the secondary level-2
-                            C{dict} (C{int} or C{None}).
-        '''
-        self._limit2 = limit2
-        self._dict2 = {}
-
-    def __contains__(self, key):
-        return dict.__contains__(key) or key in self._dict2
-
-    def __getitem__(self, key):
-        try:
-            return dict.__getitem__(self, key)
-        except KeyError:
-            # .pop raises KeyError
-            value = self._dict2.pop(key)
-            # elevate to primary
-            dict.__setitem__(self, key, value)
-            return value
-
-    def __setitem__(self, key, value):
-        try:  # replace item if in primary
-            if dict.__getitem__(self, key) != value:
-                dict.__setitem__(self, key, value)
-        except KeyError:
-            if self._limit2:
-                n = len(self._dict2)
-                if n > max(4, self._limit2):
-                    for k in list(self._dict2.keys())[:n//4]:
-                        self._dict2.pop(k)
-            self._dict2[key] = value
-            # print(len(self), len(self._dict2))
-
-    @property_RO
-    def dict2(self):
-        '''Get the secondary level-2 C{dict}.
-        '''
-        return self._dict2
-
-    def get(self, key, default=None):
-        '''Return the specified item's value.
-
-           @param key: The item's key (C{any}).
-           @keyword default: Default value for missing item (C{any}).
-
-           @return: C{Cache2}I{[key]} if I{key} in C{Cache2}
-                    else I{default} or C{None} if no I{default}
-                    specified.
-        '''
-        try:
-            return self.__getitem__(key)  # self[key]
-        except KeyError:
-            return default
-
-    @property_RO
-    def limit2(self):
-        '''Get the secondary level-2 C{dict} size limit (C{int} or C{None}).
-        '''
-        return self._limit2
-
-    def pop(self, key, *default):
-        '''Remove the specified item.
-
-           @param key: The item's key (C{any}).
-           @param default: Value for missing item (C{any}).
-
-           @return: C{Cache2}I{[key]} if I{key} in C{Cache2} else
-                    I{default}, provided I{default} was specified.
-
-           @raise KeyError: No such item I{key} and no I{default} given.
-
-           @note: If I{key} is not in the primary level-1 C{dict}, the
-                  secondary level-2 C{dict} is checked.
-        '''
-        try:
-            return dict.pop(self, key)
-        except KeyError:
-            return self._dict2.pop(key, *default)
-
-    def popitem(self):
-        '''Remove the item most recently elevated into the primary
-           level-1 C{dict}.
-
-           @return: The removed item as 2-Tuple (key, value).
-
-           @raise KeyError: The secondary level-2 C{dict} is empty.
-
-           @note: Use C{Cache2.dict2.popitem()} to remove the most
-                  recently entered item to the secondary level-2 C{dict}.
-        '''
-        return dict.popitem(self)
-
-    def update(self, *other, **kwds):
-        '''Update this cache with one or more additional items.
-
-           @param other: Items specified as an iterable of 2-tuples
-                         C{(key, value)} or as a C{dict}.
-           @keyword kwds: Items given as C{key=value} pairs, with
-                          priority over B{C{other}}.
-        '''
-        if other:
-            dict.update(self, other[0])
-        if kwds:
-            dict.update(self, kwds)
-
-
-class missing(object):
-    '''Singleton class (named like instance, to be lost on purpose)
-    '''
-    def __eq__(self, unused):  # avoid '==' comparison
-        raise SyntaxError(self._use('is', '=='))
-
-    def __ne__(self, unused):  # avoid '!=' comparison
-        raise SyntaxError(self._use('is not', '!='))
-
-    def __repr__(self):
-        return self.typename
-
-    def __str__(self):
-        return self.typename
-
-    @property_RO
-    def typename(self):
-        '''Get this instance' Python class name (C{str}).
-        '''
-        return type(self).__name__
-
-    def _use(self, is_not, neq):
-        return _fmt("use '%s %s', not '%s'", is_not, self, neq)
-
-missing = missing()  # PYCHOK private, singleton
-
-try:  # MCCABE 23
-
-    # in Python 2- bytes *is* str and bytes.__name__ == 'str'
-    _Bytes = unicode, bytearray
-    _Ints  = int, long  # PYCHOK for export
-    _Strs  = basestring,
-
-    def bytes2repr(bytestr):
-        '''Represent C{bytes} or C{str} as C{b"..."}.
-
-           @param bytestr: C{bytes} or C{str}..
-           @return: Representation C{b'...'} (C{str}).
-        '''
-        return _fmt('b%r', bytestr)
-
-    def bytes2str(bytestr, dflt=missing, name=_NN_):
-        '''Convert C{bytes}/C{unicode} to C{str} if needed.
-
-           @param bytestr: Original C{bytes}, C{str} or C{unicode}.
-           @keyword dflt: Optional, default return value.
-           @keyword name: Optional name of I{bytestr} argument.
-
-           @return: The C{str} or I{dflt}.
-
-           @raise TypeError: If neither C{str} nor C{bytes}, but
-                             only if no I{dflt} is specified.
-        '''
-        # XXX see Python-Vlc's vlc.py
-        if isinstance(bytestr, _Strs):
-            return bytestr
-        elif isinstance(bytestr, _Bytes):
-            # return str(bytestr, DEFAULT_UNICODE)
-            return bytestr.decode(DEFAULT_UNICODE)
-        elif dflt is missing:
-            raise _TypeError(name, bytestr, bytes2str)
-        return dflt
-
-    # iter(bytes) yields a 1-charsstr/byte in Python 2-
-    iterbytes = iter
-
-    def str2bytes(strbytes, dflt=missing, name=_NN_):
-        '''Convert C{strbytes} to C{bytes}/C{unicode} if needed.
-
-           @param strbytes: Original C{str}, C{bytes} or C{unicode}.
-           @keyword dflt: Optional, default return value.
-           @keyword name: Optional name of I{bytestr} argument.
-
-           @return: The C{bytes} or I{dflt}.
-
-           @raise TypeError: If neither C{bytes} nor C{str}, but
-                             only if no I{dflt} is specified.
-        '''
-        # XXX see Python-Vlc's vlc.py
-        if isinstance(strbytes, _Strs):
-            return strbytes
-        elif isinstance(strbytes, _Bytes):
-            return strbytes.encode(DEFAULT_UNICODE)
-        elif dflt is missing:
-            raise _TypeError(name, strbytes, str2bytes)
-        return dflt
-
-except NameError:  # Python 3+
-    _Bytes = bytes, bytearray
-    _Ints  = int,
-    _Strs  = str,
-
-    bytes2repr = repr  # produces always b'...'
-
-    def bytes2str(bytestr, dflt=missing, name=_NN_):  # PYCHOK expected
-        '''Convert C{bytes} to C{str} if needed.
-
-           @param bytestr: Original C{bytes}, C{str} or C{unicode}.
-           @keyword dflt: Optional, default return value.
-           @keyword name: Optional name of I{bytestr} argument.
-
-           @return: The C{str} or I{dflt}.
-
-           @raise TypeError: If neither C{str} nor C{bytes}, but
-                             only if no I{dflt} is specified.
-        '''
-        if isinstance(bytestr, _Strs):
-            return bytestr
-        elif isinstance(bytestr, _Bytes):
-            return bytestr.decode(DEFAULT_UNICODE)
-        elif dflt is missing:
-            raise _TypeError(name, bytestr, bytes2str)
-        return dflt
-
-    # iter(bytes) yields an int in Python 3+
-    def iterbytes(bytestr):
-        '''Iterate C{bytes}, yielding each as C{byte}.
-        '''
-        for b in bytestr:  # convert int to bytes
-            yield bytes([b])
-
-    # double check iterbytes
-    for b in iterbytes(b'a0'):
-        assert isinstance(b, bytes), 'iterbytes failed'
-    del b
-
-    def str2bytes(strbytes, dflt=missing, name=_NN_):  # PYCHOK expected
-        '''Convert C{strbytes} to C{bytes} if needed.
-
-           @param strbytes: Original C{str}, C{bytes} or C{unicode}.
-           @keyword dflt: Optional, default return value.
-           @keyword name: Optional name of I{bytestr} argument.
-
-           @return: The C{bytes} or I{dflt}.
-
-           @raise TypeError: If neither C{bytes} nor C{str}, but
-                             only if no I{dflt} is specified.
-        '''
-        if isinstance(strbytes, _Bytes):
-            return strbytes
-        elif isinstance(strbytes, _Strs):
-            return bytes(strbytes, DEFAULT_UNICODE)
-        elif dflt is missing:
-            raise _TypeError(name, strbytes, str2bytes)
-        return dflt
-
-_ByteStrs = _Bytes + _Strs  # bytes and/or str types
+__version__ = '25.02.22'
 
 
 def _all_listing(alls, localls, libs=False, _file_=_NN_, argv0='#'):
     '''(INTERNAL) Print sorted __all__ names and values.
     '''
-    from pycocoa.lazily import _Dall_, _Dfile_, _Dversion_
+    from pycocoa.internals import _Dall_, _Dfile_, _Dversion_
 
     def _all_in(alls, inns, m, n):
         t = tuple(a for a in alls if a not in inns)
@@ -618,7 +93,7 @@ def _all_versions(libs=False, _file_=_NN_, _version_=_NN_, argv0=_NN_):
 def _all_versionstr(libs=False, _file_=_NN_, _version_=_NN_):
     '''(INTERNAL) PyCocao, Python, macOS, etc. versions as C{str}.
     '''
-    from pycocoa import oslibs, _pycocoa, version as _version
+    from pycocoa import oslibs, _pycocoa_package, version as _version
 
     t = (('version', _version_ or _version),  # PYCHOK shadow
          ('.isLazy',  str(isLazy)),
@@ -628,7 +103,7 @@ def _all_versionstr(libs=False, _file_=_NN_, _version_=_NN_):
         ls = sorted(oslibs.get_libs().keys())
         t += ('oslibs', str(ls).replace("'", _NN_)),
 
-    m, _ = _dirbasename2(_file_ or _pycocoa)
+    m, _ = _dirbasename2(_file_ or _pycocoa_package)
     return _DOT_(m, _COMMASPACE_.join(map(_SPACE_.join, t)))
 
 
@@ -656,14 +131,13 @@ def aspect_ratio(width, *height, **Error_kwds):
        >>> aspect_ratio(0, 15)
        ()
     '''
-
     if height:
         r = (width,) + height
     else:
-        r =  width
+        r =  width  # str
     try:
-        s = bytes2str(r, dflt=None)
-        if s is not None:
+        if isinstance(r, _ByteStrs):
+            s = bytes2str(r)
             w, h = map(int, s.split(_COLON_))
         elif islistuple(r) and len(r) == 2:
             w, h = map(flint, r)
@@ -722,7 +196,7 @@ def _dirbasename2(filename, sep=_DOT_):
 
 
 def errorf(fmtxt, *args, **file_flush_nl_nt_argv0):
-    '''like C{B{printf}(B{fmtxt}, *B{args}, ..., B{file}=sys.stderr)}.
+    '''Like I{printf}, but writing to I{file=sys.stderr}.
     '''
     _writef(fmtxt, args, **_xkwds(file_flush_nl_nt_argv0,
                                   file=_sys.stderr, flush=True))
@@ -740,7 +214,7 @@ def flint(f):
     return f
 
 
-try:  # all imports listed explicitly to help PyChecker
+try:
     from math import gcd  # Python 3+
 except ImportError:
     try:
@@ -770,51 +244,33 @@ def inst2strepr(inst, strepr, *attrs):
         t = repr(v) if isinstance(v, _ByteStrs) else strepr(v)
         return _EQUALS_(a, t)
 
-    return _instr(type(inst).__name__, *map(_a_v, attrs))
+    return _instr(type(inst), *map(_a_v, attrs))
 
 
-def _int2(i):
-    '''(INTERNAL) Split an C{int} into 2-tuple (int, shift).
-    '''
-    s = 0
-    if isinstance(i, _Ints) and i > 0 and not (i & 1):
-        for n in (8, 4, 2, 1):
-            m = 2**n - 1
-            while not (i & m):
-                i >>= n
-                s  += n
-    return i, s
-
-
-def _intstr(i):  # .windows
-    '''(INTERNAL) Return C{int} as C{str}.
-    '''
-    b, s = _int2(i)
-    return _fmt('%s<<%s', b, s) if s > 1 else str(i)
-
-
-def isinstanceOf(inst, *classes, **name_missing):
+def isinstanceOf(inst, *classes, **raiser_name):
     '''Check a Python instance' class.
 
-       @param inst: The instance to check (I{any}).
+       @param inst: The instance to check (C{any}).
        @param classes: One or several classes (I{all positional}).
-       @keyword name: The name of the instance (C{str}).
+       @keyword raiser_name: Optional instance name (C{str}) to raise
+                             C{TypeError}.
 
-       @return: The matching I{class} from I{classes}, C{None} otherwise.
+       @return: The C{type{B{inst}} if C{isinstance(B{inst}, classes}}
+                else C{None}.
 
-       @raise TypeError: If I{inst} does not match any of the I{classes},
-                         but only if I{name='...'} is specified.
+       @raise TypeError: If I{inst} does not match any of the I{classes}
+                         but only if keyword C{raiser} is specified.
 
        @see: Function L{isObjCInstanceOf} for checking ObjC instances.
     '''
+    # assert classes
     if isinstance(inst, classes):
-        return inst.__class__
-
-    name = name_missing.get('name', missing)
-    if name is missing:
-        return None
-
-    raise _TypeError(name, inst, isinstanceOf, *classes)
+        return type(inst)
+    if raiser_name:
+        n = _raiser_name(**raiser_name)
+        if n:
+            raise _TypeError(n, inst, isinstanceOf, *classes)
+    return None
 
 
 def islistuple(inst):
@@ -828,24 +284,8 @@ def islistuple(inst):
     return isinstance(inst, (tuple, list))
 
 
-def lambda1(arg):
-    '''Inlieu of using M{lambda arg: arg}.
-    '''
-    return arg
-
-
 def logf(fmtxt, *args, **file_flush_nl_nt_argv0):
-    '''Formatted log I{fmtxt % args} with optional keywords.
-
-       @param fmtxt: Print-like format or plain string (C{str}).
-       @param args: Optional arguments to format (I{all positional}).
-       @keyword file: Alternate file to write to (C{file}-type),
-                      default C{NSMain.stdlog}.
-       @keyword flush: Flush B{C{file}} after writing (C{bool}),
-                       default C(True).
-       @keyword nl: Number of leading blank lines (C{int}).
-       @keyword nt: Number of trailing blank lines (C{int}).
-       @keyword argv0: Optional prefix (C{str}).
+    '''Like I{printf}, but writing to I{file=NSMain.stdlog}.
     '''
     _writef(fmtxt, args, **_xkwds(file_flush_nl_nt_argv0,
                                   file=_Globals.stdlog, flush=True))
@@ -857,10 +297,10 @@ def machine():
 
        @return: Machine C{'arm64'} for Apple Silicon, C{"arm64_x86_64"} for
                 Intel I{emulated}, C{'x86_64'} for Intel, etc. (C{str} with
-                any C{comma}s by C{underscore}).
+                any C{comma}s replaced by C{underscore}).
     '''
     m = _platform.machine().replace(_COMMA_, _UNDER_)  # arm64 Apple Si, x86_64, other?
-    if m == 'x86_64':  # only on Intel or Rosetta2
+    if m == 'x86_64' and _macOSver():  # only on Intel or Rosetta2
         # <https://Developer.Apple.com/forums/thread/659846>
         if _sysctl_uint('sysctl.proc_translated') == 1:  # and \
 #          _sysctl_uint('hw.optional.arm64') == 1:  # PYCHOK indent
@@ -881,8 +321,8 @@ def _macOSver2(n=2):
 
        @note: C{macOS 11 Big Sur} is C{(10, 16)} before Python 3.9.6.
     '''
-    v = _macOSver()
-    t = (tuple(map(int, v.split(_DOT_)[:n])) if v else ()) + (0, 0, 0)
+    v = _macOSver() or '0'
+    t =  tuple(map(int, v.split(_DOT_)[:n])) + (0, 0, 0)
     return t[:n]
 
 
@@ -954,9 +394,9 @@ def properties(inst):
 
        @return: The properties (C{dict}).
     '''
-    pd, t= {}, type(inst)
+    pd, t = {}, type(inst)
     for a in dir(inst):  # dir(t), t.__mro__?
-        if type(getattr(t, a)) is property:
+        if a[:1] != _UNDER_ and isinstance(getattr(t, a), property):
             try:
                 pd[a] = getattr(inst, a)
             except Exception as x:
@@ -964,32 +404,8 @@ def properties(inst):
     return pd
 
 
-def property2(inst, name):
-    '''Return the property C{get} and C{set} method.
-
-       @param inst: An instance (C{any}).
-       @param name: Property name (C{str}).
-
-       @return: 2-Tuple (get, set) as C{callable}s, (C{callable}, C{None})
-                or (C{None}, C{None}) if I{inst.name} is not a property.
-    '''
-    try:
-        p = getattr(inst.__class__, name)
-        if isinstance(p, property):
-            g = p.fget
-            if callable(g):
-                return g, p.fset
-    except (AttributeError, TypeError, ValueError):
-        pass
-    return None, None
-
-
-def sortuples(iterable):  # sort tuples
-    '''Sort tuples alphabetically, case-insensitive.
-    '''
-    def _tup(tup):
-        return tup[0].upper()
-    return sorted(iterable, key=_tup)
+def _raiser_name(raiser=None, name=None):  # in .runtime
+    return raiser or name
 
 
 def _sysctl_uint(name):
@@ -1080,12 +496,12 @@ def type2strepr(inst, strepr=str, **kwds):
     except AttributeError:
         d =  kwds
     if d:
-        d = (_EQUALS_(*i) for i in d.items())
+        d = _kwdstr(d)
         t = _COMMASPACE_(strepr(t), *d) if t else \
             _COMMASPACE_.join(d)
     else:
         t =  strepr(t)
-    return _instr(type(inst).__name__, t)
+    return _instr(type(inst), t)
 
 
 def _varstr(constants, strepr=None):
@@ -1213,41 +629,29 @@ if __name__ == _Dmain_:
 # % python3 -m pycocoa.utils
 #
 # pycocoa.utils.__all__ = tuple(
-#  pycocoa.utils.Adict is <class .Adict>,
-#  pycocoa.utils.aspect_ratio is <function .aspect_ratio at 0x100cf4b80>,
-#  pycocoa.utils.bytes2repr is <built-in function repr>,
-#  pycocoa.utils.bytes2str is <function .bytes2str at 0x100cf3ba0>,
-#  pycocoa.utils.Cache2 is <class .Cache2>,
-#  pycocoa.utils.clipstr is <function .clipstr at 0x100cf4c20>,
-#  pycocoa.utils.DEFAULT_UNICODE is 'utf-8',
-#  pycocoa.utils.errorf is <function .errorf at 0x100cf4d60>,
-#  pycocoa.utils.flint is <function .flint at 0x100cf4e00>,
+#  pycocoa.utils.aspect_ratio is <function .aspect_ratio at 0x1015200e0>,
+#  pycocoa.utils.clipstr is <function .clipstr at 0x101520180>,
+#  pycocoa.utils.errorf is <function .errorf at 0x1015202c0>,
+#  pycocoa.utils.flint is <function .flint at 0x101520360>,
 #  pycocoa.utils.gcd is <built-in function gcd>,
-#  pycocoa.utils.inst2strepr is <function .inst2strepr at 0x100cf4ea0>,
-#  pycocoa.utils.isinstanceOf is <function .isinstanceOf at 0x100cf51c0>,
-#  pycocoa.utils.islistuple is <function .islistuple at 0x100cf5260>,
-#  pycocoa.utils.iterbytes is <function .iterbytes at 0x100cf4860>,
-#  pycocoa.utils.lambda1 is <function .lambda1 at 0x100cf5300>,
-#  pycocoa.utils.logf is <function .logf at 0x100cf53a0>,
-#  pycocoa.utils.machine is <function .machine at 0x100cf5440>,
-#  pycocoa.utils.missing is missing,
-#  pycocoa.utils.module_property_RO is <class .module_property_RO>,
-#  pycocoa.utils.name2objc is <function .name2objc at 0x100cf5620>,
-#  pycocoa.utils.name2py is <function .name2py at 0x100cf56c0>,
-#  pycocoa.utils.name2pymethod is <function .name2pymethod at 0x100cf5760>,
-#  pycocoa.utils.printf is <function .printf at 0x100cf5800>,
-#  pycocoa.utils.properties is <function .properties at 0x100cf58a0>,
-#  pycocoa.utils.property2 is <function .property2 at 0x100cf5940>,
-#  pycocoa.utils.property_RO is <function .property_RO at 0x100c10040>,
-#  pycocoa.utils.sortuples is <function .sortuples at 0x100cf59e0>,
-#  pycocoa.utils.str2bytes is <function .str2bytes at 0x100cf4900>,
-#  pycocoa.utils.terminating is <function .terminating at 0x100cf5b20>,
-#  pycocoa.utils.type2strepr is <function .type2strepr at 0x100cf5c60>,
-#  pycocoa.utils.z1000str is <function .z1000str at 0x100cf5ee0>,
-#  pycocoa.utils.zfstr is <function .zfstr at 0x100cf5f80>,
-#  pycocoa.utils.zSIstr is <function .zSIstr at 0x100cf6020>,
-# )[33]
-# pycocoa.utils.version 25.2.4, .isLazy 1, Python 3.13.1 64bit arm64, macOS 14.6.1
+#  pycocoa.utils.inst2strepr is <function .inst2strepr at 0x101520400>,
+#  pycocoa.utils.isinstanceOf is <function .isinstanceOf at 0x1015205e0>,
+#  pycocoa.utils.islistuple is <function .islistuple at 0x101520680>,
+#  pycocoa.utils.logf is <function .logf at 0x101520720>,
+#  pycocoa.utils.machine is <function .machine at 0x1015207c0>,
+#  pycocoa.utils.name2objc is <function .name2objc at 0x1015209a0>,
+#  pycocoa.utils.name2py is <function .name2py at 0x101520a40>,
+#  pycocoa.utils.name2pymethod is <function .name2pymethod at 0x101520ae0>,
+#  pycocoa.utils.printf is <function .printf at 0x101520b80>,
+#  pycocoa.utils.properties is <function .properties at 0x101520c20>,
+#  pycocoa.utils.property2 is <function .property2 at 0x101520cc0>,
+#  pycocoa.utils.terminating is <function .terminating at 0x101520ea0>,
+#  pycocoa.utils.type2strepr is <function .type2strepr at 0x101520fe0>,
+#  pycocoa.utils.z1000str is <function .z1000str at 0x101521260>,
+#  pycocoa.utils.zfstr is <function .zfstr at 0x101521300>,
+#  pycocoa.utils.zSIstr is <function .zSIstr at 0x1015213a0>,
+# )[21]
+# pycocoa.utils.version 25.2.22, .isLazy 1, Python 3.13.2 64bit arm64, macOS 14.7.3
 
 # MIT License <https://OpenSource.org/licenses/MIT>
 #

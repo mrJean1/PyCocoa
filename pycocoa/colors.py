@@ -69,17 +69,17 @@ accessible by color space acronym like C{CMY}, C{GS}, C{RGB}, etc.
 @var UIColors.Text: I{Dynamic} color for User-Interface elements, adaptable to vibrancy and accessibility settings.
 @var UIColors.WindowBackground: I{Dynamic} color for User-Interface elements, adaptable to vibrancy and accessibility settings.
 '''
-# all imports listed explicitly to help PyChecker
-from pycocoa.bases   import _Type0
-from pycocoa.lazily  import _ALL_LAZY, _Dmain_, _EQUALS_, _fmt_invalid, _NN_
+from pycocoa.bases import _Type0
+from pycocoa.internals import _Constants, _Dmain_, _EQUALS_, \
+                              _NN_, property_RO
+from pycocoa.lazily import _ALL_LAZY,  _fmt_invalid, _Types
 from pycocoa.nstypes import  NSColor
-from pycocoa.utils   import _Constants, property_RO, _Types
 
 from copy import copy as _copy
-# from enum   import Enum
+# from enum import Enum
 
 __all__ = _ALL_LAZY.colors
-__version__ = '25.01.31'
+__version__ = '25.02.19'
 
 
 def _Xhandler(unused):
@@ -585,7 +585,7 @@ if __name__ == _Dmain_:
 #                         .Text=UIColor(NSDynamicSystemColor, name='Text'),
 #                         .WindowBackground=UIColor(NSDynamicSystemColor, name='WindowBackground'),
 # )[15]
-# pycocoa.colors.version 25.1.31, .isLazy 1, Python 3.13.1 64bit arm64, macOS 14.6.1
+# pycocoa.colors.version 25.2.19, .isLazy 1, Python 3.13.1 64bit arm64, macOS 14.7.3
 
 # MIT License <https://OpenSource.org/licenses/MIT>
 #

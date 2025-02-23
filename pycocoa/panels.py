@@ -19,21 +19,22 @@
 @var PanelButton.Suppressed: -2.
 @var PanelButton.TimedOut: -1.
 '''
-# all imports listed explicitly to help PyChecker
 from pycocoa.bases import _Type2
-from pycocoa.lazily import _ALL_LAZY, _Dmain_, _DOT_, _fmt, \
-                           _fmt_invalid, _NN_
+from pycocoa.internals import _Constants, _Dmain_, _DOT_, _NN_, \
+                               property_RO, proxy_RO, _SPACE_, _Strs
+from pycocoa.lazily import _ALL_LAZY, _Types,  _fmt, _fmt_invalid
 from pycocoa.nstypes import NSAlert, NSError, NSFont, NSMain, \
                             NSNotificationCenter, NSOpenPanel, \
-                            NSSavePanel, NSStr, nsString2str, nsTextView
-from pycocoa.pytypes import dict2NS, py2NS, url2NS
+                            NSSavePanel, _NSStr, nsString2str, \
+                            nsTextView
+from pycocoa.pytypes import frozendict2NS, py2NS, url2NS
 from pycocoa.oslibs import NO, NSCancelButton, NSOKButton, YES
-from pycocoa.runtime import isObjCInstanceOf, release
+from pycocoa.runtime import ObjCDelegate, isObjCInstanceOf, \
+                           _ObjCDelegate, ObjCInstance, send_super_init
 # from strs  import StrAttd
-from pycocoa.utils import _Constants, property_RO, _Strs, \
-                          _text_title2, _Types
+from pycocoa.utils import isinstanceOf, _text_title2
 
-from os import linesep
+from os import linesep as _linesep
 from threading import Thread
 from time import sleep
 try:
@@ -46,7 +47,7 @@ except ImportError:
     _Browser, _BrowserError = None, ImportError
 
 __all__ = _ALL_LAZY.panels
-__version__ = '25.01.31'
+__version__ = '25.02.19'
 
 
 class AlertStyle(_Constants):  # Enum?
@@ -79,7 +80,7 @@ class AlertPanel(_Type2):
 
           @keyword title: The panel name and title (C{str}).
           @keyword info: Optional, informative message (C{str}).
-          @keyword ok: First, OK button text (C{str}), other than 'OK'.
+          @keyword ok: The first, OK button text (C{str}), other than 'OK'.
           @keyword cancel: Include a second, Cancel button (C{bool} or C{str}).
           @keyword other: Include a third, Other button (C{bool} or C{str}).
           @keyword style: Kind of alert (C{AlertStyle}), default C{.Info}.
@@ -92,7 +93,7 @@ class AlertPanel(_Type2):
                  without C{linesep}arators.
         '''
         if info and isinstance(info, _Strs):
-            if len(info) > 50 or linesep in info:
+            if len(info) > 50 or _linesep in info:
                 raise ValueError(_fmt_invalid(info=repr(info)))
             self._info = info
 
@@ -112,11 +113,12 @@ class AlertPanel(_Type2):
             t = _fmt('%s- %s', t, title)
         self.title = t
 
-    def show(self, text=_NN_, font=None, timeout=None):
+    def show(self, text=_NN_, font=None, help=_NN_, timeout=None):
         '''Show alert message iff not suppressed.
 
            @keyword text: Optional, accessory text (C{str}).
            @keyword font: Optional font (L{Font}), default C{Fonts.System}.
+           @keyword help: Optional, help text (C{str}).
            @keyword timeout: Optional time limit (C{float}).
 
            @return: The button clicked (C{PanelButton}).  If
@@ -130,34 +132,32 @@ class AlertPanel(_Type2):
         # <https://Developer.Apple.com/documentation/appkit/nsalert>
         ns = NSAlert.alloc().init()
         ns.setAlertStyle_(self._style)
-        ns.setMessageText_(release(NSStr(self.title)))
+        ns.setMessageText_(_NSStr(self.title))
 
         if self._info:
             # <https://Developer.Apple.com/library/content/documentation/
             #        Cocoa/Conceptual/Strings/Articles/stringsParagraphBreaks.html>
-            ns.setInformativeText_(NSStr(self._info))
+            ns.setInformativeText_(_NSStr(self._info))
 
-        ns.addButtonWithTitle_(release(NSStr(self._ok)))
+        ns.addButtonWithTitle_(_NSStr(self._ok))
         if self._cancel:
-            ns.addButtonWithTitle_(release(NSStr(self._cancel)))
+            ns.addButtonWithTitle_(_NSStr(self._cancel))
             if self._other:
-                ns.addButtonWithTitle_(release(NSStr(self._other)))
+                ns.addButtonWithTitle_(_NSStr(self._other))
 
         if self._suppress in (False, YES):
             self._suppress = False
             ns.setShowsSuppressionButton_(YES)
             s = _AlertStyleStr.get(self._style, _NN_)
             s = 'Do not show this %sAlert again' % (s,)
-            ns.suppressionButton().setTitle_(release(NSStr(s)))
+            ns.suppressionButton().setTitle_(_NSStr(s))
 
-        # <https://Developer.Apple.com/library/content/documentation/
-        #        Cocoa/Conceptual/Dialog/Tasks/DisplayAlertHelp.html>
-        # ns.showsHelp_(YES)
-        # ns.helpAnchor_(HTML?)
+        if help:
+            self._ns_help(ns, help)
 
         if text:
-            t = nsTextView(text, NSFont.systemFontOfSize_(0)
-                                 if font is None else font.NS)
+            t = nsTextView(text, (NSFont.systemFontOfSize_(0) if
+                                  font is None else font.NS))
             ns.setAccessoryView_(t)
 
         # <https://Developer.Apple.com/documentation/appkit/
@@ -175,6 +175,13 @@ class AlertPanel(_Type2):
 
         # ns.release()  # XXX may crash
         return r
+
+    def _ns_help(self, ns, help):
+        # <https://Developer.Apple.com/library/content/documentation/
+        #        Cocoa/Conceptual/Dialog/Tasks/DisplayAlertHelp.html>
+        # <http://www.ExtelligentCocoa.org/nsalert-tutorial/> Help ...
+        ns.setShowsHelp_(YES)
+        ns.setDelegate_(NSAlertDelegate.alloc().init(self.title, help))
 
 
 class BrowserPanel(_Type2):
@@ -226,10 +233,9 @@ class BrowserPanel(_Type2):
         if self._browser:
             self._browser.open(url, new=2 if tab else 1)
         elif self.NS:
-            d = dict2NS(dict(URL=ns, reveal=True, newTab=bool(tab)), frozen=True)
-            u = NSStr('WebBrowserOpenURLNotification')
+            d =  frozendict2NS(dict(URL=ns, reveal=True, newTab=bool(tab)))
+            u = _NSStr('WebBrowserOpenURLNotification')
             self.NS.postNotificationName_object_userInfo_(u, None, d)
-            u.release()  # PYCHOK expected
         return _urlparse(nsString2str(ns.absoluteString()))
 
 
@@ -244,10 +250,11 @@ class ErrorPanel(AlertPanel):
         '''
         self.title = title
 
-    def show(self, ns_error, timeout=None):  # PYCHOK expected
+    def show(self, ns_error, help=_NN_, timeout=None):  # PYCHOK expected
         '''Show the error.
 
            @param ns_error: Error information (C{NSError}).
+           @keyword help: Optional, help text (C{str}).
            @keyword timeout: Optional time limit (C{float}).
 
            @return: TBD.
@@ -257,13 +264,50 @@ class ErrorPanel(AlertPanel):
         # <https://Developer.Apple.com/documentation/
         #        appkit/nsalert/1531823-alertwitherror>
         # <https://Developer.Apple.com/documentation/foundation/nserror>
-        if isObjCInstanceOf(ns_error, NSError, name='ns_error'):
+        if isObjCInstanceOf(ns_error, NSError, raiser='ns_error'):
             ns = NSAlert.alloc().alertWithError_(ns_error)
+            if help:
+                self._ns_help(ns, help)
             r = _runModal(ns, timeout)
             # ns.release()  # XXX may crash
         else:
             r = PanelButton.Error
         return r
+
+
+class _NSAlertDelegate(object):
+    '''An ObjC-callable I{NSDelegate} class to handle help (?)
+       button clicks in alert panels from C{alertShowHelp_}.
+    '''
+    _ObjC = _ObjCDelegate('_NSAlertDelegate')
+
+    @_ObjC.method('@PP')
+    def init(self, title, help):
+        '''Initialize the allocated C{NSAlertDelegate}.
+
+           @note: I{MUST} be called as C{.alloc().init(...)}.
+        '''
+        isinstanceOf(title, *_Strs, raiser='title')
+        isinstanceOf(help,  *_Strs, raiser='help')
+#       self = ObjCInstance(send_message(_NSObject_, _alloc_))
+        self = ObjCInstance(send_super_init(self))
+        self.title = _SPACE_(title, 'Help')
+        self.help = help
+        return self
+
+    @_ObjC.method('v@')
+    def alertShowHelp_(self, alert):  # PYCHOK unused
+        '''ObjC callback to handle C{NSAlert} event.
+        '''
+        t = TextPanel(title=self.title)
+        return t.show(self.help)
+
+
+@proxy_RO
+def NSAlertDelegate():
+    '''The L{ObjCClass}C{(_NSAlertDelegate.__name__)}.
+    '''
+    return ObjCDelegate(_NSAlertDelegate)
 
 
 class OpenPanel(_Type2):
@@ -322,7 +366,7 @@ class OpenPanel(_Type2):
         ns.setTreatsFilePackagesAsDirectories_(YES if packages else NO)
 
         if prompt:
-            ns.setPrompt_(release(NSStr(prompt)))
+            ns.setPrompt_(_NSStr(prompt))
 
         while True:
             # ns.orderFrontRegardless()  # only flashes
@@ -420,16 +464,16 @@ class SavePanel(_Type2):
 #       ns.setTitleHidden_(bool(False))  # "does nothing now"
 
         if name:
-            ns.setNameFieldStringValue_(release(NSStr(name)))
+            ns.setNameFieldStringValue_(_NSStr(name))
 
         if dir:
             if dir.lower().startswith('file:///'):
-                ns.setDirectoryURL_(release(NSStr(dir)))
+                ns.setDirectoryURL_(_NSStr(dir))
             else:
-                ns.setDirectory_(release(NSStr(dir)))
+                ns.setDirectory_(_NSStr(dir))
 
         if filetype:
-            ns.setRequiredFileType_(release(NSStr(filetype.lstrip(_DOT_))))
+            ns.setRequiredFileType_(_NSStr(filetype.lstrip(_DOT_)))
             hidexts = False
 
         ns.setShowsHiddenFiles_(YES if hidden else NO)
@@ -437,12 +481,12 @@ class SavePanel(_Type2):
         ns.setExtensionHidden_(YES if hidexts else NO)
 
         if label:
-            ns.setNameFieldLabel_(release(NSStr(label)))
+            ns.setNameFieldLabel_(_NSStr(label))
 
         ns.setTreatsFilePackagesAsDirectories_(YES if packages else NO)
 
         if prompt:
-            ns.setPrompt_(release(NSStr(prompt)))
+            ns.setPrompt_(_NSStr(prompt))
 
         if tags:
             ns.setTagNames_(py2NS(tags))
@@ -472,11 +516,12 @@ class TextPanel(AlertPanel):
         '''
         self.title = title
 
-    def show(self, text_or_file=_NN_, font=None, timeout=None):
+    def show(self, text_or_file=_NN_, font=None, help=_NN_, timeout=None):
         '''Show alert message iff not suppressed.
 
            @param text_or_file: The contents (C{str} or C{file}).
            @keyword font: Optional font (L{Font}), default C{Fonts.MonoSpace}.
+           @keyword help: Optional, help text (C{str}).
            @keyword timeout: Optional time limit (C{float}).
 
            @return: The button clicked (C{PanelButton.Close}) or
@@ -486,17 +531,20 @@ class TextPanel(AlertPanel):
         '''
         ns = NSAlert.alloc().init()
         ns.setAlertStyle_(AlertStyle.Info)
-        ns.addButtonWithTitle_(release(NSStr('Close')))
+        ns.addButtonWithTitle_(_NSStr('Close'))
 
         if not text_or_file:
             raise ValueError(_fmt_invalid(text_or_file=repr(text_or_file)))
 
         text, t = _text_title2(text_or_file, self.title)
         if t:
-            ns.setMessageText_(release(NSStr(t)))
+            ns.setMessageText_(_NSStr(t))
 
-        t = nsTextView(text, NSFont.userFixedPitchFontOfSize_(0)
-                             if font is None else font.NS)
+        if help:  # see AlertPanel._ns_help
+            self._ns_help(ns, help)
+
+        t = nsTextView(text, (NSFont.userFixedPitchFontOfSize_(0) if
+                              font is None else font.NS))
         ns.setAccessoryView_(t)
         r = _runModal(ns, timeout)
         ns.release()
@@ -527,6 +575,7 @@ if __name__ == _Dmain_:
 #                           .Warning=0,
 #  pycocoa.panels.BrowserPanel is <class .BrowserPanel>,
 #  pycocoa.panels.ErrorPanel is <class .ErrorPanel>,
+#  pycocoa.panels.NSAlertDelegate is <pycocoa.utils.proxy_RO object at 0x1014b2490>,
 #  pycocoa.panels.OpenPanel is <class .OpenPanel>,
 #  pycocoa.panels.PanelButton.Cancel=0,
 #                            .Close=1,
@@ -537,8 +586,8 @@ if __name__ == _Dmain_:
 #                            .TimedOut=-1,
 #  pycocoa.panels.SavePanel is <class .SavePanel>,
 #  pycocoa.panels.TextPanel is <class .TextPanel>,
-# )[8]
-# pycocoa.panels.version 25.1.31, .isLazy 1, Python 3.13.1 64bit arm64, macOS 14.6.1
+# )[9]
+# pycocoa.panels.version 25.2.19, .isLazy 1, Python 3.13.1 64bit arm64, macOS 14.7.3
 
 # MIT License <https://OpenSource.org/licenses/MIT>
 #

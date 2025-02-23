@@ -25,47 +25,38 @@ imported by that top-level module.
              is not supported or not enabled, or C{False} if initializing
              C{lazy import} failed.
 '''
-
-from os import environ as _environ, linesep as _NL_  # PYCHOK expected
+from pycocoa.internals import __all__ as _internals_all_, _COMMASPACE_, _Dall_, \
+                              _Dfile_, _Dmain_, _Dpackage_, _DOT_, _fmt_invalid, \
+                              _fmt, _instr, _MutableConstants, _NA_, _NN_, _no, \
+                              _NSObject_, _pycocoa_, property_RO, _sys, _UNDER_
+from os import environ as _environ
 from os.path import basename as _basename
-import sys as _sys
+# import sys as _sys  # from .internals
 
-_bNN_      = b''  # PYCHOK bytes(_NN_)
-_COMMA_    = ','  # PYCHOK in .utils
-_C_XTYPES  = 'c_ptrdiff_t', 'c_struct_t', 'c_void'  # exported
-_Dall_     = '__all__'  # _DUNDER_all_
-_Ddoc_     = '__doc__'   # PYCHOK _DUNDER_doc_
-_Dfile_    = '__file__'  # _DUNDER_file_
-_Dmain_    = '__main__'  # _DUNDER_main_
-_Dname_    = '__name__'  # PYCHOK _DUNDER_name_
-_Dpackage_ = '__package__'  # _DUNDER_package_
-_Dversion_ = '__version__'  # PYCHOK _DUNDER_version_
-_FOR_DOCS  = _environ.get('PYCOCOA_FOR_DOCS', None)
-_NA_       = 'N/A'  # in .utils
-_NONE      =  object()   # NOT None!
-_pycocoa_  = 'pycocoa'
-_PY_FH     = _environ.get('PYTHONFAULTHANDLER', None)  # PYCHOK .faults, .__init__
+_C_XTYPES = 'c_ptrdiff_t', 'c_struct_t', 'c_void'  # exported
+_FOR_DOCS = _environ.get('PYCOCOA_FOR_DOCS', None)
+_PY_FH    = _environ.get('PYTHONFAULTHANDLER', None)  # PYCHOK .faults, .__init__
 
 # @module_property[_RO?] <https://GitHub.com/jtushman/proxy_tools/>
 isLazy          =  None  # see @var isLazy above
 # _isPython2    = _sys.version_info.major < 3  # PYCHOK in .runtime
 _isPython3      = _sys.version_info.major > 2  # PYCHOK in .utils, .windows
-_isPython37     = _sys.version_info[:2] < (3, 7)  # older than 3.7
+_None           =  object()   # NOT None!
 _Python_version = _sys.version.split()[0]
 
 
 class LazyAttributeError(AttributeError):
     '''Raised if a C{lazily imported} attribute is missing or invalid.
     '''
-    def __init__(self, fmt, *args):
-        AttributeError.__init__(self, _fmt(fmt, *args))
+    def __init__(self, fmtxt, *args):
+        AttributeError.__init__(self, _fmt(fmtxt, *args))
 
 
 class LazyImportError(ImportError):
     '''Raised if C{lazy import} is not supported, disabled or failed.
     '''
-    def __init__(self, fmt, *args):
-        ImportError.__init__(self, _fmt(fmt, *args))
+    def __init__(self, fmtxt, *args):
+        ImportError.__init__(self, _fmt(fmtxt, *args))
 
 
 class _Dict(dict):
@@ -108,6 +99,58 @@ class _NamedEnum_RO(dict):
                 yield k, v
 
 
+class _Types(_MutableConstants):
+    '''Python Types, to avoid circular imports, lazily set.
+    '''
+    AlertPanel    = None  # set by .panels
+    App           = None  # set by .apps
+    Color         = None  # set by .colors
+    Dict          = None  # set by .dicts
+    ErrorPanel    = None  # set by .panels
+    Font          = None  # sef by .fonts
+    FrozenDict    = None  # set by .dicts
+    FrozenSet     = None  # set by .sets
+    Item          = None  # set by .menus
+    ItemSeparator = None  # set by .menus
+    List          = None  # set by .lists
+    MediaWindow   = None  # set by .windows
+    Menu          = None  # set by .menus
+    MenuBar       = None  # set by .menus
+    OpenPanel     = None  # set by .panels
+    Paper         = None  # set by .printer
+    PaperCustom   = None  # set by .printer
+    PaperMargins  = None  # set by .printer
+    Printer       = None  # set by .printer
+    SavePanel     = None  # set by .panels
+    Screen        = None  # set by .screens
+    Set           = None  # set by .sets
+    Str           = None  # set by .strs
+    StrAttd       = None  # set by .strs
+    Table         = None  # set by .tables
+    TableWindow   = None  # set by .tables
+    TextPanel     = None  # set by .panels
+    TextWindow    = None  # set by .windows
+    Tuple         = None  # set by .tuples
+    Window        = None  # set by .windows
+
+    def __getattr__(self, name):  # called when .__getattribute__ failed
+        '''(INTERNAL) Lazily import missing _Types.
+        '''
+        return _MutableConstants.__getattr__(self, name) or _lazy_import(name)
+
+    def __getattribute__(self, name):  # called when .name accessed
+        '''(INTERNAL) Lazily import missing _Types.
+        '''
+        return _MutableConstants.__getattribute__(self, name)  # or _lazy_import(name)
+
+    @property_RO
+    def pycocoa(self):  # get pycocoa, I{once}
+        pycocoa = _sys.modules[_pycocoa_]  # without re-import, isLazy=0?
+        _Types.__class__.pycocoa = pycocoa  # overwrite property_RO
+        return pycocoa
+
+_Types = _Types()  # PYCHOK singleton
+
 if _FOR_DOCS:
     def _ALL_DOCS(*exports):
         '''(INTERNAL) Only C{B{exports}.__name__} when make'ing docs to
@@ -129,6 +172,9 @@ _ALL_LAZY = _NamedEnum_RO(_name='_ALL_LAZY',
                           bases=(),  # module only
                          colors=('CMYColor', 'CMYColors', 'Color', 'ColorError', 'Colors', 'GrayScaleColor', 'GrayScaleColors',
                                  'HSBColor', 'HSBColors', 'RGBColor', 'RGBColors', 'TintColor', 'TintColors', 'UIColor', 'UIColors'),
+                     deprecated=('Cache2', 'module_property_RO', 'property2', 'sortuples',
+                                 'OBJC_ASSOCIATION_ASSIGN', 'OBJC_ASSOCIATION_COPY', 'OBJC_ASSOCIATION_COPY_NONATOMIC',
+                                 'OBJC_ASSOCIATION_RETAIN', 'OBJC_ASSOCIATION_RETAIN_NONATOMIC'),
                           dicts=('Dict', 'FrozenDict'),
                          faults=('getUncaughtExceptionHandler', 'setUncaughtExceptionHandler',),  # disable, enable, exiting, is_enabled, SIGs_enabled
                           fonts=('Font', 'FontError', 'fontfamilies', 'fontnamesof', 'Fonts',
@@ -139,25 +185,28 @@ _ALL_LAZY = _NamedEnum_RO(_name='_ALL_LAZY',
                                  'get_method', 'get_methods', 'get_properties', 'get_protocol', 'get_protocols',
                                  'get_selector', 'get_selectorname_permutations', 'get_selectornameof',
                                  'get_superclass', 'get_superclassnameof', 'get_superclassof'),
+                      internals=_internals_all_,
                          lazily=('LazyAttributeError', 'LazyImportError', 'isLazy'),
                           lists=('List',),
                           menus=('Item', 'ItemSeparator', 'Keys', 'Menu', 'MenuBar', 'ns2Item', 'title2action'),
                         nstypes=('at', 'isAlias', 'isLink', 'isNone',
                                  'NSAlert', 'NSApplication',
-                                 'NSArray', 'nsArray2listuple', 'nsArray2tuple', 'NSAttributedString', 'NSAutoreleasePool',
+                                 'NSArray', 'nsArray2listuple',  'nsArray2tuple', 'NSAttributedString', 'NSAutoreleasePool',
                                  'NSBezierPath', 'NSBoolean', 'nsBoolean2bool', 'NSBundle', 'nsBundleRename',
                                  'NSColor', 'NSConcreteNotification', 'NSConcreteValue', 'NSConstantString',
                                  'NSData', 'nsData2bytes', 'NSDate',
                                  'NSDecimal', 'nsDecimal2decimal', 'NSDecimalNumber', 'nsDescription2dict',
-                                 'NSDictionary', 'nsDictionary2dict', 'nsDictionary2items', 'NSDockTile', 'NSDouble',
+                                 'NSDictionary', 'nsDictionary2dict', 'nsDictionary2items',
+                                 'NSDockTile', 'NSDouble',
                                  'NSEnumerator', 'NSError', 'NSException', 'nsException', 'NSExceptionError',
                                  'NSFloat', 'NSFont', 'NSFontDescriptor', 'NSFontManager', 'NSFontPanel',
                                  'NSImage', 'NSImageView', 'NSInt', 'nsIter', 'nsIter2',
                                  'NSLayoutManager', 'nsLog', 'nsLogf', 'NSLong', 'NSLongLong',
                                  'NSMain', 'NSMenu', 'NSMenuItem', 'NSMutableArray', 'NSMutableData',
                                  'NSMutableDictionary', 'NSMutableSet', 'NSMutableString',
-                                 'NSNotification', 'NSNotificationCenter', 'NSNull', 'nsNull2none', 'NSNumber', 'nsNumber2num',
-                                 'NSObject', 'nsOf', 'NSOpenPanel', 'ns2py', 'NSPageLayout',
+                                 'NSNotification', 'NSNotificationCenter', 'ns2NSType2',
+                                 'NSNull', 'nsNull2none', 'NSNumber', 'nsNumber2num',
+                                 _NSObject_, 'nsOf', 'NSOpenPanel', 'ns2py', 'NSPageLayout',
                                  'NSPrinter', 'NSPrintInfo', 'NSPrintOperation', 'NSPrintPanel', 'nsRaise',
                                  'NSSavePanel', 'NSScreen', 'NSScrollView', 'NSSet', 'nsSet2set',
                                  'NSStatusBar', 'NSStr', 'NSString', 'nsString2str',
@@ -220,31 +269,27 @@ _ALL_LAZY = _NamedEnum_RO(_name='_ALL_LAZY',
                                  'NSWindowMiniaturizeButton', 'NSWindowStyleMaskClosable', 'NSWindowStyleMaskMiniaturizable', 'NSWindowStyleMaskResizable',
                                  'NSWindowStyleMaskTitled', 'NSWindowStyleMaskUsual', 'NSWindowStyleMaskUtilityWindow', 'NSWindowToolbarButton',
                                  'NSWindowZoomButton', 'OSlibError', 'YES'),
-                         panels=('AlertPanel', 'AlertStyle', 'BrowserPanel', 'ErrorPanel', 'OpenPanel', 'PanelButton', 'SavePanel', 'TextPanel'),
+                         panels=('AlertPanel', 'AlertStyle', 'BrowserPanel', 'ErrorPanel', 'NSAlertDelegate', 'OpenPanel', 'PanelButton', 'SavePanel', 'TextPanel'),
                        printers=('get_libPC', 'get_papers', 'get_printer', 'get_printer_browser', 'get_printers', 'get_resolutions', 'libPC',
                                  'Paper', 'PaperCustom', 'PaperMargins', 'Printer'),
-                        pytypes=('bool2NS', 'bytes2NS', 'decimal2NS', 'dict2NS', 'float2NS', 'frozenset2NS', 'generator2NS', 'int2NS', 'list2NS', 'map2NS',
-                                 'None2NS', 'py2NS', 'range2NS', 'set2NS', 'str2NS', 'time2NS', 'tuple2NS', 'type2NS', 'unicode2NS', 'url2NS'),
-                        runtime=('add_ivar', 'add_method', 'add_protocol', 'add_subclass', 'drain', 'isClass', 'isImmutable',
-                                 'isMetaClass', 'isObjCInstanceOf', 'OBJC_ASSOCIATION_ASSIGN', 'OBJC_ASSOCIATION_COPY', 'OBJC_ASSOCIATION_COPY_NONATOMIC',
-                                 'OBJC_ASSOCIATION_RETAIN', 'OBJC_ASSOCIATION_RETAIN_NONATOMIC', 'ObjCBoundClassMethod', 'ObjCBoundMethod',
-                                 'ObjCClass', 'ObjCClassMethod', 'ObjCConstant', 'ObjCDelegate', 'ObjCInstance', 'ObjCMethod', 'ObjCSubclass',
+                        pytypes=('bool2NS', 'bytes2NS', 'decimal2NS', 'dict2NS', 'dicts2NS', 'float2NS', 'frozendict2NS', 'frozenset2NS',
+                                 'generator2NS', 'int2NS', 'iterable2NS', 'list2NS', 'listuple2NS', 'map2NS', 'None2NS', 'py2NS', 'range2NS',
+                                 'set2NS', 'sets2NS', 'str2NS', 'strs2NS', 'time2NS', 'tuple2NS', 'type2NS', 'unicode2NS', 'url2NS'),
+                        runtime=('add_ivar', 'add_method', 'add_protocol', 'add_subclass', 'drain', 'OBJC_ASSOCIATION',
+                                 'isClass', 'isImmutable', 'isMetaClass', 'isMutable', 'isObjCInstanceOf',
+                                 'ObjCBoundClassMethod', 'ObjCBoundMethod', 'ObjCClass', 'ObjCClassMethod',
+                                 'ObjCConstant', 'ObjCDelegate', 'ObjCInstance', 'ObjCMethod', 'ObjCSubclass',
                                  'register_subclass', 'release', 'retain', 'send_message', 'send_super', 'send_super_init', 'set_ivar'),
                         screens=('BuiltInScreen', 'DeepestScreen', 'ExternalScreen', 'Frame', 'MainScreen', 'Screen', 'Screens'),
                            sets=('FrozenSet', 'Set'),
                            strs=('Str', 'StrAttd'),
                          tables=('closeTables', 'NSTableViewDelegate', 'Table', 'TableWindow'),
                          tuples=('Tuple',),
-                          utils=('Adict', 'aspect_ratio',
-                                 'bytes2repr', 'bytes2str', 'Cache2', 'clipstr',
-                                 'DEFAULT_UNICODE', 'errorf', 'flint', 'gcd',
-                                 'inst2strepr', 'isinstanceOf', 'islistuple', 'iterbytes',
-                                 'lambda1', 'logf',
-                                 'machine', 'missing', 'module_property_RO',
-                                 'name2objc', 'name2py', 'name2pymethod',
-                                 'printf', 'properties', 'property2', 'property_RO',
-                                 'sortuples', 'str2bytes', 'terminating', 'type2strepr',
-                                 'z1000str', 'zfstr', 'zSIstr'),
+                          utils=('aspect_ratio', 'clipstr', 'errorf', 'flint', 'gcd',
+                                 'inst2strepr', 'isinstanceOf', 'islistuple', 'logf',
+                                 'machine', 'name2objc', 'name2py', 'name2pymethod',
+                                 'printf', 'properties',
+                                 'terminating', 'type2strepr', 'z1000str', 'zfstr', 'zSIstr'),
                         windows=('AutoResize', 'AutoResizeError', 'autoResizes', 'BezelStyle', 'Border', 'MediaWindow', 'ns2Window',
                                  'NSWindowDelegate', 'TextWindow', 'Window', 'WindowError', 'WindowStyle', 'WindowStyleError', 'windowStyles'))
 
@@ -253,7 +298,7 @@ _ALL_LAZY = _NamedEnum_RO(_name='_ALL_LAZY',
 _ALL_OVERRIDING = _NamedEnum_RO(_name='_ALL_OVERRIDING')  # all DEPRECATED
 
 __all__ = _ALL_LAZY.lazily
-__version__ = '25.02.04'
+__version__ = '25.02.20'
 
 
 def _all_imports(**more):
@@ -306,39 +351,14 @@ def _caller3(up):  # in .named
             f.f_lineno)  # line number
 
 
-def _fmt(fmtxt, *args):
-    '''(INTERNAL) Format a string.
-    '''
-    if args:
-        try:
-            t =  fmtxt % args
-        except TypeError:
-            t = _NN_(fmtxt, map(str, args))
-    else:
-        t = str(fmtxt)
-    return t
-
-
-def _fmt_invalid(*nots, **kwd1):
-    '''(INTERNAL) Format an 'invalid <name>: <value>' string.
-    '''
-    t = _fmt('invalid %s: %s', *kwd1.popitem())
-    if nots:
-        t = _NN_(t, ', not ', _COMMASPACE_(*nots))
-    return t
-
-
-def _instr(name, *args):
-    '''(INTERNAL) Format an instance "<name>(*<args>)" string.
-    '''
-    return _fmt('%s(%s)', name, _COMMASPACE_(*args))
-
-
-def _lazy_import(name):  # overwritten below
+def _lazy_import(name):  # overwritten below in Python 3.7+, in .internals
     '''(INTERNAL) Lazily import an attribute by C{name}.
     '''
-    t = _instr(_lazy_import.__name__, name)
-    raise LazyImportError('unsupported: %s', t)
+    try:
+        return getattr(_Types.pycocoa, name)  # XXX _None or missing?
+    except (AttributeError, ImportError) as x:
+        t = _instr(_lazy_import, name)
+        raise LazyImportError('%s: %s', t, x)
 
 
 def _lazy_import2(pack):  # MCCABE 15
@@ -368,7 +388,7 @@ def _lazy_import2(pack):  # MCCABE 15
     '''
     global isLazy
 
-    if _isPython37:  # not supported
+    if _sys.version_info[:2] < (3, 7):  # not supported
         t = _no(_DOT_(pack, _lazy_import2.__name__), 'for')
         raise LazyImportError('%s Python %s', t, _Python_version)
 
@@ -392,10 +412,10 @@ def _lazy_import2(pack):  # MCCABE 15
                 raise LazyImportError('%s %r', _DOT_(mod, _Dpackage_), pkg)
             # import the module or module attribute
             if attr:
-                imported = getattr(imported, attr, _NONE)
+                imported = getattr(imported, attr, _None)
             elif name != mod:
-                imported = getattr(imported, name, _NONE)
-            if imported is _NONE:
+                imported = getattr(imported, name, _None)
+            if imported is _None:
                 raise LazyAttributeError(_no('attribute', _DOT_(mod, attr or name)))
 
         elif name in (_Dall_,):  # XXX _Ddir_, _Dmembers_?
@@ -420,7 +440,7 @@ def _lazy_import2(pack):  # MCCABE 15
 
         return imported  # __getattr__
 
-    global _lazy_import  # for .utils._Types.__getattribute__
+    global _lazy_import  # for _Types.__getattr[ibute]__
     _lazy_import = __getattr__
 
     return package, __getattr__  # _lazy_import2
@@ -471,28 +491,6 @@ def _lazy_init3(pack):
 
     return import_module, package, parent
 
-
-def _no(*args):
-    '''(INTERNAL) Return C{" ".join(("no",) + args)}.
-    '''
-    return _SPACE_('no', *args)
-
-
-class _Str(str):
-    '''(INTERNAL) Callable C{_Str(*args)} == C{_Str.join(map(str, args))}.
-    '''
-    def __call__(self, *args):
-        '''Join C{args} as C{self.join(args)}.
-        '''
-        return self.join(map(str, args))
-
-_COLON_      = _Str(':')  # PYCHOK expected
-_COMMASPACE_ = _Str(', ')
-_DOT_        = _Str('.')
-_EQUALS_     = _Str('=')  # PYCHOK expected
-_NN_         = _Str('')   # empty string, I{Nomen Nescio}
-_SPACE_      = _Str(' ')  # PYCHOK expected
-_UNDER_      = _Str('_')
 
 if __name__ == _Dmain_:
 

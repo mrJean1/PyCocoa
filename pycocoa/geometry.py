@@ -5,16 +5,15 @@
 
 '''Types L{Point}, L{Rect} and L{Size}, wrapping ObjC C{NSPoint_t}, L{NSRect_t}, C{NSSize_t}.
 '''
-# all imports listed explicitly to help PyChecker
 from pycocoa.bases import _Type0
-from pycocoa.lazily import _ALL_LAZY, _Dmain_, _fmt_invalid
+from pycocoa.internals import _Dmain_, _fmt_invalid, property_RO
+from pycocoa.lazily import _ALL_LAZY
 from pycocoa.nstypes import nsValue2py
 from pycocoa.octypes import NSPoint_t, NSRect_t, NSRect4_t, NSSize_t
-from pycocoa.utils import aspect_ratio, isinstanceOf, islistuple, \
-                          property_RO, type2strepr
+from pycocoa.utils import aspect_ratio, isinstanceOf, islistuple, type2strepr
 
 __all__ = _ALL_LAZY.geometry
-__version__ = '25.01.31'
+__version__ = '25.02.16'
 
 
 class Point(_Type0):
@@ -42,7 +41,7 @@ class Point(_Type0):
             self.NS = NSPoint_t(*point)
         elif isinstance(point, Point):
             self.NS = point.NS
-        elif isinstanceOf(point, NSPoint_t, name='point'):
+        elif isinstanceOf(point, NSPoint_t, raiser='point'):
             self.NS = point
 
     @property
@@ -189,7 +188,7 @@ class Rect(_Type0):
             self.NS = NSRect4_t(*rect)
         elif isinstance(rect, Rect):
             self.NS = rect.NS
-        elif isinstanceOf(rect, NSRect_t, name='rect'):
+        elif isinstanceOf(rect, NSRect_t, raiser='rect'):
             self.NS = rect
 
     @property_RO
@@ -403,7 +402,7 @@ if __name__ == _Dmain_:
 #  pycocoa.geometry.Size is <class .Size>,
 #  pycocoa.geometry.Size2 is <class .Size2>,
 # )[6]
-# pycocoa.geometry.version 25.1.31, .isLazy 1, Python 3.13.1 64bit arm64, macOS 14.6.1
+# pycocoa.geometry.version 25.2.16, .isLazy 1, Python 3.13.1 64bit arm64, macOS 14.7.3
 
 # MIT License <https://OpenSource.org/licenses/MIT>
 #

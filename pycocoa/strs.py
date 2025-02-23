@@ -5,16 +5,16 @@
 
 '''Type L{Str}, wrapping ObjC C{NSStr[ing]}.
 '''
-# all imports listed explicitly to help PyChecker
 from pycocoa.bases import _Type0
-from pycocoa.lazily import _ALL_LAZY, _Dmain_, _NN_
-from pycocoa.nstypes import NSAttributedString, NSConstantString, \
-                            NSStr, NSString, nsString2str
+from pycocoa.internals import _Dmain_, _NN_, property_RO, _Strs
+from pycocoa.lazily import _ALL_LAZY, _Types
+from pycocoa.nstypes import NSAttributedString, NSConstantString, _NSImms, \
+                           _NSMtbs, NSStr, NSString, nsString2str
+from pycocoa.runtime import isImmutable, isMutable
 from pycocoa.pytypes import dict2NS, str2NS
-from pycocoa.utils import isinstanceOf, property_RO, _Strs, _Types
 
 __all__ = _ALL_LAZY.strs
-__version__ = '25.01.31'
+__version__ = '25.02.16'
 
 
 class Str(str, _Type0):  # str, first to maintain str behavior
@@ -28,7 +28,9 @@ class Str(str, _Type0):  # str, first to maintain str behavior
             return ns_str
         elif isinstance(ns_str, _Strs):
             ns, py = str2NS(ns_str), ns_str
-        elif isinstanceOf(ns_str, NSStr, name='ns_str'):
+        elif isinstance( ns_str, NSStr) or \
+             isImmutable(ns_str, *_NSImms.Strs) or \
+             isMutable(  ns_str, *_NSMtbs.Strs, raiser='ns_str'):
             ns, py = ns_str, nsString2str(ns_str)
 
         self = super(Str, cls).__new__(cls, py)
@@ -251,8 +253,9 @@ class StrAttd(Str, _Type0):
         self._underlineStyle = underlineStyle  # NSNumber int None
 
 
-NSAttributedString._Type                              = _Types.StrAttd = StrAttd
-NSConstantString._Type = NSString._Type = NSStr._Type = _Types.Str     = Str
+NSAttributedString._Type             = _Types.StrAttd = StrAttd
+NSConstantString._Type = \
+        NSString._Type = NSStr._Type = _Types.Str     = Str
 
 if __name__ == _Dmain_:
 
@@ -266,7 +269,7 @@ if __name__ == _Dmain_:
 #  pycocoa.strs.Str is <class .Str>,
 #  pycocoa.strs.StrAttd is <class .StrAttd>,
 # )[2]
-# pycocoa.strs.version 25.1.31, .isLazy 1, Python 3.13.1 64bit arm64, macOS 14.6.1
+# pycocoa.strs.version 25.2.16, .isLazy 1, Python 3.13.1 64bit arm64, macOS 14.7.3
 
 # MIT License <https://OpenSource.org/licenses/MIT>
 #

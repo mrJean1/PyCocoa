@@ -5,16 +5,16 @@
 
 '''Types L{FrozenSet} and L{Set}, wrapping ObjC C{NS[Mutable]Set}.
 '''
-# all imports listed explicitly to help PyChecker
 from pycocoa.bases import _Type0
-from pycocoa.lazily import _ALL_LAZY, _Dmain_
-from pycocoa.nstypes import ns2py, NSMutableSet, nsSet2set, NSSet
+from pycocoa.internals import _Dmain_, property_RO
+from pycocoa.lazily import _ALL_LAZY, _Types
+from pycocoa.nstypes import _NSImms, NSMutableSet, _NSMtbs, \
+                             ns2py, NSSet, nsSet2set
 from pycocoa.pytypes import frozenset2NS, set2NS
-from pycocoa.runtime import isImmutable, isObjCInstanceOf, ObjCInstance
-from pycocoa.utils import property_RO, _Types
+from pycocoa.runtime import isImmutable, isMutable, ObjCInstance
 
 __all__ = _ALL_LAZY.sets
-__version__ = '25.01.31'
+__version__ = '25.02.16'
 
 if True:  # MCCABE 71
 
@@ -33,8 +33,7 @@ if True:  # MCCABE 71
             elif isinstance(ns_frozenset, (list, tuple, set)):
                 py = frozenset(ns_frozenset)
                 ns = frozenset2NS(py)
-            elif isImmutable(ns_frozenset, NSMutableSet,
-                                           NSSet, name=FrozenSet.__name__):
+            elif isImmutable(ns_frozenset, *_NSImms.Sets, raiser='ns_frozenset'):
                 ns = ns_frozenset
                 py = nsSet2set(ns)
 
@@ -71,7 +70,7 @@ if True:  # MCCABE 71
             elif isinstance(ns_set, (frozenset, list, tuple)):
                 py = set(ns_set)
 #               ns = set2NS(py)
-            elif isObjCInstanceOf(ns_set, NSMutableSet, name=Set.__name__):
+            elif isMutable(ns_set, *_NSMtbs.Sets, name='ns_set'):
                 py = nsSet2set(ns_set)
 #               ns = ns_set
 
@@ -111,8 +110,7 @@ else:  # XXX far too much duplication
                 self._set = ns_set._set
             elif isinstance(ns_set, Set):
                 self._set = frozenset(ns_set._set)
-            elif isImmutable(ns_set, NSMutableSet,  # mutable first
-                                     NSSet, name=self.typename):
+            elif isImmutable(ns_set, *_NSImms.Sets, raiser=self.typename):
                 self._set = nsSet2set(ns_set)
 
         def __contains__(self, elem):
@@ -246,7 +244,7 @@ else:  # XXX far too much duplication
                 self._set = set(ns_set)
             elif isinstance(ns_set, (Set, FrozenSet)):
                 self._set = set(ns_set._set)
-            elif isObjCInstanceOf(ns_set, NSMutableSet, name=Set.__name__):
+            elif isMutable(ns_set, *_NSMtbs.Sets, raiser=Set.__name__):
                 self._set = nsSet2set(ns_set)
 
         def __iand__(self, elem):
@@ -328,7 +326,7 @@ if __name__ == _Dmain_:
 #  pycocoa.sets.FrozenSet is <class .FrozenSet>,
 #  pycocoa.sets.Set is <class .Set>,
 # )[2]
-# pycocoa.sets.version 25.1.31, .isLazy 1, Python 3.13.1 64bit arm64, macOS 14.6.1
+# pycocoa.sets.version 25.2.16, .isLazy 1, Python 3.13.1 64bit arm64, macOS 14.7.3
 
 # MIT License <https://OpenSource.org/licenses/MIT>
 #

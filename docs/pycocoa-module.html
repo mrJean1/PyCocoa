@@ -97,16 +97,16 @@
     command line <code>epydoc --html --no-private --no-source 
     --name=pycocoa --url=... -v pycocoa</code>).</p>
   <h1 class="heading">Tests</h1>
-    <p>The tests and examples have only been run with 64-bit Python 3.13.1,
+    <p>The tests and examples have only been run with 64-bit Python 3.13.2,
     3.12.7. 3.11.5 and 2.7.18 using <a 
     href="https://PyPI.org/project/python-vlc" target="_top">Python-VLC</a>
     3.0.21, 3.0.18, 3.0.16, 3.0.12, 3.0.11, 3.0.10, 3.0.8, 3.0.6, 3.0.4 and
     2.2.8 (with the compatible <a href="https://www.VideoLan.org/vlc" 
-    target="_top">VLC App</a>) on macOS 14.6.1 Sonoma, 13.2 Ventura, 12.0.1
+    target="_top">VLC App</a>) on macOS 14.7.3 Sonoma, 13.2 Ventura, 12.0.1
     Monterey, 11.6.1 and 11.5.2 Big Sur (aka 10.16), 10.15.7 Catalina, 
     10.14.6 Mojave or 10.13.6 High Sierra.  The tests run with and without 
     <code>lazy import</code> in Python 3.</p>
-    <p>Python 3.13.1, 3.12.7 and 3.11.5 run on Apple Silicon 
+    <p>Python 3.13.2, 3.12.7 and 3.11.5 run on Apple Silicon 
     (<code>arm64</code> <i>natively</i>), other Python versions run on 
     Intel (<code>x86_64</code>) or Intel <i>emulation</i> 
     (<code>&quot;arm64_x86_64&quot;</code>, see function <a 
@@ -129,7 +129,7 @@
     target="_top">PyCodeStyle</a> (formerly Pep8) and <a 
     href="https://PyPI.org/project/mccabe" target="_top">McCabe</a> using 
     64-bit Python 2.7.18 and with <a href="https://PyPI.org/project/flake8"
-    target="_top">Flake8</a> using 64-bit Python 3.12.01 on macOS 14.1.2 
+    target="_top">Flake8</a> using 64-bit Python 3.13.2 on macOS 14.7.3 
     Sonoma.</p>
     <p>Some alternatives to <code>pycocoa</code> are (a) <a 
     href="https://PyPI.org/project/pyobjc" target="_top">PyObjC</a>, the 
@@ -198,7 +198,7 @@
 
 <hr />
 <div class="fields">      <p><strong>Version:</strong>
-        25.02.05
+        25.02.22
       </p>
 </div><!-- ==================== SUBMODULES ==================== -->
 <a name="section-Submodules"></a>
@@ -250,6 +250,7 @@
         href="pycocoa.colors-module.html#Colors" class="link">Colors</a> 
         accessible by color space acronym like <code>CMY</code>, 
         <code>GS</code>, <code>RGB</code>, etc.</em>    </li>
+    <li> <strong class="uidlink"><a href="pycocoa.deprecated-module.html">pycocoa.deprecated</a></strong>: <em class="summary">Deprecated classes, constants, functions, internals, etc.</em>    </li>
     <li> <strong class="uidlink"><a href="pycocoa.dicts-module.html">pycocoa.dicts</a></strong>: <em class="summary">Types <a href="pycocoa.dicts.FrozenDict-class.html" 
         class="link">FrozenDict</a> and <a 
         href="pycocoa.dicts.Dict-class.html" class="link">Dict</a>, 
@@ -268,6 +269,7 @@
         class="link">NSRect_t</a>, <code>NSSize_t</code>.</em>    </li>
     <li> <strong class="uidlink"><a href="pycocoa.getters-module.html">pycocoa.getters</a></strong>: <em class="summary"><code>get_...</code> functions to obtain ObjC classes, methods, 
         protocols, etc.</em>    </li>
+    <li> <strong class="uidlink"><a href="pycocoa.internals-module.html">pycocoa.internals</a></strong>: <em class="summary">Mostly INTERNAL, private classes, functions, constants, etc.</em>    </li>
     <li> <strong class="uidlink"><a href="pycocoa.lazily-module.html">pycocoa.lazily</a></strong>: <em class="summary">Lazily import <code>pycocoa</code> modules and attributes, based on
         <a href="https://modutil.ReadTheDocs.io/en/latest/#lazy_import" 
         target="_top">lazy_import</a> from Brett Cannon's <a 
@@ -323,7 +325,7 @@
     <li> <strong class="uidlink"><a href="pycocoa.tuples-module.html">pycocoa.tuples</a></strong>: <em class="summary">Type <a href="pycocoa.tuples.Tuple-class.html" 
         class="link">Tuple</a>, wrapping (immutable) ObjC 
         <code>NSArray</code>.</em>    </li>
-    <li> <strong class="uidlink"><a href="pycocoa.utils-module.html">pycocoa.utils</a></strong>: <em class="summary">Utility functions, constants, internals, etc.</em>    </li>
+    <li> <strong class="uidlink"><a href="pycocoa.utils-module.html">pycocoa.utils</a></strong>: <em class="summary">Mostly public utility functions.</em>    </li>
     <li> <strong class="uidlink"><a href="pycocoa.windows-module.html">pycocoa.windows</a></strong>: <em class="summary">Types <a href="pycocoa.windows-module.html#AutoResize" 
         class="link">AutoResize</a>, <a 
         href="pycocoa.windows.Window-class.html" class="link">Window</a>, 
@@ -358,7 +360,7 @@
     <td width="15%" align="right" valign="top" class="summary">
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
-        <a href="pycocoa.utils.Adict-class.html" class="summary-name">Adict</a><br />
+        <a href="pycocoa.internals.Adict-class.html" class="summary-name">Adict</a><br />
       A <code>dict</code> with key <i>and</i> attribute access to the 
         items and callable to add items.
     </td>
@@ -539,10 +541,8 @@
     <td width="15%" align="right" valign="top" class="summary">
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
-        <a href="pycocoa.utils.Cache2-class.html" class="summary-name">Cache2</a><br />
-      Two-level cache implemented by two <code>dict</code>s, a primary 
-        level-1 <code>dict</code> and a secondary level-2 
-        <code>dict</code>.
+        <a href="pycocoa.deprecated.Cache2-class.html" class="summary-name">Cache2</a><br />
+      DEPRECATED on 2025.02.15, <i>to be removed</i>.
     </td>
   </tr>
 <tr>
@@ -1452,8 +1452,17 @@
     <td width="15%" align="right" valign="top" class="summary">
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
-        <a href="pycocoa.utils.module_property_RO-class.html" class="summary-name">module_property_RO</a><br />
-      Decorator for a <code>Read-Only</code> module property.
+        <a href="pycocoa.internals.frozendict-class.html" class="summary-name">frozendict</a><br />
+      An immutable Python <code>dict</code> with key <i>and</i> attribute
+        access to the items.
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="pycocoa.deprecated.module_property_RO-class.html" class="summary-name">module_property_RO</a><br />
+      DEPRECATED on 2025.02.09, use <code>proxy_RO</code>.
     </td>
   </tr>
 <tr>
@@ -1489,6 +1498,15 @@
         <a href="pycocoa.octypes.objc_super_t-class.html" class="summary-name">objc_super_t</a><br />
       ObjC <code>struct</code> with fields <code>receiver</code> and 
         <code>class</code> (<code>Id_t</code>, <code>Class_t</code>).
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="pycocoa.internals.proxy_RO-class.html" class="summary-name">proxy_RO</a><br />
+      Decorator for a lazy module <code>dict</code> or 
+        <code>Read-Only</code> module property.
     </td>
   </tr>
 <tr>
@@ -1605,10 +1623,10 @@
     </td><td class="summary">
       <table width="100%" cellpadding="0" cellspacing="0" border="0">
         <tr>
-          <td><span class="summary-sig"><a href="pycocoa-module.html#add_subclass" class="summary-sig-name">add_subclass</a>(<span class="summary-sig-arg">superclas</span>,
+          <td><span class="summary-sig"><a href="pycocoa-module.html#add_subclass" class="summary-sig-name">add_subclass</a>(<span class="summary-sig-arg">Super</span>,
         <span class="summary-sig-arg">name</span>,
         <span class="summary-sig-arg">register</span>=<span class="summary-sig-default">False</span>)</span><br />
-      Create a new sub-class of the given super-class.</td>
+      Create a new sub-class of a given super-class.</td>
           <td align="right" valign="top">
             
             
@@ -1678,8 +1696,7 @@
       <table width="100%" cellpadding="0" cellspacing="0" border="0">
         <tr>
           <td><span class="summary-sig"><a href="pycocoa-module.html#bool2NS" class="summary-sig-name">bool2NS</a>(<span class="summary-sig-arg">py</span>)</span><br />
-      Create an <code>NSBoolean</code> instance from a Python 
-      <code>bool</code>.</td>
+      Create an <code>NSBoolean</code> from a Python <code>bool</code>.</td>
           <td align="right" valign="top">
             
             
@@ -1696,8 +1713,7 @@
       <table width="100%" cellpadding="0" cellspacing="0" border="0">
         <tr>
           <td><span class="summary-sig"><a href="pycocoa-module.html#bytes2NS" class="summary-sig-name">bytes2NS</a>(<span class="summary-sig-arg">py</span>)</span><br />
-      Create an <code>NSData</code> instance from Python 
-      <code>bytes</code>.</td>
+      Create an <code>NSData</code> from Python <code>bytes</code>.</td>
           <td align="right" valign="top">
             
             
@@ -1733,7 +1749,7 @@
         <tr>
           <td><span class="summary-sig"><a href="pycocoa-module.html#bytes2str" class="summary-sig-name">bytes2str</a>(<span class="summary-sig-arg">bytestr</span>,
         <span class="summary-sig-arg">dflt</span>=<span class="summary-sig-default">missing</span>,
-        <span class="summary-sig-arg">name</span>=<span class="summary-sig-default">''</span>)</span><br />
+        <span class="summary-sig-arg">**name</span>)</span><br />
       Convert <code>bytes</code>/<code>unicode</code> to <code>str</code> 
       if needed.</td>
           <td align="right" valign="top">
@@ -1787,8 +1803,7 @@
       <table width="100%" cellpadding="0" cellspacing="0" border="0">
         <tr>
           <td><span class="summary-sig"><a href="pycocoa-module.html#decimal2NS" class="summary-sig-name">decimal2NS</a>(<span class="summary-sig-arg">py</span>)</span><br />
-      Create an <code>NSDecimal</code> instance from a Python 
-      <code>Decimal</code>.</td>
+      Create an <code>NSDecimal</code> from a Python <code>Decimal</code>.</td>
           <td align="right" valign="top">
             
             
@@ -1804,10 +1819,27 @@
     </td><td class="summary">
       <table width="100%" cellpadding="0" cellspacing="0" border="0">
         <tr>
-          <td><span class="summary-sig"><a href="pycocoa-module.html#dict2NS" class="summary-sig-name">dict2NS</a>(<span class="summary-sig-arg">py</span>,
-        <span class="summary-sig-arg">frozen</span>=<span class="summary-sig-default">False</span>)</span><br />
-      Create an <code>NS[Mutable]Dictionary</code> instance from a Python 
-      <code>dict</code>.</td>
+          <td><span class="summary-sig"><a href="pycocoa-module.html#dict2NS" class="summary-sig-name">dict2NS</a>(<span class="summary-sig-arg">py</span>)</span><br />
+      Create an <code>NSMutableDictionary</code> from a Python 
+      <code>dict</code> or <code>frozendict</code>.</td>
+          <td align="right" valign="top">
+            
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a href="pycocoa-module.html#dicts2NS" class="summary-sig-name">dicts2NS</a>(<span class="summary-sig-arg">py</span>)</span><br />
+      Create an <code>NS[Mutable]Dictionary</code> from a Python 
+      <code>dict</code> or <code>frozendict</code>.</td>
           <td align="right" valign="top">
             
             
@@ -1885,8 +1917,7 @@
           <td><span class="summary-sig"><a name="errorf"></a><span class="summary-sig-name">errorf</span>(<span class="summary-sig-arg">fmtxt</span>,
         <span class="summary-sig-arg">*args</span>,
         <span class="summary-sig-arg">**file_flush_nl_nt_argv0</span>)</span><br />
-      like <code><b>printf</b>(<b>fmtxt</b>, *<b>args</b>, ..., 
-      <b>file</b>=sys.stderr)</code>.</td>
+      Like <i>printf</i>, but writing to <i>file=sys.stderr</i>.</td>
           <td align="right" valign="top">
             
             
@@ -2060,9 +2091,27 @@
     </td><td class="summary">
       <table width="100%" cellpadding="0" cellspacing="0" border="0">
         <tr>
+          <td><span class="summary-sig"><a href="pycocoa-module.html#frozendict2NS" class="summary-sig-name">frozendict2NS</a>(<span class="summary-sig-arg">py</span>)</span><br />
+      Create an <code>NSDictionary</code> from a Python 
+      <code>frozendict</code> or <code>dict</code>.</td>
+          <td align="right" valign="top">
+            
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
           <td><span class="summary-sig"><a href="pycocoa-module.html#frozenset2NS" class="summary-sig-name">frozenset2NS</a>(<span class="summary-sig-arg">py</span>)</span><br />
-      Create an (immutable) <code>NSSet</code> instance from a Python 
-      <code>frozenset</code>.</td>
+      Create an <code>NSSet</code> from a Python <code>frozenset</code> or 
+      <code>set</code>.</td>
           <td align="right" valign="top">
             
             
@@ -2096,8 +2145,9 @@
     </td><td class="summary">
       <table width="100%" cellpadding="0" cellspacing="0" border="0">
         <tr>
-          <td><span class="summary-sig"><a href="pycocoa-module.html#generator2NS" class="summary-sig-name">generator2NS</a>(<span class="summary-sig-arg">py</span>)</span><br />
-      Create an <code>NSArray</code> instance from a Python 
+          <td><span class="summary-sig"><a href="pycocoa-module.html#generator2NS" class="summary-sig-name">generator2NS</a>(<span class="summary-sig-arg">py</span>,
+        <span class="summary-sig-arg">frozen</span>=<span class="summary-sig-default">True</span>)</span><br />
+      Create an <code>NS[Mutable]Array</code> from a Python 
       <code>generator</code>.</td>
           <td align="right" valign="top">
             
@@ -2684,8 +2734,8 @@
         <tr>
           <td><span class="summary-sig"><a href="pycocoa-module.html#int2NS" class="summary-sig-name">int2NS</a>(<span class="summary-sig-arg">py</span>,
         <span class="summary-sig-arg">NS</span>=<span class="summary-sig-default">None</span>)</span><br />
-      Create an <code>NSNumber</code> instance from a Python 
-      <code>int</code> or <code>long</code>.</td>
+      Create an <code>NSNumber</code> from a Python <code>int</code> or 
+      <code>long</code>.</td>
           <td align="right" valign="top">
             
             
@@ -2736,10 +2786,9 @@
       <table width="100%" cellpadding="0" cellspacing="0" border="0">
         <tr>
           <td><span class="summary-sig"><a href="pycocoa-module.html#isImmutable" class="summary-sig-name">isImmutable</a>(<span class="summary-sig-arg">objc</span>,
-        <span class="summary-sig-arg">mutableClass</span>,
-        <span class="summary-sig-arg">immutableClass</span>,
-        <span class="summary-sig-arg">name</span>=<span class="summary-sig-default"><code class="variable-quote">'</code><code class="variable-string">ns</code><code class="variable-quote">'</code></span>)</span><br />
-      Check that an ObjC object is an instance of the immutable class.</td>
+        <span class="summary-sig-arg">*immutableClasses</span>,
+        <span class="summary-sig-arg">**raiser_name</span>)</span><br />
+      Check that an ObjC object is an immutable class' instance.</td>
           <td align="right" valign="top">
             
             
@@ -2789,6 +2838,25 @@
     </td><td class="summary">
       <table width="100%" cellpadding="0" cellspacing="0" border="0">
         <tr>
+          <td><span class="summary-sig"><a href="pycocoa-module.html#isMutable" class="summary-sig-name">isMutable</a>(<span class="summary-sig-arg">objc</span>,
+        <span class="summary-sig-arg">*mutableClasses</span>,
+        <span class="summary-sig-arg">**raiser_name</span>)</span><br />
+      Check that an ObjC object is a mutable class' instance.</td>
+          <td align="right" valign="top">
+            
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
           <td><span class="summary-sig"><a href="pycocoa-module.html#isNone" class="summary-sig-name">isNone</a>(<span class="summary-sig-arg">obj</span>)</span><br />
       Return True if <i>obj</i> is <code>None, NSMain.nil, 
       NSMain.Null</code>, etc.</td>
@@ -2809,7 +2877,7 @@
         <tr>
           <td><span class="summary-sig"><a href="pycocoa-module.html#isObjCInstanceOf" class="summary-sig-name">isObjCInstanceOf</a>(<span class="summary-sig-arg">objc</span>,
         <span class="summary-sig-arg">*Classes</span>,
-        <span class="summary-sig-arg">**name_missing</span>)</span><br />
+        <span class="summary-sig-arg">**raiser_name</span>)</span><br />
       Check whether an ObjC object is an instance of some ObjC class.</td>
           <td align="right" valign="top">
             
@@ -2848,7 +2916,7 @@
         <tr>
           <td><span class="summary-sig"><a href="pycocoa-module.html#isinstanceOf" class="summary-sig-name">isinstanceOf</a>(<span class="summary-sig-arg">inst</span>,
         <span class="summary-sig-arg">*classes</span>,
-        <span class="summary-sig-arg">**name_missing</span>)</span><br />
+        <span class="summary-sig-arg">**raiser_name</span>)</span><br />
       Check a Python instance' class.</td>
           <td align="right" valign="top">
             
@@ -2879,12 +2947,31 @@
   </tr>
 <tr>
     <td width="15%" align="right" valign="top" class="summary">
-      <span class="summary-type">iterator</span>
+      <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
       <table width="100%" cellpadding="0" cellspacing="0" border="0">
         <tr>
-          <td><span class="summary-sig"><a href="pycocoa-module.html#iterbytes" class="summary-sig-name">iterbytes</a>(<span class="summary-sig-arg">collection</span>)</span><br />
-      iter(callable, sentinel) -&gt; iterator</td>
+          <td><span class="summary-sig"><a href="pycocoa-module.html#iterable2NS" class="summary-sig-name">iterable2NS</a>(<span class="summary-sig-arg">py</span>,
+        <span class="summary-sig-arg">frozen</span>=<span class="summary-sig-default">True</span>)</span><br />
+      Create an <code>NS[Mutable]Array</code> from a Python 
+      <code>iterable</code>.</td>
+          <td align="right" valign="top">
+            
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a name="iterbytes"></a><span class="summary-sig-name">iterbytes</span>(<span class="summary-sig-arg">bytestr</span>)</span><br />
+      Iterate <code>bytes</code>, yielding each as <code>byte</code>.</td>
           <td align="right" valign="top">
             
             
@@ -2935,8 +3022,8 @@
       <table width="100%" cellpadding="0" cellspacing="0" border="0">
         <tr>
           <td><span class="summary-sig"><a href="pycocoa-module.html#list2NS" class="summary-sig-name">list2NS</a>(<span class="summary-sig-arg">py</span>)</span><br />
-      Create an <code>NSMutableArray</code> instance from a Python 
-      <code>list</code>.</td>
+      Create an <code>NSMutableArray</code> from a Python <code>list</code>
+      or <code>tuple</code>.</td>
           <td align="right" valign="top">
             
             
@@ -2952,10 +3039,28 @@
     </td><td class="summary">
       <table width="100%" cellpadding="0" cellspacing="0" border="0">
         <tr>
-          <td><span class="summary-sig"><a href="pycocoa-module.html#logf" class="summary-sig-name">logf</a>(<span class="summary-sig-arg">fmtxt</span>,
+          <td><span class="summary-sig"><a href="pycocoa-module.html#listuple2NS" class="summary-sig-name">listuple2NS</a>(<span class="summary-sig-arg">py</span>)</span><br />
+      Create an <code>NS[Mutable]Array</code> from a Python 
+      <code>list</code> or <code>tuple</code>.</td>
+          <td align="right" valign="top">
+            
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a name="logf"></a><span class="summary-sig-name">logf</span>(<span class="summary-sig-arg">fmtxt</span>,
         <span class="summary-sig-arg">*args</span>,
         <span class="summary-sig-arg">**file_flush_nl_nt_argv0</span>)</span><br />
-      Formatted log <i>fmtxt % args</i> with optional keywords.</td>
+      Like <i>printf</i>, but writing to <i>file=NSMain.stdlog</i>.</td>
           <td align="right" valign="top">
             
             
@@ -2989,8 +3094,9 @@
     </td><td class="summary">
       <table width="100%" cellpadding="0" cellspacing="0" border="0">
         <tr>
-          <td><span class="summary-sig"><a href="pycocoa-module.html#map2NS" class="summary-sig-name">map2NS</a>(<span class="summary-sig-arg">py</span>)</span><br />
-      Create an <code>NSArray</code> instance from a Python 
+          <td><span class="summary-sig"><a href="pycocoa-module.html#map2NS" class="summary-sig-name">map2NS</a>(<span class="summary-sig-arg">py</span>,
+        <span class="summary-sig-arg">frozen</span>=<span class="summary-sig-default">True</span>)</span><br />
+      Create an <code>NS[Mutable]Array</code> from a Python 
       <code>map</code>.</td>
           <td align="right" valign="top">
             
@@ -3096,9 +3202,26 @@
     </td><td class="summary">
       <table width="100%" cellpadding="0" cellspacing="0" border="0">
         <tr>
+          <td><span class="summary-sig"><a href="pycocoa-module.html#ns2NSType2" class="summary-sig-name">ns2NSType2</a>(<span class="summary-sig-arg">ns</span>)</span><br />
+      Get the main <code>NS[Mutable]...</code> class and Python Type.</td>
+          <td align="right" valign="top">
+            
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
           <td><span class="summary-sig"><a href="pycocoa-module.html#ns2Type" class="summary-sig-name">ns2Type</a>(<span class="summary-sig-arg">ns</span>)</span><br />
       Convert an <code>NS...</code> ObjC object to an instance of the 
-      corresponding Python Type and value.</td>
+      corresponding Python Type, <i>capital T!</i>.</td>
           <td align="right" valign="top">
             
             
@@ -3171,7 +3294,8 @@
       <table width="100%" cellpadding="0" cellspacing="0" border="0">
         <tr>
           <td><span class="summary-sig"><a href="pycocoa-module.html#nsArray2listuple" class="summary-sig-name">nsArray2listuple</a>(<span class="summary-sig-arg">ns</span>,
-        <span class="summary-sig-arg">ctype</span>=<span class="summary-sig-default">&lt;class 'ctypes.c_void_p'&gt;</span>)</span><br />
+        <span class="summary-sig-arg">ctype</span>=<span class="summary-sig-default">&lt;class 'ctypes.c_void_p'&gt;</span>,
+        <span class="summary-sig-arg">typy</span>=<span class="summary-sig-default">None</span>)</span><br />
       Create a Python <code>list</code> or <code>tuple</code> from an 
       <code>NS[Mutable]Array</code>.</td>
           <td align="right" valign="top">
@@ -3190,7 +3314,8 @@
       <table width="100%" cellpadding="0" cellspacing="0" border="0">
         <tr>
           <td><span class="summary-sig"><a href="pycocoa-module.html#nsArray2tuple" class="summary-sig-name">nsArray2tuple</a>(<span class="summary-sig-arg">ns</span>,
-        <span class="summary-sig-arg">ctype</span>=<span class="summary-sig-default">&lt;class 'pycocoa.runtime.ObjCInstance'&gt;</span>)</span><br />
+        <span class="summary-sig-arg">ctype</span>=<span class="summary-sig-default">&lt;class 'pycocoa.runtime.ObjCInstance'&gt;</span>,
+        <span class="summary-sig-arg">typy</span>=<span class="summary-sig-default">&lt;type 'tuple'&gt;</span>)</span><br />
       Create a Python <code>tuple</code> from an <i>immutable</i> 
       <code>NSArray</code>.</td>
           <td align="right" valign="top">
@@ -3279,7 +3404,7 @@
     </td><td class="summary">
       <table width="100%" cellpadding="0" cellspacing="0" border="0">
         <tr>
-          <td><span class="summary-sig"><a name="nsDescription2dict"></a><span class="summary-sig-name">nsDescription2dict</span>(<span class="summary-sig-arg">ns</span>,
+          <td><span class="summary-sig"><a href="pycocoa-module.html#nsDescription2dict" class="summary-sig-name">nsDescription2dict</a>(<span class="summary-sig-arg">ns</span>,
         <span class="summary-sig-arg">**defaults</span>)</span><br />
       Create an <i>immutable</i> <code>dict</code> object with key 
       <i>and</i> attribute access to items by name.</td>
@@ -3300,9 +3425,10 @@
         <tr>
           <td><span class="summary-sig"><a href="pycocoa-module.html#nsDictionary2dict" class="summary-sig-name">nsDictionary2dict</a>(<span class="summary-sig-arg">ns</span>,
         <span class="summary-sig-arg">ctype_keys</span>=<span class="summary-sig-default">&lt;class 'ctypes.c_void_p'&gt;</span>,
-        <span class="summary-sig-arg">ctype_vals</span>=<span class="summary-sig-default">&lt;class 'ctypes.c_void_p'&gt;</span>)</span><br />
-      Create a Python <code>dict</code> from an 
-      <code>NS[Mutable]Dictionary</code>.</td>
+        <span class="summary-sig-arg">ctype_vals</span>=<span class="summary-sig-default">&lt;class 'ctypes.c_void_p'&gt;</span>,
+        <span class="summary-sig-arg">typy</span>=<span class="summary-sig-default">None</span>)</span><br />
+      Create a Python <code>dict</code> or <code>frozendict</code> from an 
+      <code>NS[Mutable|Frozen]Dictionary</code>.</td>
           <td align="right" valign="top">
             
             
@@ -3356,9 +3482,10 @@
       <table width="100%" cellpadding="0" cellspacing="0" border="0">
         <tr>
           <td><span class="summary-sig"><a href="pycocoa-module.html#nsIter" class="summary-sig-name">nsIter</a>(<span class="summary-sig-arg">ns</span>,
-        <span class="summary-sig-arg">reverse</span>=<span class="summary-sig-default">False</span>)</span><br />
-      Iterate over an <code>NS..</code> ObjC objects's (reverse) 
-      enumerator.</td>
+        <span class="summary-sig-arg">reverse</span>=<span class="summary-sig-default">False</span>,
+        <span class="summary-sig-arg">keys</span>=<span class="summary-sig-default">False</span>)</span><br />
+      Iterate over an <code>NS..</code> ObjC objects's keys or (reverse) 
+      values.</td>
           <td align="right" valign="top">
             
             
@@ -3375,9 +3502,10 @@
       <table width="100%" cellpadding="0" cellspacing="0" border="0">
         <tr>
           <td><span class="summary-sig"><a href="pycocoa-module.html#nsIter2" class="summary-sig-name">nsIter2</a>(<span class="summary-sig-arg">ns</span>,
-        <span class="summary-sig-arg">reverse</span>=<span class="summary-sig-default">False</span>)</span><br />
-      Iterate over an <code>NS..</code> ObjC objects's (reverse) 
-      enumerator.</td>
+        <span class="summary-sig-arg">reverse</span>=<span class="summary-sig-default">False</span>,
+        <span class="summary-sig-arg">keys</span>=<span class="summary-sig-default">False</span>)</span><br />
+      Iterate over an <code>NS..</code> ObjC objects's keys or (reverse) 
+      values.</td>
           <td align="right" valign="top">
             
             
@@ -3505,7 +3633,8 @@
       <table width="100%" cellpadding="0" cellspacing="0" border="0">
         <tr>
           <td><span class="summary-sig"><a href="pycocoa-module.html#nsSet2set" class="summary-sig-name">nsSet2set</a>(<span class="summary-sig-arg">ns</span>,
-        <span class="summary-sig-arg">ctype</span>=<span class="summary-sig-default">&lt;class 'ctypes.c_void_p'&gt;</span>)</span><br />
+        <span class="summary-sig-arg">ctype</span>=<span class="summary-sig-default">&lt;class 'ctypes.c_void_p'&gt;</span>,
+        <span class="summary-sig-arg">typy</span>=<span class="summary-sig-default">None</span>)</span><br />
       Create a Python <code>set</code> or <code>frozenset</code> from an 
       <code>NS[Mutable]Set</code>.</td>
           <td align="right" valign="top">
@@ -3560,8 +3689,9 @@
     </td><td class="summary">
       <table width="100%" cellpadding="0" cellspacing="0" border="0">
         <tr>
-          <td><span class="summary-sig"><a name="nsTextView"></a><span class="summary-sig-name">nsTextView</span>(<span class="summary-sig-arg">text</span>,
-        <span class="summary-sig-arg">ns_font</span>)</span><br />
+          <td><span class="summary-sig"><a href="pycocoa-module.html#nsTextView" class="summary-sig-name">nsTextView</a>(<span class="summary-sig-arg">text</span>,
+        <span class="summary-sig-arg">ns_font</span>,
+        <span class="summary-sig-arg">scroll</span>=<span class="summary-sig-default">50</span>)</span><br />
       Return an <code>NSTextView</code> for the given text string.</td>
           <td align="right" valign="top">
             
@@ -3666,9 +3796,9 @@
     </td><td class="summary">
       <table width="100%" cellpadding="0" cellspacing="0" border="0">
         <tr>
-          <td><span class="summary-sig"><a href="pycocoa-module.html#property2" class="summary-sig-name">property2</a>(<span class="summary-sig-arg">inst</span>,
+          <td><span class="summary-sig"><a name="property2"></a><span class="summary-sig-name">property2</span>(<span class="summary-sig-arg">inst</span>,
         <span class="summary-sig-arg">name</span>)</span><br />
-      Return the property <code>get</code> and <code>set</code> method.</td>
+      DEPRECATED on 25.02.16, <i>to be removed</i>.</td>
           <td align="right" valign="top">
             
             
@@ -3719,8 +3849,9 @@
     </td><td class="summary">
       <table width="100%" cellpadding="0" cellspacing="0" border="0">
         <tr>
-          <td><span class="summary-sig"><a href="pycocoa-module.html#range2NS" class="summary-sig-name">range2NS</a>(<span class="summary-sig-arg">py</span>)</span><br />
-      Create an <code>NSArray</code> instance from a Python 
+          <td><span class="summary-sig"><a href="pycocoa-module.html#range2NS" class="summary-sig-name">range2NS</a>(<span class="summary-sig-arg">py</span>,
+        <span class="summary-sig-arg">frozen</span>=<span class="summary-sig-default">True</span>)</span><br />
+      Create an <code>NS[Mutable]Array</code> from a Python 
       <code>range</code>.</td>
           <td align="right" valign="top">
             
@@ -3791,7 +3922,7 @@
           <td><span class="summary-sig"><a href="pycocoa-module.html#send_message" class="summary-sig-name">send_message</a>(<span class="summary-sig-arg">objc</span>,
         <span class="summary-sig-arg">sel_name_</span>,
         <span class="summary-sig-arg">*args</span>,
-        <span class="summary-sig-arg">**resargtypes</span>)</span><br />
+        <span class="summary-sig-arg">**restype_argtypes</span>)</span><br />
       Send message to an ObjC object.</td>
           <td align="right" valign="top">
             
@@ -3811,7 +3942,7 @@
           <td><span class="summary-sig"><a href="pycocoa-module.html#send_super" class="summary-sig-name">send_super</a>(<span class="summary-sig-arg">objc</span>,
         <span class="summary-sig-arg">sel_name_</span>,
         <span class="summary-sig-arg">*args</span>,
-        <span class="summary-sig-arg">**resargtypes</span>)</span><br />
+        <span class="summary-sig-arg">**restype_argtypes</span>)</span><br />
       Send message to the super-class of an ObjC object.</td>
           <td align="right" valign="top">
             
@@ -3846,8 +3977,8 @@
       <table width="100%" cellpadding="0" cellspacing="0" border="0">
         <tr>
           <td><span class="summary-sig"><a href="pycocoa-module.html#set2NS" class="summary-sig-name">set2NS</a>(<span class="summary-sig-arg">py</span>)</span><br />
-      Create an <code>NSMutableSet</code> instance from a Python 
-      <code>set</code>.</td>
+      Create an <code>NSMutableSet</code> from a Python <code>set</code> or
+      <code>frozenset</code>.</td>
           <td align="right" valign="top">
             
             
@@ -3903,8 +4034,26 @@
     </td><td class="summary">
       <table width="100%" cellpadding="0" cellspacing="0" border="0">
         <tr>
+          <td><span class="summary-sig"><a href="pycocoa-module.html#sets2NS" class="summary-sig-name">sets2NS</a>(<span class="summary-sig-arg">py</span>)</span><br />
+      Create an <code>NS[Mutable]Set</code> instance from a Python 
+      <code>set</code> or <code>frozenset</code>.</td>
+          <td align="right" valign="top">
+            
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
           <td><span class="summary-sig"><a name="sortuples"></a><span class="summary-sig-name">sortuples</span>(<span class="summary-sig-arg">iterable</span>)</span><br />
-      Sort tuples alphabetically, case-insensitive.</td>
+      DEPRECATED on 25.02.09, <i>to be removed</i>.</td>
           <td align="right" valign="top">
             
             
@@ -3975,9 +4124,28 @@
         <tr>
           <td><span class="summary-sig"><a href="pycocoa-module.html#str2bytes" class="summary-sig-name">str2bytes</a>(<span class="summary-sig-arg">strbytes</span>,
         <span class="summary-sig-arg">dflt</span>=<span class="summary-sig-default">missing</span>,
-        <span class="summary-sig-arg">name</span>=<span class="summary-sig-default">''</span>)</span><br />
+        <span class="summary-sig-arg">**name</span>)</span><br />
       Convert <code>strbytes</code> to 
       <code>bytes</code>/<code>unicode</code> if needed.</td>
+          <td align="right" valign="top">
+            
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a href="pycocoa-module.html#strs2NS" class="summary-sig-name">strs2NS</a>(<span class="summary-sig-arg">py</span>,
+        <span class="summary-sig-arg">frozen</span>=<span class="summary-sig-default">True</span>)</span><br />
+      Create an <code>NS[Mutable]String</code> from a Python 
+      <code>str</code>.</td>
           <td align="right" valign="top">
             
             
@@ -4050,7 +4218,7 @@
         <tr>
           <td><span class="summary-sig"><a href="pycocoa-module.html#tuple2NS" class="summary-sig-name">tuple2NS</a>(<span class="summary-sig-arg">py</span>)</span><br />
       Create an immutable <code>NSArray</code> instance from a Python 
-      <code>tuple</code>.</td>
+      <code>tuple</code> or <code>list</code>.</td>
           <td align="right" valign="top">
             
             
@@ -4067,8 +4235,8 @@
       <table width="100%" cellpadding="0" cellspacing="0" border="0">
         <tr>
           <td><span class="summary-sig"><a href="pycocoa-module.html#type2NS" class="summary-sig-name">type2NS</a>(<span class="summary-sig-arg">py</span>)</span><br />
-      Create the <code>NS...</code> ObjC object for a Python Type or 
-      wrapper instance.</td>
+      Create the <code>NS...</code> ObjC object for a Python Type (or 
+      wrapper) instance.</td>
           <td align="right" valign="top">
             
             
@@ -4227,7 +4395,7 @@ pycocoa'"><code class="variable-quote">'</code><code class="variable-string">/Us
     <td width="15%" align="right" valign="top" class="summary">
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
-        <a name="version"></a><span class="summary-name">version</span> = <code title="'25.2.5'"><code class="variable-quote">'</code><code class="variable-string">25.2.5</code><code class="variable-quote">'</code></code>
+        <a name="version"></a><span class="summary-name">version</span> = <code title="'25.2.22'"><code class="variable-quote">'</code><code class="variable-string">25.2.22</code><code class="variable-quote">'</code></code>
     </td>
   </tr>
 <tr>
@@ -4331,13 +4499,6 @@ pycocoa'"><code class="variable-quote">'</code><code class="variable-string">/Us
     <td width="15%" align="right" valign="top" class="summary">
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
-        <a name="DEFAULT_UNICODE"></a><span class="summary-name">DEFAULT_UNICODE</span> = <code title="'utf-8'"><code class="variable-quote">'</code><code class="variable-string">utf-8</code><code class="variable-quote">'</code></code>
-    </td>
-  </tr>
-<tr>
-    <td width="15%" align="right" valign="top" class="summary">
-      <span class="summary-type">&nbsp;</span>
-    </td><td class="summary">
         <a href="pycocoa-module.html#FontTrait" class="summary-name">FontTrait</a> = <code title="FontTrait.Bold=2,
          .Compressed=1&lt;&lt;9,
          .Condensed=1&lt;&lt;6,
@@ -4353,15 +4514,15 @@ pycocoa'"><code class="variable-quote">'</code><code class="variable-string">/Us
     <td width="15%" align="right" valign="top" class="summary">
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
-        <a href="pycocoa-module.html#Fonts" class="summary-name">Fonts</a> = <code title="Fonts.App=Font({&lt;generator object &lt;genexpr&gt; at 0x7f9a78804fa0&gt;}),
-     .Bold=Font({&lt;generator object &lt;genexpr&gt; at 0x7f9a78804fa0&gt;}),
-     .BoldItalic=Font({&lt;generator object &lt;genexpr&gt; at 0x7f9a78804fa0&gt;}\
-),
-     .Italic=Font({&lt;generator object &lt;genexpr&gt; at 0x7f9a78804fa0&gt;}),
-     .Label=Font({&lt;generator object &lt;genexpr&gt; at 0x7f9a78804fa0&gt;}),
-     .Menu=Font({&lt;generator object &lt;genexpr&gt; at 0x7f9a78804fa0&gt;}),
-     .MenuBar=Font({&lt;generator object &lt;genexpr&gt; at 0x7f9a78804fa0&gt;}),
-...">Fonts.App=Font({&lt;generator object &lt;genexpr&gt; at 0x7f9a7<code class="variable-ellipsis">...</code></code>
+        <a href="pycocoa-module.html#Fonts" class="summary-name">Fonts</a> = <code title="Fonts.App=Font({family='Helvetica', name='Helvetica', size=12, weight=\
+5}),
+     .Bold=Font({family='.AppleSystemUIFont', name='.AppleSystemUIFont\
+Bold', size=13, traits='Bold', weight=9}),
+     .BoldItalic=Font({family='.AppleSystemUIFont', name='.AppleSystem\
+UIFontEmphasizedItalic', size=13, traits='Bold Italic', weight=9}),
+     .Italic=Font({family='.AppleSystemUIFont', name='.AppleSystemUIFo\
+ntItalic', size=13, traits='Italic', weight=5}),
+...">Fonts.App=Font({family='Helvetica', name='Helvetica', <code class="variable-ellipsis">...</code></code>
     </td>
   </tr>
 <tr>
@@ -4405,14 +4566,14 @@ arkGray'),
     <td width="15%" align="right" valign="top" class="summary">
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
-        <a href="pycocoa-module.html#Libs" class="summary-name">Libs</a> = <code title="Libs.AppKit=&lt;CDLL 'AppKit.framework/AppKit', handle 7fff8c50ccc8 at 7f\
-9a68729dd0&gt;,
-    .C=&lt;CDLL 'libc.dylib', handle 7fff8c5fb788 at 7f9a68729390&gt;,
+        <a href="pycocoa-module.html#Libs" class="summary-name">Libs</a> = <code title="Libs.AppKit=&lt;CDLL 'AppKit.framework/AppKit', handle 7fff9f58a290 at 7f\
+ceb86d5610&gt;,
+    .C=&lt;CDLL 'libc.dylib', handle 7fff9f598d50 at 7fceb86cfb90&gt;,
     .CoreFoundation=&lt;CDLL 'CoreFoundation.framework/CoreFoundation', h\
-andle 7fff8c5113c0 at 7f9a687293d0&gt;,
+andle 7fff9f58e988 at 7fceb86cfb50&gt;,
     .CoreGraphics=&lt;CDLL 'CoreGraphics.framework/CoreGraphics', handle \
-7fff8c50b058 at 7f9a6873e0d0&gt;,
-    .CoreText=&lt;CDLL 'CoreText.framework/CoreText', handle 7fff8c50f2f8\
+7fff9f588620 at 7fceb86d5750&gt;,
+    .CoreText=&lt;CDLL 'CoreText.framework/CoreText', handle 7fff9f58c8c0\
 ...">Libs.AppKit=&lt;CDLL 'AppKit.framework/AppKit', handle 7ff<code class="variable-ellipsis">...</code></code>
     </td>
   </tr>
@@ -4435,6 +4596,13 @@ andle 7fff8c5113c0 at 7f9a687293d0&gt;,
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
         <a name="NSAlert"></a><span class="summary-name">NSAlert</span> = <code title="ObjCClass('NSAlert')">ObjCClass('NSAlert')</code>
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="pycocoa-module.html#NSAlertDelegate" class="summary-name">NSAlertDelegate</a> = <code title="&lt;pycocoa.internals.proxy_RO object at 0x7fceb84b2bd0&gt;">&lt;pycocoa.internals.proxy_RO object at 0x7fce<code class="variable-ellipsis">...</code></code>
     </td>
   </tr>
 <tr>
@@ -4497,21 +4665,21 @@ andle 7fff8c5113c0 at 7f9a687293d0&gt;,
     <td width="15%" align="right" valign="top" class="summary">
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
-        <a href="pycocoa-module.html#NSApplicationDelegate" class="summary-name">NSApplicationDelegate</a> = <code title="&lt;pycocoa.utils.module_property_RO object at 0x7f9a685a0ed0&gt;">&lt;pycocoa.utils.module_property_RO obje<code class="variable-ellipsis">...</code></code>
+        <a href="pycocoa-module.html#NSApplicationDelegate" class="summary-name">NSApplicationDelegate</a> = <code title="&lt;pycocoa.internals.proxy_RO object at 0x7fceb8648ed0&gt;">&lt;pycocoa.internals.proxy_RO object at <code class="variable-ellipsis">...</code></code>
     </td>
   </tr>
 <tr>
     <td width="15%" align="right" valign="top" class="summary">
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
-        <a name="NSApplicationDidHideNotification"></a><span class="summary-name">NSApplicationDidHideNotification</span> = <code title="c_void_p(140704370191056)">c_void_p(140704370191056)</code>
+        <a name="NSApplicationDidHideNotification"></a><span class="summary-name">NSApplicationDidHideNotification</span> = <code title="c_void_p(140704654830288)">c_void_p(140704654830288)</code>
     </td>
   </tr>
 <tr>
     <td width="15%" align="right" valign="top" class="summary">
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
-        <a name="NSApplicationDidUnhideNotification"></a><span class="summary-name">NSApplicationDidUnhideNotification</span> = <code title="c_void_p(140704370191152)">c_void_p(140704370191152)</code>
+        <a name="NSApplicationDidUnhideNotification"></a><span class="summary-name">NSApplicationDidUnhideNotification</span> = <code title="c_void_p(140704654830384)">c_void_p(140704654830384)</code>
     </td>
   </tr>
 <tr>
@@ -5337,15 +5505,15 @@ andle 7fff8c5113c0 at 7f9a687293d0&gt;,
     <td width="15%" align="right" valign="top" class="summary">
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
-        <a href="pycocoa-module.html#NSMain" class="summary-name">NSMain</a> = <code title="NSMain.Application=NSApplication(&lt;Id_t at 0x7f9a7880f680&gt;) of 0x7f9a66\
-350c20,
-      .BooleanNO=NSBoolean(&lt;Id_t at 0x7f9a482d40e0&gt;) of 0x7ff8475e6c70\
+        <a href="pycocoa-module.html#NSMain" class="summary-name">NSMain</a> = <code title="NSMain.Application=NSApplication(&lt;Id_t at 0x7fcea8a64710&gt;) of 0x7fce83\
+fe3230,
+      .BooleanNO=NSBoolean(&lt;Id_t at 0x7fcea8a6bcb0&gt;) of 0x7ff85855ec70\
 ,
-      .BooleanYES=NSBoolean(&lt;Id_t at 0x7f9a78824950&gt;) of 0x7ff8475e6c6\
+      .BooleanYES=NSBoolean(&lt;Id_t at 0x7fcea8a735f0&gt;) of 0x7ff85855ec6\
 0,
-      .Bundle=NSBundle(&lt;Id_t at 0x7f9a78824a70&gt;) of 0x600000ef4000,
+      .Bundle=NSBundle(&lt;Id_t at 0x7fcea8a73710&gt;) of 0x600000320000,
       .BundleName=NSConstantString('CFBundleName'),
-...">NSMain.Application=NSApplication(&lt;Id_t at 0x7f9a7880f<code class="variable-ellipsis">...</code></code>
+...">NSMain.Application=NSApplication(&lt;Id_t at 0x7fcea8a64<code class="variable-ellipsis">...</code></code>
     </td>
   </tr>
 <tr>
@@ -5478,7 +5646,7 @@ andle 7fff8c5113c0 at 7f9a687293d0&gt;,
     <td width="15%" align="right" valign="top" class="summary">
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
-        <a name="NSObject"></a><span class="summary-name">NSObject</span> = <code title="ObjCClass('NSObject')">ObjCClass('NSObject')</code>
+        <a name="NSObject"></a><span class="summary-name">NSObject</span> = <code title="ObjCClass(_NSObject_)">ObjCClass(_NSObject_)</code>
     </td>
   </tr>
 <tr>
@@ -5737,7 +5905,7 @@ andle 7fff8c5113c0 at 7f9a687293d0&gt;,
     <td width="15%" align="right" valign="top" class="summary">
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
-        <a href="pycocoa-module.html#NSTableViewDelegate" class="summary-name">NSTableViewDelegate</a> = <code title="&lt;pycocoa.utils.module_property_RO object at 0x7f9a68495410&gt;">&lt;pycocoa.utils.module_property_RO object<code class="variable-ellipsis">...</code></code>
+        <a href="pycocoa-module.html#NSTableViewDelegate" class="summary-name">NSTableViewDelegate</a> = <code title="&lt;pycocoa.internals.proxy_RO object at 0x7fceb877e9d0&gt;">&lt;pycocoa.internals.proxy_RO object at 0x<code class="variable-ellipsis">...</code></code>
     </td>
   </tr>
 <tr>
@@ -5933,7 +6101,7 @@ andle 7fff8c5113c0 at 7f9a687293d0&gt;,
     <td width="15%" align="right" valign="top" class="summary">
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
-        <a href="pycocoa-module.html#NSWindowDelegate" class="summary-name">NSWindowDelegate</a> = <code title="&lt;pycocoa.utils.module_property_RO object at 0x7f9a68495190&gt;">&lt;pycocoa.utils.module_property_RO object at<code class="variable-ellipsis">...</code></code>
+        <a href="pycocoa-module.html#NSWindowDelegate" class="summary-name">NSWindowDelegate</a> = <code title="&lt;pycocoa.internals.proxy_RO object at 0x7fceb877e7d0&gt;">&lt;pycocoa.internals.proxy_RO object at 0x7fc<code class="variable-ellipsis">...</code></code>
     </td>
   </tr>
 <tr>
@@ -6011,6 +6179,17 @@ andle 7fff8c5113c0 at 7f9a687293d0&gt;,
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
         <a name="NSZoneEncoding"></a><span class="summary-name">NSZoneEncoding</span> = <code title="'{_NSZone=}'"><code class="variable-quote">'</code><code class="variable-string">{_NSZone=}</code><code class="variable-quote">'</code></code>
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="pycocoa-module.html#OBJC_ASSOCIATION" class="summary-name">OBJC_ASSOCIATION</a> = <code title="OBJC_ASSOCIATION.ASSIGN=0,
+                .COPY=771,
+                .COPY_NONATOMIC=3,
+                .RETAIN=769,
+                .RETAIN_NONATOMIC=1">OBJC_ASSOCIATION.ASSIGN<code class="variable-ellipsis">...</code></code>
     </td>
   </tr>
 <tr>
@@ -6157,39 +6336,39 @@ Background'),
     <td width="15%" align="right" valign="top" class="summary">
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
-        <a href="pycocoa-module.html#libAppKit" class="summary-name">libAppKit</a> = <code title="&lt;CDLL 'AppKit.framework/AppKit', handle 7fff8c50ccc8 at 7f9a68729dd0&gt;">&lt;CDLL 'AppKit.framework/AppKit', handle 7fff8c50cc<code class="variable-ellipsis">...</code></code>
+        <a href="pycocoa-module.html#libAppKit" class="summary-name">libAppKit</a> = <code title="&lt;CDLL 'AppKit.framework/AppKit', handle 7fff9f58a290 at 7fceb86d5610&gt;">&lt;CDLL 'AppKit.framework/AppKit', handle 7fff9f58a2<code class="variable-ellipsis">...</code></code>
     </td>
   </tr>
 <tr>
     <td width="15%" align="right" valign="top" class="summary">
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
-        <a href="pycocoa-module.html#libCF" class="summary-name">libCF</a> = <code title="&lt;CDLL 'CoreFoundation.framework/CoreFoundation', handle 7fff8c5113c0 a\
-t 7f9a687293d0&gt;">&lt;CDLL 'CoreFoundation.framework/CoreFoundation', handl<code class="variable-ellipsis">...</code></code>
+        <a href="pycocoa-module.html#libCF" class="summary-name">libCF</a> = <code title="&lt;CDLL 'CoreFoundation.framework/CoreFoundation', handle 7fff9f58e988 a\
+t 7fceb86cfb50&gt;">&lt;CDLL 'CoreFoundation.framework/CoreFoundation', handl<code class="variable-ellipsis">...</code></code>
     </td>
   </tr>
 <tr>
     <td width="15%" align="right" valign="top" class="summary">
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
-        <a href="pycocoa-module.html#libCG" class="summary-name">libCG</a> = <code title="&lt;CDLL 'CoreGraphics.framework/CoreGraphics', handle 7fff8c50b058 at 7f\
-9a6873e0d0&gt;">&lt;CDLL 'CoreGraphics.framework/CoreGraphics', handle 7f<code class="variable-ellipsis">...</code></code>
+        <a href="pycocoa-module.html#libCG" class="summary-name">libCG</a> = <code title="&lt;CDLL 'CoreGraphics.framework/CoreGraphics', handle 7fff9f588620 at 7f\
+ceb86d5750&gt;">&lt;CDLL 'CoreGraphics.framework/CoreGraphics', handle 7f<code class="variable-ellipsis">...</code></code>
     </td>
   </tr>
 <tr>
     <td width="15%" align="right" valign="top" class="summary">
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
-        <a href="pycocoa-module.html#libCT" class="summary-name">libCT</a> = <code title="&lt;CDLL 'CoreText.framework/CoreText', handle 7fff8c50f2f8 at 7f9a684c90\
-90&gt;">&lt;CDLL 'CoreText.framework/CoreText', handle 7fff8c50f2<code class="variable-ellipsis">...</code></code>
+        <a href="pycocoa-module.html#libCT" class="summary-name">libCT</a> = <code title="&lt;CDLL 'CoreText.framework/CoreText', handle 7fff9f58c8c0 at 7fcea830f8\
+90&gt;">&lt;CDLL 'CoreText.framework/CoreText', handle 7fff9f58c8<code class="variable-ellipsis">...</code></code>
     </td>
   </tr>
 <tr>
     <td width="15%" align="right" valign="top" class="summary">
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
-        <a href="pycocoa-module.html#libFoundation" class="summary-name">libFoundation</a> = <code title="&lt;CDLL 'Foundation.framework/Foundation', handle 7fff8c50e8f0 at 7f9a68\
-4c9550&gt;">&lt;CDLL 'Foundation.framework/Foundation', handl<code class="variable-ellipsis">...</code></code>
+        <a href="pycocoa-module.html#libFoundation" class="summary-name">libFoundation</a> = <code title="&lt;CDLL 'Foundation.framework/Foundation', handle 7fff9f58feb8 at 7fcea8\
+30fd50&gt;">&lt;CDLL 'Foundation.framework/Foundation', handl<code class="variable-ellipsis">...</code></code>
     </td>
   </tr>
 <tr>
@@ -6204,7 +6383,7 @@ t 7f9a687293d0&gt;">&lt;CDLL 'CoreFoundation.framework/CoreFoundation', handl<co
     <td width="15%" align="right" valign="top" class="summary">
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
-        <a href="pycocoa-module.html#libobjc" class="summary-name">libobjc</a> = <code title="&lt;CDLL 'libobjc.dylib', handle 7fff8c512e4c at 7f9a684c9810&gt;">&lt;CDLL 'libobjc.dylib', handle 7fff8c512e4c at 7f9a68<code class="variable-ellipsis">...</code></code>
+        <a href="pycocoa-module.html#libobjc" class="summary-name">libobjc</a> = <code title="&lt;CDLL 'libobjc.dylib', handle 7fff9f580414 at 7fcea830fe50&gt;">&lt;CDLL 'libobjc.dylib', handle 7fff9f580414 at 7fcea8<code class="variable-ellipsis">...</code></code>
     </td>
   </tr>
 <tr>
@@ -6271,7 +6450,7 @@ t 7f9a687293d0&gt;">&lt;CDLL 'CoreFoundation.framework/CoreFoundation', handl<co
   <p>Return the signals currently handled as <code>fault</code>.</p>
   <dl class="fields">
     <dt>Returns:</dt>
-        <dd>An <a href="pycocoa.utils.Adict-class.html" 
+        <dd>An <a href="pycocoa.internals.Adict-class.html" 
           class="link">Adict</a> with the <code>SIG*</code> name and value 
           of the currently handled signals, if any.</dd>
   </dl>
@@ -6314,7 +6493,7 @@ t 7f9a687293d0&gt;">&lt;CDLL 'CoreFoundation.framework/CoreFoundation', handl<co
         type encoding.
       </p>
       <p><strong>See Also:</strong>
-        The <code>_NSDeallocObserver</code> below.
+        The <code>_ObjCDeallocObserver</code> below.
       </p>
 </div></td></tr></table>
 </div>
@@ -6392,7 +6571,7 @@ t 7f9a687293d0&gt;">&lt;CDLL 'CoreFoundation.framework/CoreFoundation', handl<co
 <tr><td>
   <table width="100%" cellpadding="0" cellspacing="0" border="0">
   <tr valign="top"><td>
-  <h3 class="epydoc"><span class="sig"><span class="sig-name">add_subclass</span>(<span class="sig-arg">superclas</span>,
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">add_subclass</span>(<span class="sig-arg">Super</span>,
         <span class="sig-arg">name</span>,
         <span class="sig-arg">register</span>=<span class="sig-default">False</span>)</span>
   </h3>
@@ -6401,11 +6580,11 @@ t 7f9a687293d0&gt;">&lt;CDLL 'CoreFoundation.framework/CoreFoundation', handl<co
     </td>
   </tr></table>
   
-  <p>Create a new sub-class of the given super-class.</p>
+  <p>Create a new sub-class of a given super-class.</p>
   <dl class="fields">
     <dt>Parameters:</dt>
     <dd><ul class="nomargin-top">
-        <li><strong class="pname"><code>superclas</code></strong> - The parent class (<code>str</code> or <code>Object</code>).</li>
+        <li><strong class="pname"><code>Super</code></strong> - The parent class (<code>str</code> or <code>Object</code>).</li>
         <li><strong class="pname"><code>name</code></strong> - The name of the sub-class (<code>str</code>).</li>
         <li><strong class="pname"><code>register</code></strong> - Optionally, register the new sub-class (bool).</li>
     </ul></dd>
@@ -6419,8 +6598,8 @@ t 7f9a687293d0&gt;">&lt;CDLL 'CoreFoundation.framework/CoreFoundation', handl<co
         href="pycocoa.runtime-module.html#register_subclass" 
         class="link">register_subclass</a>, <i>before</i> using the new 
         sub-class.  New methods can be added <i>after</i> the sub-class has
-        been registered, but any <code>ivar</code>s must be added 
-        <i>BEFORE</i> the class is registrated.
+        been registered, but any <code>ivar</code>s <i>must be added 
+        BEFORE</i>.
       </p>
 </div></td></tr></table>
 </div>
@@ -6541,8 +6720,7 @@ t 7f9a687293d0&gt;">&lt;CDLL 'CoreFoundation.framework/CoreFoundation', handl<co
     </td>
   </tr></table>
   
-  <p>Create an <code>NSBoolean</code> instance from a Python 
-  <code>bool</code>.</p>
+  <p>Create an <code>NSBoolean</code> from a Python <code>bool</code>.</p>
   <dl class="fields">
     <dt>Parameters:</dt>
     <dd><ul class="nomargin-top">
@@ -6568,8 +6746,7 @@ t 7f9a687293d0&gt;">&lt;CDLL 'CoreFoundation.framework/CoreFoundation', handl<co
     </td>
   </tr></table>
   
-  <p>Create an <code>NSData</code> instance from Python 
-  <code>bytes</code>.</p>
+  <p>Create an <code>NSData</code> from Python <code>bytes</code>.</p>
   <dl class="fields">
     <dt>Parameters:</dt>
     <dd><ul class="nomargin-top">
@@ -6579,6 +6756,7 @@ t 7f9a687293d0&gt;">&lt;CDLL 'CoreFoundation.framework/CoreFoundation', handl<co
         <dd>The ObjC instance (<code>NSData</code>).</dd>
     <dt>Raises:</dt>
     <dd><ul class="nomargin-top">
+        <li><code><strong class='fraise'>TypeError</strong></code> - If <i>py</i> not <code>bytes</code> or <code>str</code>.</li>
         <li><code><strong class='fraise'>RuntimeError</strong></code> - If <code>len</code> vs <code>count</code> assertion failed.</li>
     </ul></dd>
   </dl>
@@ -6619,7 +6797,7 @@ t 7f9a687293d0&gt;">&lt;CDLL 'CoreFoundation.framework/CoreFoundation', handl<co
   <tr valign="top"><td>
   <h3 class="epydoc"><span class="sig"><span class="sig-name">bytes2str</span>(<span class="sig-arg">bytestr</span>,
         <span class="sig-arg">dflt</span>=<span class="sig-default">missing</span>,
-        <span class="sig-arg">name</span>=<span class="sig-default">''</span>)</span>
+        <span class="sig-arg">**name</span>)</span>
   </h3>
   </td><td align="right" valign="top"
     >&nbsp;
@@ -6687,7 +6865,7 @@ t 7f9a687293d0&gt;">&lt;CDLL 'CoreFoundation.framework/CoreFoundation', handl<co
     </td>
   </tr></table>
   
-  <p>Create an <code>NSDecimal</code> instance from a Python 
+  <p>Create an <code>NSDecimal</code> from a Python 
   <code>Decimal</code>.</p>
   <dl class="fields">
     <dt>Parameters:</dt>
@@ -6696,12 +6874,12 @@ t 7f9a687293d0&gt;">&lt;CDLL 'CoreFoundation.framework/CoreFoundation', handl<co
           <code>int</code> or <code>str</code>).</li>
     </ul></dd>
     <dt>Returns:</dt>
-        <dd>The instance ( <code>NSDecimal</code>).</dd>
+        <dd>The value (<code>NSDecimal</code>).</dd>
     <dt>Raises:</dt>
     <dd><ul class="nomargin-top">
-        <li><code><strong class='fraise'>TypeError</strong></code> - If <code>py</code> not a <code>Decimal</code>, <code>float</code>, 
+        <li><code><strong class='fraise'>TypeError</strong></code> - If <i>py</i> not a <code>Decimal</code>, <code>float</code>, 
         <code>int</code> or <code>str</code>.</li>
-        <li><code><strong class='fraise'>ValueError</strong></code> - Invalid decimal <code>py</code>.</li>
+        <li><code><strong class='fraise'>ValueError</strong></code> - Invalid decimal <i>py</i>.</li>
     </ul></dd>
   </dl>
 </td></tr></table>
@@ -6713,31 +6891,62 @@ t 7f9a687293d0&gt;">&lt;CDLL 'CoreFoundation.framework/CoreFoundation', handl<co
 <tr><td>
   <table width="100%" cellpadding="0" cellspacing="0" border="0">
   <tr valign="top"><td>
-  <h3 class="epydoc"><span class="sig"><span class="sig-name">dict2NS</span>(<span class="sig-arg">py</span>,
-        <span class="sig-arg">frozen</span>=<span class="sig-default">False</span>)</span>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">dict2NS</span>(<span class="sig-arg">py</span>)</span>
   </h3>
   </td><td align="right" valign="top"
     >&nbsp;
     </td>
   </tr></table>
   
-  <p>Create an <code>NS[Mutable]Dictionary</code> instance from a Python 
-  <code>dict</code>.</p>
+  <p>Create an <code>NSMutableDictionary</code> from a Python 
+  <code>dict</code> or <code>frozendict</code>.</p>
+  <dl class="fields">
+    <dt>Returns:</dt>
+        <dd>The ObjC instance (<code>NSMutableDictionary</code>).</dd>
+  </dl>
+<div class="fields">      <p><strong>See Also:</strong>
+        Function <a href="pycocoa.pytypes-module.html#dicts2NS" 
+        class="link">dicts2NS</a> for further details.
+      </p>
+</div></td></tr></table>
+</div>
+<a name="dicts2NS"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">dicts2NS</span>(<span class="sig-arg">py</span>)</span>
+  </h3>
+  </td><td align="right" valign="top"
+    >&nbsp;
+    </td>
+  </tr></table>
+  
+  <p>Create an <code>NS[Mutable]Dictionary</code> from a Python 
+  <code>dict</code> or <code>frozendict</code>.</p>
   <dl class="fields">
     <dt>Parameters:</dt>
     <dd><ul class="nomargin-top">
-        <li><strong class="pname"><code>py</code></strong> - The value (<code>dict</code>).</li>
-        <li><strong class="pname"><code>frozen</code></strong> - Immutable (<code>bool</code>), mutable otherwise.</li>
+        <li><strong class="pname"><code>py</code></strong> - The value (<code>dict</code> or <code>frozendict</code>).</li>
     </ul></dd>
     <dt>Returns:</dt>
-        <dd>The ObjC instance (<code>NSDictionary</code> or 
-          <code>NSMutableDictionary</code>).</dd>
+        <dd>The ObjC instance (<code>NSMutableDictionary</code> or immutable 
+          <code>NSDictionary</code>).</dd>
     <dt>Raises:</dt>
     <dd><ul class="nomargin-top">
         <li><code><strong class='fraise'>RuntimeError</strong></code> - If <code>len</code> vs <code>count</code> assertion failed.</li>
+        <li><code><strong class='fraise'>TypeError</strong></code> - If <i>py</i> is not a <code>dict</code> or <code>frozendict</code>.</li>
     </ul></dd>
   </dl>
-</td></tr></table>
+<div class="fields">      <p><strong>See Also:</strong>
+        Functions <a href="pycocoa.pytypes-module.html#dict2NS" 
+        class="link">dict2NS</a> and <a 
+        href="pycocoa.pytypes-module.html#frozendict2NS" 
+        class="link">frozendict2NS</a>.
+      </p>
+</div></td></tr></table>
 </div>
 <a name="disable"></a>
 <div>
@@ -6781,7 +6990,7 @@ t 7f9a687293d0&gt;">&lt;CDLL 'CoreFoundation.framework/CoreFoundation', handl<co
   <p>Release all objects in an <code>NSAutoreleasePool</code> instance.</p>
   <dl class="fields">
     <dt>Returns:</dt>
-        <dd>The number og <code>ObjC</code> objects cleared.</dd>
+        <dd>The number of <code>ObjC</code> objects cleared.</dd>
   </dl>
 <div class="fields">      <p><strong>Note:</strong>
         <code>NSAutoreleasePool.drain</code> invokes the 
@@ -6888,7 +7097,7 @@ t 7f9a687293d0&gt;">&lt;CDLL 'CoreFoundation.framework/CoreFoundation', handl<co
         <dd>The ObjC instance (<code>NSDouble</code>).</dd>
     <dt>Raises:</dt>
     <dd><ul class="nomargin-top">
-        <li><code><strong class='fraise'>TypeError</strong></code> - If <code>py</code> not a <code>float</code> or <code>int</code>.</li>
+        <li><code><strong class='fraise'>TypeError</strong></code> - If <i>py</i> not a <code>float</code> or <code>int</code>.</li>
     </ul></dd>
   </dl>
 </td></tr></table>
@@ -7061,6 +7270,32 @@ t 7f9a687293d0&gt;">&lt;CDLL 'CoreFoundation.framework/CoreFoundation', handl<co
   </dl>
 </td></tr></table>
 </div>
+<a name="frozendict2NS"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">frozendict2NS</span>(<span class="sig-arg">py</span>)</span>
+  </h3>
+  </td><td align="right" valign="top"
+    >&nbsp;
+    </td>
+  </tr></table>
+  
+  <p>Create an <code>NSDictionary</code> from a Python 
+  <code>frozendict</code> or <code>dict</code>.</p>
+  <dl class="fields">
+    <dt>Returns:</dt>
+        <dd>The ObjC instance (<code>NSDictionary</code>, immutable).</dd>
+  </dl>
+<div class="fields">      <p><strong>See Also:</strong>
+        Function <a href="pycocoa.pytypes-module.html#dicts2NS" 
+        class="link">dicts2NS</a> for further details.
+      </p>
+</div></td></tr></table>
+</div>
 <a name="frozenset2NS"></a>
 <div>
 <table class="details" border="1" cellpadding="3"
@@ -7075,21 +7310,17 @@ t 7f9a687293d0&gt;">&lt;CDLL 'CoreFoundation.framework/CoreFoundation', handl<co
     </td>
   </tr></table>
   
-  <p>Create an (immutable) <code>NSSet</code> instance from a Python 
-  <code>frozenset</code>.</p>
+  <p>Create an <code>NSSet</code> from a Python <code>frozenset</code> or 
+  <code>set</code>.</p>
   <dl class="fields">
-    <dt>Parameters:</dt>
-    <dd><ul class="nomargin-top">
-        <li><strong class="pname"><code>py</code></strong> - The value (<code>frozenset</code>).</li>
-    </ul></dd>
     <dt>Returns:</dt>
-        <dd>The ObjC instance (<code>NSSet</code>).</dd>
-    <dt>Raises:</dt>
-    <dd><ul class="nomargin-top">
-        <li><code><strong class='fraise'>RuntimeError</strong></code> - If <code>len</code> vs <code>count</code> assertion failed.</li>
-    </ul></dd>
+        <dd>The ObjC instance (<code>NSSet</code>, immutable).</dd>
   </dl>
-</td></tr></table>
+<div class="fields">      <p><strong>See Also:</strong>
+        Function <a href="pycocoa.pytypes-module.html#sets2NS" 
+        class="link">sets2NS</a> for further details.
+      </p>
+</div></td></tr></table>
 </div>
 <a name="gcd"></a>
 <div>
@@ -7120,25 +7351,29 @@ t 7f9a687293d0&gt;">&lt;CDLL 'CoreFoundation.framework/CoreFoundation', handl<co
 <tr><td>
   <table width="100%" cellpadding="0" cellspacing="0" border="0">
   <tr valign="top"><td>
-  <h3 class="epydoc"><span class="sig"><span class="sig-name">generator2NS</span>(<span class="sig-arg">py</span>)</span>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">generator2NS</span>(<span class="sig-arg">py</span>,
+        <span class="sig-arg">frozen</span>=<span class="sig-default">True</span>)</span>
   </h3>
   </td><td align="right" valign="top"
     >&nbsp;
     </td>
   </tr></table>
   
-  <p>Create an <code>NSArray</code> instance from a Python 
+  <p>Create an <code>NS[Mutable]Array</code> from a Python 
   <code>generator</code>.</p>
   <dl class="fields">
     <dt>Parameters:</dt>
     <dd><ul class="nomargin-top">
         <li><strong class="pname"><code>py</code></strong> - The value (<code>generator</code>).</li>
+        <li><strong class="pname"><code>frozen</code></strong> - If <code>True</code>, return an immutable <code>NSArray</code> 
+          (<code>bool</code>), otherwise an <code>NSMutableArray</code>.</li>
     </ul></dd>
     <dt>Returns:</dt>
-        <dd>The ObjC instance (<code>NSArray</code>).</dd>
+        <dd>The ObjC instance (<code>NSMutableArray</code> or immutable 
+          <code>NSArray</code>).</dd>
     <dt>Raises:</dt>
     <dd><ul class="nomargin-top">
-        <li><code><strong class='fraise'>RuntimeError</strong></code> - If <code>len</code> vs <code>count</code> assertion failed.</li>
+        <li><code><strong class='fraise'>TypeError</strong></code> - If <i>py</i> not a <code>generator</code>.</li>
     </ul></dd>
   </dl>
 </td></tr></table>
@@ -8153,24 +8388,23 @@ t 7f9a687293d0&gt;">&lt;CDLL 'CoreFoundation.framework/CoreFoundation', handl<co
     </td>
   </tr></table>
   
-  <p>Create an <code>NSNumber</code> instance from a Python 
-  <code>int</code> or <code>long</code>.</p>
+  <p>Create an <code>NSNumber</code> from a Python <code>int</code> or 
+  <code>long</code>.</p>
   <dl class="fields">
     <dt>Parameters:</dt>
     <dd><ul class="nomargin-top">
         <li><strong class="pname"><code>py</code></strong> - The value (<code>int</code> or <code>long</code>).</li>
-        <li><strong class="pname"><code>NS</code></strong> - Alternate <code>NSNumber</code> ObjC class to use when 
-          <code>py</code> exceeds the <code>NSLong</code> or 
-          <code>NSLongLong</code> range, for example 
-          <code>NS=NSDecimal</code>.</li>
+        <li><strong class="pname"><code>NS</code></strong> - Alternate <code>NSNumber</code> ObjC class to use when <i>py</i> 
+          exceeds the <code>NSLong</code> or <code>NSLongLong</code> range,
+          for example <code>NS=NSDecimal</code>.</li>
     </ul></dd>
     <dt>Returns:</dt>
         <dd>The ObjC instance (<code>NSNumber</code> or <code>NS</code> 
           alternate).</dd>
     <dt>Raises:</dt>
     <dd><ul class="nomargin-top">
-        <li><code><strong class='fraise'>TypeError</strong></code> - If <code>py</code> not an <code>int</code> or <code>long</code>.</li>
-        <li><code><strong class='fraise'>ValueError</strong></code> - If <code>py</code> exceeds <code>NSLong</code> range and if no 
+        <li><code><strong class='fraise'>TypeError</strong></code> - If <i>py</i> not an <code>int</code> or <code>long</code>.</li>
+        <li><code><strong class='fraise'>ValueError</strong></code> - If <i>py</i> exceeds <code>NSLong</code> range and if no 
         <code>NS</code> alternate is specified.</li>
     </ul></dd>
   </dl>
@@ -8200,6 +8434,10 @@ t 7f9a687293d0&gt;">&lt;CDLL 'CoreFoundation.framework/CoreFoundation', handl<co
     <dt>Returns:</dt>
         <dd>The alias' target (<code>str</code>) or <code>None</code> if 
           <i>path</i> isn't a macOS alias.</dd>
+    <dt>Raises:</dt>
+    <dd><ul class="nomargin-top">
+        <li><code><strong class='fraise'>TypeError</strong></code> - Invalid <i>path</i>.</li>
+    </ul></dd>
   </dl>
 <div class="fields">      <p><strong>See Also:</strong>
         <a href="https://GitHub.com/al45tair/mac_alias" 
@@ -8242,33 +8480,32 @@ t 7f9a687293d0&gt;">&lt;CDLL 'CoreFoundation.framework/CoreFoundation', handl<co
   <table width="100%" cellpadding="0" cellspacing="0" border="0">
   <tr valign="top"><td>
   <h3 class="epydoc"><span class="sig"><span class="sig-name">isImmutable</span>(<span class="sig-arg">objc</span>,
-        <span class="sig-arg">mutableClass</span>,
-        <span class="sig-arg">immutableClass</span>,
-        <span class="sig-arg">name</span>=<span class="sig-default"><code class="variable-quote">'</code><code class="variable-string">ns</code><code class="variable-quote">'</code></span>)</span>
+        <span class="sig-arg">*immutableClasses</span>,
+        <span class="sig-arg">**raiser_name</span>)</span>
   </h3>
   </td><td align="right" valign="top"
     >&nbsp;
     </td>
   </tr></table>
   
-  <p>Check that an ObjC object is an instance of the immutable class.</p>
+  <p>Check that an ObjC object is an immutable class' instance.</p>
   <dl class="fields">
     <dt>Parameters:</dt>
     <dd><ul class="nomargin-top">
         <li><strong class="pname"><code>objc</code></strong> - The instance to check (<a 
           href="pycocoa.runtime.ObjCInstance-class.html" 
           class="link">ObjCInstance</a>).</li>
-        <li><strong class="pname"><code>mutableClass</code></strong> - The mutable ObjC classes (<code>NSMutable...</code>).</li>
-        <li><strong class="pname"><code>immutableClass</code></strong> - The immutable ObjC classes (<code>Object</code>).</li>
-        <li><strong class="pname"><code>name</code></strong> - The name of the instance (<code>str</code>).</li>
+        <li><strong class="pname"><code>immutableClasses</code></strong> - Optional <i>immutable</i> classes to use (<code>NS...</code> or 
+          <code>Object</code>s), in lieu of all predefined ones.</li>
+        <li><strong class="pname"><code>raiser_name</code></strong> - Optional instance name (<code>str</code>) to raise TypeError.</li>
     </ul></dd>
     <dt>Returns:</dt>
-        <dd>True if <i>objc</i> is an <i>immutableClass</i> instance, False 
+        <dd><code>True</code> if <i>objc</i> is immutable, <code>False</code>
           otherwise.</dd>
     <dt>Raises:</dt>
     <dd><ul class="nomargin-top">
-        <li><code><strong class='fraise'>TypeError</strong></code> - If <i>objc</i> is a <i>mutableClass</i> instance, provided keyword 
-        argument <i>name='...'</i> is given.</li>
+        <li><code><strong class='fraise'>TypeError</strong></code> - If <i>objc</i> isn't <i>immutable</i>, but only if keyword 
+        <i>raiser='...'</i> is specified.</li>
     </ul></dd>
   </dl>
 </td></tr></table>
@@ -8297,6 +8534,10 @@ t 7f9a687293d0&gt;">&lt;CDLL 'CoreFoundation.framework/CoreFoundation', handl<co
     <dt>Returns:</dt>
         <dd>The link's or alias' target (<code>str</code>) or 
           <code>None</code> if <i>path</i> isn't a link or alias.</dd>
+    <dt>Raises:</dt>
+    <dd><ul class="nomargin-top">
+        <li><code><strong class='fraise'>TypeError</strong></code> - Invalid <i>path</i>.</li>
+    </ul></dd>
   </dl>
 </td></tr></table>
 </div>
@@ -8322,6 +8563,45 @@ t 7f9a687293d0&gt;">&lt;CDLL 'CoreFoundation.framework/CoreFoundation', handl<co
     </ul></dd>
     <dt>Returns:</dt>
         <dd>True if the <i>objc</i> is a metaclass, False otherwise.</dd>
+  </dl>
+</td></tr></table>
+</div>
+<a name="isMutable"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">isMutable</span>(<span class="sig-arg">objc</span>,
+        <span class="sig-arg">*mutableClasses</span>,
+        <span class="sig-arg">**raiser_name</span>)</span>
+  </h3>
+  </td><td align="right" valign="top"
+    >&nbsp;
+    </td>
+  </tr></table>
+  
+  <p>Check that an ObjC object is a mutable class' instance.</p>
+  <dl class="fields">
+    <dt>Parameters:</dt>
+    <dd><ul class="nomargin-top">
+        <li><strong class="pname"><code>objc</code></strong> - The instance to check (<a 
+          href="pycocoa.runtime.ObjCInstance-class.html" 
+          class="link">ObjCInstance</a>).</li>
+        <li><strong class="pname"><code>mutableClasses</code></strong> - Optional <i>mutable</i> classes to use 
+          (<code>NSMutable...</code>s or <code>Object</code>s), in lieu of 
+          all predefined ones.</li>
+        <li><strong class="pname"><code>raiser_name</code></strong> - Optional instance name (<code>str</code>) to raise TypeError.</li>
+    </ul></dd>
+    <dt>Returns:</dt>
+        <dd><code>True</code> if <i>objc</i> is mutable, <code>False</code> 
+          otherwise.</dd>
+    <dt>Raises:</dt>
+    <dd><ul class="nomargin-top">
+        <li><code><strong class='fraise'>TypeError</strong></code> - If <i>objc</i> isn't <i>mutable</i>, but only if keyword 
+        <i>raiser='...'</i> is specified.</li>
+    </ul></dd>
   </dl>
 </td></tr></table>
 </div>
@@ -8361,7 +8641,7 @@ t 7f9a687293d0&gt;">&lt;CDLL 'CoreFoundation.framework/CoreFoundation', handl<co
   <tr valign="top"><td>
   <h3 class="epydoc"><span class="sig"><span class="sig-name">isObjCInstanceOf</span>(<span class="sig-arg">objc</span>,
         <span class="sig-arg">*Classes</span>,
-        <span class="sig-arg">**name_missing</span>)</span>
+        <span class="sig-arg">**raiser_name</span>)</span>
   </h3>
   </td><td align="right" valign="top"
     >&nbsp;
@@ -8376,7 +8656,7 @@ t 7f9a687293d0&gt;">&lt;CDLL 'CoreFoundation.framework/CoreFoundation', handl<co
           href="pycocoa.runtime.ObjCInstance-class.html" 
           class="link">ObjCInstance</a> or <code>c_void_p</code>).</li>
         <li><strong class="pname"><code>Classes</code></strong> - One or several ObjC classes (<code>Object</code>).</li>
-        <li><strong class="pname"><code>name</code></strong> - The name of the instance (<code>str</code>).</li>
+        <li><strong class="pname"><code>raiser_name</code></strong> - Optional instance name (<code>str</code>) to raise TypeError.</li>
     </ul></dd>
     <dt>Returns:</dt>
         <dd>The matching <i>Class</i> from <i>Classes</i>, <code>None</code> 
@@ -8386,8 +8666,8 @@ t 7f9a687293d0&gt;">&lt;CDLL 'CoreFoundation.framework/CoreFoundation', handl<co
         <li><code><strong class='fraise'>TypeError</strong></code> - If <i>objc</i> is not an <a 
         href="pycocoa.runtime.ObjCInstance-class.html" 
         class="link">ObjCInstance</a> or <code>c_void_p</code> or if 
-        <i>objc</i> does not match any of the <i>Classes</i> and only if 
-        keyword <i>name='...'</i> is provided.</li>
+        <i>objc</i> isn't any <i>Classes</i>' instance and only if keyword 
+        <i>raiser='...'</i> is specified.</li>
     </ul></dd>
   </dl>
 <div class="fields">      <p><strong>See Also:</strong>
@@ -8435,7 +8715,7 @@ t 7f9a687293d0&gt;">&lt;CDLL 'CoreFoundation.framework/CoreFoundation', handl<co
   <tr valign="top"><td>
   <h3 class="epydoc"><span class="sig"><span class="sig-name">isinstanceOf</span>(<span class="sig-arg">inst</span>,
         <span class="sig-arg">*classes</span>,
-        <span class="sig-arg">**name_missing</span>)</span>
+        <span class="sig-arg">**raiser_name</span>)</span>
   </h3>
   </td><td align="right" valign="top"
     >&nbsp;
@@ -8446,17 +8726,18 @@ t 7f9a687293d0&gt;">&lt;CDLL 'CoreFoundation.framework/CoreFoundation', handl<co
   <dl class="fields">
     <dt>Parameters:</dt>
     <dd><ul class="nomargin-top">
-        <li><strong class="pname"><code>inst</code></strong> - The instance to check (<i>any</i>).</li>
+        <li><strong class="pname"><code>inst</code></strong> - The instance to check (<code>any</code>).</li>
         <li><strong class="pname"><code>classes</code></strong> - One or several classes (<i>all positional</i>).</li>
-        <li><strong class="pname"><code>name</code></strong> - The name of the instance (<code>str</code>).</li>
+        <li><strong class="pname"><code>raiser_name</code></strong> - Optional instance name (<code>str</code>) to raise 
+          <code>TypeError</code>.</li>
     </ul></dd>
     <dt>Returns:</dt>
-        <dd>The matching <i>class</i> from <i>classes</i>, <code>None</code> 
-          otherwise.</dd>
+        <dd>The <code>type{<b>inst</b>} if <code>isinstance(<b>inst</b>, 
+          classes</code></code> else <code>None</code>.</dd>
     <dt>Raises:</dt>
     <dd><ul class="nomargin-top">
-        <li><code><strong class='fraise'>TypeError</strong></code> - If <i>inst</i> does not match any of the <i>classes</i>, but only 
-        if <i>name='...'</i> is specified.</li>
+        <li><code><strong class='fraise'>TypeError</strong></code> - If <i>inst</i> does not match any of the <i>classes</i> but only if
+        keyword <code>raiser</code> is specified.</li>
     </ul></dd>
   </dl>
 <div class="fields">      <p><strong>See Also:</strong>
@@ -8493,26 +8774,37 @@ t 7f9a687293d0&gt;">&lt;CDLL 'CoreFoundation.framework/CoreFoundation', handl<co
   </dl>
 </td></tr></table>
 </div>
-<a name="iterbytes"></a>
+<a name="iterable2NS"></a>
 <div>
 <table class="details" border="1" cellpadding="3"
        cellspacing="0" width="100%" bgcolor="white">
 <tr><td>
   <table width="100%" cellpadding="0" cellspacing="0" border="0">
   <tr valign="top"><td>
-  <h3 class="epydoc"><span class="sig"><span class="sig-name">iterbytes</span>(<span class="sig-arg">collection</span>)</span>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">iterable2NS</span>(<span class="sig-arg">py</span>,
+        <span class="sig-arg">frozen</span>=<span class="sig-default">True</span>)</span>
   </h3>
   </td><td align="right" valign="top"
     >&nbsp;
     </td>
   </tr></table>
   
-  <p>iter(callable, sentinel) -&gt; iterator</p>
-  <p>Get an iterator from an object.  In the first form, the argument must 
-  supply its own iterator, or be a sequence. In the second form, the 
-  callable is called until it returns the sentinel.</p>
+  <p>Create an <code>NS[Mutable]Array</code> from a Python 
+  <code>iterable</code>.</p>
   <dl class="fields">
-    <dt>Returns: iterator</dt>
+    <dt>Parameters:</dt>
+    <dd><ul class="nomargin-top">
+        <li><strong class="pname"><code>py</code></strong> - The value (<code>iterable</code>).</li>
+        <li><strong class="pname"><code>frozen</code></strong> - If <code>True</code>, return an immutable <code>NSArray</code> 
+          (<code>bool</code>), otherwise an <code>NSMutableArray</code>.</li>
+    </ul></dd>
+    <dt>Returns:</dt>
+        <dd>The ObjC instance (<code>NSMutableArray</code> or immutable 
+          <code>NSArray</code>).</dd>
+    <dt>Raises:</dt>
+    <dd><ul class="nomargin-top">
+        <li><code><strong class='fraise'>TypeError</strong></code> - If <i>py</i> is not <code>iterable</code>.</li>
+    </ul></dd>
   </dl>
 </td></tr></table>
 </div>
@@ -8552,54 +8844,54 @@ t 7f9a687293d0&gt;">&lt;CDLL 'CoreFoundation.framework/CoreFoundation', handl<co
     </td>
   </tr></table>
   
-  <p>Create an <code>NSMutableArray</code> instance from a Python 
-  <code>list</code>.</p>
+  <p>Create an <code>NSMutableArray</code> from a Python <code>list</code> 
+  or <code>tuple</code>.</p>
   <dl class="fields">
-    <dt>Parameters:</dt>
-    <dd><ul class="nomargin-top">
-        <li><strong class="pname"><code>py</code></strong> - The value (<code>list</code>).</li>
-    </ul></dd>
     <dt>Returns:</dt>
         <dd>The ObjC instance (<code>NSMutableArray</code>).</dd>
-    <dt>Raises:</dt>
-    <dd><ul class="nomargin-top">
-        <li><code><strong class='fraise'>RuntimeError</strong></code> - If <code>len</code> vs <code>count</code> assertion failed.</li>
-    </ul></dd>
   </dl>
-</td></tr></table>
+<div class="fields">      <p><strong>See Also:</strong>
+        Function <a href="pycocoa.pytypes-module.html#listuple2NS" 
+        class="link">listuple2NS</a> for further details.
+      </p>
+</div></td></tr></table>
 </div>
-<a name="logf"></a>
+<a name="listuple2NS"></a>
 <div>
 <table class="details" border="1" cellpadding="3"
        cellspacing="0" width="100%" bgcolor="white">
 <tr><td>
   <table width="100%" cellpadding="0" cellspacing="0" border="0">
   <tr valign="top"><td>
-  <h3 class="epydoc"><span class="sig"><span class="sig-name">logf</span>(<span class="sig-arg">fmtxt</span>,
-        <span class="sig-arg">*args</span>,
-        <span class="sig-arg">**file_flush_nl_nt_argv0</span>)</span>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">listuple2NS</span>(<span class="sig-arg">py</span>)</span>
   </h3>
   </td><td align="right" valign="top"
     >&nbsp;
     </td>
   </tr></table>
   
-  <p>Formatted log <i>fmtxt % args</i> with optional keywords.</p>
+  <p>Create an <code>NS[Mutable]Array</code> from a Python 
+  <code>list</code> or <code>tuple</code>.</p>
   <dl class="fields">
     <dt>Parameters:</dt>
     <dd><ul class="nomargin-top">
-        <li><strong class="pname"><code>fmtxt</code></strong> - Print-like format or plain string (<code>str</code>).</li>
-        <li><strong class="pname"><code>args</code></strong> - Optional arguments to format (<i>all positional</i>).</li>
-        <li><strong class="pname"><code>file</code></strong> - Alternate file to write to (<code>file</code>-type), default 
-          <code>NSMain.stdlog</code>.</li>
-        <li><strong class="pname"><code>flush</code></strong> - Flush <b><code>file</code></b> after writing (<code>bool</code>),
-          default C(True).</li>
-        <li><strong class="pname"><code>nl</code></strong> - Number of leading blank lines (<code>int</code>).</li>
-        <li><strong class="pname"><code>nt</code></strong> - Number of trailing blank lines (<code>int</code>).</li>
-        <li><strong class="pname"><code>argv0</code></strong> - Optional prefix (<code>str</code>).</li>
+        <li><strong class="pname"><code>py</code></strong> - The value (<code>list</code> or <code>tuple</code>).</li>
+    </ul></dd>
+    <dt>Returns:</dt>
+        <dd>The ObjC instance (<code>NSMutableArray</code> or immutable 
+          <code>NSArray</code>).</dd>
+    <dt>Raises:</dt>
+    <dd><ul class="nomargin-top">
+        <li><code><strong class='fraise'>RuntimeError</strong></code> - If <code>len</code> vs <code>count</code> assertion failed.</li>
     </ul></dd>
   </dl>
-</td></tr></table>
+<div class="fields">      <p><strong>See Also:</strong>
+        Functions <a href="pycocoa.pytypes-module.html#list2NS" 
+        class="link">list2NS</a> and <a 
+        href="pycocoa.pytypes-module.html#tuple2NS" 
+        class="link">tuple2NS</a>.
+      </p>
+</div></td></tr></table>
 </div>
 <a name="machine"></a>
 <div>
@@ -8622,7 +8914,7 @@ t 7f9a687293d0&gt;">&lt;CDLL 'CoreFoundation.framework/CoreFoundation', handl<co
         <dd>Machine <code>'arm64'</code> for Apple Silicon, 
           <code>&quot;arm64_x86_64&quot;</code> for Intel <i>emulated</i>, 
           <code>'x86_64'</code> for Intel, etc. (<code>str</code> with any 
-          <code>comma</code>s by <code>underscore</code>).</dd>
+          <code>comma</code>s replaced by <code>underscore</code>).</dd>
   </dl>
 </td></tr></table>
 </div>
@@ -8633,26 +8925,26 @@ t 7f9a687293d0&gt;">&lt;CDLL 'CoreFoundation.framework/CoreFoundation', handl<co
 <tr><td>
   <table width="100%" cellpadding="0" cellspacing="0" border="0">
   <tr valign="top"><td>
-  <h3 class="epydoc"><span class="sig"><span class="sig-name">map2NS</span>(<span class="sig-arg">py</span>)</span>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">map2NS</span>(<span class="sig-arg">py</span>,
+        <span class="sig-arg">frozen</span>=<span class="sig-default">True</span>)</span>
   </h3>
   </td><td align="right" valign="top"
     >&nbsp;
     </td>
   </tr></table>
   
-  <p>Create an <code>NSArray</code> instance from a Python 
+  <p>Create an <code>NS[Mutable]Array</code> from a Python 
   <code>map</code>.</p>
   <dl class="fields">
     <dt>Parameters:</dt>
     <dd><ul class="nomargin-top">
         <li><strong class="pname"><code>py</code></strong> - The value (<code>map</code>).</li>
+        <li><strong class="pname"><code>frozen</code></strong> - If <code>True</code>, return an immutable <code>NSArray</code> 
+          (<code>bool</code>), otherwise an <code>NSMutableArray</code>.</li>
     </ul></dd>
     <dt>Returns:</dt>
-        <dd>The ObjC instance (<code>NSArray</code>).</dd>
-    <dt>Raises:</dt>
-    <dd><ul class="nomargin-top">
-        <li><code><strong class='fraise'>RuntimeError</strong></code> - If <code>len</code> vs <code>count</code> assertion failed.</li>
-    </ul></dd>
+        <dd>The ObjC instance (<code>NSArray</code> or 
+          <code>NSMutableArray</code>).</dd>
   </dl>
 </td></tr></table>
 </div>
@@ -8816,6 +9108,45 @@ t 7f9a687293d0&gt;">&lt;CDLL 'CoreFoundation.framework/CoreFoundation', handl<co
       </p>
 </div></td></tr></table>
 </div>
+<a name="ns2NSType2"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">ns2NSType2</span>(<span class="sig-arg">ns</span>)</span>
+  </h3>
+  </td><td align="right" valign="top"
+    >&nbsp;
+    </td>
+  </tr></table>
+  
+  <p>Get the main <code>NS[Mutable]...</code> class and Python Type.</p>
+  <dl class="fields">
+    <dt>Parameters:</dt>
+    <dd><ul class="nomargin-top">
+        <li><strong class="pname"><code>ns</code></strong> - The <code>NS...</code> instance (<a 
+          href="pycocoa.runtime.ObjCInstance-class.html" 
+          class="link">ObjCInstance</a>).</li>
+    </ul></dd>
+    <dt>Returns:</dt>
+        <dd>2-Tuple <code>(NS, Type)</code> with the 
+          <code>NS[Mutable]...</code> class and Python Type, either may be 
+          <code>None</code>.</dd>
+    <dt>Raises:</dt>
+    <dd><ul class="nomargin-top">
+        <li><code><strong class='fraise'>TypeError</strong></code> - Invalid <i>ns</i>.</li>
+    </ul></dd>
+  </dl>
+<div class="fields">      <p><strong>See Also:</strong>
+        Functions <a href="pycocoa.nstypes-module.html#ns2Type" 
+        class="link">ns2Type</a> and <a 
+        href="pycocoa.nstypes-module.html#ns2TypeID2" 
+        class="link">ns2TypeID2</a>.
+      </p>
+</div></td></tr></table>
+</div>
 <a name="ns2Type"></a>
 <div>
 <table class="details" border="1" cellpadding="3"
@@ -8831,16 +9162,16 @@ t 7f9a687293d0&gt;">&lt;CDLL 'CoreFoundation.framework/CoreFoundation', handl<co
   </tr></table>
   
   <p>Convert an <code>NS...</code> ObjC object to an instance of the 
-  corresponding Python Type and value.</p>
+  corresponding Python Type, <i>capital T!</i>.</p>
   <dl class="fields">
     <dt>Parameters:</dt>
     <dd><ul class="nomargin-top">
-        <li><strong class="pname"><code>ns</code></strong> - The <code>NS...</code> (<a 
+        <li><strong class="pname"><code>ns</code></strong> - The <code>NS...</code> instance (<a 
           href="pycocoa.runtime.ObjCInstance-class.html" 
           class="link">ObjCInstance</a>).</li>
     </ul></dd>
     <dt>Returns:</dt>
-        <dd>The value (<code>Python Type</code>).</dd>
+        <dd>The instance (<code>Python Type</code>).</dd>
   </dl>
 </td></tr></table>
 </div>
@@ -8863,7 +9194,7 @@ t 7f9a687293d0&gt;">&lt;CDLL 'CoreFoundation.framework/CoreFoundation', handl<co
   <dl class="fields">
     <dt>Parameters:</dt>
     <dd><ul class="nomargin-top">
-        <li><strong class="pname"><code>ns</code></strong> - The <code>NS...</code> (<a 
+        <li><strong class="pname"><code>ns</code></strong> - The <code>NS...</code> instance (<a 
           href="pycocoa.runtime.ObjCInstance-class.html" 
           class="link">ObjCInstance</a>).</li>
         <li><strong class="pname"><code>dflt</code></strong> - Default for unhandled, unexpected <code>NS...</code>s 
@@ -8872,6 +9203,10 @@ t 7f9a687293d0&gt;">&lt;CDLL 'CoreFoundation.framework/CoreFoundation', handl<co
     <dt>Returns:</dt>
         <dd>2-Tuple <code>(TypeID, ns...2py)</code> of an <code>int</code>NS 
           and the type conversion <code>callable</code>.</dd>
+    <dt>Raises:</dt>
+    <dd><ul class="nomargin-top">
+        <li><code><strong class='fraise'>TypeError</strong></code> - Invalid <i>ns</i>.</li>
+    </ul></dd>
   </dl>
 </td></tr></table>
 </div>
@@ -8930,7 +9265,7 @@ t 7f9a687293d0&gt;">&lt;CDLL 'CoreFoundation.framework/CoreFoundation', handl<co
   <dl class="fields">
     <dt>Parameters:</dt>
     <dd><ul class="nomargin-top">
-        <li><strong class="pname"><code>ns</code></strong> - The <code>NS...</code> (<a 
+        <li><strong class="pname"><code>ns</code></strong> - The <code>NS...</code> instance (<a 
           href="pycocoa.runtime.ObjCInstance-class.html" 
           class="link">ObjCInstance</a>).</li>
         <li><strong class="pname"><code>dflt</code></strong> - Default for unhandled, unexpected <code>NS...</code>s 
@@ -8940,53 +9275,56 @@ t 7f9a687293d0&gt;">&lt;CDLL 'CoreFoundation.framework/CoreFoundation', handl<co
         <dd>The value (<code>Python type</code>) or <i>dflt</i> if provided.</dd>
     <dt>Raises:</dt>
     <dd><ul class="nomargin-top">
-        <li><code><strong class='fraise'>TypeError</strong></code> - Unhandled, unexpected <code>TypeID</code>.</li>
+        <li><code><strong class='fraise'>TypeError</strong></code> - Invalid <i>ns</i> or unhandled <code>TypeID</code>.</li>
     </ul></dd>
   </dl>
 <div class="fields">      <p><strong>Note:</strong>
         Conversion map:
         <ul>
           <li>
-            NSArray          -&gt; tuple
+            NSArray             -&gt; tuple
           </li>
           <li>
-            NSBoolean        -&gt; bool
+            NSBoolean           -&gt; bool
           </li>
           <li>
-            NSConstantString -&gt; str
+            NSConstantString    -&gt; str
           </li>
           <li>
-            NSData           -&gt; bytes
+            NSData              -&gt; bytes
           </li>
           <li>
-            NSDecimalNumber  -&gt; Decimal
+            NSDecimalNumber     -&gt; Decimal
           </li>
           <li>
-            NSDictionary     -&gt; dict
+            NSDictionary        -&gt; frozendict
           </li>
           <li>
-            NSMutableArray   -&gt; list
+            NSMutableArray      -&gt; list
           </li>
           <li>
-            NSMutableSet     -&gt; set
+            NSMutableDictionary -&gt; dict
           </li>
           <li>
-            NSMutableString  -&gt; str
+            NSMutableSet        -&gt; set
           </li>
           <li>
-            NSNumber         -&gt; int or float
+            NSMutableString     -&gt; str
           </li>
           <li>
-            NSNull           -&gt; None
+            NSNumber            -&gt; int or float
           </li>
           <li>
-            NSSet            -&gt; frozenset
+            NSNull              -&gt; None
           </li>
           <li>
-            NSString         -&gt; str
+            NSSet               -&gt; frozenset
           </li>
           <li>
-            NSStr            -&gt; str
+            NSString            -&gt; str
+          </li>
+          <li>
+            NSStr               -&gt; str
           </li>
         </ul>
       </p>
@@ -9004,7 +9342,8 @@ t 7f9a687293d0&gt;">&lt;CDLL 'CoreFoundation.framework/CoreFoundation', handl<co
   <table width="100%" cellpadding="0" cellspacing="0" border="0">
   <tr valign="top"><td>
   <h3 class="epydoc"><span class="sig"><span class="sig-name">nsArray2listuple</span>(<span class="sig-arg">ns</span>,
-        <span class="sig-arg">ctype</span>=<span class="sig-default">&lt;class 'ctypes.c_void_p'&gt;</span>)</span>
+        <span class="sig-arg">ctype</span>=<span class="sig-default">&lt;class 'ctypes.c_void_p'&gt;</span>,
+        <span class="sig-arg">typy</span>=<span class="sig-default">None</span>)</span>
   </h3>
   </td><td align="right" valign="top"
     >&nbsp;
@@ -9016,13 +9355,21 @@ t 7f9a687293d0&gt;">&lt;CDLL 'CoreFoundation.framework/CoreFoundation', handl<co
   <dl class="fields">
     <dt>Parameters:</dt>
     <dd><ul class="nomargin-top">
-        <li><strong class="pname"><code>ns</code></strong> - The <code>NS[Mutable]Array</code> (<a 
+        <li><strong class="pname"><code>ns</code></strong> - The <code>NS[Mutable]Array</code> instance (<a 
           href="pycocoa.runtime.ObjCInstance-class.html" 
           class="link">ObjCInstance</a>).</li>
         <li><strong class="pname"><code>ctype</code></strong> - The array item type (<code>ctypes</code>).</li>
+        <li><strong class="pname"><code>typy</code></strong> - Use <code><b>typy</b>=list</code>, <code><b>typy</b>=tuple</code>
+          or <code><b>typy</b>=any_callable</code> to override the Python 
+          type.</li>
     </ul></dd>
     <dt>Returns:</dt>
-        <dd>The array (<code>list</code> or <code>tuple</code>).</dd>
+        <dd>The array (<code>list</code> or <code>tuple</code> or 
+          <code>typy</code>).</dd>
+    <dt>Raises:</dt>
+    <dd><ul class="nomargin-top">
+        <li><code><strong class='fraise'>TypeError</strong></code> - Invalid <i>ns</i>.</li>
+    </ul></dd>
   </dl>
 </td></tr></table>
 </div>
@@ -9034,7 +9381,8 @@ t 7f9a687293d0&gt;">&lt;CDLL 'CoreFoundation.framework/CoreFoundation', handl<co
   <table width="100%" cellpadding="0" cellspacing="0" border="0">
   <tr valign="top"><td>
   <h3 class="epydoc"><span class="sig"><span class="sig-name">nsArray2tuple</span>(<span class="sig-arg">ns</span>,
-        <span class="sig-arg">ctype</span>=<span class="sig-default">&lt;class 'pycocoa.runtime.ObjCInstance'&gt;</span>)</span>
+        <span class="sig-arg">ctype</span>=<span class="sig-default">&lt;class 'pycocoa.runtime.ObjCInstance'&gt;</span>,
+        <span class="sig-arg">typy</span>=<span class="sig-default">&lt;type 'tuple'&gt;</span>)</span>
   </h3>
   </td><td align="right" valign="top"
     >&nbsp;
@@ -9046,13 +9394,19 @@ t 7f9a687293d0&gt;">&lt;CDLL 'CoreFoundation.framework/CoreFoundation', handl<co
   <dl class="fields">
     <dt>Parameters:</dt>
     <dd><ul class="nomargin-top">
-        <li><strong class="pname"><code>ns</code></strong> - The <code>NSArray</code> (<a 
+        <li><strong class="pname"><code>ns</code></strong> - The <code>NSArray</code> instance (<a 
           href="pycocoa.runtime.ObjCInstance-class.html" 
           class="link">ObjCInstance</a>).</li>
         <li><strong class="pname"><code>ctype</code></strong> - The array item type (<code>ObjCInstance</code>).</li>
+        <li><strong class="pname"><code>typy</code></strong> - Use <code><b>typy</b>=any_callable</code> to override the Python 
+          <code>tuple</code> type.</li>
     </ul></dd>
     <dt>Returns:</dt>
-        <dd>The array (<code>tuple</code>).</dd>
+        <dd>The array (<code>tuple</code> or <code>typy</code>).</dd>
+    <dt>Raises:</dt>
+    <dd><ul class="nomargin-top">
+        <li><code><strong class='fraise'>TypeError</strong></code> - Invalid <i>ns</i>.</li>
+    </ul></dd>
   </dl>
 </td></tr></table>
 </div>
@@ -9075,7 +9429,7 @@ t 7f9a687293d0&gt;">&lt;CDLL 'CoreFoundation.framework/CoreFoundation', handl<co
   <dl class="fields">
     <dt>Parameters:</dt>
     <dd><ul class="nomargin-top">
-        <li><strong class="pname"><code>ns</code></strong> - The <code>NSBoolean</code> (<a 
+        <li><strong class="pname"><code>ns</code></strong> - The <code>NSBoolean</code> instance (<a 
           href="pycocoa.runtime.ObjCInstance-class.html" 
           class="link">ObjCInstance</a>).</li>
         <li><strong class="pname"><code>dflt</code></strong> - Default for a missing, unobtainable value (<code>missing</code>).</li>
@@ -9084,7 +9438,7 @@ t 7f9a687293d0&gt;">&lt;CDLL 'CoreFoundation.framework/CoreFoundation', handl<co
         <dd>The bool (<code>bool</code>) of <i>dlft</i>.</dd>
     <dt>Raises:</dt>
     <dd><ul class="nomargin-top">
-        <li><code><strong class='fraise'>TypeError</strong></code> - Unexpected <code>NumberType</code>.</li>
+        <li><code><strong class='fraise'>TypeError</strong></code> - Invalid <i>ns</i>.</li>
     </ul></dd>
   </dl>
 </td></tr></table>
@@ -9114,6 +9468,10 @@ t 7f9a687293d0&gt;">&lt;CDLL 'CoreFoundation.framework/CoreFoundation', handl<co
     </ul></dd>
     <dt>Returns:</dt>
         <dd>The previous bundle title (<code>str</code>) or None.</dd>
+    <dt>Raises:</dt>
+    <dd><ul class="nomargin-top">
+        <li><code><strong class='fraise'>TypeError</strong></code> - Invalid <i>ns</i>.</li>
+    </ul></dd>
   </dl>
 <div class="fields">      <p><strong>Note:</strong>
         Used to mimick <code>NSApplication.setTitle_(ns_title)</code>, the 
@@ -9141,13 +9499,17 @@ t 7f9a687293d0&gt;">&lt;CDLL 'CoreFoundation.framework/CoreFoundation', handl<co
   <dl class="fields">
     <dt>Parameters:</dt>
     <dd><ul class="nomargin-top">
-        <li><strong class="pname"><code>ns</code></strong> - The <code>NSData</code> (<a 
+        <li><strong class="pname"><code>ns</code></strong> - The <code>NSData</code> instance (<a 
           href="pycocoa.runtime.ObjCInstance-class.html" 
           class="link">ObjCInstance</a>).</li>
         <li><strong class="pname"><code>dflt</code></strong> - Default for empty <code>NSData</code> (<code>bytes</code>).</li>
     </ul></dd>
     <dt>Returns:</dt>
         <dd>The bytes (<code>bytes</code>) or <i>dflt</i>.</dd>
+    <dt>Raises:</dt>
+    <dd><ul class="nomargin-top">
+        <li><code><strong class='fraise'>TypeError</strong></code> - Invalid <i>ns</i>.</li>
+    </ul></dd>
   </dl>
 </td></tr></table>
 </div>
@@ -9170,7 +9532,7 @@ t 7f9a687293d0&gt;">&lt;CDLL 'CoreFoundation.framework/CoreFoundation', handl<co
   <dl class="fields">
     <dt>Parameters:</dt>
     <dd><ul class="nomargin-top">
-        <li><strong class="pname"><code>ns</code></strong> - The <code>NSDecimal</code> (<a 
+        <li><strong class="pname"><code>ns</code></strong> - The <code>NSDecimal</code> instance (<a 
           href="pycocoa.runtime.ObjCInstance-class.html" 
           class="link">ObjCInstance</a>).</li>
     </ul></dd>
@@ -9178,7 +9540,35 @@ t 7f9a687293d0&gt;">&lt;CDLL 'CoreFoundation.framework/CoreFoundation', handl<co
         <dd>The decimal (<code>Decimal</code>).</dd>
     <dt>Raises:</dt>
     <dd><ul class="nomargin-top">
-        <li><code><strong class='fraise'>ValueError</strong></code> - If <i>ns</i> not an <code>NSDecimal</code>.</li>
+        <li><code><strong class='fraise'>TypeError</strong></code> - If <i>ns</i> not <code>NSDecimal</code>.</li>
+    </ul></dd>
+  </dl>
+</td></tr></table>
+</div>
+<a name="nsDescription2dict"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">nsDescription2dict</span>(<span class="sig-arg">ns</span>,
+        <span class="sig-arg">**defaults</span>)</span>
+  </h3>
+  </td><td align="right" valign="top"
+    >&nbsp;
+    </td>
+  </tr></table>
+  
+  <p>Create an <i>immutable</i> <code>dict</code> object with key 
+  <i>and</i> attribute access to items by name.</p>
+  <dl class="fields">
+    <dt>Parameters:</dt>
+    <dd><ul class="nomargin-top">
+        <li><strong class="pname"><code>ns</code></strong> - The <code>NS...</code> instance (<a 
+          href="pycocoa.runtime.ObjCInstance-class.html" 
+          class="link">ObjCInstance</a>).</li>
+        <li><strong class="pname"><code>defaults</code></strong> - Optional defaults items (Any kwds).</li>
     </ul></dd>
   </dl>
 </td></tr></table>
@@ -9192,15 +9582,16 @@ t 7f9a687293d0&gt;">&lt;CDLL 'CoreFoundation.framework/CoreFoundation', handl<co
   <tr valign="top"><td>
   <h3 class="epydoc"><span class="sig"><span class="sig-name">nsDictionary2dict</span>(<span class="sig-arg">ns</span>,
         <span class="sig-arg">ctype_keys</span>=<span class="sig-default">&lt;class 'ctypes.c_void_p'&gt;</span>,
-        <span class="sig-arg">ctype_vals</span>=<span class="sig-default">&lt;class 'ctypes.c_void_p'&gt;</span>)</span>
+        <span class="sig-arg">ctype_vals</span>=<span class="sig-default">&lt;class 'ctypes.c_void_p'&gt;</span>,
+        <span class="sig-arg">typy</span>=<span class="sig-default">None</span>)</span>
   </h3>
   </td><td align="right" valign="top"
     >&nbsp;
     </td>
   </tr></table>
   
-  <p>Create a Python <code>dict</code> from an 
-  <code>NS[Mutable]Dictionary</code>.</p>
+  <p>Create a Python <code>dict</code> or <code>frozendict</code> from an 
+  <code>NS[Mutable|Frozen]Dictionary</code>.</p>
   <dl class="fields">
     <dt>Parameters:</dt>
     <dd><ul class="nomargin-top">
@@ -9209,10 +9600,20 @@ t 7f9a687293d0&gt;">&lt;CDLL 'CoreFoundation.framework/CoreFoundation', handl<co
           class="link">ObjCInstance</a>).</li>
         <li><strong class="pname"><code>ctype_keys</code></strong> - The dictionary keys type (<code>ctypes</code>).</li>
         <li><strong class="pname"><code>ctype_vals</code></strong> - The dictionary values type (<code>ctypes</code>).</li>
+        <li><strong class="pname"><code>typy</code></strong> - Use <code><b>typy</b>=dict</code>, 
+          <code><b>typy</b>=Adict</code>, 
+          <code><b>typy</b>=frozendict</code> or 
+          <code><b>typy</b>=any_callable</code> to override the Python 
+          type.</li>
     </ul></dd>
     <dt>Returns:</dt>
-        <dd>The dict (<a href="pycocoa.utils.Adict-class.html" 
-          class="link">Adict</a>).</dd>
+        <dd>The dict (<a href="pycocoa.internals.Adict-class.html" 
+          class="link">Adict</a> or <code>frozendict</code> or 
+          <code>typy</code>).</dd>
+    <dt>Raises:</dt>
+    <dd><ul class="nomargin-top">
+        <li><code><strong class='fraise'>TypeError</strong></code> - Invalid <i>ns</i>.</li>
+    </ul></dd>
   </dl>
 </td></tr></table>
 </div>
@@ -9240,9 +9641,14 @@ t 7f9a687293d0&gt;">&lt;CDLL 'CoreFoundation.framework/CoreFoundation', handl<co
           class="link">ObjCInstance</a>).</li>
     </ul></dd>
     <dt>Returns:</dt>
-        <dd>A 2-tuple <code>(key, value)</code> for each item, each a 
-          separate <a href="pycocoa.runtime.ObjCInstance-class.html" 
-          class="link">ObjCInstance</a></dd>
+        <dd>A 2-tuple <code>(key, value)</code> for each item, where each 
+          <code>key</code> and <code>value</code> is an <a 
+          href="pycocoa.runtime.ObjCInstance-class.html" 
+          class="link">ObjCInstance</a>.</dd>
+    <dt>Raises:</dt>
+    <dd><ul class="nomargin-top">
+        <li><code><strong class='fraise'>TypeError</strong></code> - Invalid <i>ns</i>.</li>
+    </ul></dd>
   </dl>
 </td></tr></table>
 </div>
@@ -9272,6 +9678,8 @@ t 7f9a687293d0&gt;">&lt;CDLL 'CoreFoundation.framework/CoreFoundation', handl<co
         <li><strong class="pname"><code>reason</code></strong> - The reason for the exception (<code>str</code>).</li>
         <li><strong class="pname"><code>info</code></strong> - Other, caller-defined information (<code>all keywords</code>).</li>
     </ul></dd>
+    <dt>Returns:</dt>
+        <dd>The exception (<code>ObjC/NSException</code>).</dd>
   </dl>
 <div class="fields">      <p><strong>See Also:</strong>
         <a href="pycocoa.nstypes-module.html#nsRaise" 
@@ -9289,9 +9697,9 @@ t 7f9a687293d0&gt;">&lt;CDLL 'CoreFoundation.framework/CoreFoundation', handl<co
         and get access to the attributes of the latter.
         </li>
         <li>
-        Raised and thrown <code>NSException</code>s can not be caught and 
-        result in <i>fatal</i> <a href="pycocoa.faults-module.html#exiting"
-        class="link">exiting</a>.
+        Raised and thrown <code>NSException</code>s can <i>not be 
+        caught</i> and result in <i>fatal</i> <a 
+        href="pycocoa.faults-module.html#exiting" class="link">exiting</a>.
         </li>
       </ul>
 </div></td></tr></table>
@@ -9304,27 +9712,41 @@ t 7f9a687293d0&gt;">&lt;CDLL 'CoreFoundation.framework/CoreFoundation', handl<co
   <table width="100%" cellpadding="0" cellspacing="0" border="0">
   <tr valign="top"><td>
   <h3 class="epydoc"><span class="sig"><span class="sig-name">nsIter</span>(<span class="sig-arg">ns</span>,
-        <span class="sig-arg">reverse</span>=<span class="sig-default">False</span>)</span>
+        <span class="sig-arg">reverse</span>=<span class="sig-default">False</span>,
+        <span class="sig-arg">keys</span>=<span class="sig-default">False</span>)</span>
   </h3>
   </td><td align="right" valign="top"
     >&nbsp;
     </td>
   </tr></table>
   
-  <p>Iterate over an <code>NS..</code> ObjC objects's (reverse) 
-  enumerator.</p>
+  <p>Iterate over an <code>NS..</code> ObjC objects's keys or (reverse) 
+  values.</p>
   <dl class="fields">
     <dt>Parameters:</dt>
     <dd><ul class="nomargin-top">
-        <li><strong class="pname"><code>ns</code></strong> - The <code>NS..</code> object to iterate over (<a 
+        <li><strong class="pname"><code>ns</code></strong> - The <code>NS..</code> instance to iterate over (<a 
           href="pycocoa.runtime.ObjCInstance-class.html" 
           class="link">ObjCInstance</a>).</li>
         <li><strong class="pname"><code>reverse</code></strong> - Iterate in reverse order (<code>bool</code>), forward otherwise.</li>
+        <li><strong class="pname"><code>keys</code></strong> - If <code>True</code> and if <code><b>reverse</b>=False</code>, 
+          iterate over the keys of <code><b>ns</b></code>, provided 
+          <code><b>ns</b></code> is an <code>NS[Mutable]Dictionary</code>.</li>
     </ul></dd>
     <dt>Returns:</dt>
-        <dd>Each object (<code>NS...</code>).</dd>
+        <dd>Yield each object or key (<code>NS...</code>).</dd>
+    <dt>Raises:</dt>
+    <dd><ul class="nomargin-top">
+        <li><code><strong class='fraise'>TypeError</strong></code> - Invalid <i>ns</i>.</li>
+    </ul></dd>
   </dl>
-</td></tr></table>
+<div class="fields">      <p><strong>Note:</strong>
+        If <code><b>ns</b></code> is an <code>NS[Mutable]Dictionary</code> 
+        and <code><b>keys</b>=False</code>, the values of 
+        <code><b>ns</b></code> are enumerated in forward of 
+        <code>reverse</code> order.
+      </p>
+</div></td></tr></table>
 </div>
 <a name="nsIter2"></a>
 <div>
@@ -9334,29 +9756,34 @@ t 7f9a687293d0&gt;">&lt;CDLL 'CoreFoundation.framework/CoreFoundation', handl<co
   <table width="100%" cellpadding="0" cellspacing="0" border="0">
   <tr valign="top"><td>
   <h3 class="epydoc"><span class="sig"><span class="sig-name">nsIter2</span>(<span class="sig-arg">ns</span>,
-        <span class="sig-arg">reverse</span>=<span class="sig-default">False</span>)</span>
+        <span class="sig-arg">reverse</span>=<span class="sig-default">False</span>,
+        <span class="sig-arg">keys</span>=<span class="sig-default">False</span>)</span>
   </h3>
   </td><td align="right" valign="top"
     >&nbsp;
     </td>
   </tr></table>
   
-  <p>Iterate over an <code>NS..</code> ObjC objects's (reverse) 
-  enumerator.</p>
+  <p>Iterate over an <code>NS..</code> ObjC objects's keys or (reverse) 
+  values.</p>
   <dl class="fields">
-    <dt>Parameters:</dt>
-    <dd><ul class="nomargin-top">
-        <li><strong class="pname"><code>ns</code></strong> - The <code>NS..</code> object to iterate over (<a 
-          href="pycocoa.runtime.ObjCInstance-class.html" 
-          class="link">ObjCInstance</a>).</li>
-        <li><strong class="pname"><code>reverse</code></strong> - Iterate in reverse order (<code>bool</code>), foward otherwise.</li>
-    </ul></dd>
     <dt>Returns:</dt>
-        <dd>Each object as 2-Tuple (<i>py, ns</i>) where <i>py</i> is a 
-          Python <code>Type</code> instance and <i>ns</i> the ObjC object 
+        <dd>Yield each object as 2-Tuple (<i>py, ns</i>) where <i>py</i> is a
+          Python <code>Type</code> instance and <i>ns</i> the object 
           <code>NS...</code>.</dd>
+    <dt>Raises:</dt>
+    <dd><ul class="nomargin-top">
+        <li><code><strong class='fraise'>TypeError</strong></code> - Invalid <i>ns</i>.</li>
+    </ul></dd>
   </dl>
-</td></tr></table>
+<div class="fields">      <p><strong>See Also:</strong>
+        Function <a href="pycocoa.nstypes-module.html#nsIter" 
+        class="link">nsIter</a> for <code><b>ns</b></code>, 
+        <code><b>reverse</b></code> and <code><b>key</b></code> details and
+        function <a href="pycocoa.nstypes-module.html#ns2Type" 
+        class="link">ns2Type</a> for Python <code>Type</code>s.
+      </p>
+</div></td></tr></table>
 </div>
 <a name="nsLog"></a>
 <div>
@@ -9380,6 +9807,10 @@ t 7f9a687293d0&gt;">&lt;CDLL 'CoreFoundation.framework/CoreFoundation', handl<co
         <li><strong class="pname"><code>ns_fmt</code></strong> - A printf-like format string (<a 
           href="pycocoa.nstypes.NSStr-class.html" class="link">NSStr</a>).</li>
         <li><strong class="pname"><code>ns_args</code></strong> - Optional arguments to format (<code>all positional</code>).</li>
+    </ul></dd>
+    <dt>Raises:</dt>
+    <dd><ul class="nomargin-top">
+        <li><code><strong class='fraise'>TypeError</strong></code> - Invalid <i>ns_fmt</i>.</li>
     </ul></dd>
   </dl>
 <div class="fields">      <p><strong>Note:</strong>
@@ -9414,6 +9845,10 @@ t 7f9a687293d0&gt;">&lt;CDLL 'CoreFoundation.framework/CoreFoundation', handl<co
         <li><strong class="pname"><code>fmtxt</code></strong> - A printf-like format string (<code>str</code>).</li>
         <li><strong class="pname"><code>args</code></strong> - Optional arguments to format (<code>all positional</code>).</li>
     </ul></dd>
+    <dt>Raises:</dt>
+    <dd><ul class="nomargin-top">
+        <li><code><strong class='fraise'>TypeError</strong></code> - Invalid <i>fmtxt</i>.</li>
+    </ul></dd>
   </dl>
 <div class="fields">      <p><strong>See Also:</strong>
         <a href="pycocoa.nstypes-module.html#nsLog" class="link">nsLog</a>.
@@ -9439,7 +9874,7 @@ t 7f9a687293d0&gt;">&lt;CDLL 'CoreFoundation.framework/CoreFoundation', handl<co
   <dl class="fields">
     <dt>Parameters:</dt>
     <dd><ul class="nomargin-top">
-        <li><strong class="pname"><code>ns</code></strong> - The <code>NS...</code> (<a 
+        <li><strong class="pname"><code>ns</code></strong> - The <code>NS...</code> instance (<a 
           href="pycocoa.runtime.ObjCInstance-class.html" 
           class="link">ObjCInstance</a>).</li>
     </ul></dd>
@@ -9447,6 +9882,7 @@ t 7f9a687293d0&gt;">&lt;CDLL 'CoreFoundation.framework/CoreFoundation', handl<co
         <dd>The singleton (<code>None</code>).</dd>
     <dt>Raises:</dt>
     <dd><ul class="nomargin-top">
+        <li><code><strong class='fraise'>TypeError</strong></code> - Invalid <i>ns</i>.</li>
         <li><code><strong class='fraise'>ValueError</strong></code> - If <i>ns</i> not <code>isNone</code>.</li>
     </ul></dd>
   </dl>
@@ -9472,7 +9908,7 @@ t 7f9a687293d0&gt;">&lt;CDLL 'CoreFoundation.framework/CoreFoundation', handl<co
   <dl class="fields">
     <dt>Parameters:</dt>
     <dd><ul class="nomargin-top">
-        <li><strong class="pname"><code>ns</code></strong> - The <code>NSNumber</code> (<a 
+        <li><strong class="pname"><code>ns</code></strong> - The <code>NSNumber</code> instance (<a 
           href="pycocoa.runtime.ObjCInstance-class.html" 
           class="link">ObjCInstance</a>).</li>
         <li><strong class="pname"><code>dflt</code></strong> - Default for missing, unobtainable value (<code>missing</code>).</li>
@@ -9482,7 +9918,7 @@ t 7f9a687293d0&gt;">&lt;CDLL 'CoreFoundation.framework/CoreFoundation', handl<co
           <code>float</code>).</dd>
     <dt>Raises:</dt>
     <dd><ul class="nomargin-top">
-        <li><code><strong class='fraise'>TypeError</strong></code> - Unexpected <code>NumberType</code>.</li>
+        <li><code><strong class='fraise'>TypeError</strong></code> - Invalid <i>ns</i>.</li>
         <li><code><strong class='fraise'>ValueError</strong></code> - If <i>ns</i> not an <code>NSNumber</code>.</li>
     </ul></dd>
   </dl>
@@ -9548,8 +9984,8 @@ t 7f9a687293d0&gt;">&lt;CDLL 'CoreFoundation.framework/CoreFoundation', handl<co
     </ul></dd>
   </dl>
 <div class="fields">      <p><strong>Note:</strong>
-        Raised <code>NSException</code>s can not be caught and result in 
-        <i>fatal</i> <a href="pycocoa.faults-module.html#exiting" 
+        Raised <code>NSException</code>s can <i>not be caught</i> and 
+        result in <i>fatal</i> <a href="pycocoa.faults-module.html#exiting"
         class="link">exiting</a>.
       </p>
       <p><strong>See Also:</strong>
@@ -9568,7 +10004,8 @@ t 7f9a687293d0&gt;">&lt;CDLL 'CoreFoundation.framework/CoreFoundation', handl<co
   <table width="100%" cellpadding="0" cellspacing="0" border="0">
   <tr valign="top"><td>
   <h3 class="epydoc"><span class="sig"><span class="sig-name">nsSet2set</span>(<span class="sig-arg">ns</span>,
-        <span class="sig-arg">ctype</span>=<span class="sig-default">&lt;class 'ctypes.c_void_p'&gt;</span>)</span>
+        <span class="sig-arg">ctype</span>=<span class="sig-default">&lt;class 'ctypes.c_void_p'&gt;</span>,
+        <span class="sig-arg">typy</span>=<span class="sig-default">None</span>)</span>
   </h3>
   </td><td align="right" valign="top"
     >&nbsp;
@@ -9580,13 +10017,22 @@ t 7f9a687293d0&gt;">&lt;CDLL 'CoreFoundation.framework/CoreFoundation', handl<co
   <dl class="fields">
     <dt>Parameters:</dt>
     <dd><ul class="nomargin-top">
-        <li><strong class="pname"><code>ns</code></strong> - The <code>NS[Mutable]Set</code> (<a 
+        <li><strong class="pname"><code>ns</code></strong> - The <code>NS[Mutable]Set</code> instance (<a 
           href="pycocoa.runtime.ObjCInstance-class.html" 
           class="link">ObjCInstance</a>).</li>
         <li><strong class="pname"><code>ctype</code></strong> - The set item type (<code>ctypes</code>).</li>
+        <li><strong class="pname"><code>typy</code></strong> - Use <code><b>typy</b>=set</code>, 
+          <code><b>typy</b>=frozenset</code> or 
+          <code><b>typy</b>=any_callable</code> to override the Python 
+          type.</li>
     </ul></dd>
     <dt>Returns:</dt>
-        <dd>The set (<code>set</code> or <code>frozenset</code>).</dd>
+        <dd>The set (<code>set</code> or <code>frozenset</code> or 
+          <code>typy</code>).</dd>
+    <dt>Raises:</dt>
+    <dd><ul class="nomargin-top">
+        <li><code><strong class='fraise'>TypeError</strong></code> - Invalid <i>ns</i>.</li>
+    </ul></dd>
   </dl>
 </td></tr></table>
 </div>
@@ -9610,7 +10056,7 @@ t 7f9a687293d0&gt;">&lt;CDLL 'CoreFoundation.framework/CoreFoundation', handl<co
   <dl class="fields">
     <dt>Parameters:</dt>
     <dd><ul class="nomargin-top">
-        <li><strong class="pname"><code>ns</code></strong> - The <code>NS[Mutable]Str[ing]</code> (<a 
+        <li><strong class="pname"><code>ns</code></strong> - The <code>NS[Mutable]Str[ing]</code> instance (<a 
           href="pycocoa.runtime.ObjCInstance-class.html" 
           class="link">ObjCInstance</a>).</li>
     </ul></dd>
@@ -9650,6 +10096,32 @@ t 7f9a687293d0&gt;">&lt;CDLL 'CoreFoundation.framework/CoreFoundation', handl<co
   </dl>
 </td></tr></table>
 </div>
+<a name="nsTextView"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">nsTextView</span>(<span class="sig-arg">text</span>,
+        <span class="sig-arg">ns_font</span>,
+        <span class="sig-arg">scroll</span>=<span class="sig-default">50</span>)</span>
+  </h3>
+  </td><td align="right" valign="top"
+    >&nbsp;
+    </td>
+  </tr></table>
+  
+  <p>Return an <code>NSTextView</code> for the given text string.</p>
+  <dl class="fields">
+    <dt>Parameters:</dt>
+    <dd><ul class="nomargin-top">
+        <li><strong class="pname"><code>scroll</code></strong> - Make the <code>NSTextView</code> scrollable if the number of text
+          lines exceeds <code>scroll</code> (<code>int</code>).</li>
+    </ul></dd>
+  </dl>
+</td></tr></table>
+</div>
 <a name="nsThrow"></a>
 <div>
 <table class="details" border="1" cellpadding="3"
@@ -9673,7 +10145,7 @@ t 7f9a687293d0&gt;">&lt;CDLL 'CoreFoundation.framework/CoreFoundation', handl<co
     </ul></dd>
     <dt>Raises:</dt>
     <dd><ul class="nomargin-top">
-        <li><code><strong class='fraise'>TypeError</strong></code> - Invalid <b><code>nsExc</code></b>.</li>
+        <li><code><strong class='fraise'>TypeError</strong></code> - Invalid <i>nsExc</i>.</li>
     </ul></dd>
   </dl>
 <div class="fields">      <p><strong>See Also:</strong>
@@ -9683,8 +10155,8 @@ t 7f9a687293d0&gt;">&lt;CDLL 'CoreFoundation.framework/CoreFoundation', handl<co
         class="link">nsRaise</a>.
       </p>
       <p><strong>Note:</strong>
-        Thrown <code>NSException</code>s can not be caught and result in 
-        <i>fatal</i> <a href="pycocoa.faults-module.html#exiting" 
+        Thrown <code>NSException</code>s can <i>not be caught</i> and 
+        result in <i>fatal</i> <a href="pycocoa.faults-module.html#exiting"
         class="link">exiting</a>.
       </p>
 </div></td></tr></table>
@@ -9707,12 +10179,16 @@ t 7f9a687293d0&gt;">&lt;CDLL 'CoreFoundation.framework/CoreFoundation', handl<co
   <dl class="fields">
     <dt>Parameters:</dt>
     <dd><ul class="nomargin-top">
-        <li><strong class="pname"><code>ns</code></strong> - The <code>CFURL</code> (<a 
+        <li><strong class="pname"><code>ns</code></strong> - The <code>CFURL</code> instance (<a 
           href="pycocoa.runtime.ObjCInstance-class.html" 
           class="link">ObjCInstance</a>).</li>
     </ul></dd>
     <dt>Returns:</dt>
         <dd>The URL as string (<code>str</code>).</dd>
+    <dt>Raises:</dt>
+    <dd><ul class="nomargin-top">
+        <li><code><strong class='fraise'>TypeError</strong></code> - Invalid <i>ns</i>.</li>
+    </ul></dd>
   </dl>
 </td></tr></table>
 </div>
@@ -9735,7 +10211,7 @@ t 7f9a687293d0&gt;">&lt;CDLL 'CoreFoundation.framework/CoreFoundation', handl<co
   <dl class="fields">
     <dt>Parameters:</dt>
     <dd><ul class="nomargin-top">
-        <li><strong class="pname"><code>ns</code></strong> - The <code>NS[Concrete]Value</code> (<a 
+        <li><strong class="pname"><code>ns</code></strong> - The <code>NS[Concrete]Value</code> instance (<a 
           href="pycocoa.runtime.ObjCInstance-class.html" 
           class="link">ObjCInstance</a>).</li>
         <li><strong class="pname"><code>dflt</code></strong> - Default for missing, unobtainable value.</li>
@@ -9743,11 +10219,11 @@ t 7f9a687293d0&gt;">&lt;CDLL 'CoreFoundation.framework/CoreFoundation', handl<co
     <dt>Returns:</dt>
         <dd>The value (<code>NSPoint_t</code>, <code>NSRange_t</code>, 
           <code>NSRect_t</code>, <code>NSSize_t</code> or 
-          <code>tuple</code>) or <b><code>dflt</code></b>.</dd>
+          <code>tuple</code>) or <i>dflt</i>.</dd>
     <dt>Raises:</dt>
     <dd><ul class="nomargin-top">
-        <li><code><strong class='fraise'>TypeError</strong></code> - Invalid <b><code>ns</code></b> or unexpected 
-        <code>ns.objCType</code>.</li>
+        <li><code><strong class='fraise'>TypeError</strong></code> - Invalid <i>ns</i> or unhandled <code>ns.objCType</code>.</li>
+        <li><code><strong class='fraise'>TypeError</strong></code> - Invalid <i>ns</i>.</li>
     </ul></dd>
   </dl>
 </td></tr></table>
@@ -9810,35 +10286,6 @@ t 7f9a687293d0&gt;">&lt;CDLL 'CoreFoundation.framework/CoreFoundation', handl<co
   </dl>
 </td></tr></table>
 </div>
-<a name="property2"></a>
-<div>
-<table class="details" border="1" cellpadding="3"
-       cellspacing="0" width="100%" bgcolor="white">
-<tr><td>
-  <table width="100%" cellpadding="0" cellspacing="0" border="0">
-  <tr valign="top"><td>
-  <h3 class="epydoc"><span class="sig"><span class="sig-name">property2</span>(<span class="sig-arg">inst</span>,
-        <span class="sig-arg">name</span>)</span>
-  </h3>
-  </td><td align="right" valign="top"
-    >&nbsp;
-    </td>
-  </tr></table>
-  
-  <p>Return the property <code>get</code> and <code>set</code> method.</p>
-  <dl class="fields">
-    <dt>Parameters:</dt>
-    <dd><ul class="nomargin-top">
-        <li><strong class="pname"><code>inst</code></strong> - An instance (<code>any</code>).</li>
-        <li><strong class="pname"><code>name</code></strong> - Property name (<code>str</code>).</li>
-    </ul></dd>
-    <dt>Returns:</dt>
-        <dd>2-Tuple (get, set) as <code>callable</code>s, 
-          (<code>callable</code>, <code>None</code>) or (<code>None</code>,
-          <code>None</code>) if <i>inst.name</i> is not a property.</dd>
-  </dl>
-</td></tr></table>
-</div>
 <a name="property_RO"></a>
 <div>
 <table class="details" border="1" cellpadding="3"
@@ -9862,8 +10309,8 @@ t 7f9a687293d0&gt;">&lt;CDLL 'CoreFoundation.framework/CoreFoundation', handl<co
   </dl>
 <div class="fields">      <p><strong>Note:</strong>
         Like standard Python <code>property</code> without a 
-        <code>property.setter</code> and with a more descriptive error 
-        message when set.
+        <code>property.setter</code> and with an error message when trying 
+        to set.
       </p>
 </div></td></tr></table>
 </div>
@@ -9901,55 +10348,59 @@ t 7f9a687293d0&gt;">&lt;CDLL 'CoreFoundation.framework/CoreFoundation', handl<co
         Conversion map:
         <ul>
           <li>
-            bool      -&gt; NSBoolean/NSNumber
+            bool       -&gt; NSBoolean/NSNumber
           </li>
           <li>
-            bytes     -&gt; NSData (Python 3+ only)
+            bytes      -&gt; NSData (Python 3+ only)
           </li>
           <li>
-            bytearray -&gt; NSData
+            bytearray  -&gt; NSData
           </li>
           <li>
-            Decimal   -&gt; NSDecimal
+            Decimal    -&gt; NSDecimal
           </li>
           <li>
-            dict      -&gt; NSMutableDictionary
+            dict       -&gt; NSMutableDictionary
           </li>
           <li>
-            float     -&gt; NSNumber
+            float      -&gt; NSNumber
           </li>
           <li>
-            frozenset -&gt; NSSet, immutable
+            frozendict -&gt; NSDictionary, immutable
           </li>
           <li>
-            generator -&gt; NSArray, immutable (like tuple)
+            frozenset  -&gt; NSSet, immutable
           </li>
           <li>
-            int       -&gt; NSNumber
+            generator  -&gt; NSArray, immutable (like tuple)
           </li>
           <li>
-            list      -&gt; NSMutableArray
+            int        -&gt; NSNumber
           </li>
           <li>
-            map       -&gt; NSArray, immutable (like tuple, Python 3+ only)
+            list       -&gt; NSMutableArray
           </li>
           <li>
-            None      -&gt; NSNull
+            map        -&gt; NSArray, immutable (like tuple, Python 3+ 
+            only)
           </li>
           <li>
-            range     -&gt; NSArray, immutable (like tuple)
+            None       -&gt; NSNull
           </li>
           <li>
-            set       -&gt; NSMutableSet
+            range      -&gt; NSArray, immutable (like tuple)
           </li>
           <li>
-            str       -&gt; NSStr, immutable
+            set        -&gt; NSMutableSet
           </li>
           <li>
-            tuple     -&gt; NSArray, immutable
+            str        -&gt; NSStr, immutable
           </li>
           <li>
-            unicode   -&gt; NSStr, immutable
+            tuple      -&gt; NSArray, immutable
+          </li>
+          <li>
+            unicode    -&gt; NSStr, immutable
           </li>
         </ul>
       </p>
@@ -9966,26 +10417,26 @@ t 7f9a687293d0&gt;">&lt;CDLL 'CoreFoundation.framework/CoreFoundation', handl<co
 <tr><td>
   <table width="100%" cellpadding="0" cellspacing="0" border="0">
   <tr valign="top"><td>
-  <h3 class="epydoc"><span class="sig"><span class="sig-name">range2NS</span>(<span class="sig-arg">py</span>)</span>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">range2NS</span>(<span class="sig-arg">py</span>,
+        <span class="sig-arg">frozen</span>=<span class="sig-default">True</span>)</span>
   </h3>
   </td><td align="right" valign="top"
     >&nbsp;
     </td>
   </tr></table>
   
-  <p>Create an <code>NSArray</code> instance from a Python 
+  <p>Create an <code>NS[Mutable]Array</code> from a Python 
   <code>range</code>.</p>
   <dl class="fields">
     <dt>Parameters:</dt>
     <dd><ul class="nomargin-top">
         <li><strong class="pname"><code>py</code></strong> - The value (<code>range</code>).</li>
+        <li><strong class="pname"><code>frozen</code></strong> - If <code>True</code>, return an immutable <code>NSArray</code> 
+          (<code>bool</code>), otherwise an <code>NSMutableArray</code>.</li>
     </ul></dd>
     <dt>Returns:</dt>
-        <dd>The ObjC instance (<code>NSArray</code>).</dd>
-    <dt>Raises:</dt>
-    <dd><ul class="nomargin-top">
-        <li><code><strong class='fraise'>RuntimeError</strong></code> - If <code>len</code> vs <code>count</code> assertion failed.</li>
-    </ul></dd>
+        <dd>The ObjC instance (<code>NSMutableArray</code> or immutable 
+          <code>NSArray</code>).</dd>
   </dl>
 </td></tr></table>
 </div>
@@ -10098,7 +10549,7 @@ t 7f9a687293d0&gt;">&lt;CDLL 'CoreFoundation.framework/CoreFoundation', handl<co
   <h3 class="epydoc"><span class="sig"><span class="sig-name">send_message</span>(<span class="sig-arg">objc</span>,
         <span class="sig-arg">sel_name_</span>,
         <span class="sig-arg">*args</span>,
-        <span class="sig-arg">**resargtypes</span>)</span>
+        <span class="sig-arg">**restype_argtypes</span>)</span>
   </h3>
   </td><td align="right" valign="top"
     >&nbsp;
@@ -10147,7 +10598,7 @@ t 7f9a687293d0&gt;">&lt;CDLL 'CoreFoundation.framework/CoreFoundation', handl<co
   <h3 class="epydoc"><span class="sig"><span class="sig-name">send_super</span>(<span class="sig-arg">objc</span>,
         <span class="sig-arg">sel_name_</span>,
         <span class="sig-arg">*args</span>,
-        <span class="sig-arg">**resargtypes</span>)</span>
+        <span class="sig-arg">**restype_argtypes</span>)</span>
   </h3>
   </td><td align="right" valign="top"
     >&nbsp;
@@ -10226,21 +10677,17 @@ t 7f9a687293d0&gt;">&lt;CDLL 'CoreFoundation.framework/CoreFoundation', handl<co
     </td>
   </tr></table>
   
-  <p>Create an <code>NSMutableSet</code> instance from a Python 
-  <code>set</code>.</p>
+  <p>Create an <code>NSMutableSet</code> from a Python <code>set</code> or 
+  <code>frozenset</code>.</p>
   <dl class="fields">
-    <dt>Parameters:</dt>
-    <dd><ul class="nomargin-top">
-        <li><strong class="pname"><code>py</code></strong> - The value (<code>set</code>).</li>
-    </ul></dd>
     <dt>Returns:</dt>
         <dd>The ObjC instance (<code>NSMutableSet</code>).</dd>
-    <dt>Raises:</dt>
-    <dd><ul class="nomargin-top">
-        <li><code><strong class='fraise'>RuntimeError</strong></code> - If <code>len</code> vs <code>count</code> assertion failed.</li>
-    </ul></dd>
   </dl>
-</td></tr></table>
+<div class="fields">      <p><strong>See Also:</strong>
+        Function <a href="pycocoa.pytypes-module.html#sets2NS" 
+        class="link">sets2NS</a> for further details.
+      </p>
+</div></td></tr></table>
 </div>
 <a name="setUncaughtExceptionHandler"></a>
 <div>
@@ -10364,6 +10811,38 @@ t 7f9a687293d0&gt;">&lt;CDLL 'CoreFoundation.framework/CoreFoundation', handl<co
     <dd><ul class="nomargin-top">
         <li><code><strong class='fraise'>ArgumentError</strong></code> - Invalid <i>name</i>, <i>value</i> or <i>ctype</i>.</li>
         <li><code><strong class='fraise'>TypeError</strong></code> - Invalid <i>name</i>, <i>value</i> or <i>ctype</i> type.</li>
+    </ul></dd>
+  </dl>
+</td></tr></table>
+</div>
+<a name="sets2NS"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">sets2NS</span>(<span class="sig-arg">py</span>)</span>
+  </h3>
+  </td><td align="right" valign="top"
+    >&nbsp;
+    </td>
+  </tr></table>
+  
+  <p>Create an <code>NS[Mutable]Set</code> instance from a Python 
+  <code>set</code> or <code>frozenset</code>.</p>
+  <dl class="fields">
+    <dt>Parameters:</dt>
+    <dd><ul class="nomargin-top">
+        <li><strong class="pname"><code>py</code></strong> - The value (<code>set</code> or <code>frozenset</code>).</li>
+    </ul></dd>
+    <dt>Returns:</dt>
+        <dd>The ObjC instance (<code>NSMutableSet</code> or immutable 
+          <code>NSSet</code>).</dd>
+    <dt>Raises:</dt>
+    <dd><ul class="nomargin-top">
+        <li><code><strong class='fraise'>RuntimeError</strong></code> - If <code>len</code> vs <code>count</code> assertion failed.</li>
+        <li><code><strong class='fraise'>TypeError</strong></code> - If <i>py</i> is not <code>set</code> nor <code>frozenset</code>.</li>
     </ul></dd>
   </dl>
 </td></tr></table>
@@ -10593,7 +11072,11 @@ t 7f9a687293d0&gt;">&lt;CDLL 'CoreFoundation.framework/CoreFoundation', handl<co
     <dt>Returns:</dt>
         <dd>The ObjC instance (<code>NSStr</code>).</dd>
   </dl>
-</td></tr></table>
+<div class="fields">      <p><strong>See Also:</strong>
+        Function <a href="pycocoa.pytypes-module.html#strs2NS" 
+        class="link">strs2NS</a>.
+      </p>
+</div></td></tr></table>
 </div>
 <a name="str2bytes"></a>
 <div>
@@ -10604,7 +11087,7 @@ t 7f9a687293d0&gt;">&lt;CDLL 'CoreFoundation.framework/CoreFoundation', handl<co
   <tr valign="top"><td>
   <h3 class="epydoc"><span class="sig"><span class="sig-name">str2bytes</span>(<span class="sig-arg">strbytes</span>,
         <span class="sig-arg">dflt</span>=<span class="sig-default">missing</span>,
-        <span class="sig-arg">name</span>=<span class="sig-default">''</span>)</span>
+        <span class="sig-arg">**name</span>)</span>
   </h3>
   </td><td align="right" valign="top"
     >&nbsp;
@@ -10630,6 +11113,40 @@ t 7f9a687293d0&gt;">&lt;CDLL 'CoreFoundation.framework/CoreFoundation', handl<co
     </ul></dd>
   </dl>
 </td></tr></table>
+</div>
+<a name="strs2NS"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">strs2NS</span>(<span class="sig-arg">py</span>,
+        <span class="sig-arg">frozen</span>=<span class="sig-default">True</span>)</span>
+  </h3>
+  </td><td align="right" valign="top"
+    >&nbsp;
+    </td>
+  </tr></table>
+  
+  <p>Create an <code>NS[Mutable]String</code> from a Python 
+  <code>str</code>.</p>
+  <dl class="fields">
+    <dt>Parameters:</dt>
+    <dd><ul class="nomargin-top">
+        <li><strong class="pname"><code>py</code></strong> - The value (<code>str</code>).</li>
+        <li><strong class="pname"><code>frozen</code></strong> - If <code>True</code>, return an immutable <code>NSString</code> 
+          (<code>bool</code>), otherwise an <code>NSMutableString</code>.</li>
+    </ul></dd>
+    <dt>Returns:</dt>
+        <dd>The ObjC instance (<code>NSMutableString</code> or immutable 
+          <code>NSString</code>).</dd>
+  </dl>
+<div class="fields">      <p><strong>See Also:</strong>
+        Function <a href="pycocoa.pytypes-module.html#str2NS" 
+        class="link">str2NS</a>.
+      </p>
+</div></td></tr></table>
 </div>
 <a name="terminating"></a>
 <div>
@@ -10741,20 +11258,16 @@ t 7f9a687293d0&gt;">&lt;CDLL 'CoreFoundation.framework/CoreFoundation', handl<co
   </tr></table>
   
   <p>Create an immutable <code>NSArray</code> instance from a Python 
-  <code>tuple</code>.</p>
+  <code>tuple</code> or <code>list</code>.</p>
   <dl class="fields">
-    <dt>Parameters:</dt>
-    <dd><ul class="nomargin-top">
-        <li><strong class="pname"><code>py</code></strong> - The value (<code>tuple</code>).</li>
-    </ul></dd>
     <dt>Returns:</dt>
-        <dd>The ObjC instance (<code>NSArray</code>).</dd>
-    <dt>Raises:</dt>
-    <dd><ul class="nomargin-top">
-        <li><code><strong class='fraise'>RuntimeError</strong></code> - If <code>len</code> vs <code>count</code> assertion failed.</li>
-    </ul></dd>
+        <dd>The ObjC instance (<code>NSArray</code>, immutable).</dd>
   </dl>
-</td></tr></table>
+<div class="fields">      <p><strong>See Also:</strong>
+        Function <a href="pycocoa.pytypes-module.html#listuple2NS" 
+        class="link">listuple2NS</a> for further details.
+      </p>
+</div></td></tr></table>
 </div>
 <a name="type2NS"></a>
 <div>
@@ -10770,8 +11283,8 @@ t 7f9a687293d0&gt;">&lt;CDLL 'CoreFoundation.framework/CoreFoundation', handl<co
     </td>
   </tr></table>
   
-  <p>Create the <code>NS...</code> ObjC object for a Python Type or wrapper
-  instance.</p>
+  <p>Create the <code>NS...</code> ObjC object for a Python Type (or 
+  wrapper) instance.</p>
   <dl class="fields">
     <dt>Parameters:</dt>
     <dd><ul class="nomargin-top">
@@ -11198,14 +11711,14 @@ FontTrait.Bold=2,
   <dl class="fields">
     <dt>Value:</dt>
       <dd><table><tr><td><pre class="variable">
-Fonts.App=Font({&lt;generator object &lt;genexpr&gt; at 0x7f9a78804fa0&gt;}),
-     .Bold=Font({&lt;generator object &lt;genexpr&gt; at 0x7f9a78804fa0&gt;}),
-     .BoldItalic=Font({&lt;generator object &lt;genexpr&gt; at 0x7f9a78804fa0&gt;}<span class="variable-linewrap"><img src="crarr.png" alt="\" /></span>
-),
-     .Italic=Font({&lt;generator object &lt;genexpr&gt; at 0x7f9a78804fa0&gt;}),
-     .Label=Font({&lt;generator object &lt;genexpr&gt; at 0x7f9a78804fa0&gt;}),
-     .Menu=Font({&lt;generator object &lt;genexpr&gt; at 0x7f9a78804fa0&gt;}),
-     .MenuBar=Font({&lt;generator object &lt;genexpr&gt; at 0x7f9a78804fa0&gt;}),
+Fonts.App=Font({family='Helvetica', name='Helvetica', size=12, weight=<span class="variable-linewrap"><img src="crarr.png" alt="\" /></span>
+5}),
+     .Bold=Font({family='.AppleSystemUIFont', name='.AppleSystemUIFont<span class="variable-linewrap"><img src="crarr.png" alt="\" /></span>
+Bold', size=13, traits='Bold', weight=9}),
+     .BoldItalic=Font({family='.AppleSystemUIFont', name='.AppleSystem<span class="variable-linewrap"><img src="crarr.png" alt="\" /></span>
+UIFontEmphasizedItalic', size=13, traits='Bold Italic', weight=9}),
+     .Italic=Font({family='.AppleSystemUIFont', name='.AppleSystemUIFo<span class="variable-linewrap"><img src="crarr.png" alt="\" /></span>
+ntItalic', size=13, traits='Italic', weight=5}),
 <code class="variable-ellipsis">...</code>
 </pre></td></tr></table>
 </dd>
@@ -11276,15 +11789,33 @@ Keys.ACK=0x6,
   <dl class="fields">
     <dt>Value:</dt>
       <dd><table><tr><td><pre class="variable">
-Libs.AppKit=&lt;CDLL 'AppKit.framework/AppKit', handle 7fff8c50ccc8 at 7f<span class="variable-linewrap"><img src="crarr.png" alt="\" /></span>
-9a68729dd0&gt;,
-    .C=&lt;CDLL 'libc.dylib', handle 7fff8c5fb788 at 7f9a68729390&gt;,
+Libs.AppKit=&lt;CDLL 'AppKit.framework/AppKit', handle 7fff9f58a290 at 7f<span class="variable-linewrap"><img src="crarr.png" alt="\" /></span>
+ceb86d5610&gt;,
+    .C=&lt;CDLL 'libc.dylib', handle 7fff9f598d50 at 7fceb86cfb90&gt;,
     .CoreFoundation=&lt;CDLL 'CoreFoundation.framework/CoreFoundation', h<span class="variable-linewrap"><img src="crarr.png" alt="\" /></span>
-andle 7fff8c5113c0 at 7f9a687293d0&gt;,
+andle 7fff9f58e988 at 7fceb86cfb50&gt;,
     .CoreGraphics=&lt;CDLL 'CoreGraphics.framework/CoreGraphics', handle <span class="variable-linewrap"><img src="crarr.png" alt="\" /></span>
-7fff8c50b058 at 7f9a6873e0d0&gt;,
-    .CoreText=&lt;CDLL 'CoreText.framework/CoreText', handle 7fff8c50f2f8<span class="variable-linewrap"><img src="crarr.png" alt="\" /></span>
+7fff9f588620 at 7fceb86d5750&gt;,
+    .CoreText=&lt;CDLL 'CoreText.framework/CoreText', handle 7fff9f58c8c0<span class="variable-linewrap"><img src="crarr.png" alt="\" /></span>
 <code class="variable-ellipsis">...</code>
+</pre></td></tr></table>
+</dd>
+  </dl>
+</td></tr></table>
+</div>
+<a name="NSAlertDelegate"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <h3 class="epydoc">NSAlertDelegate</h3>
+  
+  <dl class="fields">
+  </dl>
+  <dl class="fields">
+    <dt>Value:</dt>
+      <dd><table><tr><td><pre class="variable">
+&lt;pycocoa.internals.proxy_RO object at 0x7fceb84b2bd0&gt;
 </pre></td></tr></table>
 </dd>
   </dl>
@@ -11302,7 +11833,7 @@ andle 7fff8c5113c0 at 7f9a687293d0&gt;,
   <dl class="fields">
     <dt>Value:</dt>
       <dd><table><tr><td><pre class="variable">
-&lt;pycocoa.utils.module_property_RO object at 0x7f9a685a0ed0&gt;
+&lt;pycocoa.internals.proxy_RO object at 0x7fceb8648ed0&gt;
 </pre></td></tr></table>
 </dd>
   </dl>
@@ -11356,13 +11887,13 @@ _dllattr(libAppKit, NSEventTrackingRunLoopMode= RunLoop_t)
   <dl class="fields">
     <dt>Value:</dt>
       <dd><table><tr><td><pre class="variable">
-NSMain.Application=NSApplication(&lt;Id_t at 0x7f9a7880f680&gt;) of 0x7f9a66<span class="variable-linewrap"><img src="crarr.png" alt="\" /></span>
-350c20,
-      .BooleanNO=NSBoolean(&lt;Id_t at 0x7f9a482d40e0&gt;) of 0x7ff8475e6c70<span class="variable-linewrap"><img src="crarr.png" alt="\" /></span>
+NSMain.Application=NSApplication(&lt;Id_t at 0x7fcea8a64710&gt;) of 0x7fce83<span class="variable-linewrap"><img src="crarr.png" alt="\" /></span>
+fe3230,
+      .BooleanNO=NSBoolean(&lt;Id_t at 0x7fcea8a6bcb0&gt;) of 0x7ff85855ec70<span class="variable-linewrap"><img src="crarr.png" alt="\" /></span>
 ,
-      .BooleanYES=NSBoolean(&lt;Id_t at 0x7f9a78824950&gt;) of 0x7ff8475e6c6<span class="variable-linewrap"><img src="crarr.png" alt="\" /></span>
+      .BooleanYES=NSBoolean(&lt;Id_t at 0x7fcea8a735f0&gt;) of 0x7ff85855ec6<span class="variable-linewrap"><img src="crarr.png" alt="\" /></span>
 0,
-      .Bundle=NSBundle(&lt;Id_t at 0x7f9a78824a70&gt;) of 0x600000ef4000,
+      .Bundle=NSBundle(&lt;Id_t at 0x7fcea8a73710&gt;) of 0x600000320000,
       .BundleName=NSConstantString('CFBundleName'),
 <code class="variable-ellipsis">...</code>
 </pre></td></tr></table>
@@ -11382,7 +11913,7 @@ NSMain.Application=NSApplication(&lt;Id_t at 0x7f9a7880f680&gt;) of 0x7f9a66<spa
   <dl class="fields">
     <dt>Value:</dt>
       <dd><table><tr><td><pre class="variable">
-&lt;pycocoa.utils.module_property_RO object at 0x7f9a68495410&gt;
+&lt;pycocoa.internals.proxy_RO object at 0x7fceb877e9d0&gt;
 </pre></td></tr></table>
 </dd>
   </dl>
@@ -11400,7 +11931,29 @@ NSMain.Application=NSApplication(&lt;Id_t at 0x7f9a7880f680&gt;) of 0x7f9a66<spa
   <dl class="fields">
     <dt>Value:</dt>
       <dd><table><tr><td><pre class="variable">
-&lt;pycocoa.utils.module_property_RO object at 0x7f9a68495190&gt;
+&lt;pycocoa.internals.proxy_RO object at 0x7fceb877e7d0&gt;
+</pre></td></tr></table>
+</dd>
+  </dl>
+</td></tr></table>
+</div>
+<a name="OBJC_ASSOCIATION"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <h3 class="epydoc">OBJC_ASSOCIATION</h3>
+  
+  <dl class="fields">
+  </dl>
+  <dl class="fields">
+    <dt>Value:</dt>
+      <dd><table><tr><td><pre class="variable">
+OBJC_ASSOCIATION.ASSIGN=0,
+                .COPY=771,
+                .COPY_NONATOMIC=3,
+                .RETAIN=769,
+                .RETAIN_NONATOMIC=1
 </pre></td></tr></table>
 </dd>
   </dl>
@@ -11559,7 +12112,7 @@ WindowStyle.Closable=2,
   <dl class="fields">
     <dt>Value:</dt>
       <dd><table><tr><td><pre class="variable">
-&lt;CDLL 'AppKit.framework/AppKit', handle 7fff8c50ccc8 at 7f9a68729dd0&gt;
+&lt;CDLL 'AppKit.framework/AppKit', handle 7fff9f58a290 at 7fceb86d5610&gt;
 </pre></td></tr></table>
 </dd>
   </dl>
@@ -11577,8 +12130,8 @@ WindowStyle.Closable=2,
   <dl class="fields">
     <dt>Value:</dt>
       <dd><table><tr><td><pre class="variable">
-&lt;CDLL 'CoreFoundation.framework/CoreFoundation', handle 7fff8c5113c0 a<span class="variable-linewrap"><img src="crarr.png" alt="\" /></span>
-t 7f9a687293d0&gt;
+&lt;CDLL 'CoreFoundation.framework/CoreFoundation', handle 7fff9f58e988 a<span class="variable-linewrap"><img src="crarr.png" alt="\" /></span>
+t 7fceb86cfb50&gt;
 </pre></td></tr></table>
 </dd>
   </dl>
@@ -11596,8 +12149,8 @@ t 7f9a687293d0&gt;
   <dl class="fields">
     <dt>Value:</dt>
       <dd><table><tr><td><pre class="variable">
-&lt;CDLL 'CoreGraphics.framework/CoreGraphics', handle 7fff8c50b058 at 7f<span class="variable-linewrap"><img src="crarr.png" alt="\" /></span>
-9a6873e0d0&gt;
+&lt;CDLL 'CoreGraphics.framework/CoreGraphics', handle 7fff9f588620 at 7f<span class="variable-linewrap"><img src="crarr.png" alt="\" /></span>
+ceb86d5750&gt;
 </pre></td></tr></table>
 </dd>
   </dl>
@@ -11615,7 +12168,7 @@ t 7f9a687293d0&gt;
   <dl class="fields">
     <dt>Value:</dt>
       <dd><table><tr><td><pre class="variable">
-&lt;CDLL 'CoreText.framework/CoreText', handle 7fff8c50f2f8 at 7f9a684c90<span class="variable-linewrap"><img src="crarr.png" alt="\" /></span>
+&lt;CDLL 'CoreText.framework/CoreText', handle 7fff9f58c8c0 at 7fcea830f8<span class="variable-linewrap"><img src="crarr.png" alt="\" /></span>
 90&gt;
 </pre></td></tr></table>
 </dd>
@@ -11634,8 +12187,8 @@ t 7f9a687293d0&gt;
   <dl class="fields">
     <dt>Value:</dt>
       <dd><table><tr><td><pre class="variable">
-&lt;CDLL 'Foundation.framework/Foundation', handle 7fff8c50e8f0 at 7f9a68<span class="variable-linewrap"><img src="crarr.png" alt="\" /></span>
-4c9550&gt;
+&lt;CDLL 'Foundation.framework/Foundation', handle 7fff9f58feb8 at 7fcea8<span class="variable-linewrap"><img src="crarr.png" alt="\" /></span>
+30fd50&gt;
 </pre></td></tr></table>
 </dd>
   </dl>
@@ -11653,7 +12206,7 @@ t 7f9a687293d0&gt;
   <dl class="fields">
     <dt>Value:</dt>
       <dd><table><tr><td><pre class="variable">
-&lt;CDLL 'libobjc.dylib', handle 7fff8c512e4c at 7f9a684c9810&gt;
+&lt;CDLL 'libobjc.dylib', handle 7fff9f580414 at 7fcea830fe50&gt;
 </pre></td></tr></table>
 </dd>
   </dl>
@@ -11691,7 +12244,7 @@ t 7f9a687293d0&gt;
 <table border="0" cellpadding="0" cellspacing="0" width="100%%">
   <tr>
     <td align="left" class="footer">
-    Generated by Epydoc 3.0.1 on Wed Feb  5 15:29:03 2025
+    Generated by Epydoc 3.0.1 on Sun Feb 23 14:01:04 2025
     </td>
     <td align="right" class="footer">
       <a target="mainFrame" href="http://epydoc.sourceforge.net"

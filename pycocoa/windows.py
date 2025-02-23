@@ -45,14 +45,14 @@ L{WindowStyle}, wrapping ObjC C{NSWindow}, etc.
 @var WindowStyle.Typical: 0xf.
 @var WindowStyle.Utility: 0x10.
 '''
-# all imports listed explicitly to help PyChecker
 from pycocoa.bases import _Type2
 from pycocoa.geometry import Rect
-from pycocoa.lazily import _ALL_LAZY, _Dmain_, _fmt, _fmt_invalid, \
-                           _isPython3
+from pycocoa.internals import _Dmain_, bytes2str, _Constants, _fmt_invalid, \
+                              _fmt, _Globals, _Ints, property_RO, proxy_RO
+from pycocoa.lazily import _ALL_LAZY, _isPython3, _Types
 from pycocoa.nstypes import isNone, NSConcreteNotification, NSFont, \
                             NSImageView, NSMain, NSNotification, \
-                            NSScreen, NSScrollView, NSStr, NSTableView, \
+                            NSScreen, NSScrollView, _NSStr, NSTableView, \
                             nsTextSize3, NSTextView, NSView, NSWindow
 from pycocoa.octypes import NSIntegerMax, NSPoint_t, NSSize_t
 from pycocoa.oslibs import NO, NSBackingStoreBuffered, \
@@ -62,17 +62,15 @@ from pycocoa.oslibs import NO, NSBackingStoreBuffered, \
                            NSWindowStyleMaskTitled, \
                            NSWindowStyleMaskUsual, \
                            NSWindowStyleMaskUtilityWindow, YES
-from pycocoa.runtime import isObjCInstanceOf, ObjCDelegate, ObjCInstance, \
-                            ObjCSubclass, release, retain, send_super_init
+from pycocoa.runtime import isObjCInstanceOf, ObjCDelegate, _ObjCDelegate, \
+                            ObjCInstance, retain, send_super_init
 from pycocoa.screens import Frame, Screen, Screens
-from pycocoa.utils import aspect_ratio, bytes2str, _Constants, _Globals, \
-                          isinstanceOf, _Ints, module_property_RO, \
-                          property_RO, _text_title2, _Types
+from pycocoa.utils import aspect_ratio, isinstanceOf, _text_title2
 
 # from enum import Enum
 
 __all__ = _ALL_LAZY.windows
-__version__ = '25.01.31'
+__version__ = '25.02.19'
 
 
 class AutoResizeError(ValueError):
@@ -355,7 +353,7 @@ class Window(_Type2):
         '''Set this window's view (C{NSView...}).
         '''
         if not isNone(ns_view):
-            isObjCInstanceOf(ns_view, NSScrollView, NSView, name='ns_view')
+            isObjCInstanceOf(ns_view, NSScrollView, NSView, raiser='ns_view')
             self.NS.setContentView_(ns_view)
         self._NSview = ns_view
 
@@ -427,7 +425,7 @@ class Window(_Type2):
             screen = Screens(screen)
         if isinstanceOf(screen, Screen):
             f = screen.frame
-        elif isObjCInstanceOf(screen, NSScreen, name='screen'):
+        elif isObjCInstanceOf(screen, NSScreen, raiser='screen'):
             f = screen.frame()
         self.frame.origin = f.origin
         self.NS.setFrame_display_(self.frame.NS, YES)
@@ -676,7 +674,7 @@ class TextWindow(Window):
         tv.setVerticallyResizable_(YES)
 
         tv.setFont_(f)  # XXX set font BEFORE text
-        tv.insertText_(release(NSStr(text)))
+        tv.insertText_(_NSStr(text))
         tv.setEditable_(NO)
         tv.setDrawsBackground_(NO)
 
@@ -699,7 +697,7 @@ class _NSWindowDelegate(object):
 
        @see: The C{_NSApplicationDelegate} for more C{NSDelegate} details.
     '''
-    _ObjC = ObjCSubclass('NSObject', '_NSWindowDelegate', register=False)  # defer
+    _ObjC = _ObjCDelegate('_NSWindowDelegate')
 
     @_ObjC.method('@P')
     def init(self, window):
@@ -707,8 +705,8 @@ class _NSWindowDelegate(object):
 
            @note: I{MUST} be called as C{.alloc().init(...)}.
         '''
-        isinstanceOf(window, Window, name='window')
-#       self = ObjCInstance(send_message('NSObject', 'alloc'))
+        isinstanceOf(window, Window, raiser='window')
+#       self = ObjCInstance(send_message(_NSObject_, _alloc_))
         self = ObjCInstance(send_super_init(self))
         self.window = window
         return self
@@ -831,7 +829,7 @@ class _NSWindowDelegate(object):
 #       return NSMain.Null
 
 
-@module_property_RO
+@proxy_RO
 def NSWindowDelegate():
     '''The L{ObjCClass}C{(_NSWindowDelegate.__name__)}.
     '''
@@ -854,7 +852,7 @@ def ns2Window(ns):
     '''
     if isObjCInstanceOf(ns, NSWindow):
         u = ns.uniqueID()
-    elif isObjCInstanceOf(ns, NSConcreteNotification, NSNotification, ns='ns'):
+    elif isObjCInstanceOf(ns, NSConcreteNotification, NSNotification, raiser='ns'):
         u = ns.object().uniqueID()
     try:
         w = _Globals.Windows[u]
@@ -913,7 +911,7 @@ if __name__ == _Dmain_:
 #                        .No=0,
 #  pycocoa.windows.MediaWindow is <class .MediaWindow>,
 #  pycocoa.windows.ns2Window is <function .ns2Window at 0x100da3240>,
-#  pycocoa.windows.NSWindowDelegate is <pycocoa.utils.module_property_RO object at 0x100baa510>,
+#  pycocoa.windows.NSWindowDelegate is <pycocoa.utils.proxy_RO object at 0x100baa510>,
 #  pycocoa.windows.TextWindow is <class .TextWindow>,
 #  pycocoa.windows.Window is <class .Window>,
 #  pycocoa.windows.WindowError is <class .WindowError>,
@@ -926,7 +924,7 @@ if __name__ == _Dmain_:
 #  pycocoa.windows.WindowStyleError is <class .WindowStyleError>,
 #  pycocoa.windows.windowStyles is <function .windowStyles at 0x100d92200>,
 # )[14]
-# pycocoa.windows.version 25.1.31, .isLazy 1, Python 3.13.1 64bit arm64, macOS 14.6.1
+# pycocoa.windows.version 25.2.19, .isLazy 1, Python 3.13.1 64bit arm64, macOS 14.6.1
 
 # MIT License <https://OpenSource.org/licenses/MIT>
 #

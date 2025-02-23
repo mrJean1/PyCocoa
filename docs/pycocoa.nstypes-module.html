@@ -64,7 +64,7 @@
 
 <hr />
 <div class="fields">      <p><strong>Version:</strong>
-        25.02.04
+        25.02.19
       </p>
 </div><!-- ==================== CLASSES ==================== -->
 <a name="section-Classes"></a>
@@ -175,7 +175,8 @@
       <table width="100%" cellpadding="0" cellspacing="0" border="0">
         <tr>
           <td><span class="summary-sig"><a href="pycocoa.nstypes-module.html#nsArray2listuple" class="summary-sig-name">nsArray2listuple</a>(<span class="summary-sig-arg">ns</span>,
-        <span class="summary-sig-arg">ctype</span>=<span class="summary-sig-default">&lt;class 'ctypes.c_void_p'&gt;</span>)</span><br />
+        <span class="summary-sig-arg">ctype</span>=<span class="summary-sig-default">&lt;class 'ctypes.c_void_p'&gt;</span>,
+        <span class="summary-sig-arg">typy</span>=<span class="summary-sig-default">None</span>)</span><br />
       Create a Python <code>list</code> or <code>tuple</code> from an 
       <code>NS[Mutable]Array</code>.</td>
           <td align="right" valign="top">
@@ -194,7 +195,8 @@
       <table width="100%" cellpadding="0" cellspacing="0" border="0">
         <tr>
           <td><span class="summary-sig"><a href="pycocoa.nstypes-module.html#nsArray2tuple" class="summary-sig-name">nsArray2tuple</a>(<span class="summary-sig-arg">ns</span>,
-        <span class="summary-sig-arg">ctype</span>=<span class="summary-sig-default">&lt;class 'pycocoa.runtime.ObjCInstance'&gt;</span>)</span><br />
+        <span class="summary-sig-arg">ctype</span>=<span class="summary-sig-default">&lt;class 'pycocoa.runtime.ObjCInstance'&gt;</span>,
+        <span class="summary-sig-arg">typy</span>=<span class="summary-sig-default">&lt;type 'tuple'&gt;</span>)</span><br />
       Create a Python <code>tuple</code> from an <i>immutable</i> 
       <code>NSArray</code>.</td>
           <td align="right" valign="top">
@@ -283,7 +285,7 @@
     </td><td class="summary">
       <table width="100%" cellpadding="0" cellspacing="0" border="0">
         <tr>
-          <td><span class="summary-sig"><a name="nsDescription2dict"></a><span class="summary-sig-name">nsDescription2dict</span>(<span class="summary-sig-arg">ns</span>,
+          <td><span class="summary-sig"><a href="pycocoa.nstypes-module.html#nsDescription2dict" class="summary-sig-name">nsDescription2dict</a>(<span class="summary-sig-arg">ns</span>,
         <span class="summary-sig-arg">**defaults</span>)</span><br />
       Create an <i>immutable</i> <code>dict</code> object with key 
       <i>and</i> attribute access to items by name.</td>
@@ -304,9 +306,10 @@
         <tr>
           <td><span class="summary-sig"><a href="pycocoa.nstypes-module.html#nsDictionary2dict" class="summary-sig-name">nsDictionary2dict</a>(<span class="summary-sig-arg">ns</span>,
         <span class="summary-sig-arg">ctype_keys</span>=<span class="summary-sig-default">&lt;class 'ctypes.c_void_p'&gt;</span>,
-        <span class="summary-sig-arg">ctype_vals</span>=<span class="summary-sig-default">&lt;class 'ctypes.c_void_p'&gt;</span>)</span><br />
-      Create a Python <code>dict</code> from an 
-      <code>NS[Mutable]Dictionary</code>.</td>
+        <span class="summary-sig-arg">ctype_vals</span>=<span class="summary-sig-default">&lt;class 'ctypes.c_void_p'&gt;</span>,
+        <span class="summary-sig-arg">typy</span>=<span class="summary-sig-default">None</span>)</span><br />
+      Create a Python <code>dict</code> or <code>frozendict</code> from an 
+      <code>NS[Mutable|Frozen]Dictionary</code>.</td>
           <td align="right" valign="top">
             
             
@@ -360,9 +363,10 @@
       <table width="100%" cellpadding="0" cellspacing="0" border="0">
         <tr>
           <td><span class="summary-sig"><a href="pycocoa.nstypes-module.html#nsIter" class="summary-sig-name">nsIter</a>(<span class="summary-sig-arg">ns</span>,
-        <span class="summary-sig-arg">reverse</span>=<span class="summary-sig-default">False</span>)</span><br />
-      Iterate over an <code>NS..</code> ObjC objects's (reverse) 
-      enumerator.</td>
+        <span class="summary-sig-arg">reverse</span>=<span class="summary-sig-default">False</span>,
+        <span class="summary-sig-arg">keys</span>=<span class="summary-sig-default">False</span>)</span><br />
+      Iterate over an <code>NS..</code> ObjC objects's keys or (reverse) 
+      values.</td>
           <td align="right" valign="top">
             
             
@@ -379,9 +383,10 @@
       <table width="100%" cellpadding="0" cellspacing="0" border="0">
         <tr>
           <td><span class="summary-sig"><a href="pycocoa.nstypes-module.html#nsIter2" class="summary-sig-name">nsIter2</a>(<span class="summary-sig-arg">ns</span>,
-        <span class="summary-sig-arg">reverse</span>=<span class="summary-sig-default">False</span>)</span><br />
-      Iterate over an <code>NS..</code> ObjC objects's (reverse) 
-      enumerator.</td>
+        <span class="summary-sig-arg">reverse</span>=<span class="summary-sig-default">False</span>,
+        <span class="summary-sig-arg">keys</span>=<span class="summary-sig-default">False</span>)</span><br />
+      Iterate over an <code>NS..</code> ObjC objects's keys or (reverse) 
+      values.</td>
           <td align="right" valign="top">
             
             
@@ -418,6 +423,23 @@
           <td><span class="summary-sig"><a href="pycocoa.nstypes-module.html#nsLogf" class="summary-sig-name">nsLogf</a>(<span class="summary-sig-arg">fmtxt</span>,
         <span class="summary-sig-arg">*args</span>)</span><br />
       Formatted write to the console.</td>
+          <td align="right" valign="top">
+            
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a href="pycocoa.nstypes-module.html#ns2NSType2" class="summary-sig-name">ns2NSType2</a>(<span class="summary-sig-arg">ns</span>)</span><br />
+      Get the main <code>NS[Mutable]...</code> class and Python Type.</td>
           <td align="right" valign="top">
             
             
@@ -488,6 +510,25 @@
     </td><td class="summary">
       <table width="100%" cellpadding="0" cellspacing="0" border="0">
         <tr>
+          <td><span class="summary-sig"><a href="pycocoa.nstypes-module.html#ns2py" class="summary-sig-name">ns2py</a>(<span class="summary-sig-arg">ns</span>,
+        <span class="summary-sig-arg">dflt</span>=<span class="summary-sig-default">missing</span>)</span><br />
+      Convert (an instance of) an ObjC class to an instance of the 
+      equivalent Python standard type or wrapper and value.</td>
+          <td align="right" valign="top">
+            
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
           <td><span class="summary-sig"><a href="pycocoa.nstypes-module.html#nsRaise" class="summary-sig-name">nsRaise</a>(<span class="summary-sig-arg">name</span>=<span class="summary-sig-default">None</span>,
         <span class="summary-sig-arg">reason</span>=<span class="summary-sig-default"><code class="variable-quote">'</code><code class="variable-string">not given</code><code class="variable-quote">'</code></span>,
         <span class="summary-sig-arg">**info</span>)</span><br />
@@ -509,7 +550,8 @@
       <table width="100%" cellpadding="0" cellspacing="0" border="0">
         <tr>
           <td><span class="summary-sig"><a href="pycocoa.nstypes-module.html#nsSet2set" class="summary-sig-name">nsSet2set</a>(<span class="summary-sig-arg">ns</span>,
-        <span class="summary-sig-arg">ctype</span>=<span class="summary-sig-default">&lt;class 'ctypes.c_void_p'&gt;</span>)</span><br />
+        <span class="summary-sig-arg">ctype</span>=<span class="summary-sig-default">&lt;class 'ctypes.c_void_p'&gt;</span>,
+        <span class="summary-sig-arg">typy</span>=<span class="summary-sig-default">None</span>)</span><br />
       Create a Python <code>set</code> or <code>frozenset</code> from an 
       <code>NS[Mutable]Set</code>.</td>
           <td align="right" valign="top">
@@ -564,8 +606,9 @@
     </td><td class="summary">
       <table width="100%" cellpadding="0" cellspacing="0" border="0">
         <tr>
-          <td><span class="summary-sig"><a name="nsTextView"></a><span class="summary-sig-name">nsTextView</span>(<span class="summary-sig-arg">text</span>,
-        <span class="summary-sig-arg">ns_font</span>)</span><br />
+          <td><span class="summary-sig"><a href="pycocoa.nstypes-module.html#nsTextView" class="summary-sig-name">nsTextView</a>(<span class="summary-sig-arg">text</span>,
+        <span class="summary-sig-arg">ns_font</span>,
+        <span class="summary-sig-arg">scroll</span>=<span class="summary-sig-default">50</span>)</span><br />
       Return an <code>NSTextView</code> for the given text string.</td>
           <td align="right" valign="top">
             
@@ -584,6 +627,42 @@
         <tr>
           <td><span class="summary-sig"><a href="pycocoa.nstypes-module.html#nsThrow" class="summary-sig-name">nsThrow</a>(<span class="summary-sig-arg">nsExc</span>)</span><br />
       Mimick ObjC's <code>@throw NSException</code> to raise an exception.</td>
+          <td align="right" valign="top">
+            
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a href="pycocoa.nstypes-module.html#ns2Type" class="summary-sig-name">ns2Type</a>(<span class="summary-sig-arg">ns</span>)</span><br />
+      Convert an <code>NS...</code> ObjC object to an instance of the 
+      corresponding Python Type, <i>capital T!</i>.</td>
+          <td align="right" valign="top">
+            
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a href="pycocoa.nstypes-module.html#ns2TypeID2" class="summary-sig-name">ns2TypeID2</a>(<span class="summary-sig-arg">ns</span>,
+        <span class="summary-sig-arg">dflt</span>=<span class="summary-sig-default">None</span>)</span><br />
+      Get the <code>NS...</code> ObjC <code>TypeID</code>.</td>
           <td align="right" valign="top">
             
             
@@ -619,61 +698,6 @@
           <td><span class="summary-sig"><a href="pycocoa.nstypes-module.html#nsValue2py" class="summary-sig-name">nsValue2py</a>(<span class="summary-sig-arg">ns</span>,
         <span class="summary-sig-arg">dflt</span>=<span class="summary-sig-default">missing</span>)</span><br />
       Create a Python instance from an <code>NS[Concrete]Value</code>.</td>
-          <td align="right" valign="top">
-            
-            
-          </td>
-        </tr>
-      </table>
-      
-    </td>
-  </tr>
-<tr>
-    <td width="15%" align="right" valign="top" class="summary">
-      <span class="summary-type">&nbsp;</span>
-    </td><td class="summary">
-      <table width="100%" cellpadding="0" cellspacing="0" border="0">
-        <tr>
-          <td><span class="summary-sig"><a href="pycocoa.nstypes-module.html#ns2py" class="summary-sig-name">ns2py</a>(<span class="summary-sig-arg">ns</span>,
-        <span class="summary-sig-arg">dflt</span>=<span class="summary-sig-default">missing</span>)</span><br />
-      Convert (an instance of) an ObjC class to an instance of the 
-      equivalent Python standard type or wrapper and value.</td>
-          <td align="right" valign="top">
-            
-            
-          </td>
-        </tr>
-      </table>
-      
-    </td>
-  </tr>
-<tr>
-    <td width="15%" align="right" valign="top" class="summary">
-      <span class="summary-type">&nbsp;</span>
-    </td><td class="summary">
-      <table width="100%" cellpadding="0" cellspacing="0" border="0">
-        <tr>
-          <td><span class="summary-sig"><a href="pycocoa.nstypes-module.html#ns2Type" class="summary-sig-name">ns2Type</a>(<span class="summary-sig-arg">ns</span>)</span><br />
-      Convert an <code>NS...</code> ObjC object to an instance of the 
-      corresponding Python Type and value.</td>
-          <td align="right" valign="top">
-            
-            
-          </td>
-        </tr>
-      </table>
-      
-    </td>
-  </tr>
-<tr>
-    <td width="15%" align="right" valign="top" class="summary">
-      <span class="summary-type">&nbsp;</span>
-    </td><td class="summary">
-      <table width="100%" cellpadding="0" cellspacing="0" border="0">
-        <tr>
-          <td><span class="summary-sig"><a href="pycocoa.nstypes-module.html#ns2TypeID2" class="summary-sig-name">ns2TypeID2</a>(<span class="summary-sig-arg">ns</span>,
-        <span class="summary-sig-arg">dflt</span>=<span class="summary-sig-default">None</span>)</span><br />
-      Get the <code>NS...</code> ObjC <code>TypeID</code>.</td>
           <td align="right" valign="top">
             
             
@@ -962,7 +986,7 @@
     <td width="15%" align="right" valign="top" class="summary">
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
-        <a name="NSObject"></a><span class="summary-name">NSObject</span> = <code title="ObjCClass('NSObject')">ObjCClass('NSObject')</code>
+        <a name="NSObject"></a><span class="summary-name">NSObject</span> = <code title="ObjCClass(_NSObject_)">ObjCClass(_NSObject_)</code>
     </td>
   </tr>
 <tr>
@@ -1158,15 +1182,15 @@
     <td width="15%" align="right" valign="top" class="summary">
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
-        <a href="pycocoa.nstypes-module.html#NSMain" class="summary-name">NSMain</a> = <code title="NSMain.Application=NSApplication(&lt;Id_t at 0x7f9a7880f680&gt;) of 0x7f9a66\
-350c20,
-      .BooleanNO=NSBoolean(&lt;Id_t at 0x7f9a482d40e0&gt;) of 0x7ff8475e6c70\
+        <a href="pycocoa.nstypes-module.html#NSMain" class="summary-name">NSMain</a> = <code title="NSMain.Application=NSApplication(&lt;Id_t at 0x7fcea8a64710&gt;) of 0x7fce83\
+fe3230,
+      .BooleanNO=NSBoolean(&lt;Id_t at 0x7fcea8a6bcb0&gt;) of 0x7ff85855ec70\
 ,
-      .BooleanYES=NSBoolean(&lt;Id_t at 0x7f9a78824950&gt;) of 0x7ff8475e6c6\
+      .BooleanYES=NSBoolean(&lt;Id_t at 0x7fcea8a735f0&gt;) of 0x7ff85855ec6\
 0,
-      .Bundle=NSBundle(&lt;Id_t at 0x7f9a78824a70&gt;) of 0x600000ef4000,
+      .Bundle=NSBundle(&lt;Id_t at 0x7fcea8a73710&gt;) of 0x600000320000,
       .BundleName=NSConstantString('CFBundleName'),
-...">NSMain.Application=NSApplication(&lt;Id_t at 0x7f9a7880f<code class="variable-ellipsis">...</code></code><br />
+...">NSMain.Application=NSApplication(&lt;Id_t at 0x7fcea8a64<code class="variable-ellipsis">...</code></code><br />
       Global <code>ObjC/NS/CF...</code> singletons.
     </td>
   </tr>
@@ -1333,6 +1357,10 @@
     <dt>Returns:</dt>
         <dd>The alias' target (<code>str</code>) or <code>None</code> if 
           <i>path</i> isn't a macOS alias.</dd>
+    <dt>Raises:</dt>
+    <dd><ul class="nomargin-top">
+        <li><code><strong class='fraise'>TypeError</strong></code> - Invalid <i>path</i>.</li>
+    </ul></dd>
   </dl>
 <div class="fields">      <p><strong>See Also:</strong>
         <a href="https://GitHub.com/al45tair/mac_alias" 
@@ -1366,6 +1394,10 @@
     <dt>Returns:</dt>
         <dd>The link's or alias' target (<code>str</code>) or 
           <code>None</code> if <i>path</i> isn't a link or alias.</dd>
+    <dt>Raises:</dt>
+    <dd><ul class="nomargin-top">
+        <li><code><strong class='fraise'>TypeError</strong></code> - Invalid <i>path</i>.</li>
+    </ul></dd>
   </dl>
 </td></tr></table>
 </div>
@@ -1404,7 +1436,8 @@
   <table width="100%" cellpadding="0" cellspacing="0" border="0">
   <tr valign="top"><td>
   <h3 class="epydoc"><span class="sig"><span class="sig-name">nsArray2listuple</span>(<span class="sig-arg">ns</span>,
-        <span class="sig-arg">ctype</span>=<span class="sig-default">&lt;class 'ctypes.c_void_p'&gt;</span>)</span>
+        <span class="sig-arg">ctype</span>=<span class="sig-default">&lt;class 'ctypes.c_void_p'&gt;</span>,
+        <span class="sig-arg">typy</span>=<span class="sig-default">None</span>)</span>
   </h3>
   </td><td align="right" valign="top"
     >&nbsp;
@@ -1416,13 +1449,21 @@
   <dl class="fields">
     <dt>Parameters:</dt>
     <dd><ul class="nomargin-top">
-        <li><strong class="pname"><code>ns</code></strong> - The <code>NS[Mutable]Array</code> (<a 
+        <li><strong class="pname"><code>ns</code></strong> - The <code>NS[Mutable]Array</code> instance (<a 
           href="pycocoa.runtime.ObjCInstance-class.html" 
           class="link">ObjCInstance</a>).</li>
         <li><strong class="pname"><code>ctype</code></strong> - The array item type (<code>ctypes</code>).</li>
+        <li><strong class="pname"><code>typy</code></strong> - Use <code><b>typy</b>=list</code>, <code><b>typy</b>=tuple</code>
+          or <code><b>typy</b>=any_callable</code> to override the Python 
+          type.</li>
     </ul></dd>
     <dt>Returns:</dt>
-        <dd>The array (<code>list</code> or <code>tuple</code>).</dd>
+        <dd>The array (<code>list</code> or <code>tuple</code> or 
+          <code>typy</code>).</dd>
+    <dt>Raises:</dt>
+    <dd><ul class="nomargin-top">
+        <li><code><strong class='fraise'>TypeError</strong></code> - Invalid <i>ns</i>.</li>
+    </ul></dd>
   </dl>
 </td></tr></table>
 </div>
@@ -1434,7 +1475,8 @@
   <table width="100%" cellpadding="0" cellspacing="0" border="0">
   <tr valign="top"><td>
   <h3 class="epydoc"><span class="sig"><span class="sig-name">nsArray2tuple</span>(<span class="sig-arg">ns</span>,
-        <span class="sig-arg">ctype</span>=<span class="sig-default">&lt;class 'pycocoa.runtime.ObjCInstance'&gt;</span>)</span>
+        <span class="sig-arg">ctype</span>=<span class="sig-default">&lt;class 'pycocoa.runtime.ObjCInstance'&gt;</span>,
+        <span class="sig-arg">typy</span>=<span class="sig-default">&lt;type 'tuple'&gt;</span>)</span>
   </h3>
   </td><td align="right" valign="top"
     >&nbsp;
@@ -1446,13 +1488,19 @@
   <dl class="fields">
     <dt>Parameters:</dt>
     <dd><ul class="nomargin-top">
-        <li><strong class="pname"><code>ns</code></strong> - The <code>NSArray</code> (<a 
+        <li><strong class="pname"><code>ns</code></strong> - The <code>NSArray</code> instance (<a 
           href="pycocoa.runtime.ObjCInstance-class.html" 
           class="link">ObjCInstance</a>).</li>
         <li><strong class="pname"><code>ctype</code></strong> - The array item type (<code>ObjCInstance</code>).</li>
+        <li><strong class="pname"><code>typy</code></strong> - Use <code><b>typy</b>=any_callable</code> to override the Python 
+          <code>tuple</code> type.</li>
     </ul></dd>
     <dt>Returns:</dt>
-        <dd>The array (<code>tuple</code>).</dd>
+        <dd>The array (<code>tuple</code> or <code>typy</code>).</dd>
+    <dt>Raises:</dt>
+    <dd><ul class="nomargin-top">
+        <li><code><strong class='fraise'>TypeError</strong></code> - Invalid <i>ns</i>.</li>
+    </ul></dd>
   </dl>
 </td></tr></table>
 </div>
@@ -1475,7 +1523,7 @@
   <dl class="fields">
     <dt>Parameters:</dt>
     <dd><ul class="nomargin-top">
-        <li><strong class="pname"><code>ns</code></strong> - The <code>NSBoolean</code> (<a 
+        <li><strong class="pname"><code>ns</code></strong> - The <code>NSBoolean</code> instance (<a 
           href="pycocoa.runtime.ObjCInstance-class.html" 
           class="link">ObjCInstance</a>).</li>
         <li><strong class="pname"><code>dflt</code></strong> - Default for a missing, unobtainable value (<code>missing</code>).</li>
@@ -1484,7 +1532,7 @@
         <dd>The bool (<code>bool</code>) of <i>dlft</i>.</dd>
     <dt>Raises:</dt>
     <dd><ul class="nomargin-top">
-        <li><code><strong class='fraise'>TypeError</strong></code> - Unexpected <code>NumberType</code>.</li>
+        <li><code><strong class='fraise'>TypeError</strong></code> - Invalid <i>ns</i>.</li>
     </ul></dd>
   </dl>
 </td></tr></table>
@@ -1514,6 +1562,10 @@
     </ul></dd>
     <dt>Returns:</dt>
         <dd>The previous bundle title (<code>str</code>) or None.</dd>
+    <dt>Raises:</dt>
+    <dd><ul class="nomargin-top">
+        <li><code><strong class='fraise'>TypeError</strong></code> - Invalid <i>ns</i>.</li>
+    </ul></dd>
   </dl>
 <div class="fields">      <p><strong>Note:</strong>
         Used to mimick <code>NSApplication.setTitle_(ns_title)</code>, the 
@@ -1541,13 +1593,17 @@
   <dl class="fields">
     <dt>Parameters:</dt>
     <dd><ul class="nomargin-top">
-        <li><strong class="pname"><code>ns</code></strong> - The <code>NSData</code> (<a 
+        <li><strong class="pname"><code>ns</code></strong> - The <code>NSData</code> instance (<a 
           href="pycocoa.runtime.ObjCInstance-class.html" 
           class="link">ObjCInstance</a>).</li>
         <li><strong class="pname"><code>dflt</code></strong> - Default for empty <code>NSData</code> (<code>bytes</code>).</li>
     </ul></dd>
     <dt>Returns:</dt>
         <dd>The bytes (<code>bytes</code>) or <i>dflt</i>.</dd>
+    <dt>Raises:</dt>
+    <dd><ul class="nomargin-top">
+        <li><code><strong class='fraise'>TypeError</strong></code> - Invalid <i>ns</i>.</li>
+    </ul></dd>
   </dl>
 </td></tr></table>
 </div>
@@ -1570,7 +1626,7 @@
   <dl class="fields">
     <dt>Parameters:</dt>
     <dd><ul class="nomargin-top">
-        <li><strong class="pname"><code>ns</code></strong> - The <code>NSDecimal</code> (<a 
+        <li><strong class="pname"><code>ns</code></strong> - The <code>NSDecimal</code> instance (<a 
           href="pycocoa.runtime.ObjCInstance-class.html" 
           class="link">ObjCInstance</a>).</li>
     </ul></dd>
@@ -1578,7 +1634,35 @@
         <dd>The decimal (<code>Decimal</code>).</dd>
     <dt>Raises:</dt>
     <dd><ul class="nomargin-top">
-        <li><code><strong class='fraise'>ValueError</strong></code> - If <i>ns</i> not an <code>NSDecimal</code>.</li>
+        <li><code><strong class='fraise'>TypeError</strong></code> - If <i>ns</i> not <code>NSDecimal</code>.</li>
+    </ul></dd>
+  </dl>
+</td></tr></table>
+</div>
+<a name="nsDescription2dict"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">nsDescription2dict</span>(<span class="sig-arg">ns</span>,
+        <span class="sig-arg">**defaults</span>)</span>
+  </h3>
+  </td><td align="right" valign="top"
+    >&nbsp;
+    </td>
+  </tr></table>
+  
+  <p>Create an <i>immutable</i> <code>dict</code> object with key 
+  <i>and</i> attribute access to items by name.</p>
+  <dl class="fields">
+    <dt>Parameters:</dt>
+    <dd><ul class="nomargin-top">
+        <li><strong class="pname"><code>ns</code></strong> - The <code>NS...</code> instance (<a 
+          href="pycocoa.runtime.ObjCInstance-class.html" 
+          class="link">ObjCInstance</a>).</li>
+        <li><strong class="pname"><code>defaults</code></strong> - Optional defaults items (Any kwds).</li>
     </ul></dd>
   </dl>
 </td></tr></table>
@@ -1592,15 +1676,16 @@
   <tr valign="top"><td>
   <h3 class="epydoc"><span class="sig"><span class="sig-name">nsDictionary2dict</span>(<span class="sig-arg">ns</span>,
         <span class="sig-arg">ctype_keys</span>=<span class="sig-default">&lt;class 'ctypes.c_void_p'&gt;</span>,
-        <span class="sig-arg">ctype_vals</span>=<span class="sig-default">&lt;class 'ctypes.c_void_p'&gt;</span>)</span>
+        <span class="sig-arg">ctype_vals</span>=<span class="sig-default">&lt;class 'ctypes.c_void_p'&gt;</span>,
+        <span class="sig-arg">typy</span>=<span class="sig-default">None</span>)</span>
   </h3>
   </td><td align="right" valign="top"
     >&nbsp;
     </td>
   </tr></table>
   
-  <p>Create a Python <code>dict</code> from an 
-  <code>NS[Mutable]Dictionary</code>.</p>
+  <p>Create a Python <code>dict</code> or <code>frozendict</code> from an 
+  <code>NS[Mutable|Frozen]Dictionary</code>.</p>
   <dl class="fields">
     <dt>Parameters:</dt>
     <dd><ul class="nomargin-top">
@@ -1609,10 +1694,20 @@
           class="link">ObjCInstance</a>).</li>
         <li><strong class="pname"><code>ctype_keys</code></strong> - The dictionary keys type (<code>ctypes</code>).</li>
         <li><strong class="pname"><code>ctype_vals</code></strong> - The dictionary values type (<code>ctypes</code>).</li>
+        <li><strong class="pname"><code>typy</code></strong> - Use <code><b>typy</b>=dict</code>, 
+          <code><b>typy</b>=Adict</code>, 
+          <code><b>typy</b>=frozendict</code> or 
+          <code><b>typy</b>=any_callable</code> to override the Python 
+          type.</li>
     </ul></dd>
     <dt>Returns:</dt>
-        <dd>The dict (<a href="pycocoa.utils.Adict-class.html" 
-          class="link">Adict</a>).</dd>
+        <dd>The dict (<a href="pycocoa.internals.Adict-class.html" 
+          class="link">Adict</a> or <code>frozendict</code> or 
+          <code>typy</code>).</dd>
+    <dt>Raises:</dt>
+    <dd><ul class="nomargin-top">
+        <li><code><strong class='fraise'>TypeError</strong></code> - Invalid <i>ns</i>.</li>
+    </ul></dd>
   </dl>
 </td></tr></table>
 </div>
@@ -1640,9 +1735,14 @@
           class="link">ObjCInstance</a>).</li>
     </ul></dd>
     <dt>Returns:</dt>
-        <dd>A 2-tuple <code>(key, value)</code> for each item, each a 
-          separate <a href="pycocoa.runtime.ObjCInstance-class.html" 
-          class="link">ObjCInstance</a></dd>
+        <dd>A 2-tuple <code>(key, value)</code> for each item, where each 
+          <code>key</code> and <code>value</code> is an <a 
+          href="pycocoa.runtime.ObjCInstance-class.html" 
+          class="link">ObjCInstance</a>.</dd>
+    <dt>Raises:</dt>
+    <dd><ul class="nomargin-top">
+        <li><code><strong class='fraise'>TypeError</strong></code> - Invalid <i>ns</i>.</li>
+    </ul></dd>
   </dl>
 </td></tr></table>
 </div>
@@ -1672,6 +1772,8 @@
         <li><strong class="pname"><code>reason</code></strong> - The reason for the exception (<code>str</code>).</li>
         <li><strong class="pname"><code>info</code></strong> - Other, caller-defined information (<code>all keywords</code>).</li>
     </ul></dd>
+    <dt>Returns:</dt>
+        <dd>The exception (<code>ObjC/NSException</code>).</dd>
   </dl>
 <div class="fields">      <p><strong>See Also:</strong>
         <a href="pycocoa.nstypes-module.html#nsRaise" 
@@ -1689,9 +1791,9 @@
         and get access to the attributes of the latter.
         </li>
         <li>
-        Raised and thrown <code>NSException</code>s can not be caught and 
-        result in <i>fatal</i> <a href="pycocoa.faults-module.html#exiting"
-        class="link">exiting</a>.
+        Raised and thrown <code>NSException</code>s can <i>not be 
+        caught</i> and result in <i>fatal</i> <a 
+        href="pycocoa.faults-module.html#exiting" class="link">exiting</a>.
         </li>
       </ul>
 </div></td></tr></table>
@@ -1704,27 +1806,41 @@
   <table width="100%" cellpadding="0" cellspacing="0" border="0">
   <tr valign="top"><td>
   <h3 class="epydoc"><span class="sig"><span class="sig-name">nsIter</span>(<span class="sig-arg">ns</span>,
-        <span class="sig-arg">reverse</span>=<span class="sig-default">False</span>)</span>
+        <span class="sig-arg">reverse</span>=<span class="sig-default">False</span>,
+        <span class="sig-arg">keys</span>=<span class="sig-default">False</span>)</span>
   </h3>
   </td><td align="right" valign="top"
     >&nbsp;
     </td>
   </tr></table>
   
-  <p>Iterate over an <code>NS..</code> ObjC objects's (reverse) 
-  enumerator.</p>
+  <p>Iterate over an <code>NS..</code> ObjC objects's keys or (reverse) 
+  values.</p>
   <dl class="fields">
     <dt>Parameters:</dt>
     <dd><ul class="nomargin-top">
-        <li><strong class="pname"><code>ns</code></strong> - The <code>NS..</code> object to iterate over (<a 
+        <li><strong class="pname"><code>ns</code></strong> - The <code>NS..</code> instance to iterate over (<a 
           href="pycocoa.runtime.ObjCInstance-class.html" 
           class="link">ObjCInstance</a>).</li>
         <li><strong class="pname"><code>reverse</code></strong> - Iterate in reverse order (<code>bool</code>), forward otherwise.</li>
+        <li><strong class="pname"><code>keys</code></strong> - If <code>True</code> and if <code><b>reverse</b>=False</code>, 
+          iterate over the keys of <code><b>ns</b></code>, provided 
+          <code><b>ns</b></code> is an <code>NS[Mutable]Dictionary</code>.</li>
     </ul></dd>
     <dt>Returns:</dt>
-        <dd>Each object (<code>NS...</code>).</dd>
+        <dd>Yield each object or key (<code>NS...</code>).</dd>
+    <dt>Raises:</dt>
+    <dd><ul class="nomargin-top">
+        <li><code><strong class='fraise'>TypeError</strong></code> - Invalid <i>ns</i>.</li>
+    </ul></dd>
   </dl>
-</td></tr></table>
+<div class="fields">      <p><strong>Note:</strong>
+        If <code><b>ns</b></code> is an <code>NS[Mutable]Dictionary</code> 
+        and <code><b>keys</b>=False</code>, the values of 
+        <code><b>ns</b></code> are enumerated in forward of 
+        <code>reverse</code> order.
+      </p>
+</div></td></tr></table>
 </div>
 <a name="nsIter2"></a>
 <div>
@@ -1734,29 +1850,34 @@
   <table width="100%" cellpadding="0" cellspacing="0" border="0">
   <tr valign="top"><td>
   <h3 class="epydoc"><span class="sig"><span class="sig-name">nsIter2</span>(<span class="sig-arg">ns</span>,
-        <span class="sig-arg">reverse</span>=<span class="sig-default">False</span>)</span>
+        <span class="sig-arg">reverse</span>=<span class="sig-default">False</span>,
+        <span class="sig-arg">keys</span>=<span class="sig-default">False</span>)</span>
   </h3>
   </td><td align="right" valign="top"
     >&nbsp;
     </td>
   </tr></table>
   
-  <p>Iterate over an <code>NS..</code> ObjC objects's (reverse) 
-  enumerator.</p>
+  <p>Iterate over an <code>NS..</code> ObjC objects's keys or (reverse) 
+  values.</p>
   <dl class="fields">
-    <dt>Parameters:</dt>
-    <dd><ul class="nomargin-top">
-        <li><strong class="pname"><code>ns</code></strong> - The <code>NS..</code> object to iterate over (<a 
-          href="pycocoa.runtime.ObjCInstance-class.html" 
-          class="link">ObjCInstance</a>).</li>
-        <li><strong class="pname"><code>reverse</code></strong> - Iterate in reverse order (<code>bool</code>), foward otherwise.</li>
-    </ul></dd>
     <dt>Returns:</dt>
-        <dd>Each object as 2-Tuple (<i>py, ns</i>) where <i>py</i> is a 
-          Python <code>Type</code> instance and <i>ns</i> the ObjC object 
+        <dd>Yield each object as 2-Tuple (<i>py, ns</i>) where <i>py</i> is a
+          Python <code>Type</code> instance and <i>ns</i> the object 
           <code>NS...</code>.</dd>
+    <dt>Raises:</dt>
+    <dd><ul class="nomargin-top">
+        <li><code><strong class='fraise'>TypeError</strong></code> - Invalid <i>ns</i>.</li>
+    </ul></dd>
   </dl>
-</td></tr></table>
+<div class="fields">      <p><strong>See Also:</strong>
+        Function <a href="pycocoa.nstypes-module.html#nsIter" 
+        class="link">nsIter</a> for <code><b>ns</b></code>, 
+        <code><b>reverse</b></code> and <code><b>key</b></code> details and
+        function <a href="pycocoa.nstypes-module.html#ns2Type" 
+        class="link">ns2Type</a> for Python <code>Type</code>s.
+      </p>
+</div></td></tr></table>
 </div>
 <a name="nsLog"></a>
 <div>
@@ -1780,6 +1901,10 @@
         <li><strong class="pname"><code>ns_fmt</code></strong> - A printf-like format string (<a 
           href="pycocoa.nstypes.NSStr-class.html" class="link">NSStr</a>).</li>
         <li><strong class="pname"><code>ns_args</code></strong> - Optional arguments to format (<code>all positional</code>).</li>
+    </ul></dd>
+    <dt>Raises:</dt>
+    <dd><ul class="nomargin-top">
+        <li><code><strong class='fraise'>TypeError</strong></code> - Invalid <i>ns_fmt</i>.</li>
     </ul></dd>
   </dl>
 <div class="fields">      <p><strong>Note:</strong>
@@ -1814,9 +1939,52 @@
         <li><strong class="pname"><code>fmtxt</code></strong> - A printf-like format string (<code>str</code>).</li>
         <li><strong class="pname"><code>args</code></strong> - Optional arguments to format (<code>all positional</code>).</li>
     </ul></dd>
+    <dt>Raises:</dt>
+    <dd><ul class="nomargin-top">
+        <li><code><strong class='fraise'>TypeError</strong></code> - Invalid <i>fmtxt</i>.</li>
+    </ul></dd>
   </dl>
 <div class="fields">      <p><strong>See Also:</strong>
         <a href="pycocoa.nstypes-module.html#nsLog" class="link">nsLog</a>.
+      </p>
+</div></td></tr></table>
+</div>
+<a name="ns2NSType2"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">ns2NSType2</span>(<span class="sig-arg">ns</span>)</span>
+  </h3>
+  </td><td align="right" valign="top"
+    >&nbsp;
+    </td>
+  </tr></table>
+  
+  <p>Get the main <code>NS[Mutable]...</code> class and Python Type.</p>
+  <dl class="fields">
+    <dt>Parameters:</dt>
+    <dd><ul class="nomargin-top">
+        <li><strong class="pname"><code>ns</code></strong> - The <code>NS...</code> instance (<a 
+          href="pycocoa.runtime.ObjCInstance-class.html" 
+          class="link">ObjCInstance</a>).</li>
+    </ul></dd>
+    <dt>Returns:</dt>
+        <dd>2-Tuple <code>(NS, Type)</code> with the 
+          <code>NS[Mutable]...</code> class and Python Type, either may be 
+          <code>None</code>.</dd>
+    <dt>Raises:</dt>
+    <dd><ul class="nomargin-top">
+        <li><code><strong class='fraise'>TypeError</strong></code> - Invalid <i>ns</i>.</li>
+    </ul></dd>
+  </dl>
+<div class="fields">      <p><strong>See Also:</strong>
+        Functions <a href="pycocoa.nstypes-module.html#ns2Type" 
+        class="link">ns2Type</a> and <a 
+        href="pycocoa.nstypes-module.html#ns2TypeID2" 
+        class="link">ns2TypeID2</a>.
       </p>
 </div></td></tr></table>
 </div>
@@ -1839,7 +2007,7 @@
   <dl class="fields">
     <dt>Parameters:</dt>
     <dd><ul class="nomargin-top">
-        <li><strong class="pname"><code>ns</code></strong> - The <code>NS...</code> (<a 
+        <li><strong class="pname"><code>ns</code></strong> - The <code>NS...</code> instance (<a 
           href="pycocoa.runtime.ObjCInstance-class.html" 
           class="link">ObjCInstance</a>).</li>
     </ul></dd>
@@ -1847,6 +2015,7 @@
         <dd>The singleton (<code>None</code>).</dd>
     <dt>Raises:</dt>
     <dd><ul class="nomargin-top">
+        <li><code><strong class='fraise'>TypeError</strong></code> - Invalid <i>ns</i>.</li>
         <li><code><strong class='fraise'>ValueError</strong></code> - If <i>ns</i> not <code>isNone</code>.</li>
     </ul></dd>
   </dl>
@@ -1872,7 +2041,7 @@
   <dl class="fields">
     <dt>Parameters:</dt>
     <dd><ul class="nomargin-top">
-        <li><strong class="pname"><code>ns</code></strong> - The <code>NSNumber</code> (<a 
+        <li><strong class="pname"><code>ns</code></strong> - The <code>NSNumber</code> instance (<a 
           href="pycocoa.runtime.ObjCInstance-class.html" 
           class="link">ObjCInstance</a>).</li>
         <li><strong class="pname"><code>dflt</code></strong> - Default for missing, unobtainable value (<code>missing</code>).</li>
@@ -1882,7 +2051,7 @@
           <code>float</code>).</dd>
     <dt>Raises:</dt>
     <dd><ul class="nomargin-top">
-        <li><code><strong class='fraise'>TypeError</strong></code> - Unexpected <code>NumberType</code>.</li>
+        <li><code><strong class='fraise'>TypeError</strong></code> - Invalid <i>ns</i>.</li>
         <li><code><strong class='fraise'>ValueError</strong></code> - If <i>ns</i> not an <code>NSNumber</code>.</li>
     </ul></dd>
   </dl>
@@ -1919,6 +2088,95 @@
   </dl>
 </td></tr></table>
 </div>
+<a name="ns2py"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">ns2py</span>(<span class="sig-arg">ns</span>,
+        <span class="sig-arg">dflt</span>=<span class="sig-default">missing</span>)</span>
+  </h3>
+  </td><td align="right" valign="top"
+    >&nbsp;
+    </td>
+  </tr></table>
+  
+  <p>Convert (an instance of) an ObjC class to an instance of the 
+  equivalent Python standard type or wrapper and value.</p>
+  <dl class="fields">
+    <dt>Parameters:</dt>
+    <dd><ul class="nomargin-top">
+        <li><strong class="pname"><code>ns</code></strong> - The <code>NS...</code> instance (<a 
+          href="pycocoa.runtime.ObjCInstance-class.html" 
+          class="link">ObjCInstance</a>).</li>
+        <li><strong class="pname"><code>dflt</code></strong> - Default for unhandled, unexpected <code>NS...</code>s 
+          (<code>missing</code>).</li>
+    </ul></dd>
+    <dt>Returns:</dt>
+        <dd>The value (<code>Python type</code>) or <i>dflt</i> if provided.</dd>
+    <dt>Raises:</dt>
+    <dd><ul class="nomargin-top">
+        <li><code><strong class='fraise'>TypeError</strong></code> - Invalid <i>ns</i> or unhandled <code>TypeID</code>.</li>
+    </ul></dd>
+  </dl>
+<div class="fields">      <p><strong>Note:</strong>
+        Conversion map:
+        <ul>
+          <li>
+            NSArray             -&gt; tuple
+          </li>
+          <li>
+            NSBoolean           -&gt; bool
+          </li>
+          <li>
+            NSConstantString    -&gt; str
+          </li>
+          <li>
+            NSData              -&gt; bytes
+          </li>
+          <li>
+            NSDecimalNumber     -&gt; Decimal
+          </li>
+          <li>
+            NSDictionary        -&gt; frozendict
+          </li>
+          <li>
+            NSMutableArray      -&gt; list
+          </li>
+          <li>
+            NSMutableDictionary -&gt; dict
+          </li>
+          <li>
+            NSMutableSet        -&gt; set
+          </li>
+          <li>
+            NSMutableString     -&gt; str
+          </li>
+          <li>
+            NSNumber            -&gt; int or float
+          </li>
+          <li>
+            NSNull              -&gt; None
+          </li>
+          <li>
+            NSSet               -&gt; frozenset
+          </li>
+          <li>
+            NSString            -&gt; str
+          </li>
+          <li>
+            NSStr               -&gt; str
+          </li>
+        </ul>
+      </p>
+      <p><strong>See Also:</strong>
+        <a href="https://PythonHosted.org/pyobjc/core/typemapping.html" 
+        target="_top">Converting values between Python and Objective-C</a>
+      </p>
+</div></td></tr></table>
+</div>
 <a name="nsRaise"></a>
 <div>
 <table class="details" border="1" cellpadding="3"
@@ -1948,8 +2206,8 @@
     </ul></dd>
   </dl>
 <div class="fields">      <p><strong>Note:</strong>
-        Raised <code>NSException</code>s can not be caught and result in 
-        <i>fatal</i> <a href="pycocoa.faults-module.html#exiting" 
+        Raised <code>NSException</code>s can <i>not be caught</i> and 
+        result in <i>fatal</i> <a href="pycocoa.faults-module.html#exiting"
         class="link">exiting</a>.
       </p>
       <p><strong>See Also:</strong>
@@ -1968,7 +2226,8 @@
   <table width="100%" cellpadding="0" cellspacing="0" border="0">
   <tr valign="top"><td>
   <h3 class="epydoc"><span class="sig"><span class="sig-name">nsSet2set</span>(<span class="sig-arg">ns</span>,
-        <span class="sig-arg">ctype</span>=<span class="sig-default">&lt;class 'ctypes.c_void_p'&gt;</span>)</span>
+        <span class="sig-arg">ctype</span>=<span class="sig-default">&lt;class 'ctypes.c_void_p'&gt;</span>,
+        <span class="sig-arg">typy</span>=<span class="sig-default">None</span>)</span>
   </h3>
   </td><td align="right" valign="top"
     >&nbsp;
@@ -1980,13 +2239,22 @@
   <dl class="fields">
     <dt>Parameters:</dt>
     <dd><ul class="nomargin-top">
-        <li><strong class="pname"><code>ns</code></strong> - The <code>NS[Mutable]Set</code> (<a 
+        <li><strong class="pname"><code>ns</code></strong> - The <code>NS[Mutable]Set</code> instance (<a 
           href="pycocoa.runtime.ObjCInstance-class.html" 
           class="link">ObjCInstance</a>).</li>
         <li><strong class="pname"><code>ctype</code></strong> - The set item type (<code>ctypes</code>).</li>
+        <li><strong class="pname"><code>typy</code></strong> - Use <code><b>typy</b>=set</code>, 
+          <code><b>typy</b>=frozenset</code> or 
+          <code><b>typy</b>=any_callable</code> to override the Python 
+          type.</li>
     </ul></dd>
     <dt>Returns:</dt>
-        <dd>The set (<code>set</code> or <code>frozenset</code>).</dd>
+        <dd>The set (<code>set</code> or <code>frozenset</code> or 
+          <code>typy</code>).</dd>
+    <dt>Raises:</dt>
+    <dd><ul class="nomargin-top">
+        <li><code><strong class='fraise'>TypeError</strong></code> - Invalid <i>ns</i>.</li>
+    </ul></dd>
   </dl>
 </td></tr></table>
 </div>
@@ -2010,7 +2278,7 @@
   <dl class="fields">
     <dt>Parameters:</dt>
     <dd><ul class="nomargin-top">
-        <li><strong class="pname"><code>ns</code></strong> - The <code>NS[Mutable]Str[ing]</code> (<a 
+        <li><strong class="pname"><code>ns</code></strong> - The <code>NS[Mutable]Str[ing]</code> instance (<a 
           href="pycocoa.runtime.ObjCInstance-class.html" 
           class="link">ObjCInstance</a>).</li>
     </ul></dd>
@@ -2050,6 +2318,32 @@
   </dl>
 </td></tr></table>
 </div>
+<a name="nsTextView"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">nsTextView</span>(<span class="sig-arg">text</span>,
+        <span class="sig-arg">ns_font</span>,
+        <span class="sig-arg">scroll</span>=<span class="sig-default">50</span>)</span>
+  </h3>
+  </td><td align="right" valign="top"
+    >&nbsp;
+    </td>
+  </tr></table>
+  
+  <p>Return an <code>NSTextView</code> for the given text string.</p>
+  <dl class="fields">
+    <dt>Parameters:</dt>
+    <dd><ul class="nomargin-top">
+        <li><strong class="pname"><code>scroll</code></strong> - Make the <code>NSTextView</code> scrollable if the number of text
+          lines exceeds <code>scroll</code> (<code>int</code>).</li>
+    </ul></dd>
+  </dl>
+</td></tr></table>
+</div>
 <a name="nsThrow"></a>
 <div>
 <table class="details" border="1" cellpadding="3"
@@ -2073,7 +2367,7 @@
     </ul></dd>
     <dt>Raises:</dt>
     <dd><ul class="nomargin-top">
-        <li><code><strong class='fraise'>TypeError</strong></code> - Invalid <b><code>nsExc</code></b>.</li>
+        <li><code><strong class='fraise'>TypeError</strong></code> - Invalid <i>nsExc</i>.</li>
     </ul></dd>
   </dl>
 <div class="fields">      <p><strong>See Also:</strong>
@@ -2083,158 +2377,9 @@
         class="link">nsRaise</a>.
       </p>
       <p><strong>Note:</strong>
-        Thrown <code>NSException</code>s can not be caught and result in 
-        <i>fatal</i> <a href="pycocoa.faults-module.html#exiting" 
+        Thrown <code>NSException</code>s can <i>not be caught</i> and 
+        result in <i>fatal</i> <a href="pycocoa.faults-module.html#exiting"
         class="link">exiting</a>.
-      </p>
-</div></td></tr></table>
-</div>
-<a name="nsURL2str"></a>
-<div>
-<table class="details" border="1" cellpadding="3"
-       cellspacing="0" width="100%" bgcolor="white">
-<tr><td>
-  <table width="100%" cellpadding="0" cellspacing="0" border="0">
-  <tr valign="top"><td>
-  <h3 class="epydoc"><span class="sig"><span class="sig-name">nsURL2str</span>(<span class="sig-arg">ns</span>)</span>
-  </h3>
-  </td><td align="right" valign="top"
-    >&nbsp;
-    </td>
-  </tr></table>
-  
-  <p>Create a Python <code>str</code> from <code>NSURL</code> string.</p>
-  <dl class="fields">
-    <dt>Parameters:</dt>
-    <dd><ul class="nomargin-top">
-        <li><strong class="pname"><code>ns</code></strong> - The <code>CFURL</code> (<a 
-          href="pycocoa.runtime.ObjCInstance-class.html" 
-          class="link">ObjCInstance</a>).</li>
-    </ul></dd>
-    <dt>Returns:</dt>
-        <dd>The URL as string (<code>str</code>).</dd>
-  </dl>
-</td></tr></table>
-</div>
-<a name="nsValue2py"></a>
-<div>
-<table class="details" border="1" cellpadding="3"
-       cellspacing="0" width="100%" bgcolor="white">
-<tr><td>
-  <table width="100%" cellpadding="0" cellspacing="0" border="0">
-  <tr valign="top"><td>
-  <h3 class="epydoc"><span class="sig"><span class="sig-name">nsValue2py</span>(<span class="sig-arg">ns</span>,
-        <span class="sig-arg">dflt</span>=<span class="sig-default">missing</span>)</span>
-  </h3>
-  </td><td align="right" valign="top"
-    >&nbsp;
-    </td>
-  </tr></table>
-  
-  <p>Create a Python instance from an <code>NS[Concrete]Value</code>.</p>
-  <dl class="fields">
-    <dt>Parameters:</dt>
-    <dd><ul class="nomargin-top">
-        <li><strong class="pname"><code>ns</code></strong> - The <code>NS[Concrete]Value</code> (<a 
-          href="pycocoa.runtime.ObjCInstance-class.html" 
-          class="link">ObjCInstance</a>).</li>
-        <li><strong class="pname"><code>dflt</code></strong> - Default for missing, unobtainable value.</li>
-    </ul></dd>
-    <dt>Returns:</dt>
-        <dd>The value (<code>NSPoint_t</code>, <code>NSRange_t</code>, 
-          <code>NSRect_t</code>, <code>NSSize_t</code> or 
-          <code>tuple</code>) or <b><code>dflt</code></b>.</dd>
-    <dt>Raises:</dt>
-    <dd><ul class="nomargin-top">
-        <li><code><strong class='fraise'>TypeError</strong></code> - Invalid <b><code>ns</code></b> or unexpected 
-        <code>ns.objCType</code>.</li>
-    </ul></dd>
-  </dl>
-</td></tr></table>
-</div>
-<a name="ns2py"></a>
-<div>
-<table class="details" border="1" cellpadding="3"
-       cellspacing="0" width="100%" bgcolor="white">
-<tr><td>
-  <table width="100%" cellpadding="0" cellspacing="0" border="0">
-  <tr valign="top"><td>
-  <h3 class="epydoc"><span class="sig"><span class="sig-name">ns2py</span>(<span class="sig-arg">ns</span>,
-        <span class="sig-arg">dflt</span>=<span class="sig-default">missing</span>)</span>
-  </h3>
-  </td><td align="right" valign="top"
-    >&nbsp;
-    </td>
-  </tr></table>
-  
-  <p>Convert (an instance of) an ObjC class to an instance of the 
-  equivalent Python standard type or wrapper and value.</p>
-  <dl class="fields">
-    <dt>Parameters:</dt>
-    <dd><ul class="nomargin-top">
-        <li><strong class="pname"><code>ns</code></strong> - The <code>NS...</code> (<a 
-          href="pycocoa.runtime.ObjCInstance-class.html" 
-          class="link">ObjCInstance</a>).</li>
-        <li><strong class="pname"><code>dflt</code></strong> - Default for unhandled, unexpected <code>NS...</code>s 
-          (<code>missing</code>).</li>
-    </ul></dd>
-    <dt>Returns:</dt>
-        <dd>The value (<code>Python type</code>) or <i>dflt</i> if provided.</dd>
-    <dt>Raises:</dt>
-    <dd><ul class="nomargin-top">
-        <li><code><strong class='fraise'>TypeError</strong></code> - Unhandled, unexpected <code>TypeID</code>.</li>
-    </ul></dd>
-  </dl>
-<div class="fields">      <p><strong>Note:</strong>
-        Conversion map:
-        <ul>
-          <li>
-            NSArray          -&gt; tuple
-          </li>
-          <li>
-            NSBoolean        -&gt; bool
-          </li>
-          <li>
-            NSConstantString -&gt; str
-          </li>
-          <li>
-            NSData           -&gt; bytes
-          </li>
-          <li>
-            NSDecimalNumber  -&gt; Decimal
-          </li>
-          <li>
-            NSDictionary     -&gt; dict
-          </li>
-          <li>
-            NSMutableArray   -&gt; list
-          </li>
-          <li>
-            NSMutableSet     -&gt; set
-          </li>
-          <li>
-            NSMutableString  -&gt; str
-          </li>
-          <li>
-            NSNumber         -&gt; int or float
-          </li>
-          <li>
-            NSNull           -&gt; None
-          </li>
-          <li>
-            NSSet            -&gt; frozenset
-          </li>
-          <li>
-            NSString         -&gt; str
-          </li>
-          <li>
-            NSStr            -&gt; str
-          </li>
-        </ul>
-      </p>
-      <p><strong>See Also:</strong>
-        <a href="https://PythonHosted.org/pyobjc/core/typemapping.html" 
-        target="_top">Converting values between Python and Objective-C</a>
       </p>
 </div></td></tr></table>
 </div>
@@ -2253,16 +2398,16 @@
   </tr></table>
   
   <p>Convert an <code>NS...</code> ObjC object to an instance of the 
-  corresponding Python Type and value.</p>
+  corresponding Python Type, <i>capital T!</i>.</p>
   <dl class="fields">
     <dt>Parameters:</dt>
     <dd><ul class="nomargin-top">
-        <li><strong class="pname"><code>ns</code></strong> - The <code>NS...</code> (<a 
+        <li><strong class="pname"><code>ns</code></strong> - The <code>NS...</code> instance (<a 
           href="pycocoa.runtime.ObjCInstance-class.html" 
           class="link">ObjCInstance</a>).</li>
     </ul></dd>
     <dt>Returns:</dt>
-        <dd>The value (<code>Python Type</code>).</dd>
+        <dd>The instance (<code>Python Type</code>).</dd>
   </dl>
 </td></tr></table>
 </div>
@@ -2285,7 +2430,7 @@
   <dl class="fields">
     <dt>Parameters:</dt>
     <dd><ul class="nomargin-top">
-        <li><strong class="pname"><code>ns</code></strong> - The <code>NS...</code> (<a 
+        <li><strong class="pname"><code>ns</code></strong> - The <code>NS...</code> instance (<a 
           href="pycocoa.runtime.ObjCInstance-class.html" 
           class="link">ObjCInstance</a>).</li>
         <li><strong class="pname"><code>dflt</code></strong> - Default for unhandled, unexpected <code>NS...</code>s 
@@ -2294,6 +2439,77 @@
     <dt>Returns:</dt>
         <dd>2-Tuple <code>(TypeID, ns...2py)</code> of an <code>int</code>NS 
           and the type conversion <code>callable</code>.</dd>
+    <dt>Raises:</dt>
+    <dd><ul class="nomargin-top">
+        <li><code><strong class='fraise'>TypeError</strong></code> - Invalid <i>ns</i>.</li>
+    </ul></dd>
+  </dl>
+</td></tr></table>
+</div>
+<a name="nsURL2str"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">nsURL2str</span>(<span class="sig-arg">ns</span>)</span>
+  </h3>
+  </td><td align="right" valign="top"
+    >&nbsp;
+    </td>
+  </tr></table>
+  
+  <p>Create a Python <code>str</code> from <code>NSURL</code> string.</p>
+  <dl class="fields">
+    <dt>Parameters:</dt>
+    <dd><ul class="nomargin-top">
+        <li><strong class="pname"><code>ns</code></strong> - The <code>CFURL</code> instance (<a 
+          href="pycocoa.runtime.ObjCInstance-class.html" 
+          class="link">ObjCInstance</a>).</li>
+    </ul></dd>
+    <dt>Returns:</dt>
+        <dd>The URL as string (<code>str</code>).</dd>
+    <dt>Raises:</dt>
+    <dd><ul class="nomargin-top">
+        <li><code><strong class='fraise'>TypeError</strong></code> - Invalid <i>ns</i>.</li>
+    </ul></dd>
+  </dl>
+</td></tr></table>
+</div>
+<a name="nsValue2py"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">nsValue2py</span>(<span class="sig-arg">ns</span>,
+        <span class="sig-arg">dflt</span>=<span class="sig-default">missing</span>)</span>
+  </h3>
+  </td><td align="right" valign="top"
+    >&nbsp;
+    </td>
+  </tr></table>
+  
+  <p>Create a Python instance from an <code>NS[Concrete]Value</code>.</p>
+  <dl class="fields">
+    <dt>Parameters:</dt>
+    <dd><ul class="nomargin-top">
+        <li><strong class="pname"><code>ns</code></strong> - The <code>NS[Concrete]Value</code> instance (<a 
+          href="pycocoa.runtime.ObjCInstance-class.html" 
+          class="link">ObjCInstance</a>).</li>
+        <li><strong class="pname"><code>dflt</code></strong> - Default for missing, unobtainable value.</li>
+    </ul></dd>
+    <dt>Returns:</dt>
+        <dd>The value (<code>NSPoint_t</code>, <code>NSRange_t</code>, 
+          <code>NSRect_t</code>, <code>NSSize_t</code> or 
+          <code>tuple</code>) or <i>dflt</i>.</dd>
+    <dt>Raises:</dt>
+    <dd><ul class="nomargin-top">
+        <li><code><strong class='fraise'>TypeError</strong></code> - Invalid <i>ns</i> or unhandled <code>ns.objCType</code>.</li>
+        <li><code><strong class='fraise'>TypeError</strong></code> - Invalid <i>ns</i>.</li>
+    </ul></dd>
   </dl>
 </td></tr></table>
 </div>
@@ -2319,13 +2535,13 @@
   <dl class="fields">
     <dt>Value:</dt>
       <dd><table><tr><td><pre class="variable">
-NSMain.Application=NSApplication(&lt;Id_t at 0x7f9a7880f680&gt;) of 0x7f9a66<span class="variable-linewrap"><img src="crarr.png" alt="\" /></span>
-350c20,
-      .BooleanNO=NSBoolean(&lt;Id_t at 0x7f9a482d40e0&gt;) of 0x7ff8475e6c70<span class="variable-linewrap"><img src="crarr.png" alt="\" /></span>
+NSMain.Application=NSApplication(&lt;Id_t at 0x7fcea8a64710&gt;) of 0x7fce83<span class="variable-linewrap"><img src="crarr.png" alt="\" /></span>
+fe3230,
+      .BooleanNO=NSBoolean(&lt;Id_t at 0x7fcea8a6bcb0&gt;) of 0x7ff85855ec70<span class="variable-linewrap"><img src="crarr.png" alt="\" /></span>
 ,
-      .BooleanYES=NSBoolean(&lt;Id_t at 0x7f9a78824950&gt;) of 0x7ff8475e6c6<span class="variable-linewrap"><img src="crarr.png" alt="\" /></span>
+      .BooleanYES=NSBoolean(&lt;Id_t at 0x7fcea8a735f0&gt;) of 0x7ff85855ec6<span class="variable-linewrap"><img src="crarr.png" alt="\" /></span>
 0,
-      .Bundle=NSBundle(&lt;Id_t at 0x7f9a78824a70&gt;) of 0x600000ef4000,
+      .Bundle=NSBundle(&lt;Id_t at 0x7fcea8a73710&gt;) of 0x600000320000,
       .BundleName=NSConstantString('CFBundleName'),
 <code class="variable-ellipsis">...</code>
 </pre></td></tr></table>
@@ -2365,7 +2581,7 @@ NSMain.Application=NSApplication(&lt;Id_t at 0x7f9a7880f680&gt;) of 0x7f9a66<spa
 <table border="0" cellpadding="0" cellspacing="0" width="100%%">
   <tr>
     <td align="left" class="footer">
-    Generated by Epydoc 3.0.1 on Wed Feb  5 15:29:03 2025
+    Generated by Epydoc 3.0.1 on Sun Feb 23 14:01:04 2025
     </td>
     <td align="right" class="footer">
       <a target="mainFrame" href="http://epydoc.sourceforge.net"

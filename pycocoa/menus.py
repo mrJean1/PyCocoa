@@ -80,13 +80,15 @@ wrapping ObjC C{NSMenuItem} and C{NSMenu} and L{Keys}.
 @var Keys.VT: '\x0b'.
 @var Keys.VerticalTab: '\x0b'.
 '''
-# all imports listed explicitly to help PyChecker
 from pycocoa.bases import _Type2
 from pycocoa.fonts import Font
 from pycocoa.geometry import Size
 from pycocoa.getters import get_selector, get_selectornameof
-from pycocoa.lazily import _ALL_LAZY, _Dmain_, _DOT_, _fmt, _fmt_invalid, \
-                           _instr, _NA_, _NN_, _no, _SPACE_, _UNDER_
+from pycocoa.internals import Adict, bytes2str, _ByteStrs, _Constants, _Dmain_, \
+                             _DOT_, _Globals, _Ints, missing, _NA_, _nargs, \
+                             _NN_, _no, _property2, property_RO, _SPACE_, \
+                             _Strs, _UNDER_
+from pycocoa.lazily import _ALL_LAZY, _Types,  _fmt, _fmt_invalid, _instr
 from pycocoa.nstypes import isNone, NSMain, NSMenu, NSMenuItem, nsOf, NSStr, \
                             nsString2str
 from pycocoa.pytypes import int2NS
@@ -111,20 +113,14 @@ from pycocoa.oslibs import NSAcknowledgeCharacter, NSBackSpaceCharacter, \
                            NSStartOfTextCharacter, NSSubstituteCharacter, \
                            NSSynchronousIdleCharacter, NSTabCharacter, \
                            NSUnitSeparatorCharacter, NSVerticalTabCharacter
-from pycocoa.runtime import isObjCInstanceOf  # , ObjCInstance
+from pycocoa.runtime import isObjCInstanceOf  # ObjCInstance
 from pycocoa.screens import Screens
-from pycocoa.utils import Adict, bytes2str, _ByteStrs, _Constants, errorf, \
-                         _Globals, _Ints, isinstanceOf, missing, name2pymethod,  \
-                         _Strs, property2, property_RO, _Types
-try:
-    from inspect import getfullargspec as getargspec  # Python 3+
-except ImportError:
-    from inspect import getargspec  # Python 2
-from inspect import isfunction, ismethod
+from pycocoa.utils import errorf, isinstanceOf, name2pymethod
+
 # from types import FunctionType, MethodType
 
 __all__ = _ALL_LAZY.menus
-__version__ = '25.01.31'
+__version__ = '25.02.16'
 
 # Method _NSApplicationDelegate.handleMenuItem_ in .apps.py
 # is the handler ('selector') for all menu items specified
@@ -208,12 +204,12 @@ def _nsMenuItem(inst, sel=0, nskey=_NoKey):
 def _setTag(inst, tag, ns=None):
     '''(INTERNAL) Check and set the tag.
     '''
-    if isinstanceOf(tag, _Ints, name='tag'):
-        if not tag:  # XXX zero tag invalid
-            raise ValueError(_fmt_invalid(tag=repr(tag)))
-        inst._tag = tag
-        if ns:
-            ns.setTag_(tag)
+    isinstanceOf(tag, *_Ints, raiser='tag')
+    if not tag:  # XXX zero tag invalid
+        raise ValueError(_fmt_invalid(tag=repr(tag)))
+    inst._tag = tag
+    if ns:
+        ns.setTag_(tag)
 
 
 class _Item_Type2(_Type2):
@@ -306,7 +302,7 @@ class Item(_Item_Type2):
         # self.NS.setEnabled_(YES) or self.isEnabled = True, is default
         for p, v in props.items():
             try:  # get property setter
-                g, s = property2(self, p)
+                g, s = _property2(self, p)
                 if s and callable(s):
                     s(self, v)
                 else:
@@ -336,7 +332,7 @@ class Item(_Item_Type2):
 #           self._NS     = other.NS
 #           self._SEL_   = other._SEL_
 #
-#       elif isObjCInstanceOf(other, NSMenuItem, name='other'):
+#       elif isObjCInstanceOf(other, NSMenuItem, raiser='other'):
 #           self.title   = nsString2str(other.title())
 #           self._action = get_selectornameof(other.action())
 #           self.key     = nsString2str(other.keyEquivalent())
@@ -355,9 +351,7 @@ class Item(_Item_Type2):
         '''Set the item's C{action} (C{str} or Python C{callable}), see C{Item.__init__} B{Notes}.
         '''
         # type(action) in (types.FunctionType, types.MethodType ...
-        if (isinstanceOf(action, _Strs) or
-           (ismethod(action)   and len(getargspec(action).args) > 1) or
-           (isfunction(action) and len(getargspec(action).args) > 0)):
+        if isinstanceOf(action, *_Strs) or _nargs(action) > 0:
             self._action = action
         else:
             raise TypeError(_fmt_invalid(action=repr(action)))
@@ -405,7 +399,8 @@ class Item(_Item_Type2):
     def font(self, font):
         '''Set the item's C{font} (L{Font}).
         '''
-        if isinstanceOf(font, Font, name='font') and font != self.font:
+        isinstanceOf(font, Font, raiser='font')
+        if font != self.font:
             self.NS.setFont_(font.NS)
 
     @property_RO
@@ -424,7 +419,8 @@ class Item(_Item_Type2):
 #   def image(self, image):
 #       '''Set the item's C{image} (L{Image}).
 #       '''
-#       if isinstanceOf(image, Image, name='image') and image != self.image:
+#       isinstanceOf(image, Image, raiser='image')
+#       if image != self.image:
 #           self.NS.setImage_(image.NS)
 
     @property
@@ -437,7 +433,8 @@ class Item(_Item_Type2):
     def indentationLevel(self, indent):
         '''Set the item's C{indentation} (C{int}).
         '''
-        if isinstanceOf(indent, _Ints, name='indent') and indent != self.indentationLevel:
+        isinstanceOf(indent, *_Ints, raiser='indent')
+        if indent != self.indentationLevel:
             if not 0 <= indent < 16:
                 raise ValueError(_fmt_invalid(indent=indent))
             self.NS.setIndentationLevel_(indent)
@@ -538,7 +535,7 @@ class Item(_Item_Type2):
         d = self._keyModifiers(**modifiers)
         if d:
             self._mask = m  # restore
-            raise KeyError(_instr(self, Adict(d)))
+            raise KeyError(_instr(self.typename, Adict(d)))
 
     def _keyModifiers(self, **kwds):
         '''(INTERNAL) Set the item's shortcut key modifiers.
@@ -561,7 +558,8 @@ class Item(_Item_Type2):
 #   def mixedStateImage(self, image):
 #       '''Set the item's mixed-state C{image} (L{Image}).
 #       '''
-#       if isinstanceOf(image, Image, name='image') and image != self.mixedStateImage:
+#       isinstanceOf(image, Image, raiser='image')
+#       if image != self.mixedStateImage:
 #           self.NS.setMixedStateImage_(image.NS)
 
 #   @property
@@ -574,7 +572,8 @@ class Item(_Item_Type2):
 #   def offStateImage(self, image):
 #       '''Set the item's off-state C{image} (L{Image}).
 #       '''
-#       if isinstanceOf(image, Image, name='image') and image != self.offStateImage:
+#       isinstanceOf(image, Image, raiser='image')
+#       if image != self.offStateImage:
 #           self.NS.setOffStateImage_(image.NS)
 
 #   @property
@@ -587,7 +586,8 @@ class Item(_Item_Type2):
 #   def onStateImage(self, image):
 #       '''Set the item's on-state C{image} (L{Image}).
 #       '''
-#       if isinstanceOf(image, Image, name='image') and image != self.onStateImage:
+#       isinstanceOf(image, Image, raiser='image')
+#       if image != self.onStateImage:
 #           self.NS.setOnStateImage_(image.NS)
 
     @property_RO
@@ -601,8 +601,8 @@ class Item(_Item_Type2):
 #   def nsTarget(self, ns_target):
 #       '''Set the item's C{target} (C{NS...}).
 #       '''
-#       if isinstanceOf(ns_target, ObjCInstance, name='ns_target'):
-#           self.NS.setTarget_(ns_target)
+#       isinstanceOf(ns_target, ObjCInstance, raiser='ns_target')
+#       self.NS.setTarget_(ns_target)
 
     @property_RO
     def shift(self):
@@ -620,7 +620,7 @@ class Item(_Item_Type2):
     def state(self, state):
         '''Set the item's C{state} (C{int}).
         '''
-        if isinstanceOf(state, _Ints, name='state') and state != self.state:
+        if isinstanceOf(state, *_Ints, raiser='state') and state != self.state:
             self.NS.setState_(state)
 
     @property
@@ -640,7 +640,7 @@ class Item(_Item_Type2):
             self.NS.setSubmenu_(0)
             self._subMenu = None
 
-        elif isinstanceOf(submenu, Menu, name='submenu') and submenu != self.subMenu:
+        elif isinstanceOf(submenu, Menu, raiser='submenu') and submenu != self.subMenu:
             _bindM(submenu, self)
             self.NS.setSubmenu_(nsOf(submenu))
             self._subMenu = submenu
@@ -780,24 +780,23 @@ class _Menu_Type2(_Type2):
 
     def _appendM(self, insts, *classes):
         for inst in insts:
-            if isinstanceOf(inst, *classes, name=self._nameM):
-                ns, m = self._validM(inst), len(self) + 1
-                self.NS.addItem_(ns)
-                self._listM.append(inst)
-                self._tagM(inst, ns)
-                self._assertM(len(self), m)
+            isinstanceOf(inst, *classes, raiser=self._nameM)
+            ns, m = self._validM(inst), len(self) + 1
+            self.NS.addItem_(ns)
+            self._listM.append(inst)
+            self._tagM(inst, ns)
+            self._assertM(len(self), m)
 
     def _assertM(self, n, m):
         if n != m:
             raise RuntimeError(_fmt_invalid(str(m), len=n))
 
     def _find(self, inst, *classes):
-        if isinstanceOf(inst, *classes, name=self._nameM):
-            try:
-                return self._listM.index(inst)
-            except ValueError:
-                pass
-        return -1
+        isinstanceOf(inst, *classes, raiser=self._nameM)
+        try:
+            return self._listM.index(inst)
+        except ValueError:
+            return -1
 
     def _findM(self, title, action, tag, dflt):  # MCCABE 15
         # find item or menu
@@ -851,11 +850,11 @@ class _Menu_Type2(_Type2):
         raise IndexError(_no(t))
 
     def _index(self, inst, *classes):
-        if isinstanceOf(inst, *classes, name=self._nameM):
-            try:
-                return self._listM.index(inst)
-            except ValueError:
-                pass
+        isinstanceOf(inst, *classes, raiser=self._nameM)
+        try:
+            return self._listM.index(inst)
+        except ValueError:
+            pass
         t = _fmt('%s: %r', self._nameM, inst)
         raise ValueError(_no(t))
 
@@ -877,12 +876,12 @@ class _Menu_Type2(_Type2):
     def _insertM(self, index, insts, *classes):
         i = self._indexM(index)
         for inst in reversed(insts):
-            if isinstanceOf(inst, *classes, name=self._nameM):
-                ns, m = self._validM(inst), len(self) + 1
-                self.NS.insertItem_atIndex_(ns, i)
-                self._listM.insert(i, inst)
-                self._tagM(inst, ns)
-                self._assertM(len(self), m)
+            isinstanceOf(inst, *classes, raiser=self._nameM)
+            ns, m = self._validM(inst), len(self) + 1
+            self.NS.insertItem_atIndex_(ns, i)
+            self._listM.insert(i, inst)
+            self._tagM(inst, ns)
+            self._assertM(len(self), m)
 
     def _popM(self, index):
         try:
@@ -899,13 +898,13 @@ class _Menu_Type2(_Type2):
 
     def _removeM(self, insts, *classes):
         for inst in insts:
-            if isinstanceOf(inst, *classes, name=self._nameM):
-                try:
-                    self._popM(self._listM.index(inst))
-                except (IndexError, ValueError):
-                    t = _DOT_(self, 'remove')
-                    t = _instr(t, repr(inst))
-                    raise ValueError(_no(t))  # cause=X
+            isinstanceOf(inst, *classes, raiser=self._nameM)
+            try:
+                self._popM(self._listM.index(inst))
+            except (IndexError, ValueError):
+                t = _DOT_(self, 'remove')
+                t = _instr(t, repr(inst))
+                raise ValueError(_no(t))  # cause=X
 
     def _tagM(self, inst, ns):
         # only L{Item} tags are settable
@@ -976,8 +975,8 @@ class _Menu_Type2(_Type2):
     def minWidth(self, width):
         '''set the menu bar's C{minimumWidth} property (C{float} screen coordinates).
         '''
-        if isinstanceOf(width, float, *_Ints, name='width'):
-            self.NS.setMinimumWidth_(float(width))
+        isinstanceOf(width, float, *_Ints, raiser='width')
+        self.NS.setMinimumWidth_(float(width))
 
     @property_RO
     def parent(self):
@@ -1074,7 +1073,7 @@ class Menu(_Menu_Type2):
         if item._SEL_ is _CALL_:  # .callMenuItem_
             item._action(item)
         else:  # if item._SEL_ is _HANDLE_:  # .handleMenuItem_
-            t = _DOT_(self, self.click.__name)
+            t = _DOT_(self, self.click.__name__)
             raise NotImplementedError(_instr(t, item))
         if highlight:
             # <https://Stackoverflow.com/questions/6169930/
@@ -1197,7 +1196,6 @@ class Menu(_Menu_Type2):
         '''
         b = bool(hidden)
         if b != self.isHidden and self._NSiMI:
-            print(b)
             self._NSiMI.setHidden_(YES if b else NO)
 
     @property_RO
@@ -1268,7 +1266,7 @@ class Menu(_Menu_Type2):
         if ns:
             m = ns2Item(ns)
             if m is not self:  # or m.NS != ns.subMenu()
-                t = _instr(ns2Item.__name__, self)
+                t = _instr(ns2Item, self)
                 raise RuntimeError(_fmt('%s: %r', t, m))
         return ns or None
 
@@ -1537,7 +1535,7 @@ def ns2Item(ns):
               intermediate C{NSMenuItem}, created internally
               to append or insert a L{Menu} to a L{MenuBar}.
     '''
-    if isObjCInstanceOf(ns, NSMenuItem, name='ns'):
+    if isObjCInstanceOf(ns, NSMenuItem, raiser='ns'):
         return _Globals.Items[ns.representedObject()]
 
 
@@ -1565,7 +1563,8 @@ _Types.MenuBar       = MenuBar
 
 if __name__ == _Dmain_:
 
-    from pycocoa.utils import _all_listing, properties, printf, _varstr
+    from pycocoa import printf, properties
+    from pycocoa.utils import _all_listing, _varstr
 
     print(_varstr(Keys, strepr=repr))
 
@@ -1687,13 +1686,13 @@ if __name__ == _Dmain_:
 #                    .VT=0xb,
 #  pycocoa.menus.Menu is <class .Menu>,
 #  pycocoa.menus.MenuBar is <class .MenuBar>,
-#  pycocoa.menus.ns2Item is <function .ns2Item at 0x102f965c0>,
-#  pycocoa.menus.title2action is <function .title2action at 0x102f9ff60>,
+#  pycocoa.menus.ns2Item is <function .ns2Item at 0x1036fccc0>,
+#  pycocoa.menus.title2action is <function .title2action at 0x103702660>,
 # )[7]
-# pycocoa.menus.version 25.1.31, .isLazy 1, Python 3.13.1 64bit arm64, macOS 14.6.1
+# pycocoa.menus.version 25.2.16, .isLazy 1, Python 3.13.1 64bit arm64, macOS 14.7.3
 
 # Item('Quit', 'menuTerminate_', Cmd+q) properties:
-#   NS = <ObjCInstance(NSMenuItem(<Id_t at 0x102f9bb50>) of 0x6000003e8000) at 0x102dce8b0>
+#   NS = <ObjCInstance(NSMenuItem(<Id_t at 0x10363e750>) of 0x60000377cf50) at 0x103626780>
 #   NSDelegate = 'NameError("use \'NSd-\', not \'NSD-\'")'
 #   NSdelegate = None
 #   action = 'menuTerminate_'
@@ -1715,7 +1714,7 @@ if __name__ == _Dmain_:
 #   keyEquivalentModifiers = {'alt': False, 'cmd': True, 'ctrl': False, 'shift': False}
 #   keyModifiers = {'alt': False, 'cmd': True, 'ctrl': False, 'shift': False}
 #   nsTarget = None
-#   parent = Menu('Test') at 0x102dbee40
+#   parent = Menu('Test') at 0x1036e9e80
 #   shift = False
 #   state = 0
 #   subMenu = None
@@ -1725,7 +1724,7 @@ if __name__ == _Dmain_:
 #   typename = 'Item'
 
 # Menu('Test') properties:
-#   NS = <ObjCInstance(NSMenu(<Id_t at 0x102f9aad0>) of 0x600003de83c0) at 0x102d8f390>
+#   NS = <ObjCInstance(NSMenu(<Id_t at 0x10363d6d0>) of 0x60000097cd40) at 0x103472990>
 #   NSDelegate = 'NameError("use \'NSd-\', not \'NSD-\'")'
 #   NSdelegate = None
 #   action = None
@@ -1739,17 +1738,17 @@ if __name__ == _Dmain_:
 #   isTornOff = False
 #   isVisible = None
 #   minWidth = 0.0
-#   nsMenuItem = <ObjCInstance(NSMenuItem(<Id_t at 0x102fd51d0>) of 0x6000003e51f0) at 0x102fcc290>
-#   parent = MenuBar(None) at 0x102dbdfd0
+#   nsMenuItem = <ObjCInstance(NSMenuItem(<Id_t at 0x10363f650>) of 0x60000377d340) at 0x1037055b0>
+#   parent = MenuBar(None) at 0x1036e9be0
 #   showsState = True
-#   size = <NSSize_t(width=101.0, height=32.0) at 0x102fe4ad0>
+#   size = <NSSize_t(width=101.0, height=32.0) at 0x10381edd0>
 #   tag = 2
 #   tags = 2
 #   title = 'Test'
 #   typename = 'Menu'
 
 # MenuBar(None) properties:
-#   NS = <ObjCInstance(NSMenu(<Id_t at 0x102f9a250>) of 0x600003de8400) at 0x102dbe510>
+#   NS = <ObjCInstance(NSMenu(<Id_t at 0x10363cdd0>) of 0x60000097cd80) at 0x1036e9d30>
 #   NSDelegate = 'NameError("use \'NSd-\', not \'NSD-\'")'
 #   NSdelegate = None
 #   action = None
@@ -1763,7 +1762,7 @@ if __name__ == _Dmain_:
 #   minWidth = 0.0
 #   parent = None
 #   showsState = True
-#   size = <NSSize_t(width=85.0, height=32.0) at 0x102fe59d0>
+#   size = <NSSize_t(width=85.0, height=32.0) at 0x10381f250>
 #   tag = None
 #   tags = 2
 #   title = None

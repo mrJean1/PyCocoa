@@ -59,49 +59,13 @@
 </table>
 <!-- ==================== MODULE DESCRIPTION ==================== -->
 <h1 class="epydoc">Module utils</h1><p class="nomargin-top"></p>
-<p>Utility functions, constants, internals, etc.</p>
+<p>Mostly public utility functions.</p>
 
 <hr />
 <div class="fields">      <p><strong>Version:</strong>
-        25.02.04
+        25.02.22
       </p>
-</div><!-- ==================== CLASSES ==================== -->
-<a name="section-Classes"></a>
-<table class="summary" border="1" cellpadding="3"
-       cellspacing="0" width="100%" bgcolor="white">
-<tr bgcolor="#70b0f0" class="table-header">
-  <td align="left" colspan="2" class="table-header">
-    <span class="table-header">Classes</span></td>
-</tr>
-<tr>
-    <td width="15%" align="right" valign="top" class="summary">
-      <span class="summary-type">&nbsp;</span>
-    </td><td class="summary">
-        <a href="pycocoa.utils.module_property_RO-class.html" class="summary-name">module_property_RO</a><br />
-      Decorator for a <code>Read-Only</code> module property.
-    </td>
-  </tr>
-<tr>
-    <td width="15%" align="right" valign="top" class="summary">
-      <span class="summary-type">&nbsp;</span>
-    </td><td class="summary">
-        <a href="pycocoa.utils.Adict-class.html" class="summary-name">Adict</a><br />
-      A <code>dict</code> with key <i>and</i> attribute access to the 
-        items and callable to add items.
-    </td>
-  </tr>
-<tr>
-    <td width="15%" align="right" valign="top" class="summary">
-      <span class="summary-type">&nbsp;</span>
-    </td><td class="summary">
-        <a href="pycocoa.utils.Cache2-class.html" class="summary-name">Cache2</a><br />
-      Two-level cache implemented by two <code>dict</code>s, a primary 
-        level-1 <code>dict</code> and a secondary level-2 
-        <code>dict</code>.
-    </td>
-  </tr>
-</table>
-<!-- ==================== FUNCTIONS ==================== -->
+</div><!-- ==================== FUNCTIONS ==================== -->
 <a name="section-Functions"></a>
 <table class="summary" border="1" cellpadding="3"
        cellspacing="0" width="100%" bgcolor="white">
@@ -109,98 +73,6 @@
   <td align="left" colspan="2" class="table-header">
     <span class="table-header">Functions</span></td>
 </tr>
-<tr>
-    <td width="15%" align="right" valign="top" class="summary">
-      <span class="summary-type">&nbsp;</span>
-    </td><td class="summary">
-      <table width="100%" cellpadding="0" cellspacing="0" border="0">
-        <tr>
-          <td><span class="summary-sig"><a href="pycocoa.utils-module.html#property_RO" class="summary-sig-name">property_RO</a>(<span class="summary-sig-arg">method</span>)</span><br />
-      Decorator for <code>Read_Only</code> class/instance property.</td>
-          <td align="right" valign="top">
-            
-            
-          </td>
-        </tr>
-      </table>
-      
-    </td>
-  </tr>
-<tr>
-    <td width="15%" align="right" valign="top" class="summary">
-      <span class="summary-type">&nbsp;</span>
-    </td><td class="summary">
-      <table width="100%" cellpadding="0" cellspacing="0" border="0">
-        <tr>
-          <td><span class="summary-sig"><a href="pycocoa.utils-module.html#bytes2repr" class="summary-sig-name">bytes2repr</a>(<span class="summary-sig-arg">bytestr</span>)</span><br />
-      Represent <code>bytes</code> or <code>str</code> as 
-      <code>b&quot;...&quot;</code>.</td>
-          <td align="right" valign="top">
-            
-            
-          </td>
-        </tr>
-      </table>
-      
-    </td>
-  </tr>
-<tr>
-    <td width="15%" align="right" valign="top" class="summary">
-      <span class="summary-type">&nbsp;</span>
-    </td><td class="summary">
-      <table width="100%" cellpadding="0" cellspacing="0" border="0">
-        <tr>
-          <td><span class="summary-sig"><a href="pycocoa.utils-module.html#bytes2str" class="summary-sig-name">bytes2str</a>(<span class="summary-sig-arg">bytestr</span>,
-        <span class="summary-sig-arg">dflt</span>=<span class="summary-sig-default">missing</span>,
-        <span class="summary-sig-arg">name</span>=<span class="summary-sig-default">''</span>)</span><br />
-      Convert <code>bytes</code>/<code>unicode</code> to <code>str</code> 
-      if needed.</td>
-          <td align="right" valign="top">
-            
-            
-          </td>
-        </tr>
-      </table>
-      
-    </td>
-  </tr>
-<tr>
-    <td width="15%" align="right" valign="top" class="summary">
-      <span class="summary-type">iterator</span>
-    </td><td class="summary">
-      <table width="100%" cellpadding="0" cellspacing="0" border="0">
-        <tr>
-          <td><span class="summary-sig"><a href="pycocoa.utils-module.html#iterbytes" class="summary-sig-name">iterbytes</a>(<span class="summary-sig-arg">collection</span>)</span><br />
-      iter(callable, sentinel) -&gt; iterator</td>
-          <td align="right" valign="top">
-            
-            
-          </td>
-        </tr>
-      </table>
-      
-    </td>
-  </tr>
-<tr>
-    <td width="15%" align="right" valign="top" class="summary">
-      <span class="summary-type">&nbsp;</span>
-    </td><td class="summary">
-      <table width="100%" cellpadding="0" cellspacing="0" border="0">
-        <tr>
-          <td><span class="summary-sig"><a href="pycocoa.utils-module.html#str2bytes" class="summary-sig-name">str2bytes</a>(<span class="summary-sig-arg">strbytes</span>,
-        <span class="summary-sig-arg">dflt</span>=<span class="summary-sig-default">missing</span>,
-        <span class="summary-sig-arg">name</span>=<span class="summary-sig-default">''</span>)</span><br />
-      Convert <code>strbytes</code> to 
-      <code>bytes</code>/<code>unicode</code> if needed.</td>
-          <td align="right" valign="top">
-            
-            
-          </td>
-        </tr>
-      </table>
-      
-    </td>
-  </tr>
 <tr>
     <td width="15%" align="right" valign="top" class="summary">
       <span class="summary-type">&nbsp;</span>
@@ -247,8 +119,7 @@
           <td><span class="summary-sig"><a name="errorf"></a><span class="summary-sig-name">errorf</span>(<span class="summary-sig-arg">fmtxt</span>,
         <span class="summary-sig-arg">*args</span>,
         <span class="summary-sig-arg">**file_flush_nl_nt_argv0</span>)</span><br />
-      like <code><b>printf</b>(<b>fmtxt</b>, *<b>args</b>, ..., 
-      <b>file</b>=sys.stderr)</code>.</td>
+      Like <i>printf</i>, but writing to <i>file=sys.stderr</i>.</td>
           <td align="right" valign="top">
             
             
@@ -320,7 +191,7 @@
         <tr>
           <td><span class="summary-sig"><a href="pycocoa.utils-module.html#isinstanceOf" class="summary-sig-name">isinstanceOf</a>(<span class="summary-sig-arg">inst</span>,
         <span class="summary-sig-arg">*classes</span>,
-        <span class="summary-sig-arg">**name_missing</span>)</span><br />
+        <span class="summary-sig-arg">**raiser_name</span>)</span><br />
       Check a Python instance' class.</td>
           <td align="right" valign="top">
             
@@ -355,27 +226,10 @@
     </td><td class="summary">
       <table width="100%" cellpadding="0" cellspacing="0" border="0">
         <tr>
-          <td><span class="summary-sig"><a name="lambda1"></a><span class="summary-sig-name">lambda1</span>(<span class="summary-sig-arg">arg</span>)</span><br />
-      Inlieu of using <i class="math">lambda arg: arg</i>.</td>
-          <td align="right" valign="top">
-            
-            
-          </td>
-        </tr>
-      </table>
-      
-    </td>
-  </tr>
-<tr>
-    <td width="15%" align="right" valign="top" class="summary">
-      <span class="summary-type">&nbsp;</span>
-    </td><td class="summary">
-      <table width="100%" cellpadding="0" cellspacing="0" border="0">
-        <tr>
-          <td><span class="summary-sig"><a href="pycocoa.utils-module.html#logf" class="summary-sig-name">logf</a>(<span class="summary-sig-arg">fmtxt</span>,
+          <td><span class="summary-sig"><a name="logf"></a><span class="summary-sig-name">logf</span>(<span class="summary-sig-arg">fmtxt</span>,
         <span class="summary-sig-arg">*args</span>,
         <span class="summary-sig-arg">**file_flush_nl_nt_argv0</span>)</span><br />
-      Formatted log <i>fmtxt % args</i> with optional keywords.</td>
+      Like <i>printf</i>, but writing to <i>file=NSMain.stdlog</i>.</td>
           <td align="right" valign="top">
             
             
@@ -498,41 +352,6 @@
     </td><td class="summary">
       <table width="100%" cellpadding="0" cellspacing="0" border="0">
         <tr>
-          <td><span class="summary-sig"><a href="pycocoa.utils-module.html#property2" class="summary-sig-name">property2</a>(<span class="summary-sig-arg">inst</span>,
-        <span class="summary-sig-arg">name</span>)</span><br />
-      Return the property <code>get</code> and <code>set</code> method.</td>
-          <td align="right" valign="top">
-            
-            
-          </td>
-        </tr>
-      </table>
-      
-    </td>
-  </tr>
-<tr>
-    <td width="15%" align="right" valign="top" class="summary">
-      <span class="summary-type">&nbsp;</span>
-    </td><td class="summary">
-      <table width="100%" cellpadding="0" cellspacing="0" border="0">
-        <tr>
-          <td><span class="summary-sig"><a name="sortuples"></a><span class="summary-sig-name">sortuples</span>(<span class="summary-sig-arg">iterable</span>)</span><br />
-      Sort tuples alphabetically, case-insensitive.</td>
-          <td align="right" valign="top">
-            
-            
-          </td>
-        </tr>
-      </table>
-      
-    </td>
-  </tr>
-<tr>
-    <td width="15%" align="right" valign="top" class="summary">
-      <span class="summary-type">&nbsp;</span>
-    </td><td class="summary">
-      <table width="100%" cellpadding="0" cellspacing="0" border="0">
-        <tr>
           <td><span class="summary-sig"><a href="pycocoa.utils-module.html#terminating" class="summary-sig-name">terminating</a>(<span class="summary-sig-arg">app</span>,
         <span class="summary-sig-arg">timeout</span>=<span class="summary-sig-default">None</span>)</span><br />
       Set up a separate thread to terminate an NSApplication by calling the
@@ -637,21 +456,6 @@
         <a name="__all__"></a><span class="summary-name">__all__</span> = <code title="_ALL_LAZY.utils">_ALL_LAZY.utils</code>
     </td>
   </tr>
-<tr>
-    <td width="15%" align="right" valign="top" class="summary">
-      <span class="summary-type">&nbsp;</span>
-    </td><td class="summary">
-        <a name="DEFAULT_UNICODE"></a><span class="summary-name">DEFAULT_UNICODE</span> = <code title="'utf-8'"><code class="variable-quote">'</code><code class="variable-string">utf-8</code><code class="variable-quote">'</code></code>
-    </td>
-  </tr>
-<tr>
-    <td width="15%" align="right" valign="top" class="summary">
-      <span class="summary-type">&nbsp;</span>
-    </td><td class="summary">
-        <a name="missing"></a><span class="summary-name">missing</span> = <code title="missing">missing</code><br />
-      Missing keyword argument value.
-    </td>
-  </tr>
 </table>
 <!-- ==================== FUNCTION DETAILS ==================== -->
 <a name="section-FunctionDetails"></a>
@@ -662,155 +466,6 @@
     <span class="table-header">Function Details</span></td>
 </tr>
 </table>
-<a name="property_RO"></a>
-<div>
-<table class="details" border="1" cellpadding="3"
-       cellspacing="0" width="100%" bgcolor="white">
-<tr><td>
-  <table width="100%" cellpadding="0" cellspacing="0" border="0">
-  <tr valign="top"><td>
-  <h3 class="epydoc"><span class="sig"><span class="sig-name">property_RO</span>(<span class="sig-arg">method</span>)</span>
-  </h3>
-  </td><td align="right" valign="top"
-    >&nbsp;
-    </td>
-  </tr></table>
-  
-  <p>Decorator for <code>Read_Only</code> class/instance property.</p>
-  <dl class="fields">
-    <dt>Parameters:</dt>
-    <dd><ul class="nomargin-top">
-        <li><strong class="pname"><code>method</code></strong> - The callable to be decorated as <code>Read_Only property</code>.</li>
-    </ul></dd>
-  </dl>
-<div class="fields">      <p><strong>Note:</strong>
-        Like standard Python <code>property</code> without a 
-        <code>property.setter</code> and with a more descriptive error 
-        message when set.
-      </p>
-</div></td></tr></table>
-</div>
-<a name="bytes2repr"></a>
-<div>
-<table class="details" border="1" cellpadding="3"
-       cellspacing="0" width="100%" bgcolor="white">
-<tr><td>
-  <table width="100%" cellpadding="0" cellspacing="0" border="0">
-  <tr valign="top"><td>
-  <h3 class="epydoc"><span class="sig"><span class="sig-name">bytes2repr</span>(<span class="sig-arg">bytestr</span>)</span>
-  </h3>
-  </td><td align="right" valign="top"
-    >&nbsp;
-    </td>
-  </tr></table>
-  
-  <p>Represent <code>bytes</code> or <code>str</code> as 
-  <code>b&quot;...&quot;</code>.</p>
-  <dl class="fields">
-    <dt>Parameters:</dt>
-    <dd><ul class="nomargin-top">
-        <li><strong class="pname"><code>bytestr</code></strong> - <code>bytes</code> or <code>str</code>..</li>
-    </ul></dd>
-    <dt>Returns:</dt>
-        <dd>Representation <code>b'...'</code> (<code>str</code>).</dd>
-  </dl>
-</td></tr></table>
-</div>
-<a name="bytes2str"></a>
-<div>
-<table class="details" border="1" cellpadding="3"
-       cellspacing="0" width="100%" bgcolor="white">
-<tr><td>
-  <table width="100%" cellpadding="0" cellspacing="0" border="0">
-  <tr valign="top"><td>
-  <h3 class="epydoc"><span class="sig"><span class="sig-name">bytes2str</span>(<span class="sig-arg">bytestr</span>,
-        <span class="sig-arg">dflt</span>=<span class="sig-default">missing</span>,
-        <span class="sig-arg">name</span>=<span class="sig-default">''</span>)</span>
-  </h3>
-  </td><td align="right" valign="top"
-    >&nbsp;
-    </td>
-  </tr></table>
-  
-  <p>Convert <code>bytes</code>/<code>unicode</code> to <code>str</code> if
-  needed.</p>
-  <dl class="fields">
-    <dt>Parameters:</dt>
-    <dd><ul class="nomargin-top">
-        <li><strong class="pname"><code>bytestr</code></strong> - Original <code>bytes</code>, <code>str</code> or 
-          <code>unicode</code>.</li>
-        <li><strong class="pname"><code>dflt</code></strong> - Optional, default return value.</li>
-        <li><strong class="pname"><code>name</code></strong> - Optional name of <i>bytestr</i> argument.</li>
-    </ul></dd>
-    <dt>Returns:</dt>
-        <dd>The <code>str</code> or <i>dflt</i>.</dd>
-    <dt>Raises:</dt>
-    <dd><ul class="nomargin-top">
-        <li><code><strong class='fraise'>TypeError</strong></code> - If neither <code>str</code> nor <code>bytes</code>, but only if no 
-        <i>dflt</i> is specified.</li>
-    </ul></dd>
-  </dl>
-</td></tr></table>
-</div>
-<a name="iterbytes"></a>
-<div>
-<table class="details" border="1" cellpadding="3"
-       cellspacing="0" width="100%" bgcolor="white">
-<tr><td>
-  <table width="100%" cellpadding="0" cellspacing="0" border="0">
-  <tr valign="top"><td>
-  <h3 class="epydoc"><span class="sig"><span class="sig-name">iterbytes</span>(<span class="sig-arg">collection</span>)</span>
-  </h3>
-  </td><td align="right" valign="top"
-    >&nbsp;
-    </td>
-  </tr></table>
-  
-  <p>iter(callable, sentinel) -&gt; iterator</p>
-  <p>Get an iterator from an object.  In the first form, the argument must 
-  supply its own iterator, or be a sequence. In the second form, the 
-  callable is called until it returns the sentinel.</p>
-  <dl class="fields">
-    <dt>Returns: iterator</dt>
-  </dl>
-</td></tr></table>
-</div>
-<a name="str2bytes"></a>
-<div>
-<table class="details" border="1" cellpadding="3"
-       cellspacing="0" width="100%" bgcolor="white">
-<tr><td>
-  <table width="100%" cellpadding="0" cellspacing="0" border="0">
-  <tr valign="top"><td>
-  <h3 class="epydoc"><span class="sig"><span class="sig-name">str2bytes</span>(<span class="sig-arg">strbytes</span>,
-        <span class="sig-arg">dflt</span>=<span class="sig-default">missing</span>,
-        <span class="sig-arg">name</span>=<span class="sig-default">''</span>)</span>
-  </h3>
-  </td><td align="right" valign="top"
-    >&nbsp;
-    </td>
-  </tr></table>
-  
-  <p>Convert <code>strbytes</code> to 
-  <code>bytes</code>/<code>unicode</code> if needed.</p>
-  <dl class="fields">
-    <dt>Parameters:</dt>
-    <dd><ul class="nomargin-top">
-        <li><strong class="pname"><code>strbytes</code></strong> - Original <code>str</code>, <code>bytes</code> or 
-          <code>unicode</code>.</li>
-        <li><strong class="pname"><code>dflt</code></strong> - Optional, default return value.</li>
-        <li><strong class="pname"><code>name</code></strong> - Optional name of <i>bytestr</i> argument.</li>
-    </ul></dd>
-    <dt>Returns:</dt>
-        <dd>The <code>bytes</code> or <i>dflt</i>.</dd>
-    <dt>Raises:</dt>
-    <dd><ul class="nomargin-top">
-        <li><code><strong class='fraise'>TypeError</strong></code> - If neither <code>bytes</code> nor <code>str</code>, but only if no 
-        <i>dflt</i> is specified.</li>
-    </ul></dd>
-  </dl>
-</td></tr></table>
-</div>
 <a name="aspect_ratio"></a>
 <div>
 <table class="details" border="1" cellpadding="3"
@@ -945,7 +600,7 @@
   <tr valign="top"><td>
   <h3 class="epydoc"><span class="sig"><span class="sig-name">isinstanceOf</span>(<span class="sig-arg">inst</span>,
         <span class="sig-arg">*classes</span>,
-        <span class="sig-arg">**name_missing</span>)</span>
+        <span class="sig-arg">**raiser_name</span>)</span>
   </h3>
   </td><td align="right" valign="top"
     >&nbsp;
@@ -956,17 +611,18 @@
   <dl class="fields">
     <dt>Parameters:</dt>
     <dd><ul class="nomargin-top">
-        <li><strong class="pname"><code>inst</code></strong> - The instance to check (<i>any</i>).</li>
+        <li><strong class="pname"><code>inst</code></strong> - The instance to check (<code>any</code>).</li>
         <li><strong class="pname"><code>classes</code></strong> - One or several classes (<i>all positional</i>).</li>
-        <li><strong class="pname"><code>name</code></strong> - The name of the instance (<code>str</code>).</li>
+        <li><strong class="pname"><code>raiser_name</code></strong> - Optional instance name (<code>str</code>) to raise 
+          <code>TypeError</code>.</li>
     </ul></dd>
     <dt>Returns:</dt>
-        <dd>The matching <i>class</i> from <i>classes</i>, <code>None</code> 
-          otherwise.</dd>
+        <dd>The <code>type{<b>inst</b>} if <code>isinstance(<b>inst</b>, 
+          classes</code></code> else <code>None</code>.</dd>
     <dt>Raises:</dt>
     <dd><ul class="nomargin-top">
-        <li><code><strong class='fraise'>TypeError</strong></code> - If <i>inst</i> does not match any of the <i>classes</i>, but only 
-        if <i>name='...'</i> is specified.</li>
+        <li><code><strong class='fraise'>TypeError</strong></code> - If <i>inst</i> does not match any of the <i>classes</i> but only if
+        keyword <code>raiser</code> is specified.</li>
     </ul></dd>
   </dl>
 <div class="fields">      <p><strong>See Also:</strong>
@@ -1003,39 +659,6 @@
   </dl>
 </td></tr></table>
 </div>
-<a name="logf"></a>
-<div>
-<table class="details" border="1" cellpadding="3"
-       cellspacing="0" width="100%" bgcolor="white">
-<tr><td>
-  <table width="100%" cellpadding="0" cellspacing="0" border="0">
-  <tr valign="top"><td>
-  <h3 class="epydoc"><span class="sig"><span class="sig-name">logf</span>(<span class="sig-arg">fmtxt</span>,
-        <span class="sig-arg">*args</span>,
-        <span class="sig-arg">**file_flush_nl_nt_argv0</span>)</span>
-  </h3>
-  </td><td align="right" valign="top"
-    >&nbsp;
-    </td>
-  </tr></table>
-  
-  <p>Formatted log <i>fmtxt % args</i> with optional keywords.</p>
-  <dl class="fields">
-    <dt>Parameters:</dt>
-    <dd><ul class="nomargin-top">
-        <li><strong class="pname"><code>fmtxt</code></strong> - Print-like format or plain string (<code>str</code>).</li>
-        <li><strong class="pname"><code>args</code></strong> - Optional arguments to format (<i>all positional</i>).</li>
-        <li><strong class="pname"><code>file</code></strong> - Alternate file to write to (<code>file</code>-type), default 
-          <code>NSMain.stdlog</code>.</li>
-        <li><strong class="pname"><code>flush</code></strong> - Flush <b><code>file</code></b> after writing (<code>bool</code>),
-          default C(True).</li>
-        <li><strong class="pname"><code>nl</code></strong> - Number of leading blank lines (<code>int</code>).</li>
-        <li><strong class="pname"><code>nt</code></strong> - Number of trailing blank lines (<code>int</code>).</li>
-        <li><strong class="pname"><code>argv0</code></strong> - Optional prefix (<code>str</code>).</li>
-    </ul></dd>
-  </dl>
-</td></tr></table>
-</div>
 <a name="machine"></a>
 <div>
 <table class="details" border="1" cellpadding="3"
@@ -1057,7 +680,7 @@
         <dd>Machine <code>'arm64'</code> for Apple Silicon, 
           <code>&quot;arm64_x86_64&quot;</code> for Intel <i>emulated</i>, 
           <code>'x86_64'</code> for Intel, etc. (<code>str</code> with any 
-          <code>comma</code>s by <code>underscore</code>).</dd>
+          <code>comma</code>s replaced by <code>underscore</code>).</dd>
   </dl>
 </td></tr></table>
 </div>
@@ -1203,35 +826,6 @@
     </ul></dd>
     <dt>Returns:</dt>
         <dd>The properties (<code>dict</code>).</dd>
-  </dl>
-</td></tr></table>
-</div>
-<a name="property2"></a>
-<div>
-<table class="details" border="1" cellpadding="3"
-       cellspacing="0" width="100%" bgcolor="white">
-<tr><td>
-  <table width="100%" cellpadding="0" cellspacing="0" border="0">
-  <tr valign="top"><td>
-  <h3 class="epydoc"><span class="sig"><span class="sig-name">property2</span>(<span class="sig-arg">inst</span>,
-        <span class="sig-arg">name</span>)</span>
-  </h3>
-  </td><td align="right" valign="top"
-    >&nbsp;
-    </td>
-  </tr></table>
-  
-  <p>Return the property <code>get</code> and <code>set</code> method.</p>
-  <dl class="fields">
-    <dt>Parameters:</dt>
-    <dd><ul class="nomargin-top">
-        <li><strong class="pname"><code>inst</code></strong> - An instance (<code>any</code>).</li>
-        <li><strong class="pname"><code>name</code></strong> - Property name (<code>str</code>).</li>
-    </ul></dd>
-    <dt>Returns:</dt>
-        <dd>2-Tuple (get, set) as <code>callable</code>s, 
-          (<code>callable</code>, <code>None</code>) or (<code>None</code>,
-          <code>None</code>) if <i>inst.name</i> is not a property.</dd>
   </dl>
 </td></tr></table>
 </div>
@@ -1411,7 +1005,7 @@
 <table border="0" cellpadding="0" cellspacing="0" width="100%%">
   <tr>
     <td align="left" class="footer">
-    Generated by Epydoc 3.0.1 on Wed Feb  5 15:29:03 2025
+    Generated by Epydoc 3.0.1 on Sun Feb 23 14:01:04 2025
     </td>
     <td align="right" class="footer">
       <a target="mainFrame" href="http://epydoc.sourceforge.net"

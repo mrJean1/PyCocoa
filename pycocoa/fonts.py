@@ -35,26 +35,24 @@
 @var FontTrait.UnBold: int([x]) -> integer.
 @var FontTrait.UnItalic: int([x]) -> integer.
 '''
-# all imports listed explicitly to help PyChecker
-from pycocoa.bases   import _Type0
-from pycocoa.lazily  import _ALL_LAZY, _Dmain_, _fmt, _fmt_invalid, \
-                            _instr, _NN_, _SPACE_
-from pycocoa.nstypes import isNone, NSFont, nsIter, nsIter2, NSMain, \
-                            NSStr, nsString2str
-from pycocoa.oslibs  import NSFontBoldMask, NSFontItalicMask, \
-                            NSFontCompressedMask, NSFontCondensedMask, \
-                            NSFontExpandedMask, NSFontMonoSpaceMask, \
-                            NSFontNarrowMask, NSFontPosterMask, \
-                            NSFontSmallCapsMask, NSFontSansSerifClass, \
-                            NSFontUnboldMask, NSFontUnitalicMask
-from pycocoa.runtime import isObjCInstanceOf, release
-from pycocoa.strs    import Str
-from pycocoa.utils   import Adict, bytes2str, _ByteStrs, _Constants, flint, \
-                           _Ints, isinstanceOf, property_RO, _Singletons, \
-                           _Types
+from pycocoa.bases import _Type0
+from pycocoa.internals import Adict, _Constants, _Dmain_, bytes2str, _ByteStrs, \
+                             _Ints, _NN_, property_RO, _Singletons, _SPACE_
+from pycocoa.lazily import _ALL_LAZY, _Types,  _fmt, _fmt_invalid, _instr
+from pycocoa.nstypes import isNone, NSFont, nsIter, nsIter2, NSMain, NSStr, \
+                           _NSStr, nsString2str
+from pycocoa.oslibs import NSFontBoldMask, NSFontItalicMask, \
+                           NSFontCompressedMask, NSFontCondensedMask, \
+                           NSFontExpandedMask, NSFontMonoSpaceMask, \
+                           NSFontNarrowMask, NSFontPosterMask, \
+                           NSFontSmallCapsMask, NSFontSansSerifClass, \
+                           NSFontUnboldMask, NSFontUnitalicMask
+from pycocoa.runtime import isObjCInstanceOf
+from pycocoa.strs import Str
+from pycocoa.utils import flint, isinstanceOf
 
 __all__ = _ALL_LAZY.fonts
-__version__ = '25.01.31'
+__version__ = '25.05.19'
 
 # <https://Developer.Apple.com/documentation/appkit/nsfont.weight>
 # _NSFontWeigthHeavy      = 13 ?
@@ -209,16 +207,16 @@ class Font(_Type0):
                  a particular font family.
         '''
         if isinstance(family_or_font, Str):
-            ns, py = family_or_font.NS, str(family_or_font)
+            ns, py =  family_or_font.NS, str(family_or_font)
         elif isinstance(family_or_font, _ByteStrs):
-            ns, py = release(NSStr(family_or_font)), bytes2str(family_or_font)
+            ns, py = _NSStr(family_or_font), bytes2str(family_or_font)
         elif isinstance(family_or_font, NSStr):
-            ns, py = family_or_font, nsString2str(family_or_font)
+            ns, py =  family_or_font, nsString2str(family_or_font)
 #       elif isObjCInstanceOf(family_or_font, NSFontDescriptor):
             # <https://Developer.Apple.com/documentation/appkit/nsfont/1525386-init>
             # ignore traits and weight
 #           ns, py = NSFont.alloc().init_(family_or_font, size), None
-        elif isObjCInstanceOf(family_or_font, NSFont, name='family_or_font'):
+        elif isObjCInstanceOf(family_or_font, NSFont, raiser='family_or_font'):
             ns, py = family_or_font, None
             if size == 0:
                 size = ns.pointSize()
@@ -475,11 +473,11 @@ class Font(_Type0):
            @return: 2-Tuple (width, height) in (C{float} or C{int}).
         '''
         if isinstance(bstr, Str):
-            ns = bstr.NS
+            ns =  bstr.NS
         elif isinstance(bstr, _ByteStrs):
-            ns = release(NSStr(bstr))
-        elif isinstanceOf(bstr, NSStr, name='bstr'):
-            ns = bstr
+            ns = _NSStr(bstr)
+        elif isinstanceOf(bstr, NSStr, raiser='bstr'):
+            ns =  bstr
         return flint(self.NS.widthOfString_(ns)), self.height
 
     def sizedup(self, points):
@@ -801,24 +799,24 @@ if __name__ == _Dmain_:
 # pycocoa.fonts.__all__ = tuple(
 #  pycocoa.fonts.Font is <class .Font>,
 #  pycocoa.fonts.FontError is <class .FontError>,
-#  pycocoa.fonts.fontfamilies is <function .fontfamilies at 0x101238180>,
-#  pycocoa.fonts.fontnamesof is <function .fontnamesof at 0x10123bec0>,
-#  pycocoa.fonts.Fonts.App=Font({<generator object Adict.__str__.<locals>.<genexpr> at 0x101211a80>}),
-#                     .Bold=Font({<generator object Adict.__str__.<locals>.<genexpr> at 0x101211a80>}),
-#                     .BoldItalic=Font({<generator object Adict.__str__.<locals>.<genexpr> at 0x101211a80>}),
-#                     .Italic=Font({<generator object Adict.__str__.<locals>.<genexpr> at 0x101211a80>}),
-#                     .Label=Font({<generator object Adict.__str__.<locals>.<genexpr> at 0x101211a80>}),
-#                     .Menu=Font({<generator object Adict.__str__.<locals>.<genexpr> at 0x101211a80>}),
-#                     .MenuBar=Font({<generator object Adict.__str__.<locals>.<genexpr> at 0x101211a80>}),
-#                     .Message=Font({<generator object Adict.__str__.<locals>.<genexpr> at 0x101211a80>}),
-#                     .MonoSpace=Font({<generator object Adict.__str__.<locals>.<genexpr> at 0x101211a80>}),
-#                     .Palette=Font({<generator object Adict.__str__.<locals>.<genexpr> at 0x101211a80>}),
-#                     .System=Font({<generator object Adict.__str__.<locals>.<genexpr> at 0x101211a80>}),
-#                     .TableData=Font({<generator object Adict.__str__.<locals>.<genexpr> at 0x101211a80>}),
-#                     .TableHeader=Font({<generator object Adict.__str__.<locals>.<genexpr> at 0x101211a80>}),
-#                     .Title=Font({<generator object Adict.__str__.<locals>.<genexpr> at 0x101211a80>}),
-#  pycocoa.fonts.fontsof is <function .fontsof at 0x10123bf60>,
-#  pycocoa.fonts.fontsof4 is <function .fontsof4 at 0x101240040>,
+#  pycocoa.fonts.fontfamilies is <function .fontfamilies at 0x1008abd80>,
+#  pycocoa.fonts.fontnamesof is <function .fontnamesof at 0x1008b7b00>,
+#  pycocoa.fonts.Fonts.App=Font({<generator object Adict.__str__.<locals>.<genexpr> at 0x10088de00>}),
+#                     .Bold=Font({<generator object Adict.__str__.<locals>.<genexpr> at 0x10088de00>}),
+#                     .BoldItalic=Font({<generator object Adict.__str__.<locals>.<genexpr> at 0x10088de00>}),
+#                     .Italic=Font({<generator object Adict.__str__.<locals>.<genexpr> at 0x10088de00>}),
+#                     .Label=Font({<generator object Adict.__str__.<locals>.<genexpr> at 0x10088de00>}),
+#                     .Menu=Font({<generator object Adict.__str__.<locals>.<genexpr> at 0x10088de00>}),
+#                     .MenuBar=Font({<generator object Adict.__str__.<locals>.<genexpr> at 0x10088de00>}),
+#                     .Message=Font({<generator object Adict.__str__.<locals>.<genexpr> at 0x10088de00>}),
+#                     .MonoSpace=Font({<generator object Adict.__str__.<locals>.<genexpr> at 0x10088de00>}),
+#                     .Palette=Font({<generator object Adict.__str__.<locals>.<genexpr> at 0x10088de00>}),
+#                     .System=Font({<generator object Adict.__str__.<locals>.<genexpr> at 0x10088de00>}),
+#                     .TableData=Font({<generator object Adict.__str__.<locals>.<genexpr> at 0x10088de00>}),
+#                     .TableHeader=Font({<generator object Adict.__str__.<locals>.<genexpr> at 0x10088de00>}),
+#                     .Title=Font({<generator object Adict.__str__.<locals>.<genexpr> at 0x10088de00>}),
+#  pycocoa.fonts.fontsof is <function .fontsof at 0x1008b7ba0>,
+#  pycocoa.fonts.fontsof4 is <function .fontsof4 at 0x1008b7c40>,
 #  pycocoa.fonts.FontTrait.Bold=2,
 #                         .Compressed=1<<9,
 #                         .Condensed=1<<6,
@@ -832,10 +830,10 @@ if __name__ == _Dmain_:
 #                         .UnBold=1<<2,
 #                         .UnItalic=1<<24,
 #  pycocoa.fonts.FontTraitError is <class .FontTraitError>,
-#  pycocoa.fonts.fontTraits is <function .fontTraits at 0x1012400e0>,
-#  pycocoa.fonts.fontTraitstrs is <function .fontTraitstrs at 0x101240180>,
+#  pycocoa.fonts.fontTraits is <function .fontTraits at 0x1008b7ce0>,
+#  pycocoa.fonts.fontTraitstrs is <function .fontTraitstrs at 0x1008b7d80>,
 # )[11]
-# pycocoa.fonts.version 25.1.31, .isLazy 1, Python 3.13.1 64bit arm64, macOS 14.6.1
+# pycocoa.fonts.version 25.5.19, .isLazy 1, Python 3.13.1 64bit arm64, macOS 14.7.3
 
 # MIT License <https://OpenSource.org/licenses/MIT>
 #

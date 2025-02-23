@@ -64,16 +64,18 @@
   <p>For debugging purposes, enable logging to the console by setting env 
   variable <code>PYCOCOA_OBJC_LOG</code> to a string of one or more of the 
   following letters:</p>
-  <p><code>% env  PYCOCOA_OBJC_LOG=ICSMBDX  python3  ...</code></p>
+  <p><code>% env  PYCOCOA_OBJC_LOG=ICSMBDPX  python3  ...</code></p>
   <p>where <code>I</code> logs __new__ and __del__ Instance calls, 
   <code>C</code> new Classes, <code>S</code> new Subclasses, <code>M</code>
-  new Methods, <code>B</code> new BoundMethods, <code>D</code> draining of 
-  <code>NSAutoreleasePool</code>s and <code>X</code> send_message, 
-  send_super calls.</p>
+  new Methods, <code>B</code> new BoundMethods, <code>D</code> draining of,
+  <code>P</code> printing of <code>NSAutoreleasePool</code>s and 
+  <code>X</code> send_message, send_super calls.</p>
+  <p>Use env variable <code>PYCOCOA_LIBOBJC_NONATOMIC=on</code> to detect 
+  non-atomic calls of certain <code>libobjc</code> functions.</p>
 
 <hr />
 <div class="fields">      <p><strong>Version:</strong>
-        25.02.03
+        25.02.22
       </p>
 </div><!-- ==================== CLASSES ==================== -->
 <a name="section-Classes"></a>
@@ -235,10 +237,10 @@
     </td><td class="summary">
       <table width="100%" cellpadding="0" cellspacing="0" border="0">
         <tr>
-          <td><span class="summary-sig"><a href="pycocoa.runtime-module.html#add_subclass" class="summary-sig-name">add_subclass</a>(<span class="summary-sig-arg">superclas</span>,
+          <td><span class="summary-sig"><a href="pycocoa.runtime-module.html#add_subclass" class="summary-sig-name">add_subclass</a>(<span class="summary-sig-arg">Super</span>,
         <span class="summary-sig-arg">name</span>,
         <span class="summary-sig-arg">register</span>=<span class="summary-sig-default">False</span>)</span><br />
-      Create a new sub-class of the given super-class.</td>
+      Create a new sub-class of a given super-class.</td>
           <td align="right" valign="top">
             
             
@@ -289,10 +291,9 @@
       <table width="100%" cellpadding="0" cellspacing="0" border="0">
         <tr>
           <td><span class="summary-sig"><a href="pycocoa.runtime-module.html#isImmutable" class="summary-sig-name">isImmutable</a>(<span class="summary-sig-arg">objc</span>,
-        <span class="summary-sig-arg">mutableClass</span>,
-        <span class="summary-sig-arg">immutableClass</span>,
-        <span class="summary-sig-arg">name</span>=<span class="summary-sig-default"><code class="variable-quote">'</code><code class="variable-string">ns</code><code class="variable-quote">'</code></span>)</span><br />
-      Check that an ObjC object is an instance of the immutable class.</td>
+        <span class="summary-sig-arg">*immutableClasses</span>,
+        <span class="summary-sig-arg">**raiser_name</span>)</span><br />
+      Check that an ObjC object is an immutable class' instance.</td>
           <td align="right" valign="top">
             
             
@@ -325,9 +326,28 @@
     </td><td class="summary">
       <table width="100%" cellpadding="0" cellspacing="0" border="0">
         <tr>
+          <td><span class="summary-sig"><a href="pycocoa.runtime-module.html#isMutable" class="summary-sig-name">isMutable</a>(<span class="summary-sig-arg">objc</span>,
+        <span class="summary-sig-arg">*mutableClasses</span>,
+        <span class="summary-sig-arg">**raiser_name</span>)</span><br />
+      Check that an ObjC object is a mutable class' instance.</td>
+          <td align="right" valign="top">
+            
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
           <td><span class="summary-sig"><a href="pycocoa.runtime-module.html#isObjCInstanceOf" class="summary-sig-name">isObjCInstanceOf</a>(<span class="summary-sig-arg">objc</span>,
         <span class="summary-sig-arg">*Classes</span>,
-        <span class="summary-sig-arg">**name_missing</span>)</span><br />
+        <span class="summary-sig-arg">**raiser_name</span>)</span><br />
       Check whether an ObjC object is an instance of some ObjC class.</td>
           <td align="right" valign="top">
             
@@ -398,7 +418,7 @@
           <td><span class="summary-sig"><a href="pycocoa.runtime-module.html#send_message" class="summary-sig-name">send_message</a>(<span class="summary-sig-arg">objc</span>,
         <span class="summary-sig-arg">sel_name_</span>,
         <span class="summary-sig-arg">*args</span>,
-        <span class="summary-sig-arg">**resargtypes</span>)</span><br />
+        <span class="summary-sig-arg">**restype_argtypes</span>)</span><br />
       Send message to an ObjC object.</td>
           <td align="right" valign="top">
             
@@ -418,7 +438,7 @@
           <td><span class="summary-sig"><a href="pycocoa.runtime-module.html#send_super" class="summary-sig-name">send_super</a>(<span class="summary-sig-arg">objc</span>,
         <span class="summary-sig-arg">sel_name_</span>,
         <span class="summary-sig-arg">*args</span>,
-        <span class="summary-sig-arg">**resargtypes</span>)</span><br />
+        <span class="summary-sig-arg">**restype_argtypes</span>)</span><br />
       Send message to the super-class of an ObjC object.</td>
           <td align="right" valign="top">
             
@@ -486,35 +506,11 @@
     <td width="15%" align="right" valign="top" class="summary">
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
-        <a name="OBJC_ASSOCIATION_ASSIGN"></a><span class="summary-name">OBJC_ASSOCIATION_ASSIGN</span> = <code title="0">0</code>
-    </td>
-  </tr>
-<tr>
-    <td width="15%" align="right" valign="top" class="summary">
-      <span class="summary-type">&nbsp;</span>
-    </td><td class="summary">
-        <a name="OBJC_ASSOCIATION_COPY"></a><span class="summary-name">OBJC_ASSOCIATION_COPY</span> = <code title="771">771</code>
-    </td>
-  </tr>
-<tr>
-    <td width="15%" align="right" valign="top" class="summary">
-      <span class="summary-type">&nbsp;</span>
-    </td><td class="summary">
-        <a name="OBJC_ASSOCIATION_COPY_NONATOMIC"></a><span class="summary-name">OBJC_ASSOCIATION_COPY_NONATOMIC</span> = <code title="3">3</code>
-    </td>
-  </tr>
-<tr>
-    <td width="15%" align="right" valign="top" class="summary">
-      <span class="summary-type">&nbsp;</span>
-    </td><td class="summary">
-        <a name="OBJC_ASSOCIATION_RETAIN"></a><span class="summary-name">OBJC_ASSOCIATION_RETAIN</span> = <code title="769">769</code>
-    </td>
-  </tr>
-<tr>
-    <td width="15%" align="right" valign="top" class="summary">
-      <span class="summary-type">&nbsp;</span>
-    </td><td class="summary">
-        <a name="OBJC_ASSOCIATION_RETAIN_NONATOMIC"></a><span class="summary-name">OBJC_ASSOCIATION_RETAIN_NONATOMIC</span> = <code title="1">1</code>
+        <a href="pycocoa.runtime-module.html#OBJC_ASSOCIATION" class="summary-name">OBJC_ASSOCIATION</a> = <code title="OBJC_ASSOCIATION.ASSIGN=0,
+                .COPY=771,
+                .COPY_NONATOMIC=3,
+                .RETAIN=769,
+                .RETAIN_NONATOMIC=1">OBJC_ASSOCIATION.ASSIGN<code class="variable-ellipsis">...</code></code>
     </td>
   </tr>
 </table>
@@ -564,7 +560,7 @@
         type encoding.
       </p>
       <p><strong>See Also:</strong>
-        The <code>_NSDeallocObserver</code> below.
+        The <code>_ObjCDeallocObserver</code> below.
       </p>
 </div></td></tr></table>
 </div>
@@ -642,7 +638,7 @@
 <tr><td>
   <table width="100%" cellpadding="0" cellspacing="0" border="0">
   <tr valign="top"><td>
-  <h3 class="epydoc"><span class="sig"><span class="sig-name">add_subclass</span>(<span class="sig-arg">superclas</span>,
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">add_subclass</span>(<span class="sig-arg">Super</span>,
         <span class="sig-arg">name</span>,
         <span class="sig-arg">register</span>=<span class="sig-default">False</span>)</span>
   </h3>
@@ -651,11 +647,11 @@
     </td>
   </tr></table>
   
-  <p>Create a new sub-class of the given super-class.</p>
+  <p>Create a new sub-class of a given super-class.</p>
   <dl class="fields">
     <dt>Parameters:</dt>
     <dd><ul class="nomargin-top">
-        <li><strong class="pname"><code>superclas</code></strong> - The parent class (<code>str</code> or <code>Object</code>).</li>
+        <li><strong class="pname"><code>Super</code></strong> - The parent class (<code>str</code> or <code>Object</code>).</li>
         <li><strong class="pname"><code>name</code></strong> - The name of the sub-class (<code>str</code>).</li>
         <li><strong class="pname"><code>register</code></strong> - Optionally, register the new sub-class (bool).</li>
     </ul></dd>
@@ -669,8 +665,8 @@
         href="pycocoa.runtime-module.html#register_subclass" 
         class="link">register_subclass</a>, <i>before</i> using the new 
         sub-class.  New methods can be added <i>after</i> the sub-class has
-        been registered, but any <code>ivar</code>s must be added 
-        <i>BEFORE</i> the class is registrated.
+        been registered, but any <code>ivar</code>s <i>must be added 
+        BEFORE</i>.
       </p>
 </div></td></tr></table>
 </div>
@@ -691,7 +687,7 @@
   <p>Release all objects in an <code>NSAutoreleasePool</code> instance.</p>
   <dl class="fields">
     <dt>Returns:</dt>
-        <dd>The number og <code>ObjC</code> objects cleared.</dd>
+        <dd>The number of <code>ObjC</code> objects cleared.</dd>
   </dl>
 <div class="fields">      <p><strong>Note:</strong>
         <code>NSAutoreleasePool.drain</code> invokes the 
@@ -733,33 +729,32 @@
   <table width="100%" cellpadding="0" cellspacing="0" border="0">
   <tr valign="top"><td>
   <h3 class="epydoc"><span class="sig"><span class="sig-name">isImmutable</span>(<span class="sig-arg">objc</span>,
-        <span class="sig-arg">mutableClass</span>,
-        <span class="sig-arg">immutableClass</span>,
-        <span class="sig-arg">name</span>=<span class="sig-default"><code class="variable-quote">'</code><code class="variable-string">ns</code><code class="variable-quote">'</code></span>)</span>
+        <span class="sig-arg">*immutableClasses</span>,
+        <span class="sig-arg">**raiser_name</span>)</span>
   </h3>
   </td><td align="right" valign="top"
     >&nbsp;
     </td>
   </tr></table>
   
-  <p>Check that an ObjC object is an instance of the immutable class.</p>
+  <p>Check that an ObjC object is an immutable class' instance.</p>
   <dl class="fields">
     <dt>Parameters:</dt>
     <dd><ul class="nomargin-top">
         <li><strong class="pname"><code>objc</code></strong> - The instance to check (<a 
           href="pycocoa.runtime.ObjCInstance-class.html" 
           class="link">ObjCInstance</a>).</li>
-        <li><strong class="pname"><code>mutableClass</code></strong> - The mutable ObjC classes (<code>NSMutable...</code>).</li>
-        <li><strong class="pname"><code>immutableClass</code></strong> - The immutable ObjC classes (<code>Object</code>).</li>
-        <li><strong class="pname"><code>name</code></strong> - The name of the instance (<code>str</code>).</li>
+        <li><strong class="pname"><code>immutableClasses</code></strong> - Optional <i>immutable</i> classes to use (<code>NS...</code> or 
+          <code>Object</code>s), in lieu of all predefined ones.</li>
+        <li><strong class="pname"><code>raiser_name</code></strong> - Optional instance name (<code>str</code>) to raise TypeError.</li>
     </ul></dd>
     <dt>Returns:</dt>
-        <dd>True if <i>objc</i> is an <i>immutableClass</i> instance, False 
+        <dd><code>True</code> if <i>objc</i> is immutable, <code>False</code>
           otherwise.</dd>
     <dt>Raises:</dt>
     <dd><ul class="nomargin-top">
-        <li><code><strong class='fraise'>TypeError</strong></code> - If <i>objc</i> is a <i>mutableClass</i> instance, provided keyword 
-        argument <i>name='...'</i> is given.</li>
+        <li><code><strong class='fraise'>TypeError</strong></code> - If <i>objc</i> isn't <i>immutable</i>, but only if keyword 
+        <i>raiser='...'</i> is specified.</li>
     </ul></dd>
   </dl>
 </td></tr></table>
@@ -789,6 +784,45 @@
   </dl>
 </td></tr></table>
 </div>
+<a name="isMutable"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">isMutable</span>(<span class="sig-arg">objc</span>,
+        <span class="sig-arg">*mutableClasses</span>,
+        <span class="sig-arg">**raiser_name</span>)</span>
+  </h3>
+  </td><td align="right" valign="top"
+    >&nbsp;
+    </td>
+  </tr></table>
+  
+  <p>Check that an ObjC object is a mutable class' instance.</p>
+  <dl class="fields">
+    <dt>Parameters:</dt>
+    <dd><ul class="nomargin-top">
+        <li><strong class="pname"><code>objc</code></strong> - The instance to check (<a 
+          href="pycocoa.runtime.ObjCInstance-class.html" 
+          class="link">ObjCInstance</a>).</li>
+        <li><strong class="pname"><code>mutableClasses</code></strong> - Optional <i>mutable</i> classes to use 
+          (<code>NSMutable...</code>s or <code>Object</code>s), in lieu of 
+          all predefined ones.</li>
+        <li><strong class="pname"><code>raiser_name</code></strong> - Optional instance name (<code>str</code>) to raise TypeError.</li>
+    </ul></dd>
+    <dt>Returns:</dt>
+        <dd><code>True</code> if <i>objc</i> is mutable, <code>False</code> 
+          otherwise.</dd>
+    <dt>Raises:</dt>
+    <dd><ul class="nomargin-top">
+        <li><code><strong class='fraise'>TypeError</strong></code> - If <i>objc</i> isn't <i>mutable</i>, but only if keyword 
+        <i>raiser='...'</i> is specified.</li>
+    </ul></dd>
+  </dl>
+</td></tr></table>
+</div>
 <a name="isObjCInstanceOf"></a>
 <div>
 <table class="details" border="1" cellpadding="3"
@@ -798,7 +832,7 @@
   <tr valign="top"><td>
   <h3 class="epydoc"><span class="sig"><span class="sig-name">isObjCInstanceOf</span>(<span class="sig-arg">objc</span>,
         <span class="sig-arg">*Classes</span>,
-        <span class="sig-arg">**name_missing</span>)</span>
+        <span class="sig-arg">**raiser_name</span>)</span>
   </h3>
   </td><td align="right" valign="top"
     >&nbsp;
@@ -813,7 +847,7 @@
           href="pycocoa.runtime.ObjCInstance-class.html" 
           class="link">ObjCInstance</a> or <code>c_void_p</code>).</li>
         <li><strong class="pname"><code>Classes</code></strong> - One or several ObjC classes (<code>Object</code>).</li>
-        <li><strong class="pname"><code>name</code></strong> - The name of the instance (<code>str</code>).</li>
+        <li><strong class="pname"><code>raiser_name</code></strong> - Optional instance name (<code>str</code>) to raise TypeError.</li>
     </ul></dd>
     <dt>Returns:</dt>
         <dd>The matching <i>Class</i> from <i>Classes</i>, <code>None</code> 
@@ -823,8 +857,8 @@
         <li><code><strong class='fraise'>TypeError</strong></code> - If <i>objc</i> is not an <a 
         href="pycocoa.runtime.ObjCInstance-class.html" 
         class="link">ObjCInstance</a> or <code>c_void_p</code> or if 
-        <i>objc</i> does not match any of the <i>Classes</i> and only if 
-        keyword <i>name='...'</i> is provided.</li>
+        <i>objc</i> isn't any <i>Classes</i>' instance and only if keyword 
+        <i>raiser='...'</i> is specified.</li>
     </ul></dd>
   </dl>
 <div class="fields">      <p><strong>See Also:</strong>
@@ -942,7 +976,7 @@
   <h3 class="epydoc"><span class="sig"><span class="sig-name">send_message</span>(<span class="sig-arg">objc</span>,
         <span class="sig-arg">sel_name_</span>,
         <span class="sig-arg">*args</span>,
-        <span class="sig-arg">**resargtypes</span>)</span>
+        <span class="sig-arg">**restype_argtypes</span>)</span>
   </h3>
   </td><td align="right" valign="top"
     >&nbsp;
@@ -991,7 +1025,7 @@
   <h3 class="epydoc"><span class="sig"><span class="sig-name">send_super</span>(<span class="sig-arg">objc</span>,
         <span class="sig-arg">sel_name_</span>,
         <span class="sig-arg">*args</span>,
-        <span class="sig-arg">**resargtypes</span>)</span>
+        <span class="sig-arg">**restype_argtypes</span>)</span>
   </h3>
   </td><td align="right" valign="top"
     >&nbsp;
@@ -1094,6 +1128,38 @@
 </td></tr></table>
 </div>
 <br />
+<!-- ==================== VARIABLES DETAILS ==================== -->
+<a name="section-VariablesDetails"></a>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr bgcolor="#70b0f0" class="table-header">
+  <td align="left" colspan="2" class="table-header">
+    <span class="table-header">Variables Details</span></td>
+</tr>
+</table>
+<a name="OBJC_ASSOCIATION"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <h3 class="epydoc">OBJC_ASSOCIATION</h3>
+  
+  <dl class="fields">
+  </dl>
+  <dl class="fields">
+    <dt>Value:</dt>
+      <dd><table><tr><td><pre class="variable">
+OBJC_ASSOCIATION.ASSIGN=0,
+                .COPY=771,
+                .COPY_NONATOMIC=3,
+                .RETAIN=769,
+                .RETAIN_NONATOMIC=1
+</pre></td></tr></table>
+</dd>
+  </dl>
+</td></tr></table>
+</div>
+<br />
 <!-- ==================== NAVIGATION BAR ==================== -->
 <table class="navbar" border="0" width="100%" cellpadding="0"
        bgcolor="#a0c0ff" cellspacing="0">
@@ -1125,7 +1191,7 @@
 <table border="0" cellpadding="0" cellspacing="0" width="100%%">
   <tr>
     <td align="left" class="footer">
-    Generated by Epydoc 3.0.1 on Wed Feb  5 15:29:03 2025
+    Generated by Epydoc 3.0.1 on Sun Feb 23 14:01:04 2025
     </td>
     <td align="right" class="footer">
       <a target="mainFrame" href="http://epydoc.sourceforge.net"

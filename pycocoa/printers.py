@@ -10,8 +10,9 @@ C{PMPaperMargins} plus several C{get_...} print functions.
 @var libPC: The macOS C{PrintCore} framework library (C{ctypes.CDLL}) or C{None}.
 '''
 from pycocoa.bases import _Type0
-from pycocoa.lazily import _ALL_LAZY, _Dmain_, _DOT_, _fmt, \
-                           _fmt_invalid, _instr, _NN_
+from pycocoa.internals import Adict, _Dmain_, _DOT_, _instr, _name_, \
+                             _NN_, property_RO, _Strs
+from pycocoa.lazily import _ALL_LAZY, _Types,  _fmt, _fmt_invalid
 from pycocoa.nstypes import nsDictionary2dict, NSImageView, NSMain, \
                             NSPrinter, NSPrintInfo, NSPrintOperation, \
                             ns2py, NSStr, NSTableView, NSTextView
@@ -21,15 +22,14 @@ from pycocoa.oslibs import cfNumber2bool, cfString, cfString2str, \
                            cfURL2str, _csignature, _free_memory, \
                            get_lib_framework, libCF, YES
 from pycocoa.runtime import isObjCInstanceOf, send_message, _Xargs
-from pycocoa.utils import Adict, isinstanceOf, property_RO, _Strs, \
-                         _Types, zfstr
+from pycocoa.utils import isinstanceOf, zfstr
 
 from ctypes import ArgumentError, byref, cast, c_char_p, c_double, \
                    c_int, c_void_p, POINTER, sizeof
 import os
 
 __all__ = _ALL_LAZY.printers
-__version__ = '25.01.31'
+__version__ = '25.02.19'
 
 libPC = None  # loaded on-demand
 kPMServerLocal = None
@@ -91,7 +91,7 @@ class PrintError(ValueError):  # SystemError
 def _nsPrinter(name, pm):
     '''(INTERNAL) New C{NSPrinter} instance.
     '''
-    if isinstanceOf(pm, PMPrinter_t, name='pm'):  # NSStr(name)
+    if isinstanceOf(pm, PMPrinter_t, raiser='pm'):  # NSStr(name)
         ns = send_message('NSPrinter', 'alloc', restype=Id_t)
         # _initWithName:printer:(Id_t, Id_t, SEL_t, Id_t, LP_Struct_t)
         # requires special selector handling due to leading underscore
@@ -250,7 +250,7 @@ class Paper(_PM_Type0):
                     break
             else:
                 raise PrintError(_fmt_invalid(Paper=name_pm))
-        elif isinstanceOf(name_pm, PMPaper_t, name='name_pm'):
+        elif isinstanceOf(name_pm, PMPaper_t, raiser='name_pm'):
             pm = name_pm
         _PM_Type0.__init__(self, pm)
 
@@ -279,7 +279,7 @@ class Paper(_PM_Type0):
         '''
         if not printer:
             pm = get_printer().PM
-        elif isinstanceOf(printer, Printer, name='printer'):
+        elif isinstanceOf(printer, Printer, raiser='printer'):
             pm = printer.PM
         return self._2str(libPC.PMPaperCreateLocalizedName, pm)
 
@@ -353,12 +353,12 @@ class PaperCustom(Paper):
 
         if margins is None:
             m = PaperMargins()
-        elif isinstanceOf(margins, PaperMargins, name='margins'):
+        elif isinstanceOf(margins, PaperMargins, raiser='margins'):
             m = PaperMargins(margins)
 
         if printer is None:
             p = get_printer()
-        elif isinstanceOf(printer, Printer, name='printer'):
+        elif isinstanceOf(printer, Printer, raiser='printer'):
             p = printer
 
         pm = PMPaper_t()
@@ -382,7 +382,7 @@ class PaperMargins(PMRect_t):
             self.left   = float(left)
             self.right  = float(right)
             self.top    = float(top)
-        elif isinstanceOf(margins_pm, PaperMargins, PMRect_t, name='margins_pm'):
+        elif isinstanceOf(margins_pm, PaperMargins, PMRect_t, raiser='margins_pm'):
             self.bottom = float(margins_pm.bottom)
             self.left   = float(margins_pm.left)
             self.right  = float(margins_pm.right)
@@ -428,7 +428,7 @@ class Printer(_PM_Type0):
             pm = name_ns_pm
             ns = _nsPrinter(cfString2str(libPC.PMPrinterGetName(pm)), pm)
 
-        elif isObjCInstanceOf(name_ns_pm, NSPrinter, name='name_ns_pm'):
+        elif isObjCInstanceOf(name_ns_pm, NSPrinter, raiser='name_ns_pm'):
             ns = name_ns_pm
             # special method name due to leading underscore
             pm = send_message(ns, '_printer', restype=PMPrinter_t)
@@ -587,7 +587,7 @@ class Printer(_PM_Type0):
         '''
         if PMview and isObjCInstanceOf(PMview, NSImageView,
                                                NSTableView,
-                                               NSTextView, name='PMview'):
+                                               NSTextView, raiser='PMview'):
             pi = NSMain.PrintInfo
             if not self.isDefault:
                 pi = NSPrintInfo.alloc().initWithDictionary_(pi.dictionary())
@@ -684,8 +684,8 @@ def _printers(printers):
     elif not libPC:
         get_libPC()
     for p in printers:
-        if isinstanceOf(p, Printer, name='printers'):
-            yield p
+        isinstanceOf(p, Printer, raiser='printers')
+        yield p
 
 
 def get_papers(*printers):
@@ -920,7 +920,7 @@ if __name__ == _Dmain_:
     d = get_printer()
     if d:
         printf('default (%s) printer: %s...', d.isDefault, d, nl=1)
-        for a in ('name', 'ID', 'makemodel', 'isColor', 'location',
+        for a in (_name_, 'ID', 'makemodel', 'isColor', 'location',
                                 'psCapable', 'psLevel', 'isRemote',
                                 'deviceURI', 'deviceDescription',
                                 'description', 'PPD', 'resolution'):
@@ -933,7 +933,7 @@ if __name__ == _Dmain_:
 
     p = Paper('A4')
     printf('paper: %s...', p, nl=1)
-    for a in ('name', 'ID', 'height', 'width',
+    for a in (_name_, 'ID', 'height', 'width',
                             'size2inch', 'size2mm',
                             'PPD', 'printer'):
         printf(' %s: %r', _DOT_(p, a), getattr(p, a))
@@ -1005,7 +1005,7 @@ if __name__ == _Dmain_:
 #  pycocoa.printers.PaperMargins is <class .PaperMargins>,
 #  pycocoa.printers.Printer is <class .Printer>,
 # )[11]
-# pycocoa.printers.version 25.1.31, .isLazy 1, Python 3.13.1 64bit arm64, macOS 14.6.1
+# pycocoa.printers.version 25.2.19, .isLazy 1, Python 3.13.1 64bit arm64, macOS 14.7.3
 
 # MIT License <https://OpenSource.org/licenses/MIT>
 #

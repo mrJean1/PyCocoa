@@ -35,12 +35,12 @@ are ObjC types defined in terms of a C{ctypes} C{c_} type.
 @var UniChar_t:              Unicode C{unsigned short} ctype.
 @var unichar_t:              Unicode C{wchar} ctype.
 '''
-# all imports listed explicitly to help PyChecker
 # from pycocoa.getters import get_selectornameof
-from pycocoa.lazily import _ALL_LAZY, _bNN_, _Dmain_, _fmt_invalid, \
-                           _NN_, _SPACE_
-from pycocoa.utils import bytes2str, _fmt, inst2strepr, iterbytes, \
-                          missing, property_RO, str2bytes
+from pycocoa.internals import _bNN_, bytes2str, _Dmain_, iterbytes, \
+                               missing, _name_, _NN_, property_RO, \
+                               str2bytes, _SPACE_
+from pycocoa.lazily import _ALL_LAZY,  _fmt, _fmt_invalid
+from pycocoa.utils import inst2strepr
 
 from ctypes import c_bool, c_byte, c_char, c_char_p, c_double, c_float, \
                    c_int, c_int32, c_int64, c_long, c_longlong, c_short, \
@@ -51,29 +51,15 @@ try:
     from ctypes import c_void
 except ImportError:
     c_void = None
-from platform import machine as m
-m = m()  # see .utils.machine
-__arm64__  = m == 'arm64'   # PYCHOK see .oslibs._Apple_Si
-__i386__   = m == 'i386'    # PYCHOK expected
-__x86_64__ = m == 'x86_64'  # PYCHOK also Intel emulation
-del m
 
 __all__ = _ALL_LAZY.octypes
-__version__ = '25.01.31'
+__version__ = '25.02.20'
 
-z = sizeof(c_void_p)
-if z == 4:
-    c_ptrdiff_t = c_int32
-    __LP64__ = False
-elif z == 8:
-    c_ptrdiff_t = c_int64
-    __LP64__ = True
-else:
-    raise AssertionError(_fmt_invalid(sizeof=z))
-del z
-_bHAT     = b'^'
-unichar_t = c_wchar   # actually a c_ushort in NSString_.h,
-UniChar_t = c_ushort  # but need ctypes to convert properly
+__LP64__    = sizeof(c_void_p) == 8  # in .runtime iff __i386__
+c_ptrdiff_t = c_int64 if __LP64__ else c_int32
+unichar_t   = c_wchar   # actually a c_ushort in NSString_.h,
+UniChar_t   = c_ushort  # but need ctypes to convert properly
+_bHAT       = b'^'
 
 
 class c_struct_t(Structure):
@@ -131,7 +117,7 @@ if __LP64__:
     NSInteger_t  = c_long    # == Int_t?
     NSUInteger_t = c_ulong   # == Uint_t?
 
-    NSIntegerMax = 0x7fffffffffffffff
+    NSIntegerMax = 0x7fffffffffffffff  # 2**63 - 1
 
     NSPointEncoding = CGPointEncoding = b'{CGPoint=dd}'
     NSRangeEncoding                   = b'{_NSRange=QQ}'
@@ -143,7 +129,7 @@ else:
     NSInteger_t  = c_int    # == Int_t?
     NSUInteger_t = c_uint   # == Uint_t?
 
-    NSIntegerMax = 0x7fffffff
+    NSIntegerMax = 0x7fffffff  # 2**31 - 1
 
     NSPointEncoding = b'{_NSPoint=ff}'
     NSRangeEncoding = b'{_NSRange=II}'
@@ -321,7 +307,7 @@ class VoidPtr_t(ObjC_t):
 class objc_method_description_t(c_struct_t):
     '''ObjC C{struct} with fields C{name} and C{types} (C{SEL_t}, C{c_char_p}).
     '''
-    _fields_ = ('name', SEL_t), ('types', c_char_p)
+    _fields_ = (_name_, SEL_t), ('types', c_char_p)
 
 
 class objc_property_t(ObjC_t):
@@ -333,7 +319,7 @@ class objc_property_t(ObjC_t):
 class objc_property_attribute_t(c_struct_t):
     '''ObjC C{struct} with fields C{name} and C{value} (both C{c_char_p}).
     '''
-    _fields_ = ('name', c_char_p), ('value', c_char_p)
+    _fields_ = (_name_, c_char_p), ('value', c_char_p)
 
 
 class objc_super_t(c_struct_t):
@@ -770,22 +756,25 @@ def split_encoding(encoding):  # MCCABE 18
     opened = []     # opened braces, brackets, parensm etc.
     quoted = False  # inside double quotes
 
+    def _bJoined(code):
+        codes.append(_bJoin(code))
+        code[:] = []
+        return code
+
     for b in iterbytes(str2bytes(encoding)):
 
         if b in _TYPEOPENERS:
             if code and code[-1] != _bHAT and not opened:
-                codes.append(_bJoin(code))
-                code[:] = []
+                code = _bJoined(code)
             opened.append(_TYPEOPENERS[b])
             code.append(b)
 
         elif b in _TYPECLOSERS:
             code.append(b)
-            if not opened or b != opened.pop():
+            if not (opened and b == opened.pop()):
                 raise TypeCodeError('unbalanced', bytes2str(_bJoin(code)))
             if not opened:
-                codes.append(_bJoin(code))
-                code[:] = []
+                code = _bJoined(code)
 
         elif opened:  # inside braces, etc
             # XXX ignore digits?
@@ -794,16 +783,14 @@ def split_encoding(encoding):  # MCCABE 18
         elif b == b'"':
             code.append(b)
             if quoted:  # closing quotes
-                code[:] = _bJoin(code)
                 if code[:2] in (b'@"', b'#"'):
                     # XXX only @"..." and #"..." are OK, but
                     # XXX what about ^@"..." and ^#"..."?
-                    codes.append(code)
+                    code = _bJoined(code)
                 elif code[:1] == b'"':
-                    pass  # ignore prefix "name"
+                    code[:] = []  # ignore prefix "name"
                 else:
                     raise TypeCodeError('invalid', bytes2str(code))
-                code[:] = []
             quoted = not quoted
 
         elif quoted:  # inside quotes
@@ -813,25 +800,24 @@ def split_encoding(encoding):  # MCCABE 18
         elif b in _TYPECODESET:
             if code and code[-1] != _bHAT:
                 # not a pointer, previous char != '^'
-                codes.append(_bJoin(code))
-                code[:] = []
+                code = _bJoined(code)
             code.append(b)
 
         elif b in _TYPESKIPPED:
             pass  # ignore type, width and offsets
 
-    if opened:
+    if opened or quoted:
         raise TypeCodeError('unbalanced', bytes2str(encoding))
 
     if code:  # final type code
-        codes.append(_bJoin(code))
+        _ = _bJoined(code)
     return codes
 
 
 if __name__ == _Dmain_:
 
-    from pycocoa.utils import _all_listing, bytes2repr, \
-                              _Globals, printf
+    from pycocoa import bytes2repr, printf
+    from pycocoa.utils import _all_listing, _Globals  # in .internals
 
     _Globals.argv0 = _NN_
 
@@ -972,7 +958,7 @@ if __name__ == _Dmain_:
 #  pycocoa.octypes.NSNotFound is 9223372036854775807 or 0x7FFFFFFFFFFFFFFF,
 #  pycocoa.octypes.NSPoint_t is <class .NSPoint_t>,
 #  pycocoa.octypes.NSPointEncoding is b'{CGPoint=dd}',
-#  pycocoa.octypes.NSPointZero is <NSPoint_t(x=0.0, y=0.0) at 0x104ef2450>,
+#  pycocoa.octypes.NSPointZero is <NSPoint_t(x=0.0, y=0.0) at 0x102ac1cd0>,
 #  pycocoa.octypes.NSRange_t is <class .NSRange_t>,
 #  pycocoa.octypes.NSRangeEncoding is b'{_NSRange=QQ}',
 #  pycocoa.octypes.NSRect4_t is <class .NSRect4_t>,
@@ -997,8 +983,8 @@ if __name__ == _Dmain_:
 #  pycocoa.octypes.RunLoop_t is <class .RunLoop_t>,
 #  pycocoa.octypes.SEL_t is <class .SEL_t>,
 #  pycocoa.octypes.Set_t is <class ctypes.c_void_p>,
-#  pycocoa.octypes.split_emcoding2 is <function .split_emcoding2 at 0x104f00e00>,
-#  pycocoa.octypes.split_encoding is <function .split_encoding at 0x104f00fe0>,
+#  pycocoa.octypes.split_emcoding2 is <function .split_emcoding2 at 0x102af8cc0>,
+#  pycocoa.octypes.split_encoding is <function .split_encoding at 0x102af8ea0>,
 #  pycocoa.octypes.String_t is <class ctypes.c_void_p>,
 #  pycocoa.octypes.Struct_t is <class .Struct_t>,
 #  pycocoa.octypes.TimeInterval_t is <class ctypes.c_double>,
@@ -1013,7 +999,7 @@ if __name__ == _Dmain_:
 #  pycocoa.octypes.URL_t is <class .URL_t>,
 #  pycocoa.octypes.VoidPtr_t is <class .VoidPtr_t>,
 # )[83]
-# pycocoa.octypes.version 25.1.31, .isLazy 1, Python 3.13.1 64bit arm64, macOS 14.6.1
+# pycocoa.octypes.version 25.2.20, .isLazy 1, Python 3.13.2 64bit arm64, macOS 14.7.3
 
 # MIT License <https://OpenSource.org/licenses/MIT>
 #

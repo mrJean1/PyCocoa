@@ -5,16 +5,15 @@
 
 '''(INTERNAL) Base classes for Python C{Types}.
 '''
-# all imports listed explicitly to help PyChecker
-from pycocoa.lazily import _ALL_LAZY, _Dmain_, _fmt, _instr
+from pycocoa.internals import bytes2str, _Dmain_, property_RO
+from pycocoa.lazily import _ALL_LAZY,  _fmt, _instr
 from pycocoa.nstypes import isNone, NSStr, nsString2str
 from pycocoa.octypes import c_struct_t, ObjC_t
 from pycocoa.runtime import ObjCInstance, release
-from pycocoa.utils import bytes2str, isinstanceOf, \
-                          property_RO, type2strepr
+from pycocoa.utils import isinstanceOf, type2strepr
 
 __all__ = _ALL_LAZY.bases
-__version__ = '25.02.03'
+__version__ = '25.02.15'
 
 _NSD_Error = NameError("use 'NSd-', not 'NSD-'")  # PYCHOK used!
 
@@ -53,7 +52,7 @@ class _Type0(object):
         '''Set the ObjC instance (C{NS...}).
         '''
         if not isNone(ns):  # see also .nstypes.nsOf
-            isinstanceOf(ns, ObjCInstance, c_struct_t, ObjC_t, name='ns')
+            isinstanceOf(ns, ObjCInstance, c_struct_t, ObjC_t, raiser='ns')
         elif isinstanceOf(self.NS, ObjCInstance):
             pass  # self.NS.release()
         self._NS = ns
@@ -90,7 +89,7 @@ class _Type1(_Type0):
         '''
         if app not in (None,):
             from pycocoa.apps import App
-            isinstanceOf(app, App, name='app')
+            isinstanceOf(app, App, raiser='app')
         self._app = app
 
     @property
@@ -107,7 +106,7 @@ class _Type1(_Type0):
         '''Set the class' delegate.
         '''
         if not isNone(delegate):
-            isinstanceOf(delegate, ObjCInstance, name='delegate')  # XXXX ????
+            isinstanceOf(delegate, ObjCInstance, raiser='delegate')  # XXXX ????
             self.NS.setDelegate_(delegate)
 
 
@@ -155,7 +154,7 @@ if __name__ == _Dmain_:
 #
 # pycocoa.bases.__all__ = tuple(
 # )[0]
-# pycocoa.bases.version 25.2.3, .isLazy 1, Python 3.13.1 64bit arm64, macOS 14.6.1
+# pycocoa.bases.version 25.2.15, .isLazy 1, Python 3.13.1 64bit arm64, macOS 14.7.3
 
 # MIT License <https://OpenSource.org/licenses/MIT>
 #

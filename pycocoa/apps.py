@@ -5,25 +5,25 @@
 
 '''Types L{App} and L{Tile}, wrapping ObjC C{NSApplication} and C{NSDocktile}.
 '''
-# all imports listed explicitly to help PyChecker
-from pycocoa.bases   import _Type2
-from pycocoa.menus   import _callMenuItem_name, _handleMenuItem_name, \
-                             Item, ItemSeparator, Menu, MenuBar, ns2Item
-from pycocoa.lazily  import _ALL_LAZY, _Dmain_, _fmt, _fmt_invalid, _NN_
-from pycocoa.nstypes import NSApplication, nsBundleRename, nsOf, NSStr, \
+from pycocoa.bases import _Type2
+from pycocoa.internals import bytes2str, _Dmain_, _Globals, _NN_, \
+                              property_RO, proxy_RO
+from pycocoa.menus import _callMenuItem_name, _handleMenuItem_name, \
+                           Item, ItemSeparator, Menu, MenuBar, ns2Item
+from pycocoa.lazily import _ALL_LAZY, _fmt, _fmt_invalid, _Types
+from pycocoa.nstypes import NSApplication, nsBundleRename, nsOf, _NSStr, \
                             NSConcreteNotification, NSMain, NSNotification
-from pycocoa.oslibs  import YES
-from pycocoa.runtime import isObjCInstanceOf, ObjCDelegate, ObjCInstance, \
-                            ObjCSubclass, _ObjC_log_totals, release, retain, \
+from pycocoa.oslibs import YES
+from pycocoa.runtime import isObjCInstanceOf, ObjCDelegate, _ObjCDelegate, \
+                            ObjCInstance, _ObjC_log_totals, retain, \
                             send_super_init
-from pycocoa.utils   import bytes2str, errorf, _Globals, isinstanceOf, \
-                            module_property_RO, property_RO, _Types
+from pycocoa.utils import errorf, isinstanceOf
 
 from threading import Thread
 from time import sleep
 
 __all__ = _ALL_LAZY.apps
-__version__ = '25.01.31'
+__version__ = '25.02.19'
 
 
 class App(_Type2):
@@ -90,7 +90,7 @@ class App(_Type2):
 
            @note: The first menu item of the bar menu is provided by default.
         '''
-        isinstanceOf(menu, Menu, name='menu')
+        isinstanceOf(menu, Menu, raiser='menu')
 
         if self._menubar is None:
             # create the menu bar, once
@@ -369,11 +369,11 @@ class _NSApplicationDelegate(object):
        L{App}C{.window..._} callback methods.
     '''
     # Cobbled together from the pycocoa.ObjCSubclass.__doc__,
-    # pycocoa.runtime._NSDeallocObserver and PyObjC examples:
+    # pycocoa.runtime._ObjcDeallocObserver and PyObjC examples:
     # <https://TaoOfMac.com/space/blog/2007/04/22/1745> and
     # <https://StackOverflow.com/questions/24024723/swift-using-
     #        nsstatusbar-statusitemwithlength-and-nsvariablestatusitemlength>
-    _ObjC = ObjCSubclass('NSObject', '_NSApplicationDelegate', register=False)  # defer
+    _ObjC = _ObjCDelegate('_NSApplicationDelegate')
 
     # The _ObjC.method(signature) decorator specifies the signature
     # of a Python method as an Objective-C type encoding to make the
@@ -389,8 +389,8 @@ class _NSApplicationDelegate(object):
 
            @note: I{MUST} be called as C{.alloc().init(...)}.
         '''
-        isinstanceOf(app, App, name='app')
-#       self = ObjCInstance(send_message('NSObject', 'alloc'))
+        isinstanceOf(app, App, raiser='app')
+#       self = ObjCInstance(send_message(_NSObject_, _alloc_))
         self = ObjCInstance(send_super_init(self))
         self.app = app
         return self
@@ -557,7 +557,7 @@ assert(_NSApplicationDelegate.callMenuItem_.name   == _callMenuItem_name), _call
 assert(_NSApplicationDelegate.handleMenuItem_.name == _handleMenuItem_name), _handleMenuItem_name
 
 
-@module_property_RO
+@proxy_RO
 def NSApplicationDelegate():
     '''The L{ObjCClass}C{(_NSApplicationDelegate.__name__)}.
     '''
@@ -588,7 +588,7 @@ class Tile(_Type2):
         '''Set the badge text of the app's dock tile (C{str}).
         '''
         self._label = bytes2str(label)
-        self.NS.setBadgeLabel_(release(NSStr(label)))
+        self.NS.setBadgeLabel_(_NSStr(label))
         self.NS.display()
 
 
@@ -599,7 +599,7 @@ def app_title(title):
 
        @return: Previous title (C{str}).
     '''
-    return nsBundleRename(release(NSStr(title)))
+    return nsBundleRename(_NSStr(title))
 
 
 def ns2App(ns):
@@ -616,7 +616,7 @@ def ns2App(ns):
     '''
     if isObjCInstanceOf(ns, NSApplication):
         pass
-    elif isObjCInstanceOf(ns, NSConcreteNotification, NSNotification, name='ns'):
+    elif isObjCInstanceOf(ns, NSConcreteNotification, NSNotification, raiser='ns'):
         ns = ns.object()
     if ns != _Globals.App.NS:
         raise RuntimeError(_fmt_invalid(repr(_Globals.App.NS), ns=ns))
@@ -635,12 +635,12 @@ if __name__ == _Dmain_:
 #
 # pycocoa.apps.__all__ = tuple(
 #  pycocoa.apps.App is <class .App>,
-#  pycocoa.apps.app_title is <function .app_title at 0x100e91260>,
-#  pycocoa.apps.ns2App is <function .ns2App at 0x100e91c60>,
-#  pycocoa.apps.NSApplicationDelegate is <pycocoa.utils.module_property_RO object at 0x100ba96a0>,
+#  pycocoa.apps.app_title is <function .app_title at 0x1054c6fc0>,
+#  pycocoa.apps.ns2App is <function .ns2App at 0x1054c79c0>,
+#  pycocoa.apps.NSApplicationDelegate is <pycocoa.utils.proxy_RO object at 0x105454690>,
 #  pycocoa.apps.Tile is <class .Tile>,
 # )[5]
-# pycocoa.apps.version 25.1.31, .isLazy 1, Python 3.13.1 64bit arm64, macOS 14.6.1
+# pycocoa.apps.version 25.02.19, .isLazy 1, Python 3.13.1 64bit arm64, macOS 14.7.3
 
 # MIT License <https://OpenSource.org/licenses/MIT>
 #

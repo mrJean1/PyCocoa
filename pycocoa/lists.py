@@ -5,13 +5,12 @@
 
 '''Type L{List}, wrapping ObjC C{NSMutableArray}.
 '''
-# all imports listed explicitly to help PyChecker
-from pycocoa.lazily  import _ALL_LAZY, _Dmain_, _fmt
-from pycocoa.nstypes import NSMutableArray
+from pycocoa.internals import _Dmain_, _fmt, missing
+from pycocoa.lazily import _ALL_LAZY, _Types
+from pycocoa.nstypes import NSMutableArray, _NSMtbs
 from pycocoa.pytypes import list2NS, py2NS
-from pycocoa.runtime import isObjCInstanceOf
-from pycocoa.tuples  import _at, Tuple
-from pycocoa.utils   import missing, _Types
+from pycocoa.runtime import isMutable
+from pycocoa.tuples import _at, Tuple
 
 try:
     from itertools import zip_longest
@@ -19,7 +18,7 @@ except ImportError:  # Python 2-
     from itertools import izip_longest as zip_longest
 
 __all__ = _ALL_LAZY.lists
-__version__ = '25.01.31'
+__version__ = '25.02.16'
 
 
 class List(Tuple):
@@ -34,7 +33,7 @@ class List(Tuple):
             self.NS = list2NS(ns_list)
         elif isinstance(ns_list, (List, Tuple)):
             self.NS = ns_list.NS.mutableCopy()  # PYCHOK safe
-        elif isObjCInstanceOf(ns_list, NSMutableArray, name='ns_list'):
+        elif isMutable(ns_list, *_NSMtbs.Arrays, raiser='ns_list'):
             self.NS = ns_list
 
     def __setitem__(self, index, value):
@@ -133,7 +132,7 @@ if __name__ == _Dmain_:
 # pycocoa.lists.__all__ = tuple(
 #  pycocoa.lists.List is <class .List>,
 # )[1]
-# pycocoa.lists.version 25.1.31, .isLazy 1, Python 3.13.1 64bit arm64, macOS 14.6.1
+# pycocoa.lists.version 25.2.16, .isLazy 1, Python 3.13.1 64bit arm64, macOS 14.7.3
 
 # MIT License <https://OpenSource.org/licenses/MIT>
 #

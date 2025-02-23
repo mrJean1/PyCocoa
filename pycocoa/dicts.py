@@ -5,19 +5,18 @@
 
 '''Types L{FrozenDict} and L{Dict}, wrapping ObjC C{NS[Mutable]Dictionary}.
 '''
-# all imports listed explicitly to help PyChecker
-from pycocoa.bases   import _Type0
-from pycocoa.lazily  import _ALL_LAZY, _Dmain_, _DOT_, _fmt, \
-                            _instr, _no, _SPACE_
-from pycocoa.nstypes import isNone, NSDictionary, nsIter2, \
-                            NSMutableDictionary, ns2Type
-from pycocoa.pytypes import py2NS, type2NS
-from pycocoa.runtime import isImmutable, isObjCInstanceOf, \
-                            ObjCClass, ObjCInstance
-from pycocoa.utils   import isinstanceOf, missing, _Types
+from pycocoa.bases import _Type0
+from pycocoa.internals import _Dmain_, _DOT_, _fmt, _fmt_frozen, frozendict, \
+                              _frozendictbase, _instr, missing, _no, _SPACE_
+from pycocoa.lazily import _ALL_LAZY, _Types
+from pycocoa.nstypes import isNone, NSDictionary, _NSImms, nsIter2, \
+                            NSMutableDictionary, _NSMtbs, ns2Type
+from pycocoa.pytypes import py2NS, type2NS,  isinstanceOf
+from pycocoa.runtime import isImmutable, isMutable, ObjCClass, ObjCInstance
+# from pycocoa.utils import isinstanceOf  # from .pytypes
 
 __all__ = _ALL_LAZY.dicts
-__version__ = '25.01.31'
+__version__ = '25.02.16'
 
 
 def _dict_cmp(dict1, dict2):
@@ -36,8 +35,8 @@ def _dict_kwds(args, kwds, name):
         if len(args) != 1:
             raise ValueError('invalid')
         arg0 = args[0]
-        if not isinstance(arg0, (Dict, FrozenDict,
-                                 ObjCClass, ObjCInstance)):
+        if not isinstanceOf(arg0, Dict, FrozenDict,
+                                  ObjCClass, ObjCInstance):
             arg0 = dict(arg0)  # tuple, list to dict
     except (TypeError, ValueError) as x:
         t = _fmt('%s() %r: %s', name, args, x)
@@ -45,25 +44,63 @@ def _dict_kwds(args, kwds, name):
     return arg0, kwds
 
 
-class FrozenDict(_Type0):
+if False:  # _isPython3:
+    class _FrozenDictBase(_Type0, _frozendictbase):
+        pass
+else:
+    class _FrozenDictBase(_Type0):  # PYCHOK redef
+
+        def __call__(self, *args, **unused):
+            raise self._FrozenError(self.__call__, *args)
+
+        def __delitem__(self, key):
+            raise TypeError(_fmt('%s %s[%r]', 'del', self, key))
+
+        def __setitem__(self, key, value):
+            raise TypeError(_fmt_frozen(self, key, value))
+
+        def clear(self):
+            raise self._FrozenError(self.clear)
+
+        def _FrozenError(self, method, *args):
+            n = _DOT_(self, method.__name__)
+            return TypeError(_instr(n, *map(repr, args)))
+
+        def pop(self, key, *unused):
+            raise self._FrozenError(self.pop, key)
+
+        def popitem(self):
+            raise self._FrozenError(self.popitem)
+
+        def setdefault(self, key, *unused):
+            raise self._FrozenError(self.setdefault, key)
+
+        def update(self, *unused):
+            raise self._FrozenError(self.update)
+
+
+class FrozenDict(_FrozenDictBase):
     '''Python immutable C{dict} Type, wrapping an (immutable) ObjC C{NSDictionary}.
+
+       @see: <https://code.ActiveState.com/recipes/414283-frozen-dictionaries/>
     '''
     def __init__(self, *ns_dict, **kwds):
         '''New immutable L{FrozenDict}, like C{dict.__init__}.
         '''
         ns_dict, kwds = _dict_kwds(ns_dict, kwds, FrozenDict.__name__)
         if isinstance(ns_dict, dict):
-            if kwds:
-                ns_dict = ns_dict.copy()
-                ns_dict.update(kwds)
-                kwds = {}
+            # if kwds:
+            #     ns_dict = ns_dict.copy()
+            #     ns_dict.update(kwds)
+            #     kwds = {}
             self.NS = self._NS_Dictionary(py2NS(ns_dict))
         elif isinstance(ns_dict, FrozenDict):
             self.NS = ns_dict.NS
         elif isinstance(ns_dict, Dict):
             self.NS = ns_dict.NS._NS_copy(False)
-        elif isImmutable(ns_dict, NSMutableDictionary,
-                                  NSDictionary, name=FrozenDict.__name__):
+        elif isMutable(ns_dict, *_NSMtbs.Dicts):
+            self.NS = ns_dict._NS_copy(False)
+        elif isImmutable(ns_dict, *_NSImms.Dicts, raiser=FrozenDict.__name__):
             self.NS = ns_dict
 
         if kwds:
@@ -76,14 +113,11 @@ class FrozenDict(_Type0):
         return value is not missing
 
     def __eq__(self, other):
-        if isinstance(other, (FrozenDict, Dict)):
-            return True if self.NS.isEqualToDictionary_(other.NS) else False
-        elif isinstanceOf(other, dict, name='other'):
+        if isinstanceOf(other, FrozenDict, Dict):
+            return bool(self.NS.isEqualToDictionary_(other.NS))
+        elif isinstanceOf(other, dict, frozendict, raiser='other'):
             return len(self) == len(other) and _dict_cmp(self, other) \
                                            and _dict_cmp(other, self)
-
-    def __delitem__(self, key):
-        raise TypeError(_fmt('%s %s[%r]', 'del', self, key))
 
     def __getitem__(self, key):
         k, _, value = self._NS_get3(key)
@@ -101,13 +135,6 @@ class FrozenDict(_Type0):
     def __ne__(self, other):
         return not self.__eq__(other)
 
-    def __setitem__(self, key, value):
-        raise TypeError(_fmt('%s[%r] = %r', self, key, value))
-
-    def clear(self):
-        n = _DOT_(self, self.clear.__name__)
-        raise TypeError(_instr(n))
-
     def copy(self):
         '''Make a shallow copy.
 
@@ -121,8 +148,8 @@ class FrozenDict(_Type0):
     def get(self, key, default=None):
         '''Return the value for the given key, like C{dict.get}.
         '''
-        _, _, value = self._NS_get3(key)
-        return default if value is missing else value
+        _, _, value = self._NS_get3(key, default)
+        return value
 
     def items(self):
         '''Yield the key, value pairs, like C{dict.items}.
@@ -138,11 +165,8 @@ class FrozenDict(_Type0):
         '''
         for key, _ in nsIter2(self.NS.allKeys()):
             yield key
-    __iter__ = keys
 
-    def pop(self, key, **unused):
-        n = _DOT_(self, self.pop.__name__)
-        raise TypeError(_instr(n, repr(key)))
+    __iter__ = keys
 
     def values(self):
         '''Yield the values, like C{dict.values}.
@@ -151,19 +175,16 @@ class FrozenDict(_Type0):
             yield value
 
     def _NS_copy(self, mutable):
-        if mutable:
-            ns = self.NS.mutableCopy()
-        else:
-            ns = self._NS_Dictionary(self.NS)
-        return ns
+        return self. NS.mutableCopy() if mutable else \
+               self._NS_Dictionary(self.NS)
 
     def _NS_Dictionary(self, ns_dict):
         return NSDictionary.alloc().initWithDictionary_(ns_dict)
 
-    def _NS_get3(self, key):
+    def _NS_get3(self, key, default=missing):
         k = type2NS(key)
         v = self.NS.objectForKey_(k)  # nil for missing key
-        return k, v, (missing if isNone(v) else ns2Type(v))
+        return k, v, (default if isNone(v) else ns2Type(v))
 
     def _NS_KeyError(self, key, k):
         # XXX KeyError(key) prints repr(key), adding "..."
@@ -180,14 +201,16 @@ class Dict(FrozenDict):
         '''New mutable L{Dict}, like C{dict.__init__}.
         '''
         ns_dict, kwds = _dict_kwds(ns_dict, kwds, Dict.__name__)
-        if isinstance(ns_dict, dict):
+        if isinstance(ns_dict, dict):  # frozendict
             self.NS = NSMutableDictionary.alloc().init()
             self.update(ns_dict)
         elif isinstance(ns_dict, Dict):
             self.NS = ns_dict.NS
         elif isinstance(ns_dict, FrozenDict):
             self.NS = ns_dict.NS.mutableCopy()  # XXX flat copy only?
-        elif isObjCInstanceOf(ns_dict, NSMutableDictionary, name=Dict.__name__):
+        elif isImmutable(ns_dict, *_NSImms.Dicts):
+            self.NS = ns_dict.mutableCopy()  # XXX flat copy only?
+        elif isMutable(ns_dict, *_NSMtbs.Dicts, raiser=Dict.__name__):
             self.NS = ns_dict
 
         if kwds:
@@ -234,9 +257,9 @@ class Dict(FrozenDict):
 #   def popitem(self):
 #       raise NotImplementedError('%s.%s' % (self, 'popitem'))
 
-    def setdefault(self, key, default=missing):  # XXX default=None
-        '''Get/set an item, like C{dict.setdefault}, except
-           the I{default} keyword argument is required.
+    def setdefault(self, key, default=missing):  # PYCHOK default=None
+        '''Get/set an item, like C{dict.setdefault}, except the
+           I{default} keyword is required for a new I{key}.
 
            @raise ValueError: No I{default} provided for new I{key}.
         '''
@@ -248,7 +271,7 @@ class Dict(FrozenDict):
         self.NS.setObject_forKey_(type2NS(default), k)
         return default
 
-    def update(self, *other, **kwds):
+    def update(self, *other, **kwds):  # PYCHOK signature
         '''Update, like C{dict.update}, except I{other} must be a C{dict},
            L{Dict} or L{FrozenDict}.
 
@@ -260,9 +283,10 @@ class Dict(FrozenDict):
         if other:
             if isinstanceOf(other, Dict, FrozenDict):
                 self.NS.addEntriesFromDictionary_(other.NS)
-            elif isObjCInstanceOf(other, NSMutableDictionary, NSDictionary):
+            elif isMutable(  other, *_NSMtbs.Dicts) or \
+                 isImmutable(other, *_NSImms.Dicts):
                 self.NS.addEntriesFromDictionary_(other)
-            elif isinstanceOf(other, dict, name='other'):
+            elif isinstanceOf(other, dict, frozendict, raiser='other'):
                 for k, v in other.items():
                     self[k] = v  # self.__setitem__
         for k, v in kwds.items():
@@ -284,7 +308,7 @@ if __name__ == _Dmain_:
 #  pycocoa.dicts.Dict is <class .Dict>,
 #  pycocoa.dicts.FrozenDict is <class .FrozenDict>,
 # )[2]
-# pycocoa.dicts.version 25.1.31, .isLazy 1, Python 3.13.1 64bit arm64, macOS 14.6.1
+# pycocoa.dicts.version 25.2.16, .isLazy 1, Python 3.13.1 64bit arm64, macOS 14.7.3
 
 # MIT License <https://OpenSource.org/licenses/MIT>
 #

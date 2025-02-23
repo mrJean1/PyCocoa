@@ -5,20 +5,19 @@
 
 '''Types L{Frame} and L{Screen}, wrapping ObjC C{NSScreen}.
 '''
-# all imports listed explicitly to help PyChecker
 from pycocoa.bases import _Type0
 from pycocoa.geometry import Point, Rect, Size
-from pycocoa.lazily import _ALL_LAZY, _COMMASPACE_, _Dmain_, \
-                           _fmt, _fmt_invalid
+from pycocoa.internals import _COMMASPACE_, _Dmain_, _fmt, _fmt_invalid, \
+                              _Ints, property_RO, _Singletons
+from pycocoa.lazily import _ALL_LAZY, _Types
 from pycocoa.nstypes import ns2py, NSScreen, nsString2str
 from pycocoa.octypes import NSRect_t
 from pycocoa.oslibs import libCG
-from pycocoa.runtime import isObjCInstanceOf
-from pycocoa.utils import _Ints, isinstanceOf, property_RO, \
-                          _Singletons, _Types
+from pycocoa.runtime import isObjCInstanceOf,  isinstanceOf
+# from pycocoa.utils import isinstanceOf  # from .runtime
 
 __all__ = _ALL_LAZY.screens
-__version__ = '25.02.04'
+__version__ = '25.02.19'
 
 
 class Frame(Rect):
@@ -44,7 +43,7 @@ class Frame(Rect):
             f = Screens(screen_frame).frame
         elif isinstance(screen_frame, Screen):
             f = screen_frame.frame
-        elif isinstanceOf(screen_frame, NSRect_t, Rect, name='screen_frame'):
+        elif isinstanceOf(screen_frame, NSRect_t, Rect, raiser='screen_frame'):
             f = screen_frame
 
         if isinstance(fraction, (float, int)):
@@ -79,7 +78,7 @@ class Screen(_Type0):
             self.NS = screen.NS
             if screen._deviceDescription:
                 self._deviceDescription = screen._deviceDescription  # XXX copy
-        elif isObjCInstanceOf(screen, NSScreen, name='screen'):
+        elif isObjCInstanceOf(screen, NSScreen, raiser='screen'):
             self = _Type0.__new__(cls)
             self.NS = screen
         if name:
@@ -478,7 +477,7 @@ if __name__ == _Dmain_:
 #  pycocoa.screens.Screen is <class .Screen>,
 #  pycocoa.screens.Screens is (BuiltInScreen(NSScreen, name='BuiltIn'), ExternalScreen(NSScreen, name='External')),
 # )[7]
-# pycocoa.screens.version 25.2.4, .isLazy 1, Python 3.13.1 64bit arm64, macOS 14.6.1
+# pycocoa.screens.version 25.2.19, .isLazy 1, Python 3.13.1 64bit arm64, macOS 14.7.3
 
 # MIT License <https://OpenSource.org/licenses/MIT>
 #

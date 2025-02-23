@@ -5,15 +5,14 @@
 
 '''C{get_...} functions to obtain ObjC classes, methods, protocols, etc.
 '''
-# all imports listed explicitly to help PyChecker
-from pycocoa.lazily import _ALL_LAZY, _COLON_, _COMMA_, _COMMASPACE_, \
-                           _Dmain_, _fmt, _fmt_invalid, _NN_, _no, _UNDER_
-from pycocoa.octypes import emcoding2ctype, encoding2ctype, \
-                            Class_t, Id_t, IMP_t, Ivar_t, Protocol_t, \
-                            SEL_t, split_encoding
+from pycocoa.internals import bytes2str, _COLON_, _COMMA_, _COMMASPACE_, \
+                             _Dmain_, missing, _NN_, _no, property_RO, \
+                             _UNDER_, str2bytes
+from pycocoa.lazily import _ALL_LAZY,  _fmt, _fmt_invalid
+from pycocoa.octypes import emcoding2ctype, encoding2ctype, Class_t, Id_t, \
+                            IMP_t, Ivar_t, Protocol_t, SEL_t, split_encoding
 from pycocoa.oslibs import libobjc  # get_lib
-from pycocoa.utils import bytes2str, Cache2, isinstanceOf, missing, \
-                          name2objc, str2bytes
+from pycocoa.utils import isinstanceOf, name2objc
 
 from ctypes import ArgumentError, byref, c_uint, cast, CFUNCTYPE
 import itertools
@@ -26,11 +25,139 @@ except AttributeError:
 del itertools
 
 __all__ = _ALL_LAZY.getters
-__version__ = '25.01.31'
+__version__ = '25.02.19'
 
-_c_func_t_cache = {}
-_SEL_t_cache = Cache2(limit2=128)
-_super_cache = Cache2(limit2=32)
+
+class _Cache2(dict):
+    '''Two-level cache implemented by two C{dict}s, a primary
+       level-1 C{dict} and a secondary level-2 C{dict}.
+
+       Newly created key-value pairs are entered into the
+       secondary C{dict}.  Repeatedly gotten key-value items
+       are elevated from the secondary to the primary C{dict}.
+
+       The secondary C{dict} can optionally be limited in size
+       to avoid excessive growth.
+    '''
+    def __init__(self, limit2=None):
+        '''New L{Cache2}, optionally limited in size.
+
+           @keyword limit2: Size limit for the secondary level-2
+                            C{dict} (C{int} or C{None}).
+        '''
+        self._limit2 = limit2
+        self._dict2 = {}
+
+    def __contains__(self, key):
+        return dict.__contains__(self, key) or key in self._dict2
+
+    def __delitem__(self, key):
+        return self.pop(key)
+
+    def __getitem__(self, key):
+        try:
+            return dict.__getitem__(self, key)
+        except KeyError:
+            # .pop raises KeyError
+            value = self._dict2.pop(key)
+            # elevate to primary
+            dict.__setitem__(self, key, value)
+            return value
+
+    def __setitem__(self, key, value):
+        try:  # replace item if in primary
+            if dict.__getitem__(self, key) != value:
+                dict.__setitem__(self, key, value)
+        except KeyError:  # otherwise add to secondary
+            d2 = self.dict2
+            if self._limit2:
+                n = len(d2)
+                if n > max(4, self._limit2):
+                    for k in tuple(d2.keys())[:n//4]:
+                        d2.pop(k)
+            d2[key] = value
+            # print(len(self), len(d2))
+
+    @property_RO
+    def dict2(self):
+        '''Get the secondary level-2 C{dict}.
+        '''
+        return self._dict2
+
+    def get(self, key, default=None):
+        '''Return the specified item's value.
+
+           @param key: The item's key (C{any}).
+           @keyword default: Default value for missing item (C{any}).
+
+           @return: C{Cache2}I{[key]} if I{key} in C{Cache2}
+                    else I{default} or C{None} if no I{default}
+                    specified.
+        '''
+        try:
+            return self.__getitem__(key)  # self[key]
+        except KeyError:
+            return default
+
+    @property_RO
+    def limit2(self):
+        '''Get the secondary level-2 C{dict} size limit (C{int} or C{None}).
+        '''
+        return self._limit2
+
+    def pop(self, key, *default):
+        '''Remove the specified item.
+
+           @param key: The item's key (C{any}).
+           @param default: Value for missing item (C{any}).
+
+           @return: C{Cache2}I{[key]} if I{key} in C{Cache2} else
+                    I{default}, provided I{default} was specified.
+
+           @raise KeyError: No such item I{key} and no I{default} given.
+
+           @note: If I{key} is not in the primary level-1 C{dict}, the
+                  secondary level-2 C{dict} is checked.
+        '''
+        try:
+            return dict.pop(self, key)
+        except KeyError:
+            return self._dict2.pop(key, *default)
+
+    def popitem(self):
+        '''Remove the item most recently elevated into the primary
+           level-1 C{dict}.
+
+           @return: The removed item as 2-Tuple (key, value).
+
+           @raise KeyError: The secondary level-2 C{dict} is empty.
+
+           @note: Use C{Cache2.dict2.popitem()} to remove the most
+                  recently entered item to the secondary level-2 C{dict}.
+        '''
+        return dict.popitem(self)
+
+    def update(self, *other, **kwds):
+        '''Update this cache with one or more additional items.
+
+           @param other: Items specified as an iterable of 2-tuples
+                         C{(key, value)} or as a C{dict}.
+           @keyword kwds: Items given as C{key=value} pairs, with
+                          priority over B{C{other}}.
+        '''
+        if other:
+            if len(other) != 1:
+                raise ValueError(_fmt_invalid(other=other))
+            d = other[0]
+            if not isinstance(d, dict):
+                raise TypeError(_fmt_invalid(other=d))
+            dict.update(self, d)
+        if kwds:
+            dict.update(self, kwds)
+
+_c_func_t_cache = {}  # PYCHOK singltons
+_SEL_t_cache    = _Cache2(limit2=128)
+_super_cache    = _Cache2(limit2=32)
 
 
 def _ivar_ctype(objc, name):
@@ -115,7 +242,7 @@ def get_classname(clas, dflt=missing):
 
        @raise ValueError: Invalid I{clas}, iff no I{dflt} provided.
     '''
-    if clas and isinstanceOf(clas, Class_t, name='clas'):
+    if clas and isinstanceOf(clas, Class_t, raiser='clas'):
         return bytes2str(libobjc.class_getName(clas))
     if dflt is missing:
         raise ValueError(_fmt_invalid(Class=repr(clas)))
@@ -379,7 +506,7 @@ def get_selectornameof(sel):
 
        @return: The selector name (C{str}) if found, C{""} otherwise.
     '''
-    isinstanceOf(sel, SEL_t, name='sel')
+    isinstanceOf(sel, SEL_t, raiser='sel')
     return bytes2str(libobjc.sel_getName(sel)) or _NN_
 
 
@@ -424,7 +551,7 @@ def get_superclass(clas):
 
        @return: The super-class (L{Class_t}), C{None} otherwise.
     '''
-    isinstanceOf(clas, Class_t, name='clas')
+    isinstanceOf(clas, Class_t, raiser='clas')
     try:
         supr = _super_cache[clas.value]
     except KeyError:
@@ -489,7 +616,7 @@ if __name__ == _Dmain_:
 #  pycocoa.getters.get_superclassnameof is <function .get_superclassnameof at 0x1031d1e40>,
 #  pycocoa.getters.get_superclassof is <function .get_superclassof at 0x1031d1da0>,
 # )[21]
-# pycocoa.getters.version 25.1.31, .isLazy 1, Python 3.13.1 64bit arm64, macOS 14.6.1
+# pycocoa.getters.version 25.2.19, .isLazy 1, Python 3.13.1 64bit arm64, macOS 14.7.3
 
 # MIT License <https://OpenSource.org/licenses/MIT>
 #
