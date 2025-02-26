@@ -12,15 +12,20 @@
 @var Libs.CoreGraphics: The '/System/Library/Frameworks/CoreGraphics.framework/CoreGraphics' library.
 @var Libs.CoreText: The '/System/Library/Frameworks/CoreText.framework/CoreText' library.
 @var Libs.Foundation: The '/System/Library/Frameworks/Foundation.framework/Foundation' library.
+@var Libs.libc: The '/usr/lib/libc.dylib' library.
+@var Libs.libobjc: The '/usr/lib/libobjc.dylib' library.
 @var Libs.ObjC: The '/usr/lib/libobjc.dylib' library.
+@var Libs.PrintCore: The '/System/Library/Frameworks/ApplicationServices.framework/Frameworks/PrintCore.framework/PrintCore' library.
+@var Libs.PrintCore.framework: The '/System/Library/Frameworks/ApplicationServices.framework/Frameworks/PrintCore.framework/PrintCore' library.
+@var Libs.Quartz: The '/System/Library/Frameworks/CoreGraphics.framework/CoreGraphics' library.
 
 @var NO:  ObjC's False (C{const c_byte}).
 @var YES: ObjC's True (C{const c_byte}).
 
 '''
-from pycocoa.internals import __arm64__, _bNN_, _COMMASPACE_, _Constants, _Dmain_, \
-                              _DOT_, _EQUALS_, __i386__, _NN_, Adict, bytes2str, \
-                              __x86_64__, str2bytes  # _sys
+from pycocoa.internals import Adict, __arm64__, _bNN_, bytes2str, _COMMASPACE_, \
+                             _Dmain_, _DOT_, _EQUALS_, __i386__, str2bytes, \
+                             _NN_, __x86_64__
 from pycocoa.lazily import _ALL_LAZY,  _fmt, _fmt_invalid
 from pycocoa.octypes import Allocator_t, Array_t, BOOL_t, CFIndex_t, CFRange_t, \
                             CGBitmapInfo_t, CGDirectDisplayID_t, CGError_t, \
@@ -46,21 +51,29 @@ except ImportError:  # XXX Pythonista/iOS
     def _find_library(*unused):  # PYCHOK redef
         return None  # not found
 from os.path import join as _join, sep as _SEP
-# import sys as _sys  # from .internals
 
 __all__ = _ALL_LAZY.oslibs
-__version__ = '25.02.22'
+__version__ = '25.02.25'
 
 _framework_ = 'framework'
 _leaked2    = []  # leaked memory, 2-tuples (ptr, size)
-_libs_cache =  Adict()  # loaded libraries, by name
 # 'PointerType' in Python 2.6-, 'PyCPointerType' later
 _POINTER_ts =  set(type(POINTER(_)) for _ in (Ivar_t, Method_t, Protocol_t,
                objc_method_description_t, objc_property_t, objc_property_attribute_t))
-# _thismodule = _sys.modules[__name__]
+# _thismodule = sys.modules[__name__]
 
 NO  = False  # c_byte(0)
 YES = True   # c_byte(1)
+
+
+class Libs(Adict):
+    '''The loaded C{macOS} libraries, all C{.dylib}.
+    '''
+    def __setitem__(self, name, lib):
+        lib.__doc__ = _fmt('The %r library.', lib._name.rstrip(_DOT_))
+        Adict.__setitem__(self, name, lib)
+
+Libs = Libs()  # PYCHOK singleton
 
 
 class OSlibError(OSError):
@@ -225,9 +238,9 @@ def get_lib(name):
        @note: Private attribute C{._name} shows the library path.
     '''
     try:
-        lib = _libs_cache[name]
+        lib = Libs[name]
     except KeyError:
-        _libs_cache[name] = lib = _load_lib(_find_lib(name))
+        Libs[name] = lib = _load_lib(_find_lib(name))
     return lib
 
 
@@ -251,23 +264,16 @@ def get_lib_framework(name, services='ApplicationServices', version=_NN_):
     '''
     n_fw = _DOT_(name, _framework_)
     try:
-        lib = _libs_cache[n_fw]
+        lib = Libs[n_fw]
     except KeyError:
         s_fw = _DOT_(services, _framework_)
         if version:  # PYCHOK not 'Current'
             name = _join('Versions', version, name)  # PYCHOK version
         p = _join(_SEP, 'System', 'Library', 'Frameworks',
                   s_fw, 'Frameworks', n_fw, name)
-        _libs_cache[n_fw] = lib = _load_lib(p)
+        Libs[name] = \
+        Libs[n_fw] = lib = _load_lib(p)
     return lib
-
-
-def get_libs():
-    '''Return the C{.dylib} libraries loaded so far.
-
-       @return: The libraries cached (C{Adict}).
-    '''
-    return _libs_cache.copy()
 
 
 def leaked2():
@@ -310,23 +316,13 @@ def _strdup(result, *unused):  # func, args
 # get function free(void *ptr) from the C runtime
 # (see <https://GitHub.com/oaubert/python-vlc>, the
 # Python binding for VLC in folder generated/*/vlc.py)
-_libc = get_lib('libc')  # in pycocoa.utils.machine, NOT 'c'
+_libc = get_lib('libc')  # NOT 'c'
 if _libc:  # macOS, linux, etc.
     _libc_free = _libc.free
     _csignature(_libc_free, c_void, c_void_p)
 #   _csignature_variadic(_libc.printf, c_int, c_char_p)  # printf(format, ...)
 else:  # ignore free, leaking some memory
     _libc_free = None
-
-
-# CORE FOUNDATION
-libCF = get_lib('CoreFoundation')
-
-# see also framework_constants_via_ctypes.py and -_pyobjc.py
-# <https://Gist.GitHub.com/pudquick/8f65bb9b306f91eafdcc> and
-# <https://Gist.GitHub.com/pudquick/ac8f22326f095ed2690e>
-kCFAllocatorDefault   = _dllattr(libCF, kCFAllocatorDefault=Allocator_t)  # XXX or NULL
-kCFRunLoopDefaultMode = _dllattr(libCF, kCFRunLoopDefaultMode=c_void_p)
 
 # <https://Developer.Apple.com/documentation/corefoundation/
 #          cfstringbuiltinencodings?language=objc>
@@ -347,56 +343,65 @@ kCFStringEncodingWindowsLatin1 = 0x0500
 CFStringEncoding = kCFStringEncodingUTF8  # or -UTF16
 CFStringEncoding_t = c_uint32  # a ctype
 
-_csignature(libCF.CFArrayAppendValue, Array_t, c_void_p)
-# <https://Developer.Apple.com/documentation/corefoundation/1388741-cfarraycreate>
-_csignature(libCF.CFArrayCreate, Array_t, Allocator_t, c_void_p, CFIndex_t, c_void_p)
-# <https://Developer.Apple.com/library/content/documentation/CoreFoundation/
-#          Conceptual/CFStrings/Articles/ComparingAndSearching.html>
-_csignature(libCF.CFArrayCreateMutable, Array_t, Allocator_t, CFIndex_t, c_void_p)
-_csignature(libCF.CFArrayGetCount, CFIndex_t, Array_t)
-_csignature(libCF.CFArrayGetTypeID, TypeID_t)
-_csignature(libCF.CFArrayGetValueAtIndex, c_void_p, Array_t, CFIndex_t)
 
-_csignature(libCF.CFAttributedStringCreate, c_void_p, Allocator_t, c_void_p, c_void_p)
+_libCF = get_lib('CoreFoundation')
+if _libCF:
+    # see also framework_constants_via_ctypes.py and -_pyobjc.py
+    # <https://Gist.GitHub.com/pudquick/8f65bb9b306f91eafdcc> and
+    # <https://Gist.GitHub.com/pudquick/ac8f22326f095ed2690e>
+    kCFAllocatorDefault   = _dllattr(_libCF, kCFAllocatorDefault=Allocator_t)  # XXX or NULL
+    kCFRunLoopDefaultMode = _dllattr(_libCF, kCFRunLoopDefaultMode=c_void_p)
 
-_csignature(libCF.CFBooleanGetTypeID, TypeID_t)
+    _csignature(_libCF.CFArrayAppendValue, Array_t, c_void_p)
+    # <https://Developer.Apple.com/documentation/corefoundation/1388741-cfarraycreate>
+    _csignature(_libCF.CFArrayCreate, Array_t, Allocator_t, c_void_p, CFIndex_t, c_void_p)
+    # <https://Developer.Apple.com/library/content/documentation/CoreFoundation/
+    #          Conceptual/CFStrings/Articles/ComparingAndSearching.html>
+    _csignature(_libCF.CFArrayCreateMutable, Array_t, Allocator_t, CFIndex_t, c_void_p)
+    _csignature(_libCF.CFArrayGetCount, CFIndex_t, Array_t)
+    _csignature(_libCF.CFArrayGetTypeID, TypeID_t)
+    _csignature(_libCF.CFArrayGetValueAtIndex, c_void_p, Array_t, CFIndex_t)
 
-_csignature(libCF.CFDataCreate, Data_t, Allocator_t, c_void_p, CFIndex_t)
-_csignature(libCF.CFDataGetBytes, c_void, Data_t, CFRange_t, c_void_p)
-_csignature(libCF.CFDataGetLength, CFIndex_t, Data_t)
+    _csignature(_libCF.CFAttributedStringCreate, c_void_p, Allocator_t, c_void_p, c_void_p)
 
-# <https://Developer.Apple.com/documentation/corefoundation/1542050-cfdategettypeid>
-# <https://Developer.Apple.com/documentation/foundation/nsdate>
-_csignature(libCF.CFDateGetTypeID, TypeID_t)
+    _csignature(_libCF.CFBooleanGetTypeID, TypeID_t)
 
-# <https://Developer.Apple.com/documentation/corefoundation/cfdictionary-rum>
-# <https://Developer.Apple.com/library/content/documentation/CoreFoundation/
-#          Conceptual/CFMemoryMgmt/Concepts/Ownership.html>
-# <https://Developer.Apple.com/documentation/corefoundation/1516777-cfdictionaryaddvalue>
-_csignature(libCF.CFDictionaryAddValue, c_void, Dictionary_t, c_void_p, c_void_p)  # (d, key, val)
-_csignature(libCF.CFDictionaryContainsKey, BOOL_t, Dictionary_t, c_void_p)
-_csignature(libCF.CFDictionaryContainsValue, BOOL_t, Dictionary_t, c_void_p)
-_csignature(libCF.CFDictionaryCreateMutable, c_void_p, Allocator_t, CFIndex_t, c_void_p, c_void_p)
-_csignature(libCF.CFDictionaryGetCount, CFIndex_t, Dictionary_t)
-_csignature(libCF.CFDictionaryGetCountOfKey, CFIndex_t, Dictionary_t, c_void_p)
-_csignature(libCF.CFDictionaryGetCountOfValue, CFIndex_t, Dictionary_t, c_void_p)
-_csignature(libCF.CFDictionaryGetKeysAndValues, c_void, Dictionary_t, c_void_p, c_void_p)
-_csignature(libCF.CFDictionaryGetTypeID, TypeID_t)
-_csignature(libCF.CFDictionaryGetValue, c_void_p, Dictionary_t, c_void_p)  # v = (d, key)
-# Returns a Boolean value that indicates whether a given value for a given key
-# is in a dictionary, and returns that value into the last arg if it exists
-_csignature(libCF.CFDictionaryGetValueIfPresent, BOOL_t, Dictionary_t, c_void_p, c_void_p)  # b = (d, key, byref(val))
-_csignature(libCF.CFDictionarySetValue, c_void, Dictionary_t, c_void_p, c_void_p)  # (d, key, val)
-# _csignature(libCF.CFDictionarySetValueForKey, c_void, Dictionary_t, c_void_p, c_void_p)  # (d, key, val)
+    _csignature(_libCF.CFDataCreate, Data_t, Allocator_t, c_void_p, CFIndex_t)
+    _csignature(_libCF.CFDataGetBytes, c_void, Data_t, CFRange_t, c_void_p)
+    _csignature(_libCF.CFDataGetLength, CFIndex_t, Data_t)
 
-_csignature(libCF.CFGetTypeID, TypeID_t, c_void_p)
+    # <https://Developer.Apple.com/documentation/corefoundation/1542050-cfdategettypeid>
+    # <https://Developer.Apple.com/documentation/foundation/nsdate>
+    _csignature(_libCF.CFDateGetTypeID, TypeID_t)
 
-_csignature(libCF.CFNullGetTypeID, TypeID_t)
+    # <https://Developer.Apple.com/documentation/corefoundation/cfdictionary-rum>
+    # <https://Developer.Apple.com/library/content/documentation/CoreFoundation/
+    #          Conceptual/CFMemoryMgmt/Concepts/Ownership.html>
+    # <https://Developer.Apple.com/documentation/corefoundation/1516777-cfdictionaryaddvalue>
+    _csignature(_libCF.CFDictionaryAddValue, c_void, Dictionary_t, c_void_p, c_void_p)  # (d, key, val)
+    _csignature(_libCF.CFDictionaryContainsKey, BOOL_t, Dictionary_t, c_void_p)
+    _csignature(_libCF.CFDictionaryContainsValue, BOOL_t, Dictionary_t, c_void_p)
+    _csignature(_libCF.CFDictionaryCreateMutable, c_void_p, Allocator_t, CFIndex_t, c_void_p, c_void_p)
+    _csignature(_libCF.CFDictionaryGetCount, CFIndex_t, Dictionary_t)
+    _csignature(_libCF.CFDictionaryGetCountOfKey, CFIndex_t, Dictionary_t, c_void_p)
+    _csignature(_libCF.CFDictionaryGetCountOfValue, CFIndex_t, Dictionary_t, c_void_p)
+    _csignature(_libCF.CFDictionaryGetKeysAndValues, c_void, Dictionary_t, c_void_p, c_void_p)
+    _csignature(_libCF.CFDictionaryGetTypeID, TypeID_t)
+    _csignature(_libCF.CFDictionaryGetValue, c_void_p, Dictionary_t, c_void_p)  # v = (d, key)
+    # Returns a Boolean value that indicates whether a given value for a given key
+    # is in a dictionary, and returns that value into the last arg if it exists
+    _csignature(_libCF.CFDictionaryGetValueIfPresent, BOOL_t, Dictionary_t, c_void_p, c_void_p)  # b = (d, key, byref(val))
+    _csignature(_libCF.CFDictionarySetValue, c_void, Dictionary_t, c_void_p, c_void_p)  # (d, key, val)
+    # _csignature(_libCF.CFDictionarySetValueForKey, c_void, Dictionary_t, c_void_p, c_void_p)  # (d, key, val)
 
-_csignature(libCF.CFNumberCreate, Number_t, Allocator_t, NumberType_t, c_void_p)
-_csignature(libCF.CFNumberGetType, NumberType_t, Number_t)
-_csignature(libCF.CFNumberGetTypeID, TypeID_t)
-_csignature(libCF.CFNumberGetValue, BOOL_t, Number_t, NumberType_t, c_void_p)  # (n, TypeID, *n)
+    _csignature(_libCF.CFGetTypeID, TypeID_t, c_void_p)
+
+    _csignature(_libCF.CFNullGetTypeID, TypeID_t)
+
+    _csignature(_libCF.CFNumberCreate, Number_t, Allocator_t, NumberType_t, c_void_p)
+    _csignature(_libCF.CFNumberGetType, NumberType_t, Number_t)
+    _csignature(_libCF.CFNumberGetTypeID, TypeID_t)
+    _csignature(_libCF.CFNumberGetValue, BOOL_t, Number_t, NumberType_t, c_void_p)  # (n, TypeID, *n)
 
 # <https://GitHub.com/opensource-apple/CF/blob/master/CFNumber.h>
 kCFNumberSInt8Type     = 1
@@ -445,16 +450,17 @@ def cfNumber2bool(ns, dflt=None):
 
        @return: The bool (C{bool}) or I{dflt}.
     '''
-    nType = libCF.CFNumberGetType(ns)
+    nType = _libCF.CFNumberGetType(ns)
     if nType != kCFNumberCharType:
         raise _cfNumberError(ns, nType)
-    n = c_byte()  # c_ubyte, see octypes._encoding2ctype!
-    r = libCF.CFNumberGetValue(ns, nType, byref(n))
+    n =  c_byte()  # c_ubyte, see octypes._encoding2ctype!
+    r = _libCF.CFNumberGetValue(ns, nType, byref(n))
     return bool(n.value) if r else dflt
 
 
 def _cfNumberError(ns, nType):  # helper for cfNumber2bool and cfNumber2num
-    return TypeError(_fmt('unexpected %s(%r): %r', 'NumberType', ns, nType))
+    t = _fmt('%s(%r): %r', 'NumberType', ns, nType)
+    return TypeError(_COMMASPACE_(t, 'unexpected'))
 
 
 def cfNumber2num(ns, dflt=None):
@@ -467,12 +473,12 @@ def cfNumber2num(ns, dflt=None):
 
        @return: The number (C{int} or C{float}) or I{dflt}.
     '''
-    nType = libCF.CFNumberGetType(ns)
+    nType = _libCF.CFNumberGetType(ns)
     try:
         n = _CFNumberType2ctype[nType]()
     except (KeyError, TypeError):
         raise _cfNumberError(ns, nType)
-    r = libCF.CFNumberGetValue(ns, nType, byref(n))
+    r = _libCF.CFNumberGetValue(ns, nType, byref(n))
     return n.value if r else dflt
 
 
@@ -483,10 +489,10 @@ def cfString2str(ns, dflt=None):  # XXX an NS*String method
 
        @return: The string (C{str} or C{unicode}) or I{dflt}.
     '''
-    n = libCF.CFStringGetLength(ns)
-    u = libCF.CFStringGetMaximumSizeForEncoding(n, CFStringEncoding)
-    b = c_buffer(u + 2)
-    r = libCF.CFStringGetCString(ns, b, len(b), CFStringEncoding)
+    n = _libCF.CFStringGetLength(ns)
+    u = _libCF.CFStringGetMaximumSizeForEncoding(n, CFStringEncoding)
+    b =  c_buffer(u + 2)
+    r = _libCF.CFStringGetCString(ns, b, len(b), CFStringEncoding)
     # XXX if r: assert isinstance(b.value, _Bytes), 'bytes expected'
     # bytes to unicode in Python 2, to str in Python 3+
     return bytes2str(b.value) if r else dflt  # XXX was .decode(_DEFAULT_UNICODE)
@@ -499,44 +505,45 @@ def cfString(ustr):
 
        @return: The string instance (C{NS[Constant]String}).
     '''
-    return libCF.CFStringCreateWithCString(None, str2bytes(ustr),
-                                                 CFStringEncoding)
+    return _libCF.CFStringCreateWithCString(None, str2bytes(ustr),
+                                                  CFStringEncoding)
 
 
-_csignature(libCF.CFRelease, c_void, TypeRef_t)
-_csignature(libCF.CFRetain, TypeRef_t, TypeRef_t)
+if _libCF:
+    _csignature(_libCF.CFRelease, c_void, TypeRef_t)
+    _csignature(_libCF.CFRetain, TypeRef_t, TypeRef_t)
 
-_csignature(libCF.CFRunLoopGetCurrent, c_void_p)
-_csignature(libCF.CFRunLoopGetMain, c_void_p)
+    _csignature(_libCF.CFRunLoopGetCurrent, c_void_p)
+    _csignature(_libCF.CFRunLoopGetMain, c_void_p)
 
-_csignature(libCF.CFSetContainsValue, BOOL_t, Set_t, c_void_p)
-_csignature(libCF.CFSetGetCount, CFIndex_t, Set_t)
-_csignature(libCF.CFSetGetCountOfValue, CFIndex_t, Set_t, c_void_p)
-_csignature(libCF.CFSetGetValue, c_void_p, Set_t, c_void_p)
-# PyPy 1.7 is fine with the 2nd arg as POINTER(c_void_p),
-# but CPython ctypes 1.1.0 complains, so just use c_void_p.
-_csignature(libCF.CFSetGetValues, c_void, Set_t, c_void_p)
-_csignature(libCF.CFSetGetValueIfPresent, BOOL_t, Set_t, c_void_p, POINTER(c_void_p))
+    _csignature(_libCF.CFSetContainsValue, BOOL_t, Set_t, c_void_p)
+    _csignature(_libCF.CFSetGetCount, CFIndex_t, Set_t)
+    _csignature(_libCF.CFSetGetCountOfValue, CFIndex_t, Set_t, c_void_p)
+    _csignature(_libCF.CFSetGetValue, c_void_p, Set_t, c_void_p)
+    # PyPy 1.7 is fine with the 2nd arg as POINTER(c_void_p),
+    # but CPython ctypes 1.1.0 complains, so just use c_void_p.
+    _csignature(_libCF.CFSetGetValues, c_void, Set_t, c_void_p)
+    _csignature(_libCF.CFSetGetValueIfPresent, BOOL_t, Set_t, c_void_p, POINTER(c_void_p))
 
-_csignature(libCF.CFStringCreateWithCString, String_t, Allocator_t, c_char_p, CFStringEncoding_t)
-_csignature(libCF.CFStringGetCString, BOOL_t, String_t, c_char_p, CFIndex_t, CFStringEncoding_t)
-_csignature(libCF.CFStringGetLength, CFIndex_t, String_t)
-_csignature(libCF.CFStringGetMaximumSizeForEncoding, CFIndex_t, CFIndex_t, CFStringEncoding_t)
-_csignature(libCF.CFStringGetTypeID, TypeID_t)
+    _csignature(_libCF.CFStringCreateWithCString, String_t, Allocator_t, c_char_p, CFStringEncoding_t)
+    _csignature(_libCF.CFStringGetCString, BOOL_t, String_t, c_char_p, CFIndex_t, CFStringEncoding_t)
+    _csignature(_libCF.CFStringGetLength, CFIndex_t, String_t)
+    _csignature(_libCF.CFStringGetMaximumSizeForEncoding, CFIndex_t, CFIndex_t, CFStringEncoding_t)
+    _csignature(_libCF.CFStringGetTypeID, TypeID_t)
 
-# CFDataRef CFURLCreateBookmarkDataFromFile(CFAllocatorRef allocator, CFURLRef fileURL, CFErrorRef *errorRef)
-_csignature(libCF.CFURLCreateBookmarkDataFromFile, Data_t, Allocator_t, URL_t, c_void_p)
-# <https://Developer.Apple.com/documentation/corefoundation/cfurlbookmarkresolutionoptions>
-kCFURLBookmarkResolutionWithoutMountingMask = 1 <<  9
-kCFURLBookmarkResolutionWithoutUIMask       = 1 <<  8
-kCFURLBookmarkResolutionWithSecurityScope   = 1 << 10
-# CFURLRef CFURLCreateByResolvingBookmarkData(CFAllocatorRef allocator, CFDataRef bookmark,
-#          CFURLBookmarkResolutionOptions options, CFURLRef relativeToURL,
-#          CFArrayRef resourcePropertiesToInclude, Boolean *isStale, CFErrorRef *error)
-_csignature(libCF.CFURLCreateByResolvingBookmarkData, URL_t, Allocator_t, Data_t, c_uint, URL_t, c_void_p, BOOL_t, c_void_p)
-# <https://Developer.Apple.com/documentation/corefoundation/1542826-cfurlgetstring>
-_csignature(libCF.CFURLGetString, String_t, URL_t)
-_csignature(libCF.CFURLGetTypeID, TypeID_t)
+    # CFDataRef CFURLCreateBookmarkDataFromFile(CFAllocatorRef allocator, CFURLRef fileURL, CFErrorRef *errorRef)
+    _csignature(_libCF.CFURLCreateBookmarkDataFromFile, Data_t, Allocator_t, URL_t, c_void_p)
+    # <https://Developer.Apple.com/documentation/corefoundation/cfurlbookmarkresolutionoptions>
+    kCFURLBookmarkResolutionWithoutMountingMask = 1 <<  9
+    kCFURLBookmarkResolutionWithoutUIMask       = 1 <<  8
+    kCFURLBookmarkResolutionWithSecurityScope   = 1 << 10
+    # CFURLRef CFURLCreateByResolvingBookmarkData(CFAllocatorRef allocator, CFDataRef bookmark,
+    #          CFURLBookmarkResolutionOptions options, CFURLRef relativeToURL,
+    #          CFArrayRef resourcePropertiesToInclude, Boolean *isStale, CFErrorRef *error)
+    _csignature(_libCF.CFURLCreateByResolvingBookmarkData, URL_t, Allocator_t, Data_t, c_uint, URL_t, c_void_p, BOOL_t, c_void_p)
+    # <https://Developer.Apple.com/documentation/corefoundation/1542826-cfurlgetstring>
+    _csignature(_libCF.CFURLGetString, String_t, URL_t)
+    _csignature(_libCF.CFURLGetTypeID, TypeID_t)
 
 
 # <https://GitHub.com/al45tair/mac_alias>
@@ -549,11 +556,11 @@ def cfURLResolveAlias(alias):
 
        @return: The alias' target (C{NSURL}) or C{None}.
     '''
-    kA = kCFAllocatorDefault
-    ns = libCF.CFURLCreateBookmarkDataFromFile(kA, cast(alias, URL_t), 0) or None
+    kA =  kCFAllocatorDefault
+    ns = _libCF.CFURLCreateBookmarkDataFromFile(kA, cast(alias, URL_t), 0) or None
     if ns:
-        kM = kCFURLBookmarkResolutionWithoutUIMask
-        ns = libCF.CFURLCreateByResolvingBookmarkData(kA, ns, kM, 0, 0, NO, 0)
+        kM =  kCFURLBookmarkResolutionWithoutUIMask
+        ns = _libCF.CFURLCreateByResolvingBookmarkData(kA, ns, kM, 0, 0, NO, 0)
     return ns
 
 
@@ -564,22 +571,24 @@ def cfURL2str(url):
 
        @return: The I{url} as string (C{str}).
     '''
-    return cfString2str(libCF.CFURLGetString(url))
+    return cfString2str(_libCF.CFURLGetString(url))
 
 
-# APPLICATION KIT
-# Even though we don't use this directly, it must be loaded so that
-# we can find the NSApplication, NSWindow, and NSView classes.
-libAppKit = get_lib('AppKit')
+# Even though we don't use this directly, it must be loaded
+# to find the NSApplication, NSWindow, and NSView classes.
+_libAppKit = get_lib('AppKit')
+if _libAppKit:
+    NSApplicationDidHideNotification   = _dllattr(_libAppKit, NSApplicationDidHideNotification=c_void_p)
+    NSApplicationDidUnhideNotification = _dllattr(_libAppKit, NSApplicationDidUnhideNotification=c_void_p)
 
-NSApplicationDidHideNotification   = _dllattr(libAppKit, NSApplicationDidHideNotification=c_void_p)
-NSApplicationDidUnhideNotification = _dllattr(libAppKit, NSApplicationDidUnhideNotification=c_void_p)
+    # see NSApplication.nextEventMatchingMask:untilDate:inMode:dequeue:
+    NSDefaultRunLoopMode       = _dllattr(_libAppKit, NSDefaultRunLoopMode=RunLoop_t)
+    NSEventTrackingRunLoopMode = _dllattr(_libAppKit, NSEventTrackingRunLoopMode=RunLoop_t)
+    NSModalPanelRunLoopMode    = _dllattr(_libAppKit, NSModalPanelRunLoopMode=RunLoop_t)
+    # UITrackingRunLoopMode    = _dllattr(_libAppKit, UITrackingRunLoopMode=RunLoop_t)
 
-# see NSApplication.nextEventMatchingMask:untilDate:inMode:dequeue:
-NSDefaultRunLoopMode       = _dllattr(libAppKit, NSDefaultRunLoopMode=RunLoop_t)
-NSEventTrackingRunLoopMode = _dllattr(libAppKit, NSEventTrackingRunLoopMode=RunLoop_t)
-NSModalPanelRunLoopMode    = _dllattr(libAppKit, NSModalPanelRunLoopMode=RunLoop_t)
-# UITrackingRunLoopMode    = _dllattr(libAppKit, UITrackingRunLoopMode=RunLoop_t)
+    # <https://Developer.Apple.com/documentation/appkit/1473652-nsrectfill>
+    _csignature(_libAppKit.NSRectFill, c_void, POINTER(NSRect_t))
 
 # NSApplication.h
 NSApplicationPresentationDefault                 = 0
@@ -801,120 +810,117 @@ NSWindowToolbarButton      = 3
 NSWindowDocumentIconButton = 4
 # typedef NSUInteger NSWindowButton
 
-# <https://Developer.Apple.com/documentation/appkit/1473652-nsrectfill>
-_csignature(libAppKit.NSRectFill, c_void, POINTER(NSRect_t))
+_libCG = get_lib('CoreGraphics')  # aka Quartz
+if _libCG:
+    # /System/Library/Frameworks/ApplicationServices.framework/Frameworks/...
+    #  CoreGraphics.framework/Headers/CGImage.h
+    kCGImageAlphaNone               = 0
+    kCGImageAlphaPremultipliedLast  = 1
+    kCGImageAlphaPremultipliedFirst = 2
+    kCGImageAlphaLast               = 3
+    kCGImageAlphaFirst              = 4
+    kCGImageAlphaNoneSkipLast       = 5
+    kCGImageAlphaNoneSkipFirst      = 6
+    kCGImageAlphaOnly               = 7
 
-# callback to handle so-called uncaught ObjC exceptions from libc, different from
-# the libAppKit.NSExceptionHandler, see for example <https://Developer.Apple.com/
-# documentation/exceptionhandling/nsexceptionhandler>.  DO NOT use the latter, for
-# an example see here <https://OpenSource.Apple.com/source/pyobjc/pyobjc-32/pyobjc/
-# pyobjc-framework-ExceptionHandling/Lib/PyObjCTools/Debugging.py.auto.html>.
-try:
-    _setUncaughtExceptionHandler = _libc.objc_setUncaughtExceptionHandler
-except AttributeError:  # macOS 12.0.1 Monterey
-    _setUncaughtExceptionHandler = libAppKit.NSSetUncaughtExceptionHandler
-_UncaughtExceptionHandler_t = CFUNCTYPE(None, c_void_p)
-_csignature(_setUncaughtExceptionHandler, _UncaughtExceptionHandler_t, _UncaughtExceptionHandler_t)
+    kCGImageAlphaPremultipliedLast = 1
 
-# COREGRAPHICS / aka QUARTZ
-libCG = get_lib('CoreGraphics')
+    kCGBitmapAlphaInfoMask     = 0x1F
+    kCGBitmapFloatComponents   = 1 << 8
 
-# /System/Library/Frameworks/ApplicationServices.framework/Frameworks/...
-#  CoreGraphics.framework/Headers/CGImage.h
-kCGImageAlphaNone               = 0
-kCGImageAlphaPremultipliedLast  = 1
-kCGImageAlphaPremultipliedFirst = 2
-kCGImageAlphaLast               = 3
-kCGImageAlphaFirst              = 4
-kCGImageAlphaNoneSkipLast       = 5
-kCGImageAlphaNoneSkipFirst      = 6
-kCGImageAlphaOnly               = 7
+    kCGBitmapByteOrderDefault  = 0 << 12
+    kCGBitmapByteOrder16Little = 1 << 12
+    kCGBitmapByteOrder32Little = 2 << 12
+    kCGBitmapByteOrder16Big    = 3 << 12
+    kCGBitmapByteOrder32Big    = 4 << 12
+    kCGBitmapByteOrderMask     = 7 << 12
 
-kCGImageAlphaPremultipliedLast = 1
+    # /System/Library/Frameworks/ApplicationServices.framework/Frameworks/...
+    #  ImageIO.framework/Headers/CGImageProperties.h
+    try:  # missing in 12.0.1 macOS Monterey
+        kCGImagePropertyGIFDictionary = _dllattr(_libCG, kCGImagePropertyGIFDictionary=c_void_p)
+        kCGImagePropertyGIFDelayTime  = _dllattr(_libCG, kCGImagePropertyGIFDelayTime=c_void_p)
+    except ValueError:
+        pass
+    # /System/Library/Frameworks/ApplicationServices.framework/Frameworks/...
+    #  CoreGraphics.framework/Headers/CGColorSpace.h
+    kCGRenderingIntentDefault = 0
 
-kCGBitmapAlphaInfoMask     = 0x1F
-kCGBitmapFloatComponents   = 1 << 8
+    _csignature(_libCG.CGAssociateMouseAndMouseCursorPosition, CGError_t, BOOL_t)
+    _csignature(_libCG.CGBitmapContextCreate, c_void_p, c_void_p, c_size_t, c_size_t, c_size_t, c_size_t, c_void_p, CGBitmapInfo_t)
+    _csignature(_libCG.CGBitmapContextCreateImage, c_void_p, c_void_p)
+    _csignature(_libCG.CGColorSpaceCreateDeviceRGB, c_void_p)
+    _csignature(_libCG.CGColorSpaceRelease, c_void, c_void_p)
+    _csignature(_libCG.CGContextDrawImage, c_void, c_void_p, CGRect_t, c_void_p)
+    _csignature(_libCG.CGContextRelease, c_void, c_void_p)
+    _csignature(_libCG.CGContextSetShouldAntialias, c_void,c_void_p, BOOL_t)
+    _csignature(_libCG.CGContextSetTextPosition, c_void, c_void_p, CGFloat_t, CGFloat_t)
+    _csignature(_libCG.CGCursorIsVisible, BOOL_t)
+    _csignature(_libCG.CGDataProviderCopyData, c_void_p, c_void_p)
+    _csignature(_libCG.CGDataProviderCreateWithCFData, c_void_p, c_void_p)
+    _csignature(_libCG.CGDataProviderRelease, c_void, c_void_p)
+    _csignature(_libCG.CGDisplayBounds, CGRect_t, CGDirectDisplayID_t)
+    _csignature(_libCG.CGDisplayCapture, CGError_t, CGDirectDisplayID_t)
+    _csignature(_libCG.CGDisplayCopyAllDisplayModes, c_void_p, CGDirectDisplayID_t, c_void_p)
+    _csignature(_libCG.CGDisplayCopyDisplayMode, c_void_p, CGDirectDisplayID_t)
+    _csignature(_libCG.CGDisplayIDToOpenGLDisplayMask, c_uint32, c_uint32)
+    _csignature(_libCG.CGDisplayIsBuiltin, BOOL_t, CGDirectDisplayID_t)  # screenID, NSScreenNumber
+    _csignature(_libCG.CGDisplayModeCopyPixelEncoding, c_void_p, c_void_p)
+    _csignature(_libCG.CGDisplayModeGetHeight, c_size_t, c_void_p)
+    _csignature(_libCG.CGDisplayModeGetRefreshRate, c_double, c_void_p)
+    _csignature(_libCG.CGDisplayModeGetWidth, c_size_t, c_void_p)
+    _csignature(_libCG.CGDisplayModeRelease, c_void, c_void_p)
+    _csignature(_libCG.CGDisplayModeRetain, c_void_p, c_void_p)
+    _csignature(_libCG.CGDisplayMoveCursorToPoint, CGError_t, CGDirectDisplayID_t, CGPoint_t)
+    _csignature(_libCG.CGDisplayRelease, CGError_t, CGDirectDisplayID_t)
+    _csignature(_libCG.CGDisplaySetDisplayMode, CGError_t, CGDirectDisplayID_t, c_void_p, c_void_p)
+    _csignature(_libCG.CGFontCreateWithDataProvider, c_void_p, c_void_p)
+    _csignature(_libCG.CGFontCreateWithFontName, c_void_p, c_void_p)
+    _csignature(_libCG.CGGetActiveDisplayList, CGError_t, c_uint32, POINTER(CGDirectDisplayID_t), POINTER(c_uint32))
+    _csignature(_libCG.CGGetOnlineDisplayList, CGError_t, c_uint32, POINTER(CGDirectDisplayID_t), POINTER(c_uint32))
+    _csignature(_libCG.CGImageCreate, c_void_p, c_size_t, c_size_t, c_size_t, c_size_t, c_size_t, c_void_p, c_uint32, c_void_p, c_void_p, BOOL_t, c_int)
+    _csignature(_libCG.CGImageGetBitmapInfo, CGBitmapInfo_t, c_void_p)
+    _csignature(_libCG.CGImageGetBitsPerPixel, c_size_t, c_void_p)
+    _csignature(_libCG.CGImageGetBytesPerRow, c_size_t, c_void_p)
+    _csignature(_libCG.CGImageGetDataProvider, c_void_p, c_void_p)
+    _csignature(_libCG.CGImageGetHeight, c_size_t, c_void_p)
+    _csignature(_libCG.CGImageGetWidth, c_size_t, c_void_p)
+    _csignature(_libCG.CGImageRelease, c_void, c_void_p)
+    try:  # missing in 12.0.1 macOS Monterey
+        _csignature(_libCG.CGImageSourceCopyPropertiesAtIndex, c_void_p, c_void_p, c_size_t, c_void_p)
+        _csignature(_libCG.CGImageSourceCreateImageAtIndex, c_void_p, c_void_p, c_size_t, c_void_p)
+        _csignature(_libCG.CGImageSourceCreateWithData, c_void_p, c_void_p, c_void_p)
+    except AttributeError:
+        pass
+    _csignature(_libCG.CGMainDisplayID, CGDirectDisplayID_t)
+    _csignature(_libCG.CGShieldingWindowLevel, c_int32)
+    _csignature(_libCG.CGWarpMouseCursorPosition, CGError_t, CGPoint_t)
 
-kCGBitmapByteOrderDefault  = 0 << 12
-kCGBitmapByteOrder16Little = 1 << 12
-kCGBitmapByteOrder32Little = 2 << 12
-kCGBitmapByteOrder16Big    = 3 << 12
-kCGBitmapByteOrder32Big    = 4 << 12
-kCGBitmapByteOrderMask     = 7 << 12
+_libCT = get_lib('CoreText')
+if _libCT:
+    # CoreText constants
+    kCTFontAttributeName       = _dllattr(_libCT, kCTFontAttributeName=c_void_p)
+    kCTFontFamilyNameAttribute = _dllattr(_libCT, kCTFontFamilyNameAttribute=c_void_p)
+    kCTFontTraitsAttribute     = _dllattr(_libCT, kCTFontTraitsAttribute=c_void_p)
 
-# /System/Library/Frameworks/ApplicationServices.framework/Frameworks/...
-#  ImageIO.framework/Headers/CGImageProperties.h
-try:  # missing in 12.0.1 macOS Monterey
-    kCGImagePropertyGIFDictionary = _dllattr(libCG, kCGImagePropertyGIFDictionary=c_void_p)
-    kCGImagePropertyGIFDelayTime  = _dllattr(libCG, kCGImagePropertyGIFDelayTime=c_void_p)
-except ValueError:
-    pass
-# /System/Library/Frameworks/ApplicationServices.framework/Frameworks/...
-#  CoreGraphics.framework/Headers/CGColorSpace.h
-kCGRenderingIntentDefault = 0
+    kCTFontSlantTrait          = _dllattr(_libCT, kCTFontSlantTrait=c_void_p)  # traits dict key -> -1.0..+1.0
+    kCTFontSymbolicTrait       = _dllattr(_libCT, kCTFontSymbolicTrait=c_void_p)  # traits dict key -> 0
+    kCTFontWeightTrait         = _dllattr(_libCT, kCTFontWeightTrait=c_void_p)  # traits dict key -> -1.0..+1.0
+    kCTFontWidthTrait          = _dllattr(_libCT, kCTFontWidthTrait=c_void_p)  # traits dict key -> -1.0..+1.0
 
-_csignature(libCG.CGAssociateMouseAndMouseCursorPosition, CGError_t, BOOL_t)
-_csignature(libCG.CGBitmapContextCreate, c_void_p, c_void_p, c_size_t, c_size_t, c_size_t, c_size_t, c_void_p, CGBitmapInfo_t)
-_csignature(libCG.CGBitmapContextCreateImage, c_void_p, c_void_p)
-_csignature(libCG.CGColorSpaceCreateDeviceRGB, c_void_p)
-_csignature(libCG.CGColorSpaceRelease, c_void, c_void_p)
-_csignature(libCG.CGContextDrawImage, c_void, c_void_p, CGRect_t, c_void_p)
-_csignature(libCG.CGContextRelease, c_void, c_void_p)
-_csignature(libCG.CGContextSetShouldAntialias, c_void,c_void_p, BOOL_t)
-_csignature(libCG.CGContextSetTextPosition, c_void, c_void_p, CGFloat_t, CGFloat_t)
-_csignature(libCG.CGCursorIsVisible, BOOL_t)
-_csignature(libCG.CGDataProviderCopyData, c_void_p, c_void_p)
-_csignature(libCG.CGDataProviderCreateWithCFData, c_void_p, c_void_p)
-_csignature(libCG.CGDataProviderRelease, c_void, c_void_p)
-_csignature(libCG.CGDisplayBounds, CGRect_t, CGDirectDisplayID_t)
-_csignature(libCG.CGDisplayCapture, CGError_t, CGDirectDisplayID_t)
-_csignature(libCG.CGDisplayCopyAllDisplayModes, c_void_p, CGDirectDisplayID_t, c_void_p)
-_csignature(libCG.CGDisplayCopyDisplayMode, c_void_p, CGDirectDisplayID_t)
-_csignature(libCG.CGDisplayIDToOpenGLDisplayMask, c_uint32, c_uint32)
-_csignature(libCG.CGDisplayIsBuiltin, BOOL_t, CGDirectDisplayID_t)  # screenID, NSScreenNumber
-_csignature(libCG.CGDisplayModeCopyPixelEncoding, c_void_p, c_void_p)
-_csignature(libCG.CGDisplayModeGetHeight, c_size_t, c_void_p)
-_csignature(libCG.CGDisplayModeGetRefreshRate, c_double, c_void_p)
-_csignature(libCG.CGDisplayModeGetWidth, c_size_t, c_void_p)
-_csignature(libCG.CGDisplayModeRelease, c_void, c_void_p)
-_csignature(libCG.CGDisplayModeRetain, c_void_p, c_void_p)
-_csignature(libCG.CGDisplayMoveCursorToPoint, CGError_t, CGDirectDisplayID_t, CGPoint_t)
-_csignature(libCG.CGDisplayRelease, CGError_t, CGDirectDisplayID_t)
-_csignature(libCG.CGDisplaySetDisplayMode, CGError_t, CGDirectDisplayID_t, c_void_p, c_void_p)
-_csignature(libCG.CGFontCreateWithDataProvider, c_void_p, c_void_p)
-_csignature(libCG.CGFontCreateWithFontName, c_void_p, c_void_p)
-_csignature(libCG.CGGetActiveDisplayList, CGError_t, c_uint32, POINTER(CGDirectDisplayID_t), POINTER(c_uint32))
-_csignature(libCG.CGGetOnlineDisplayList, CGError_t, c_uint32, POINTER(CGDirectDisplayID_t), POINTER(c_uint32))
-_csignature(libCG.CGImageCreate, c_void_p, c_size_t, c_size_t, c_size_t, c_size_t, c_size_t, c_void_p, c_uint32, c_void_p, c_void_p, BOOL_t, c_int)
-_csignature(libCG.CGImageGetBitmapInfo, CGBitmapInfo_t, c_void_p)
-_csignature(libCG.CGImageGetBitsPerPixel, c_size_t, c_void_p)
-_csignature(libCG.CGImageGetBytesPerRow, c_size_t, c_void_p)
-_csignature(libCG.CGImageGetDataProvider, c_void_p, c_void_p)
-_csignature(libCG.CGImageGetHeight, c_size_t, c_void_p)
-_csignature(libCG.CGImageGetWidth, c_size_t, c_void_p)
-_csignature(libCG.CGImageRelease, c_void, c_void_p)
-try:  # missing in 12.0.1 macOS Monterey
-    _csignature(libCG.CGImageSourceCopyPropertiesAtIndex, c_void_p, c_void_p, c_size_t, c_void_p)
-    _csignature(libCG.CGImageSourceCreateImageAtIndex, c_void_p, c_void_p, c_size_t, c_void_p)
-    _csignature(libCG.CGImageSourceCreateWithData, c_void_p, c_void_p, c_void_p)
-except AttributeError:
-    pass
-_csignature(libCG.CGMainDisplayID, CGDirectDisplayID_t)
-_csignature(libCG.CGShieldingWindowLevel, c_int32)
-_csignature(libCG.CGWarpMouseCursorPosition, CGError_t, CGPoint_t)
-
-# CORETEXT
-libCT = get_lib('CoreText')
-
-# CoreText constants
-kCTFontAttributeName       = _dllattr(libCT, kCTFontAttributeName=c_void_p)
-kCTFontFamilyNameAttribute = _dllattr(libCT, kCTFontFamilyNameAttribute=c_void_p)
-kCTFontTraitsAttribute     = _dllattr(libCT, kCTFontTraitsAttribute=c_void_p)
-
-kCTFontSlantTrait          = _dllattr(libCT, kCTFontSlantTrait=c_void_p)  # traits dict key -> -1.0..+1.0
-kCTFontSymbolicTrait       = _dllattr(libCT, kCTFontSymbolicTrait=c_void_p)  # traits dict key -> 0
-kCTFontWeightTrait         = _dllattr(libCT, kCTFontWeightTrait=c_void_p)  # traits dict key -> -1.0..+1.0
-kCTFontWidthTrait          = _dllattr(libCT, kCTFontWidthTrait=c_void_p)  # traits dict key -> -1.0..+1.0
+    _csignature(_libCT.CTFontCreateWithGraphicsFont, c_void_p, c_void_p, CGFloat_t, c_void_p, c_void_p)
+    _csignature(_libCT.CTFontCopyFamilyName, c_void_p, c_void_p)
+    _csignature(_libCT.CTFontCopyFullName, c_void_p, c_void_p)
+    _csignature(_libCT.CTLineCreateWithAttributedString, c_void_p, c_void_p)
+    _csignature(_libCT.CTFontCreateWithFontDescriptor, c_void_p, c_void_p, CGFloat_t, c_void_p)
+    _csignature(_libCT.CTFontDescriptorCreateWithAttributes, c_void_p, c_void_p)
+    _csignature(_libCT.CTFontGetBoundingRectsForGlyphs, CGRect_t, c_void_p, CTFontOrientation_t, POINTER(CGGlyph_t), POINTER(CGRect_t), CFIndex_t)
+    _csignature(_libCT.CTFontGetAdvancesForGlyphs, c_double, c_void_p, CTFontOrientation_t, POINTER(CGGlyph_t), POINTER(CGSize_t), CFIndex_t)
+    _csignature(_libCT.CTFontGetAscent, CGFloat_t, c_void_p)
+    _csignature(_libCT.CTFontGetDescent, CGFloat_t, c_void_p)
+    _csignature(_libCT.CTFontGetGlyphsForCharacters, BOOL_t, c_void_p, POINTER(UniChar_t), POINTER(CGGlyph_t), CFIndex_t)
+    _csignature(_libCT.CTFontGetSymbolicTraits, CTFontSymbolicTraits_t, c_void_p)
+    _csignature(_libCT.CTLineDraw, c_void, c_void_p, c_void_p)
 
 # constants from CTFontTraits.h
 kCTFontClassMaskShift = 28
@@ -963,259 +969,242 @@ kCTFontClassScripts            = NSFontScriptsClass            = 10 << kCTFontCl
 kCTFontClassSymbolic           = NSFontSymbolicClass           = 12 << kCTFontClassMaskShift
 kCTFontClassMaskTrait          = NSFontClassMask               = 15 << kCTFontClassMaskShift
 
-_csignature(libCT.CTFontCreateWithGraphicsFont, c_void_p, c_void_p, CGFloat_t, c_void_p, c_void_p)
-_csignature(libCT.CTFontCopyFamilyName, c_void_p, c_void_p)
-_csignature(libCT.CTFontCopyFullName, c_void_p, c_void_p)
-_csignature(libCT.CTLineCreateWithAttributedString, c_void_p, c_void_p)
-_csignature(libCT.CTFontCreateWithFontDescriptor, c_void_p, c_void_p, CGFloat_t, c_void_p)
-_csignature(libCT.CTFontDescriptorCreateWithAttributes, c_void_p, c_void_p)
-_csignature(libCT.CTFontGetBoundingRectsForGlyphs, CGRect_t, c_void_p, CTFontOrientation_t, POINTER(CGGlyph_t), POINTER(CGRect_t), CFIndex_t)
-_csignature(libCT.CTFontGetAdvancesForGlyphs, c_double, c_void_p, CTFontOrientation_t, POINTER(CGGlyph_t), POINTER(CGSize_t), CFIndex_t)
-_csignature(libCT.CTFontGetAscent, CGFloat_t, c_void_p)
-_csignature(libCT.CTFontGetDescent, CGFloat_t, c_void_p)
-_csignature(libCT.CTFontGetGlyphsForCharacters, BOOL_t, c_void_p, POINTER(UniChar_t), POINTER(CGGlyph_t), CFIndex_t)
-_csignature(libCT.CTFontGetSymbolicTraits, CTFontSymbolicTraits_t, c_void_p)
-_csignature(libCT.CTLineDraw, c_void, c_void_p, c_void_p)
+_libFoundation = get_lib('Foundation')
+if _libFoundation:
+    _csignature_variadic(_libFoundation.NSLog, c_void, c_char_p)  # ... like printf(format, ...)
+    _csignature(_libFoundation.NSMouseInRect, BOOL_t, CGPoint_t, CGRect_t, BOOL_t)  # CORETEXT  flipped=NO
 
-# FOUNDATION
-libFoundation = get_lib('Foundation')
 
-_csignature_variadic(libFoundation.NSLog, c_void, c_char_p)  # ... like printf(format, ...)
-_csignature(libFoundation.NSMouseInRect, BOOL_t, CGPoint_t, CGRect_t, BOOL_t)  # CORETEXT  flipped=NO
+_libObjC = get_lib('libobjc')
+if _libObjC:
+    # BOOL class_addIvar(Class_t cls, const char *name, size_t size, uint8_t alignment, const char *types)
+    _csignature(_libObjC.class_addIvar, BOOL_t, Class_t, c_char_p, c_size_t, c_uint8, c_char_p)
+    # BOOL class_addMethod(Class_t cls, SEL_t name, IMP_t imp, const char *types)
+    _csignature(_libObjC.class_addMethod, BOOL_t, Class_t, SEL_t, IMP_t, c_char_p)
+    # BOOL class_addProtocol(Class_t cls, Protocol_t *protocol)
+    _csignature(_libObjC.class_addProtocol, BOOL_t, Class_t, Protocol_t)
+    # BOOL class_conformsToProtocol(Class_t cls, Protocol_t *protocol)
+    _csignature(_libObjC.class_conformsToProtocol, BOOL_t, Class_t, Protocol_t)
+    # Ivar_t *class_copyIvarList(Class_t cls, unsigned int *outCount)
+    # Returns an array of pointers of type Ivar_t describing instance variables.
+    # The array has *outCount pointers, NULL terminated.  You must free() the returned array!
+    _csignature_list(_libObjC.class_copyIvarList, POINTER(Ivar_t), Class_t, POINTER(c_uint))
+    # Method_t *class_copyMethodList(Class_t cls, unsigned int *outCount)
+    # Returns an array of pointers of type Method_t describing instance methods.
+    # The array has *outCount pointers, NULL terminated.  You must free() the returned array!
+    _csignature_list(_libObjC.class_copyMethodList, POINTER(Method_t), Class_t, POINTER(c_uint))
+    # objc_property_t *class_copyPropertyList(Class_t cls, unsigned int *outCount)
+    # Returns an array of pointers of type objc_property_t describing properties.
+    # The array has *outCount pointers, NULL terminated.  You must free() the returned array!
+    _csignature_list(_libObjC.class_copyPropertyList, POINTER(objc_property_t), Class_t, POINTER(c_uint))
+    # Protocol_t **class_copyProtocolList(Class_t cls, unsigned int *outCount)
+    # Returns an array of pointers of type Protocol_t* describing protocols.
+    # The array has *outCount pointers, NULL terminated.  You must free() the returned array!
+    _csignature_list(_libObjC.class_copyProtocolList, POINTER(Protocol_t), Class_t, POINTER(c_uint))
+    # Id_t class_createInstance(Class_t cls, size_t extraBytes)
+    _csignature(_libObjC.class_createInstance, Id_t, Class_t, c_size_t)
+    # Method_t class_getClassMethod(Class_t aClass, SEL_t aSelector)
+    # Will also search superclass for implementations.
+    _csignature(_libObjC.class_getClassMethod, Method_t, Class_t, SEL_t)
+    # Ivar_t class_getClassVariable(Class_t cls, const char* name)
+    _csignature(_libObjC.class_getClassVariable, Ivar_t, Class_t, c_char_p)
+    # Method_t class_getInstanceMethod(Class_t aClass, SEL_t aSelector)
+    # Will also search superclass for implementations.
+    _csignature(_libObjC.class_getInstanceMethod, Method_t, Class_t, SEL_t)
+    # size_t class_getInstanceSize(Class_t cls)
+    _csignature(_libObjC.class_getInstanceSize, c_size_t, Class_t)
+    # Ivar_t class_getInstanceVariable(Class_t cls, const char* name)
+    _csignature(_libObjC.class_getInstanceVariable, Ivar_t, Class_t, c_char_p)
+    # const char *class_getIvarLayout(Class_t cls)
+    _csignature(_libObjC.class_getIvarLayout, c_char_p, Class_t)
+    # IMP_t class_getMethodImplementation(Class_t cls, SEL_t name)
+    _csignature(_libObjC.class_getMethodImplementation, IMP_t, Class_t, SEL_t)
+    # IMP_t class_getMethodImplementation_stret(Class_t cls, SEL_t name)
+    # M1 _csignature(_libObjC.class_getMethodImplementation_stret, IMP_t, Class_t, SEL_t)
+    # const char *class_getName(Class_t cls)
+    _csignature(_libObjC.class_getName, c_char_p, Class_t)
+    # objc_property_t class_getProperty(Class_t cls, const char *name)
+    _csignature(_libObjC.class_getProperty, objc_property_t, Class_t, c_char_p)
+    # Class_t class_getSuperclass(Class_t cls)
+    _csignature(_libObjC.class_getSuperclass, Class_t, Class_t)
+    # int class_getVersion(Class_t theClass)
+    _csignature(_libObjC.class_getVersion, c_int, Class_t)
+    # const char *class_getWeakIvarLayout(Class_t cls)
+    _csignature(_libObjC.class_getWeakIvarLayout, c_char_p, Class_t)
+    # BOOL class_isMetaClass(Class_t cls)
+    _csignature(_libObjC.class_isMetaClass, BOOL_t, Class_t)
+    # IMP_t class_replaceMethod(Class_t cls, SEL_t name, IMP_t imp, const char *types)
+    _csignature(_libObjC.class_replaceMethod, IMP_t, Class_t, SEL_t, IMP_t, c_char_p)
+    # BOOL class_respondsToSelector(Class_t cls, SEL_t sel)
+    _csignature(_libObjC.class_respondsToSelector, BOOL_t, Class_t, SEL_t)
+    # void class_setIvarLayout(Class_t cls, const char *layout)
+    _csignature(_libObjC.class_setIvarLayout, c_void, Class_t, c_char_p)
+    # Class_t class_setSuperclass(Class_t cls, Class_t newSuper)
+    _csignature(_libObjC.class_setSuperclass, Class_t, Class_t, Class_t)
+    # void class_setVersion(Class_t theClass, int version)
+    _csignature(_libObjC.class_setVersion, c_void, Class_t, c_int)
+    # void class_setWeakIvarLayout(Class_t cls, const char *layout)
+    _csignature(_libObjC.class_setWeakIvarLayout, c_void, Class_t, c_char_p)
 
-# OBJECTIVE-C
-libobjc = get_lib('libobjc')
+    # const char *ivar_getName(Ivar_t ivar)
+    _csignature(_libObjC.ivar_getName, c_char_p, Ivar_t)
+    # ptrdiff_t ivar_getOffset(Ivar_t ivar)
+    _csignature(_libObjC.ivar_getOffset, c_ptrdiff_t, Ivar_t)
+    # const char *ivar_getTypeEncoding(Ivar_t ivar)
+    _csignature(_libObjC.ivar_getTypeEncoding, c_char_p, Ivar_t)
 
-# BOOL class_addIvar(Class_t cls, const char *name, size_t size, uint8_t alignment, const char *types)
-_csignature(libobjc.class_addIvar, BOOL_t, Class_t, c_char_p, c_size_t, c_uint8, c_char_p)
-# BOOL class_addMethod(Class_t cls, SEL_t name, IMP_t imp, const char *types)
-_csignature(libobjc.class_addMethod, BOOL_t, Class_t, SEL_t, IMP_t, c_char_p)
-# BOOL class_addProtocol(Class_t cls, Protocol_t *protocol)
-_csignature(libobjc.class_addProtocol, BOOL_t, Class_t, Protocol_t)
-# BOOL class_conformsToProtocol(Class_t cls, Protocol_t *protocol)
-_csignature(libobjc.class_conformsToProtocol, BOOL_t, Class_t, Protocol_t)
-# Ivar_t *class_copyIvarList(Class_t cls, unsigned int *outCount)
-# Returns an array of pointers of type Ivar_t describing instance variables.
-# The array has *outCount pointers, NULL terminated.  You must free() the returned array!
-_csignature_list(libobjc.class_copyIvarList, POINTER(Ivar_t), Class_t, POINTER(c_uint))
-# Method_t *class_copyMethodList(Class_t cls, unsigned int *outCount)
-# Returns an array of pointers of type Method_t describing instance methods.
-# The array has *outCount pointers, NULL terminated.  You must free() the returned array!
-_csignature_list(libobjc.class_copyMethodList, POINTER(Method_t), Class_t, POINTER(c_uint))
-# objc_property_t *class_copyPropertyList(Class_t cls, unsigned int *outCount)
-# Returns an array of pointers of type objc_property_t describing properties.
-# The array has *outCount pointers, NULL terminated.  You must free() the returned array!
-_csignature_list(libobjc.class_copyPropertyList, POINTER(objc_property_t), Class_t, POINTER(c_uint))
-# Protocol_t **class_copyProtocolList(Class_t cls, unsigned int *outCount)
-# Returns an array of pointers of type Protocol_t* describing protocols.
-# The array has *outCount pointers, NULL terminated.  You must free() the returned array!
-_csignature_list(libobjc.class_copyProtocolList, POINTER(Protocol_t), Class_t, POINTER(c_uint))
-# Id_t class_createInstance(Class_t cls, size_t extraBytes)
-_csignature(libobjc.class_createInstance, Id_t, Class_t, c_size_t)
-# Method_t class_getClassMethod(Class_t aClass, SEL_t aSelector)
-# Will also search superclass for implementations.
-_csignature(libobjc.class_getClassMethod, Method_t, Class_t, SEL_t)
-# Ivar_t class_getClassVariable(Class_t cls, const char* name)
-_csignature(libobjc.class_getClassVariable, Ivar_t, Class_t, c_char_p)
-# Method_t class_getInstanceMethod(Class_t aClass, SEL_t aSelector)
-# Will also search superclass for implementations.
-_csignature(libobjc.class_getInstanceMethod, Method_t, Class_t, SEL_t)
-# size_t class_getInstanceSize(Class_t cls)
-_csignature(libobjc.class_getInstanceSize, c_size_t, Class_t)
-# Ivar_t class_getInstanceVariable(Class_t cls, const char* name)
-_csignature(libobjc.class_getInstanceVariable, Ivar_t, Class_t, c_char_p)
-# const char *class_getIvarLayout(Class_t cls)
-_csignature(libobjc.class_getIvarLayout, c_char_p, Class_t)
-# IMP_t class_getMethodImplementation(Class_t cls, SEL_t name)
-_csignature(libobjc.class_getMethodImplementation, IMP_t, Class_t, SEL_t)
-# IMP_t class_getMethodImplementation_stret(Class_t cls, SEL_t name)
-# M1 _csignature(libobjc.class_getMethodImplementation_stret, IMP_t, Class_t, SEL_t)
-# const char *class_getName(Class_t cls)
-_csignature(libobjc.class_getName, c_char_p, Class_t)
-# objc_property_t class_getProperty(Class_t cls, const char *name)
-_csignature(libobjc.class_getProperty, objc_property_t, Class_t, c_char_p)
-# Class_t class_getSuperclass(Class_t cls)
-_csignature(libobjc.class_getSuperclass, Class_t, Class_t)
-# int class_getVersion(Class_t theClass)
-_csignature(libobjc.class_getVersion, c_int, Class_t)
-# const char *class_getWeakIvarLayout(Class_t cls)
-_csignature(libobjc.class_getWeakIvarLayout, c_char_p, Class_t)
-# BOOL class_isMetaClass(Class_t cls)
-_csignature(libobjc.class_isMetaClass, BOOL_t, Class_t)
-# IMP_t class_replaceMethod(Class_t cls, SEL_t name, IMP_t imp, const char *types)
-_csignature(libobjc.class_replaceMethod, IMP_t, Class_t, SEL_t, IMP_t, c_char_p)
-# BOOL class_respondsToSelector(Class_t cls, SEL_t sel)
-_csignature(libobjc.class_respondsToSelector, BOOL_t, Class_t, SEL_t)
-# void class_setIvarLayout(Class_t cls, const char *layout)
-_csignature(libobjc.class_setIvarLayout, c_void, Class_t, c_char_p)
-# Class_t class_setSuperclass(Class_t cls, Class_t newSuper)
-_csignature(libobjc.class_setSuperclass, Class_t, Class_t, Class_t)
-# void class_setVersion(Class_t theClass, int version)
-_csignature(libobjc.class_setVersion, c_void, Class_t, c_int)
-# void class_setWeakIvarLayout(Class_t cls, const char *layout)
-_csignature(libobjc.class_setWeakIvarLayout, c_void, Class_t, c_char_p)
+    # char *method_copyArgumentType(Method_t method, unsigned int index).
+    # You must free() the returned string!
+    _csignature_str(_libObjC.method_copyArgumentType, c_char_p, Method_t, c_uint)
+    # char *method_copyReturnType(Method_t method).
+    # You must free() the returned string, but can't despite the documentation
+    # https://Developer.Apple.com/documentation/objectivec/1418777-method_copyreturntype
+    _csignature(_libObjC.method_copyReturnType, c_char_p, Method_t)
+    # void method_exchangeImplementations(Method_t m1, Method_t m2)
+    _csignature(_libObjC.method_exchangeImplementations, c_void, Method_t, Method_t)
+    # void method_getArgumentType(Method_t method, unsigned int index, char *dst, size_t dst_len)
+    # Functionally similar to strncpy(dst, parameter_type, dst_len).
+    _csignature(_libObjC.method_getArgumentType, c_void, Method_t, c_uint, c_char_p, c_size_t)
+    # IMP_t method_getImplementation(Method_t method)
+    _csignature(_libObjC.method_getImplementation, IMP_t, Method_t)
+    # SEL_t method_getName(Method_t method)
+    _csignature(_libObjC.method_getName, SEL_t, Method_t)
+    # unsigned method_getNumberOfArguments(Method_t method)
+    _csignature(_libObjC.method_getNumberOfArguments, c_uint, Method_t)
+    # void method_getReturnType(Method_t method, char *dst, size_t dst_len)
+    # Functionally similar to strncpy(dst, return_type, dst_len)
+    _csignature(_libObjC.method_getReturnType, c_void, Method_t, c_char_p, c_size_t)
+    # const char *method_getTypeEncoding(Method_t method)
+    _csignature(_libObjC.method_getTypeEncoding, c_char_p, Method_t)
+    # IMP_t method_setImplementation(Method_t method, IMP_t imp)
+    _csignature(_libObjC.method_setImplementation, IMP_t, Method_t, IMP_t)
 
-# const char *ivar_getName(Ivar_t ivar)
-_csignature(libobjc.ivar_getName, c_char_p, Ivar_t)
-# ptrdiff_t ivar_getOffset(Ivar_t ivar)
-_csignature(libobjc.ivar_getOffset, c_ptrdiff_t, Ivar_t)
-# const char *ivar_getTypeEncoding(Ivar_t ivar)
-_csignature(libobjc.ivar_getTypeEncoding, c_char_p, Ivar_t)
+    # Class_t objc_allocateClassPair(Class_t superclass, const char *name, size_t extraBytes)
+    _csignature(_libObjC.objc_allocateClassPair, Class_t, Class_t, c_char_p, c_size_t)
+    # void objc_registerClassPair(Class_t cls)
+    _csignature(_libObjC.objc_registerClassPair, c_void, Class_t)
 
-# char *method_copyArgumentType(Method_t method, unsigned int index).
-# You must free() the returned string!
-_csignature_str(libobjc.method_copyArgumentType, c_char_p, Method_t, c_uint)
-# char *method_copyReturnType(Method_t method).
-# You must free() the returned string, but can't despite the documentation
-# https://Developer.Apple.com/documentation/objectivec/1418777-method_copyreturntype
-_csignature(libobjc.method_copyReturnType, c_char_p, Method_t)
-# void method_exchangeImplementations(Method_t m1, Method_t m2)
-_csignature(libobjc.method_exchangeImplementations, c_void, Method_t, Method_t)
-# void method_getArgumentType(Method_t method, unsigned int index, char *dst, size_t dst_len)
-# Functionally similar to strncpy(dst, parameter_type, dst_len).
-_csignature(libobjc.method_getArgumentType, c_void, Method_t, c_uint, c_char_p, c_size_t)
-# IMP_t method_getImplementation(Method_t method)
-_csignature(libobjc.method_getImplementation, IMP_t, Method_t)
-# SEL_t method_getName(Method_t method)
-_csignature(libobjc.method_getName, SEL_t, Method_t)
-# unsigned method_getNumberOfArguments(Method_t method)
-_csignature(libobjc.method_getNumberOfArguments, c_uint, Method_t)
-# void method_getReturnType(Method_t method, char *dst, size_t dst_len)
-# Functionally similar to strncpy(dst, return_type, dst_len)
-_csignature(libobjc.method_getReturnType, c_void, Method_t, c_char_p, c_size_t)
-# const char *method_getTypeEncoding(Method_t method)
-_csignature(libobjc.method_getTypeEncoding, c_char_p, Method_t)
-# IMP_t method_setImplementation(Method_t method, IMP_t imp)
-_csignature(libobjc.method_setImplementation, IMP_t, Method_t, IMP_t)
+    # Protocol_t **objc_copyProtocolList(unsigned int *outCount)
+    # Returns an array of *outcount pointers NULL terminated.  You must free() the array!
+    _csignature_list(_libObjC.objc_copyProtocolList, POINTER(Protocol_t), POINTER(c_uint))
 
-# Class_t objc_allocateClassPair(Class_t superclass, const char *name, size_t extraBytes)
-_csignature(libobjc.objc_allocateClassPair, Class_t, Class_t, c_char_p, c_size_t)
-# void objc_registerClassPair(Class_t cls)
-_csignature(libobjc.objc_registerClassPair, c_void, Class_t)
+    # Id_t objc_getAssociatedObject(Id_t object, void *key)
+    _csignature(_libObjC.objc_getAssociatedObject, Id_t, Id_t, c_void_p)
+    # void objc_removeAssociatedObjects(Id_t object)
+    _csignature(_libObjC.objc_removeAssociatedObjects, c_void, Id_t)
+    # void objc_setAssociatedObject(Id_t object, void *key, Id_t value, objc_AssociationPolicy policy)
+    _csignature(_libObjC.objc_setAssociatedObject, c_void, Id_t, c_void_p, Id_t, c_int)
 
-# Protocol_t **objc_copyProtocolList(unsigned int *outCount)
-# Returns an array of *outcount pointers NULL terminated.  You must free() the array!
-_csignature_list(libobjc.objc_copyProtocolList, POINTER(Protocol_t), POINTER(c_uint))
+    # Class_t objc_getClass(const char *name)
+    _csignature(_libObjC.objc_getClass, Class_t, c_char_p)
+    # int objc_getClassList(Class_t *buffer, int bufferLen)
+    # Pass C{None} for buffer to obtain just the total number of classes.
+    _csignature(_libObjC.objc_getClassList, c_int, Class_t, c_int)
+    # Class_t objc_getMetaClass(const char *name)
+    _csignature(_libObjC.objc_getMetaClass, Class_t, c_char_p)
+    # Protocol_t *objc_getProtocol(const char *name)
+    _csignature(_libObjC.objc_getProtocol, Protocol_t, c_char_p)
 
-# Id_t objc_getAssociatedObject(Id_t object, void *key)
-_csignature(libobjc.objc_getAssociatedObject, Id_t, Id_t, c_void_p)
-# void objc_removeAssociatedObjects(Id_t object)
-_csignature(libobjc.objc_removeAssociatedObjects, c_void, Id_t)
-# void objc_setAssociatedObject(Id_t object, void *key, Id_t value, objc_AssociationPolicy policy)
-_csignature(libobjc.objc_setAssociatedObject, c_void, Id_t, c_void_p, Id_t, c_int)
+    # You must set return and argument types depending on context.
+    # Id_t objc_msgSend(Id_t theReceiver, SEL_t theSelector, ...)
+    _csignature(_libObjC.objc_msgSend, Id_t, Id_t, SEL_t)
+    # Id_t objc_msgSendSuper(struct objc_super_t *super, SEL_t op, ...)
+    _csignature(_libObjC.objc_msgSendSuper, Id_t, c_void_p, SEL_t)
+    if __i386__ or __x86_64__:  # only for Intel processor
+        # double objc_msgSend_fpret(Id_t self, SEL_t op, ...)
+        _csignature(_libObjC.objc_msgSend_fpret, c_float, Id_t, SEL_t)  # c_float, c_longdouble
+        # void objc_msgSend_stret(void *stretAddr, Id_t theReceiver, SEL_t theSelector,  ...)
+        _csignature(_libObjC.objc_msgSend_stret, c_void, c_void_p, Id_t, SEL_t)
+        # void objc_msgSendSuper_stret(struct objc_super_t *super, SEL_t op, ...)
+        _csignature(_libObjC.objc_msgSendSuper_stret, c_void, c_void_p, SEL_t)
 
-# Class_t objc_getClass(const char *name)
-_csignature(libobjc.objc_getClass, Class_t, c_char_p)
-# int objc_getClassList(Class_t *buffer, int bufferLen)
-# Pass C{None} for buffer to obtain just the total number of classes.
-_csignature(libobjc.objc_getClassList, c_int, Class_t, c_int)
-# Class_t objc_getMetaClass(const char *name)
-_csignature(libobjc.objc_getMetaClass, Class_t, c_char_p)
-# Protocol_t *objc_getProtocol(const char *name)
-_csignature(libobjc.objc_getProtocol, Protocol_t, c_char_p)
+    # Id_t object_copy(Id_t obj, size_t size)
+    _csignature(_libObjC.object_copy, Id_t, Id_t, c_size_t)
+    # Id_t object_dispose(Id_t obj)
+    _csignature(_libObjC.object_dispose, Id_t, Id_t)
+    # Class_t object_getClass(Id_t object)
+    _csignature(_libObjC.object_getClass, Class_t, Id_t)
+    # const char *object_getClassName(Id_t obj)
+    _csignature(_libObjC.object_getClassName, c_char_p, Id_t)
+    # Ivar_t object_getInstanceVariable(Id_t obj, const char *name, void **outValue)
+    _csignature(_libObjC.object_getInstanceVariable, Ivar_t, Id_t, c_char_p, c_void_p)
+    # Id_t object_getIvar(Id_t object, Ivar_t ivar)
+    _csignature(_libObjC.object_getIvar, Id_t, Id_t, Ivar_t)
+    # Class_t object_setClass(Id_t object, Class_t cls)
+    _csignature(_libObjC.object_setClass, c_void_p, c_void_p, c_void_p)
+    # Ivar_t object_setInstanceVariable(Id_t obj, const char *name, void *value)
+    # Set argtypes based on the data type of the instance variable, see .runtime.set_ivar
+    _csignature(_libObjC.object_setInstanceVariable, Ivar_t, Id_t, c_char_p, c_void_p)
+    # void object_setIvar(Id_t object, Ivar_t ivar, Id_t value)
+    _csignature(_libObjC.object_setIvar, c_void, Id_t, Ivar_t, Id_t)
 
-# You must set return and argument types depending on context.
-# Id_t objc_msgSend(Id_t theReceiver, SEL_t theSelector, ...)
-_csignature(libobjc.objc_msgSend, Id_t, Id_t, SEL_t)
-# Id_t objc_msgSendSuper(struct objc_super_t *super, SEL_t op, ...)
-_csignature(libobjc.objc_msgSendSuper, Id_t, c_void_p, SEL_t)
-if __i386__ or __x86_64__:  # only for Intel processor
-    # double objc_msgSend_fpret(Id_t self, SEL_t op, ...)
-    _csignature(libobjc.objc_msgSend_fpret, c_float, Id_t, SEL_t)  # c_float, c_longdouble
-    # void objc_msgSend_stret(void *stretAddr, Id_t theReceiver, SEL_t theSelector,  ...)
-    _csignature(libobjc.objc_msgSend_stret, c_void, c_void_p, Id_t, SEL_t)
-    # void objc_msgSendSuper_stret(struct objc_super_t *super, SEL_t op, ...)
-    _csignature(libobjc.objc_msgSendSuper_stret, c_void, c_void_p, SEL_t)
+    # void objc_startCollectorThread(void)
+    _csignature(_libObjC.objc_startCollectorThread, c_void)
 
-# Id_t object_copy(Id_t obj, size_t size)
-_csignature(libobjc.object_copy, Id_t, Id_t, c_size_t)
-# Id_t object_dispose(Id_t obj)
-_csignature(libobjc.object_dispose, Id_t, Id_t)
-# Class_t object_getClass(Id_t object)
-_csignature(libobjc.object_getClass, Class_t, Id_t)
-# const char *object_getClassName(Id_t obj)
-_csignature(libobjc.object_getClassName, c_char_p, Id_t)
-# Ivar_t object_getInstanceVariable(Id_t obj, const char *name, void **outValue)
-_csignature(libobjc.object_getInstanceVariable, Ivar_t, Id_t, c_char_p, c_void_p)
-# Id_t object_getIvar(Id_t object, Ivar_t ivar)
-_csignature(libobjc.object_getIvar, Id_t, Id_t, Ivar_t)
-# Class_t object_setClass(Id_t object, Class_t cls)
-_csignature(libobjc.object_setClass, c_void_p, c_void_p, c_void_p)
-# Ivar_t object_setInstanceVariable(Id_t obj, const char *name, void *value)
-# Set argtypes based on the data type of the instance variable, see .runtime.set_ivar
-_csignature(libobjc.object_setInstanceVariable, Ivar_t, Id_t, c_char_p, c_void_p)
-# void object_setIvar(Id_t object, Ivar_t ivar, Id_t value)
-_csignature(libobjc.object_setIvar, c_void, Id_t, Ivar_t, Id_t)
+    # objc_property_attribute_t *property_copyAttributeList(objc_property_t property, unsigned int *outCount)
+    # Returns an array of pointers of type objc_property_attribute_t* describing property attributes.
+    # The array has *outCount pointers, NULL terminated.  You must free() the returned array!
+    _csignature_list(_libObjC.property_copyAttributeList, POINTER(objc_property_attribute_t), objc_property_t, POINTER(c_uint))
+    # const char *property_getAttributes(objc_property_t property)
+    _csignature(_libObjC.property_getAttributes, c_char_p, objc_property_t)
+    # const char *property_getName(objc_property_t property)
+    _csignature(_libObjC.property_getName, c_char_p, objc_property_t)
 
-# void objc_startCollectorThread(void)
-_csignature(libobjc.objc_startCollectorThread, c_void)
+    # void protocol_addMethodDescription(Protocol_t *proto, SEL_t name, const char *types,
+    #                                    BOOL isRequiredMethod, BOOL isInstanceMethod)
+    _csignature(_libObjC.protocol_addMethodDescription, c_void, Protocol_t, SEL_t, c_char_p, BOOL_t, BOOL_t)
+    # void protocol_addProperty(Protocol_t *proto, const char *name, const objc_property_attribute_t *attributes,
+    #                           unsigned int attributeCount, BOOL isRequiredProperty, BOOL isInstanceProperty)
+    _csignature(_libObjC.protocol_addProperty, c_void, Protocol_t, c_char_p, POINTER(objc_property_attribute_t), c_uint, BOOL_t, BOOL_t)
+    # void protocol_addProtocol(Protocol_t *proto, Protocol_t *addition)
+    _csignature(_libObjC.protocol_addProtocol, c_void, Protocol_t, Protocol_t)
+    # Protocol_t *objc_allocateProtocol(const char *name)
+    _csignature(_libObjC.objc_allocateProtocol, Protocol_t, c_char_p)
+    # BOOL protocol_conformsToProtocol(Protocol_t *proto, Protocol_t *other)
+    _csignature(_libObjC.protocol_conformsToProtocol, BOOL_t, Protocol_t, Protocol_t)
+    # struct objc_method_description_t *protocol_copyMethodDescriptionList(Protocol_t *p, BOOL isRequiredMethod,
+    #                                   BOOL isInstanceMethod, unsigned int *outCount).  You must free() the returned array!
+    _csignature_list(_libObjC.protocol_copyMethodDescriptionList, POINTER(objc_method_description_t), Protocol_t, BOOL_t, BOOL_t, POINTER(c_uint))
+    # objc_property_t *protocol_copyPropertyList(Protocol_t *protocol, unsigned int *outCount)
+    _csignature_list(_libObjC.protocol_copyPropertyList, POINTER(objc_property_t), Protocol_t, POINTER(c_uint))
+    # Protocol_t **protocol_copyProtocolList(Protocol_t *proto, unsigned int *outCount)
+    _csignature_list(_libObjC.protocol_copyProtocolList, POINTER(Protocol_t), Protocol_t, POINTER(c_uint))
+    # struct objc_method_description_t protocol_getMethodDescription(Protocol_t *p, SEL_t aSel, BOOL isRequiredMethod, BOOL isInstanceMethod)
+    _csignature(_libObjC.protocol_getMethodDescription, objc_method_description_t, Protocol_t, SEL_t, BOOL_t, BOOL_t)
+    # const char *protocol_getName(Protocol_t *p)
+    _csignature(_libObjC.protocol_getName, c_char_p, Protocol_t)
+    # void objc_registerProtocol(Protocol_t *proto)
+    _csignature(_libObjC.objc_registerProtocol, c_void, Protocol_t)
 
-# objc_property_attribute_t *property_copyAttributeList(objc_property_t property, unsigned int *outCount)
-# Returns an array of pointers of type objc_property_attribute_t* describing property attributes.
-# The array has *outCount pointers, NULL terminated.  You must free() the returned array!
-_csignature_list(libobjc.property_copyAttributeList, POINTER(objc_property_attribute_t), objc_property_t, POINTER(c_uint))
-# const char *property_getAttributes(objc_property_t property)
-_csignature(libobjc.property_getAttributes, c_char_p, objc_property_t)
-# const char *property_getName(objc_property_t property)
-_csignature(libobjc.property_getName, c_char_p, objc_property_t)
-
-# void protocol_addMethodDescription(Protocol_t *proto, SEL_t name, const char *types,
-#                                    BOOL isRequiredMethod, BOOL isInstanceMethod)
-_csignature(libobjc.protocol_addMethodDescription, c_void, Protocol_t, SEL_t, c_char_p, BOOL_t, BOOL_t)
-# void protocol_addProperty(Protocol_t *proto, const char *name, const objc_property_attribute_t *attributes,
-#                           unsigned int attributeCount, BOOL isRequiredProperty, BOOL isInstanceProperty)
-_csignature(libobjc.protocol_addProperty, c_void, Protocol_t, c_char_p, POINTER(objc_property_attribute_t), c_uint, BOOL_t, BOOL_t)
-# void protocol_addProtocol(Protocol_t *proto, Protocol_t *addition)
-_csignature(libobjc.protocol_addProtocol, c_void, Protocol_t, Protocol_t)
-# Protocol_t *objc_allocateProtocol(const char *name)
-_csignature(libobjc.objc_allocateProtocol, Protocol_t, c_char_p)
-# BOOL protocol_conformsToProtocol(Protocol_t *proto, Protocol_t *other)
-_csignature(libobjc.protocol_conformsToProtocol, BOOL_t, Protocol_t, Protocol_t)
-# struct objc_method_description_t *protocol_copyMethodDescriptionList(Protocol_t *p, BOOL isRequiredMethod,
-#                                   BOOL isInstanceMethod, unsigned int *outCount).  You must free() the returned array!
-_csignature_list(libobjc.protocol_copyMethodDescriptionList, POINTER(objc_method_description_t), Protocol_t, BOOL_t, BOOL_t, POINTER(c_uint))
-# objc_property_t *protocol_copyPropertyList(Protocol_t *protocol, unsigned int *outCount)
-_csignature_list(libobjc.protocol_copyPropertyList, POINTER(objc_property_t), Protocol_t, POINTER(c_uint))
-# Protocol_t **protocol_copyProtocolList(Protocol_t *proto, unsigned int *outCount)
-_csignature_list(libobjc.protocol_copyProtocolList, POINTER(Protocol_t), Protocol_t, POINTER(c_uint))
-# struct objc_method_description_t protocol_getMethodDescription(Protocol_t *p, SEL_t aSel, BOOL isRequiredMethod, BOOL isInstanceMethod)
-_csignature(libobjc.protocol_getMethodDescription, objc_method_description_t, Protocol_t, SEL_t, BOOL_t, BOOL_t)
-# const char *protocol_getName(Protocol_t *p)
-_csignature(libobjc.protocol_getName, c_char_p, Protocol_t)
-# void objc_registerProtocol(Protocol_t *proto)
-_csignature(libobjc.objc_registerProtocol, c_void, Protocol_t)
-
-# const char *sel_getName(SEL_t aSelector)
-_csignature(libobjc.sel_getName, c_char_p, SEL_t)
-# BOOL sel_isEqual(SEL_t lhs, SEL_t rhs)
-_csignature(libobjc.sel_isEqual, BOOL_t, SEL_t, SEL_t)
-# SEL_t sel_getUid(const char *str)
-# Use sel_registerName instead.
-# SEL_t sel_registerName(const char *str)
-_csignature(libobjc.sel_registerName, SEL_t, c_char_p)
+    # const char *sel_getName(SEL_t aSelector)
+    _csignature(_libObjC.sel_getName, c_char_p, SEL_t)
+    # BOOL sel_isEqual(SEL_t lhs, SEL_t rhs)
+    _csignature(_libObjC.sel_isEqual, BOOL_t, SEL_t, SEL_t)
+    # SEL_t sel_getUid(const char *str)
+    # Use sel_registerName instead.
+    # SEL_t sel_registerName(const char *str)
+    _csignature(_libObjC.sel_registerName, SEL_t, c_char_p)
 
 # VLC KIT
-# libVLCKit = get_lib('VLCKit')  # XXX not needed
+# _libVLCKit = get_lib('VLCKit')  # XXX not needed
 
+# callback to handle so-called uncaught ObjC exceptions from libc, different from
+# the _libAppKit.NSExceptionHandler, see for example <https://Developer.Apple.com/
+# documentation/exceptionhandling/nsexceptionhandler>.  DO NOT use the latter, for
+# an example see here <https://OpenSource.Apple.com/source/pyobjc/pyobjc-32/pyobjc/
+# pyobjc-framework-ExceptionHandling/Lib/PyObjCTools/Debugging.py.auto.html>.
+try:
+    _setUncaughtExceptionHandler = _libc.objc_setUncaughtExceptionHandler
+except AttributeError:  # macOS 12.0.1 Monterey
+    _setUncaughtExceptionHandler = _libAppKit.NSSetUncaughtExceptionHandler
+_UncaughtExceptionHandler_t = CFUNCTYPE(None, c_void_p)
+_csignature(_setUncaughtExceptionHandler, _UncaughtExceptionHandler_t, _UncaughtExceptionHandler_t)
 
-class Libs(_Constants):
-    '''The loaded C{macOS} libraries, all C{.dylib}.
-    '''
-    C              = _libc
-    AppKit         =  libAppKit
-    CoreFoundation =  libCF
-    CoreGraphics   =  libCG
-    CoreText       =  libCT
-    Foundation     =  libFoundation
-    ObjC           =  libobjc
-
-    def __init__(self):
-        for _, dy in self.items():
-            dy.__doc__ = _fmt('The %r library.', dy._name.rstrip(_DOT_))
-
-Libs = Libs()  # PYCHOK singleton
+Libs(C=_libc, ObjC=_libObjC, Quartz=_libCG)
 
 if __name__ == _Dmain_:
+
+    _ = get_lib_framework('PrintCore')
 
     import sys
     if '-dlllist' in sys.argv:
@@ -1238,30 +1227,21 @@ if __name__ == _Dmain_:
     else:
         from pycocoa.utils import _all_listing, _varstr
 
+        C = Libs.__class__
+        for n_l in Libs.items():
+            setattr(C, *n_l)
         print(_varstr(Libs))
 
-        _all_listing(__all__, locals())
+        Libs = 'see @var Libs'
+        _all_listing(__all__, locals(), libs=True)
 
 # python3 -m pycocoa.oslibs
 #
 # pycocoa.oslibs.__all__ = tuple(
-#  pycocoa.oslibs.get_lib is <function .get_lib at 0x102a42f20>,
-#  pycocoa.oslibs.get_lib_framework is <function .get_lib_framework at 0x102a42fc0>,
-#  pycocoa.oslibs.get_libs is <function .get_libs at 0x102a43060>,
-#  pycocoa.oslibs.leaked2 is <function .leaked2 at 0x102a43100>,
-#  pycocoa.oslibs.libAppKit is <CDLL '/System/Library/Frameworks/AppKit.framework/AppKit', handle 31a3150a0 at 0x1029f4e10>,
-#  pycocoa.oslibs.libCF is <CDLL '/System/Library/Frameworks/CoreFoundation.framework/CoreFoundation', handle 31a3094f8 at 0x1029f4a50>,
-#  pycocoa.oslibs.libCG is <CDLL '/System/Library/Frameworks/CoreGraphics.framework/CoreGraphics', handle 31a3175c0 at 0x1029f56d0>,
-#  pycocoa.oslibs.libCT is <CDLL '/System/Library/Frameworks/CoreText.framework/CoreText', handle 31a30b5b0 at 0x1029f5810>,
-#  pycocoa.oslibs.libFoundation is <CDLL '/System/Library/Frameworks/Foundation.framework/Foundation', handle 31a308b28 at 0x1029f5950>,
-#  pycocoa.oslibs.libobjc is <CDLL '/usr/lib/libobjc.dylib', handle 31a30ce04 at 0x1029f5a90>,
-#  pycocoa.oslibs.Libs.AppKit=<CDLL '/System/Library/Frameworks/AppKit.framework/AppKit', handle 31a3150a0 at 0x1029f4e10>,
-#                     .C=<CDLL '/usr/lib/libc.dylib', handle 31a326b28 at 0x102a20980>,
-#                     .CoreFoundation=<CDLL '/System/Library/Frameworks/CoreFoundation.framework/CoreFoundation', handle 31a3094f8 at 0x1029f4a50>,
-#                     .CoreGraphics=<CDLL '/System/Library/Frameworks/CoreGraphics.framework/CoreGraphics', handle 31a3175c0 at 0x1029f56d0>,
-#                     .CoreText=<CDLL '/System/Library/Frameworks/CoreText.framework/CoreText', handle 31a30b5b0 at 0x1029f5810>,
-#                     .Foundation=<CDLL '/System/Library/Frameworks/Foundation.framework/Foundation', handle 31a308b28 at 0x1029f5950>,
-#                     .ObjC=<CDLL '/usr/lib/libobjc.dylib', handle 31a30ce04 at 0x1029f5a90>,
+#  pycocoa.oslibs.get_lib is <function .get_lib at 0x10347b240>,
+#  pycocoa.oslibs.get_lib_framework is <function .get_lib_framework at 0x10347b2e0>,
+#  pycocoa.oslibs.leaked2 is <function .leaked2 at 0x10347b380>,
+#  pycocoa.oslibs.Libs is 'see @var Libs',
 #  pycocoa.oslibs.NO is False or 0x0,
 #  pycocoa.oslibs.NSAcknowledgeCharacter is 6 or 0x6,
 #  pycocoa.oslibs.NSAlphaShiftKeyMask is 65536 or 0x10000 or 1 << 16,
@@ -1292,7 +1272,7 @@ if __name__ == _Dmain_:
 #  pycocoa.oslibs.NSCommandKeyMask is 1048576 or 0x100000 or 1 << 20,
 #  pycocoa.oslibs.NSControlKeyMask is 262144 or 0x40000 or 1 << 18,
 #  pycocoa.oslibs.NSDataLineEscapeCharacter is 16 or 0x10 or 1 << 4,
-#  pycocoa.oslibs.NSDefaultRunLoopMode is <RunLoop_t at 0x1029e32d0>,
+#  pycocoa.oslibs.NSDefaultRunLoopMode is <RunLoop_t at 0x103436c50>,
 #  pycocoa.oslibs.NSDeleteCharacter is 127 or 0x7F,
 #  pycocoa.oslibs.NSDeleteFunctionKey is 63272 or 0xF728 or 7909 << 3,
 #  pycocoa.oslibs.NSDeviceControl1Character is 17 or 0x11,
@@ -1308,7 +1288,7 @@ if __name__ == _Dmain_:
 #  pycocoa.oslibs.NSEnquiryCharacter is 5 or 0x5,
 #  pycocoa.oslibs.NSEnterCharacter is 3 or 0x3,
 #  pycocoa.oslibs.NSEscapeCharacter is 27 or 0x1B,
-#  pycocoa.oslibs.NSEventTrackingRunLoopMode is <RunLoop_t at 0x1029e3350>,
+#  pycocoa.oslibs.NSEventTrackingRunLoopMode is <RunLoop_t at 0x103436cd0>,
 #  pycocoa.oslibs.NSF19FunctionKey is 63254 or 0xF716,
 #  pycocoa.oslibs.NSF1FunctionKey is 63236 or 0xF704,
 #  pycocoa.oslibs.NSFileHandlingPanelCancelButton is 0 or 0x0,
@@ -1411,8 +1391,8 @@ if __name__ == _Dmain_:
 #  pycocoa.oslibs.NSWindowZoomButton is 2 or 0x2,
 #  pycocoa.oslibs.OSlibError is <class .OSlibError>,
 #  pycocoa.oslibs.YES is True or 0x1,
-# )[160]
-# pycocoa.oslibs.version 25.2.22, .isLazy 1, Python 3.13.2 64bit arm64, macOS 14.7.3
+# )[153]
+# pycocoa.oslibs.version 25.2.25, .isLazy 1, Python 3.13.2 64bit arm64, macOS 14.7.3, oslibs [AppKit, C, CoreFoundation, CoreGraphics, CoreText, Foundation, libc, libobjc, ObjC, Quartz]
 
 # MIT License <https://OpenSource.org/licenses/MIT>
 #

@@ -11,15 +11,13 @@ from pycocoa import NSApplication, NSBackingStoreBuffered, \
                     NSStr, NSWindow, NSWindowStyleMaskUsual, \
                     PyObjectEncoding, ObjCClass, ObjCInstance, \
                     ObjCSubclass, send_super, terminating, \
-                    NSAutoreleasePool, NSDate
-
-from pycocoa.oslibs import libAppKit
+                    NSAutoreleasePool, NSDate, Libs
 
 from math import sin, cos, pi as PI
 
-__version__ = '23.01.19'
+__version__ = '25.02.25'
 
-NSRectFill = libAppKit.NSRectFill
+NSRectFill = Libs.AppKit.NSRectFill
 
 
 class _View_Implementation(object):

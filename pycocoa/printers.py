@@ -6,35 +6,34 @@
 '''Types L{Printer}, L{Paper}, L{PaperCustom} and L{PaperMargins},
 wrapping ObjC C{NSPrinter}, C{PMPrinter}, C{PMPaper} respectively
 C{PMPaperMargins} plus several C{get_...} print functions.
-
-@var libPC: The macOS C{PrintCore} framework library (C{ctypes.CDLL}) or C{None}.
 '''
 from pycocoa.bases import _Type0
-from pycocoa.internals import Adict, _Dmain_, _DOT_, _instr, _name_, \
-                             _NN_, property_RO, _Strs
-from pycocoa.lazily import _ALL_LAZY, _Types,  _fmt, _fmt_invalid
-from pycocoa.nstypes import nsDictionary2dict, NSImageView, NSMain, \
-                            NSPrinter, NSPrintInfo, NSPrintOperation, \
-                            ns2py, NSStr, NSTableView, NSTextView
+from pycocoa.internals import Adict, _alloc_, _Dmain_, _DOT_, \
+                             _filexists, _fmt, _fmt_invalid, \
+                             _instr, _name_, _NN_, property_RO, \
+                             _SPACE_, _Strs
+from pycocoa.lazily import _ALL_LAZY, _Types
+from pycocoa.nstypes import _nsArray2items, nsDictionary2dict, \
+                             NSImageView, NSMain, NSPrinter, \
+                             NSPrintInfo, NSPrintOperation, ns2py, \
+                             NSStr, NSTableView, NSTextView
 from pycocoa.octypes import Array_t, BOOL_t, c_struct_t, Dictionary_t, \
                             Id_t, ObjC_t, String_t, URL_t
 from pycocoa.oslibs import cfNumber2bool, cfString, cfString2str, \
                            cfURL2str, _csignature, _free_memory, \
-                           get_lib_framework, libCF, YES
+                           get_lib_framework, YES
 from pycocoa.runtime import isObjCInstanceOf, send_message, _Xargs
 from pycocoa.utils import isinstanceOf, zfstr
 
 from ctypes import ArgumentError, byref, cast, c_char_p, c_double, \
                    c_int, c_void_p, POINTER, sizeof
-import os
 
 __all__ = _ALL_LAZY.printers
-__version__ = '25.02.19'
+__version__ = '25.02.25'
 
-libPC = None  # loaded on-demand
-kPMServerLocal = None
+kPMServerLocal        = None
 kPMPPDDescriptionType = cfString('PMPPDDescriptionType')  # PYCHOK false
-noErr = 0  # aka noErr
+_noErr                = 0  # aka KPMErrors.kPMNoError
 
 
 # <https://Developer.Apple.com/documentation/applicationservices/core_printing>
@@ -82,49 +81,6 @@ class PMServer_t(ObjC_t):
     pass
 
 
-class PrintError(ValueError):  # SystemError
-    '''Error from ObjC C{NSPrinter} or C{PM...}.
-    '''
-    pass
-
-
-def _nsPrinter(name, pm):
-    '''(INTERNAL) New C{NSPrinter} instance.
-    '''
-    if isinstanceOf(pm, PMPrinter_t, raiser='pm'):  # NSStr(name)
-        ns = send_message('NSPrinter', 'alloc', restype=Id_t)
-        # _initWithName:printer:(Id_t, Id_t, SEL_t, Id_t, LP_Struct_t)
-        # requires special selector handling due to leading underscore
-        ns = send_message(ns, '_initWithName:printer:', NSStr(name), pm,
-                          restype=Id_t, argtypes=[Id_t, PMPrinter_t])
-    else:
-        ns = None
-    return ns
-
-# % python -m test.list_methods NSPrinter
-# description @16@0:8 (Id_t, Id_t, SEL_t)  # JSON?
-# deviceDescription @16@0:8 (Id_t, Id_t, SEL_t)
-# domain @16@0:8 (Id_t, Id_t, SEL_t)  # DEPRECATED
-# host @16@0:8 (Id_t, Id_t, SEL_t)  # DEPRECATED
-# imageRectForPaper: {CGRect={CGPoint=dd}{CGSize=dd}}24@0:8@16 (NSRect_t, Id_t, SEL_t, Id_t)
-# initWithCoder: @24@0:8@16 (Id_t, Id_t, SEL_t, Id_t)
-# isColor c16@0:8 (c_byte, Id_t, SEL_t)  # DEPRECATED
-# isFontAvailable: c24@0:8@16 (c_byte, Id_t, SEL_t, Id_t)
-# isOutputStackInReverseOrder c16@0:8 (c_byte, Id_t, SEL_t)
-# name @16@0:8 (Id_t, Id_t, SEL_t)
-# note @16@0:8 (Id_t, Id_t, SEL_t)  # DEPRECATED
-# pageSizeForPaper: {CGSize=dd}24@0:8@16 (NSSize_t, Id_t, SEL_t, Id_t)
-# type @16@0:8 (Id_t, Id_t, SEL_t)  # == MakeAndModelName
-# ...
-# _allocatePPDStuffAndParse v16@0:8 (None, Id_t, SEL_t)
-# _allocString: *24@0:8r*16 (c_char_p, Id_t, SEL_t, c_char_p)
-# _deallocatePPDStuff v16@0:8 (None, Id_t, SEL_t)
-# _initWithName:printer: @32@0:8@16^{OpaquePMPrinter=}24 (Id_t, Id_t, SEL_t, Id_t, LP_Struct_t)
-# _printer ^{OpaquePMPrinter=}16@0:8 (LP_Struct_t, Id_t, SEL_t)
-# _setUIConstraints: @24@0:8*16 (Id_t, Id_t, SEL_t, c_char_p)
-# ...
-
-
 class _PM_Type0(_Type0):
     '''(INTERNAL) Base type for ObjC C{PM...} objects.
     '''
@@ -132,78 +88,86 @@ class _PM_Type0(_Type0):
 
     def __init__(self, pm):
         self._PM = pm
-        if not libPC:
-            get_libPC()
 
     def __str__(self):
         return _instr(self.typename, repr(self.name))
 
-    def _libPCcall(self, func, *args):  # like runtime._libobjcall
+    def _libPCcall(self, func_, *args):  # like runtime._libobjcall
         try:
-            e = func(self.PM, *args)
-        except (ArgumentError, KeyError, TypeError) as x:
-            raise _Xargs(x, func.__name__, func.argtypes, func.restype)
-        e = e.value
-        if e != noErr:
-            raise _StatusError(e, func.__name__)
-        return e
+            s = func_(self.PM, *args)
+        except (ArgumentError, Exception) as x:
+            try:
+                kwds = dict(argtypes=func_.argtypes,
+                            restype =func_.restype)
+            except AttributeError:
+                kwds = dict(restype=OSStatus_t)  # []
+            raise _Xargs(x, func_, **kwds)
+        s = s.value
+        if s != _noErr:
+            t = _instr(func_, self.PM, *args)
+            raise _PrintError(s, t)
+        return s
 
-    def _2bool(self, libPC_func):
-        b = BOOL_t()
-        self._libPCcall(libPC_func, byref(b))
+    def _libPCcall_t(self, func_, c_t):
+        c = c_t()
+        _ = self._libPCcall(func_, byref(c))
+        return c
+
+    def _2bool(self, func_):
+        b = self._libPCcall_t(func_, BOOL_t)
         return True if b.value else False
 
-    def _2dict(self, libPC_func):
-        D = Dictionary_t()
-        self._libPCcall(libPC_func, byref(D))
+    def _2dict(self, func_):
+        D = self._libPCcall_t(func_, Dictionary_t)
         if D:  # usually Null
             d = nsDictionary2dict(D)
-            _free_memory(D, len(d) * 2 * sizeof(ObjC_t))
+            self._free(D, len(d) * 2)
         else:
             d = {}
         return d
 
-    def _2float(self, libPC_func):
-        d = c_double()
-        self._libPCcall(libPC_func, byref(d))
+    def _2float(self, func_):
+        d = self._libPCcall_t(func_, c_double)
         return d.value
 
-    def _2int(self, libPC_func):
-        i = c_int()  # c_int32?
-        self._libPCcall(libPC_func, byref(i))
+    def _free(self, m, n):
+        _free_memory(m, n * self._ObjC_t_size)
+
+    def _2int(self, func_):
+        i = self._libPCcall_t(func_, c_int)  # c_int32?
         return i.value
 
-    def _2rect(self, libPC_func):
-        r = PMRect_t()
-        self._libPCcall(libPC_func, byref(r))
-        return r
+    @property_RO
+    def _ObjC_t_size(self):  # get sizeof, I{once}
+        z = sizeof(ObjC_t)
+        _PM_Type0._ObjC_t_size = z  # overwrite property_RO
+        return z
 
-    def _2str(self, libPC_func, *args):
-        s = c_char_p()
+    def _2rect(self, func_):
+        return self._libPCcall_t(func_, PMRect_t)
+
+    def _2str(self, func_, *args):
         if args:
-            args += (byref(s),)
-            self._libPCcall(libPC_func, *args)
+            s     = c_char_p()
+            args += byref(s),
+            self._libPCcall(func_, *args)
         else:
-            self._libPCcall(libPC_func, byref(s))
+            s = self._libPCcall_t(func_, c_char_p)
         return cfString2str(s)
 
-    def _2tuple(self, libPC_func, ctype):
-        a = Array_t()
-        self._libPCcall(libPC_func, byref(a))
-        # like nstypes.nsArray2listuple
-        n = libCF.CFArrayGetCount(a)
-        f = libCF.CFArrayGetValueAtIndex
-        t = tuple(cast(f(a, i), ctype) for i in range(n))
-        _free_memory(a, n * sizeof(ObjC_t))
+    def _2tuple(self, func_, ctype):
+        a = self._libPCcall_t(func_, Array_t)
+        t = tuple(cast(c, ctype) for c in _nsArray2items(a))
+        self._free(a, len(t))
         return t
 
-    def _2ustr(self, libPC_func, *args):
-        u = URL_t()
+    def _2ustr(self, func_, *args):
         if args:
-            args += (byref(u),)
-            self._libPCcall(libPC_func, *args)
+            u     = URL_t()
+            args += byref(u),
+            self._libPCcall(func_, *args)
         else:
-            self._libPCcall(libPC_func, byref(u))
+            u = self._libPCcall_t(func_, URL_t)
         return cfURL2str(u)
 
     @property_RO
@@ -215,12 +179,12 @@ class _PM_Type0(_Type0):
     def release(self):
         '''Release this ObjC C{PMobject}.
         '''
-        self._libPCcall(libPC.PMRelease)
+        self._libPCcall(_libPC.PMRelease)
 
     def retain(self):
         '''Release this ObjC C{PMobject}.
         '''
-        self._libPCcall(libPC.PMRetain)
+        self._libPCcall(_libPC.PMRetain)
 
 
 class Paper(_PM_Type0):
@@ -249,8 +213,9 @@ class Paper(_PM_Type0):
                     pm = p.PM
                     break
             else:
-                raise PrintError(_fmt_invalid(Paper=name_pm))
-        elif isinstanceOf(name_pm, PMPaper_t, raiser='name_pm'):
+                t = _fmt_invalid(Paper=name_pm)
+                raise PrintError(t)
+        elif isinstanceOf(name_pm, PMPaper_t, *_Strs, raiser='name_pm'):
             pm = name_pm
         _PM_Type0.__init__(self, pm)
 
@@ -258,19 +223,19 @@ class Paper(_PM_Type0):
     def height(self):
         '''Get the paper height in I{points} (C{float}).
         '''
-        return self._2float(libPC.PMPaperGetHeight)
+        return self._2float(_libPC.PMPaperGetHeight)
 
     @property_RO
     def ID(self):
         '''Get the paper IDentifier (C{str}).
         '''
-        return self._2str(libPC.PMPaperGetID)
+        return self._2str(_libPC.PMPaperGetID)
 
     @property_RO
     def isCustom(self):
         '''True if this is a custom paper (C{bool}).
         '''
-        return cfNumber2bool(libPC.PMPaperIsCustom(self.PM), None)
+        return cfNumber2bool(_libPC.PMPaperIsCustom(self.PM), None)
 
     def localname(self, printer=None):
         '''Get the paper's localized name for a printer (C{str}).
@@ -281,55 +246,60 @@ class Paper(_PM_Type0):
             pm = get_printer().PM
         elif isinstanceOf(printer, Printer, raiser='printer'):
             pm = printer.PM
-        return self._2str(libPC.PMPaperCreateLocalizedName, pm)
+        return self._2str(_libPC.PMPaperCreateLocalizedName, pm)
 
     @property_RO
     def margins(self):
         '''Get the paper margins (L{PaperMargins}).
         '''
-        return PaperMargins(self._2rect(libPC.PMPaperGetMargins))
+        return PaperMargins(self._2rect(_libPC.PMPaperGetMargins))
 
     @property_RO
     def name(self):
         '''Get the paper name (C{str}).
         '''
         if self._name is None:
-            self._name = self._2str(libPC.PMPaperGetName)
+            self._name = self._2str(_libPC.PMPaperGetName)
         return self._name
 
     @property_RO
     def PPD(self):
         '''Get the paper's PPD name (C{URL}).
         '''
-        return self._2str(libPC.PMPaperGetPPDPaperName)
+        return self._2str(_libPC.PMPaperGetPPDPaperName)
 
     @property_RO
     def printer(self):
         '''Get the printer corresponding to this paper (C{Printer}) or C{None}.
         '''
-        ID = self._2str(libPC.PMPaperGetPrinterID)
+        ID = self._2str(_libPC.PMPaperGetPrinterID)
         for p in get_printers(ID):
             if p.ID == ID:
-                return p
-        return None
+                break
+        else:
+            p = None
+        return p
+
+    def _size2__(self, pp):  # helper for .size2inch, -mm
+        return (float(self.width) / pp), (float(self.height) / pp)
 
     @property_RO
     def size2inch(self):
         '''Get 2-tuple (width, height) in I{inch} (C{float}s).
         '''
-        return self.width / self._ppi, self.height / self._ppi
+        return self._size2__(self._ppi)
 
     @property_RO
     def size2mm(self):
         '''Get 2-tuple (width, height) in I{millimeter} (C{float}s).
         '''
-        return self.width / self._ppmm, self.height / self._ppmm
+        return self._size2__(self._ppmm)
 
     @property_RO
     def width(self):
         '''Get the paper width in I{points} (C{float}).
         '''
-        return self._2float(libPC.PMPaperGetWidth)
+        return self._2float(_libPC.PMPaperGetWidth)
 
 
 class PaperCustom(Paper):
@@ -340,20 +310,9 @@ class PaperCustom(Paper):
 
            @raise TypeError: Invalid I{margins} or I{printer}.
         '''
-        h = float(height)
-        w = float(width)
-
-        z = 'x'.join(map(zfstr, (w, h)))
-        if name:
-            n = str(name)
-            i = str(ID) or '%s %s' % (name, z)
-        else:
-            n = z
-            i = str(ID) or z
-
         if margins is None:
             m = PaperMargins()
-        elif isinstanceOf(margins, PaperMargins, raiser='margins'):
+        elif isinstanceOf(margins, PaperMargins, PMRect_t, raiser='margins'):
             m = PaperMargins(margins)
 
         if printer is None:
@@ -361,9 +320,14 @@ class PaperCustom(Paper):
         elif isinstanceOf(printer, Printer, raiser='printer'):
             p = printer
 
+        w,  h = float(width), float(height)
+        n = i = 'x'.join(map(zfstr, (w, h)))
+        if name:
+            n =  str(name)
+            i = _SPACE_(n, i)
         pm = PMPaper_t()
-        self._libPCcall(libPC.PMPaperCreateCustom, p, NSStr(n),
-                              NSStr(i), w, h, m, byref(pm))
+        self._libPCcall(_libPC.PMPaperCreateCustom, p, NSStr(n),
+                         NSStr(str(ID) or i), w, h, m, byref(pm))
         Paper.__init__(self, pm)
 
 
@@ -378,15 +342,12 @@ class PaperMargins(PMRect_t):
            @raise TypeError: Invalid I{margins_pm}.
         '''
         if not margins_pm:
-            self.bottom = float(bottom)
-            self.left   = float(left)
-            self.right  = float(right)
-            self.top    = float(top)
+            t = (bottom, left, right, top)
         elif isinstanceOf(margins_pm, PaperMargins, PMRect_t, raiser='margins_pm'):
-            self.bottom = float(margins_pm.bottom)
-            self.left   = float(margins_pm.left)
-            self.right  = float(margins_pm.right)
-            self.top    = float(margins_pm.top)
+            t = (margins_pm.bottom, margins_pm.left,
+                 margins_pm.right,  margins_pm.top)
+        (self.bottom, self.left,
+        self.right,   self.top) = map(float, t)
 
         self._PM = self
 
@@ -411,22 +372,22 @@ class Printer(_PM_Type0):
         '''
         if not name_ns_pm:  # generic printer
             _PM_Type0.__init__(self, PMPrinter_t())
-            self._libPCcall(libPC.PMCreateGenericPrinter)
-            pm = self.PM
+            self._libPCcall(_libPC.PMCreateGenericPrinter)
+            pm =  self.PM
             ns = _nsPrinter('Generic', pm)
 
         elif isinstance(name_ns_pm, _Strs):
             for p in get_printers():
                 if p.name == name_ns_pm:
-                    pm = p.PM
+                    pm =  p.PM
                     ns = _nsPrinter(p.name, pm)
                     break
             else:
                 raise PrintError(_fmt_invalid(Printer=name_ns_pm))
 
         elif isinstanceOf(name_ns_pm, PMPrinter_t):
-            pm = name_ns_pm
-            ns = _nsPrinter(cfString2str(libPC.PMPrinterGetName(pm)), pm)
+            pm =  name_ns_pm
+            ns = _nsPrinter(cfString2str(_libPC.PMPrinterGetName(pm)), pm)
 
         elif isObjCInstanceOf(name_ns_pm, NSPrinter, raiser='name_ns_pm'):
             ns = name_ns_pm
@@ -459,47 +420,47 @@ class Printer(_PM_Type0):
         '''Get the printer device (C{URI}) or C{""}.
         '''
         try:
-            return self._2ustr(libPC.PMPrinterCopyDeviceURI)
-        except _StatusError:
+            return self._2ustr(_libPC.PMPrinterCopyDeviceURI)
+        except _PrintError:
             return _NN_
 
     @property_RO
     def ID(self):
         '''Get the printer IDentifier (C{str}) or C{""}.
         '''
-        return cfString2str(libPC.PMPrinterGetID(self.PM)).strip()
+        return cfString2str(_libPC.PMPrinterGetID(self.PM)).strip()
 
     @property_RO
     def isColor(self):
         '''Is printer color (C{bool}).
         '''
-        return True if (  # self.NS.isColor() or  # DEPRECATED
-                       'color' in self.name.lower() or
-                       'color' in self.makemodel.lower()) else False
+        return bool(  # self.NS.isColor() or  # DEPRECATED
+                    'color' in self.name.lower() or
+                    'color' in self.makemodel.lower())
 
     @property_RO
     def isDefault(self):
         '''Is this the default printer (C{bool}).
         '''
-        return True if libPC.PMPrinterIsDefault(self.PM) else False
+        return bool(_libPC.PMPrinterIsDefault(self.PM))
 
     @property_RO
     def isRemote(self):
         '''Is this a remote printer (C{bool}).
         '''
-        return self._2bool(libPC.PMPrinterIsRemote)
+        return self._2bool(_libPC.PMPrinterIsRemote)
 
 #   @property_RO
 #   def localname(self):
 #       '''Get the printer's localized name (C{str}).
 #       '''
-#       return cfString2str(libPC.PMPrinterGetName(self.PM))
+#       return self.name
 
     @property_RO
     def location(self):
         '''Get the printer location (C{str}) or C{""}.
         '''
-        s = libPC.PMPrinterGetLocation(self.PM)
+        s = _libPC.PMPrinterGetLocation(self.PM)
         return cfString2str(s) if s else _NN_
 
     @property_RO
@@ -507,8 +468,8 @@ class Printer(_PM_Type0):
         '''Get the printer make and model (C{str}) or C{""}.
         '''
         try:
-            return self._2str(libPC.PMPrinterGetMakeAndModelName)
-        except _StatusError:
+            return self._2str(_libPC.PMPrinterGetMakeAndModelName)
+        except _PrintError:
             return _NN_
 
     @property_RO
@@ -516,7 +477,7 @@ class Printer(_PM_Type0):
         '''Get the printer name (C{str}) or C{""}.
         '''
         if self._name is None:
-            self._name = cfString2str(libPC.PMPrinterGetName(self.PM)).strip()
+            self._name = cfString2str(_libPC.PMPrinterGetName(self.PM)).strip()
         return self._name
 
     @property_RO
@@ -535,14 +496,14 @@ class Printer(_PM_Type0):
     def PPD(self):
         '''Get the printer PPD description (C{URL}).
         '''
-        return self._2ustr(libPC.PMPrinterCopyDescriptionURL,
+        return self._2ustr(_libPC.PMPrinterCopyDescriptionURL,
                                         kPMPPDDescriptionType)
 
     @property_RO
     def psCapable(self):
         '''Is the printer PostScript capable (C{bool}).
         '''
-        return True if libPC.PMPrinterIsPostScriptCapable(self.PM) else False
+        return bool(_libPC.PMPrinterIsPostScriptCapable(self.PM))
 
     @property_RO
     def psLevel(self):
@@ -563,7 +524,7 @@ class Printer(_PM_Type0):
 #         '''
 #         # <https://StackOverflow.com/questions/6452144/
 #         #        how-to-make-a-print-dialog-with-preview-for-printing-an-image-file>
-#         if not os.access(image, os.R_OK):
+#         if _filexists(toPDF):
 #             raise PrintError(_fmt_invalid(image=image))
 #         im = NSImage.alloc().initWithContentsOfFile_(NSStr(image))
 #         vw = NSImageView.alloc().initWithFrame_(NSRect4_t(width=nim.size.width,
@@ -593,21 +554,23 @@ class Printer(_PM_Type0):
                 pi = NSPrintInfo.alloc().initWithDictionary_(pi.dictionary())
                 pi.setPrinter_(self.NS)  # NSPrinter
 
+            po = NSPrintOperation
             if toPDF:
-                if os.access(toPDF, os.F_OK):
+                if _filexists(toPDF):
                     raise PrintError(_fmt_invalid(toPDF=toPDF))
                 # <https://Developer.Apple.com/documentation/appkit/
                 #        nsprintoperation/1534130-pdfoperationwithview>
-                po = NSPrintOperation.PDFOperationWithView_insideRect_toPath_printInfo_(
-                                      PMview, PMview.frame(), NSStr(toPDF), pi)
+                i_ = po.PDFOperationWithView_insideRect_toPath_printInfo_
+                po = i_(PMview, PMview.frame(), NSStr(toPDF), pi)
             else:
                 # <https://StackOverflow.com/questions/6452144/
                 #        how-to-make-a-print-dialog-with-preview-for-printing-an-image-file>
-                po = NSPrintOperation.printOperationWithView_printInfo_(PMview, pi)
+                i_ = po.printOperationWithView_printInfo_
+                po = i_(PMview, pi)
 
             if not wait:
                 po.setCanSpawnSeparateThread_(YES)
-            return True if po.runOperation() else False
+            return bool(po.runOperation())
         else:
             return None
 
@@ -625,55 +588,86 @@ class Printer(_PM_Type0):
 
            @return: C{True} if set, C{False} otherwise
         '''
-        return self._libPCcall(libPC.PMPrinterSetDefault) == noErr
+        return self._libPCcall(_libPC.PMPrinterSetDefault) == _noErr
 
 
-def get_libPC():
-    '''Get the C{PrintCore} framework library.
-
-       @return: The C{libPC} framework library (C{ctypes.CDLL}).
+class PrintError(ValueError):  # SystemError
+    '''Error from ObjC C{NSPrinter} or C{PM...}.
     '''
-    global libPC
-    if not libPC:
-        libPC = get_lib_framework('PrintCore')
+    pass
 
-        _csignature(libPC.PMCreateGenericPrinter, OSStatus_t, POINTER(PMPrinter_t))
 
-        _csignature(libPC.PMPaperCreateCustom, OSStatus_t, PMPrinter_t, String_t, String_t,
-                                               c_double, c_double, PMRect_t, POINTER(PMPaper_t))
-        _csignature(libPC.PMPaperCreateLocalizedName, OSStatus_t, PMPaper_t, PMPrinter_t, POINTER(c_char_p))
-        _csignature(libPC.PMPaperGetHeight, OSStatus_t, PMPaper_t, POINTER(c_double))
-        _csignature(libPC.PMPaperGetID, OSStatus_t, PMPaper_t, POINTER(c_char_p))
-        _csignature(libPC.PMPaperGetMargins, OSStatus_t, PMPaper_t, POINTER(PMRect_t))
-        _csignature(libPC.PMPaperGetName, OSStatus_t, PMPaper_t, POINTER(c_char_p))
-        _csignature(libPC.PMPaperGetPPDPaperName, OSStatus_t, PMPaper_t, POINTER(c_char_p))
-        _csignature(libPC.PMPaperGetPrinterID, OSStatus_t, PMPaper_t, POINTER(c_char_p))
-        _csignature(libPC.PMPaperGetWidth, OSStatus_t, PMPaper_t, POINTER(c_double))
-        _csignature(libPC.PMPaperIsCustom, BOOL_t, PMPaper_t)
+class _PrintError(PrintError):
+    '''C{OSStatus} printer or printing error.
+    '''
+    def __init__(self, sts, txt):
+        k =  kPMErrors.rget(sts, OSStatus_t.__name__[:-2])
+        t = _fmt('%s (%s) %s', k, sts, txt)
+        PrintError.__init__(self, t)
 
-        _csignature(libPC.PMPrinterCopyDescriptionURL, OSStatus_t, PMPrinter_t, String_t, POINTER(URL_t))
-        _csignature(libPC.PMPrinterCopyDeviceURI, OSStatus_t, PMPrinter_t, POINTER(URL_t))
-#       _csignature(libPC.PMPrinterCreateFromPrinterID, PMPrinter_t, c_char_p)
-        _csignature(libPC.PMPrinterGetID, String_t, PMPrinter_t)
-        _csignature(libPC.PMPrinterGetLocation, String_t, PMPrinter_t)
-        _csignature(libPC.PMPrinterGetMakeAndModelName, OSStatus_t, PMPrinter_t, POINTER(c_char_p))
-        _csignature(libPC.PMPrinterGetName, String_t, PMPrinter_t)
-        _csignature(libPC.PMPrinterGetPaperList, OSStatus_t, PMPrinter_t, POINTER(c_void_p))
-        _csignature(libPC.PMPrinterGetPrinterResolutionCount, OSStatus_t, PMPrinter_t, POINTER(c_int))
-        _csignature(libPC.PMPrinterGetIndexedPrinterResolution, OSStatus_t, PMPrinter_t,
-                                                                c_int, POINTER(PMResolution_t))
-        _csignature(libPC.PMPrinterIsDefault, BOOL_t, PMPrinter_t)
-        _csignature(libPC.PMPrinterIsPostScriptCapable, BOOL_t, PMPrinter_t)
-        _csignature(libPC.PMPrinterIsRemote, OSStatus_t, PMPrinter_t, POINTER(BOOL_t))
-        _csignature(libPC.PMPrinterSetDefault, OSStatus_t, PMPrinter_t)
 
-        _csignature(libPC.PMRelease, OSStatus_t, PM_t)
-        _csignature(libPC.PMRetain, OSStatus_t, PM_t)
+# % python -m test.list_methods NSPrinter
+# description @16@0:8 (Id_t, Id_t, SEL_t)  # JSON?
+# deviceDescription @16@0:8 (Id_t, Id_t, SEL_t)
+# domain @16@0:8 (Id_t, Id_t, SEL_t)  # DEPRECATED
+# host @16@0:8 (Id_t, Id_t, SEL_t)  # DEPRECATED
+# imageRectForPaper: {CGRect={CGPoint=dd}{CGSize=dd}}24@0:8@16 (NSRect_t, Id_t, SEL_t, Id_t)
+# initWithCoder: @24@0:8@16 (Id_t, Id_t, SEL_t, Id_t)
+# isColor c16@0:8 (c_byte, Id_t, SEL_t)  # DEPRECATED
+# isFontAvailable: c24@0:8@16 (c_byte, Id_t, SEL_t, Id_t)
+# isOutputStackInReverseOrder c16@0:8 (c_byte, Id_t, SEL_t)
+# name @16@0:8 (Id_t, Id_t, SEL_t)
+# note @16@0:8 (Id_t, Id_t, SEL_t)  # DEPRECATED
+# pageSizeForPaper: {CGSize=dd}24@0:8@16 (NSSize_t, Id_t, SEL_t, Id_t)
+# type @16@0:8 (Id_t, Id_t, SEL_t)  # == MakeAndModelName
+# ...
+# _allocatePPDStuffAndParse v16@0:8 (None, Id_t, SEL_t)
+# _allocString: *24@0:8r*16 (c_char_p, Id_t, SEL_t, c_char_p)
+# _deallocatePPDStuff v16@0:8 (None, Id_t, SEL_t)
+# _initWithName:printer: @32@0:8@16^{OpaquePMPrinter=}24 (Id_t, Id_t, SEL_t, Id_t, LP_Struct_t)
+# _printer ^{OpaquePMPrinter=}16@0:8 (LP_Struct_t, Id_t, SEL_t)
+# _setUIConstraints: @24@0:8*16 (Id_t, Id_t, SEL_t, c_char_p)
+# ...
 
-        _csignature(libPC.PMServerCreatePrinterList, OSStatus_t, PMServer_t, POINTER(Array_t))
-        _csignature(libPC.PMServerLaunchPrinterBrowser, OSStatus_t, PMServer_t, POINTER(Dictionary_t))
+_libPC = get_lib_framework('PrintCore')
+if _libPC:
+    _csignature(_libPC.PMCreateGenericPrinter, OSStatus_t, POINTER(PMPrinter_t))
 
-    return libPC
+    _csignature(_libPC.PMPaperCreateCustom, OSStatus_t, PMPrinter_t, String_t, String_t, c_double,
+                                                        c_double, PMRect_t, POINTER(PMPaper_t))
+    _csignature(_libPC.PMPaperCreateLocalizedName, OSStatus_t, PMPaper_t, PMPrinter_t, POINTER(c_char_p))
+    _csignature(_libPC.PMPaperGetHeight, OSStatus_t, PMPaper_t, POINTER(c_double))
+    _csignature(_libPC.PMPaperGetID, OSStatus_t, PMPaper_t, POINTER(c_char_p))
+    _csignature(_libPC.PMPaperGetMargins, OSStatus_t, PMPaper_t, POINTER(PMRect_t))
+    _csignature(_libPC.PMPaperGetName, OSStatus_t, PMPaper_t, POINTER(c_char_p))
+    _csignature(_libPC.PMPaperGetPPDPaperName, OSStatus_t, PMPaper_t, POINTER(c_char_p))
+    _csignature(_libPC.PMPaperGetPrinterID, OSStatus_t, PMPaper_t, POINTER(c_char_p))
+    _csignature(_libPC.PMPaperGetWidth, OSStatus_t, PMPaper_t, POINTER(c_double))
+    _csignature(_libPC.PMPaperIsCustom, BOOL_t, PMPaper_t)
+
+    _csignature(_libPC.PMPrinterCopyDescriptionURL, OSStatus_t, PMPrinter_t, String_t, POINTER(URL_t))
+    _csignature(_libPC.PMPrinterCopyDeviceURI, OSStatus_t, PMPrinter_t, POINTER(URL_t))
+#   _csignature(_libPC.PMPrinterCreateFromPrinterID, PMPrinter_t, c_char_p)
+    _csignature(_libPC.PMPrinterGetID, String_t, PMPrinter_t)
+    _csignature(_libPC.PMPrinterGetLocation, String_t, PMPrinter_t)
+    _csignature(_libPC.PMPrinterGetMakeAndModelName, OSStatus_t, PMPrinter_t, POINTER(c_char_p))
+    _csignature(_libPC.PMPrinterGetName, String_t, PMPrinter_t)
+    _csignature(_libPC.PMPrinterGetPaperList, OSStatus_t, PMPrinter_t, POINTER(c_void_p))
+    _csignature(_libPC.PMPrinterGetPrinterResolutionCount, OSStatus_t, PMPrinter_t, POINTER(c_int))
+    _csignature(_libPC.PMPrinterGetIndexedPrinterResolution, OSStatus_t, PMPrinter_t, c_int,
+                                                                         POINTER(PMResolution_t))
+    _csignature(_libPC.PMPrinterIsDefault, BOOL_t, PMPrinter_t)
+    _csignature(_libPC.PMPrinterIsPostScriptCapable, BOOL_t, PMPrinter_t)
+    _csignature(_libPC.PMPrinterIsRemote, OSStatus_t, PMPrinter_t, POINTER(BOOL_t))
+    _csignature(_libPC.PMPrinterSetDefault, OSStatus_t, PMPrinter_t)
+
+    _csignature(_libPC.PMRelease, OSStatus_t, PM_t)
+    _csignature(_libPC.PMRetain, OSStatus_t, PM_t)
+
+    _csignature(_libPC.PMServerCreatePrinterList, OSStatus_t, PMServer_t, POINTER(Array_t))
+    _csignature(_libPC.PMServerLaunchPrinterBrowser, OSStatus_t, PMServer_t, POINTER(Dictionary_t))
+
+    del _csignature, get_lib_framework, POINTER
 
 
 def _printers(printers):
@@ -681,8 +675,8 @@ def _printers(printers):
     '''
     if not printers:
         printers = (get_printer(),)
-    elif not libPC:
-        get_libPC()
+#   elif not _libPC:
+#       pass
     for p in printers:
         isinstanceOf(p, Printer, raiser='printers')
         yield p
@@ -695,9 +689,10 @@ def get_papers(*printers):
 
        @return: Each paper (L{Paper}).
     '''
+    pl_ = _libPC.PMPrinterGetPaperList
     for r in _printers(printers):
         # <https://Gist.GitHub.com/lv10/8547663#file-gistfile1-m>
-        for p in r._2tuple(libPC.PMPrinterGetPaperList, PMPaper_t):
+        for p in r._2tuple(pl_, PMPaper_t):
             yield Paper(p)
 
 
@@ -729,7 +724,7 @@ def get_printer_browser(server=kPMServerLocal):  # kPMServerLocal only
        @return: Printers (C{dict}) or C{None}.
     '''
     sv = _PM_Type0(server)
-    return sv._2dict(libPC.PMServerLaunchPrinterBrowser) or None
+    return sv._2dict(_libPC.PMServerLaunchPrinterBrowser) or None
 
 
 def get_printers(server=kPMServerLocal):  # kPMServerLocal only
@@ -741,7 +736,7 @@ def get_printers(server=kPMServerLocal):  # kPMServerLocal only
        @return: Each printer (L{Printer}).
     '''
     sv = _PM_Type0(server)
-    for p in sv._2tuple(libPC.PMServerCreatePrinterList, PMPrinter_t):
+    for p in sv._2tuple(_libPC.PMServerCreatePrinterList, PMPrinter_t):
         yield Printer(p)
 
 
@@ -750,29 +745,32 @@ def get_resolutions(*printers):
 
        @param printers: No, one or more printers (L{Printer}s).
 
-       @return: Each resolution 2-tuple (horizontal, vertical) in dots per inch (C{float}s).
+       @return: A 2-tuple (horizontal, vertical) in dots per inch
+                (C{float}s) for each resolution.
     '''
+    rc_ = _libPC.PMPrinterGetPrinterResolutionCount
+    ri_ = _libPC.PMPrinterGetIndexedPrinterResolution
     for p in _printers(printers):
         try:
-            n = p._2int(libPC.PMPrinterGetPrinterResolutionCount)
-        except _StatusError:  # kPMNotImplemented
-            n = 0
+            n = p._2int(rc_)
+        except _PrintError:  # kPMNotImplemented
+            continue
         r = PMResolution_t()
-        for i in range(n):
-            p._libPCcall(libPC.PMPrinterGetIndexedPrinterResolution, i+1, byref(r))
-            yield tuple(map(float, (r.hRes, r.vRes)))
+        for i in range(1, n + 1):
+            p._libPCcall(ri_, i, byref(r))
+            yield float(r.hRes), float(r.vRes)
 
 
-class _StatusError(PrintError):
-    '''C{OSStatus} error.
+def _nsPrinter(name, pm):
+    '''(INTERNAL) New C{NSPrinter} instance.
     '''
-    def __init__(self, sts, name):
-        for k, v in kPMErrors.items():
-            if v == sts:
-                break
-        else:
-            k = 'OSStatus'
-        PrintError.__init__(self, _fmt('%s (%s) %s', k, sts, name))
+    if isinstanceOf(pm, PMPrinter_t, raiser='pm'):  # NSStr(name)
+        ns = send_message(NSPrinter.name, _alloc_, restype=Id_t)
+        # _initWithName:printer:(Id_t, Id_t, SEL_t, Id_t, LP_Struct_t)
+        # requires special selector handling due to leading underscore
+        ns = send_message(ns, '_initWithName:printer:', NSStr(name), pm,
+                          restype=Id_t, argtypes=[Id_t, PMPrinter_t])
+        return ns
 
 
 # <https://www.OSStatus.com/search/results?platform=all&framework=all&search=0>
@@ -783,7 +781,7 @@ class _StatusError(PrintError):
 # Copyright: 2001-2006 by Apple Computer, Inc., all rights reserved
 kPMErrors = Adict(
     # General error codes originally in PMDefinitions (-30870 to -30899)
-    kPMNoError                   = noErr,   # no error
+    kPMNoError                   = _noErr,   # no error
     kPMInvalidParameter          = -50,     # paramErr: parameter missing or invalid
     kPMAllocationFailure         = -108,    # memFullErr: out of memory error
 #   kPMGeneralError              = -30870,  # general, internal error
@@ -963,49 +961,45 @@ if __name__ == _Dmain_:
 #  Printer('WiFi ...').PPD: 'file:///var/folders/nx/.../...'
 #  Printer('WiFi ...').resolution: (300.0, 300.0)
 
-#  1 Paper('A4'): ID 'iso-a4', 595x842 (8.264X11.694)
-#  2 Paper('US Letter'): ID 'na-letter', 612x792 (8.5X11)
-#  3 Paper('US Legal'): ID 'na-legal', 612x1008 (8.5X14)
-#  4 Paper('Executive'): ID 'executive', 522x756 (7.25X10.5)
-#  5 Paper('A5'): ID 'iso-a5', 420x595 (5.833X8.264)
-#  6 Paper('A5 Long Edge'): ID 'A5 Long Edge', 595x420 (8.264X5.833)
-#  7 Paper('A6'): ID 'iso-a6', 297x420 (4.125X5.833)
-#  8 Paper('B5'): ID 'iso-b5', 499x709 (6.931X9.847)
-#  9 Paper('JIS B5'): ID 'jis-b5', 516x729 (7.167X10.125)
-# 10 Paper('Envelope DL'): ID 'iso-designated', 312x624 (4.333X8.667)
-# 11 Paper('Envelope C5'): ID 'iso-c5', 459x649 (6.375X9.014)
-# 12 Paper('Envelope #10'): ID 'na-number-10-envelope', 297x684 (4.125X9.5)
-# 13 Paper('Envelope Monarch'): ID 'monarch-envelope', 279x540 (3.875X7.5)
-# 14 Paper('3 x 5'): ID '3 x 5', 216x360 (3X5)
-# 15 Paper('8.5 x 13'): ID 'Folio', 612x936 (8.5X13)
-# 16 Paper('Envelope PRC5 Long Edge'): ID 'DL Long Edge', 624x312 (8.667X4.333)
-
+#  1 Paper('3 x 5'): ID '3x5', 216x360 (3X5)
+#  2 Paper('A4'): ID 'iso-a4', 595.276x841.89 (8.268X11.693)
+#  3 Paper('A5'): ID 'iso-a5', 419.528x595.276 (5.827X8.268)
+#  4 Paper('A6'): ID 'iso-a6', 297.638x419.528 (4.134X5.827)
+#  5 Paper('JIS B5'): ID 'jis-b5', 515.906x728.504 (7.165X10.118)
+#  6 Paper('Envelope #10'): ID 'na-number-10-envelope', 296.986x684 (4.125X9.5)
+#  7 Paper('Envelope C5'): ID 'iso-c5', 459.213x649.134 (6.378X9.016)
+#  8 Paper('Envelope DL'): ID 'iso-designated', 311.811x623.622 (4.331X8.661)
+#  9 Paper('Envelope Monarch'): ID 'monarch-envelope', 278.986x540 (3.875X7.5)
+# 10 Paper('Executive'): ID 'executive', 522x756 (7.25X10.5)
+# 11 Paper('8.5 x 13'): ID 'FanFoldGermanLegal', 612x936 (8.5X13)
+# 12 Paper('B5'): ID 'iso-b5', 498.898x708.661 (6.929X9.843)
+# 13 Paper('US Legal'): ID 'na-legal', 612x1008 (8.5X14)
+# 14 Paper('US Letter'): ID 'na-letter', 612x792 (8.5X11)
+#
 # paper: Paper('A4')...
 #  Paper('A4').name: 'A4'
 #  Paper('A4').ID: 'iso-a4'
-#  Paper('A4').height: 842.0
-#  Paper('A4').width: 595.0
-#  Paper('A4').size2inch: (8.26388888888889, 11.694444444444445)
-#  Paper('A4').size2mm: (209.90277777777774, 297.03888888888883)
+#  Paper('A4').height: 841.8897705078125
+#  Paper('A4').width: 595.2755460739136
+#  Paper('A4').size2inch: (8.267715917693245, 11.692913479275173)
+#  Paper('A4').size2mm: (209.99998430940838, 297.0000023735894)
 #  Paper('A4').PPD: 'A4'
-#  Paper('A4').printer: Printer('WiFi MFC-...') at 0x1034bd9d0
+#  Paper('A4').printer: Printer('WiFi MFC-9340CDW') at 0x104646580
 #  Paper('A4').localname: 'A4'
 
 
 # pycocoa.printers.__all__ = tuple(
-#  pycocoa.printers.get_libPC is <function .get_libPC at 0x102dfc4a0>,
-#  pycocoa.printers.get_papers is <function .get_papers at 0x103345b20>,
-#  pycocoa.printers.get_printer is <function .get_printer at 0x103345bc0>,
-#  pycocoa.printers.get_printer_browser is <function .get_printer_browser at 0x103345c60>,
-#  pycocoa.printers.get_printers is <function .get_printers at 0x103345d00>,
-#  pycocoa.printers.get_resolutions is <function .get_resolutions at 0x103345da0>,
-#  pycocoa.printers.libPC is <CDLL '/System/Library/Frameworks/ApplicationServices.framework/Frameworks/PrintCore.framework/PrintCore', handle 3e6505580 at 0x103176e90>,
+#  pycocoa.printers.get_papers is <function .get_papers at 0x1049ee020>,
+#  pycocoa.printers.get_printer is <function .get_printer at 0x1049ee0c0>,
+#  pycocoa.printers.get_printer_browser is <function .get_printer_browser at 0x1049ee160>,
+#  pycocoa.printers.get_printers is <function .get_printers at 0x1049ee200>,
+#  pycocoa.printers.get_resolutions is <function .get_resolutions at 0x1049ee2a0>,
 #  pycocoa.printers.Paper is <class .Paper>,
 #  pycocoa.printers.PaperCustom is <class .PaperCustom>,
 #  pycocoa.printers.PaperMargins is <class .PaperMargins>,
 #  pycocoa.printers.Printer is <class .Printer>,
-# )[11]
-# pycocoa.printers.version 25.2.19, .isLazy 1, Python 3.13.1 64bit arm64, macOS 14.7.3
+# )[9]
+# pycocoa.printers.version 25.2.25, .isLazy 1, Python 3.13.2 64bit arm64, macOS 14.7.3
 
 # MIT License <https://OpenSource.org/licenses/MIT>
 #

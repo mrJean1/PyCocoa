@@ -40,7 +40,7 @@ from pycocoa.internals import _bNN_, bytes2str, _Dmain_, iterbytes, \
                                missing, _name_, _NN_, property_RO, \
                                str2bytes, _SPACE_
 from pycocoa.lazily import _ALL_LAZY,  _fmt, _fmt_invalid
-from pycocoa.utils import inst2strepr
+from pycocoa.utils import _bCOL, inst2strepr
 
 from ctypes import c_bool, c_byte, c_char, c_char_p, c_double, c_float, \
                    c_int, c_int32, c_int64, c_long, c_longlong, c_short, \
@@ -53,12 +53,14 @@ except ImportError:
     c_void = None
 
 __all__ = _ALL_LAZY.octypes
-__version__ = '25.02.20'
+__version__ = '25.02.25'
 
 __LP64__    = sizeof(c_void_p) == 8  # in .runtime iff __i386__
 c_ptrdiff_t = c_int64 if __LP64__ else c_int32
 unichar_t   = c_wchar   # actually a c_ushort in NSString_.h,
 UniChar_t   = c_ushort  # but need ctypes to convert properly
+_bAT        = b'@'  # in .runtime
+_bHASH      = b'#'  # in .runtime
 _bHAT       = b'^'
 
 
@@ -232,7 +234,7 @@ class SEL_t(ObjC_t):
     _name_ = None
 
 #   def __new__(cls, name_=None):
-#       self = libobjc.sel_registerName(str2bytes(name_))
+#       self = libObjC.sel_registerName(str2bytes(name_))
 #       return self
 
     def __repr__(self):
@@ -470,14 +472,14 @@ _ctype2encoding = {c_char:    b'c', c_ubyte:   b'C',
                    c_float:   b'f', c_double:  b'd',
                    c_bool:    b'B',
                    c_char_p:  b'*',
-                   c_void_p:  b'@',  # c_void: b'v',
-                   Class_t:   b'#',
-                   Id_t:      b'@',
+                   c_void_p: _bAT,  # c_void: b'v',
+                   Class_t:  _bHASH,
+                   Id_t:     _bAT,
                    NSPoint_t: NSPointEncoding,
                    NSRange_t: NSRangeEncoding,
                    NSRect_t:  NSRectEncoding,
                    NSSize_t:  NSSizeEncoding,
-                   SEL_t:     b':',
+                   SEL_t:    _bCOL,
                    py_object: PyObjectEncoding}
 
 # add c_?longlong only if different from c_?long
@@ -511,9 +513,9 @@ _encoding2ctype = {b'c': c_char,     b'C': c_ubyte,
                    b'f': c_float,    b'd': c_double,
                    b'B': c_bool,     b'v': c_void,
                    b'*': c_char_p,  # string
-                   b'#': Class_t,   # class
-                   b'@': Id_t,      # Id/self
-                   b':': SEL_t,     # SELector/cmd
+                  _bAT: Id_t,       # Id/self
+                  _bHASH: Class_t,  # class
+                  _bCOL: SEL_t,     # SELector/cmd
                    NSPointEncoding:  NSPoint_t,
                    NSRangeEncoding:  NSRange_t,
                    NSRectEncoding:   NSRect_t,
@@ -531,7 +533,7 @@ _encoding2ctype = {b'c': c_char,     b'C': c_ubyte,
 # double check the 2encoding and 2ctype mappings
 for c_, code in _ctype2encoding.items():
     f_ = _encoding2ctype.get(code, 'missing')
-    if c_ != f_ and code not in (b'@',):
+    if c_ != f_ and code not in (_bAT,):
         c_ = _fmt('%r ctype %r', code, c_)
         raise AssertionError(_fmt_invalid(repr(f_), code=c_))
 del c_, code, f_
@@ -665,10 +667,10 @@ def split_emcoding2(encoding, start=0):
        >>> (['v', '@', ':', '*'], 'v@:*')
     '''
     codes = split_encoding(encoding)
-    if codes[1:3] != [b'@', b':']:
+    if codes[1:3] != [_bAT, _bCOL]:
         # Add codes for hidden arguments
-        codes.insert(1, b'@')  # Id/self type encoding
-        codes.insert(2, b':')  # SEL/cmd type encoding
+        codes.insert(1, _bAT)   # Id/self type encoding
+        codes.insert(2, _bCOL)  # SEL/cmd type encoding
 
     return codes[start:], _bJoin(codes)
 
@@ -958,7 +960,7 @@ if __name__ == _Dmain_:
 #  pycocoa.octypes.NSNotFound is 9223372036854775807 or 0x7FFFFFFFFFFFFFFF,
 #  pycocoa.octypes.NSPoint_t is <class .NSPoint_t>,
 #  pycocoa.octypes.NSPointEncoding is b'{CGPoint=dd}',
-#  pycocoa.octypes.NSPointZero is <NSPoint_t(x=0.0, y=0.0) at 0x102ac1cd0>,
+#  pycocoa.octypes.NSPointZero is <NSPoint_t(x=0.0, y=0.0) at 0x10296c8d0>,
 #  pycocoa.octypes.NSRange_t is <class .NSRange_t>,
 #  pycocoa.octypes.NSRangeEncoding is b'{_NSRange=QQ}',
 #  pycocoa.octypes.NSRect4_t is <class .NSRect4_t>,
@@ -983,8 +985,8 @@ if __name__ == _Dmain_:
 #  pycocoa.octypes.RunLoop_t is <class .RunLoop_t>,
 #  pycocoa.octypes.SEL_t is <class .SEL_t>,
 #  pycocoa.octypes.Set_t is <class ctypes.c_void_p>,
-#  pycocoa.octypes.split_emcoding2 is <function .split_emcoding2 at 0x102af8cc0>,
-#  pycocoa.octypes.split_encoding is <function .split_encoding at 0x102af8ea0>,
+#  pycocoa.octypes.split_emcoding2 is <function .split_emcoding2 at 0x102974ae0>,
+#  pycocoa.octypes.split_encoding is <function .split_encoding at 0x102974cc0>,
 #  pycocoa.octypes.String_t is <class ctypes.c_void_p>,
 #  pycocoa.octypes.Struct_t is <class .Struct_t>,
 #  pycocoa.octypes.TimeInterval_t is <class ctypes.c_double>,
@@ -999,7 +1001,7 @@ if __name__ == _Dmain_:
 #  pycocoa.octypes.URL_t is <class .URL_t>,
 #  pycocoa.octypes.VoidPtr_t is <class .VoidPtr_t>,
 # )[83]
-# pycocoa.octypes.version 25.2.20, .isLazy 1, Python 3.13.2 64bit arm64, macOS 14.7.3
+# pycocoa.octypes.version 25.2.25, .isLazy 1, Python 3.13.2 64bit arm64, macOS 14.7.3
 
 # MIT License <https://OpenSource.org/licenses/MIT>
 #

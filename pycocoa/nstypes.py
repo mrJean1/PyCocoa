@@ -34,7 +34,7 @@ from pycocoa.lazily import _ALL_LAZY, _Types,  _fmt, _fmt_invalid, _instr
 from pycocoa.octypes import Array_t, Class_t, c_struct_t, _encoding2ctype, Id_t, \
                             NSRect4_t, ObjC_t, SEL_t, Set_t  # NSPoint_t
 from pycocoa.oslibs import cfNumber2bool, cfNumber2num, cfString, cfString2str, \
-                           cfURLResolveAlias, libCF, libFoundation, libobjc, \
+                           cfURLResolveAlias, _libCF, _libFoundation, _libObjC, \
                            NO, YES
 from pycocoa.runtime import isObjCInstanceOf, ObjCClass, ObjCInstance, release, \
                             retain, send_message, _Xargs
@@ -47,7 +47,7 @@ from os import linesep as _linesep, path as _os_path
 from time import time as _timestamp
 
 __all__ = _ALL_LAZY.nstypes
-__version__ = '25.02.19'
+__version__ = '25.02.25'
 
 _not_given_ = 'not given'
 _raiser_ns  =  dict(raiser='ns')
@@ -200,8 +200,8 @@ class NSDecimal(ObjCInstance):
 
         if None in (cls._IMP, cls._SEL):
             cls._SEL = get_selector('decimalNumberWithString:')
-            m = libobjc.class_getClassMethod(cls._Class, cls._SEL)
-            m = libobjc.method_getImplementation(m)
+            m = _libObjC.class_getClassMethod(cls._Class, cls._SEL)
+            m = _libObjC.method_getImplementation(m)
             cls._IMP = cast(m, CFUNCTYPE(Id_t, Id_t, SEL_t, Id_t))
 
         py = _Decimal(py)  # from Decimal, float, int, str
@@ -589,9 +589,9 @@ def isNone(obj):
     return obj in (None, NSMain.nil, NSMain.Null)
 
 
-def _nsArray2items(ns):  # helper for nsArray2...
-    _f = libCF.CFArrayGetValueAtIndex
-    for i in range(libCF.CFArrayGetCount(ns)):
+def _nsArray2items(ns):  # helper for nsArray2..., in .printers
+    _f = _libCF.CFArrayGetValueAtIndex
+    for i in range(_libCF.CFArrayGetCount(ns)):
         yield _f(ns, i)
 
 
@@ -761,7 +761,7 @@ def nsDescription2dict(ns, **defaults):
             if v is missing:
                 n = NSStr(name)
                 v = c_void_p(None)
-                t = libCF.CFDictionaryGetValueIfPresent(self.NS, n, byref(v))
+                t = _libCF.CFDictionaryGetValueIfPresent(self.NS, n, byref(v))
                 if not t or isNone(v):
                     t = _fmt('%s (%r)', _DOT_(self.name, name), n)
                     raise AttributeError(_fmt_invalid(item=t))
@@ -816,10 +816,10 @@ def nsDictionary2dict(ns, ctype_keys=c_void_p, ctype_vals=c_void_p, typy=None): 
 
 def _nsDictionary2items(ns, ctype_keys, ctype_vals):  # helper for nsDictionary2...
     # <https://Developer.Apple.com/documentation/corefoundation/cfdictionary-rum>
-    n  = libCF.CFDictionaryGetCount(ns)
+    n  = _libCF.CFDictionaryGetCount(ns)
     ks = (ctype_keys * n)()
     vs = (ctype_vals * n)()
-    libCF.CFDictionaryGetKeysAndValues(ns, byref(ks), byref(vs))
+    _libCF.CFDictionaryGetKeysAndValues(ns, byref(ks), byref(vs))
     return zip(ks, vs)
 
 
@@ -936,7 +936,7 @@ def nsLog(ns_fmt, *ns_args):
             isinstanceOf(ns, ObjCInstance, raiser=n)
             break  # never reached
     else:  # XXX all ns_fmt %-types should be %@?
-        libFoundation.NSLog(ns_fmt, *ns_args)  # variadic, printf-like
+        _libFoundation.NSLog(ns_fmt, *ns_args)  # variadic, printf-like
 
 
 def nsLogf(fmtxt, *args):
@@ -951,7 +951,7 @@ def nsLogf(fmtxt, *args):
     '''
     isinstanceOf(fmtxt, *_ByteStrs, raiser='fmtxt')
     ns = NSStr(_fmt(fmtxt, *args))
-    libFoundation.NSLog(ns)  # variadic, printf-like
+    _libFoundation.NSLog(ns)  # variadic, printf-like
 
 
 def ns2NSType2(ns):
@@ -1114,9 +1114,9 @@ def nsSet2set(ns, ctype=Set_t, typy=None):  # XXX NS*Set method?
        @raise TypeError: Invalid I{ns}.
     '''
     _, py = _ns2Tpy2(ns, typy, set, frozenset, **_raiser_ns)
-    n = libCF.CFSetGetCount(ns)  # == nsSet.count()
+    n  = _libCF.CFSetGetCount(ns)  # == nsSet.count()
     cs = (ctype * n)()
-    libCF.CFSetGetValues(ns, byref(cs))
+    _libCF.CFSetGetValues(ns, byref(cs))
     return py(_ns2ctype2py(c, ctype) for c in cs)
 
 
@@ -1286,11 +1286,11 @@ def ns2TypeID2(ns, dflt=None):
     # if isinstance(ns, ObjCInstance):
     #     ns = ns._as_parameter_
     try:
-        iD = libCF.CFGetTypeID(ns)
+        iD = _libCF.CFGetTypeID(ns)
     except ArgumentError as x:
-        _Xargs(x, libCF.CFGetTypeID.__name__,
-                  libCF.CFGetTypeID.argtypes,
-                  libCF.CFGetTypeID.restype)
+        _Xargs(x, _libCF.CFGetTypeID.__name__,
+                  _libCF.CFGetTypeID.argtypes,
+                  _libCF.CFGetTypeID.restype)
         raise
     try:
         _ns2 = _CFTypeID2ns[iD]
@@ -1369,16 +1369,16 @@ class _CFTypeID2ns(dict):  # singleton last
             yield _fmt('%s: %s', *t)
 
 _CFTypeID2ns = _CFTypeID2ns({1:          nsValue2py,  # PYCHOK _NSImms.Arrays
-          libCF.CFArrayGetTypeID():      nsArray2listuple,   # 19
-          libCF.CFBooleanGetTypeID():    nsBoolean2bool,     # 21
-          libCF.CFDataGetTypeID():       nsData2bytes,       # 20
-          libCF.CFDateGetTypeID():       nsDate2time,        # 42
-          libCF.CFDictionaryGetTypeID(): nsDictionary2dict,  # 18
-          libCF.CFNullGetTypeID():       nsNull2none,        # 16
-          libCF.CFNumberGetTypeID():     nsNumber2num,       # 22
-          libCF.CFSetGetTypeID():        nsSet2set,          # 17
-          libCF.CFStringGetTypeID():     nsString2str,       # 7
-          libCF.CFURLGetTypeID():        nsURL2str})         # 29
+         _libCF.CFArrayGetTypeID():      nsArray2listuple,   # 19
+         _libCF.CFBooleanGetTypeID():    nsBoolean2bool,     # 21
+         _libCF.CFDataGetTypeID():       nsData2bytes,       # 20
+         _libCF.CFDateGetTypeID():       nsDate2time,        # 42
+         _libCF.CFDictionaryGetTypeID(): nsDictionary2dict,  # 18
+         _libCF.CFNullGetTypeID():       nsNull2none,        # 16
+         _libCF.CFNumberGetTypeID():     nsNumber2num,       # 22
+         _libCF.CFSetGetTypeID():        nsSet2set,          # 17
+         _libCF.CFStringGetTypeID():     nsString2str,       # 7
+         _libCF.CFURLGetTypeID():        nsURL2str})         # 29
 
 if __name__ == _Dmain_:
 
@@ -1516,7 +1516,7 @@ if __name__ == _Dmain_:
 #  pycocoa.nstypes.NSView is <ObjCClass(NSView of 0x203d281a8) at 0x103551400>,
 #  pycocoa.nstypes.NSWindow is <ObjCClass(NSWindow of 0x203d283b0) at 0x103551470>,
 # )[102]
-# pycocoa.nstypes.version 25.2.19, .isLazy 1, Python 3.13.1 64bit arm64, macOS 14.7.3
+# pycocoa.nstypes.version 25.2.25, .isLazy 1, Python 3.13.2 64bit arm64, macOS 14.7.3
 
 # MIT License <https://OpenSource.org/licenses/MIT>
 #

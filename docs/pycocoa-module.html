@@ -144,6 +144,36 @@
     target="_top">PyGUI</a> for <i>macOS</i> and (d) <a 
     href="https://wxPython.org/pages/overview/index.html" 
     target="_top">wxPython</a>.</p>
+  <h1 class="heading">Env variables</h1>
+    <p>The following environment variables are observed by 
+    <code>pycocoa</code>:</p>
+    <ul>
+      <li>
+        <code>PYCOCOA_LAZY_IMPORT</code> - see module <a 
+        href="pycocoa.lazily-module.html" class="link">lazily</a> and 
+        variable <a href="pycocoa-module.html#isLazy" 
+        class="link">isLazy</a>.
+      </li>
+      <li>
+        <code>PYCOCOA_LIBOBJC_NONATOMIC</code> - see module <a 
+        href="pycocoa.runtime-module.html" class="link">runtime</a>.
+      </li>
+      <li>
+        <code>PYCOCOA_OBJC_LOG</code> - see module <a 
+        href="pycocoa.runtime-module.html" class="link">runtime</a>.
+      </li>
+    </ul>
+    <p>plus during development:</p>
+    <ul>
+      <li>
+        <code>PYCOCOA_FOR_DOCS</code> - for extended documentation by 
+        <code>epydoc</code>.
+      </li>
+      <li>
+        <code>PYTHONFAULTHANDLER</code> - see modules <a 
+        href="pycocoa.faults-module.html" class="link">faults</a>.
+      </li>
+    </ul>
   <h1 class="heading">Licenses</h1>
     <p><a href="https://OpenSource.org/licenses/MIT" 
     target="_top">Copyright (C) 2017-2025 -- mrJean1 at Gmail -- All Rights
@@ -198,7 +228,7 @@
 
 <hr />
 <div class="fields">      <p><strong>Version:</strong>
-        25.02.22
+        25.02.25
       </p>
 </div><!-- ==================== SUBMODULES ==================== -->
 <a name="section-Submodules"></a>
@@ -2361,8 +2391,8 @@
     </td><td class="summary">
       <table width="100%" cellpadding="0" cellspacing="0" border="0">
         <tr>
-          <td><span class="summary-sig"><a href="pycocoa-module.html#get_libPC" class="summary-sig-name">get_libPC</a>()</span><br />
-      Get the <code>PrintCore</code> framework library.</td>
+          <td><span class="summary-sig"><a name="get_libPC"></a><span class="summary-sig-name">get_libPC</span>()</span><br />
+      DEPRECATED on 25.02.25, use <code>Libs.PrintCore</code>.</td>
           <td align="right" valign="top">
             
             
@@ -2398,8 +2428,8 @@
     </td><td class="summary">
       <table width="100%" cellpadding="0" cellspacing="0" border="0">
         <tr>
-          <td><span class="summary-sig"><a href="pycocoa-module.html#get_libs" class="summary-sig-name">get_libs</a>()</span><br />
-      Return the <code>.dylib</code> libraries loaded so far.</td>
+          <td><span class="summary-sig"><a name="get_libs"></a><span class="summary-sig-name">get_libs</span>()</span><br />
+      DEPRECATED on 25.02.25, use <code>Libs</code>.</td>
           <td align="right" valign="top">
             
             
@@ -4395,7 +4425,7 @@ pycocoa'"><code class="variable-quote">'</code><code class="variable-string">/Us
     <td width="15%" align="right" valign="top" class="summary">
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
-        <a name="version"></a><span class="summary-name">version</span> = <code title="'25.2.22'"><code class="variable-quote">'</code><code class="variable-string">25.2.22</code><code class="variable-quote">'</code></code>
+        <a name="version"></a><span class="summary-name">version</span> = <code title="'25.2.25'"><code class="variable-quote">'</code><code class="variable-string">25.2.25</code><code class="variable-quote">'</code></code>
     </td>
   </tr>
 <tr>
@@ -4566,15 +4596,15 @@ arkGray'),
     <td width="15%" align="right" valign="top" class="summary">
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
-        <a href="pycocoa-module.html#Libs" class="summary-name">Libs</a> = <code title="Libs.AppKit=&lt;CDLL 'AppKit.framework/AppKit', handle 7fff9f58a290 at 7f\
-ceb86d5610&gt;,
-    .C=&lt;CDLL 'libc.dylib', handle 7fff9f598d50 at 7fceb86cfb90&gt;,
-    .CoreFoundation=&lt;CDLL 'CoreFoundation.framework/CoreFoundation', h\
-andle 7fff9f58e988 at 7fceb86cfb50&gt;,
-    .CoreGraphics=&lt;CDLL 'CoreGraphics.framework/CoreGraphics', handle \
-7fff9f588620 at 7fceb86d5750&gt;,
-    .CoreText=&lt;CDLL 'CoreText.framework/CoreText', handle 7fff9f58c8c0\
-...">Libs.AppKit=&lt;CDLL 'AppKit.framework/AppKit', handle 7ff<code class="variable-ellipsis">...</code></code>
+        <a href="pycocoa-module.html#Libs" class="summary-name">Libs</a> = <code title="{'CoreFoundation': &lt;CDLL 'CoreFoundation.framework/CoreFoundation', ha\
+ndle 7fff9d392988 at 7fc918642fd0&gt;, 'Foundation': &lt;CDLL 'Foundation.fr\
+amework/Foundation', handle 7fff9d393eb8 at 7fc91832a090&gt;, 'C': &lt;CDLL \
+'libc.dylib', handle 7fff9d384d50 at 7fc918642f90&gt;, 'Quartz': &lt;CDLL 'C\
+oreGraphics.framework/CoreGraphics', handle 7fff9d394620 at 7fc918645d\
+90&gt;, 'PrintCore.framework': &lt;CDLL '/System/Library/Frameworks/Applicat\
+ionServices.framework/Frameworks/PrintCore.framework/PrintCore', handl\
+e 7fff9d272510 at 7fc9283fd3d0&gt;, 'libc': &lt;CDLL 'libc.dylib', handle 7f\
+...">{'CoreFoundation': &lt;CDLL 'CoreFoundation.framework/Core<code class="variable-ellipsis">...</code></code>
     </td>
   </tr>
 <tr>
@@ -4602,7 +4632,7 @@ andle 7fff9f58e988 at 7fceb86cfb50&gt;,
     <td width="15%" align="right" valign="top" class="summary">
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
-        <a href="pycocoa-module.html#NSAlertDelegate" class="summary-name">NSAlertDelegate</a> = <code title="&lt;pycocoa.internals.proxy_RO object at 0x7fceb84b2bd0&gt;">&lt;pycocoa.internals.proxy_RO object at 0x7fce<code class="variable-ellipsis">...</code></code>
+        <a href="pycocoa-module.html#NSAlertDelegate" class="summary-name">NSAlertDelegate</a> = <code title="&lt;pycocoa.internals.proxy_RO object at 0x7fc92842c790&gt;">&lt;pycocoa.internals.proxy_RO object at 0x7fc9<code class="variable-ellipsis">...</code></code>
     </td>
   </tr>
 <tr>
@@ -4665,7 +4695,7 @@ andle 7fff9f58e988 at 7fceb86cfb50&gt;,
     <td width="15%" align="right" valign="top" class="summary">
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
-        <a href="pycocoa-module.html#NSApplicationDelegate" class="summary-name">NSApplicationDelegate</a> = <code title="&lt;pycocoa.internals.proxy_RO object at 0x7fceb8648ed0&gt;">&lt;pycocoa.internals.proxy_RO object at <code class="variable-ellipsis">...</code></code>
+        <a href="pycocoa-module.html#NSApplicationDelegate" class="summary-name">NSApplicationDelegate</a> = <code title="&lt;pycocoa.internals.proxy_RO object at 0x7fc9284a5210&gt;">&lt;pycocoa.internals.proxy_RO object at <code class="variable-ellipsis">...</code></code>
     </td>
   </tr>
 <tr>
@@ -4910,7 +4940,7 @@ andle 7fff9f58e988 at 7fceb86cfb50&gt;,
     <td width="15%" align="right" valign="top" class="summary">
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
-        <a href="pycocoa-module.html#NSDefaultRunLoopMode" class="summary-name">NSDefaultRunLoopMode</a> = <code title="_dllattr(libAppKit, NSDefaultRunLoopMode= RunLoop_t)">_dllattr(libAppKit, NSDefaultRunLoopMod<code class="variable-ellipsis">...</code></code>
+        <a href="pycocoa-module.html#NSDefaultRunLoopMode" class="summary-name">NSDefaultRunLoopMode</a> = <code title="_dllattr(_libAppKit, NSDefaultRunLoopMode= RunLoop_t)">_dllattr(_libAppKit, NSDefaultRunLoopMo<code class="variable-ellipsis">...</code></code>
     </td>
   </tr>
 <tr>
@@ -5057,7 +5087,7 @@ andle 7fff9f58e988 at 7fceb86cfb50&gt;,
     <td width="15%" align="right" valign="top" class="summary">
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
-        <a href="pycocoa-module.html#NSEventTrackingRunLoopMode" class="summary-name">NSEventTrackingRunLoopMode</a> = <code title="_dllattr(libAppKit, NSEventTrackingRunLoopMode= RunLoop_t)">_dllattr(libAppKit, NSEventTracki<code class="variable-ellipsis">...</code></code>
+        <a href="pycocoa-module.html#NSEventTrackingRunLoopMode" class="summary-name">NSEventTrackingRunLoopMode</a> = <code title="_dllattr(_libAppKit, NSEventTrackingRunLoopMode= RunLoop_t)">_dllattr(_libAppKit, NSEventTrack<code class="variable-ellipsis">...</code></code>
     </td>
   </tr>
 <tr>
@@ -5505,15 +5535,15 @@ andle 7fff9f58e988 at 7fceb86cfb50&gt;,
     <td width="15%" align="right" valign="top" class="summary">
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
-        <a href="pycocoa-module.html#NSMain" class="summary-name">NSMain</a> = <code title="NSMain.Application=NSApplication(&lt;Id_t at 0x7fcea8a64710&gt;) of 0x7fce83\
-fe3230,
-      .BooleanNO=NSBoolean(&lt;Id_t at 0x7fcea8a6bcb0&gt;) of 0x7ff85855ec70\
+        <a href="pycocoa-module.html#NSMain" class="summary-name">NSMain</a> = <code title="NSMain.Application=NSApplication(&lt;Id_t at 0x7fc9087b0d40&gt;) of 0x7fc902\
+a89b10,
+      .BooleanNO=NSBoolean(&lt;Id_t at 0x7fc9087b08c0&gt;) of 0x7ff85855ec70\
 ,
-      .BooleanYES=NSBoolean(&lt;Id_t at 0x7fcea8a735f0&gt;) of 0x7ff85855ec6\
+      .BooleanYES=NSBoolean(&lt;Id_t at 0x7fc9087ad200&gt;) of 0x7ff85855ec6\
 0,
-      .Bundle=NSBundle(&lt;Id_t at 0x7fcea8a73710&gt;) of 0x600000320000,
+      .Bundle=NSBundle(&lt;Id_t at 0x7fc9087bb9e0&gt;) of 0x600003408320,
       .BundleName=NSConstantString('CFBundleName'),
-...">NSMain.Application=NSApplication(&lt;Id_t at 0x7fcea8a64<code class="variable-ellipsis">...</code></code>
+...">NSMain.Application=NSApplication(&lt;Id_t at 0x7fc9087b0<code class="variable-ellipsis">...</code></code>
     </td>
   </tr>
 <tr>
@@ -5905,7 +5935,7 @@ fe3230,
     <td width="15%" align="right" valign="top" class="summary">
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
-        <a href="pycocoa-module.html#NSTableViewDelegate" class="summary-name">NSTableViewDelegate</a> = <code title="&lt;pycocoa.internals.proxy_RO object at 0x7fceb877e9d0&gt;">&lt;pycocoa.internals.proxy_RO object at 0x<code class="variable-ellipsis">...</code></code>
+        <a href="pycocoa-module.html#NSTableViewDelegate" class="summary-name">NSTableViewDelegate</a> = <code title="&lt;pycocoa.internals.proxy_RO object at 0x7fc928392a50&gt;">&lt;pycocoa.internals.proxy_RO object at 0x<code class="variable-ellipsis">...</code></code>
     </td>
   </tr>
 <tr>
@@ -6101,7 +6131,7 @@ fe3230,
     <td width="15%" align="right" valign="top" class="summary">
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
-        <a href="pycocoa-module.html#NSWindowDelegate" class="summary-name">NSWindowDelegate</a> = <code title="&lt;pycocoa.internals.proxy_RO object at 0x7fceb877e7d0&gt;">&lt;pycocoa.internals.proxy_RO object at 0x7fc<code class="variable-ellipsis">...</code></code>
+        <a href="pycocoa-module.html#NSWindowDelegate" class="summary-name">NSWindowDelegate</a> = <code title="&lt;pycocoa.internals.proxy_RO object at 0x7fc928392850&gt;">&lt;pycocoa.internals.proxy_RO object at 0x7fc<code class="variable-ellipsis">...</code></code>
     </td>
   </tr>
 <tr>
@@ -6336,54 +6366,55 @@ Background'),
     <td width="15%" align="right" valign="top" class="summary">
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
-        <a href="pycocoa-module.html#libAppKit" class="summary-name">libAppKit</a> = <code title="&lt;CDLL 'AppKit.framework/AppKit', handle 7fff9f58a290 at 7fceb86d5610&gt;">&lt;CDLL 'AppKit.framework/AppKit', handle 7fff9f58a2<code class="variable-ellipsis">...</code></code>
+        <a href="pycocoa-module.html#libAppKit" class="summary-name">libAppKit</a> = <code title="&lt;CDLL 'AppKit.framework/AppKit', handle 7fff9d396290 at 7fc918645a50&gt;">&lt;CDLL 'AppKit.framework/AppKit', handle 7fff9d3962<code class="variable-ellipsis">...</code></code>
     </td>
   </tr>
 <tr>
     <td width="15%" align="right" valign="top" class="summary">
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
-        <a href="pycocoa-module.html#libCF" class="summary-name">libCF</a> = <code title="&lt;CDLL 'CoreFoundation.framework/CoreFoundation', handle 7fff9f58e988 a\
-t 7fceb86cfb50&gt;">&lt;CDLL 'CoreFoundation.framework/CoreFoundation', handl<code class="variable-ellipsis">...</code></code>
+        <a href="pycocoa-module.html#libCF" class="summary-name">libCF</a> = <code title="&lt;CDLL 'CoreFoundation.framework/CoreFoundation', handle 7fff9d392988 a\
+t 7fc918642fd0&gt;">&lt;CDLL 'CoreFoundation.framework/CoreFoundation', handl<code class="variable-ellipsis">...</code></code>
     </td>
   </tr>
 <tr>
     <td width="15%" align="right" valign="top" class="summary">
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
-        <a href="pycocoa-module.html#libCG" class="summary-name">libCG</a> = <code title="&lt;CDLL 'CoreGraphics.framework/CoreGraphics', handle 7fff9f588620 at 7f\
-ceb86d5750&gt;">&lt;CDLL 'CoreGraphics.framework/CoreGraphics', handle 7f<code class="variable-ellipsis">...</code></code>
+        <a href="pycocoa-module.html#libCG" class="summary-name">libCG</a> = <code title="&lt;CDLL 'CoreGraphics.framework/CoreGraphics', handle 7fff9d394620 at 7f\
+c918645d90&gt;">&lt;CDLL 'CoreGraphics.framework/CoreGraphics', handle 7f<code class="variable-ellipsis">...</code></code>
     </td>
   </tr>
 <tr>
     <td width="15%" align="right" valign="top" class="summary">
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
-        <a href="pycocoa-module.html#libCT" class="summary-name">libCT</a> = <code title="&lt;CDLL 'CoreText.framework/CoreText', handle 7fff9f58c8c0 at 7fcea830f8\
-90&gt;">&lt;CDLL 'CoreText.framework/CoreText', handle 7fff9f58c8<code class="variable-ellipsis">...</code></code>
+        <a href="pycocoa-module.html#libCT" class="summary-name">libCT</a> = <code title="&lt;CDLL 'CoreText.framework/CoreText', handle 7fff9d3908c0 at 7fc91831eb\
+90&gt;">&lt;CDLL 'CoreText.framework/CoreText', handle 7fff9d3908<code class="variable-ellipsis">...</code></code>
     </td>
   </tr>
 <tr>
     <td width="15%" align="right" valign="top" class="summary">
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
-        <a href="pycocoa-module.html#libFoundation" class="summary-name">libFoundation</a> = <code title="&lt;CDLL 'Foundation.framework/Foundation', handle 7fff9f58feb8 at 7fcea8\
-30fd50&gt;">&lt;CDLL 'Foundation.framework/Foundation', handl<code class="variable-ellipsis">...</code></code>
+        <a href="pycocoa-module.html#libFoundation" class="summary-name">libFoundation</a> = <code title="&lt;CDLL 'Foundation.framework/Foundation', handle 7fff9d393eb8 at 7fc918\
+32a090&gt;">&lt;CDLL 'Foundation.framework/Foundation', handl<code class="variable-ellipsis">...</code></code>
     </td>
   </tr>
 <tr>
     <td width="15%" align="right" valign="top" class="summary">
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
-        <a name="libPC"></a><span class="summary-name">libPC</span> = <code title="None">None</code><br />
-      hash(x)
+        <a href="pycocoa-module.html#libPC" class="summary-name">libPC</a> = <code title="&lt;CDLL '/System/Library/Frameworks/ApplicationServices.framework/Framew\
+orks/PrintCore.framework/PrintCore', handle 7fff9d272510 at 7fc9283fd3\
+d0&gt;">&lt;CDLL '/System/Library/Frameworks/ApplicationServices.<code class="variable-ellipsis">...</code></code>
     </td>
   </tr>
 <tr>
     <td width="15%" align="right" valign="top" class="summary">
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
-        <a href="pycocoa-module.html#libobjc" class="summary-name">libobjc</a> = <code title="&lt;CDLL 'libobjc.dylib', handle 7fff9f580414 at 7fcea830fe50&gt;">&lt;CDLL 'libobjc.dylib', handle 7fff9f580414 at 7fcea8<code class="variable-ellipsis">...</code></code>
+        <a href="pycocoa-module.html#libobjc" class="summary-name">libobjc</a> = <code title="&lt;CDLL 'libobjc.dylib', handle 7fff9d39c414 at 7fc91832a350&gt;">&lt;CDLL 'libobjc.dylib', handle 7fff9d39c414 at 7fc918<code class="variable-ellipsis">...</code></code>
     </td>
   </tr>
 <tr>
@@ -7711,28 +7742,6 @@ ceb86d5750&gt;">&lt;CDLL 'CoreGraphics.framework/CoreGraphics', handle 7f<code c
       </p>
 </div></td></tr></table>
 </div>
-<a name="get_libPC"></a>
-<div>
-<table class="details" border="1" cellpadding="3"
-       cellspacing="0" width="100%" bgcolor="white">
-<tr><td>
-  <table width="100%" cellpadding="0" cellspacing="0" border="0">
-  <tr valign="top"><td>
-  <h3 class="epydoc"><span class="sig"><span class="sig-name">get_libPC</span>()</span>
-  </h3>
-  </td><td align="right" valign="top"
-    >&nbsp;
-    </td>
-  </tr></table>
-  
-  <p>Get the <code>PrintCore</code> framework library.</p>
-  <dl class="fields">
-    <dt>Returns:</dt>
-        <dd>The <code>libPC</code> framework library 
-          (<code>ctypes.CDLL</code>).</dd>
-  </dl>
-</td></tr></table>
-</div>
 <a name="get_lib_framework"></a>
 <div>
 <table class="details" border="1" cellpadding="3"
@@ -7780,27 +7789,6 @@ ceb86d5750&gt;">&lt;CDLL 'CoreGraphics.framework/CoreGraphics', handle 7f<code c
         </ul>
       </p>
 </div></td></tr></table>
-</div>
-<a name="get_libs"></a>
-<div>
-<table class="details" border="1" cellpadding="3"
-       cellspacing="0" width="100%" bgcolor="white">
-<tr><td>
-  <table width="100%" cellpadding="0" cellspacing="0" border="0">
-  <tr valign="top"><td>
-  <h3 class="epydoc"><span class="sig"><span class="sig-name">get_libs</span>()</span>
-  </h3>
-  </td><td align="right" valign="top"
-    >&nbsp;
-    </td>
-  </tr></table>
-  
-  <p>Return the <code>.dylib</code> libraries loaded so far.</p>
-  <dl class="fields">
-    <dt>Returns:</dt>
-        <dd>The libraries cached (<code>Adict</code>).</dd>
-  </dl>
-</td></tr></table>
 </div>
 <a name="get_metaclass"></a>
 <div>
@@ -8168,8 +8156,8 @@ ceb86d5750&gt;">&lt;CDLL 'CoreGraphics.framework/CoreGraphics', handle 7f<code c
           class="link">Printer</a>s).</li>
     </ul></dd>
     <dt>Returns:</dt>
-        <dd>Each resolution 2-tuple (horizontal, vertical) in dots per inch 
-          (<code>float</code>s).</dd>
+        <dd>A 2-tuple (horizontal, vertical) in dots per inch 
+          (<code>float</code>s) for each resolution.</dd>
   </dl>
 </td></tr></table>
 </div>
@@ -11789,14 +11777,14 @@ Keys.ACK=0x6,
   <dl class="fields">
     <dt>Value:</dt>
       <dd><table><tr><td><pre class="variable">
-Libs.AppKit=&lt;CDLL 'AppKit.framework/AppKit', handle 7fff9f58a290 at 7f<span class="variable-linewrap"><img src="crarr.png" alt="\" /></span>
-ceb86d5610&gt;,
-    .C=&lt;CDLL 'libc.dylib', handle 7fff9f598d50 at 7fceb86cfb90&gt;,
-    .CoreFoundation=&lt;CDLL 'CoreFoundation.framework/CoreFoundation', h<span class="variable-linewrap"><img src="crarr.png" alt="\" /></span>
-andle 7fff9f58e988 at 7fceb86cfb50&gt;,
-    .CoreGraphics=&lt;CDLL 'CoreGraphics.framework/CoreGraphics', handle <span class="variable-linewrap"><img src="crarr.png" alt="\" /></span>
-7fff9f588620 at 7fceb86d5750&gt;,
-    .CoreText=&lt;CDLL 'CoreText.framework/CoreText', handle 7fff9f58c8c0<span class="variable-linewrap"><img src="crarr.png" alt="\" /></span>
+{'CoreFoundation': &lt;CDLL 'CoreFoundation.framework/CoreFoundation', ha<span class="variable-linewrap"><img src="crarr.png" alt="\" /></span>
+ndle 7fff9d392988 at 7fc918642fd0&gt;, 'Foundation': &lt;CDLL 'Foundation.fr<span class="variable-linewrap"><img src="crarr.png" alt="\" /></span>
+amework/Foundation', handle 7fff9d393eb8 at 7fc91832a090&gt;, 'C': &lt;CDLL <span class="variable-linewrap"><img src="crarr.png" alt="\" /></span>
+'libc.dylib', handle 7fff9d384d50 at 7fc918642f90&gt;, 'Quartz': &lt;CDLL 'C<span class="variable-linewrap"><img src="crarr.png" alt="\" /></span>
+oreGraphics.framework/CoreGraphics', handle 7fff9d394620 at 7fc918645d<span class="variable-linewrap"><img src="crarr.png" alt="\" /></span>
+90&gt;, 'PrintCore.framework': &lt;CDLL '/System/Library/Frameworks/Applicat<span class="variable-linewrap"><img src="crarr.png" alt="\" /></span>
+ionServices.framework/Frameworks/PrintCore.framework/PrintCore', handl<span class="variable-linewrap"><img src="crarr.png" alt="\" /></span>
+e 7fff9d272510 at 7fc9283fd3d0&gt;, 'libc': &lt;CDLL 'libc.dylib', handle 7f<span class="variable-linewrap"><img src="crarr.png" alt="\" /></span>
 <code class="variable-ellipsis">...</code>
 </pre></td></tr></table>
 </dd>
@@ -11815,7 +11803,7 @@ andle 7fff9f58e988 at 7fceb86cfb50&gt;,
   <dl class="fields">
     <dt>Value:</dt>
       <dd><table><tr><td><pre class="variable">
-&lt;pycocoa.internals.proxy_RO object at 0x7fceb84b2bd0&gt;
+&lt;pycocoa.internals.proxy_RO object at 0x7fc92842c790&gt;
 </pre></td></tr></table>
 </dd>
   </dl>
@@ -11833,7 +11821,7 @@ andle 7fff9f58e988 at 7fceb86cfb50&gt;,
   <dl class="fields">
     <dt>Value:</dt>
       <dd><table><tr><td><pre class="variable">
-&lt;pycocoa.internals.proxy_RO object at 0x7fceb8648ed0&gt;
+&lt;pycocoa.internals.proxy_RO object at 0x7fc9284a5210&gt;
 </pre></td></tr></table>
 </dd>
   </dl>
@@ -11851,7 +11839,7 @@ andle 7fff9f58e988 at 7fceb86cfb50&gt;,
   <dl class="fields">
     <dt>Value:</dt>
       <dd><table><tr><td><pre class="variable">
-_dllattr(libAppKit, NSDefaultRunLoopMode= RunLoop_t)
+_dllattr(_libAppKit, NSDefaultRunLoopMode= RunLoop_t)
 </pre></td></tr></table>
 </dd>
   </dl>
@@ -11869,7 +11857,7 @@ _dllattr(libAppKit, NSDefaultRunLoopMode= RunLoop_t)
   <dl class="fields">
     <dt>Value:</dt>
       <dd><table><tr><td><pre class="variable">
-_dllattr(libAppKit, NSEventTrackingRunLoopMode= RunLoop_t)
+_dllattr(_libAppKit, NSEventTrackingRunLoopMode= RunLoop_t)
 </pre></td></tr></table>
 </dd>
   </dl>
@@ -11887,13 +11875,13 @@ _dllattr(libAppKit, NSEventTrackingRunLoopMode= RunLoop_t)
   <dl class="fields">
     <dt>Value:</dt>
       <dd><table><tr><td><pre class="variable">
-NSMain.Application=NSApplication(&lt;Id_t at 0x7fcea8a64710&gt;) of 0x7fce83<span class="variable-linewrap"><img src="crarr.png" alt="\" /></span>
-fe3230,
-      .BooleanNO=NSBoolean(&lt;Id_t at 0x7fcea8a6bcb0&gt;) of 0x7ff85855ec70<span class="variable-linewrap"><img src="crarr.png" alt="\" /></span>
+NSMain.Application=NSApplication(&lt;Id_t at 0x7fc9087b0d40&gt;) of 0x7fc902<span class="variable-linewrap"><img src="crarr.png" alt="\" /></span>
+a89b10,
+      .BooleanNO=NSBoolean(&lt;Id_t at 0x7fc9087b08c0&gt;) of 0x7ff85855ec70<span class="variable-linewrap"><img src="crarr.png" alt="\" /></span>
 ,
-      .BooleanYES=NSBoolean(&lt;Id_t at 0x7fcea8a735f0&gt;) of 0x7ff85855ec6<span class="variable-linewrap"><img src="crarr.png" alt="\" /></span>
+      .BooleanYES=NSBoolean(&lt;Id_t at 0x7fc9087ad200&gt;) of 0x7ff85855ec6<span class="variable-linewrap"><img src="crarr.png" alt="\" /></span>
 0,
-      .Bundle=NSBundle(&lt;Id_t at 0x7fcea8a73710&gt;) of 0x600000320000,
+      .Bundle=NSBundle(&lt;Id_t at 0x7fc9087bb9e0&gt;) of 0x600003408320,
       .BundleName=NSConstantString('CFBundleName'),
 <code class="variable-ellipsis">...</code>
 </pre></td></tr></table>
@@ -11913,7 +11901,7 @@ fe3230,
   <dl class="fields">
     <dt>Value:</dt>
       <dd><table><tr><td><pre class="variable">
-&lt;pycocoa.internals.proxy_RO object at 0x7fceb877e9d0&gt;
+&lt;pycocoa.internals.proxy_RO object at 0x7fc928392a50&gt;
 </pre></td></tr></table>
 </dd>
   </dl>
@@ -11931,7 +11919,7 @@ fe3230,
   <dl class="fields">
     <dt>Value:</dt>
       <dd><table><tr><td><pre class="variable">
-&lt;pycocoa.internals.proxy_RO object at 0x7fceb877e7d0&gt;
+&lt;pycocoa.internals.proxy_RO object at 0x7fc928392850&gt;
 </pre></td></tr></table>
 </dd>
   </dl>
@@ -12112,7 +12100,7 @@ WindowStyle.Closable=2,
   <dl class="fields">
     <dt>Value:</dt>
       <dd><table><tr><td><pre class="variable">
-&lt;CDLL 'AppKit.framework/AppKit', handle 7fff9f58a290 at 7fceb86d5610&gt;
+&lt;CDLL 'AppKit.framework/AppKit', handle 7fff9d396290 at 7fc918645a50&gt;
 </pre></td></tr></table>
 </dd>
   </dl>
@@ -12130,8 +12118,8 @@ WindowStyle.Closable=2,
   <dl class="fields">
     <dt>Value:</dt>
       <dd><table><tr><td><pre class="variable">
-&lt;CDLL 'CoreFoundation.framework/CoreFoundation', handle 7fff9f58e988 a<span class="variable-linewrap"><img src="crarr.png" alt="\" /></span>
-t 7fceb86cfb50&gt;
+&lt;CDLL 'CoreFoundation.framework/CoreFoundation', handle 7fff9d392988 a<span class="variable-linewrap"><img src="crarr.png" alt="\" /></span>
+t 7fc918642fd0&gt;
 </pre></td></tr></table>
 </dd>
   </dl>
@@ -12149,8 +12137,8 @@ t 7fceb86cfb50&gt;
   <dl class="fields">
     <dt>Value:</dt>
       <dd><table><tr><td><pre class="variable">
-&lt;CDLL 'CoreGraphics.framework/CoreGraphics', handle 7fff9f588620 at 7f<span class="variable-linewrap"><img src="crarr.png" alt="\" /></span>
-ceb86d5750&gt;
+&lt;CDLL 'CoreGraphics.framework/CoreGraphics', handle 7fff9d394620 at 7f<span class="variable-linewrap"><img src="crarr.png" alt="\" /></span>
+c918645d90&gt;
 </pre></td></tr></table>
 </dd>
   </dl>
@@ -12168,7 +12156,7 @@ ceb86d5750&gt;
   <dl class="fields">
     <dt>Value:</dt>
       <dd><table><tr><td><pre class="variable">
-&lt;CDLL 'CoreText.framework/CoreText', handle 7fff9f58c8c0 at 7fcea830f8<span class="variable-linewrap"><img src="crarr.png" alt="\" /></span>
+&lt;CDLL 'CoreText.framework/CoreText', handle 7fff9d3908c0 at 7fc91831eb<span class="variable-linewrap"><img src="crarr.png" alt="\" /></span>
 90&gt;
 </pre></td></tr></table>
 </dd>
@@ -12187,8 +12175,28 @@ ceb86d5750&gt;
   <dl class="fields">
     <dt>Value:</dt>
       <dd><table><tr><td><pre class="variable">
-&lt;CDLL 'Foundation.framework/Foundation', handle 7fff9f58feb8 at 7fcea8<span class="variable-linewrap"><img src="crarr.png" alt="\" /></span>
-30fd50&gt;
+&lt;CDLL 'Foundation.framework/Foundation', handle 7fff9d393eb8 at 7fc918<span class="variable-linewrap"><img src="crarr.png" alt="\" /></span>
+32a090&gt;
+</pre></td></tr></table>
+</dd>
+  </dl>
+</td></tr></table>
+</div>
+<a name="libPC"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <h3 class="epydoc">libPC</h3>
+  
+  <dl class="fields">
+  </dl>
+  <dl class="fields">
+    <dt>Value:</dt>
+      <dd><table><tr><td><pre class="variable">
+&lt;CDLL '/System/Library/Frameworks/ApplicationServices.framework/Framew<span class="variable-linewrap"><img src="crarr.png" alt="\" /></span>
+orks/PrintCore.framework/PrintCore', handle 7fff9d272510 at 7fc9283fd3<span class="variable-linewrap"><img src="crarr.png" alt="\" /></span>
+d0&gt;
 </pre></td></tr></table>
 </dd>
   </dl>
@@ -12206,7 +12214,7 @@ ceb86d5750&gt;
   <dl class="fields">
     <dt>Value:</dt>
       <dd><table><tr><td><pre class="variable">
-&lt;CDLL 'libobjc.dylib', handle 7fff9f580414 at 7fcea830fe50&gt;
+&lt;CDLL 'libobjc.dylib', handle 7fff9d39c414 at 7fc91832a350&gt;
 </pre></td></tr></table>
 </dd>
   </dl>
@@ -12244,7 +12252,7 @@ ceb86d5750&gt;
 <table border="0" cellpadding="0" cellspacing="0" width="100%%">
   <tr>
     <td align="left" class="footer">
-    Generated by Epydoc 3.0.1 on Sun Feb 23 14:01:04 2025
+    Generated by Epydoc 3.0.1 on Wed Feb 26 13:23:51 2025
     </td>
     <td align="right" class="footer">
       <a target="mainFrame" href="http://epydoc.sourceforge.net"

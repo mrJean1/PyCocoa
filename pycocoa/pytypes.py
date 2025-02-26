@@ -15,7 +15,7 @@ from pycocoa.nstypes import NSArray, NSData, NSDate, NSDecimal, \
                             NSMain, NSMutableArray, NSMutableSet, \
                             NSMutableDictionary, NSMutableString, \
                             NSSet, _NSStr, NSStr, NSString, NSURL
-from pycocoa.oslibs import libCF
+from pycocoa.oslibs import _libCF
 from pycocoa.runtime import ObjCInstance
 from pycocoa.utils import clipstr, isinstanceOf
 
@@ -24,7 +24,7 @@ from decimal import Decimal as _Decimal
 from types import GeneratorType as _Generator
 
 __all__ = _ALL_LAZY.pytypes
-__version__ = '25.02.19'
+__version__ = '25.02.25'
 
 _MAXLONG = (1 << 63)  # == _MAXLONGLONG!
 _Numbers = _Ints + (float, _Decimal)
@@ -100,7 +100,7 @@ def _dicts2NS(py, frozen=False):
     ns = NSMutableDictionary.dictionary()
     for k, v in py.get('iteritems', py.items)():
         ns.setObject_forKey_(py2NS(v), py2NS(k))
-    ns = _len2NS(py, ns, libCF.CFDictionaryGetCount)
+    ns = _len2NS(py, ns, _libCF.CFDictionaryGetCount)
     if frozen:
         ns = NSDictionary.alloc().initWithDictionary_(ns)
         ns._from_py2NS = True
@@ -248,7 +248,7 @@ def list2NS(py):
 def _listuple2NS(py, frozen=False, count=True):
     '''(INTERNAL) Create an C{NS[Mutable]Array}.
     '''
-    _g =  libCF.CFArrayGetCount if count else None
+    _g = _libCF.CFArrayGetCount if count else None
     ns = _iter2NS(NSMutableArray.array(), py, _g)
     if frozen:
         ns = _len2NS(py, NSArray.alloc().initWithArray_(ns), _g)
@@ -386,7 +386,7 @@ def _sets2NS(py, frozen=False):
     '''(INTERNAL) Create an C{NS[Mutable]Set}.
     '''
     isinstanceOf(py, frozenset, set, **_raiser_py)
-    _g =  libCF.CFSetGetCount
+    _g = _libCF.CFSetGetCount
     ns = _iter2NS(NSMutableSet.set(), py, _g)
     if frozen:
         ns = _len2NS(py, NSSet.alloc().initWithSet_(ns), _g)
@@ -577,7 +577,7 @@ if __name__ == _Dmain_:
 #  pycocoa.pytypes.unicode2NS is <function .unicode2NS at 0x104d1c0e0>,
 #  pycocoa.pytypes.url2NS is <function .url2NS at 0x104d1c180>,
 # )[26]
-# pycocoa.pytypes.version 25.2.19, .isLazy 1, Python 3.13.1 64bit arm64, macOS 14.7.3
+# pycocoa.pytypes.version 25.2.25, .isLazy 1, Python 3.13.2 64bit arm64, macOS 14.7.3
 
 # MIT License <https://OpenSource.org/licenses/MIT>
 #

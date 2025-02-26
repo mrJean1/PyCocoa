@@ -20,7 +20,9 @@ import platform as _platform
 # import sys as _sys  # from .lazily
 
 __all__ = _ALL_LAZY.utils
-__version__ = '25.02.22'
+__version__ = '25.02.25'
+
+_bCOL = b':'  # in .octypes
 
 
 def _all_listing(alls, localls, libs=False, _file_=_NN_, argv0='#'):
@@ -49,7 +51,7 @@ def _all_listing(alls, localls, libs=False, _file_=_NN_, argv0='#'):
     d = i = 0
     p = _NN_
     S = _SPACE_ * (len(m) + 2)
-    for n in sorted(alls, key=str.lower):
+    for n in _asorted(alls):
         v = localls[n]
         r = repr(v)
         if isinstance(v, _Ints):
@@ -100,11 +102,15 @@ def _all_versionstr(libs=False, _file_=_NN_, _version_=_NN_):
          ('Python',  _Python_version, _platform.architecture()[0], machine()),
          ('macOS',   _macOSver()))
     if libs:
-        ls = sorted(oslibs.get_libs().keys())
+        ls = _asorted(oslibs.Libs.keys())
         t += ('oslibs', str(ls).replace("'", _NN_)),
 
     m, _ = _dirbasename2(_file_ or _pycocoa_package)
     return _DOT_(m, _COMMASPACE_.join(map(_SPACE_.join, t)))
+
+
+def _asorted(sortable):
+    return sorted(sortable, key=str.lower)
 
 
 def aspect_ratio(width, *height, **Error_kwds):
@@ -337,7 +343,7 @@ def name2objc(name_):
     '''
     b = str2bytes(name_)
     if not b.startswith(b'_'):
-        b = b.replace(b'_', b':')
+        b = b.replace(b'_', _bCOL)
     return b
 
 
@@ -517,7 +523,7 @@ def _varstr(constants, strepr=None):
     C = constants.__class__
     N = C.__name__.lstrip(_UNDER_)
     v = [_NN_, _doc1(C, N, None)]
-    for n, _ in constants.items():
+    for n in _asorted(constants.keys()):
         v.append(_doc1(getattr(C, n), _DOT_(N, n), strepr))
     return _NL_.join(v)
 
@@ -651,7 +657,7 @@ if __name__ == _Dmain_:
 #  pycocoa.utils.zfstr is <function .zfstr at 0x101521300>,
 #  pycocoa.utils.zSIstr is <function .zSIstr at 0x1015213a0>,
 # )[21]
-# pycocoa.utils.version 25.2.22, .isLazy 1, Python 3.13.2 64bit arm64, macOS 14.7.3
+# pycocoa.utils.version 25.2.25, .isLazy 1, Python 3.13.2 64bit arm64, macOS 14.7.3
 
 # MIT License <https://OpenSource.org/licenses/MIT>
 #

@@ -12,12 +12,12 @@ from pycocoa.internals import _COMMASPACE_, _Dmain_, _fmt, _fmt_invalid, \
 from pycocoa.lazily import _ALL_LAZY, _Types
 from pycocoa.nstypes import ns2py, NSScreen, nsString2str
 from pycocoa.octypes import NSRect_t
-from pycocoa.oslibs import libCG
+from pycocoa.oslibs import _libCG  # PYCHOK used!
 from pycocoa.runtime import isObjCInstanceOf,  isinstanceOf
 # from pycocoa.utils import isinstanceOf  # from .runtime
 
 __all__ = _ALL_LAZY.screens
-__version__ = '25.02.19'
+__version__ = '25.02.25'
 
 
 class Frame(Rect):
@@ -173,13 +173,13 @@ class Screen(_Type0):
     def isBuiltIn(self):
         '''Is this the single, BuiltIn screen (C{bool})?
         '''
-        return self.displayID == libCG.CGMainDisplayID()
+        return self.displayID == _libCG.CGMainDisplayID()
 
     @property_RO
     def isExternal(self):
         '''Is this screen an External one (C{bool})?
         '''
-        return self.displayID != libCG.CGMainDisplayID()
+        return self.displayID != _libCG.CGMainDisplayID()
 
     @property_RO
     def isPrinter(self):
@@ -477,7 +477,7 @@ if __name__ == _Dmain_:
 #  pycocoa.screens.Screen is <class .Screen>,
 #  pycocoa.screens.Screens is (BuiltInScreen(NSScreen, name='BuiltIn'), ExternalScreen(NSScreen, name='External')),
 # )[7]
-# pycocoa.screens.version 25.2.19, .isLazy 1, Python 3.13.1 64bit arm64, macOS 14.7.3
+# pycocoa.screens.version 25.2.25, .isLazy 1, Python 3.13.2 64bit arm64, macOS 14.7.3
 
 # MIT License <https://OpenSource.org/licenses/MIT>
 #

@@ -13,7 +13,7 @@ try:
     _getargspec = _inspect.getfullargspec  # Python 3+
 except AttributeError:
     _getargspec = _inspect.getargspec  # Python 2
-from os import linesep as _NL_  # PYCHOK expected
+import os  as _os
 import sys as _sys  # PYCHOK used!
 
 from platform import machine as _m
@@ -32,6 +32,8 @@ class _Str(str):
         '''
         return self.join(map(str, args))
 
+
+_alloc_          = 'alloc'     # PYCHOK .printers, .runtime
 _bNN_            = b''         # PYCHOK bytes(_NN_)
 _COLON_          = _Str(':')   # PYCHOK expected
 _COMMA_          = _Str(',')   # in .utils
@@ -46,11 +48,12 @@ _Dpackage_       = '__package__'  # PYCHOK _DUNDER_package_
 _Dversion_       = '__version__'  # PYCHOK _DUNDER_version_
 _DOT_            = _Str('.')
 _EQUALS_         = _Str('=')
-_NN_             = _Str('')    # empty string, I{Nomen Nescio}
+_NN_             = _Str('')     # empty string, I{Nomen Nescio}
 _NA_             = 'N/A'
-_name_           = 'name'      # PYCHOK .nstypes, ...
-_NSObject_       = 'NSObject'  # PYCHOK .nstypes, ...
-_pycocoa_        = 'pycocoa'   # pycocoa._pycocoa_package
+_name_           = 'name'       # PYCHOK .nstypes, ...
+_NL_             = _os.linesep  # PYCHOK ...
+_NSObject_       = 'NSObject'   # PYCHOK  NSObject.name
+_pycocoa_        = 'pycocoa'    # pycocoa._pycocoa_package
 _SPACE_          = _Str(' ')
 _UNDER_          = _Str('_')
 _unhandled_      = 'unhandled'  # PYCHOK .nstypes, .pytypes
@@ -149,6 +152,15 @@ class Adict(dict):
         '''Return a shallow copy.
         '''
         return dict.copy(self)
+
+    def items(self):
+        return dict.items(self)
+
+    def keys(self):
+        return dict.keys(self)
+
+    def values(self):
+        return dict.values(self)
 
 
 class _frozendictbase(dict):  # in nstypes.nsDescription2dict
@@ -285,6 +297,8 @@ class _MutableConstants(object):  # in .lazily
         return self._strepr(_fmt2)
 
     def get(self, name, *dflt):
+        '''Get C{value} for I{name} or I{dflt}.
+        '''
         return getattr(self, name, *dflt)
 
     def items(self):
@@ -308,6 +322,16 @@ class _MutableConstants(object):  # in .lazily
         for n in dir(self):
             if n[:1].isupper():
                 yield n
+
+    def rget(self, value, dflt):
+        '''Get C{name} for I{value} or I{dflt}.
+        '''
+        for n in self.keys():
+            if getattr(self, n) == value:
+                break
+        else:
+            n = dflt
+        return n
 
     def _strepr(self, _fmt2):  # helper for __repr__ and __str__
         n =  self.typename.lstrip(_UNDER_)
@@ -520,6 +544,12 @@ def _c_tstr(*c_ts):
     return _COMMASPACE_.join(map(_nameOf, c_ts))
 
 
+def _filexists(name):
+    '''(INTERNAL) Does file I{name} exist?
+    '''
+    return _os.access(name, _os.F_OK)
+
+
 def _fmt(fmtxt, *args):
     '''(INTERNAL) Format a string.
     '''
@@ -667,7 +697,7 @@ __all__ = tuple(_.__name__ for _ in (Adict, bytes2repr, bytes2str,
                                      frozendict, iterbytes,
                                      lambda1, missing.__class__,
                                      property_RO, proxy_RO, str2bytes))
-__version__ = '25.02.22'
+__version__ = '25.02.25'
 
 if __name__ == _Dmain_:
 
@@ -689,7 +719,7 @@ if __name__ == _Dmain_:
 #  pycocoa.internals.proxy_RO is <class .proxy_RO>,
 #  pycocoa.internals.str2bytes is <function .str2bytes at 0x102890900>,
 # )[10]
-# pycocoa.internals.version 25.2.22, .isLazy 1, Python 3.13.2 64bit arm64, macOS 14.7.3
+# pycocoa.internals.version 25.2.25, .isLazy 1, Python 3.13.2 64bit arm64, macOS 14.7.3
 
 # MIT License <https://OpenSource.org/licenses/MIT>
 #

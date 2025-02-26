@@ -10,14 +10,14 @@ from pycocoa.internals import _Dmain_, _DOT_, _fmt, _fmt_frozen, \
                              _fmt_invalid, _Ints, _instr
 from pycocoa.lazily import _ALL_LAZY, _Types
 from pycocoa.octypes import NSNotFound, NSRange_t
-from pycocoa.oslibs import libCF
+from pycocoa.oslibs import _libCF
 from pycocoa.nstypes import NSArray, _NSImms, nsIter2, \
                             NSMutableArray, ns2Type
 from pycocoa.pytypes import py2NS, tuple2NS
 from pycocoa.runtime import isImmutable, isinstanceOf
 
 __all__ = _ALL_LAZY.tuples
-__version__ = '25.02.16'
+__version__ = '25.02.25'
 
 
 def _at(inst, index):
@@ -101,7 +101,7 @@ class Tuple(_Type0):  # note, List subclasses Tuple
         '''
         # can't use self.NS.count() <https://Developer.Apple.com//
         # documentation/foundation/nsarray/1409982-count>
-        return libCF.CFArrayGetCount(self.NS)
+        return _libCF.CFArrayGetCount(self.NS)
 
     def __ne__(self, other):
         return not self.__eq__(other)
@@ -207,7 +207,7 @@ if __name__ == _Dmain_:
 # pycocoa.tuples.__all__ = tuple(
 #  pycocoa.tuples.Tuple is <class .Tuple>,
 # )[1]
-# pycocoa.tuples.version 25.2.15, .isLazy 1, Python 3.13.1 64bit arm64, macOS 14.7.3
+# pycocoa.tuples.version 25.2.25, .isLazy 1, Python 3.13.2 64bit arm64, macOS 14.7.3
 
 # MIT License <https://OpenSource.org/licenses/MIT>
 #

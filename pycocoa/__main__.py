@@ -5,7 +5,7 @@ u'''Print L{pycocoa} all public attributes, pycocoa version, Python
 release, etc. by using C{python -m pycocoa [-all]} from the command line.
 '''
 from pycocoa import __all__ as _alls, _locals, _pycocoa_package
-from pycocoa.lazily import _isPython3, _sys
+from pycocoa.lazily import _isPython3,  _sys
 from pycocoa.utils import _all_listing, _all_versions  # PYCHOK expected
 
 if _isPython3:  # get pycocoa.__all__ from .lazily
@@ -19,11 +19,11 @@ from pycocoa.runtime import _ObjCDeallocObserver
 _ObjCDeallocObserver._testIvar1()
 
 __all__ = ()
-__version__ = '25.02.18'
+__version__ = '25.02.25'
 
-# % python3.13 -m pycocoa -all
+# % python3 -m pycocoa -all
 #
-# pycocoa.version 25.1.31, .isLazy 1, Python 3.13.1 64bit arm64, macOS 14.6.1
+# pycocoa.version 25.2.25, .isLazy 1, Python 3.13.2 64bit arm64, macOS 14.6.1
 #
 #  pycocoa.add_ivar is <function pycocoa.runtime.add_ivar at 0x104995440>,
 #  pycocoa.add_method is <function pycocoa.runtime.add_method at 0x1049976a0>,
@@ -37,7 +37,7 @@ __version__ = '25.02.18'
 #  pycocoa.Allocator_t is <class pycocoa.octypes.Allocator_t>,
 #  pycocoa.App is <class pycocoa.apps.App>,
 #  pycocoa.app_title is <function pycocoa.apps.app_title at 0x104a38400>,
-#  pycocoa.apps is <module 'pycocoa.apps' from '/Users/jean/Library/CloudStorage/Dropbox/Projects/ObjC-Cocoa/PyCocoa/pycocoa/apps.py'>,
+#  pycocoa.apps is <module 'pycocoa.apps' from '.../pycocoa/apps.py'>,
 #  pycocoa.Array_t is <class ctypes.c_void_p>,
 #  pycocoa.aspect_ratio is <function pycocoa.utils.aspect_ratio at 0x104684220>,
 #  pycocoa.at is <class pycocoa.nstypes.at>,
@@ -60,12 +60,12 @@ __version__ = '25.02.18'
 #  pycocoa.UnknownPtr_t is <class pycocoa.octypes.UnknownPtr_t>,
 #  pycocoa.url2NS is <function pycocoa.pytypes.url2NS at 0x1049d5ee0>,
 #  pycocoa.URL_t is <class pycocoa.octypes.URL_t>,
-#  pycocoa.utils is <module 'pycocoa.utils' from '/Users/jean/Library/CloudStorage/Dropbox/Projects/ObjC-Cocoa/PyCocoa/pycocoa/utils.py'>,
-#  pycocoa.version is '25.2.22',
+#  pycocoa.utils is <module 'pycocoa.utils' from '.../pycocoa/utils.py'>,
+#  pycocoa.version is '25.2.25',
 #  pycocoa.VoidPtr_t is <class pycocoa.octypes.VoidPtr_t>,
 #  pycocoa.Window is <class pycocoa.windows.Window>,
 #  pycocoa.WindowError is <class pycocoa.windows.WindowError>,
-#  pycocoa.windows is <module 'pycocoa.windows' from '/Users/jean/Library/CloudStorage/Dropbox/Projects/ObjC-Cocoa/PyCocoa/pycocoa/windows.py'>,
+#  pycocoa.windows is <module 'pycocoa.windows' from '.../pycocoa/windows.py'>,
 #  pycocoa.WindowStyle.Closable=2,
 #                     .Miniaturizable=1<<2,
 #                     .Resizable=1<<3,
@@ -78,35 +78,32 @@ __version__ = '25.02.18'
 #  pycocoa.z1000str is <function pycocoa.utils.z1000str at 0x104685300>,
 #  pycocoa.zfstr is <function pycocoa.utils.zfstr at 0x1046853a0>,
 #  pycocoa.zSIstr is <function pycocoa.utils.zSIstr at 0x104685440>,
-# )[588]
-# pycocoa.version 25.2.22, .isLazy 1, Python 3.13.1 64bit arm64, macOS 14.7.3, oslibs [AppKit, CoreFoundation, CoreGraphics, CoreText, Foundation, libc, libobjc]
+# )[589]
+# pycocoa.version 25.2.25, .isLazy 1, Python 3.13.2 64bit arm64, macOS 14.7.3, oslibs [AppKit, C, CoreFoundation, CoreGraphics, CoreText, Foundation, libc, libobjc, ObjC, PrintCore, PrintCore.framework, Quartz]
 
 # % python3.13 -m pycocoa
-# pycocoa.version 25.1.31, .isLazy 1, Python 3.13.1 64bit arm64, macOS 14.6.1
+# pycocoa.version 25.2.25, .isLazy 1, Python 3.13.2 64bit arm64, macOS 14.7.3
 
 # % python3.12 -m pycocoa
-# pycocoa.version 25.1.16, .isLazy 1, Python 3.12.7 64bit arm64, macOS 14.6.1
+# pycocoa.version 25.2.25, .isLazy 1, Python 3.12.7 64bit arm64, macOS 14.7.3
 
 # % python3.11 -m pycocoa
-# pycocoa.version 23.1.06, .isLazy 1, Python 3.11.0 64bit arm64, macOS 13.0.1
+# pycocoa.version 25.2.25, .isLazy 1, Python 3.11.5 64bit arm64, macOS 14.7.3
 
 # % python3.10 -m pycocoa
-# pycocoa.version 23.1.6, .isLazy 1, Python 3.10.8 64bit arm64, macOS 13.0.1
+# pycocoa.version 25.2.25, .isLazy 1, Python 3.10.8 64bit arm64, macOS 14.7.3
 
 # % python3.9 -m pycocoa
-# pycocoa.version 23.1.6, .isLazy 1, Python 3.9.6 64bit arm64, macOS 13.0.1
+# pycocoa.version 25.2.25, .isLazy 1, Python 3.9.6 64bit arm64, macOS 14.7.3
 
 # % python3.8 -m pycocoa
-# pycocoa.version 23.1.6, .isLazy 1, Python 3.8.10 64bit arm64_x86_64, macOS 10.16
+# pycocoa.version 25.2.25, .isLazy 1, Python 3.8.10 64bit arm64_x86_64, macOS 10.16
 
 # % python3.7 -m pycocoa
-# pycocoa.version 23.1.6, .isLazy 1, Python 3.7.6 64bit arm64_x86_64, macOS 10.16
-
-# % python3.6 -m pycocoa
-# pycocoa.version 23.1.6, .isLazy None, Python 3.6.5 64bit arm64_x86_64, macOS 10.16
+# pycocoa.version 25.2.25, .isLazy 1, Python 3.7.6 64bit arm64_x86_64, macOS 10.16
 
 # % python2.7 -m pycocoa
-# pycocoa.version 23.1.6, .isLazy None, Python 2.7.18 64bit arm64_x86_64, macOS 10.16
+# pycocoa.version 25.2.25, .isLazy None, Python 2.7.18 64bit arm64_x86_64, macOS 10.16
 
 # MIT License <https://OpenSource.org/licenses/MIT>
 #

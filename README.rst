@@ -59,7 +59,7 @@ Objective-C bridge (no longer included in `macOS\' Python`_), (b) `Rubicon-ObjC`
 for Python 3.5+, taking advantage of Python\'s typing_ annotations, (c) PyGUI_ for
 macOS_ and (d) wxPython_.
 
-*Last updated: Feb 22, 2025.*
+*Last updated: Feb 25, 2025.*
 
 Licenses
 ========

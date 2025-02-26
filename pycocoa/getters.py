@@ -11,7 +11,7 @@ from pycocoa.internals import bytes2str, _COLON_, _COMMA_, _COMMASPACE_, \
 from pycocoa.lazily import _ALL_LAZY,  _fmt, _fmt_invalid
 from pycocoa.octypes import emcoding2ctype, encoding2ctype, Class_t, Id_t, \
                             IMP_t, Ivar_t, Protocol_t, SEL_t, split_encoding
-from pycocoa.oslibs import libobjc  # get_lib
+from pycocoa.oslibs import _libObjC  # get_lib
 from pycocoa.utils import isinstanceOf, name2objc
 
 from ctypes import ArgumentError, byref, c_uint, cast, CFUNCTYPE
@@ -25,7 +25,7 @@ except AttributeError:
 del itertools
 
 __all__ = _ALL_LAZY.getters
-__version__ = '25.02.19'
+__version__ = '25.02.25'
 
 
 class _Cache2(dict):
@@ -210,7 +210,7 @@ def get_class(name):
 
        @return: The class (L{Class_t}) if found, C{None} otherwise.
     '''
-    return libobjc.objc_getClass(str2bytes(name)) or None
+    return _libObjC.objc_getClass(str2bytes(name)) or None
 
 
 def get_classes(*prefixes):
@@ -223,9 +223,9 @@ def get_classes(*prefixes):
                 where I{name} is the class name and I{class} is
                 the ObjC L{Class_t} object.
     '''
-    n = libobjc.objc_getClassList(None, 0)
+    n = _libObjC.objc_getClassList(None, 0)
     clases = (Class_t * n)()
-    n = libobjc.objc_getClassList(clases, n)
+    n = _libObjC.objc_getClassList(clases, n)
     for clas in clases:
         # XXX should yield name, ObjCClass instance
         name = get_classname(clas)
@@ -243,7 +243,7 @@ def get_classname(clas, dflt=missing):
        @raise ValueError: Invalid I{clas}, iff no I{dflt} provided.
     '''
     if clas and isinstanceOf(clas, Class_t, raiser='clas'):
-        return bytes2str(libobjc.class_getName(clas))
+        return bytes2str(_libObjC.class_getName(clas))
     if dflt is missing:
         raise ValueError(_fmt_invalid(Class=repr(clas)))
     return dflt
@@ -268,7 +268,7 @@ def get_classof(objc):
 
        @return: The object's class (L{Class_t}) if found, C{None} otherwise.
     '''
-    return libobjc.object_getClass(cast(objc, Id_t)) or None
+    return _libObjC.object_getClass(cast(objc, Id_t)) or None
 
 
 def get_ivar(objc, name, ctype=None):
@@ -284,7 +284,7 @@ def get_ivar(objc, name, ctype=None):
         ctype = _ivar_ctype(objc, name)
 
     ivar = ctype()
-    libobjc.object_getInstanceVariable(objc, str2bytes(name), byref(ivar))
+    _libObjC.object_getInstanceVariable(objc, str2bytes(name), byref(ivar))
     try:
         return ivar.value
     except AttributeError:
@@ -306,11 +306,11 @@ def get_ivars(clas, *prefixes):
                 C{ctypes} type and I{ivar} the L{Ivar_t} object.
     '''
     n = c_uint()
-    for ivar in libobjc.class_copyIvarList(clas, byref(n)):
-        name = bytes2str(libobjc.ivar_getName(ivar))
+    for ivar in _libObjC.class_copyIvarList(clas, byref(n)):
+        name = bytes2str(_libObjC.ivar_getName(ivar))
         if name.startswith(prefixes or name):
             # XXX should yield name, ObjCIvar instance
-            encoding = libobjc.ivar_getTypeEncoding(ivar)
+            encoding = _libObjC.ivar_getTypeEncoding(ivar)
             ctype = emcoding2ctype(encoding, dflt=Ivar_t)  # c_void_p
             yield name, str2bytes(encoding), ctype, ivar
 
@@ -325,7 +325,7 @@ def get_inheritance(clas):
     while clas:
         yield clas
         # XXX clas = get_superclassof(clas) infinite loop
-        clas = libobjc.class_getSuperclass(clas)
+        clas = _libObjC.class_getSuperclass(clas)
 
 
 def get_metaclass(name):
@@ -335,7 +335,7 @@ def get_metaclass(name):
 
        @return: The metaclass (L{Class_t}) if found, C{None} otherwise.
     '''
-    return libobjc.objc_getMetaClass(str2bytes(name)) or None
+    return _libObjC.objc_getMetaClass(str2bytes(name)) or None
 
 
 def get_method(clas, name):
@@ -347,9 +347,9 @@ def get_method(clas, name):
        @return: The method (L{Method_t}) if found, C{None} otherwise.
     '''
     n = c_uint()
-    for method in libobjc.class_copyMethodList(clas, byref(n)):
-        sel = libobjc.method_getName(method)
-        if bytes2str(libobjc.sel_getName(sel)) == name:
+    for method in _libObjC.class_copyMethodList(clas, byref(n)):
+        sel = _libObjC.method_getName(method)
+        if bytes2str(_libObjC.sel_getName(sel)) == name:
             return method
     return None
 
@@ -374,13 +374,13 @@ def get_methods(clas, *prefixes):
         return emcoding2ctype(code, dflt=IMP_t)  # c_void_p
 
     n = c_uint()
-    for method in libobjc.class_copyMethodList(clas, byref(n)):
-        sel = libobjc.method_getName(method)
-        name = bytes2str(libobjc.sel_getName(sel))
+    for method in _libObjC.class_copyMethodList(clas, byref(n)):
+        sel = _libObjC.method_getName(method)
+        name = bytes2str(_libObjC.sel_getName(sel))
         if name.startswith(prefixes or name):
             # XXX should yield name, ObjCMethod instance
-            encoding = libobjc.method_getTypeEncoding(method)
-            rescode = libobjc.method_copyReturnType(method)
+            encoding = _libObjC.method_getTypeEncoding(method)
+            rescode = _libObjC.method_copyReturnType(method)
             if not encoding.startswith(rescode):
                 encoding = rescode + encoding
             rargtypes = map(_ctype, split_encoding(encoding))
@@ -432,20 +432,20 @@ def get_properties(clas_or_proto, *prefixes):
     '''
     n = c_uint()
     if isinstance(clas_or_proto, Class_t):
-        props = libobjc.class_copyPropertyList(clas_or_proto, byref(n))
+        props = _libObjC.class_copyPropertyList(clas_or_proto, byref(n))
         setters = set(_[0] for _ in get_methods(clas_or_proto, 'set'))
     elif isinstance(clas_or_proto, Protocol_t):
-        props = libobjc.protocol_copyPropertyList(clas_or_proto, byref(n))
+        props = _libObjC.protocol_copyPropertyList(clas_or_proto, byref(n))
         setters = []
     else:
         raise TypeError(_fmt_invalid(clas_or_proto=clas_or_proto))
 
     for prop in props:
-        name = bytes2str(libobjc.property_getName(prop))
+        name = bytes2str(_libObjC.property_getName(prop))
         if name and name.startswith(prefixes or name):
             # XXX should yield name, ObjCProperty instance
             # attrs T@"type",&,C,D,G<name>,N,P,R,S<name>,W,t<encoding>,V<varname>
-            attrs = bytes2str(libobjc.property_getAttributes(prop))
+            attrs = bytes2str(_libObjC.property_getAttributes(prop))
             astrs = _COMMASPACE_.join(map(_xPA, attrs.split(_COMMA_)))
             setter = _NN_
             if setters:
@@ -462,7 +462,7 @@ def get_protocol(name):
 
        @return: The protocol (L{Protocol_t}) if found, C{None} otherwise.
     '''
-    return libobjc.objc_getProtocol(str2bytes(name)) or None
+    return _libObjC.objc_getProtocol(str2bytes(name)) or None
 
 
 def get_protocols(clas, *prefixes):
@@ -477,8 +477,8 @@ def get_protocols(clas, *prefixes):
                 L{Protocol_t} object.
     '''
     n = c_uint()
-    for proto in libobjc.class_copyProtocolList(clas, byref(n)):
-        name = bytes2str(libobjc.protocol_getName(proto))
+    for proto in _libObjC.class_copyProtocolList(clas, byref(n)):
+        name = bytes2str(_libObjC.protocol_getName(proto))
         if name.startswith(prefixes or name):
             # XXX should yield name, ObjCProtocol instance
             yield name, proto
@@ -494,7 +494,7 @@ def get_selector(name_):
     try:
         sel = _SEL_t_cache[name_]
     except KeyError:
-        sel = libobjc.sel_registerName(name2objc(name_)) or None
+        sel = _libObjC.sel_registerName(name2objc(name_)) or None
         _SEL_t_cache[name_] = sel
     return sel
 
@@ -507,7 +507,7 @@ def get_selectornameof(sel):
        @return: The selector name (C{str}) if found, C{""} otherwise.
     '''
     isinstanceOf(sel, SEL_t, raiser='sel')
-    return bytes2str(libobjc.sel_getName(sel)) or _NN_
+    return bytes2str(_libObjC.sel_getName(sel)) or _NN_
 
 
 def get_selectorname_permutations(name_, leading=False):
@@ -555,7 +555,7 @@ def get_superclass(clas):
     try:
         supr = _super_cache[clas.value]
     except KeyError:
-        supr = libobjc.class_getSuperclass(clas) or None
+        supr = _libObjC.class_getSuperclass(clas) or None
         _super_cache[clas.value] = supr
     return supr
 
@@ -594,29 +594,29 @@ if __name__ == _Dmain_:
 # % python3 -m pycocoa.getters
 #
 # pycocoa.getters.__all__ = tuple(
-#  pycocoa.getters.get_c_func_t is <function .get_c_func_t at 0x102f09120>,
-#  pycocoa.getters.get_class is <function .get_class at 0x1031d1080>,
-#  pycocoa.getters.get_classes is <function .get_classes at 0x1031d1260>,
-#  pycocoa.getters.get_classname is <function .get_classname at 0x1031d1300>,
-#  pycocoa.getters.get_classnameof is <function .get_classnameof at 0x1031d13a0>,
-#  pycocoa.getters.get_classof is <function .get_classof at 0x1031d1440>,
-#  pycocoa.getters.get_inheritance is <function .get_inheritance at 0x1031d1620>,
-#  pycocoa.getters.get_ivar is <function .get_ivar at 0x1031d14e0>,
-#  pycocoa.getters.get_ivars is <function .get_ivars at 0x1031d1580>,
-#  pycocoa.getters.get_metaclass is <function .get_metaclass at 0x1031d16c0>,
-#  pycocoa.getters.get_method is <function .get_method at 0x1031d1760>,
-#  pycocoa.getters.get_methods is <function .get_methods at 0x1031d1800>,
-#  pycocoa.getters.get_properties is <function .get_properties at 0x1031d1940>,
-#  pycocoa.getters.get_protocol is <function .get_protocol at 0x1031d19e0>,
-#  pycocoa.getters.get_protocols is <function .get_protocols at 0x1031d1a80>,
-#  pycocoa.getters.get_selector is <function .get_selector at 0x1031d1b20>,
-#  pycocoa.getters.get_selectorname_permutations is <function .get_selectorname_permutations at 0x1031d1c60>,
-#  pycocoa.getters.get_selectornameof is <function .get_selectornameof at 0x1031d1bc0>,
-#  pycocoa.getters.get_superclass is <function .get_superclass at 0x1031d1d00>,
-#  pycocoa.getters.get_superclassnameof is <function .get_superclassnameof at 0x1031d1e40>,
-#  pycocoa.getters.get_superclassof is <function .get_superclassof at 0x1031d1da0>,
+#  pycocoa.getters.get_c_func_t is <function .get_c_func_t at 0x102bd8680>,
+#  pycocoa.getters.get_class is <function .get_class at 0x102bd8720>,
+#  pycocoa.getters.get_classes is <function .get_classes at 0x102bd87c0>,
+#  pycocoa.getters.get_classname is <function .get_classname at 0x102bd8860>,
+#  pycocoa.getters.get_classnameof is <function .get_classnameof at 0x102bd8900>,
+#  pycocoa.getters.get_classof is <function .get_classof at 0x102bd89a0>,
+#  pycocoa.getters.get_inheritance is <function .get_inheritance at 0x102bd8b80>,
+#  pycocoa.getters.get_ivar is <function .get_ivar at 0x102bd8a40>,
+#  pycocoa.getters.get_ivars is <function .get_ivars at 0x102bd8ae0>,
+#  pycocoa.getters.get_metaclass is <function .get_metaclass at 0x102bd8c20>,
+#  pycocoa.getters.get_method is <function .get_method at 0x102bd8cc0>,
+#  pycocoa.getters.get_methods is <function .get_methods at 0x102bd8d60>,
+#  pycocoa.getters.get_properties is <function .get_properties at 0x102bd8ea0>,
+#  pycocoa.getters.get_protocol is <function .get_protocol at 0x102bd8f40>,
+#  pycocoa.getters.get_protocols is <function .get_protocols at 0x102bd8fe0>,
+#  pycocoa.getters.get_selector is <function .get_selector at 0x102bd9080>,
+#  pycocoa.getters.get_selectorname_permutations is <function .get_selectorname_permutations at 0x102bd91c0>,
+#  pycocoa.getters.get_selectornameof is <function .get_selectornameof at 0x102bd9120>,
+#  pycocoa.getters.get_superclass is <function .get_superclass at 0x102bd9260>,
+#  pycocoa.getters.get_superclassnameof is <function .get_superclassnameof at 0x102bd93a0>,
+#  pycocoa.getters.get_superclassof is <function .get_superclassof at 0x102bd9300>,
 # )[21]
-# pycocoa.getters.version 25.2.19, .isLazy 1, Python 3.13.1 64bit arm64, macOS 14.7.3
+# pycocoa.getters.version 25.2.25, .isLazy 1, Python 3.13.2 64bit arm64, macOS 14.7.3
 
 # MIT License <https://OpenSource.org/licenses/MIT>
 #

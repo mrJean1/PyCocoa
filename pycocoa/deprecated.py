@@ -8,10 +8,21 @@
 from pycocoa.getters import _Cache2
 from pycocoa.internals import _property2, proxy_RO, _sortuples
 from pycocoa.lazily import _ALL_LAZY, _Dmain_
+from pycocoa.oslibs import Libs
+from pycocoa.printers import _libPC
 from pycocoa.runtime import OBJC_ASSOCIATION as _OBJC_AN
 
 __all__ = _ALL_LAZY.deprecated
-__version__ = '25.02.22'
+__version__ = '25.02.25'
+
+libAppKit     =  Libs.AppKit
+libCF         =  Libs.CoreFoundation
+libCG         =  Libs.CoreGraphics
+libCT         =  Libs.CoreText
+libFoundation =  Libs.Foundation
+libobjc       =  Libs.ObjC
+libPC         = _libPC
+'''DEPRECATED on 2025.02.25, use C{Libs}, see module L{pycocoa.oslibs}'''
 
 OBJC_ASSOCIATION_ASSIGN           = _OBJC_AN.ASSIGN
 OBJC_ASSOCIATION_COPY             = _OBJC_AN.COPY
@@ -29,6 +40,16 @@ class Cache2(_Cache2):
 class module_property_RO(proxy_RO):
     '''DEPRECATED on 2025.02.09, use C{proxy_RO}.'''
     pass
+
+
+def get_libPC():
+    '''DEPRECATED on 25.02.25, use C{Libs.PrintCore}.'''
+    return libPC
+
+
+def get_libs():
+    '''DEPRECATED on 25.02.25, use C{Libs}.'''
+    return Libs.copy()
 
 
 def property2(inst, name):
@@ -51,11 +72,25 @@ if __name__ == _Dmain_:
 #
 # pycocoa.deprecated.__all__ = tuple(
 #  pycocoa.deprecated.Cache2 is <class .Cache2>,
+#  pycocoa.deprecated.get_libPC is <function .get_libPC at 0x10538bc40>,
+#  pycocoa.deprecated.get_libs is <function .get_libs at 0x10560f6a0>,
+#  pycocoa.deprecated.libAppKit is <CDLL '/System/Library/Frameworks/AppKit.framework/AppKit', handle 31a3150a0 at 0x10540ccd0>,
+#  pycocoa.deprecated.libCF is <CDLL '/System/Library/Frameworks/CoreFoundation.framework/CoreFoundation', handle 31a3094f8 at 0x10540c910>,
+#  pycocoa.deprecated.libCG is <CDLL '/System/Library/Frameworks/CoreGraphics.framework/CoreGraphics', handle 31a3175c0 at 0x10540d590>,
+#  pycocoa.deprecated.libCT is <CDLL '/System/Library/Frameworks/CoreText.framework/CoreText', handle 31a30b5b0 at 0x10540d6d0>,
+#  pycocoa.deprecated.libFoundation is <CDLL '/System/Library/Frameworks/Foundation.framework/Foundation', handle 31a308b28 at 0x10540d810>,
+#  pycocoa.deprecated.libobjc is <CDLL '/usr/lib/libobjc.dylib', handle 31a30ce04 at 0x10540d950>,
+#  pycocoa.deprecated.libPC is <CDLL '/System/Library/Frameworks/ApplicationServices.framework/Frameworks/PrintCore.framework/PrintCore', handle 31a328b38 at 0x10540da90>,
 #  pycocoa.deprecated.module_property_RO is <class .module_property_RO>,
-#  pycocoa.deprecated.property2 is <function .property2 at 0x10089cb80>,
-#  pycocoa.deprecated.sortuples is <function .sortuples at 0x1009d3060>,
-# )[4]
-# pycocoa.deprecated.version 25.2.22, .isLazy 1, Python 3.13.2 64bit arm64, macOS 14.7.3
+#  pycocoa.deprecated.OBJC_ASSOCIATION_ASSIGN is 0 or 0x0,
+#  pycocoa.deprecated.OBJC_ASSOCIATION_COPY is 771 or 0x303,
+#  pycocoa.deprecated.OBJC_ASSOCIATION_COPY_NONATOMIC is 3 or 0x3,
+#  pycocoa.deprecated.OBJC_ASSOCIATION_RETAIN is 769 or 0x301,
+#  pycocoa.deprecated.OBJC_ASSOCIATION_RETAIN_NONATOMIC is 1 or 0x1,
+#  pycocoa.deprecated.property2 is <function .property2 at 0x1054cef20>,
+#  pycocoa.deprecated.sortuples is <function .sortuples at 0x1054cefc0>,
+# )[18]
+# pycocoa.deprecated.version 25.2.25, .isLazy 1, Python 3.13.2 64bit arm64, macOS 14.7.3
 
 # MIT License <https://OpenSource.org/licenses/MIT>
 #

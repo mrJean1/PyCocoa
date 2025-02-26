@@ -26,29 +26,31 @@ C{% env  PYCOCOA_OBJC_LOG=ICSMBDPX  python3  ...}
 
 where C{I} logs __new__ and __del__ Instance calls, C{C} new Classes, C{S}
 new Subclasses, C{M} new Methods, C{B} new BoundMethods, C{D} draining of,
-C{P} printing of C{NSAutoreleasePool}s and C{X} send_message, send_super calls.
+C{P} printing of C{NSAutoreleasePool}s and C{X} I{send_message}, I{send_super},
+(rather C{libobjc.objc_msgSend} and C{libobjc.objc_msgSendSuper}) calls.
 
-Use env variable C{PYCOCOA_LIBOBJC_NONATOMIC=on} to detect non-atomic calls of
-certain C{libobjc} functions.
+Use env variable C{PYCOCOA_LIBOBJC_NONATOMIC=on} to detect I{non-atomic} calls
+of certain C{libobjc} functions.
 '''
 from pycocoa.getters import _ivar_ctype, get_c_func_t, get_class, \
                              get_classname, get_classof, get_ivar, \
                              get_metaclass, get_protocol, get_selector, \
                              get_superclassof
-from pycocoa.internals import Adict, _bNN_, _ByteStrs, bytes2str, _no, \
+from pycocoa.internals import Adict, _alloc_, _bNN_, _ByteStrs, bytes2str, \
                              _COMMASPACE_, _Constants, _c_tstr, _Dmain_, \
                              _DOT_, _fmt, _fmt_invalid, __i386__, _instr, \
-                             _kwdstr, lambda1, missing, _NA_, _name_, \
+                             _kwdstr, lambda1, missing, _NA_, _name_, _no, \
                              _NL_, _NN_, _NSObject_, property_RO, proxy_RO, \
                              _property2, _SPACE_, str2bytes, _TypeError, \
                              _sys, _Ddoc_  # PYCHOK used!
 from pycocoa.lazily import _ALL_LAZY, _environ
 # from pycocoa import nstypes as _nstypes  # circular, see proxy_RO
+from pycocoa.octypes import _bAT, _bHASH  # PYCHOK used!
 from pycocoa.octypes import c_struct_t, c_void, ctype2encoding, emcoding2ctype, \
                             encoding2ctype, Class_t, Id_t, IMP_t, objc_super_t, \
                             objc_super_t_ptr, ObjC_t, SEL_t, split_emcoding2, \
                             TypeCodeError
-from pycocoa.oslibs import cfString2str, _csignature, _dllattr, libobjc
+from pycocoa.oslibs import cfString2str, _csignature, _dllattr, _libObjC
 from pycocoa.utils import isinstanceOf, logf, name2py, _raiser_name
 
 from ctypes import alignment, ArgumentError, byref, cast, c_buffer, \
@@ -62,7 +64,7 @@ from ctypes import alignment, ArgumentError, byref, cast, c_buffer, \
 # import sys as _sys  # from .internals
 
 __all__ = _ALL_LAZY.runtime
-__version__ = '25.02.22'
+__version__ = '25.02.25'
 
 _OBJC_ENV = 'PYCOCOA_OBJC_LOG'
 _OBJC_LOG =  dict((_, 0) for _ in _environ.get(_OBJC_ENV, _NN_).upper()
@@ -257,10 +259,10 @@ class ObjCClass(_ObjCBase):
         _ObjC_log(self, 'new', 'C')
 
         # Cache the Python version of all instance methods of
-        # this class (but does not find methods of superclass).
+        # this class (doesn't include methods of superclass).
         self._methods_cache = self._cache_methods(ptr, ObjCMethod)
         # Cache the Python version of all class methods of this
-        # class (but does not find class methods of superclass).
+        # class (doesn't include class methods of superclass).
         p = get_classof(ptr)
         self._classmethods_cache = self._cache_methods(p, ObjCClassMethod)
 
@@ -312,7 +314,7 @@ class ObjCClass(_ObjCBase):
         # build a cache of all class or instance methods
         # def _n_m2(which, Class):
         #     n = c_uint()
-        #     for m in libobjc.class_copyMethodList(which, byref(n)):
+        #     for m in _libObjC.class_copyMethodList(which, byref(n)):
         #         m = Class(m)
         #         _ObjC_log(m, 'new', 'M')
         #         yield m.name, m
@@ -338,7 +340,7 @@ class ObjCClass(_ObjCBase):
             return self._classmethods_cache[name2py(name)]
         except KeyError:
             return self._cache_method(name, ObjCClassMethod,
-                   self._classmethods_cache, libobjc.class_getClassMethod)
+                   self._classmethods_cache, _libObjC.class_getClassMethod)
 
     def get_method(self, name):
         '''Find an instance method.
@@ -351,7 +353,7 @@ class ObjCClass(_ObjCBase):
             return self._methods_cache[name2py(name)]
         except KeyError:
             return self._cache_method(name, ObjCMethod,
-                   self._methods_cache, libobjc.class_getInstanceMethod)
+                   self._methods_cache, _libObjC.class_getInstanceMethod)
 
     @property_RO
     def name(self):
@@ -424,13 +426,13 @@ def _ObjCDelegateError(name, why):  # helper for __new__ above
 class ObjCInstance(_ObjCBase):
     '''Python wrapper for an ObjC instance.
     '''
-    _autoPool   = 0  # pool id, see property .inPool
-    _dealloc_d  = False
-    _from_py2NS = False
+    _autoPool   =  0  # pool id, see property .inPool
+    _dealloc_d  =  False
+    _from_py2NS =  False
     _objc_cache = {}  # see _ObjCDeallocObserver, example class_wrapper4.py
-    _objc_class = None
-    _objc_ptr   = None  # shut PyChecker up
-    _retained   = None  # False or True
+    _objc_class =  None
+    _objc_ptr   =  None  # shut PyChecker up
+    _retained   =  None  # False or True
 
     def __new__(cls, objc_ptr, cached=True):
         '''New L{ObjCInstance} or a previously created, cached one.
@@ -720,16 +722,16 @@ class ObjCMethod(_ObjCBase):
 
            @param method: The method pointer (L{IMP_t}).
         '''
-        self._IMP  = libobjc.method_getImplementation(method)
-        self._SEL  = libobjc.method_getName(method)
-        self._name = libobjc.sel_getName(self._SEL)  # bytes
+        self._IMP  = _libObjC.method_getImplementation(method)
+        self._SEL  = _libObjC.method_getName(method)
+        self._name = _libObjC.sel_getName(self._SEL)  # bytes
 
         # determine the return and argument types of the method
-        self._encoding = libobjc.method_getTypeEncoding(method)
+        self._encoding = _libObjC.method_getTypeEncoding(method)
         try:  # to get the ctype for all args
             c, t = c_buffer(512), []
-            for i in range(libobjc.method_getNumberOfArguments(method)):
-                libobjc.method_getArgumentType(method, i, c, len(c))
+            for i in range(_libObjC.method_getNumberOfArguments(method)):
+                _libObjC.method_getArgumentType(method, i, c, len(c))
                 t.append(emcoding2ctype(c.value))
         except TypeError:
             t = []  # XXX ignore all?
@@ -740,7 +742,7 @@ class ObjCMethod(_ObjCBase):
         # it truncates the pointer along the way.  Instead, set the
         # return type to c_void_p to ensure we get 64-bit addresses
         # and then convert the return value manually
-        c = libobjc.method_copyReturnType(method)
+        c = _libObjC.method_copyReturnType(method)
         self._pyresult, t = _PyRes_t2.get(c, (None, None))
         if t is None:
             try:  # to get the ctype from the result encoding
@@ -1077,8 +1079,8 @@ def add_ivar(clas, name, ctype):
         if ctype is not Id_t:
             raise
         z = 8  # XXX 4?
-    return bool(libobjc.class_addIvar(clas, str2bytes(name), z,
-                                            alignment(ctype), code))
+    return bool(_libObjC.class_addIvar(clas, str2bytes(name), z,
+                                             alignment(ctype), code))
 
 
 def add_method(clas, name_, method, encoding):
@@ -1103,9 +1105,9 @@ def add_method(clas, name_, method, encoding):
     imp = imp(method)
     imp = cast(imp, IMP_t)
 
-#   libobjc.class_addMethod.argtypes = [Class_t, SEL_t, IMP_t, c_char_p]
-    return imp if libobjc.class_addMethod(clas, get_selector(name_),
-                                                imp, signature) else None
+#   _libObjC.class_addMethod.argtypes = [Class_t, SEL_t, IMP_t, c_char_p]
+    return imp if _libObjC.class_addMethod(clas, get_selector(name_),
+                                                 imp, signature) else None
 
 
 def add_protocol(clas, protocol):
@@ -1117,7 +1119,7 @@ def add_protocol(clas, protocol):
        @return: The protocol (L{Protocol_t}) if added, C{None} otherwise.
     '''
     protocol, _ = _objc_name2(protocol, get_protocol)
-    return protocol if libobjc.class_addProtocol(clas, protocol) else None
+    return protocol if _libObjC.class_addProtocol(clas, protocol) else None
 
 
 def add_subclass(Super, name, register=False):
@@ -1136,7 +1138,7 @@ def add_subclass(Super, name, register=False):
               be added BEFORE}.
     '''
     S, _ = _objc_name2(Super, get_class)
-    clas = libobjc.objc_allocateClassPair(S, str2bytes(name), 0)
+    clas = _libObjC.objc_allocateClassPair(S, str2bytes(name), 0)
     if clas and register:
         register_subclass(clas)
     return clas or None
@@ -1208,7 +1210,7 @@ def isMetaClass(objc):
 
        @return: True if the I{objc} is a metaclass, False otherwise.
     '''
-    return bool(libobjc.class_isMetaClass(objc))
+    return bool(_libObjC.class_isMetaClass(objc))
 
 
 def isMutable(objc, *mutableClasses, **raiser_name):
@@ -1278,13 +1280,17 @@ def _libobjcall(objc_, restype, argtypes, *args):  # in printer.py
     '''
     if 'X' in _OBJC_LOG:
         t = _instr(objc_, *args)
+        try:
+            r = _fmt('%s, [%s]', restype.__name__,
+                     _COMMASPACE_.join(_.__name__ for _ in argtypes))
+        except AttributeError:
+            r = _NN_
         _OBJC_LOG['X'] += 1
-        logf('%s libobjc.%s %d  %s', 'call', t, _OBJC_LOG['X'],
-                               _COMMASPACE_(restype, argtypes))
+        logf('%s libobjc.%s %d  %s', 'call', t, _OBJC_LOG['X'], r)
     try:
         # objc_        = _copy(objc_) throws ValueError
-        objc_.restype  =  restype  # or c_void
-        objc_.argtypes =  argtypes
+        objc_.restype  =  restype   # or c_void
+        objc_.argtypes =  argtypes  # or []
 
         r = objc_(*args)
         if _OBJC_NON and not (objc_.restype  is restype
@@ -1341,23 +1347,23 @@ if __i386__:  # or __x86_64__  # Intel-emulation?
             return issubclass(restype, c_struct_t) and sizeof(restype) not in _1_2_4_8
 
     def _libobjc_msgSend(restype, argtypes, *args):
-        # invoke libobjc.objc_msgSend, _fpret or _stret
+        # invoke _libObjC.objc_msgSend, _fpret or _stret
         if restype in _C_FLOATS:  # _x86_use_fpret(restype)
-            objc_ = libobjc.objc_msgSend_fpret
+            objc_ = _libObjC.objc_msgSend_fpret
         elif _istruct(restype):  # _x86_use_stret(restype)
-            objc_ = libobjc.objc_msgSend_stret
+            objc_ = _libObjC.objc_msgSend_stret
             # args.insert(0, byref(restype()))
             args = (byref(restype()),) + args
             argtypes = [POINTER(restype)] + argtypes
             restype  =  c_void
         else:
-            objc_ = libobjc.objc_msgSend
+            objc_ = _libObjC.objc_msgSend
         return _libobjcall(objc_, restype, argtypes, *args)
 
     def _libobjc_msgSendSuper(restype, *argtypes_args):
-        # invoke libobjc.objc_msgSendSuper or _stret
-        objc_ = libobjc.objc_msgSendSuper_stret if _istruct(restype) else \
-                libobjc.objc_msgSendSuper  # _x86_use_stret(restype)
+        # invoke _libObjC.objc_msgSendSuper or _stret
+        objc_ = _libObjC.objc_msgSendSuper_stret if _istruct(restype) else \
+                _libObjC.objc_msgSendSuper  # _x86_use_stret(restype)
         return _libobjcall(objc_, restype, *argtypes_args)
 
 else:  # non-Intel
@@ -1365,19 +1371,19 @@ else:  # non-Intel
     # dlsyms accessed by .attr are cached, by [key] are not
 
     def _libobjc_msgSend(*restype_argtypes_args):  # PYCHOK expected
-        # invoke libobjc.objc_msgSend, _fpret or _stret
-        return _libobjcall(libobjc.objc_msgSend, *restype_argtypes_args)
+        # invoke _libObjC.objc_msgSend, _fpret or _stret
+        return _libobjcall(_libObjC.objc_msgSend, *restype_argtypes_args)
 
     def _libobjc_msgSendSuper(*restype_argtypes_args):  # PYCHOK expected
-        # invoke libobjc.objc_msgSendSuper or _stret
-        return _libobjcall(libobjc.objc_msgSendSuper, *restype_argtypes_args)
+        # invoke _libObjC.objc_msgSendSuper or _stret
+        return _libobjcall(_libObjC.objc_msgSendSuper, *restype_argtypes_args)
 
 
 def _libobject_setInstanceVariable(*restype_argtypes_args):
     # <https://Developer.Apple.com/documentation/objectivec/
     #        1441499-object_getinstancevariable>
     # and ../1441498-object_setinstancevariable>
-    return _libobjcall(libobjc.object_setInstanceVariable, *restype_argtypes_args)
+    return _libobjcall(_libObjC.object_setInstanceVariable, *restype_argtypes_args)
 
 
 def _objc_cast(objc):
@@ -1415,8 +1421,8 @@ def _objc_dealloc(nso, sel_name_):
         # U{issue #6<https://GitHub.com/mrJean1/ PyCocoa/issues/6>},
         # also see <https://StackOverflow.com/questions/41827988>)
         nil = _nstypes.NSMain.nil
-        libobjc.objc_setAssociatedObject(objc_ptr_value, nso, nil,
-                                         OBJC_ASSOCIATION.RETAIN)
+        _libObjC.objc_setAssociatedObject(objc_ptr_value, nso, nil,
+                                          OBJC_ASSOCIATION.RETAIN)
         objc = ObjCInstance._objc_cache.pop(objc_ptr_value, None)
         if objc:
             objc._cache_clear()
@@ -1495,7 +1501,7 @@ def register_subclass(subclas):
     '''
     if not isinstance(subclas, Class_t):
         subclas = Class_t(subclas)
-    libobjc.objc_registerClassPair(subclas)
+    _libObjC.objc_registerClassPair(subclas)
 
 
 def release(objc):
@@ -1660,7 +1666,7 @@ def _signature3(objc_t, sel_name_, args, restype=c_void_p,  # == Id_t
     return restype, argtypes, sel
 
 
-def _Xargs(x, name, argtypes, restype='void'):  # imported by nstypes.py, printers.py
+def _Xargs(x, name, argtypes=[], restype=c_void):  # in .nstypes, .printers
     '''(INTERNAL) Expand the args of an C{ctypes.ArgumentError} I{x}.
     '''
     # x.args = tuple(x.args) + (_fmt('%s(%s) %s', name, _c_tstr(*argtypes),
@@ -1693,6 +1699,7 @@ class _ObjCDeallocObserver(object):  # XXX (_ObjCBase):  # must be last
        The I{sel} argument in all decorated methods below represents
        the C{SEL/cmd} C{SEL_t}, see L{ObjCSubclass}C{.rawmethod}.
     '''
+    #            _nstypes.NSObject.name
     _ObjC = ObjCSubclass(_NSObject_, '_ObjCDeallocObserver',  # .__name__
                                        register=False,  # defer
                                     **_Ivar1.akwd())  # ivar
@@ -1739,20 +1746,20 @@ class _ObjCDeallocObserver(object):  # XXX (_ObjCBase):  # must be last
         if not _ObjCDeallocObserver._ObjC.isregistered:
             _ObjCDeallocObserver._ObjC.register()
 
-        nso = send_message(_ObjCDeallocObserver.__name__, 'alloc',
+        nso = send_message(_ObjCDeallocObserver.__name__, _alloc_,
                             restype=Id_t)  # argtypes=[]
         nso = send_message(nso, 'initWithObject_', objc_ptr_value,
                            restype=Id_t, argtypes=[_Ivar1.c_t])
         # the observer is retained by ObjC objc_ptr_value
         # and associated to it as key=nso with value=nso
-        libobjc.objc_setAssociatedObject(objc_ptr_value, nso, nso,
-                                         OBJC_ASSOCIATION.RETAIN)
+        _libObjC.objc_setAssociatedObject(objc_ptr_value, nso, nso,
+                                          OBJC_ASSOCIATION.RETAIN)
         # double-check the association
-#       obs = libobjc.objc_getAssociatedObject(objc_ptr_value, nso)
+#       obs = _libObjC.objc_getAssociatedObject(objc_ptr_value, nso)
 #       assert(obs and obs.value == nso.value)
         # release to observer now, such that dealloc/finalize
         # messages are received which delete the ObjCInstance
-        send_message(nso, 'release')
+        send_message(nso, release.__name__)
         return nso
 
     @staticmethod
@@ -1771,8 +1778,8 @@ class _ObjCDeallocObserver(object):  # XXX (_ObjCBase):  # must be last
             raise AssertionError(t)
 
 
-_PyRes_t2 = {b'@': (ObjCInstance, Id_t),
-             b'#': (ObjCClass, Class_t)}
+_PyRes_t2 = {_bAT:   (ObjCInstance, Id_t),
+             _bHASH: (ObjCClass, Class_t)}
 
 from ctypes import sizeof  # see from ctypes ... comments at the top
 
@@ -1817,7 +1824,7 @@ if __name__ == _Dmain_:
 #  pycocoa.runtime.send_super_init is <function .send_super_init at 0x1013d2b60>,
 #  pycocoa.runtime.set_ivar is <function .set_ivar at 0x1013d2c00>,
 # )[27]
-# pycocoa.runtime.version 25.2.22, .isLazy 1, Python 3.13.2 64bit arm64, macOS 14.7.3
+# pycocoa.runtime.version 25.2.23, .isLazy 1, Python 3.13.2 64bit arm64, macOS 14.7.3
 
 # MIT License <https://OpenSource.org/licenses/MIT>
 #

@@ -65,9 +65,8 @@ class _Dict(dict):
     def add(self, key, value, *values):
         '''Add C{[key] = value}, typically C{[attr] = mod}.
 
-           @raise AssertionError: The B{C{key}} already
-                                  exists with different
-                                  B{C{value}}.
+           @raise AssertionError: The B{C{key}} already exists
+                                  with different B{C{value}}.
         '''
         if key in self:
             val = self[key]  # duplicate OK
@@ -172,7 +171,9 @@ _ALL_LAZY = _NamedEnum_RO(_name='_ALL_LAZY',
                           bases=(),  # module only
                          colors=('CMYColor', 'CMYColors', 'Color', 'ColorError', 'Colors', 'GrayScaleColor', 'GrayScaleColors',
                                  'HSBColor', 'HSBColors', 'RGBColor', 'RGBColors', 'TintColor', 'TintColors', 'UIColor', 'UIColors'),
-                     deprecated=('Cache2', 'module_property_RO', 'property2', 'sortuples',
+                     deprecated=('Cache2', 'module_property_RO',
+                                 'get_libPC', 'get_libs', 'property2', 'sortuples',
+                                 'libAppKit', 'libCF', 'libCG', 'libCT', 'libFoundation', 'libPC', 'libobjc',
                                  'OBJC_ASSOCIATION_ASSIGN', 'OBJC_ASSOCIATION_COPY', 'OBJC_ASSOCIATION_COPY_NONATOMIC',
                                  'OBJC_ASSOCIATION_RETAIN', 'OBJC_ASSOCIATION_RETAIN_NONATOMIC'),
                           dicts=('Dict', 'FrozenDict'),
@@ -232,8 +233,7 @@ _ALL_LAZY = _NamedEnum_RO(_name='_ALL_LAZY',
                                  'TimeInterval_t', 'TypeCodeError', 'TypeID_t', 'TypeRef_t',
                                  'UniChar_t', 'unichar_t', 'Union_t', 'Unknown_t', 'UnknownPtr_t', 'URL_t',
                                  'VoidPtr_t') + _C_XTYPES,
-                         oslibs=('get_lib', 'get_libs', 'get_lib_framework', 'leaked2',
-                                 'libAppKit', 'libCF', 'libCG', 'libCT', 'libFoundation', 'libobjc', 'Libs',
+                         oslibs=('get_lib', 'get_lib_framework', 'leaked2', 'Libs',
                                  'NO', 'NSAcknowledgeCharacter', 'NSAlphaShiftKeyMask', 'NSAlternateKeyMask', 'NSAnyEventMask',
                                  'NSApplicationActivationPolicyAccessory', 'NSApplicationActivationPolicyProhibited',
                                  'NSApplicationActivationPolicyRegular', 'NSApplicationDefined', 'NSApplicationDidHideNotification',
@@ -270,7 +270,7 @@ _ALL_LAZY = _NamedEnum_RO(_name='_ALL_LAZY',
                                  'NSWindowStyleMaskTitled', 'NSWindowStyleMaskUsual', 'NSWindowStyleMaskUtilityWindow', 'NSWindowToolbarButton',
                                  'NSWindowZoomButton', 'OSlibError', 'YES'),
                          panels=('AlertPanel', 'AlertStyle', 'BrowserPanel', 'ErrorPanel', 'NSAlertDelegate', 'OpenPanel', 'PanelButton', 'SavePanel', 'TextPanel'),
-                       printers=('get_libPC', 'get_papers', 'get_printer', 'get_printer_browser', 'get_printers', 'get_resolutions', 'libPC',
+                       printers=('get_papers', 'get_printer', 'get_printer_browser', 'get_printers', 'get_resolutions',
                                  'Paper', 'PaperCustom', 'PaperMargins', 'Printer'),
                         pytypes=('bool2NS', 'bytes2NS', 'decimal2NS', 'dict2NS', 'dicts2NS', 'float2NS', 'frozendict2NS', 'frozenset2NS',
                                  'generator2NS', 'int2NS', 'iterable2NS', 'list2NS', 'listuple2NS', 'map2NS', 'None2NS', 'py2NS', 'range2NS',
@@ -298,7 +298,7 @@ _ALL_LAZY = _NamedEnum_RO(_name='_ALL_LAZY',
 _ALL_OVERRIDING = _NamedEnum_RO(_name='_ALL_OVERRIDING')  # all DEPRECATED
 
 __all__ = _ALL_LAZY.lazily
-__version__ = '25.02.20'
+__version__ = '25.02.25'
 
 
 def _all_imports(**more):

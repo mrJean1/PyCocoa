@@ -77,6 +77,21 @@ U{typing<https://Docs.Python.org/3/library/typing.html>} annotations, (c) U{PyGU
 <https://CoSC.Canterbury.AC.NZ/greg.ewing/python_gui>} for I{macOS} and (d) U{wxPython
 <https://wxPython.org/pages/overview/index.html>}.
 
+Env variables
+=============
+
+The following environment variables are observed by C{pycocoa}:
+
+ - C{PYCOCOA_LAZY_IMPORT} - see module L{lazily<pycocoa.lazily>} and variable L{isLazy<pycocoa.isLazy>}.
+ - C{PYCOCOA_LIBOBJC_NONATOMIC} - see module L{runtime<pycocoa.runtime>}.
+ - C{PYCOCOA_OBJC_LOG} - see module L{runtime<pycocoa.runtime>}.
+
+plus during development:
+
+ - C{PYCOCOA_FOR_DOCS} - for extended documentation by C{epydoc}.
+ - C{PYTHONFAULTHANDLER} - see modules L{faults<pycocoa.faults>}.
+
+
 Licenses
 ========
 
@@ -145,7 +160,7 @@ _isfrozen        =  getattr(_sys, 'frozen', False)
 pycocoa_abspath  = _path.dirname(_path.abspath(__file__))  # _sys._MEIPASS + '/pycocoa'
 _pycocoa_package = __package__ or _path.basename(pycocoa_abspath)
 
-__version__ = '25.02.22'
+__version__ = '25.02.25'
 # see setup.py for similar logic
 version = '.'.join(map(str, map(int, __version__.split('.'))))
 
@@ -265,7 +280,7 @@ if not _lazy_import2:  # import and set __all__
     # get_NSString                  = NSStr                      # PYCHOK expected
     # get_object_class              = get_classof                # PYCHOK expected
     # get_superclass_of_object      = get_superclassof           # PYCHOK expected
-    # objc                          = libobjc                    # PYCHOK expected
+    # objc                          = Libs.ObjC                  # PYCHOK expected
     # objc_id                       = Id_t                       # PYCHOK expected
     # OBJC_SUPER                    = objc_super_t               # PYCHOK expected
     # OBJC_SUPER_PTR                = objc_super_t_ptr           # PYCHOK expected
