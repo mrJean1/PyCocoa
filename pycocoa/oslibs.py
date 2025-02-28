@@ -16,7 +16,6 @@
 @var Libs.libobjc: The '/usr/lib/libobjc.dylib' library.
 @var Libs.ObjC: The '/usr/lib/libobjc.dylib' library.
 @var Libs.PrintCore: The '/System/Library/Frameworks/ApplicationServices.framework/Frameworks/PrintCore.framework/PrintCore' library.
-@var Libs.PrintCore.framework: The '/System/Library/Frameworks/ApplicationServices.framework/Frameworks/PrintCore.framework/PrintCore' library.
 @var Libs.Quartz: The '/System/Library/Frameworks/CoreGraphics.framework/CoreGraphics' library.
 
 @var NO:  ObjC's False (C{const c_byte}).
@@ -53,7 +52,7 @@ except ImportError:  # XXX Pythonista/iOS
 from os.path import join as _join, sep as _SEP
 
 __all__ = _ALL_LAZY.oslibs
-__version__ = '25.02.25'
+__version__ = '25.02.27'
 
 _framework_ = 'framework'
 _leaked2    = []  # leaked memory, 2-tuples (ptr, size)
@@ -192,8 +191,9 @@ if _macOSver2() > (10, 15):  # Big Sur and later
     from ctypes import _dlopen
 
     def _find_lib(name):
-        '''Mimick C{ctype.util.find_library}, return
-           the (fully-qualified) name of the library.
+        '''Mimick C{ctype.util.find_library}, returning the
+           (fully-qualified) name of the library or throwing
+           an C{OSlibError} if not found.
         '''
         ns = []
         for n in (_find_library(name), name,
@@ -212,7 +212,15 @@ if _macOSver2() > (10, 15):  # Big Sur and later
     _isAppleSi = __arm64__  # and _macOSver2() > (11, 0)
 else:
     _isAppleSi =  False
-    _find_lib  = _find_library
+
+    def _find_lib(name):  # PYCHOK redef
+        '''As C{ctype.util.find_library}, but throwing
+           an C{OSlibError} if not found.
+        '''
+        n = _find_library(name)
+        if n:
+            return n
+        raise OSlibError('find', name)
 
 
 def _free_memory(ptr, size):
@@ -233,7 +241,7 @@ def get_lib(name):
 
        @return: The library (C{ctypes.CDLL}).
 
-       @raise OSlibError: No C{B{name}.dylib} library.
+       @raise OSlibError: No C{B{name}.dylib} library found.
 
        @note: Private attribute C{._name} shows the library path.
     '''
@@ -254,7 +262,7 @@ def get_lib_framework(name, services='ApplicationServices', version=_NN_):
 
        @return: The library (C{ctypes.CDLL}).
 
-       @raise OSlibError: No C{B{name}.framework} library.
+       @raise OSlibError: No C{B{name}.framework} library found.
 
        @note: Private attribute C{._name} shows the library path.
 
@@ -262,17 +270,16 @@ def get_lib_framework(name, services='ApplicationServices', version=_NN_):
         - get_lib_framework('PrintCore')
         - get_lib_framework('Metadata', services='CoreServices')
     '''
-    n_fw = _DOT_(name, _framework_)
     try:
-        lib = Libs[n_fw]
+        lib = Libs[name]
     except KeyError:
-        s_fw = _DOT_(services, _framework_)
-        if version:  # PYCHOK not 'Current'
-            name = _join('Versions', version, name)  # PYCHOK version
-        p = _join(_SEP, 'System', 'Library', 'Frameworks',
-                  s_fw, 'Frameworks', n_fw, name)
-        Libs[name] = \
-        Libs[n_fw] = lib = _load_lib(p)
+        n = _DOT_(name, _framework_)
+        s = _DOT_(services, _framework_)
+        v = _join('Versions', version, name) if version else name  # PYCHOK shadow
+        p = _join(_SEP, 'System', 'Library', 'Frameworks', s,
+                                             'Frameworks', n, v)
+        Libs[name] = lib = _load_lib(p)
+#       lib.framework = lib  # for Libs.PrintCore.framework
     return lib
 
 
@@ -1392,7 +1399,7 @@ if __name__ == _Dmain_:
 #  pycocoa.oslibs.OSlibError is <class .OSlibError>,
 #  pycocoa.oslibs.YES is True or 0x1,
 # )[153]
-# pycocoa.oslibs.version 25.2.25, .isLazy 1, Python 3.13.2 64bit arm64, macOS 14.7.3, oslibs [AppKit, C, CoreFoundation, CoreGraphics, CoreText, Foundation, libc, libobjc, ObjC, Quartz]
+# pycocoa.oslibs.version 25.2.27, .isLazy 1, Python 3.13.2 64bit arm64, macOS 14.7.3, oslibs [AppKit, C, CoreFoundation, CoreGraphics, CoreText, Foundation, libc, libobjc, ObjC, Quartz]
 
 # MIT License <https://OpenSource.org/licenses/MIT>
 #

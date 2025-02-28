@@ -642,7 +642,6 @@ pycocoa.internals._isiterable	pycocoa.internals-module.html#_isiterable
 pycocoa.internals._nargs	pycocoa.internals-module.html#_nargs
 pycocoa.internals._dflt	pycocoa.internals-module.html#_dflt
 pycocoa.internals._DOT_	pycocoa.internals-module.html#_DOT_
-pycocoa.internals.str2bytes	pycocoa.internals-module.html#str2bytes
 pycocoa.internals._sortuples	pycocoa.internals-module.html#_sortuples
 pycocoa.internals._Dall_	pycocoa.internals-module.html#_Dall_
 pycocoa.internals.property_RO	pycocoa.internals-module.html#property_RO
@@ -669,6 +668,7 @@ pycocoa.internals.missing	pycocoa.internals-module.html#missing
 pycocoa.internals._Strs	pycocoa.internals-module.html#_Strs
 pycocoa.internals._Dversion_	pycocoa.internals-module.html#_Dversion_
 pycocoa.internals._int2	pycocoa.internals-module.html#_int2
+pycocoa.internals._property2	pycocoa.internals-module.html#_property2
 pycocoa.internals._SPACE_	pycocoa.internals-module.html#_SPACE_
 pycocoa.internals._Ddoc_	pycocoa.internals-module.html#_Ddoc_
 pycocoa.internals._NSObject_	pycocoa.internals-module.html#_NSObject_
@@ -681,12 +681,12 @@ pycocoa.internals._name_	pycocoa.internals-module.html#_name_
 pycocoa.internals._COMMA_	pycocoa.internals-module.html#_COMMA_
 pycocoa.internals._isgenerator	pycocoa.internals-module.html#_isgenerator
 pycocoa.internals._Ints	pycocoa.internals-module.html#_Ints
-pycocoa.internals._property2	pycocoa.internals-module.html#_property2
+pycocoa.internals._int2str	pycocoa.internals-module.html#_int2str
 pycocoa.internals._Bytes	pycocoa.internals-module.html#_Bytes
 pycocoa.internals._NA_	pycocoa.internals-module.html#_NA_
 pycocoa.internals.lambda1	pycocoa.internals-module.html#lambda1
 pycocoa.internals._filexists	pycocoa.internals-module.html#_filexists
-pycocoa.internals._intstr	pycocoa.internals-module.html#_intstr
+pycocoa.internals.str2bytes	pycocoa.internals-module.html#str2bytes
 pycocoa.internals.__i386__	pycocoa.internals-module.html#__i386__
 pycocoa.internals._COLON_	pycocoa.internals-module.html#_COLON_
 pycocoa.lazily	pycocoa.lazily-module.html

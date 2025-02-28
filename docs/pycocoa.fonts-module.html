@@ -64,7 +64,7 @@
 
 <hr />
 <div class="fields">      <p><strong>Version:</strong>
-        25.05.19
+        25.05.27
       </p>
 </div><!-- ==================== CLASSES ==================== -->
 <a name="section-Classes"></a>
@@ -232,13 +232,13 @@
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
         <a href="pycocoa.fonts-module.html#FontTrait" class="summary-name">FontTrait</a> = <code title="FontTrait.Bold=2,
-         .Compressed=1&lt;&lt;9,
-         .Condensed=1&lt;&lt;6,
-         .Expanded=1&lt;&lt;5,
+         .Compressed=512 or 1&lt;&lt;9,
+         .Condensed=64 or 1&lt;&lt;6,
+         .Expanded=32 or 1&lt;&lt;5,
          .Italic=1,
-         .MonoSpace=1&lt;&lt;10,
-         .Narrow=1&lt;&lt;4,
-         .Poster=1&lt;&lt;8,
+         .MonoSpace=1024 or 1&lt;&lt;10,
+         .Narrow=16 or 1&lt;&lt;4,
+         .Poster=256 or 1&lt;&lt;8,
 ...">FontTrait.Bold<code class="variable-ellipsis">...</code></code><br />
       Font trait constants (<code>mask</code>).
     </td>
@@ -265,7 +265,7 @@ ntItalic', size=13, traits='Italic', weight=5}),
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
         <a name="FontTrait.Bold"></a><span class="summary-name">FontTrait.Bold</span><br />
-      int([x]) -&gt; integer.
+      0x2
     </td>
   </tr>
 <tr>
@@ -273,7 +273,7 @@ ntItalic', size=13, traits='Italic', weight=5}),
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
         <a name="FontTrait.Compressed"></a><span class="summary-name">FontTrait.Compressed</span><br />
-      int([x]) -&gt; integer.
+      0x200
     </td>
   </tr>
 <tr>
@@ -281,7 +281,7 @@ ntItalic', size=13, traits='Italic', weight=5}),
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
         <a name="FontTrait.Condensed"></a><span class="summary-name">FontTrait.Condensed</span><br />
-      int([x]) -&gt; integer.
+      0x40
     </td>
   </tr>
 <tr>
@@ -289,7 +289,7 @@ ntItalic', size=13, traits='Italic', weight=5}),
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
         <a name="FontTrait.Expanded"></a><span class="summary-name">FontTrait.Expanded</span><br />
-      int([x]) -&gt; integer.
+      0x20
     </td>
   </tr>
 <tr>
@@ -297,7 +297,7 @@ ntItalic', size=13, traits='Italic', weight=5}),
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
         <a name="FontTrait.Italic"></a><span class="summary-name">FontTrait.Italic</span><br />
-      int([x]) -&gt; integer.
+      0x1
     </td>
   </tr>
 <tr>
@@ -305,7 +305,7 @@ ntItalic', size=13, traits='Italic', weight=5}),
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
         <a name="FontTrait.MonoSpace"></a><span class="summary-name">FontTrait.MonoSpace</span><br />
-      int([x]) -&gt; integer.
+      0x400
     </td>
   </tr>
 <tr>
@@ -313,7 +313,7 @@ ntItalic', size=13, traits='Italic', weight=5}),
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
         <a name="FontTrait.Narrow"></a><span class="summary-name">FontTrait.Narrow</span><br />
-      int([x]) -&gt; integer.
+      0x10
     </td>
   </tr>
 <tr>
@@ -321,7 +321,7 @@ ntItalic', size=13, traits='Italic', weight=5}),
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
         <a name="FontTrait.Poster"></a><span class="summary-name">FontTrait.Poster</span><br />
-      int([x]) -&gt; integer.
+      0x100
     </td>
   </tr>
 <tr>
@@ -329,7 +329,7 @@ ntItalic', size=13, traits='Italic', weight=5}),
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
         <a name="FontTrait.SansSerif"></a><span class="summary-name">FontTrait.SansSerif</span><br />
-      int([x]) -&gt; integer.
+      0x80000000
     </td>
   </tr>
 <tr>
@@ -337,7 +337,7 @@ ntItalic', size=13, traits='Italic', weight=5}),
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
         <a name="FontTrait.SmallCaps"></a><span class="summary-name">FontTrait.SmallCaps</span><br />
-      int([x]) -&gt; integer.
+      0x80
     </td>
   </tr>
 <tr>
@@ -345,7 +345,7 @@ ntItalic', size=13, traits='Italic', weight=5}),
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
         <a name="FontTrait.UnBold"></a><span class="summary-name">FontTrait.UnBold</span><br />
-      int([x]) -&gt; integer.
+      0x4
     </td>
   </tr>
 <tr>
@@ -353,7 +353,7 @@ ntItalic', size=13, traits='Italic', weight=5}),
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
         <a name="FontTrait.UnItalic"></a><span class="summary-name">FontTrait.UnItalic</span><br />
-      int([x]) -&gt; integer.
+      0x1000000
     </td>
   </tr>
 <tr>
@@ -669,13 +669,13 @@ ntItalic', size=13, traits='Italic', weight=5}),
     <dt>Value:</dt>
       <dd><table><tr><td><pre class="variable">
 FontTrait.Bold=2,
-         .Compressed=1&lt;&lt;9,
-         .Condensed=1&lt;&lt;6,
-         .Expanded=1&lt;&lt;5,
+         .Compressed=512 or 1&lt;&lt;9,
+         .Condensed=64 or 1&lt;&lt;6,
+         .Expanded=32 or 1&lt;&lt;5,
          .Italic=1,
-         .MonoSpace=1&lt;&lt;10,
-         .Narrow=1&lt;&lt;4,
-         .Poster=1&lt;&lt;8,
+         .MonoSpace=1024 or 1&lt;&lt;10,
+         .Narrow=16 or 1&lt;&lt;4,
+         .Poster=256 or 1&lt;&lt;8,
 <code class="variable-ellipsis">...</code>
 </pre></td></tr></table>
 </dd>
@@ -741,7 +741,7 @@ ntItalic', size=13, traits='Italic', weight=5}),
 <table border="0" cellpadding="0" cellspacing="0" width="100%%">
   <tr>
     <td align="left" class="footer">
-    Generated by Epydoc 3.0.1 on Wed Feb 26 13:23:51 2025
+    Generated by Epydoc 3.0.1 on Fri Feb 28 11:23:42 2025
     </td>
     <td align="right" class="footer">
       <a target="mainFrame" href="http://epydoc.sourceforge.net"

@@ -7,78 +7,78 @@
 wrapping ObjC C{NSMenuItem} and C{NSMenu} and L{Keys}.
 
 @var Keys: Menu L{Item} shortcut keys (C{chr}).
-@var Keys.ACK: '\x06'.
-@var Keys.Acknowledge: '\x06'.
-@var Keys.BEL: '\x07'.
-@var Keys.BS: '\x08'.
-@var Keys.BT: '\x19'.
-@var Keys.BackSpace: '\x08'.
-@var Keys.BackTab: '\x19'.
-@var Keys.Bell: '\x07'.
-@var Keys.CAN: '\x18'.
-@var Keys.CR: '\r'.
-@var Keys.Cancel: '\x18'.
-@var Keys.CarriageReturn: '\r'.
-@var Keys.DC1: '\x11'.
-@var Keys.DC2: '\x12'.
-@var Keys.DC3: '\x13'.
-@var Keys.DC4: '\x14'.
-@var Keys.DEL: '\x7f'.
-@var Keys.DLE: '\x10'.
-@var Keys.DataLineEscape: '\x10'.
-@var Keys.Delete: '\x7f'.
-@var Keys.DeviceControl1: '\x11'.
-@var Keys.DeviceControl2: '\x12'.
-@var Keys.DeviceControl3: '\x13'.
-@var Keys.DeviceControl4: '\x14'.
-@var Keys.EM: '\x19'.
-@var Keys.ENQ: '\x05'.
-@var Keys.EOT: '\x04'.
-@var Keys.ESC: '\x1b'.
-@var Keys.ETB: '\x17'.
-@var Keys.ETX: '\x03'.
-@var Keys.EndOfMedium: '\x19'.
-@var Keys.EndOfText: '\x03'.
-@var Keys.EndOfTransmit: '\x04'.
-@var Keys.EndOfTransmitBlock: '\x17'.
-@var Keys.Enquiry: '\x05'.
-@var Keys.Enter: '\x03'.
-@var Keys.Escape: '\x1b'.
-@var Keys.FF: '\x0c'.
-@var Keys.FS: '\x1c'.
-@var Keys.FileSeparator: '\x1c'.
-@var Keys.FormFeed: '\x0c'.
-@var Keys.GS: '\x1d'.
-@var Keys.GroupSeparator: '\x1d'.
-@var Keys.HT: '\t'.
-@var Keys.HorizontalTab: '\t'.
-@var Keys.LF: '\n'.
-@var Keys.LineFeed: '\n'.
-@var Keys.NAK: '\x15'.
-@var Keys.NL: '\n'.
-@var Keys.NegativeAcknowledge: '\x15'.
-@var Keys.NewLine: '\n'.
-@var Keys.RS: '\x1e'.
-@var Keys.RecordSeparator: '\x1e'.
-@var Keys.SI: '\x0f'.
-@var Keys.SO: '\x0e'.
-@var Keys.SOH: '\x01'.
-@var Keys.SP: ' '.
-@var Keys.STX: '\x02'.
-@var Keys.SUB: '\x1a'.
-@var Keys.SYN: '\x16'.
-@var Keys.ShiftIn: '\x0f'.
-@var Keys.ShiftOut: '\x0e'.
-@var Keys.Space: ' '.
-@var Keys.StartOfHeading: '\x01'.
-@var Keys.StartOfText: '\x02'.
-@var Keys.Substitute: '\x1a'.
-@var Keys.SynchronousIdle: '\x16'.
-@var Keys.Tab: '\t'.
-@var Keys.US: '\x1f'.
-@var Keys.UnitSeparator: '\x1f'.
-@var Keys.VT: '\x0b'.
-@var Keys.VerticalTab: '\x0b'.
+@var Keys.ACK: '\x06'
+@var Keys.Acknowledge: '\x06'
+@var Keys.BackSpace: '\x08'
+@var Keys.BackTab: '\x19'
+@var Keys.BEL: '\x07'
+@var Keys.Bell: '\x07'
+@var Keys.BS: '\x08'
+@var Keys.BT: '\x19'
+@var Keys.CAN: '\x18'
+@var Keys.Cancel: '\x18'
+@var Keys.CarriageReturn: '\r'
+@var Keys.CR: '\r'
+@var Keys.DataLineEscape: '\x10'
+@var Keys.DC1: '\x11'
+@var Keys.DC2: '\x12'
+@var Keys.DC3: '\x13'
+@var Keys.DC4: '\x14'
+@var Keys.DEL: '\x7f'
+@var Keys.Delete: '\x7f'
+@var Keys.DeviceControl1: '\x11'
+@var Keys.DeviceControl2: '\x12'
+@var Keys.DeviceControl3: '\x13'
+@var Keys.DeviceControl4: '\x14'
+@var Keys.DLE: '\x10'
+@var Keys.EM: '\x19'
+@var Keys.EndOfMedium: '\x19'
+@var Keys.EndOfText: '\x03'
+@var Keys.EndOfTransmit: '\x04'
+@var Keys.EndOfTransmitBlock: '\x17'
+@var Keys.ENQ: '\x05'
+@var Keys.Enquiry: '\x05'
+@var Keys.Enter: '\x03'
+@var Keys.EOT: '\x04'
+@var Keys.ESC: '\x1b'
+@var Keys.Escape: '\x1b'
+@var Keys.ETB: '\x17'
+@var Keys.ETX: '\x03'
+@var Keys.FF: '\x0c'
+@var Keys.FileSeparator: '\x1c'
+@var Keys.FormFeed: '\x0c'
+@var Keys.FS: '\x1c'
+@var Keys.GroupSeparator: '\x1d'
+@var Keys.GS: '\x1d'
+@var Keys.HorizontalTab: '\t'
+@var Keys.HT: '\t'
+@var Keys.LF: '\n'
+@var Keys.LineFeed: '\n'
+@var Keys.NAK: '\x15'
+@var Keys.NegativeAcknowledge: '\x15'
+@var Keys.NewLine: '\n'
+@var Keys.NL: '\n'
+@var Keys.RecordSeparator: '\x1e'
+@var Keys.RS: '\x1e'
+@var Keys.ShiftIn: '\x0f'
+@var Keys.ShiftOut: '\x0e'
+@var Keys.SI: '\x0f'
+@var Keys.SO: '\x0e'
+@var Keys.SOH: '\x01'
+@var Keys.SP: ' '
+@var Keys.Space: ' '
+@var Keys.StartOfHeading: '\x01'
+@var Keys.StartOfText: '\x02'
+@var Keys.STX: '\x02'
+@var Keys.SUB: '\x1a'
+@var Keys.Substitute: '\x1a'
+@var Keys.SYN: '\x16'
+@var Keys.SynchronousIdle: '\x16'
+@var Keys.Tab: '\t'
+@var Keys.UnitSeparator: '\x1f'
+@var Keys.US: '\x1f'
+@var Keys.VerticalTab: '\x0b'
+@var Keys.VT: '\x0b'
 '''
 from pycocoa.bases import _Type2
 from pycocoa.fonts import Font
@@ -120,7 +120,7 @@ from pycocoa.utils import errorf, isinstanceOf, name2pymethod
 # from types import FunctionType, MethodType
 
 __all__ = _ALL_LAZY.menus
-__version__ = '25.02.16'
+__version__ = '25.02.27'
 
 # Method _NSApplicationDelegate.handleMenuItem_ in .apps.py
 # is the handler ('selector') for all menu items specified
@@ -1686,13 +1686,13 @@ if __name__ == _Dmain_:
 #                    .VT=0xb,
 #  pycocoa.menus.Menu is <class .Menu>,
 #  pycocoa.menus.MenuBar is <class .MenuBar>,
-#  pycocoa.menus.ns2Item is <function .ns2Item at 0x1036fccc0>,
-#  pycocoa.menus.title2action is <function .title2action at 0x103702660>,
+#  pycocoa.menus.ns2Item is <function .ns2Item at 0x1018d7d80>,
+#  pycocoa.menus.title2action is <function .title2action at 0x1018e1760>,
 # )[7]
-# pycocoa.menus.version 25.2.16, .isLazy 1, Python 3.13.1 64bit arm64, macOS 14.7.3
+# pycocoa.menus.version 25.2.27, .isLazy 1, Python 3.13.2 64bit arm64, macOS 14.7.3
 
 # Item('Quit', 'menuTerminate_', Cmd+q) properties:
-#   NS = <ObjCInstance(NSMenuItem(<Id_t at 0x10363e750>) of 0x60000377cf50) at 0x103626780>
+#   NS = <ObjCInstance(NSMenuItem(<Id_t at 0x1018e5450>) of 0x600003505570) at 0x10169a060>
 #   NSDelegate = 'NameError("use \'NSd-\', not \'NSD-\'")'
 #   NSdelegate = None
 #   action = 'menuTerminate_'
@@ -1714,7 +1714,7 @@ if __name__ == _Dmain_:
 #   keyEquivalentModifiers = {'alt': False, 'cmd': True, 'ctrl': False, 'shift': False}
 #   keyModifiers = {'alt': False, 'cmd': True, 'ctrl': False, 'shift': False}
 #   nsTarget = None
-#   parent = Menu('Test') at 0x1036e9e80
+#   parent = Menu('Test') at 0x1018b9e80
 #   shift = False
 #   state = 0
 #   subMenu = None
@@ -1724,7 +1724,7 @@ if __name__ == _Dmain_:
 #   typename = 'Item'
 
 # Menu('Test') properties:
-#   NS = <ObjCInstance(NSMenu(<Id_t at 0x10363d6d0>) of 0x60000097cd40) at 0x103472990>
+#   NS = <ObjCInstance(NSMenu(<Id_t at 0x1018e4650>) of 0x600000b051c0) at 0x10169e850>
 #   NSDelegate = 'NameError("use \'NSd-\', not \'NSD-\'")'
 #   NSdelegate = None
 #   action = None
@@ -1738,17 +1738,17 @@ if __name__ == _Dmain_:
 #   isTornOff = False
 #   isVisible = None
 #   minWidth = 0.0
-#   nsMenuItem = <ObjCInstance(NSMenuItem(<Id_t at 0x10363f650>) of 0x60000377d340) at 0x1037055b0>
-#   parent = MenuBar(None) at 0x1036e9be0
+#   nsMenuItem = <ObjCInstance(NSMenuItem(<Id_t at 0x1018e60d0>) of 0x600003505730) at 0x1018d0b90>
+#   parent = MenuBar(None) at 0x1018b9be0
 #   showsState = True
-#   size = <NSSize_t(width=101.0, height=32.0) at 0x10381edd0>
+#   size = <NSSize_t(width=101.0, height=32.0) at 0x1018f4550>
 #   tag = 2
 #   tags = 2
 #   title = 'Test'
 #   typename = 'Menu'
 
 # MenuBar(None) properties:
-#   NS = <ObjCInstance(NSMenu(<Id_t at 0x10363cdd0>) of 0x60000097cd80) at 0x1036e9d30>
+#   NS = <ObjCInstance(NSMenu(<Id_t at 0x101873dd0>) of 0x600000b05100) at 0x1018b9d30>
 #   NSDelegate = 'NameError("use \'NSd-\', not \'NSD-\'")'
 #   NSdelegate = None
 #   action = None
@@ -1762,7 +1762,7 @@ if __name__ == _Dmain_:
 #   minWidth = 0.0
 #   parent = None
 #   showsState = True
-#   size = <NSSize_t(width=85.0, height=32.0) at 0x10381f250>
+#   size = <NSSize_t(width=85.0, height=32.0) at 0x1018f48d0>
 #   tag = None
 #   tags = 2
 #   title = None

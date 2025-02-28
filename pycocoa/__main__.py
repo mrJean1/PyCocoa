@@ -19,16 +19,17 @@ from pycocoa.runtime import _ObjCDeallocObserver
 _ObjCDeallocObserver._testIvar1()
 
 __all__ = ()
-__version__ = '25.02.25'
+__version__ = '25.02.27'
 
 # % python3 -m pycocoa -all
 #
-# pycocoa.version 25.2.25, .isLazy 1, Python 3.13.2 64bit arm64, macOS 14.6.1
+# pycocoa.version 25.2.28, .isLazy 1, Python 3.13.2 64bit arm64, macOS 14.6.1
 #
-#  pycocoa.add_ivar is <function pycocoa.runtime.add_ivar at 0x104995440>,
-#  pycocoa.add_method is <function pycocoa.runtime.add_method at 0x1049976a0>,
-#  pycocoa.add_protocol is <function pycocoa.runtime.add_protocol at 0x104997740>,
-#  pycocoa.add_subclass is <function pycocoa.runtime.add_subclass at 0x1049977e0>,
+# pycocoa.__all__ = tuple(
+#  pycocoa.add_ivar is <function pycocoa.runtime.add_ivar at 0x1052e82c0>,
+#  pycocoa.add_method is <function pycocoa.runtime.add_method at 0x1052ea520>,
+#  pycocoa.add_protocol is <function pycocoa.runtime.add_protocol at 0x1052ea5c0>,
+#  pycocoa.add_subclass is <function pycocoa.runtime.add_subclass at 0x1052ea660>,
 #  pycocoa.Adict is <class pycocoa.internals.Adict>,
 #  pycocoa.AlertPanel is <class pycocoa.panels.AlertPanel>,
 #  pycocoa.AlertStyle.Critical=2,
@@ -36,16 +37,16 @@ __version__ = '25.02.25'
 #                    .Warning=0,
 #  pycocoa.Allocator_t is <class pycocoa.octypes.Allocator_t>,
 #  pycocoa.App is <class pycocoa.apps.App>,
-#  pycocoa.app_title is <function pycocoa.apps.app_title at 0x104a38400>,
-#  pycocoa.apps is <module 'pycocoa.apps' from '.../pycocoa/apps.py'>,
+#  pycocoa.app_title is <function pycocoa.apps.app_title at 0x10562b240>,
+#  pycocoa.apps is <module 'pycocoa.apps' from '/Users/jean/Library/CloudStorage/Dropbox/Projects/ObjC-Cocoa/PyCocoa/pycocoa/apps.py'>,
 #  pycocoa.Array_t is <class ctypes.c_void_p>,
-#  pycocoa.aspect_ratio is <function pycocoa.utils.aspect_ratio at 0x104684220>,
+#  pycocoa.aspect_ratio is <function pycocoa.utils.aspect_ratio at 0x105190a40>,
 #  pycocoa.at is <class pycocoa.nstypes.at>,
-#  pycocoa.AutoResize.HeightSizable=1<<4,
-#                    .MaxXMargin=1<<2,
-#                    .MaxYMargin=1<<5,
+#  pycocoa.AutoResize.HeightSizable=16 or 1<<4,
+#                    .MaxXMargin=4 or 1<<2,
+#                    .MaxYMargin=32 or 1<<5,
 #                    .MinXMargin=1,
-#                    .MinYMargin=1<<3,
+#                    .MinYMargin=8 or 1<<3,
 #                    .NotSizable=0,
 #                    .Sizable=18,
 #                    .WidthSizable=2,
@@ -67,11 +68,11 @@ __version__ = '25.02.25'
 #  pycocoa.WindowError is <class pycocoa.windows.WindowError>,
 #  pycocoa.windows is <module 'pycocoa.windows' from '.../pycocoa/windows.py'>,
 #  pycocoa.WindowStyle.Closable=2,
-#                     .Miniaturizable=1<<2,
-#                     .Resizable=1<<3,
+#                     .Miniaturizable=4 or 1<<2,
+#                     .Resizable=8 or 1<<3,
 #                     .Titled=1,
 #                     .Typical=15,
-#                     .Utility=1<<4,
+#                     .Utility=16 or 1<<4,
 #  pycocoa.WindowStyleError is <class pycocoa.windows.WindowStyleError>,
 #  pycocoa.windowStyles is <function pycocoa.windows.windowStyles at 0x104ef1bc0>,
 #  pycocoa.YES is True or 0x1,
@@ -103,7 +104,7 @@ __version__ = '25.02.25'
 # pycocoa.version 25.2.25, .isLazy 1, Python 3.7.6 64bit arm64_x86_64, macOS 10.16
 
 # % python2.7 -m pycocoa
-# pycocoa.version 25.2.25, .isLazy None, Python 2.7.18 64bit arm64_x86_64, macOS 10.16
+# pycocoa.version 25.2.28, .isLazy None, Python 2.7.18 64bit arm64_x86_64, macOS 10.16
 
 # MIT License <https://OpenSource.org/licenses/MIT>
 #

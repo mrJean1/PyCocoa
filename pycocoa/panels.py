@@ -6,18 +6,18 @@
 '''Types L{OpenPanel} and L{SavePanel}, wrapping ObjC C{NSOpenPanel} and C{NSSavePanel}.
 
 @var AlertStyle: Alert level constants (C{int}).
-@var AlertStyle.Critical: 2.
-@var AlertStyle.Info: 1.
-@var AlertStyle.Warning: 0.
+@var AlertStyle.Critical: 2
+@var AlertStyle.Info: 1
+@var AlertStyle.Warning: 0
 
 @var PanelButton: Panel button kinds (C{int}).
-@var PanelButton.Cancel: 0.
-@var PanelButton.Close: 1.
-@var PanelButton.Error: -3.
-@var PanelButton.OK: 1.
-@var PanelButton.Other: 2.
-@var PanelButton.Suppressed: -2.
-@var PanelButton.TimedOut: -1.
+@var PanelButton.Cancel: 0
+@var PanelButton.Close: 1
+@var PanelButton.Error: -3
+@var PanelButton.OK: 1
+@var PanelButton.Other: 2
+@var PanelButton.Suppressed: -2
+@var PanelButton.TimedOut: -1
 '''
 from pycocoa.bases import _Type2
 from pycocoa.internals import _Constants, _Dmain_, _DOT_, _NN_, \
@@ -47,7 +47,7 @@ except ImportError:
     _Browser, _BrowserError = None, ImportError
 
 __all__ = _ALL_LAZY.panels
-__version__ = '25.02.19'
+__version__ = '25.02.27'
 
 
 class AlertStyle(_Constants):  # Enum?
@@ -587,7 +587,7 @@ if __name__ == _Dmain_:
 #  pycocoa.panels.SavePanel is <class .SavePanel>,
 #  pycocoa.panels.TextPanel is <class .TextPanel>,
 # )[9]
-# pycocoa.panels.version 25.2.19, .isLazy 1, Python 3.13.1 64bit arm64, macOS 14.7.3
+# pycocoa.panels.version 25.2.27, .isLazy 1, Python 3.13.2 64bit arm64, macOS 14.7.3
 
 # MIT License <https://OpenSource.org/licenses/MIT>
 #

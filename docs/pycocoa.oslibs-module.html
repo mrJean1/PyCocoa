@@ -63,7 +63,7 @@
 
 <hr />
 <div class="fields">      <p><strong>Version:</strong>
-        25.02.25
+        25.02.27
       </p>
 </div><!-- ==================== CLASSES ==================== -->
 <a name="section-Classes"></a>
@@ -180,14 +180,14 @@
     <td width="15%" align="right" valign="top" class="summary">
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
-        <a name="NSApplicationDidHideNotification"></a><span class="summary-name">NSApplicationDidHideNotification</span> = <code title="c_void_p(140704654830288)">c_void_p(140704654830288)</code>
+        <a name="NSApplicationDidHideNotification"></a><span class="summary-name">NSApplicationDidHideNotification</span> = <code title="c_void_p(140704533441232)">c_void_p(140704533441232)</code>
     </td>
   </tr>
 <tr>
     <td width="15%" align="right" valign="top" class="summary">
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
-        <a name="NSApplicationDidUnhideNotification"></a><span class="summary-name">NSApplicationDidUnhideNotification</span> = <code title="c_void_p(140704654830384)">c_void_p(140704654830384)</code>
+        <a name="NSApplicationDidUnhideNotification"></a><span class="summary-name">NSApplicationDidUnhideNotification</span> = <code title="c_void_p(140704533441328)">c_void_p(140704533441328)</code>
     </td>
   </tr>
 <tr>
@@ -1231,13 +1231,13 @@
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
         <a href="pycocoa.oslibs-module.html#Libs" class="summary-name">Libs</a> = <code title="{'CoreFoundation': &lt;CDLL 'CoreFoundation.framework/CoreFoundation', ha\
-ndle 7fff9d392988 at 7fc918642fd0&gt;, 'Foundation': &lt;CDLL 'Foundation.fr\
-amework/Foundation', handle 7fff9d393eb8 at 7fc91832a090&gt;, 'C': &lt;CDLL \
-'libc.dylib', handle 7fff9d384d50 at 7fc918642f90&gt;, 'Quartz': &lt;CDLL 'C\
-oreGraphics.framework/CoreGraphics', handle 7fff9d394620 at 7fc918645d\
-90&gt;, 'PrintCore.framework': &lt;CDLL '/System/Library/Frameworks/Applicat\
-ionServices.framework/Frameworks/PrintCore.framework/PrintCore', handl\
-e 7fff9d272510 at 7fc9283fd3d0&gt;, 'libc': &lt;CDLL 'libc.dylib', handle 7f\
+ndle 7fff9357a988 at 7fbf481cc390&gt;, 'Foundation': &lt;CDLL 'Foundation.fr\
+amework/Foundation', handle 7fff9357beb8 at 7fbf68611190&gt;, 'C': &lt;CDLL \
+'libc.dylib', handle 7fff93564d50 at 7fbf481cc0d0&gt;, 'Quartz': &lt;CDLL 'C\
+oreGraphics.framework/CoreGraphics', handle 7fff93574620 at 7fbf481cce\
+90&gt;, 'libc': &lt;CDLL 'libc.dylib', handle 7fff93564d50 at 7fbf481cc0d0&gt;,\
+ 'ObjC': &lt;CDLL 'libobjc.dylib', handle 7fff9357c414 at 7fbf68611450&gt;, \
+'PrintCore': &lt;CDLL '/System/Library/Frameworks/ApplicationServices.fra\
 ...">{'CoreFoundation': &lt;CDLL 'CoreFoundation.framework/Core<code class="variable-ellipsis">...</code></code><br />
       The loaded <code>macOS</code> libraries, all <code>.dylib</code>.
     </td>
@@ -1316,16 +1316,6 @@ e 7fff9d272510 at 7fc9283fd3d0&gt;, 'libc': &lt;CDLL 'libc.dylib', handle 7f\
     <td width="15%" align="right" valign="top" class="summary">
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
-        <a name="Libs.PrintCore.framework"></a><span class="summary-name">Libs.PrintCore.framework</span><br />
-      The 
-      '/System/Library/Frameworks/ApplicationServices.framework/Frameworks/PrintCore.framework/PrintCore'
-      library.
-    </td>
-  </tr>
-<tr>
-    <td width="15%" align="right" valign="top" class="summary">
-      <span class="summary-type">&nbsp;</span>
-    </td><td class="summary">
         <a name="Libs.Quartz"></a><span class="summary-name">Libs.Quartz</span><br />
       The '/System/Library/Frameworks/CoreGraphics.framework/CoreGraphics' 
       library.
@@ -1381,7 +1371,7 @@ e 7fff9d272510 at 7fc9283fd3d0&gt;, 'libc': &lt;CDLL 'libc.dylib', handle 7f\
         <dd>The library (<code>ctypes.CDLL</code>).</dd>
     <dt>Raises:</dt>
     <dd><ul class="nomargin-top">
-        <li><code><strong class='fraise'><a href="pycocoa.oslibs.OSlibError-class.html">OSlibError</a></strong></code> - No <code><b>name</b>.dylib</code> library.</li>
+        <li><code><strong class='fraise'><a href="pycocoa.oslibs.OSlibError-class.html">OSlibError</a></strong></code> - No <code><b>name</b>.dylib</code> library found.</li>
     </ul></dd>
   </dl>
 <div class="fields">      <p><strong>Note:</strong>
@@ -1419,7 +1409,7 @@ e 7fff9d272510 at 7fc9283fd3d0&gt;, 'libc': &lt;CDLL 'libc.dylib', handle 7f\
         <dd>The library (<code>ctypes.CDLL</code>).</dd>
     <dt>Raises:</dt>
     <dd><ul class="nomargin-top">
-        <li><code><strong class='fraise'><a href="pycocoa.oslibs.OSlibError-class.html">OSlibError</a></strong></code> - No <code><b>name</b>.framework</code> library.</li>
+        <li><code><strong class='fraise'><a href="pycocoa.oslibs.OSlibError-class.html">OSlibError</a></strong></code> - No <code><b>name</b>.framework</code> library found.</li>
     </ul></dd>
   </dl>
 <div class="fields">      <p><strong>Note:</strong>
@@ -1554,13 +1544,13 @@ _dllattr(_libCG, kCGImagePropertyGIFDelayTime= c_void_p)
     <dt>Value:</dt>
       <dd><table><tr><td><pre class="variable">
 {'CoreFoundation': &lt;CDLL 'CoreFoundation.framework/CoreFoundation', ha<span class="variable-linewrap"><img src="crarr.png" alt="\" /></span>
-ndle 7fff9d392988 at 7fc918642fd0&gt;, 'Foundation': &lt;CDLL 'Foundation.fr<span class="variable-linewrap"><img src="crarr.png" alt="\" /></span>
-amework/Foundation', handle 7fff9d393eb8 at 7fc91832a090&gt;, 'C': &lt;CDLL <span class="variable-linewrap"><img src="crarr.png" alt="\" /></span>
-'libc.dylib', handle 7fff9d384d50 at 7fc918642f90&gt;, 'Quartz': &lt;CDLL 'C<span class="variable-linewrap"><img src="crarr.png" alt="\" /></span>
-oreGraphics.framework/CoreGraphics', handle 7fff9d394620 at 7fc918645d<span class="variable-linewrap"><img src="crarr.png" alt="\" /></span>
-90&gt;, 'PrintCore.framework': &lt;CDLL '/System/Library/Frameworks/Applicat<span class="variable-linewrap"><img src="crarr.png" alt="\" /></span>
-ionServices.framework/Frameworks/PrintCore.framework/PrintCore', handl<span class="variable-linewrap"><img src="crarr.png" alt="\" /></span>
-e 7fff9d272510 at 7fc9283fd3d0&gt;, 'libc': &lt;CDLL 'libc.dylib', handle 7f<span class="variable-linewrap"><img src="crarr.png" alt="\" /></span>
+ndle 7fff9357a988 at 7fbf481cc390&gt;, 'Foundation': &lt;CDLL 'Foundation.fr<span class="variable-linewrap"><img src="crarr.png" alt="\" /></span>
+amework/Foundation', handle 7fff9357beb8 at 7fbf68611190&gt;, 'C': &lt;CDLL <span class="variable-linewrap"><img src="crarr.png" alt="\" /></span>
+'libc.dylib', handle 7fff93564d50 at 7fbf481cc0d0&gt;, 'Quartz': &lt;CDLL 'C<span class="variable-linewrap"><img src="crarr.png" alt="\" /></span>
+oreGraphics.framework/CoreGraphics', handle 7fff93574620 at 7fbf481cce<span class="variable-linewrap"><img src="crarr.png" alt="\" /></span>
+90&gt;, 'libc': &lt;CDLL 'libc.dylib', handle 7fff93564d50 at 7fbf481cc0d0&gt;,<span class="variable-linewrap"><img src="crarr.png" alt="\" /></span>
+ 'ObjC': &lt;CDLL 'libobjc.dylib', handle 7fff9357c414 at 7fbf68611450&gt;, <span class="variable-linewrap"><img src="crarr.png" alt="\" /></span>
+'PrintCore': &lt;CDLL '/System/Library/Frameworks/ApplicationServices.fra<span class="variable-linewrap"><img src="crarr.png" alt="\" /></span>
 <code class="variable-ellipsis">...</code>
 </pre></td></tr></table>
 </dd>
@@ -1599,7 +1589,7 @@ e 7fff9d272510 at 7fc9283fd3d0&gt;, 'libc': &lt;CDLL 'libc.dylib', handle 7f<spa
 <table border="0" cellpadding="0" cellspacing="0" width="100%%">
   <tr>
     <td align="left" class="footer">
-    Generated by Epydoc 3.0.1 on Wed Feb 26 13:23:51 2025
+    Generated by Epydoc 3.0.1 on Fri Feb 28 11:23:42 2025
     </td>
     <td align="right" class="footer">
       <a target="mainFrame" href="http://epydoc.sourceforge.net"

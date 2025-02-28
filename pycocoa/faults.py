@@ -6,31 +6,29 @@
 '''Handle I{uncaught} C{ObjC/NSExceptions} and other C{fault}s similar
 to standard module C{faulthandler} available since Python 3.3.
 
-By default, C{fault} handling is not enabled.  In Python 3.3 and
-later, the U{faulthandler<https://Docs.Python.org/3/library/faulthandler.html>}
-may be enabled by (a) calling function C{faulthandler.enable} or
-(b) setting environment variable U{PYTHONFAULTHANDLER
+By default, C{fault} handling is not enabled.  In Python 3.3 and later,
+the U{faulthandler<https://Docs.Python.org/3/library/faulthandler.html>}
+may be enabled by (a) calling function C{faulthandler.enable} or (b) setting
+env variable U{PYTHONFAULTHANDLER
 <https://Docs.Python.org/3/using/cmdline.html#envvar-PYTHONFAULTHANDLER>}
-to any no-empty string or (c) including option C{-X faulthandler}
-on the python command line.
+to any no-empty string or (c) including option C{-X faulthandler} on the
+python command line.
 
-For other Python releases, C{fault} handling by this module L{pycocoa.faults}
-is enabled by either (a) calling function L{faults.enable} or (b) setting
-environment variable U{PYTHONFAULTHANDLER
+Command line option C{-X faulthandler} is not available in older Python
+releases, but C{fault} handling I{by this module} L{pycocoa.faults} can
+be enabled by either (a) calling function L{faults.enable} or (b) setting
+env variable U{PYTHONFAULTHANDLER
 <https://Docs.Python.org/3/using/cmdline.html#envvar-PYTHONFAULTHANDLER>}
-to any no-empty string.  Command line option C{-X faulthandler} is not
-available in older Python versions.
+to any no-empty string.
 
-B{NOTE, if in Python 3.3 or later,} the environment variable is defined as
-B{U{PYTHONFAULTHANDLER=pycocoa
-<https://Docs.Python.org/3/using/cmdline.html#envvar-PYTHONFAULTHANDLER>}},
-the Python C{faulthandler} will be overridden by this module L{pycocoa.faults}.
+B{NOTE, if in Python 3.3 or later,} the env variable is defined as
+B{U{PYTHONFAULTHANDLER=pycocoa}}, the Python C{faulthandler} will be
+overridden I{by this module} L{pycocoa.faults}.
 
 @note: Functions L{faults.disable}, L{faults.enable}, L{faults.exiting},
-L{faults.is_enabled} and L{faults.SIGs_enabled} are not exported publicly
-as C{pycocoa.disable}, C{pycocoa.enable}, C{pycocoa.exiting}, etc., only
-functions L{getUncaughtExceptionHandler} and L{setUncaughtExceptionHandler}
-are.
+       L{faults.is_enabled} and L{faults.SIGs_enabled} are I{not exported,
+       publicly} , only functions L{getUncaughtExceptionHandler} and
+       L{setUncaughtExceptionHandler} are.
 '''
 from pycocoa.internals import Adict, _Dmain_, _Globals, _NL_, _NN_, _no, _pycocoa_
 from pycocoa.lazily import _ALL_DOCS, _ALL_LAZY, _instr, _PY_FH
@@ -44,7 +42,7 @@ import signal as _signal
 import sys
 
 __all__ = _ALL_LAZY.faults
-__version__ = '25.02.09'
+__version__ = '25.02.27'
 
 _exiting = -9  # default _exit and status
 # SIGnals handled by Python 3 C{faulthandler}
@@ -395,7 +393,7 @@ if __name__ == _Dmain_:
 #  pycocoa.faults.getUncaughtExceptionHandler is <function .getUncaughtExceptionHandler at 0x1016e9c60>,
 #  pycocoa.faults.setUncaughtExceptionHandler is <function .setUncaughtExceptionHandler at 0x1016e9d00>,
 # )[2]
-# pycocoa.faults.version 25.1.31, .isLazy 1, Python 3.13.1 64bit arm64, macOS 14.6.1
+# pycocoa.faults.version 25.2.27, .isLazy 1, Python 3.13.2 64bit arm64, macOS 14.7.3
 
 # MIT License <https://OpenSource.org/licenses/MIT>
 #

@@ -31,6 +31,13 @@ C{P} printing of C{NSAutoreleasePool}s and C{X} I{send_message}, I{send_super},
 
 Use env variable C{PYCOCOA_LIBOBJC_NONATOMIC=on} to detect I{non-atomic} calls
 of certain C{libobjc} functions.
+
+@var OBJC_ASSOCIATION: C{Libs,ObjC.objc_setAssociatedObject} associations (C{mask}).
+@var OBJC_ASSOCIATION.ASSIGN: 0x0
+@var OBJC_ASSOCIATION.COPY: 0x303
+@var OBJC_ASSOCIATION.COPY_NONATOMIC: 0x3
+@var OBJC_ASSOCIATION.RETAIN: 0x301
+@var OBJC_ASSOCIATION.RETAIN_NONATOMIC: 0x1
 '''
 from pycocoa.getters import _ivar_ctype, get_c_func_t, get_class, \
                              get_classname, get_classof, get_ivar, \
@@ -64,7 +71,7 @@ from ctypes import alignment, ArgumentError, byref, cast, c_buffer, \
 # import sys as _sys  # from .internals
 
 __all__ = _ALL_LAZY.runtime
-__version__ = '25.02.25'
+__version__ = '25.02.27'
 
 _OBJC_ENV = 'PYCOCOA_OBJC_LOG'
 _OBJC_LOG =  dict((_, 0) for _ in _environ.get(_OBJC_ENV, _NN_).upper()
@@ -98,6 +105,8 @@ class _Ivar1(_Constants):
 # <https://Developer.Apple.com/documentation/objectivec/
 #        objc_associationpolicy?language=objc>
 class OBJC_ASSOCIATION(_Constants):
+    '''C{libObjC.objc_setAssociatedObject} associations (C{mask}).
+    '''
     ASSIGN           = 0      # weak reference
     COPY             = 0x303  # 01403
     COPY_NONATOMIC   = 3
@@ -1785,7 +1794,9 @@ from ctypes import sizeof  # see from ctypes ... comments at the top
 
 if __name__ == _Dmain_:
 
-    from pycocoa.utils import _all_listing
+    from pycocoa.utils import _all_listing, _varstr
+
+    print(_varstr(OBJC_ASSOCIATION, strepr=hex))
 
     _all_listing(__all__, locals())
 
@@ -1824,7 +1835,7 @@ if __name__ == _Dmain_:
 #  pycocoa.runtime.send_super_init is <function .send_super_init at 0x1013d2b60>,
 #  pycocoa.runtime.set_ivar is <function .set_ivar at 0x1013d2c00>,
 # )[27]
-# pycocoa.runtime.version 25.2.23, .isLazy 1, Python 3.13.2 64bit arm64, macOS 14.7.3
+# pycocoa.runtime.version 25.2.27, .isLazy 1, Python 3.13.2 64bit arm64, macOS 14.7.3
 
 # MIT License <https://OpenSource.org/licenses/MIT>
 #

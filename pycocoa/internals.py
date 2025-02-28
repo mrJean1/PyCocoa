@@ -288,7 +288,7 @@ class _MutableConstants(object):  # in .lazily
 
     def __repr__(self):
         def _fmt2(n, v):
-            return _EQUALS_(n, _intstr(v))
+            return _EQUALS_(n, _int2str(v))
         return self._strepr(_fmt2)
 
     def __str__(self):
@@ -599,11 +599,11 @@ def _int2(i):  # in .utils
     return i, s
 
 
-def _intstr(i):
+def _int2str(i):
     '''(INTERNAL) Return C{int} as C{str}.
     '''
     b, s = _int2(i)
-    return _fmt('%s<<%s', b, s) if s > 1 else str(i)
+    return _fmt('%s or %s<<%s', i, b, s) if s > 1 else str(i)
 
 
 def _isgenerator(obj):
@@ -697,7 +697,7 @@ __all__ = tuple(_.__name__ for _ in (Adict, bytes2repr, bytes2str,
                                      frozendict, iterbytes,
                                      lambda1, missing.__class__,
                                      property_RO, proxy_RO, str2bytes))
-__version__ = '25.02.25'
+__version__ = '25.02.27'
 
 if __name__ == _Dmain_:
 
@@ -719,7 +719,7 @@ if __name__ == _Dmain_:
 #  pycocoa.internals.proxy_RO is <class .proxy_RO>,
 #  pycocoa.internals.str2bytes is <function .str2bytes at 0x102890900>,
 # )[10]
-# pycocoa.internals.version 25.2.25, .isLazy 1, Python 3.13.2 64bit arm64, macOS 14.7.3
+# pycocoa.internals.version 25.2.27, .isLazy 1, Python 3.13.2 64bit arm64, macOS 14.7.3
 
 # MIT License <https://OpenSource.org/licenses/MIT>
 #

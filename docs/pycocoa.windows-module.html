@@ -70,7 +70,7 @@
 
 <hr />
 <div class="fields">      <p><strong>Version:</strong>
-        25.02.19
+        25.02.27
       </p>
 </div><!-- ==================== CLASSES ==================== -->
 <a name="section-Classes"></a>
@@ -212,14 +212,14 @@
     <td width="15%" align="right" valign="top" class="summary">
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
-        <a href="pycocoa.windows-module.html#AutoResize" class="summary-name">AutoResize</a> = <code title="AutoResize.HeightSizable=1&lt;&lt;4,
-          .MaxXMargin=1&lt;&lt;2,
-          .MaxYMargin=1&lt;&lt;5,
+        <a href="pycocoa.windows-module.html#AutoResize" class="summary-name">AutoResize</a> = <code title="AutoResize.HeightSizable=16 or 1&lt;&lt;4,
+          .MaxXMargin=4 or 1&lt;&lt;2,
+          .MaxYMargin=32 or 1&lt;&lt;5,
           .MinXMargin=1,
-          .MinYMargin=1&lt;&lt;3,
+          .MinYMargin=8 or 1&lt;&lt;3,
           .NotSizable=0,
           .Sizable=18,
-          .WidthSizable=2">AutoResize.HeightSizable=1&lt;<code class="variable-ellipsis">...</code></code><br />
+          .WidthSizable=2">AutoResize.HeightSizable=16 or 1&lt;<code class="variable-ellipsis">...</code></code><br />
       AutoResize options (<code>mask</code>, wrapping 
       <code>NSAutoresizingMaskOptions</code>).
     </td>
@@ -228,15 +228,15 @@
     <td width="15%" align="right" valign="top" class="summary">
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
-        <a href="pycocoa.windows-module.html#BezelStyle" class="summary-name">BezelStyle</a> = <code title="BezelStyle.Disclosure=5,
+        <a href="pycocoa.windows-module.html#BezelStyle" class="summary-name">BezelStyle</a> = <code title="BezelStyle.Circular=7,
+          .Disclosure=5,
           .HelpButton=9,
           .Inline=15,
-          .NCircular=7,
           .Recessed=13,
           .RegularSquare=2,
           .Rounded=1,
           .RoundedDisclosure=14,
-...">BezelStyle.Disclosure<code class="variable-ellipsis">...</code></code><br />
+...">BezelStyle.Circular<code class="variable-ellipsis">...</code></code><br />
       Bezel style constants (<code>int</code>).
     </td>
   </tr>
@@ -256,11 +256,11 @@
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
         <a href="pycocoa.windows-module.html#WindowStyle" class="summary-name">WindowStyle</a> = <code title="WindowStyle.Closable=2,
-           .Miniaturizable=1&lt;&lt;2,
-           .Resizable=1&lt;&lt;3,
+           .Miniaturizable=4 or 1&lt;&lt;2,
+           .Resizable=8 or 1&lt;&lt;3,
            .Titled=1,
            .Typical=15,
-           .Utility=1&lt;&lt;4">WindowStyle.Closable<code class="variable-ellipsis">...</code></code><br />
+           .Utility=16 or 1&lt;&lt;4">WindowStyle.Closable<code class="variable-ellipsis">...</code></code><br />
       Window style constants (<code>mask</code>).
     </td>
   </tr>
@@ -268,7 +268,7 @@
     <td width="15%" align="right" valign="top" class="summary">
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
-        <a href="pycocoa.windows-module.html#NSWindowDelegate" class="summary-name">NSWindowDelegate</a> = <code title="&lt;pycocoa.internals.proxy_RO object at 0x7fc928392850&gt;">&lt;pycocoa.internals.proxy_RO object at 0x7fc<code class="variable-ellipsis">...</code></code>
+        <a href="pycocoa.windows-module.html#NSWindowDelegate" class="summary-name">NSWindowDelegate</a> = <code title="&lt;pycocoa.internals.proxy_RO object at 0x7fbf480b4910&gt;">&lt;pycocoa.internals.proxy_RO object at 0x7fb<code class="variable-ellipsis">...</code></code>
     </td>
   </tr>
 <tr>
@@ -276,7 +276,7 @@
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
         <a name="AutoResize.HeightSizable"></a><span class="summary-name">AutoResize.HeightSizable</span><br />
-      0x10.
+      0x10
     </td>
   </tr>
 <tr>
@@ -284,7 +284,7 @@
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
         <a name="AutoResize.MaxXMargin"></a><span class="summary-name">AutoResize.MaxXMargin</span><br />
-      0x4.
+      0x4
     </td>
   </tr>
 <tr>
@@ -292,7 +292,7 @@
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
         <a name="AutoResize.MaxYMargin"></a><span class="summary-name">AutoResize.MaxYMargin</span><br />
-      0x20.
+      0x20
     </td>
   </tr>
 <tr>
@@ -300,7 +300,7 @@
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
         <a name="AutoResize.MinXMargin"></a><span class="summary-name">AutoResize.MinXMargin</span><br />
-      0x1.
+      0x1
     </td>
   </tr>
 <tr>
@@ -308,7 +308,7 @@
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
         <a name="AutoResize.MinYMargin"></a><span class="summary-name">AutoResize.MinYMargin</span><br />
-      0x8.
+      0x8
     </td>
   </tr>
 <tr>
@@ -316,7 +316,7 @@
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
         <a name="AutoResize.NotSizable"></a><span class="summary-name">AutoResize.NotSizable</span><br />
-      0x0.
+      0x0
     </td>
   </tr>
 <tr>
@@ -324,7 +324,7 @@
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
         <a name="AutoResize.Sizable"></a><span class="summary-name">AutoResize.Sizable</span><br />
-      0x12.
+      0x12
     </td>
   </tr>
 <tr>
@@ -332,7 +332,15 @@
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
         <a name="AutoResize.WidthSizable"></a><span class="summary-name">AutoResize.WidthSizable</span><br />
-      0x2.
+      0x2
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a name="BezelStyle.Circular"></a><span class="summary-name">BezelStyle.Circular</span><br />
+      7
     </td>
   </tr>
 <tr>
@@ -340,7 +348,7 @@
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
         <a name="BezelStyle.Disclosure"></a><span class="summary-name">BezelStyle.Disclosure</span><br />
-      0x5.
+      5
     </td>
   </tr>
 <tr>
@@ -348,7 +356,7 @@
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
         <a name="BezelStyle.HelpButton"></a><span class="summary-name">BezelStyle.HelpButton</span><br />
-      0x9.
+      9
     </td>
   </tr>
 <tr>
@@ -356,15 +364,7 @@
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
         <a name="BezelStyle.Inline"></a><span class="summary-name">BezelStyle.Inline</span><br />
-      0xf.
-    </td>
-  </tr>
-<tr>
-    <td width="15%" align="right" valign="top" class="summary">
-      <span class="summary-type">&nbsp;</span>
-    </td><td class="summary">
-        <a name="BezelStyle.NCircular"></a><span class="summary-name">BezelStyle.NCircular</span><br />
-      0x7.
+      15
     </td>
   </tr>
 <tr>
@@ -372,7 +372,7 @@
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
         <a name="BezelStyle.Recessed"></a><span class="summary-name">BezelStyle.Recessed</span><br />
-      0xd.
+      13
     </td>
   </tr>
 <tr>
@@ -380,7 +380,7 @@
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
         <a name="BezelStyle.RegularSquare"></a><span class="summary-name">BezelStyle.RegularSquare</span><br />
-      0x2.
+      2
     </td>
   </tr>
 <tr>
@@ -388,7 +388,7 @@
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
         <a name="BezelStyle.RoundRect"></a><span class="summary-name">BezelStyle.RoundRect</span><br />
-      0xc.
+      12
     </td>
   </tr>
 <tr>
@@ -396,7 +396,7 @@
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
         <a name="BezelStyle.Rounded"></a><span class="summary-name">BezelStyle.Rounded</span><br />
-      0x1.
+      1
     </td>
   </tr>
 <tr>
@@ -404,7 +404,7 @@
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
         <a name="BezelStyle.RoundedDisclosure"></a><span class="summary-name">BezelStyle.RoundedDisclosure</span><br />
-      0xe.
+      14
     </td>
   </tr>
 <tr>
@@ -412,7 +412,7 @@
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
         <a name="BezelStyle.ShadowlessSquare"></a><span class="summary-name">BezelStyle.ShadowlessSquare</span><br />
-      0x6.
+      6
     </td>
   </tr>
 <tr>
@@ -420,7 +420,7 @@
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
         <a name="BezelStyle.SmallSquare"></a><span class="summary-name">BezelStyle.SmallSquare</span><br />
-      0xa.
+      10
     </td>
   </tr>
 <tr>
@@ -428,7 +428,7 @@
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
         <a name="BezelStyle.TexturedRounded"></a><span class="summary-name">BezelStyle.TexturedRounded</span><br />
-      0xb.
+      11
     </td>
   </tr>
 <tr>
@@ -436,7 +436,7 @@
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
         <a name="BezelStyle.TexturedSquare"></a><span class="summary-name">BezelStyle.TexturedSquare</span><br />
-      0x8.
+      8
     </td>
   </tr>
 <tr>
@@ -444,7 +444,7 @@
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
         <a name="Border.Bezel"></a><span class="summary-name">Border.Bezel</span><br />
-      0x2.
+      2
     </td>
   </tr>
 <tr>
@@ -452,7 +452,7 @@
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
         <a name="Border.Groove"></a><span class="summary-name">Border.Groove</span><br />
-      0x3.
+      3
     </td>
   </tr>
 <tr>
@@ -460,7 +460,7 @@
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
         <a name="Border.Line"></a><span class="summary-name">Border.Line</span><br />
-      0x1.
+      1
     </td>
   </tr>
 <tr>
@@ -468,7 +468,7 @@
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
         <a name="Border.No"></a><span class="summary-name">Border.No</span><br />
-      0x0.
+      0
     </td>
   </tr>
 <tr>
@@ -476,7 +476,7 @@
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
         <a name="WindowStyle.Closable"></a><span class="summary-name">WindowStyle.Closable</span><br />
-      0x2.
+      0x2
     </td>
   </tr>
 <tr>
@@ -484,7 +484,7 @@
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
         <a name="WindowStyle.Miniaturizable"></a><span class="summary-name">WindowStyle.Miniaturizable</span><br />
-      0x4.
+      0x4
     </td>
   </tr>
 <tr>
@@ -492,7 +492,7 @@
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
         <a name="WindowStyle.Resizable"></a><span class="summary-name">WindowStyle.Resizable</span><br />
-      0x8.
+      0x8
     </td>
   </tr>
 <tr>
@@ -500,7 +500,7 @@
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
         <a name="WindowStyle.Titled"></a><span class="summary-name">WindowStyle.Titled</span><br />
-      0x1.
+      0x1
     </td>
   </tr>
 <tr>
@@ -508,7 +508,7 @@
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
         <a name="WindowStyle.Typical"></a><span class="summary-name">WindowStyle.Typical</span><br />
-      0xf.
+      0xf
     </td>
   </tr>
 <tr>
@@ -516,7 +516,7 @@
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
         <a name="WindowStyle.Utility"></a><span class="summary-name">WindowStyle.Utility</span><br />
-      0x10.
+      0x10
     </td>
   </tr>
 </table>
@@ -649,11 +649,11 @@
   <dl class="fields">
     <dt>Value:</dt>
       <dd><table><tr><td><pre class="variable">
-AutoResize.HeightSizable=1&lt;&lt;4,
-          .MaxXMargin=1&lt;&lt;2,
-          .MaxYMargin=1&lt;&lt;5,
+AutoResize.HeightSizable=16 or 1&lt;&lt;4,
+          .MaxXMargin=4 or 1&lt;&lt;2,
+          .MaxYMargin=32 or 1&lt;&lt;5,
           .MinXMargin=1,
-          .MinYMargin=1&lt;&lt;3,
+          .MinYMargin=8 or 1&lt;&lt;3,
           .NotSizable=0,
           .Sizable=18,
           .WidthSizable=2
@@ -674,10 +674,10 @@ AutoResize.HeightSizable=1&lt;&lt;4,
   <dl class="fields">
     <dt>Value:</dt>
       <dd><table><tr><td><pre class="variable">
-BezelStyle.Disclosure=5,
+BezelStyle.Circular=7,
+          .Disclosure=5,
           .HelpButton=9,
           .Inline=15,
-          .NCircular=7,
           .Recessed=13,
           .RegularSquare=2,
           .Rounded=1,
@@ -722,11 +722,11 @@ Border.Bezel=2,
     <dt>Value:</dt>
       <dd><table><tr><td><pre class="variable">
 WindowStyle.Closable=2,
-           .Miniaturizable=1&lt;&lt;2,
-           .Resizable=1&lt;&lt;3,
+           .Miniaturizable=4 or 1&lt;&lt;2,
+           .Resizable=8 or 1&lt;&lt;3,
            .Titled=1,
            .Typical=15,
-           .Utility=1&lt;&lt;4
+           .Utility=16 or 1&lt;&lt;4
 </pre></td></tr></table>
 </dd>
   </dl>
@@ -744,7 +744,7 @@ WindowStyle.Closable=2,
   <dl class="fields">
     <dt>Value:</dt>
       <dd><table><tr><td><pre class="variable">
-&lt;pycocoa.internals.proxy_RO object at 0x7fc928392850&gt;
+&lt;pycocoa.internals.proxy_RO object at 0x7fbf480b4910&gt;
 </pre></td></tr></table>
 </dd>
   </dl>
@@ -782,7 +782,7 @@ WindowStyle.Closable=2,
 <table border="0" cellpadding="0" cellspacing="0" width="100%%">
   <tr>
     <td align="left" class="footer">
-    Generated by Epydoc 3.0.1 on Wed Feb 26 13:23:52 2025
+    Generated by Epydoc 3.0.1 on Fri Feb 28 11:23:42 2025
     </td>
     <td align="right" class="footer">
       <a target="mainFrame" href="http://epydoc.sourceforge.net"

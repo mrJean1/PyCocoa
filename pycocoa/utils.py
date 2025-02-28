@@ -20,7 +20,7 @@ import platform as _platform
 # import sys as _sys  # from .lazily
 
 __all__ = _ALL_LAZY.utils
-__version__ = '25.02.25'
+__version__ = '25.02.28'
 
 _bCOL = b':'  # in .octypes
 
@@ -58,7 +58,7 @@ def _all_listing(alls, localls, libs=False, _file_=_NN_, argv0='#'):
             r = '%s or 0x%X' % (r, v)
             v, s = _int2(v)
             if s > 2:
-                r = _fmt('%s or %d << %s', r, v, s)
+                r = _fmt('%s or %d<<%s', r, v, s)
         elif r.startswith('<class '):
             r = r.replace("'", _NN_)
         elif r.startswith('<function '):
@@ -204,8 +204,8 @@ def _dirbasename2(filename, sep=_DOT_):
 def errorf(fmtxt, *args, **file_flush_nl_nt_argv0):
     '''Like I{printf}, but writing to I{file=sys.stderr}.
     '''
-    _writef(fmtxt, args, **_xkwds(file_flush_nl_nt_argv0,
-                                  file=_sys.stderr, flush=True))
+    return _writef(fmtxt, args, **_xkwds(file_flush_nl_nt_argv0,
+                                         file=_sys.stderr, flush=True))
 
 
 def flint(f):
@@ -293,8 +293,8 @@ def islistuple(inst):
 def logf(fmtxt, *args, **file_flush_nl_nt_argv0):
     '''Like I{printf}, but writing to I{file=NSMain.stdlog}.
     '''
-    _writef(fmtxt, args, **_xkwds(file_flush_nl_nt_argv0,
-                                  file=_Globals.stdlog, flush=True))
+    return _writef(fmtxt, args, **_xkwds(file_flush_nl_nt_argv0,
+                                         file=_Globals.stdlog, flush=True))
 
 
 def machine():
@@ -387,10 +387,12 @@ def printf(fmtxt, *args, **file_flush_nl_nt_argv0):
        @keyword flush: Flush B{C{file}} after writing (C{bool}),
                        default C{False}.
        @keyword nl: Number of leading blank lines (C{int}).
-       @keyword nt: Number of trailing blank lines (C{int}).
+       @keyword nt: Number of trailing blank lines (C{int}, default 1).
        @keyword argv0: Optional prefix (C{str}).
+
+       @return: Number of bytes written (C{int}).
     '''
-    _writef(fmtxt, args, **file_flush_nl_nt_argv0)
+    return _writef(fmtxt, args, **file_flush_nl_nt_argv0)
 
 
 def properties(inst):
@@ -515,10 +517,13 @@ def _varstr(constants, strepr=None):
     '''
     def _doc1(c, n, f):
         # get class c's 1st __doc__ line or value from f(c)
-        d = f(c) if callable(f) else (
-            getattr(c, _Ddoc_) or _NN_)  # PYCHOK getattr
-        t = d.split(_NL_)[0].strip().rstrip(_DOT_)
-        return _fmt('@var %s: %s.', n, t)
+        if callable(f):
+            t = f(c)
+        else:
+            d = getattr(c, _Ddoc_) or _NN_
+            t = d.split(_NL_)[0].strip()
+            t = t.rstrip('.,;:') + _DOT_
+        return _fmt('@var %s: %s', n, t)
 
     C = constants.__class__
     N = C.__name__.lstrip(_UNDER_)
@@ -529,7 +534,7 @@ def _varstr(constants, strepr=None):
 
 
 def _writef(fmtxt, args, file=_sys.stdout, flush=False,
-                         nl=0, nt=0, argv0=missing):
+                         nl=0, nt=1, argv0=missing):
     '''(INTERNAL) Write a formatted string to C{file}.
     '''
     t = _fmt(fmtxt, *args)
@@ -537,7 +542,7 @@ def _writef(fmtxt, args, file=_sys.stdout, flush=False,
     if a:
         t =  t.replace(_NL_, _NN_(_NL_, a, _SPACE_))
         t = _SPACE_(a, t)
-    t = _NN_(_NL_ * nl, t, _NL_, _NL_ * nt)
+    t = _NN_(_NL_ * nl, t, _NL_ * nt)
     n =  file.write(t)
     if flush:
         file.flush()
@@ -650,14 +655,13 @@ if __name__ == _Dmain_:
 #  pycocoa.utils.name2pymethod is <function .name2pymethod at 0x101520ae0>,
 #  pycocoa.utils.printf is <function .printf at 0x101520b80>,
 #  pycocoa.utils.properties is <function .properties at 0x101520c20>,
-#  pycocoa.utils.property2 is <function .property2 at 0x101520cc0>,
 #  pycocoa.utils.terminating is <function .terminating at 0x101520ea0>,
 #  pycocoa.utils.type2strepr is <function .type2strepr at 0x101520fe0>,
 #  pycocoa.utils.z1000str is <function .z1000str at 0x101521260>,
 #  pycocoa.utils.zfstr is <function .zfstr at 0x101521300>,
 #  pycocoa.utils.zSIstr is <function .zSIstr at 0x1015213a0>,
-# )[21]
-# pycocoa.utils.version 25.2.25, .isLazy 1, Python 3.13.2 64bit arm64, macOS 14.7.3
+# )[20]
+# pycocoa.utils.version 25.2.28, .isLazy 1, Python 3.13.2 64bit arm64, macOS 14.7.3
 
 # MIT License <https://OpenSource.org/licenses/MIT>
 #

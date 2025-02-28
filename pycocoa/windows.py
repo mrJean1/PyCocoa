@@ -7,43 +7,43 @@
 L{WindowStyle}, wrapping ObjC C{NSWindow}, etc.
 
 @var AutoResize: AutoResize options (C{mask}, wrapping C{NSAutoresizingMaskOptions}).
-@var AutoResize.HeightSizable: 0x10.
-@var AutoResize.MaxXMargin: 0x4.
-@var AutoResize.MaxYMargin: 0x20.
-@var AutoResize.MinXMargin: 0x1.
-@var AutoResize.MinYMargin: 0x8.
-@var AutoResize.NotSizable: 0x0.
-@var AutoResize.Sizable: 0x12.
-@var AutoResize.WidthSizable: 0x2.
+@var AutoResize.HeightSizable: 0x10
+@var AutoResize.MaxXMargin: 0x4
+@var AutoResize.MaxYMargin: 0x20
+@var AutoResize.MinXMargin: 0x1
+@var AutoResize.MinYMargin: 0x8
+@var AutoResize.NotSizable: 0x0
+@var AutoResize.Sizable: 0x12
+@var AutoResize.WidthSizable: 0x2
 
 @var BezelStyle: Bezel style constants (C{int}).
-@var BezelStyle.Disclosure: 0x5.
-@var BezelStyle.HelpButton: 0x9.
-@var BezelStyle.Inline: 0xf.
-@var BezelStyle.NCircular: 0x7.
-@var BezelStyle.Recessed: 0xd.
-@var BezelStyle.RegularSquare: 0x2.
-@var BezelStyle.RoundRect: 0xc.
-@var BezelStyle.Rounded: 0x1.
-@var BezelStyle.RoundedDisclosure: 0xe.
-@var BezelStyle.ShadowlessSquare: 0x6.
-@var BezelStyle.SmallSquare: 0xa.
-@var BezelStyle.TexturedRounded: 0xb.
-@var BezelStyle.TexturedSquare: 0x8.
+@var BezelStyle.Circular: 7
+@var BezelStyle.Disclosure: 5
+@var BezelStyle.HelpButton: 9
+@var BezelStyle.Inline: 15
+@var BezelStyle.Recessed: 13
+@var BezelStyle.RegularSquare: 2
+@var BezelStyle.Rounded: 1
+@var BezelStyle.RoundedDisclosure: 14
+@var BezelStyle.RoundRect: 12
+@var BezelStyle.ShadowlessSquare: 6
+@var BezelStyle.SmallSquare: 10
+@var BezelStyle.TexturedRounded: 11
+@var BezelStyle.TexturedSquare: 8
 
 @var Border: Border type constants (C{int}).
-@var Border.Bezel: 0x2.
-@var Border.Groove: 0x3.
-@var Border.Line: 0x1.
-@var Border.No: 0x0.
+@var Border.Bezel: 2
+@var Border.Groove: 3
+@var Border.Line: 1
+@var Border.No: 0
 
 @var WindowStyle: Window style constants (C{mask}).
-@var WindowStyle.Closable: 0x2.
-@var WindowStyle.Miniaturizable: 0x4.
-@var WindowStyle.Resizable: 0x8.
-@var WindowStyle.Titled: 0x1.
-@var WindowStyle.Typical: 0xf.
-@var WindowStyle.Utility: 0x10.
+@var WindowStyle.Closable: 0x2
+@var WindowStyle.Miniaturizable: 0x4
+@var WindowStyle.Resizable: 0x8
+@var WindowStyle.Titled: 0x1
+@var WindowStyle.Typical: 0xf
+@var WindowStyle.Utility: 0x10
 '''
 from pycocoa.bases import _Type2
 from pycocoa.geometry import Rect
@@ -70,7 +70,7 @@ from pycocoa.utils import aspect_ratio, isinstanceOf, _text_title2
 # from enum import Enum
 
 __all__ = _ALL_LAZY.windows
-__version__ = '25.02.19'
+__version__ = '25.02.27'
 
 
 class AutoResizeError(ValueError):
@@ -114,7 +114,7 @@ def autoResizes(*options):
 class BezelStyle(_Constants):  # Enum?
     '''Bezel style constants (C{int}).
     '''
-    NCircular         =  7  # NSCircularBezelStyle
+    Circular          =  7  # NSCircularBezelStyle
     Disclosure        =  5  # NSDisclosureBezelStyle
     HelpButton        =  9  # NSHelpButtonBezelStyle
     Inline            = 15  # NSInlineBezelStyle
@@ -872,59 +872,59 @@ if __name__ == _Dmain_:
 
     from pycocoa.utils import _all_listing, _varstr
 
-    print(_varstr(AutoResize, strepr=hex))  # XXX oct
-    print(_varstr(BezelStyle, strepr=hex))
-    print(_varstr(Border, strepr=hex))
-    print(_varstr(WindowStyle, strepr=hex))
+    print(_varstr(AutoResize, strepr=hex))  # mask XXX oct
+    print(_varstr(BezelStyle, strepr=str))
+    print(_varstr(Border, strepr=str))
+    print(_varstr(WindowStyle, strepr=hex))  # mask
 
     _all_listing(__all__, locals())
 
 # % python3 -m pycocoa.windows
 #
 # pycocoa.windows.__all__ = tuple(
-#  pycocoa.windows.AutoResize.HeightSizable=1<<4,
-#                            .MaxXMargin=1<<2,
-#                            .MaxYMargin=1<<5,
+#  pycocoa.windows.AutoResize.HeightSizable=16 or 1<<4,
+#                            .MaxXMargin=4 or 1<<2,
+#                            .MaxYMargin=32 or 1<<5,
 #                            .MinXMargin=1,
-#                            .MinYMargin=1<<3,
+#                            .MinYMargin=8 or 1<<3,
 #                            .NotSizable=0,
 #                            .Sizable=18,
 #                            .WidthSizable=2,
 #  pycocoa.windows.AutoResizeError is <class .AutoResizeError>,
-#  pycocoa.windows.autoResizes is <function .autoResizes at 0x100850680>,
-#  pycocoa.windows.BezelStyle.Disclosure=5,
+#  pycocoa.windows.autoResizes is <function .autoResizes at 0x1054e4180>,
+#  pycocoa.windows.BezelStyle.Circular=7,
+#                            .Disclosure=5,
 #                            .HelpButton=9,
 #                            .Inline=15,
-#                            .NCircular=7,
 #                            .Recessed=13,
 #                            .RegularSquare=2,
 #                            .Rounded=1,
 #                            .RoundedDisclosure=14,
-#                            .RoundRect=3<<2,
+#                            .RoundRect=12 or 3<<2,
 #                            .ShadowlessSquare=6,
 #                            .SmallSquare=10,
 #                            .TexturedRounded=11,
-#                            .TexturedSquare=1<<3,
+#                            .TexturedSquare=8 or 1<<3,
 #  pycocoa.windows.Border.Bezel=2,
 #                        .Groove=3,
 #                        .Line=1,
 #                        .No=0,
 #  pycocoa.windows.MediaWindow is <class .MediaWindow>,
-#  pycocoa.windows.ns2Window is <function .ns2Window at 0x100da3240>,
-#  pycocoa.windows.NSWindowDelegate is <pycocoa.utils.proxy_RO object at 0x100baa510>,
+#  pycocoa.windows.ns2Window is <function .ns2Window at 0x105941f80>,
+#  pycocoa.windows.NSWindowDelegate is <pycocoa.internals.proxy_RO object at 0x105914cd0>,
 #  pycocoa.windows.TextWindow is <class .TextWindow>,
 #  pycocoa.windows.Window is <class .Window>,
 #  pycocoa.windows.WindowError is <class .WindowError>,
 #  pycocoa.windows.WindowStyle.Closable=2,
-#                             .Miniaturizable=1<<2,
-#                             .Resizable=1<<3,
+#                             .Miniaturizable=4 or 1<<2,
+#                             .Resizable=8 or 1<<3,
 #                             .Titled=1,
 #                             .Typical=15,
-#                             .Utility=1<<4,
+#                             .Utility=16 or 1<<4,
 #  pycocoa.windows.WindowStyleError is <class .WindowStyleError>,
-#  pycocoa.windows.windowStyles is <function .windowStyles at 0x100d92200>,
+#  pycocoa.windows.windowStyles is <function .windowStyles at 0x105930fe0>,
 # )[14]
-# pycocoa.windows.version 25.2.19, .isLazy 1, Python 3.13.1 64bit arm64, macOS 14.6.1
+# pycocoa.windows.version 25.2.27, .isLazy 1, Python 3.13.2 64bit arm64, macOS 14.7.3
 
 # MIT License <https://OpenSource.org/licenses/MIT>
 #
