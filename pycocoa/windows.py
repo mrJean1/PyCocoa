@@ -70,7 +70,7 @@ from pycocoa.utils import aspect_ratio, isinstanceOf, _text_title2
 # from enum import Enum
 
 __all__ = _ALL_LAZY.windows
-__version__ = '25.02.27'
+__version__ = '25.03.09'
 
 
 class AutoResizeError(ValueError):
@@ -277,32 +277,39 @@ class Window(_Type2):
 
            @param full: Enter or exit (C{bool}).
         '''
-        if full:
-            self.NS.enterFullScreenMode_(self.NS.screen())
-        else:
-            self.NS.exitFullScreenMode_(self.NS.screen())
+        ns = self.NS
+        f_ = ns.enterFullScreenMode_ if full else \
+             ns.exitFullScreenMode_
+        f_(ns.screen())
 
     def hide(self, hide):
         '''Hide or unhide this window.
 
            @param hide: Hide or show (C{bool}).
         '''
+        ns = self.NS
         if hide:  # click the hide/miniaturize button
-            self.NS.performMiniaturize_(self.NS)  # XXX self.delegate
+            ns.performMiniaturize_(ns)  # XXX self.delegate
         elif self.isHidden:
-            self.NS.deminiaturize_(self.NS)
+            ns.deminiaturize_(ns)
 
     @property_RO
     def isFull(self):
-        '''Get this window's full screen state (C{bool}).
+        '''Get this window's full screen mode or zoomed state (C{bool}).
         '''
-        return True if self.NS.isInFullScreenMode() else False
+        return self.isFullScreen or self.isZoomed
+
+    @property_RO
+    def isFullScreen(self):
+        '''Get this window's full screen mode (C{bool}).
+        '''
+        return bool(self.NSview.isInFullScreenMode())
 
     @property_RO
     def isHidden(self):
         '''Get this window's hidden state (C{bool}).
         '''
-        return True if self.NS.isMiniaturized() else False
+        return bool(self.NS.isMiniaturized())
 
     @property_RO
     def isKey(self):
@@ -320,19 +327,19 @@ class Window(_Type2):
     def isPrintable(self):
         '''Get this window's printable state (C{bool}).
         '''
-        return True if self.PMview else False
+        return bool(self.PMview)
 
     @property_RO
     def isVisible(self):
         '''Get this window's visible state (C{bool}).
         '''
-        return True if self.NS.isVisible() else False
+        return bool(self.NS.isVisible())
 
     @property_RO
     def isZoomed(self):
         '''Get this window's zoomed state (C{bool}).
         '''
-        return True if self.NS.isZoomed() else False
+        return bool(self.NS.isZoomed())
 
     def limit(self, width=3840, height=4160):
         '''Limit this window's content size.
@@ -467,7 +474,7 @@ class Window(_Type2):
     def transparentTitlebar(self):
         '''Is this window's title bar transparent (C{bool})?
         '''
-        return True if self.NS.titlebarAppearsTransparent() else False
+        return bool(self.NS.titlebarAppearsTransparent())
 
     @transparentTitlebar.setter  # PYCHOK property.setter
     def transparentTitlebar(self, transparent):

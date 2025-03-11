@@ -120,7 +120,7 @@ from pycocoa.utils import errorf, isinstanceOf, name2pymethod
 # from types import FunctionType, MethodType
 
 __all__ = _ALL_LAZY.menus
-__version__ = '25.02.27'
+__version__ = '25.03.08'
 
 # Method _NSApplicationDelegate.handleMenuItem_ in .apps.py
 # is the handler ('selector') for all menu items specified
@@ -407,7 +407,7 @@ class Item(_Item_Type2):
     def hasSubmenu(self):
         '''Has this item a C{submenu} (C{bool}).
         '''
-        return True if self.NS.hasSubmenu() else False
+        return bool(self.NS.hasSubmenu())
 
 #   @property
 #   def image(self):
@@ -943,7 +943,7 @@ class _Menu_Type2(_Type2):
     def autoEnables(self):
         '''Get the menu's C{autoEnablesItems} property (C{bool}).
         '''
-        return True if self.NS.autoenablesItems() else False
+        return bool(self.NS.autoenablesItems())
 
     @autoEnables.setter  # PYCHOK property.setter
     def autoEnables(self, enable):
@@ -957,13 +957,13 @@ class _Menu_Type2(_Type2):
     def isAttached(self):
         '''Get the menu's C{isAttached} property (C{bool}).
         '''
-        return True if self.NS.isAttached() else False
+        return bool(self.NS.isAttached())
 
     @property_RO
     def isTornOff(self):
         '''Get the menu's C{isTornOff} property (C{bool}).
         '''
-        return True if self.NS.isTornOff() else False
+        return bool(self.NS.isTornOff())
 
     @property
     def minWidth(self):
@@ -994,7 +994,7 @@ class _Menu_Type2(_Type2):
     def showsState(self):
         '''Get the menu's C{showsStateColumn} property (C{bool}).
         '''
-        return True if self.NS.showsStateColumn() else False
+        return bool(self.NS.showsStateColumn())
 
     @showsState.setter  # PYCHOK property.setter
     def showsState(self, enable):

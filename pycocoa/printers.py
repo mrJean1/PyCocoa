@@ -29,7 +29,7 @@ from ctypes import ArgumentError, byref, cast, c_char_p, c_double, \
                    c_int, c_void_p, POINTER, sizeof
 
 __all__ = _ALL_LAZY.printers
-__version__ = '25.02.25'
+__version__ = '25.03.08'
 
 kPMServerLocal        = None
 kPMPPDDescriptionType = cfString('PMPPDDescriptionType')  # PYCHOK false
@@ -115,7 +115,7 @@ class _PM_Type0(_Type0):
 
     def _2bool(self, func_):
         b = self._libPCcall_t(func_, BOOL_t)
-        return True if b.value else False
+        return bool(b.value)
 
     def _2dict(self, func_):
         D = self._libPCcall_t(func_, Dictionary_t)

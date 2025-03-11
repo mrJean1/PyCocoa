@@ -17,7 +17,7 @@ from pycocoa.runtime import isObjCInstanceOf,  isinstanceOf
 # from pycocoa.utils import isinstanceOf  # from .runtime
 
 __all__ = _ALL_LAZY.screens
-__version__ = '25.02.25'
+__version__ = '25.03.03'
 
 
 class Frame(Rect):
@@ -54,7 +54,8 @@ class Frame(Rect):
                 h = int(z.height * w / z.width)
                 # avoid cascading window off-screen
                 c = min(max(0, cascade), min(z.width, z.height))
-                f = f.origin.x + c, f.origin.y + c, w, h
+                z = f.origin
+                f = (z.x + c), (z.y + c), w, h
             elif fraction < 0 or fraction > 1:
                 t = _fmt('%.2f', fraction)
                 raise ValueError(_fmt_invalid(fraction=t))
@@ -110,15 +111,15 @@ class Screen(_Type0):
     def cascade(self, fraction=0.1):
         '''Return a screen point off the upper left corner.
 
-           @param fraction: Of the size (C{float}).
+           @param fraction: Of the screen size (C{float}).
 
-           @return: The screen point (L{Point}).
+           @return: The screen or topleft point (L{Point}).
         '''
         p = self.topleft
         if 0 < fraction <= 1:
-            f = self.frame
-            p = Point((p.x + fraction * f.size.width,
-                       p.y - fraction * f.size.height))
+            z = self.frame.size
+            p = Point((p.x + fraction * z.width,
+                       p.y - fraction * z.height))
         return p
 
     @property_RO

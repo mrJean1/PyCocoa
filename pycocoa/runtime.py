@@ -71,7 +71,7 @@ from ctypes import alignment, ArgumentError, byref, cast, c_buffer, \
 # import sys as _sys  # from .internals
 
 __all__ = _ALL_LAZY.runtime
-__version__ = '25.02.27'
+__version__ = '25.03.08'
 
 _OBJC_ENV = 'PYCOCOA_OBJC_LOG'
 _OBJC_LOG =  dict((_, 0) for _ in _environ.get(_OBJC_ENV, _NN_).upper()
@@ -518,8 +518,8 @@ class ObjCInstance(_ObjCBase):
         # self._cache_clear()
 
 #   def __eq__(self, other):
-#       return True if (isinstance(other, ObjCInstance) and
-#                       self.isEqualTo_(other)) else False
+#       return bool(isinstance(other, ObjCInstance) and
+#                   self.isEqualTo_(other))
 #
 #   def __ne__(self, other):
 #       return not self.__eq__(other)

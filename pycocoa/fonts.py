@@ -52,7 +52,7 @@ from pycocoa.strs import Str
 from pycocoa.utils import flint, isinstanceOf
 
 __all__ = _ALL_LAZY.fonts
-__version__ = '25.05.27'
+__version__ = '25.03.08'
 
 # <https://Developer.Apple.com/documentation/appkit/nsfont.weight>
 # _NSFontWeigthHeavy      = 13 ?
@@ -269,7 +269,7 @@ class Font(_Type0):
         return str(td)
 
     def _isTrait(self, mask):
-        return True if (self._traits & mask) else False
+        return bool(self._traits & mask)
 
     @property_RO
     def count(self):
@@ -412,10 +412,7 @@ class Font(_Type0):
     def isVertical(self):
         '''Get the C{Vertical} "trait" (C{bool}).
         '''
-        if self.NS:
-            return True if self.NS.isVertical() else False
-        else:
-            return None
+        return bool(self.NS.isVertical()) if self.NS else None
 
     @property
     def name(self):

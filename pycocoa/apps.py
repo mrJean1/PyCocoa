@@ -8,8 +8,8 @@
 from pycocoa.bases import _Type2
 from pycocoa.internals import bytes2str, _Dmain_, _Globals, _NN_, \
                               property_RO, proxy_RO
-from pycocoa.menus import _callMenuItem_name, _handleMenuItem_name, \
-                           Item, ItemSeparator, Menu, MenuBar, ns2Item
+from pycocoa.menus import _callMenuItem_name, _handleMenuItem_name, Item, \
+                           ItemSeparator, Menu, MenuBar, ns2Item
 from pycocoa.lazily import _ALL_LAZY, _fmt, _fmt_invalid, _Types
 from pycocoa.nstypes import NSApplication, nsBundleRename, nsOf, _NSStr, \
                             NSConcreteNotification, NSMain, NSNotification
@@ -18,24 +18,27 @@ from pycocoa.runtime import isObjCInstanceOf, ObjCDelegate, _ObjCDelegate, \
                             ObjCInstance, _ObjC_log_totals, retain, \
                             send_super_init
 from pycocoa.utils import errorf, isinstanceOf
+# from pycocoa.windows import Window  # see below
 
 from threading import Thread
 from time import sleep
 
 __all__ = _ALL_LAZY.apps
-__version__ = '25.02.19'
+__version__ = '25.03.09'
 
 
 class App(_Type2):
     '''Python C{App} Type, wrapping an ObjC C{NSApplication}.
     '''
     _badge      = None
+    _FullScreen = None
     _isUp       = None
     _keyWindow  = None  # Window
     _lastWindow = None  # most recent key or main
     _mainWindow = None  # Window
     _menubar    = None
     _timeout    = None
+    _window     = None
 
     def __init__(self, title='PyCocao', raiser=False, **kwds):
         '''New L{App}.
@@ -63,24 +66,26 @@ class App(_Type2):
 
         self.NSdelegate = retain(NSApplicationDelegate.alloc().init(self))
 
-    def activate(self, active, force=True):
+    def activate(self, active=None, force=True):
         '''Active or de-activate this app.
 
-           @param active: Activate or de-activate (C{bool}).
+           @param active: Activate or de-activate (C{bool}) or C{None}.
            @keyword force: Activate regardless (C{bool}), otheriwse
                            only activate if no other app is active
 
-           @return: Previous C{isActive} value (C{bool}).
+           @return: I{Previous} C{isActive} state (C{bool}) or C{None}
+                    if unkown.
 
            @see: U{activate(ignoringOtherApps flag: Bool)
                  <https://Developer.Apple.com/documentation/appkit/
                  nsapplication/1428468-activate>}.
         '''
         a = self.isActive
-        if a and not active:
-            self.NS.deactivate()
-        elif active and not a:
-            self.NS.activateIgnoringOtherApps_(force)
+        if force or active is not None:
+            if a and not active:
+                self.NS.deactivate()
+            elif active and not a:
+                self.NS.activateIgnoringOtherApps_(force)
         return a
 
     def append(self, menu):
@@ -96,8 +101,9 @@ class App(_Type2):
             # create the menu bar, once
             b = MenuBar(app=self)
             m = Menu(title=self.title)
+            f = Item('Full ' + 'Screen', key='f', ctrl=True)  # Ctrl-Cmd-F, en-/disabled
             m.append(  # note key modifier cmd=True is the default
-                Item('Full ' + 'Screen', key='f', ctrl=True),  # Ctrl-Cmd-F, Esc to exit
+                f,
                 ItemSeparator(),
                 Item('Hide ' + self.title, self.menuHide_, key='h'),  # Cmd-H
                 Item('Hide Others', self.menuOther_, key='h', alt=True),  # Alt-Cmd-H
@@ -107,6 +113,7 @@ class App(_Type2):
             b.append(m)
             b.main(app=self)
             self._menubar = b
+            self._FullScreen = f
 
         self._menubar.append(menu)
 
@@ -120,67 +127,107 @@ class App(_Type2):
             self._badge = Tile(self)
         return self._badge
 
-    def full(self, full):
+    def full(self, full=None):
         '''Enter or exit full screen mode for this app.
 
-           @param full: Enter or exit (C{bool}).
-        '''
-        if full:
-            self.NS.enterFullScreenMode_(self.NS)
-        else:
-            self.NS.exitFullScreenMode_(self.NS)
+           @param full: Enter or exit (C{bool}) or C{None}.
 
-    def hide(self, hide):
+           @return: Full screen mode (C{bool}) or C{None} if unknown.
+        '''
+        ns = None if full is None else self.NS
+        if ns:
+            f_ = ns.enterFullScreenMode_ if full else \
+                 ns.exitFullScreenMode_
+            f_(ns)
+        return self._fullAble(self.window)
+
+    def _fullAble(self, window):
+        '''(INTERNAL) En-/disable the C{Full Screen} menu item.
+        '''
+        f = (window.isFull or window.isZoomed) if window else None
+        if f is None:
+            f = self.isFull or self.isZoomed
+        if self._FullScreen and f is not None:
+            self._FullScreen.isEnabled = not f
+        return f
+
+    def hide(self, hide=None):
         '''Hide or show this app's windows.
 
-           @param hide: Hide or show (C{bool}).
+           @param hide: Hide or show (C{bool}) or C{None}.
 
-           @return: Previous C{isHidden} value (C{bool}).
+           @return: I{Previous} C{isHidden} state (C{bool}) or C{None} if unknown.
 
            @see: U{unhideWithoutActivation
                  <https://Developer.Apple.com/documentation/appkit/
                  nsapplication/1428566-unhidewithoutactivation>}.
         '''
         h = self.isHidden
-        if h and not hide:
-            self.NS.unhide_(self.NS)
-        elif hide and not h:
-            self.NS.hide_(self.NS)
+        if hide is not None:
+            if h and not hide:
+                self.NS.unhide_(self.NS)
+            elif hide and not h:
+                self.NS.hide_(self.NS)
         return h
 
     def hideOther(self, hide):
-        '''Hide other or show all apps's windows.
+        '''Hide other or show all other apps' windows.
 
            @param hide: Hide or show (C{bool}).
         '''
-        if hide:
-            self.NS.hideOtherApplications_(self.NS)
-        else:
-            self.NS.unhideAllApplications_(self.NS)
+        ns = self.NS
+        if ns:
+            h_ = ns.hideOtherApplications_ if hide else \
+                 ns.unhideAllApplications_
+            h_(ns)
 
     @property_RO
     def isActive(self):
-        '''Get this app's active state (C{bool}).
+        '''Get this app's active state (C{bool}) or C{None} if unknown.
         '''
-        return True if self.NS.isActive() else False
+        return bool(self.NS.isActive()) if self.NS else None
+
+    @property_RO
+    def isFull(self):
+        '''Get this app's full screen mode or zoomed state (C{bool}) or C{None} if unknown.
+        '''
+        return self.window.isFull if self.window else None
+
+    @property_RO
+    def isFullScreen(self):
+        '''Get this app's full screen mode (C{bool}) or C{None} if unknown.
+        '''
+        return self.window.isFullScreen if self.window else None
 
     @property_RO
     def isHidden(self):
-        '''Get this app's hidden state (C{bool}).
+        '''Get this app's hidden state (C{bool}) or C{None} if unknown.
         '''
-        return True if self.NS.isHidden() else False
+        return bool(self.NS.isHidden()) if self.NS else None
 
     @property_RO
     def isRunning(self):
-        '''Get this app's running state (C{bool}).
+        '''Get this app's running state (C{bool}) or C{None} if unknown.
         '''
-        return True if self.NS.isRunning() else False
+        return bool(self.NS.isRunning()) if self.NS else None
 
     @property_RO
     def isUp(self):
         '''Get this app's launched state (C{bool}).
         '''
         return self._isUp
+
+    @property_RO
+    def isVisible(self):
+        '''Get this apps's visible state (C{bool}) or C{None} if unknown.
+        '''
+        return self.window.isVisible if self.window else None
+
+    @property_RO
+    def isZoomed(self):
+        '''Get this apps's zoomed state (C{bool}) or C{None} if unknown.
+        '''
+        return self.window.isZoomed if self.window else None
 
     @property_RO
     def keyWindow(self):
@@ -253,7 +300,7 @@ class App(_Type2):
 
     # Callback methods for Window instances,
     # menus, etc. to be overloaded as needed
-    def appLaunched_(self, app):  # PYCHOK expected
+    def appLaunched_(self, app):  # PYCHOK item
         '''Callback, the app launched and is up.
         '''
         self._isUp = True
@@ -264,36 +311,51 @@ class App(_Type2):
         #        appkit/nsapplication/1428473-stop>
 #       self.NS.stop_(nsOf(sender or self))
 
-    def menuFullScreen_(self, item):  # PYCHOK expected
+    def menuFullScreen_(self, item):  # PYCHOK item
         '''Callback for C{Full Screen} menu I{item}.
         '''
         self.full(True)
 
-    def menuHide_(self, item):  # PYCHOK expected
+    def menuHide_(self, item):  # PYCHOK item
         '''Callback for C{Hide} menu I{item}.
         '''
         self.hide(True)
 
-    def menuOther_(self, item):  # PYCHOK expected
+    def menuOther_(self, item):  # PYCHOK item
         '''Callback for C{Hide/Show Other} menu I{item}.
         '''
         h = item.title.startswith('Hide')
         self.hideOther(h)
         item.title = 'Show All' if h else 'Hide Others'
 
-    def menuTerminate_(self, item):  # PYCHOK expected
+    def menuTerminate_(self, item):  # PYCHOK item
         '''Callback for C{Quit} menu I{item}.
         '''
         self.terminate()
 
-    def windowClose_(self, window):  # PYCHOK expected
+    @property
+    def window(self):
+        '''Get this app's window (L{Window}) or C{None}.
+        '''
+        return self._window
+
+    @window.setter  # PYCHOK property.setter
+    def window(self, window):
+        '''Re/set this app's window (L{Window}) or C{None}.
+        '''
+        if window is not None:
+            from pycocoa.windows import Window
+            isinstanceOf(window, Window, raiser='window')
+        self._window = Window
+
+    def windowClose_(self, window):  # PYCHOK window
         '''Closing I{window} callback.
         '''
         self.windowKey_(None)
         # self.windowLast_(None)
         self.windowMain_(None)
 
-    def windowCloseOK_(self, window):  # PYCHOK expected
+    def windowCloseOK_(self, window):  # PYCHOK window
         '''Is it OK? to close I{window} callback.
 
            @return: True if OK to close, False otherwise.
@@ -317,15 +379,15 @@ class App(_Type2):
         '''
         self._mainWindow = self._window_None(window)
 
-    def windowPrint_(self, window):  # PYCHOK expected
+    def windowPrint_(self, window):  # PYCHOK window
         '''Print I{window} callback.
         '''
         pass
 
-    def windowResize_(self, window):  # PYCHOK expected
+    def windowResize_(self, window):  # PYCHOK window
         '''Resizing I{window} callback.
         '''
-        pass
+        self._fullAble(window)
 
     def windowScreen_(self, window, change):
         '''Called when I{window} screen or screen profile changed C{Main}.
@@ -333,9 +395,10 @@ class App(_Type2):
            @param change: C{True} if the screen or C{False} if
                           the profile changed (C{bool}).
         '''
-        pass
+        if change:
+            self._fullAble(window)
 
-    def windowZoomOK_(self, window, frame=None):  # PYCHOK expected
+    def windowZoomOK_(self, window, frame=None):  # PYCHOK window, frame
         '''Is it OK? to toggle zoom I{window} callback.
 
            @keyword frame: The frame to zoom to (L{Rect}).

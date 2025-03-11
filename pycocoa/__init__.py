@@ -44,10 +44,10 @@ Tests
 The tests and examples have only been run with 64-bit Python 3.13.2, 3.12.7. 3.11.5
 and 2.7.18 using U{Python-VLC<https://PyPI.org/project/python-vlc>} 3.0.21, 3.0.18,
 3.0.16, 3.0.12, 3.0.11, 3.0.10, 3.0.8, 3.0.6, 3.0.4 and 2.2.8 (with the compatible
-U{VLC App<https://www.VideoLan.org/vlc>}) on macOS 14.7.3 Sonoma, 13.2 Ventura,
-12.0.1 Monterey, 11.6.1 and 11.5.2 Big Sur (aka 10.16), 10.15.7 Catalina, 10.14.6
-Mojave or 10.13.6 High Sierra.  The tests run with and without C{lazy import} in
-Python 3.
+U{VLC App<https://www.VideoLan.org/vlc>}) on macOS 15.3.1 Sequoia, 14.7.3 Sonoma,
+13.2 Ventura, 12.0.1 Monterey, 11.6.1 and 11.5.2 Big Sur (aka 10.16), 10.15.7
+Catalina, 10.14.6 Mojave or 10.13.6 High Sierra.  The tests run with and without
+C{lazy import} in Python 3.
 
 Python 3.13.2, 3.12.7 and 3.11.5 run on Apple Silicon (C{arm64} I{natively}), other
 Python versions run on Intel (C{x86_64}) or Intel I{emulation} (C{"arm64_x86_64"},
@@ -160,7 +160,7 @@ _isfrozen        =  getattr(_sys, 'frozen', False)
 pycocoa_abspath  = _path.dirname(_path.abspath(__file__))  # _sys._MEIPASS + '/pycocoa'
 _pycocoa_package = __package__ or _path.basename(pycocoa_abspath)
 
-__version__ = '25.02.28'
+__version__ = '25.03.08'
 # see setup.py for similar logic
 version = '.'.join(map(str, map(int, __version__.split('.'))))
 
