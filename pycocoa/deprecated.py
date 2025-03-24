@@ -5,15 +5,17 @@
 
 '''Deprecated classes, constants, functions, internals, etc.
 '''
+from pycocoa import fonts as _fonts
 from pycocoa.getters import _Cache2
 from pycocoa.internals import _property2, proxy_RO, _sortuples
 from pycocoa.lazily import _ALL_LAZY, _Dmain_
 from pycocoa.oslibs import Libs
 from pycocoa.printers import _libPC
 from pycocoa.runtime import OBJC_ASSOCIATION as _OBJC_AN
+from pycocoa.screens import Screen as _Screen
 
 __all__ = _ALL_LAZY.deprecated
-__version__ = '25.02.27'
+__version__ = '25.03.16'
 
 libAppKit     =  Libs.AppKit
 '''DEPRECATED on 2025.02.25, use C{Libs.AppKit}'''
@@ -42,14 +44,62 @@ OBJC_ASSOCIATION_RETAIN_NONATOMIC = _OBJC_AN.RETAIN_NONATOMIC
 '''DEPRECATED on 2025.02.20, use C{OBJC_ASSOCIATION.RETAIN_NONATOMIC}.'''
 
 
+class _DeprecatedScreen(_Screen):
+    '''(INTERNAL) DEPRECATED C{Screen}s.'''
+    # _name = ...
+    def __init__(self, *args, **kwds):  # PYCHOK signature
+        _DeprecatedScreen._name = type(self).__name__[:-6]
+        _Screen.__init__(self, *args, **kwds)
+
+
+class BuiltInScreen(_DeprecatedScreen):
+    '''DEPRECATED on 2025.03.16, use C{Screens.BuiltIn}.'''
+    pass
+
+
 class Cache2(_Cache2):
     '''DEPRECATED on 2025.02.15, I{to be removed}.'''
+    pass
+
+
+class DeepestScreen(_DeprecatedScreen):
+    '''DEPRECATED on 2025.03.16, use C{Screens.Deepest}.'''
+    pass
+
+
+class ExternalScreen(_DeprecatedScreen):
+    '''DEPRECATED on 2025.03.16, use C{Screens.External}.'''
+    pass
+
+
+class MainScreen(_DeprecatedScreen):
+    '''DEPRECATED on 2025.03.16, use C{Screens.Main}.'''
     pass
 
 
 class module_property_RO(proxy_RO):
     '''DEPRECATED on 2025.02.09, use C{proxy_RO}.'''
     pass
+
+
+def fontfamilies(*prefixes):
+    '''DEPRECATED on 25.03.13, use C{fontFamilies}.'''
+    return _fonts.fontFamilies(*prefixes)
+
+
+def fontnamesof(family):
+    '''DEPRECATED on 25.03.13, use C{fontNamesOf}.'''
+    return _fonts.fontNamesOf(family)
+
+
+def fontsof(family, **size_weight):
+    '''DEPRECATED on 25.03.13, use C{fontsOf}.'''
+    return _fonts.fontsOf(family, **size_weight)
+
+
+def fontsof4(family):
+    '''DEPRECATED on 25.03.13, use C{fontsOf4}.'''
+    return _fonts.fontsOf4(family)
 
 
 def get_libPC():
@@ -78,29 +128,37 @@ if __name__ == _Dmain_:
 
     _all_listing(__all__, locals())
 
-# % python3 -m pycocoa.deprecated
-#
+#  % python3 -m pycocoa.deprecated
+
 # pycocoa.deprecated.__all__ = tuple(
+#  pycocoa.deprecated.BuiltInScreen is <class .BuiltInScreen>,
 #  pycocoa.deprecated.Cache2 is <class .Cache2>,
-#  pycocoa.deprecated.get_libPC is <function .get_libPC at 0x1045267a0>,
-#  pycocoa.deprecated.get_libs is <function .get_libs at 0x104be6d40>,
-#  pycocoa.deprecated.libAppKit is <CDLL '/System/Library/Frameworks/AppKit.framework/AppKit', handle 3fe50d0a0 at 0x10491ccd0>,
-#  pycocoa.deprecated.libCF is <CDLL '/System/Library/Frameworks/CoreFoundation.framework/CoreFoundation', handle 3fe5094f8 at 0x10491c910>,
-#  pycocoa.deprecated.libCG is <CDLL '/System/Library/Frameworks/CoreGraphics.framework/CoreGraphics', handle 3fe50f5c0 at 0x10491d590>,
-#  pycocoa.deprecated.libCT is <CDLL '/System/Library/Frameworks/CoreText.framework/CoreText', handle 3fe50b5b0 at 0x10491d6d0>,
-#  pycocoa.deprecated.libFoundation is <CDLL '/System/Library/Frameworks/Foundation.framework/Foundation', handle 3fe508b28 at 0x10491d810>,
-#  pycocoa.deprecated.libobjc is <CDLL '/usr/lib/libobjc.dylib', handle 3fe504e04 at 0x10491d950>,
-#  pycocoa.deprecated.libPC is <CDLL '/System/Library/Frameworks/ApplicationServices.framework/Frameworks/PrintCore.framework/PrintCore', handle 3fe568b38 at 0x10491e210>,
+#  pycocoa.deprecated.DeepestScreen is <class .DeepestScreen>,
+#  pycocoa.deprecated.ExternalScreen is <class .ExternalScreen>,
+#  pycocoa.deprecated.fontfamilies is <function .fontfamilies at 0x1015887c0>,
+#  pycocoa.deprecated.fontnamesof is <function .fontnamesof at 0x101908400>,
+#  pycocoa.deprecated.fontsof is <function .fontsof at 0x1019084a0>,
+#  pycocoa.deprecated.fontsof4 is <function .fontsof4 at 0x101908540>,
+#  pycocoa.deprecated.get_libPC is <function .get_libPC at 0x1019085e0>,
+#  pycocoa.deprecated.get_libs is <function .get_libs at 0x101908680>,
+#  pycocoa.deprecated.libAppKit is <CDLL '/System/Library/Frameworks/AppKit.framework/AppKit', handle 3eed350a0 at 0x1015d5e50>,
+#  pycocoa.deprecated.libCF is <CDLL '/System/Library/Frameworks/CoreFoundation.framework/CoreFoundation', handle 3eed394f8 at 0x1015d5a90>,
+#  pycocoa.deprecated.libCG is <CDLL '/System/Library/Frameworks/CoreGraphics.framework/CoreGraphics', handle 3eed375c0 at 0x1015d6710>,
+#  pycocoa.deprecated.libCT is <CDLL '/System/Library/Frameworks/CoreText.framework/CoreText', handle 3eed3b5b0 at 0x1015d6850>,
+#  pycocoa.deprecated.libFoundation is <CDLL '/System/Library/Frameworks/Foundation.framework/Foundation', handle 3eed38b28 at 0x1015d6990>,
+#  pycocoa.deprecated.libobjc is <CDLL '/usr/lib/libobjc.dylib', handle 3eed3ce04 at 0x1015d6ad0>,
+#  pycocoa.deprecated.libPC is <CDLL '/System/Library/Frameworks/ApplicationServices.framework/Frameworks/PrintCore.framework/PrintCore', handle 3ee2d8b38 at 0x10126b750>,
+#  pycocoa.deprecated.MainScreen is <class .MainScreen>,
 #  pycocoa.deprecated.module_property_RO is <class .module_property_RO>,
 #  pycocoa.deprecated.OBJC_ASSOCIATION_ASSIGN is 0 or 0x0,
 #  pycocoa.deprecated.OBJC_ASSOCIATION_COPY is 771 or 0x303,
 #  pycocoa.deprecated.OBJC_ASSOCIATION_COPY_NONATOMIC is 3 or 0x3,
 #  pycocoa.deprecated.OBJC_ASSOCIATION_RETAIN is 769 or 0x301,
 #  pycocoa.deprecated.OBJC_ASSOCIATION_RETAIN_NONATOMIC is 1 or 0x1,
-#  pycocoa.deprecated.property2 is <function .property2 at 0x104be6de0>,
-#  pycocoa.deprecated.sortuples is <function .sortuples at 0x104be6e80>,
-# )[18]
-# pycocoa.deprecated.version 25.2.27, .isLazy 1, Python 3.13.2 64bit arm64, macOS 14.7.3
+#  pycocoa.deprecated.property2 is <function .property2 at 0x101908720>,
+#  pycocoa.deprecated.sortuples is <function .sortuples at 0x1019087c0>,
+# )[26]
+# pycocoa.deprecated.version 25.3.16, .isLazy 1, Python 3.13.2 64bit arm64, macOS 15.3.2
 
 # MIT License <https://OpenSource.org/licenses/MIT>
 #

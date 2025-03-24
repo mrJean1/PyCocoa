@@ -36,9 +36,9 @@ are ObjC types defined in terms of a C{ctypes} C{c_} type.
 @var unichar_t:              Unicode C{wchar} ctype.
 '''
 # from pycocoa.getters import get_selectornameof
-from pycocoa.internals import _bNN_, bytes2str, _Dmain_, iterbytes, \
-                               missing, _name_, _NN_, property_RO, \
-                               str2bytes, _SPACE_
+from pycocoa.internals import _bNN_, bytes2str, _Dmain_, _invalid_, \
+                               iterbytes, missing, _name_, _NN_, \
+                               property_RO, str2bytes, _SPACE_
 from pycocoa.lazily import _ALL_LAZY,  _fmt, _fmt_invalid
 from pycocoa.utils import _bCOL, inst2strepr
 
@@ -53,7 +53,7 @@ except ImportError:
     c_void = None
 
 __all__ = _ALL_LAZY.octypes
-__version__ = '25.02.25'
+__version__ = '25.03.13'
 
 __LP64__    = sizeof(c_void_p) == 8  # in .runtime iff __i386__
 c_ptrdiff_t = c_int64 if __LP64__ else c_int32
@@ -538,26 +538,25 @@ for c_, code in _ctype2encoding.items():
         raise AssertionError(_fmt_invalid(repr(f_), code=c_))
 del c_, code, f_
 
-# map 'c' to c_byte rather than c_char, because
-# otherwise ctypes converts the value into a 1-char
-# string which is generally not what we want,
-# especially when the 'c' represents a bool
+# map 'c' to c_byte rather than c_char, because otherwise ctypes
+# converts the value into a 1-char string which is generally not
+# what we want, especially when the 'c' represents a bool
 _encoding2ctype[b'c'] = c_byte  # C_ubyte, see oslibs.cfNumber2bool!
-if CGPointEncoding != NSPointEncoding:  # in 32-bit
-    _encoding2ctype.update({CGPointEncoding: CGPoint_t})
-if CGRectEncoding  != NSRectEncoding:  # in 32-bit
-    _encoding2ctype.update({CGRectEncoding:  CGRect_t})
-if CGSizeEncoding  != NSSizeEncoding:  # in 32-bit
-    _encoding2ctype.update({CGSizeEncoding:  CGSize_t})
 
-_emcoding2ctype = {b'Vv': c_void,
-                  _bHAT + CGImageEncoding: c_void_p,
-                  _bHAT + NSZoneEncoding:  c_void_p}
+for CG, NS, CG_t in ((CGPointEncoding, NSPointEncoding, CGPoint_t),
+                     (CGRectEncoding,  NSRectEncoding,  CGRect_t),
+                     (CGSizeEncoding,  NSSizeEncoding,  CGSize_t)):
+    if CG != NS:  # in 32-bit
+        _encoding2ctype.update({CG: CG_t})
+del CG, NS, CG_t
+
+_emcoding2ctype = {b'Vv': c_void, _bHAT + CGImageEncoding: c_void_p,
+                                  _bHAT + NSZoneEncoding:  c_void_p}
 
 
-def emcoding2ctype(code, dflt=missing, name='type'):
+def emcoding2ctype(code, dflt=missing, name=type.__name__):
     '''Return the C{ctypes} type for a single ObjC type encoding
-       code for a I{method} result or I{method} argument.
+       for a I{method} result or I{method} argument.
 
        @param code: The type encoding (C{bytes}).
        @keyword dflt: Default result (C{ctype}).
@@ -575,8 +574,8 @@ def emcoding2ctype(code, dflt=missing, name='type'):
     return encoding2ctype(code, dflt, name)
 
 
-def encoding2ctype(code, dflt=missing, name='type'):  # MCCABE 20
-    '''Return the C{ctypes} type for a single ObjC type encoding code.
+def encoding2ctype(code, dflt=missing, name=type.__name__):  # MCCABE 20
+    '''Return the C{ctypes} type for a single ObjC type encoding.
 
        @param code: The type encoding (C{bytes}).
        @keyword dflt: Default encoding (C{ctype}).
@@ -635,7 +634,7 @@ def encoding2ctype(code, dflt=missing, name='type'):  # MCCABE 20
             raise TypeCodeError
 
     except TypeCodeError:
-        raise TypeCodeError('invalid', coderr, name)
+        raise TypeCodeError(_invalid_, coderr, name)
     except KeyError:
         if dflt is missing:
             raise TypeCodeError('unknown', coderr, name)
@@ -792,7 +791,7 @@ def split_encoding(encoding):  # MCCABE 18
                 elif code[:1] == b'"':
                     code[:] = []  # ignore prefix "name"
                 else:
-                    raise TypeCodeError('invalid', bytes2str(code))
+                    raise TypeCodeError(_invalid_, bytes2str(code))
             quoted = not quoted
 
         elif quoted:  # inside quotes
@@ -826,13 +825,13 @@ if __name__ == _Dmain_:
     def _c(ctype):
         return 'c_void' if ctype is c_void else ctype.__name__
 
-    printf('%s ...', 'ctype2encoding', nl=1)
+    printf('%s ...', ctype2encoding.__name__, nl=1)
     i = 0
     for c, e in sorted((_c(c), e) for c, e in _ctype2encoding.items()):
         i += 1
         printf('%4s: %-9s -> %s', i, c, bytes2repr(e))
 
-    printf('%s ...', 'encoding2ctype', nl=1)
+    printf('%s ...', encoding2ctype.__name__, nl=1)
     e = _encoding2ctype.copy()
     e.update(_emcoding2ctype)
     i = 0
@@ -960,7 +959,7 @@ if __name__ == _Dmain_:
 #  pycocoa.octypes.NSNotFound is 9223372036854775807 or 0x7FFFFFFFFFFFFFFF,
 #  pycocoa.octypes.NSPoint_t is <class .NSPoint_t>,
 #  pycocoa.octypes.NSPointEncoding is b'{CGPoint=dd}',
-#  pycocoa.octypes.NSPointZero is <NSPoint_t(x=0.0, y=0.0) at 0x10296c8d0>,
+#  pycocoa.octypes.NSPointZero is <NSPoint_t(x=0.0, y=0.0) at 0x104e11bd0>,
 #  pycocoa.octypes.NSRange_t is <class .NSRange_t>,
 #  pycocoa.octypes.NSRangeEncoding is b'{_NSRange=QQ}',
 #  pycocoa.octypes.NSRect4_t is <class .NSRect4_t>,
@@ -985,8 +984,8 @@ if __name__ == _Dmain_:
 #  pycocoa.octypes.RunLoop_t is <class .RunLoop_t>,
 #  pycocoa.octypes.SEL_t is <class .SEL_t>,
 #  pycocoa.octypes.Set_t is <class ctypes.c_void_p>,
-#  pycocoa.octypes.split_emcoding2 is <function .split_emcoding2 at 0x102974ae0>,
-#  pycocoa.octypes.split_encoding is <function .split_encoding at 0x102974cc0>,
+#  pycocoa.octypes.split_emcoding2 is <function .split_emcoding2 at 0x104e091c0>,
+#  pycocoa.octypes.split_encoding is <function .split_encoding at 0x104e093a0>,
 #  pycocoa.octypes.String_t is <class ctypes.c_void_p>,
 #  pycocoa.octypes.Struct_t is <class .Struct_t>,
 #  pycocoa.octypes.TimeInterval_t is <class ctypes.c_double>,
@@ -1001,7 +1000,7 @@ if __name__ == _Dmain_:
 #  pycocoa.octypes.URL_t is <class .URL_t>,
 #  pycocoa.octypes.VoidPtr_t is <class .VoidPtr_t>,
 # )[83]
-# pycocoa.octypes.version 25.2.25, .isLazy 1, Python 3.13.2 64bit arm64, macOS 14.7.3
+# pycocoa.octypes.version 25.3.13, .isLazy 1, Python 3.13.2 64bit arm64, macOS 14.7.3
 
 # MIT License <https://OpenSource.org/licenses/MIT>
 #

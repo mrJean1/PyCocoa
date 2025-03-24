@@ -44,12 +44,12 @@ from pycocoa.getters import _ivar_ctype, get_c_func_t, get_class, \
                              get_metaclass, get_protocol, get_selector, \
                              get_superclassof
 from pycocoa.internals import Adict, _alloc_, _bNN_, _ByteStrs, bytes2str, \
-                             _COMMASPACE_, _Constants, _c_tstr, _Dmain_, \
-                             _DOT_, _fmt, _fmt_invalid, __i386__, _instr, \
-                             _kwdstr, lambda1, missing, _NA_, _name_, _no, \
-                             _NL_, _NN_, _NSObject_, property_RO, proxy_RO, \
-                             _property2, _SPACE_, str2bytes, _TypeError, \
-                             _sys, _Ddoc_  # PYCHOK used!
+                             _COLONSPACE_, _COMMASPACE_, _Constants, _c_tstr, \
+                             _Dmain_, _DOT_, _fmt, _fmt_invalid, __i386__, \
+                             _instr, _kwdstr, lambda1, missing, _NA_, _name_, \
+                             _NL_, _NN_, _no, _NSObject_, property_RO, \
+                             _property2, proxy_RO, _SPACE_, str2bytes, \
+                             _TypeError,  _Ddoc_, sys  # PYCHOK used!
 from pycocoa.lazily import _ALL_LAZY, _environ
 # from pycocoa import nstypes as _nstypes  # circular, see proxy_RO
 from pycocoa.octypes import _bAT, _bHASH  # PYCHOK used!
@@ -68,10 +68,10 @@ from ctypes import alignment, ArgumentError, byref, cast, c_buffer, \
 #                  # _ObjCDeallocObserver.  sizeof is imported at the
 #                  # very end of this module.
 # from os import environ as _environ  # from .lazily
-# import sys as _sys  # from .internals
+# import sys  # from .internals
 
 __all__ = _ALL_LAZY.runtime
-__version__ = '25.03.08'
+__version__ = '25.03.23'
 
 _OBJC_ENV = 'PYCOCOA_OBJC_LOG'
 _OBJC_LOG =  dict((_, 0) for _ in _environ.get(_OBJC_ENV, _NN_).upper()
@@ -83,7 +83,7 @@ del _environ
 @proxy_RO
 def _nstypes():  # lazily import nstypes, I{once}
     from pycocoa import nstypes
-    _sys.modules[__name__]._nstypes = nstypes  # overwrite proxy_RO _thismodule
+    sys.modules[__name__]._nstypes = nstypes  # overwrite proxy_RO _thismodule
     return nstypes  # .NSAutoReleasePool, .NSMain, ._NSImms, ._NSMtbs
 
 
@@ -129,8 +129,9 @@ class _ObjCBase(object):
     def _AttributeError(self, name, _or_other):
         # no classmethod, method or property attr
         t = _DOT_(self, name)
-        t = _fmt('[class]method%s: %s', _or_other, t)
-        return AttributeError(_no(t))
+        t = _COLONSPACE_(_or_other, t)
+        t = _no('[class]method%' + t)
+        return AttributeError(t)
 
     @property_RO
     def description(self):
@@ -139,7 +140,7 @@ class _ObjCBase(object):
         n = getattr(self, _name_, self.typename)
         d = getattr(self, _Ddoc_, _NA_).lstrip()
         d = d.split(_NL_, 1)[0]
-        return _fmt('%s: %s', n, d.strip())
+        return _COLONSPACE_(n, d.strip())
 
     @property_RO
     def typename(self):
@@ -245,6 +246,8 @@ class ObjCClass(_ObjCBase):
         # Determine name and ptr values from C{name_or_ptr}.
         ptr, name = _objc_name2(name_or_ptr, get_class)
         if name is None:
+            if not ptr:
+                raise RuntimeError(_fmt_invalid(name_ptr=repr(ptr)))
             # Make sure that ptr is wrapped in a Class_t,
             # for safety when passing as ctypes argument.
             ptr = cast(name_or_ptr, Class_t)
@@ -607,8 +610,8 @@ class ObjCInstance(_ObjCBase):
 
     def _cache_print(self, label):
         if 'P' in _OBJC_LOG:
-            _rc = _sys.getrefcount
-            c   =  self._objc_cache
+            _rc = sys.getrefcount
+            c   = self._objc_cache
             t   = (_fmt('%r %d', v, _rc(v)) for v in c.values())
             _ObjC_log(self, label, 'P', len(c), _COMMASPACE_.join(t))
 
@@ -658,7 +661,7 @@ class ObjCInstance(_ObjCBase):
     def retained(self, *retain):
         '''Get/set this instance' cache retention (C{bool}).
 
-           @arg retain: If C{True} retain, if C{False} do not
+           @arg retain: If C{True} retain, if C{False} I{do not}
                         retain this instance.
 
            @return: The previous value (C{bool}).
@@ -1444,13 +1447,11 @@ def _ObjC_log(inst, what, T, *args, **kwds):  # B, C, D, I, M, S
        call or pool/cache Drain.
     '''
     if inst and T in _OBJC_LOG:
-        r = _instr(inst, *args)
-        if kwds:
-            t = _COMMASPACE_.join(_kwdstr(kwds))
-        else:
-            t = _NN_
         _OBJC_LOG[T] += 1
-        logf('%s %s %d %s', what, r, _OBJC_LOG[T], t)
+        r = _instr(inst, *args)
+        t = _kwdstr(kwds) if kwds else _NN_
+        t = _SPACE_(what, r, _OBJC_LOG[T], t)
+        logf(t)
 
 
 def _ObjC_log_totals():
@@ -1835,7 +1836,7 @@ if __name__ == _Dmain_:
 #  pycocoa.runtime.send_super_init is <function .send_super_init at 0x1013d2b60>,
 #  pycocoa.runtime.set_ivar is <function .set_ivar at 0x1013d2c00>,
 # )[27]
-# pycocoa.runtime.version 25.2.27, .isLazy 1, Python 3.13.2 64bit arm64, macOS 14.7.3
+# pycocoa.runtime.version 25.3.23, .isLazy 1, Python 3.13.2 64bit arm64, macOS 15.3.2
 
 # MIT License <https://OpenSource.org/licenses/MIT>
 #

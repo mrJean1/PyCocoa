@@ -34,14 +34,15 @@ Tests
 
 The tests and examples have only been run with 64-bit Python 3.13.2, 3.12.7, 3.11.5
 and 2.7.18 using `Python-VLC`_ 3.0.21, 3.0.18, 3.0.16, 3.0.12, 3.0.11, 3.0.10, 3.0.8,
-3.0.6, 3.0.4 and 2.2.8 (with the compatible `VLC App`_) on macOS 15.3.1 Sequoia,
-14.7.3 Sonoma, 13.2 Ventura, 12.0.1 Monterey, 11.6.1 and 11.5.2 Big Sur (aka 10.16),
-10.15.7 Catalina, 10.14.6 Mojave or 10.13.6 High Sierra.  The tests run *with and
-without* ``lazy import`` in Python 3.
+3.0.6, 3.0.4 and 2.2.8 (with the compatible `VLC App`_) on macOS 15.3.2 Sequoia (on
+``arm64`` *natively* only), 14.7.3 Sonoma, 13.2 Ventura, 12.0.1 Monterey, 11.6.1 and
+11.5.2 Big Sur (aka 10.16), 10.15.7 Catalina, 10.14.6 Mojave or 10.13.6 High Sierra.
+The tests run *with and without* ``lazy import`` in Python 3.
 
 Python 3.13.2, 3.12.7 and 3.11.5 run on Apple Silicon (``arm64`` *natively*), other
 Python versions run on Intel (``x86_64``) or Intel *emulation* (``arm64_x86_64``,
-see function ``pycocoa.machine``).
+see function ``pycocoa.machine``), but only *before macOS 15 Sequoia* (see module
+``pycocoa.faults``).
 
 Previously, ``pycocoa`` was tested with 64-bit Python 3.10.0, 3.9.6, 3.8.6, 3.8.3, 3.8.1,
 3.7.4-6, 3.6.5, 2.7.17 and macOS\' 2.7.16.  However, ``pycocoa`` has *not been tested* on
@@ -52,14 +53,14 @@ Notes
 
 All ``pycocoa`` source code has been statically checked_ with PyChecker_, PyFlakes_,
 PyCodeStyle_ (formerly Pep8) and McCabe_ using 64-bit Python 2.7.18 and with
-Flake8_ using 64-bit Python 3.13.2 on macOS 14.7.3 Sonoma.
+Flake8_ using 64-bit Python 3.13.2 on macOS 15.3.2 Sequoia.
 
 Some alternatives to ``pycocoa`` are (a) PyObjC_, the most comprehensive Python to
 Objective-C bridge (no longer included in `macOS\' Python`_), (b) `Rubicon-ObjC`_
 for Python 3.5+, taking advantage of Python\'s typing_ annotations, (c) PyGUI_ for
 macOS_ and (d) wxPython_.
 
-*Last updated: Mar 08, 2025.*
+*Last updated: Mar 25, 2025.*
 
 Licenses
 ========

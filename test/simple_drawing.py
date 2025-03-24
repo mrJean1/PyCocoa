@@ -6,16 +6,15 @@
 
 import run as _  # PYCHOK sys.path
 # all imports listed explicitly to help PyChecker
-from pycocoa import NSApplication, NSBackingStoreBuffered, \
-                    NSBezierPath, NSColor, NSMakeRect, NSPoint_t, \
-                    NSStr, NSWindow, NSWindowStyleMaskUsual, \
-                    PyObjectEncoding, ObjCClass, ObjCInstance, \
-                    ObjCSubclass, send_super, terminating, \
-                    NSAutoreleasePool, NSDate, Libs
+from pycocoa import NSApplication, NSAutoreleasePool, NSBackingStoreBuffered, \
+                    NSBezierPath, NSColor, NSDate, NSMakeRect, NSPoint_t, \
+                    NSStr, NSWindow, NSWindowStyleMaskUsual, ObjCClass, \
+                    ObjCInstance, ObjCSubclass, PyObjectEncoding, Libs, \
+                    SegfaultError, segfaulty, send_super, terminating
 
 from math import sin, cos, pi as PI
 
-__version__ = '25.02.25'
+__version__ = '25.03.21'
 
 NSRectFill = Libs.AppKit.NSRectFill
 
@@ -116,10 +115,20 @@ if __name__ == '__main__':
 
     import sys
 
-    if len(sys.argv) > 1:
-        main(sys.argv.pop(1))
+    if segfaulty():
+        x = segfaulty.__name__
     else:
-        main()
+        try:  # may hang
+            if len(sys.argv) > 1:
+                main(sys.argv.pop(1))
+            else:
+                main()
+            x = None
+        except SegfaultError as x:
+            x = repr(x)
+    if x:
+        print('%s: %s' % (__file__, x))
+        exit(9)
 
 # MIT License <https://OpenSource.org/licenses/MIT>
 #

@@ -70,7 +70,7 @@ from pycocoa.utils import aspect_ratio, isinstanceOf, _text_title2
 # from enum import Enum
 
 __all__ = _ALL_LAZY.windows
-__version__ = '25.03.09'
+__version__ = '25.03.18'
 
 
 class AutoResizeError(ValueError):
@@ -104,10 +104,10 @@ def autoResizes(*options):
 
        @raise AutoResizeError: One or more I{options} are invalid.
     '''
-    c, e = AutoResize._masks(*options)
-    if e is None:
-        return c
-    raise AutoResizeError(_fmt_invalid(option=e))
+    M, x = AutoResize._masks(*options)
+    if x is None:
+        return M
+    raise AutoResizeError(_fmt_invalid(options=x))
 
 
 # <https://Developer.Apple.com/documentation/appkit/nsbezelstyle>
@@ -174,29 +174,26 @@ class Window(_Type2):
 
            @raise WindowError: Unique C{Id} exists.
         '''
+        ns = NSWindow.alloc()
+        t = (WindowStyle.Typical ^ excl,  # PYCHOK expected
+             NSBackingStoreBuffered, NO)
         if frame is None:
-            self._frame = Frame(screen, fraction=fraction)
-            self.NS = NSWindow.alloc().initWithContentRect_styleMask_backing_defer_(
-                                       self._frame.NS,
-                                       WindowStyle.Typical ^ excl,  # PYCHOK expected
-                                       NSBackingStoreBuffered,
-                                       NO)
+            f  = Frame(screen, fraction=fraction)
+            ns = ns.initWithContentRect_styleMask_backing_defer_
         else:  # for .tables.TableWindow
-            self._frame = Frame(frame)
-            self.NS = NSWindow.alloc().initWithContentRect_styleMask_backing_defer_screen_(
-                                       self._frame.NS,
-                                       WindowStyle.Typical ^ excl,  # PYCHOK expected
-                                       NSBackingStoreBuffered,
-                                       NO,
-                                       Screens.Main.NS)  # like .tables.TableWindow
+            f  = Frame(frame)
+            ns = ns.initWithContentRect_styleMask_backing_defer_screen_
+            t += Screens.Main.NS,  # like .tables.TableWindow
+        self._frame  = f
+        self.NS = ns = ns(f.NS, *t)
+
         self.title = bytes2str(title)
         self.front(True)
-
         if kwds:
             super(Window, self).__init__(**kwds)
 
         # XXX self.NS.setIdentifier_(int2NS(id(self)))
-        self._NSuniqID = u = self.NS.uniqueID()
+        self._NSuniqID = u = ns.uniqueID()
         if u in _Globals.Windows:
             t = _fmt('%s %r exists: %r', '.uniqueID', u, _Globals.Windows[u])
             raise WindowError(t)
@@ -207,7 +204,7 @@ class Window(_Type2):
             self.app = _Globals.App
 
         if auto:
-            self.NS.setReleasedWhenClosed_(YES)
+            ns.setReleasedWhenClosed_(YES)
             self._auto = True
 
         self.NSdelegate = retain(NSWindowDelegate.alloc().init(self))
@@ -265,22 +262,23 @@ class Window(_Type2):
 
            @keyword focus: Make this window C{Key} (C{bool}).
         '''
+        ns = self.NS
         if focus:
-            self.NS.makeKeyAndOrderFront_(None)
+            ns.makeKeyAndOrderFront_(None)
         else:
-            self.NS.orderFrontRegardless()
-        self.NS.display()
-        self.NS.orderFront_(None)  # vs .orderOut_(None)
+            ns.orderFrontRegardless()
+        ns.display()
+        ns.orderFront_(None)  # vs .orderOut_(None)
 
     def full(self, full):
         '''Enter or exit full screen mode for this window.
 
            @param full: Enter or exit (C{bool}).
         '''
-        ns = self.NS
+        ns = self.NS  # self.NSview
         f_ = ns.enterFullScreenMode_ if full else \
              ns.exitFullScreenMode_
-        f_(ns.screen())
+        return bool(f_(ns.screen()))
 
     def hide(self, hide):
         '''Hide or unhide this window.
@@ -294,16 +292,33 @@ class Window(_Type2):
             ns.deminiaturize_(ns)
 
     @property_RO
-    def isFull(self):
-        '''Get this window's full screen mode or zoomed state (C{bool}).
+    def isBuiltIn(self):
+        '''Is this window's screen built-in (C{bool} or C{None} if unknown)?
         '''
-        return self.isFullScreen or self.isZoomed
+        return self.screen.isBuiltIn if self.screen else None
+
+    @property_RO
+    def isExternal(self):
+        '''Is this window's screen external (C{bool} or C{None} if unknown)?
+        '''
+        return self.screen.isBuiltIn if self.screen else None
+
+    @property_RO
+    def isFull(self):
+        '''Get this window's full screen mode or zoomed state (C{bool} or C{None} if unknown).
+        '''
+        f = self.isFullScreen
+        z = self.isZoomed
+        return z if f is None else (
+               f if z is None else (f or z))
 
     @property_RO
     def isFullScreen(self):
-        '''Get this window's full screen mode (C{bool}).
+        '''Get this window's full screen mode (C{bool} or C{None} if unknown).
         '''
-        return bool(self.NSview.isInFullScreenMode())
+        # XXX unreliable if this window.isExternal
+        ns = self.NSview
+        return bool(ns.isInFullScreenMode()) if ns else None
 
     @property_RO
     def isHidden(self):
@@ -359,10 +374,10 @@ class Window(_Type2):
     def NSview(self, ns_view):
         '''Set this window's view (C{NSView...}).
         '''
-        if not isNone(ns_view):
+        if ns_view and not isNone(ns_view):
             isObjCInstanceOf(ns_view, NSScrollView, NSView, raiser='ns_view')
             self.NS.setContentView_(ns_view)
-        self._NSview = ns_view
+        self._NSview = ns_view  # or NSMain.Null
 
     @property
     def opaque(self):
@@ -386,10 +401,10 @@ class Window(_Type2):
     def PMview(self, ns_view):
         '''Set this window's print view (C{NSView...}).
         '''
-        if ns_view and isObjCInstanceOf(ns_view, NSImageView, NSTableView, NSTextView, NSView):
-            self._PMview = ns_view
-        else:
-            self._PMview = None
+        if not (ns_view and isObjCInstanceOf(
+                ns_view, NSImageView, NSTableView, NSTextView, NSView)):
+            ns_view = None
+        self._PMview = ns_view
 
     @property
     def ratio(self):
@@ -460,14 +475,13 @@ class Window(_Type2):
             ns.setHasShadow_(shadow)
             ns.setBackgroundColor_(bgColor)
 
-        p = self.transparent
+        ns, p = self.NS, self.transparent
         if transparent and not p:  # make
             from pycocoa.colors import GrayScaleColors
-            ns = self.NS
             self._untrans = ns.isOpaque(), ns.hasShadow(), ns.backgroundColor()
             _nset(ns, NO, NO, GrayScaleColors.Clear)
         elif p and not transparent:  # undo
-            _nset(self.NS, *self._untrans)
+            _nset(ns, *self._untrans)
             self._untrans = None
 
     @property
@@ -485,9 +499,9 @@ class Window(_Type2):
     def zoom(self, zoom):
         '''Toggle, zoom or un-zoom this window.
 
-           @param zoom: Zoom or un-zoom (C{bool}) or C{None} to toggle.
+           @param zoom: Use C{True} to zoom, C{False} to un-zoom or C{None} to toggle.
         '''
-        if zoom is None or bool(zoom) is not self.isZoomed:
+        if zoom is None or self.isZoomed is bool(not bool(zoom)):
             # click the "zoom box", toggles the zoom state
             # <https://Developer.Apple.com/documentation/appkit/nswindow/1419513-zoom>
             self.NS.performZoom_(self.NS)  # XXX self.delegate
@@ -502,14 +516,11 @@ class Window(_Type2):
             self.NSdelegate.release()
 
     def windowCloseOK_(self):
-        '''Is it OK? to close I{window} callback.
+        '''Callback Is it OK to close I{window}?
 
-           @return: True if OK to close, False otherwise.
+           @return: C{True} if OK to close, C{False} otherwise.
         '''
-        if self.app:
-            return self.app.windowCloseOK_(self)
-        else:
-            return True
+        return self.app.windowCloseOK_(self) if self.app else True
 
     def windowKey_(self, key):
         '''Callback I{window} becomes/resigns C{Key}.
@@ -545,7 +556,7 @@ class Window(_Type2):
     def windowScreen_(self, change):
         '''Called I{window} when screen or screen profile changed C{Main}.
 
-           @param change: C{True} if the screen or C{False} if
+           @param change: C{True} if the screen changed or C{False} if
                           the profile changed (C{bool}).
 
            @note: Typically, changing screen involves 2 callback invokations,
@@ -556,16 +567,14 @@ class Window(_Type2):
             self.app.windowScreen_(self, change)
 
     def windowZoomOK_(self, frame=None):
-        '''Is it OK? to toggle zoom I{window} callback.
+        '''Callback Is it OK to zoom I{window}?
 
            @keyword frame: The frame to zoom to (L{Rect}).
 
-           @return: True if OK to toggle, False otherwise.
+           @return: C{True} if OK to zoom, C{False} otherwise.
         '''
-        if self.app:
-            return self.app.windowZoomOK_(self, frame)
-        else:
-            return True
+        a = self.app
+        return a.windowZoomOK_(self, frame) if a else True
 
 
 class WindowError(ValueError):
@@ -603,10 +612,10 @@ def windowStyles(*styles):
 
        @raise WindowStyleError: One or more I{styles} are invalid.
     '''
-    c, e = WindowStyle._masks(*styles)
-    if e is None:
-        return c
-    raise WindowStyleError(_fmt_invalid(styles=e))
+    M, x = WindowStyle._masks(*styles)
+    if x is None:
+        return M
+    raise WindowStyleError(_fmt_invalid(styles=x))
 
 
 class MediaWindow(Window):
@@ -898,7 +907,7 @@ if __name__ == _Dmain_:
 #                            .Sizable=18,
 #                            .WidthSizable=2,
 #  pycocoa.windows.AutoResizeError is <class .AutoResizeError>,
-#  pycocoa.windows.autoResizes is <function .autoResizes at 0x1054e4180>,
+#  pycocoa.windows.autoResizes is <function .autoResizes at 0x100b7c360>,
 #  pycocoa.windows.BezelStyle.Circular=7,
 #                            .Disclosure=5,
 #                            .HelpButton=9,
@@ -917,8 +926,8 @@ if __name__ == _Dmain_:
 #                        .Line=1,
 #                        .No=0,
 #  pycocoa.windows.MediaWindow is <class .MediaWindow>,
-#  pycocoa.windows.ns2Window is <function .ns2Window at 0x105941f80>,
-#  pycocoa.windows.NSWindowDelegate is <pycocoa.internals.proxy_RO object at 0x105914cd0>,
+#  pycocoa.windows.ns2Window is <function .ns2Window at 0x100f3e7a0>,
+#  pycocoa.windows.NSWindowDelegate is <pycocoa.internals.proxy_RO object at 0x100f282d0>,
 #  pycocoa.windows.TextWindow is <class .TextWindow>,
 #  pycocoa.windows.Window is <class .Window>,
 #  pycocoa.windows.WindowError is <class .WindowError>,
@@ -929,9 +938,9 @@ if __name__ == _Dmain_:
 #                             .Typical=15,
 #                             .Utility=16 or 1<<4,
 #  pycocoa.windows.WindowStyleError is <class .WindowStyleError>,
-#  pycocoa.windows.windowStyles is <function .windowStyles at 0x105930fe0>,
+#  pycocoa.windows.windowStyles is <function .windowStyles at 0x100f128e0>,
 # )[14]
-# pycocoa.windows.version 25.2.27, .isLazy 1, Python 3.13.2 64bit arm64, macOS 14.7.3
+# pycocoa.windows.version 25.3.18, .isLazy 1, Python 3.13.2 64bit arm64, macOS 15.3.2
 
 # MIT License <https://OpenSource.org/licenses/MIT>
 #

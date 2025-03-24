@@ -8,6 +8,7 @@
 @var AlertStyle: Alert level constants (C{int}).
 @var AlertStyle.Critical: 2
 @var AlertStyle.Info: 1
+@var AlertStyle.Informational: 1
 @var AlertStyle.Warning: 0
 
 @var PanelButton: Panel button kinds (C{int}).
@@ -47,21 +48,24 @@ except ImportError:
     _Browser, _BrowserError = None, ImportError
 
 __all__ = _ALL_LAZY.panels
-__version__ = '25.02.27'
+__version__ = '25.03.16'
 
 
 class AlertStyle(_Constants):  # Enum?
     '''Alert level constants (C{int}).
     '''
-    Critical = 2  # NSAlertStyleCritical
-    Info     = 1  # NSAlertStyleInformational
-    Warning  = 0  # NSAlertStyleWarning
+    Critical      = 2  # NSAlertStyleCritical
+    Info          = 1  # NSAlertStyleInformational
+    Informational = 1  # NSAlertStyleInformational
+    Warning       = 0  # NSAlertStyleWarning
+
+    def _Astr(self, style, dflt=_NN_):
+        # get I{style} as C{str} + _SPACE_
+        return {AlertStyle.Critical: 'Critical ',
+                AlertStyle.Info:     'Informational ',
+                AlertStyle.Warning:  'Warning '}.get(style, dflt)
 
 AlertStyle = AlertStyle()  # PYCHOK constants
-
-_AlertStyleStr = {AlertStyle.Critical: 'Critical ',
-                  AlertStyle.Info:     'Informational ',
-                  AlertStyle.Warning:  'Warning '}
 
 
 class AlertPanel(_Type2):
@@ -107,8 +111,7 @@ class AlertPanel(_Type2):
             self._suppress = YES
 
         self._style = style
-        s = _AlertStyleStr.get(style, _NN_)
-        t = s or 'Alert '
+        t = AlertStyle._Astr(style, 'Alert ')
         if title:
             t = _fmt('%s- %s', t, title)
         self.title = t
@@ -148,7 +151,7 @@ class AlertPanel(_Type2):
         if self._suppress in (False, YES):
             self._suppress = False
             ns.setShowsSuppressionButton_(YES)
-            s = _AlertStyleStr.get(self._style, _NN_)
+            s =  AlertStyle._Astr(self._style)
             s = 'Do not show this %sAlert again' % (s,)
             ns.suppressionButton().setTitle_(_NSStr(s))
 
@@ -156,9 +159,7 @@ class AlertPanel(_Type2):
             self._ns_help(ns, help)
 
         if text:
-            t = nsTextView(text, (NSFont.systemFontOfSize_(0) if
-                                  font is None else font.NS))
-            ns.setAccessoryView_(t)
+            ns.setAccessoryView_(nsTextView(text, _ns_font(font)))
 
         # <https://Developer.Apple.com/documentation/appkit/
         #        nsalert/1535196-showssuppressionbutton>
@@ -391,10 +392,10 @@ class PanelButton(_Constants):  # Enum?
     Error      = -3
     Suppressed = -2
     TimedOut   = -1
-    Cancel     = 0  # NSCancelButton
-    Close      = 1  # TextPanel, like OK
-    OK         = 1  # NSOKButton
-    Other      = 2
+    Cancel     =  0  # NSCancelButton
+    Close      =  1  # TextPanel, like OK
+    OK         =  1  # NSOKButton
+    Other      =  2
 
 PanelButton = PanelButton()  # PYCHOK constants
 
@@ -534,7 +535,8 @@ class TextPanel(AlertPanel):
         ns.addButtonWithTitle_(_NSStr('Close'))
 
         if not text_or_file:
-            raise ValueError(_fmt_invalid(text_or_file=repr(text_or_file)))
+            t = _fmt_invalid(text_or_file=repr(text_or_file))
+            raise ValueError(t)
 
         text, t = _text_title2(text_or_file, self.title)
         if t:
@@ -543,12 +545,15 @@ class TextPanel(AlertPanel):
         if help:  # see AlertPanel._ns_help
             self._ns_help(ns, help)
 
-        t = nsTextView(text, (NSFont.userFixedPitchFontOfSize_(0) if
-                              font is None else font.NS))
-        ns.setAccessoryView_(t)
+        ns.setAccessoryView_(nsTextView(text, _ns_font(font)))
         r = _runModal(ns, timeout)
         ns.release()
         return r
+
+
+def _ns_font(font):
+    # helper for AlertPanel.show and TextPanel.show
+    return font.NS if font else NSFont.systemFontOfSize_(0)
 
 
 _Types.AlertPanel = AlertPanel
@@ -572,10 +577,11 @@ if __name__ == _Dmain_:
 #  pycocoa.panels.AlertPanel is <class .AlertPanel>,
 #  pycocoa.panels.AlertStyle.Critical=2,
 #                           .Info=1,
+#                           .Informational=1,
 #                           .Warning=0,
 #  pycocoa.panels.BrowserPanel is <class .BrowserPanel>,
 #  pycocoa.panels.ErrorPanel is <class .ErrorPanel>,
-#  pycocoa.panels.NSAlertDelegate is <pycocoa.utils.proxy_RO object at 0x1014b2490>,
+#  pycocoa.panels.NSAlertDelegate is <pycocoa.internals.proxy_RO object at 0x104b55a90>,
 #  pycocoa.panels.OpenPanel is <class .OpenPanel>,
 #  pycocoa.panels.PanelButton.Cancel=0,
 #                            .Close=1,
@@ -587,7 +593,7 @@ if __name__ == _Dmain_:
 #  pycocoa.panels.SavePanel is <class .SavePanel>,
 #  pycocoa.panels.TextPanel is <class .TextPanel>,
 # )[9]
-# pycocoa.panels.version 25.2.27, .isLazy 1, Python 3.13.2 64bit arm64, macOS 14.7.3
+# pycocoa.panels.version 25.3.16, .isLazy 1, Python 3.13.2 64bit arm64, macOS 14.7.3
 
 # MIT License <https://OpenSource.org/licenses/MIT>
 #

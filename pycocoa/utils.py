@@ -3,24 +3,22 @@
 
 # License at the end of this file.
 
-'''Mostly public utility functions.
-
-@var missing: Missing keyword argument value.
+'''Private and public utility functions.
 '''
 from pycocoa.internals import bytes2str, _ByteStrs, _COLON_, _COMMA_, \
-                             _COMMASPACE_, _Ddoc_, _Dmain_, _DOT_, \
-                             _EQUALS_, _fmt, _fmt_invalid, _Globals, \
-                             _instr, _int2, _Ints, _kwdstr, missing, \
-                             _NL_, _NN_, _SPACE_, str2bytes, _sys, \
-                             _TypeError, _UNDER_   # _Dall_, _Dfile_, _Dversion_
+                             _COLONSPACE_, _COMMASPACE_, _Ddoc_, _Dmain_,\
+                             _DOT_, _EQUALS_, _fmt, _fmt_invalid, _Globals, \
+                             _instr, _int2, _Ints, _kwdstr, missing, _NL_, \
+                             _NN_, _SPACE_, str2bytes, _TypeError, \
+                             _UNDER_, _writef,  sys   # _Dall_, _Dfile_, _Dversion_
 from pycocoa.lazily import _ALL_LAZY, isLazy, _Python_version
 
 import os.path as _os_path
 import platform as _platform
-# import sys as _sys  # from .lazily
+# import sys  # from .lazily
 
 __all__ = _ALL_LAZY.utils
-__version__ = '25.02.28'
+__version__ = '25.03.24'
 
 _bCOL = b':'  # in .octypes
 
@@ -33,9 +31,10 @@ def _all_listing(alls, localls, libs=False, _file_=_NN_, argv0='#'):
     def _all_in(alls, inns, m, n):
         t = tuple(a for a in alls if a not in inns)
         if t:
-            n = _DOT_(m, n)
             t = _COMMASPACE_.join(t)
-            raise NameError(_fmt('missing %s: %s', n, t))
+            t = _COLONSPACE_(_DOT_(m, n), t)
+            t = _SPACE_(missing, t)
+            raise NameError(t)
 
     t =  alls.__class__.__name__
     f = _file_ or localls.get(_Dfile_, _NN_)
@@ -100,7 +99,7 @@ def _all_versionstr(libs=False, _file_=_NN_, _version_=_NN_):
     t = (('version', _version_ or _version),  # PYCHOK shadow
          ('.isLazy',  str(isLazy)),
          ('Python',  _Python_version, _platform.architecture()[0], machine()),
-         ('macOS',   _macOSver()))
+         ('macOS',    macOSver()))
     if libs:
         ls = _asorted(oslibs.Libs.keys())
         t += ('oslibs', str(ls).replace("'", _NN_)),
@@ -205,7 +204,7 @@ def errorf(fmtxt, *args, **file_flush_nl_nt_argv0):
     '''Like I{printf}, but writing to I{file=sys.stderr}.
     '''
     return _writef(fmtxt, args, **_xkwds(file_flush_nl_nt_argv0,
-                                         file=_sys.stderr, flush=True))
+                                         file=sys.stderr, flush=True))
 
 
 def flint(f):
@@ -306,7 +305,7 @@ def machine():
                 any C{comma}s replaced by C{underscore}).
     '''
     m = _platform.machine().replace(_COMMA_, _UNDER_)  # arm64 Apple Si, x86_64, other?
-    if m == 'x86_64' and _macOSver():  # only on Intel or Rosetta2
+    if m == 'x86_64' and macOSver():  # only on Intel or Rosetta2
         # <https://Developer.Apple.com/forums/thread/659846>
         if _sysctl_uint('sysctl.proc_translated') == 1:  # and \
 #          _sysctl_uint('hw.optional.arm64') == 1:  # PYCHOK indent
@@ -314,21 +313,23 @@ def machine():
     return m
 
 
-def _macOSver():
-    '''(INTERNAL) Return the macOS release as C{str}.
+def macOSver():
+    '''Return the macOS release as C{str}.
 
-       @note: C{macOS 11 Big Sur} is C{'10.16'} before Python 3.9.6.
+       @note: C{macOS 11 Big Sur} is C{'10.16'} before Python 3.9.6 and
+              on Apple Si Intel-emulation, see function L{machine}.
     '''
     return _platform.mac_ver()[0]
 
 
-def _macOSver2(n=2):
-    '''(INTERNAL) Return the macOS release as 1-, 2- or 3-tuple of C{int}s.
+def macOSver2(n=2):
+    '''Return the macOS release as 1-, 2- or 3-tuple of C{int}s.
 
-       @note: C{macOS 11 Big Sur} is C{(10, 16)} before Python 3.9.6.
+       @note: C{macOS 11 Big Sur} is C{(10, 16)} before Python 3.9.6 and
+              on Apple Si Intel-emulation, see function L{machine}.
     '''
-    v = _macOSver() or '0'
-    t =  tuple(map(int, v.split(_DOT_)[:n])) + (0, 0, 0)
+    v = macOSver() or '0'
+    t = tuple(map(int, v.split(_DOT_)[:n])) + (0, 0, 0)
     return t[:n]
 
 
@@ -432,17 +433,16 @@ def _sysctl_uint(name):
 
 
 def terminating(app, timeout=None):
-    '''Set up a separate thread to terminate an NSApplication
-       by calling the C{.terminate_} method after the given
-       timeout has elapsed.
+    '''Set up a separate thread to terminate an NSApplication I{app}
+       by calling its C{.terminate_} method at the given I{timeout}
+       in seconds.
 
        @return: Timeout in seconds (C{float}) or C{None}.
 
-       @note: Similarly, the NSWindow could be closed, provided
-              the NSWindow or NSApplication C{Delegate} instance
-              includes the C{.windowWillClose_} method which in
-              turn terminates the NSApplication's C{.terminate_}
-              method.
+       @note: Similarly, the NSWindow could be closed, provided the
+              NSWindow or NSApplication C{Delegate} instance includes
+              the C{.windowWillClose_} method which in turn invokes
+              the NSApplication's C{.terminate_} method.
     '''
     try:
         s = float(timeout)
@@ -505,8 +505,7 @@ def type2strepr(inst, strepr=str, **kwds):
         d =  kwds
     if d:
         d = _kwdstr(d)
-        t = _COMMASPACE_(strepr(t), *d) if t else \
-            _COMMASPACE_.join(d)
+        t = _COMMASPACE_(strepr(t), d) if t else d
     else:
         t =  strepr(t)
     return _instr(type(inst), t)
@@ -523,7 +522,7 @@ def _varstr(constants, strepr=None):
             d = getattr(c, _Ddoc_) or _NN_
             t = d.split(_NL_)[0].strip()
             t = t.rstrip('.,;:') + _DOT_
-        return _fmt('@var %s: %s', n, t)
+        return _SPACE_('@var', _COLONSPACE_(n, t))
 
     C = constants.__class__
     N = C.__name__.lstrip(_UNDER_)
@@ -531,22 +530,6 @@ def _varstr(constants, strepr=None):
     for n in _asorted(constants.keys()):
         v.append(_doc1(getattr(C, n), _DOT_(N, n), strepr))
     return _NL_.join(v)
-
-
-def _writef(fmtxt, args, file=_sys.stdout, flush=False,
-                         nl=0, nt=1, argv0=missing):
-    '''(INTERNAL) Write a formatted string to C{file}.
-    '''
-    t = _fmt(fmtxt, *args)
-    a = _Globals.argv0 if argv0 is missing else argv0
-    if a:
-        t =  t.replace(_NL_, _NN_(_NL_, a, _SPACE_))
-        t = _SPACE_(a, t)
-    t = _NN_(_NL_ * nl, t, _NL_ * nt)
-    n =  file.write(t)
-    if flush:
-        file.flush()
-    return n
 
 
 def _xkwds(kwds, **dflts):
@@ -640,28 +623,30 @@ if __name__ == _Dmain_:
 # % python3 -m pycocoa.utils
 #
 # pycocoa.utils.__all__ = tuple(
-#  pycocoa.utils.aspect_ratio is <function .aspect_ratio at 0x1015200e0>,
-#  pycocoa.utils.clipstr is <function .clipstr at 0x101520180>,
-#  pycocoa.utils.errorf is <function .errorf at 0x1015202c0>,
-#  pycocoa.utils.flint is <function .flint at 0x101520360>,
+#  pycocoa.utils.aspect_ratio is <function .aspect_ratio at 0x102574c20>,
+#  pycocoa.utils.clipstr is <function .clipstr at 0x102574cc0>,
+#  pycocoa.utils.errorf is <function .errorf at 0x102574e00>,
+#  pycocoa.utils.flint is <function .flint at 0x102574ea0>,
 #  pycocoa.utils.gcd is <built-in function gcd>,
-#  pycocoa.utils.inst2strepr is <function .inst2strepr at 0x101520400>,
-#  pycocoa.utils.isinstanceOf is <function .isinstanceOf at 0x1015205e0>,
-#  pycocoa.utils.islistuple is <function .islistuple at 0x101520680>,
-#  pycocoa.utils.logf is <function .logf at 0x101520720>,
-#  pycocoa.utils.machine is <function .machine at 0x1015207c0>,
-#  pycocoa.utils.name2objc is <function .name2objc at 0x1015209a0>,
-#  pycocoa.utils.name2py is <function .name2py at 0x101520a40>,
-#  pycocoa.utils.name2pymethod is <function .name2pymethod at 0x101520ae0>,
-#  pycocoa.utils.printf is <function .printf at 0x101520b80>,
-#  pycocoa.utils.properties is <function .properties at 0x101520c20>,
-#  pycocoa.utils.terminating is <function .terminating at 0x101520ea0>,
-#  pycocoa.utils.type2strepr is <function .type2strepr at 0x101520fe0>,
-#  pycocoa.utils.z1000str is <function .z1000str at 0x101521260>,
-#  pycocoa.utils.zfstr is <function .zfstr at 0x101521300>,
-#  pycocoa.utils.zSIstr is <function .zSIstr at 0x1015213a0>,
-# )[20]
-# pycocoa.utils.version 25.2.28, .isLazy 1, Python 3.13.2 64bit arm64, macOS 14.7.3
+#  pycocoa.utils.inst2strepr is <function .inst2strepr at 0x102574f40>,
+#  pycocoa.utils.isinstanceOf is <function .isinstanceOf at 0x102575120>,
+#  pycocoa.utils.islistuple is <function .islistuple at 0x1025751c0>,
+#  pycocoa.utils.logf is <function .logf at 0x102575260>,
+#  pycocoa.utils.machine is <function .machine at 0x102575300>,
+#  pycocoa.utils.macOSver is <function .macOSver at 0x1025753a0>,
+#  pycocoa.utils.macOSver2 is <function .macOSver2 at 0x102575440>,
+#  pycocoa.utils.name2objc is <function .name2objc at 0x1025754e0>,
+#  pycocoa.utils.name2py is <function .name2py at 0x102575580>,
+#  pycocoa.utils.name2pymethod is <function .name2pymethod at 0x102575620>,
+#  pycocoa.utils.printf is <function .printf at 0x1025756c0>,
+#  pycocoa.utils.properties is <function .properties at 0x102575760>,
+#  pycocoa.utils.terminating is <function .terminating at 0x102575940>,
+#  pycocoa.utils.type2strepr is <function .type2strepr at 0x102575a80>,
+#  pycocoa.utils.z1000str is <function .z1000str at 0x102575c60>,
+#  pycocoa.utils.zfstr is <function .zfstr at 0x102575d00>,
+#  pycocoa.utils.zSIstr is <function .zSIstr at 0x102575da0>,
+# )[22]
+# pycocoa.utils.version 25.3.24, .isLazy 1, Python 3.13.2 64bit arm64, macOS 15.3.2
 
 # MIT License <https://OpenSource.org/licenses/MIT>
 #

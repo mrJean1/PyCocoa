@@ -9,8 +9,9 @@ from pycocoa.internals import _Dmain_, _fmt, missing
 from pycocoa.lazily import _ALL_LAZY, _Types
 from pycocoa.nstypes import NSMutableArray, _NSMtbs
 from pycocoa.pytypes import list2NS, py2NS
-from pycocoa.runtime import isMutable
+from pycocoa.runtime import isMutable, isinstanceOf
 from pycocoa.tuples import _at, Tuple
+# from pycocoa.utils import isinstanceOf  # from .runtime
 
 try:
     from itertools import zip_longest
@@ -18,7 +19,7 @@ except ImportError:  # Python 2-
     from itertools import izip_longest as zip_longest
 
 __all__ = _ALL_LAZY.lists
-__version__ = '25.02.16'
+__version__ = '25.03.13'
 
 
 class List(Tuple):
@@ -29,31 +30,33 @@ class List(Tuple):
     def __init__(self, ns_list=[]):
         '''New L{List} from a C{list}, L{List}, L{Tuple} or C{NSMutableArray}.
         '''
-        if isinstance(ns_list, list):
+        if isinstanceOf(ns_list, list, tuple):
             self.NS = list2NS(ns_list)
-        elif isinstance(ns_list, (List, Tuple)):
+        elif isinstanceOf(ns_list, List, Tuple):
             self.NS = ns_list.NS.mutableCopy()  # PYCHOK safe
         elif isMutable(ns_list, *_NSMtbs.Arrays, raiser='ns_list'):
             self.NS = ns_list
 
     def __setitem__(self, index, value):
+        R_ = self.NS.replaceObjectAtIndex_withObject_
         if isinstance(index, slice):
-            indices = range(*index.indices(len(self)))
-            for i, val in zip_longest(indices, value, fillvalue=missing):
-                if missing in (i, val):  # XXX only if val is missing?
+            r = self._sliced(index)
+            for i, v in zip_longest(r, value, fillvalue=missing):
+                if missing in (i, v):  # XXX only if val is missing?
                     t = _fmt('%s len() %r vs %r', self, index, value)
                     raise ValueError(t)
-                self.NS.replaceObjectAtIndex_withObject_(i, py2NS(val))
+                R_(i, py2NS(v))
         else:
-            self.NS.replaceObjectAtIndex_withObject_(_at(self, index), py2NS(value))
+            R_(_at(self, index), py2NS(value))
 
     def __delitem__(self, index):
+        R_ = self.NS.removeObjectAtIndex_
         if isinstance(index, slice):
-            indices = range(*index.indices(len(self)))
-            for i in sorted(indices, reverse=True):
-                self.NS.removeObjectAtIndex_(i)
+            r = self._sliced(index)
+            for i in sorted(r, reverse=True):
+                R_(i)
         else:
-            self.NS.removeObjectAtIndex_(_at(self, index))
+            R_(_at(self, index))
 
     def append(self, value):
         '''Add an item to this list, like C{list.append}.
@@ -77,8 +80,9 @@ class List(Tuple):
     def extend(self, values):
         '''Add one or more items to this list, like C{list.extend}.
         '''
+        A_ = self.NS.addObject_
         for v in values:
-            self.NS.addObject_(py2NS(v))
+            A_(py2NS(v))
 
     def insert(self, index, value):
         '''Insert an item into this list, like C{list.insert}.
@@ -104,12 +108,15 @@ class List(Tuple):
     def reverse(self):
         '''Reverse this list in-place, like C{list.reverse}.
         '''
-        self.NS.setArray_(self.NS.reverseObjectEnumerator().allObjects())
-#       i, n = 0, len(self)-1
+        ns = self.NS
+        ns.setArray_(ns.reverseObjectEnumerator().allObjects())
+#       I_ = ns.objectAtIndex_
+#       R_ = ns.replaceObjectAtIndex_withObject_
+#       i, n = 0, (len(self) - 1)
 #       while i < n:
-#           ns = self.NS.objectAtIndex_(i)
-#           self.NS.replaceObjectAtIndex_withObject_(i, self.NS.objectAtIndex_(n))
-#           self.NS.replaceObjectAtIndex_withObject_(n, ns)
+#           ns  = I_(i)
+#           R_(i, I_(n))
+#           R_(n, ns)
 #           i += 1
 #           n -= 1
 
@@ -132,7 +139,7 @@ if __name__ == _Dmain_:
 # pycocoa.lists.__all__ = tuple(
 #  pycocoa.lists.List is <class .List>,
 # )[1]
-# pycocoa.lists.version 25.2.16, .isLazy 1, Python 3.13.1 64bit arm64, macOS 14.7.3
+# pycocoa.lists.version 25.3.13, .isLazy 1, Python 3.13.2 64bit arm64, macOS 14.7.3
 
 # MIT License <https://OpenSource.org/licenses/MIT>
 #

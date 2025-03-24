@@ -59,11 +59,11 @@
 </table>
 <!-- ==================== MODULE DESCRIPTION ==================== -->
 <h1 class="epydoc">Module utils</h1><p class="nomargin-top"></p>
-<p>Mostly public utility functions.</p>
+<p>Private and public utility functions.</p>
 
 <hr />
 <div class="fields">      <p><strong>Version:</strong>
-        25.02.28
+        25.03.24
       </p>
 </div><!-- ==================== FUNCTIONS ==================== -->
 <a name="section-Functions"></a>
@@ -263,6 +263,40 @@
     </td><td class="summary">
       <table width="100%" cellpadding="0" cellspacing="0" border="0">
         <tr>
+          <td><span class="summary-sig"><a href="pycocoa.utils-module.html#macOSver" class="summary-sig-name">macOSver</a>()</span><br />
+      Return the macOS release as <code>str</code>.</td>
+          <td align="right" valign="top">
+            
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a href="pycocoa.utils-module.html#macOSver2" class="summary-sig-name">macOSver2</a>(<span class="summary-sig-arg">n</span>=<span class="summary-sig-default">2</span>)</span><br />
+      Return the macOS release as 1-, 2- or 3-tuple of <code>int</code>s.</td>
+          <td align="right" valign="top">
+            
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
           <td><span class="summary-sig"><a href="pycocoa.utils-module.html#name2objc" class="summary-sig-name">name2objc</a>(<span class="summary-sig-arg">name_</span>)</span><br />
       Convert a (selector) name to <code>bytes</code> and ObjC naming 
       rules.</td>
@@ -354,8 +388,9 @@
         <tr>
           <td><span class="summary-sig"><a href="pycocoa.utils-module.html#terminating" class="summary-sig-name">terminating</a>(<span class="summary-sig-arg">app</span>,
         <span class="summary-sig-arg">timeout</span>=<span class="summary-sig-default">None</span>)</span><br />
-      Set up a separate thread to terminate an NSApplication by calling the
-      <code>.terminate_</code> method after the given timeout has elapsed.</td>
+      Set up a separate thread to terminate an NSApplication <i>app</i> by 
+      calling its <code>.terminate_</code> method at the given 
+      <i>timeout</i> in seconds.</td>
           <td align="right" valign="top">
             
             
@@ -684,6 +719,55 @@
   </dl>
 </td></tr></table>
 </div>
+<a name="macOSver"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">macOSver</span>()</span>
+  </h3>
+  </td><td align="right" valign="top"
+    >&nbsp;
+    </td>
+  </tr></table>
+  
+  <p>Return the macOS release as <code>str</code>.</p>
+  <dl class="fields">
+  </dl>
+<div class="fields">      <p><strong>Note:</strong>
+        <code>macOS 11 Big Sur</code> is <code>'10.16'</code> before Python
+        3.9.6 and on Apple Si Intel-emulation, see function <a 
+        href="pycocoa.utils-module.html#machine" class="link">machine</a>.
+      </p>
+</div></td></tr></table>
+</div>
+<a name="macOSver2"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">macOSver2</span>(<span class="sig-arg">n</span>=<span class="sig-default">2</span>)</span>
+  </h3>
+  </td><td align="right" valign="top"
+    >&nbsp;
+    </td>
+  </tr></table>
+  
+  <p>Return the macOS release as 1-, 2- or 3-tuple of 
+  <code>int</code>s.</p>
+  <dl class="fields">
+  </dl>
+<div class="fields">      <p><strong>Note:</strong>
+        <code>macOS 11 Big Sur</code> is <code>(10, 16)</code> before 
+        Python 3.9.6 and on Apple Si Intel-emulation, see function <a 
+        href="pycocoa.utils-module.html#machine" class="link">machine</a>.
+      </p>
+</div></td></tr></table>
+</div>
 <a name="name2objc"></a>
 <div>
 <table class="details" border="1" cellpadding="3"
@@ -846,8 +930,9 @@
     </td>
   </tr></table>
   
-  <p>Set up a separate thread to terminate an NSApplication by calling the 
-  <code>.terminate_</code> method after the given timeout has elapsed.</p>
+  <p>Set up a separate thread to terminate an NSApplication <i>app</i> by 
+  calling its <code>.terminate_</code> method at the given <i>timeout</i> 
+  in seconds.</p>
   <dl class="fields">
     <dt>Returns:</dt>
         <dd>Timeout in seconds (<code>float</code>) or <code>None</code>.</dd>
@@ -855,7 +940,7 @@
 <div class="fields">      <p><strong>Note:</strong>
         Similarly, the NSWindow could be closed, provided the NSWindow or 
         NSApplication <code>Delegate</code> instance includes the 
-        <code>.windowWillClose_</code> method which in turn terminates the 
+        <code>.windowWillClose_</code> method which in turn invokes the 
         NSApplication's <code>.terminate_</code> method.
       </p>
 </div></td></tr></table>
@@ -1007,7 +1092,7 @@
 <table border="0" cellpadding="0" cellspacing="0" width="100%%">
   <tr>
     <td align="left" class="footer">
-    Generated by Epydoc 3.0.1 on Tue Mar 11 15:30:54 2025
+    Generated by Epydoc 3.0.1 on Mon Mar 24 15:10:34 2025
     </td>
     <td align="right" class="footer">
       <a target="mainFrame" href="http://epydoc.sourceforge.net"

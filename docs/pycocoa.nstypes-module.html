@@ -64,7 +64,7 @@
 
 <hr />
 <div class="fields">      <p><strong>Version:</strong>
-        25.02.25
+        25.03.18
       </p>
 </div><!-- ==================== CLASSES ==================== -->
 <a name="section-Classes"></a>
@@ -365,8 +365,8 @@
           <td><span class="summary-sig"><a href="pycocoa.nstypes-module.html#nsIter" class="summary-sig-name">nsIter</a>(<span class="summary-sig-arg">ns</span>,
         <span class="summary-sig-arg">reverse</span>=<span class="summary-sig-default">False</span>,
         <span class="summary-sig-arg">keys</span>=<span class="summary-sig-default">False</span>)</span><br />
-      Iterate over an <code>NS..</code> ObjC objects's keys or (reverse) 
-      values.</td>
+      Iterate over an <code>NS..</code> ObjC objects's keys, values or 
+      reverse values.</td>
           <td align="right" valign="top">
             
             
@@ -512,8 +512,8 @@
         <tr>
           <td><span class="summary-sig"><a href="pycocoa.nstypes-module.html#ns2py" class="summary-sig-name">ns2py</a>(<span class="summary-sig-arg">ns</span>,
         <span class="summary-sig-arg">dflt</span>=<span class="summary-sig-default">missing</span>)</span><br />
-      Convert (an instance of) an ObjC class to an instance of the 
-      equivalent Python standard type or wrapper and value.</td>
+      Convert an ObjC class' instance to the equivalent Python standard 
+      type's instance or wrapper and value.</td>
           <td align="right" valign="top">
             
             
@@ -1182,15 +1182,15 @@
     <td width="15%" align="right" valign="top" class="summary">
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
-        <a href="pycocoa.nstypes-module.html#NSMain" class="summary-name">NSMain</a> = <code title="NSMain.Application=NSApplication(&lt;Id_t at 0x7fa829087cb0&gt;) of 0x7fa815\
-a28830,
-      .BooleanNO=NSBoolean(&lt;Id_t at 0x7fa829087170&gt;) of 0x7ff84548ec70\
+        <a href="pycocoa.nstypes-module.html#NSMain" class="summary-name">NSMain</a> = <code title="NSMain.Application=NSApplication(&lt;Id_t at 0x7f922115cb00&gt;) of 0x7f9209\
+cd37d0,
+      .BooleanNO=NSBoolean(&lt;Id_t at 0x7f922115c7a0&gt;) of 0x7ff8558bf088\
 ,
-      .BooleanYES=NSBoolean(&lt;Id_t at 0x7fa829081440&gt;) of 0x7ff84548ec6\
-0,
-      .Bundle=NSBundle(&lt;Id_t at 0x7fa82907cef0&gt;) of 0x6000025b0000,
+      .BooleanYES=NSBoolean(&lt;Id_t at 0x7f9221161710&gt;) of 0x7ff8558bf07\
+8,
+      .Bundle=NSBundle(&lt;Id_t at 0x7f922115c440&gt;) of 0x6000029d05a0,
       .BundleName=NSConstantString('CFBundleName'),
-...">NSMain.Application=NSApplication(&lt;Id_t at 0x7fa829087<code class="variable-ellipsis">...</code></code><br />
+...">NSMain.Application=NSApplication(&lt;Id_t at 0x7f922115c<code class="variable-ellipsis">...</code></code><br />
       Global <code>ObjC/NS/CF...</code> singletons.
     </td>
   </tr>
@@ -1814,18 +1814,20 @@ a28830,
     </td>
   </tr></table>
   
-  <p>Iterate over an <code>NS..</code> ObjC objects's keys or (reverse) 
-  values.</p>
+  <p>Iterate over an <code>NS..</code> ObjC objects's keys, values or 
+  reverse values.</p>
   <dl class="fields">
     <dt>Parameters:</dt>
     <dd><ul class="nomargin-top">
         <li><strong class="pname"><code>ns</code></strong> - The <code>NS..</code> instance to iterate over (<a 
           href="pycocoa.runtime.ObjCInstance-class.html" 
           class="link">ObjCInstance</a>).</li>
-        <li><strong class="pname"><code>reverse</code></strong> - Iterate in reverse order (<code>bool</code>), forward otherwise.</li>
-        <li><strong class="pname"><code>keys</code></strong> - If <code>True</code> and if <code><b>reverse</b>=False</code>, 
-          iterate over the keys of <code><b>ns</b></code>, provided 
-          <code><b>ns</b></code> is an <code>NS[Mutable]Dictionary</code>.</li>
+        <li><strong class="pname"><code>reverse</code></strong> - If <code>True</code>, iterate in reverse otherwise forward order 
+          over <code><b>ns</b></code>' values (<code>bool</code>).</li>
+        <li><strong class="pname"><code>keys</code></strong> - If <code>True</code>, iterate over <code><b>ns</b></code>' keys, 
+          provided <code><b>ns</b></code> is an 
+          <code>NS[Mutable]Dictionary</code> and ignoring 
+          <code><b>reverse</b></code>.</li>
     </ul></dd>
     <dt>Returns:</dt>
         <dd>Yield each object or key (<code>NS...</code>).</dd>
@@ -1837,7 +1839,7 @@ a28830,
 <div class="fields">      <p><strong>Note:</strong>
         If <code><b>ns</b></code> is an <code>NS[Mutable]Dictionary</code> 
         and <code><b>keys</b>=False</code>, the values of 
-        <code><b>ns</b></code> are enumerated in forward of 
+        <code><b>ns</b></code> are enumerated in forward or  
         <code>reverse</code> order.
       </p>
 </div></td></tr></table>
@@ -2103,8 +2105,8 @@ a28830,
     </td>
   </tr></table>
   
-  <p>Convert (an instance of) an ObjC class to an instance of the 
-  equivalent Python standard type or wrapper and value.</p>
+  <p>Convert an ObjC class' instance to the equivalent Python standard 
+  type's instance or wrapper and value.</p>
   <dl class="fields">
     <dt>Parameters:</dt>
     <dd><ul class="nomargin-top">
@@ -2164,10 +2166,10 @@ a28830,
             NSSet               -&gt; frozenset
           </li>
           <li>
-            NSString            -&gt; str
+            NSStr               -&gt; str
           </li>
           <li>
-            NSStr               -&gt; str
+            NSString            -&gt; str
           </li>
         </ul>
       </p>
@@ -2535,13 +2537,13 @@ a28830,
   <dl class="fields">
     <dt>Value:</dt>
       <dd><table><tr><td><pre class="variable">
-NSMain.Application=NSApplication(&lt;Id_t at 0x7fa829087cb0&gt;) of 0x7fa815<span class="variable-linewrap"><img src="crarr.png" alt="\" /></span>
-a28830,
-      .BooleanNO=NSBoolean(&lt;Id_t at 0x7fa829087170&gt;) of 0x7ff84548ec70<span class="variable-linewrap"><img src="crarr.png" alt="\" /></span>
+NSMain.Application=NSApplication(&lt;Id_t at 0x7f922115cb00&gt;) of 0x7f9209<span class="variable-linewrap"><img src="crarr.png" alt="\" /></span>
+cd37d0,
+      .BooleanNO=NSBoolean(&lt;Id_t at 0x7f922115c7a0&gt;) of 0x7ff8558bf088<span class="variable-linewrap"><img src="crarr.png" alt="\" /></span>
 ,
-      .BooleanYES=NSBoolean(&lt;Id_t at 0x7fa829081440&gt;) of 0x7ff84548ec6<span class="variable-linewrap"><img src="crarr.png" alt="\" /></span>
-0,
-      .Bundle=NSBundle(&lt;Id_t at 0x7fa82907cef0&gt;) of 0x6000025b0000,
+      .BooleanYES=NSBoolean(&lt;Id_t at 0x7f9221161710&gt;) of 0x7ff8558bf07<span class="variable-linewrap"><img src="crarr.png" alt="\" /></span>
+8,
+      .Bundle=NSBundle(&lt;Id_t at 0x7f922115c440&gt;) of 0x6000029d05a0,
       .BundleName=NSConstantString('CFBundleName'),
 <code class="variable-ellipsis">...</code>
 </pre></td></tr></table>
@@ -2581,7 +2583,7 @@ a28830,
 <table border="0" cellpadding="0" cellspacing="0" width="100%%">
   <tr>
     <td align="left" class="footer">
-    Generated by Epydoc 3.0.1 on Tue Mar 11 15:30:54 2025
+    Generated by Epydoc 3.0.1 on Mon Mar 24 15:10:34 2025
     </td>
     <td align="right" class="footer">
       <a target="mainFrame" href="http://epydoc.sourceforge.net"

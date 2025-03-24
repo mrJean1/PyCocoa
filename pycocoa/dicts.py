@@ -7,7 +7,8 @@
 '''
 from pycocoa.bases import _Type0
 from pycocoa.internals import _Dmain_, _DOT_, _fmt, _fmt_frozen, frozendict, \
-                              _frozendictbase, _instr, missing, _no, _SPACE_
+                              _frozendictbase, _instr, _invalid_, missing, \
+                              _no, _SPACE_
 from pycocoa.lazily import _ALL_LAZY, _Types
 from pycocoa.nstypes import isNone, NSDictionary, _NSImms, nsIter2, \
                             NSMutableDictionary, _NSMtbs, ns2Type
@@ -16,7 +17,7 @@ from pycocoa.runtime import isImmutable, isMutable, ObjCClass, ObjCInstance
 # from pycocoa.utils import isinstanceOf  # from .pytypes
 
 __all__ = _ALL_LAZY.dicts
-__version__ = '25.02.16'
+__version__ = '25.03.13'
 
 
 def _dict_cmp(dict1, dict2):
@@ -33,7 +34,7 @@ def _dict_kwds(args, kwds, name):
         return kwds, {}
     try:
         if len(args) != 1:
-            raise ValueError('invalid')
+            raise ValueError(_invalid_)
         arg0 = args[0]
         if not isinstanceOf(arg0, Dict, FrozenDict,
                                   ObjCClass, ObjCInstance):
@@ -308,7 +309,7 @@ if __name__ == _Dmain_:
 #  pycocoa.dicts.Dict is <class .Dict>,
 #  pycocoa.dicts.FrozenDict is <class .FrozenDict>,
 # )[2]
-# pycocoa.dicts.version 25.2.16, .isLazy 1, Python 3.13.1 64bit arm64, macOS 14.7.3
+# pycocoa.dicts.version 25.3.13, .isLazy 1, Python 3.13.2 64bit arm64, macOS 14.7.3
 
 # MIT License <https://OpenSource.org/licenses/MIT>
 #

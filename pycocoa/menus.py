@@ -84,10 +84,10 @@ from pycocoa.bases import _Type2
 from pycocoa.fonts import Font
 from pycocoa.geometry import Size
 from pycocoa.getters import get_selector, get_selectornameof
-from pycocoa.internals import Adict, bytes2str, _ByteStrs, _Constants, _Dmain_, \
-                             _DOT_, _Globals, _Ints, missing, _NA_, _nargs, \
-                             _NN_, _no, _property2, property_RO, _SPACE_, \
-                             _Strs, _UNDER_
+from pycocoa.internals import Adict, bytes2str, _ByteStrs, _COLONSPACE_, \
+                             _Constants, _Dmain_, _DOT_, _Globals, _Ints, \
+                             _invalid_, _NA_, missing, _nargs, _NN_, _no, \
+                             _property2, property_RO, _SPACE_, _Strs, _UNDER_
 from pycocoa.lazily import _ALL_LAZY, _Types,  _fmt, _fmt_invalid, _instr
 from pycocoa.nstypes import isNone, NSMain, NSMenu, NSMenuItem, nsOf, NSStr, \
                             nsString2str
@@ -120,7 +120,7 @@ from pycocoa.utils import errorf, isinstanceOf, name2pymethod
 # from types import FunctionType, MethodType
 
 __all__ = _ALL_LAZY.menus
-__version__ = '25.03.08'
+__version__ = '25.03.24'
 
 # Method _NSApplicationDelegate.handleMenuItem_ in .apps.py
 # is the handler ('selector') for all menu items specified
@@ -140,7 +140,6 @@ _Modifiers2 = (('Alt',   NSAlternateKeyMask),
                ('Cmd',   NSCommandKeyMask),
                ('Ctrl',  NSControlKeyMask),
                ('Shift', NSShiftKeyMask))  # or NSAlphaShiftKeyMask?
-_NoKey = NSStr(_NN_)
 
 
 def _bindM(inst, parent):
@@ -177,7 +176,7 @@ def _nsKey2(key):
     '''(INTERNAL) Check a shortcut key.
     '''
     if not key:
-        return _NoKey, _NN_
+        return Keys._noKey, _NN_
     k = bytes2str(key, name='key')
     if len(k) == 1 and 32 < ord(k[0]) < 127:  # k.isprintable() and not k.ispace()
         return NSStr(k), k
@@ -188,13 +187,14 @@ def _nsKey2(key):
     raise ValueError(_fmt_invalid(key=repr(key)))
 
 
-def _nsMenuItem(inst, sel=0, nskey=_NoKey):
+def _nsMenuItem(inst, sel=0, nskey=None):
     '''(INTERNAL) New menu item or new menu bar menu item.
     '''
     # <https://Developer.Apple.com/documentation/appkit/
     #        nsmenuitem/1514858-initwithtitle>
+    ns = Keys._noKey if nskey is None else nskey
     ns = NSMenuItem.alloc().initWithTitle_action_keyEquivalent_(
-                            NSStr(inst.title), sel, nskey)
+                            NSStr(inst.title), sel, ns)
     r = int2NS(id(inst))
     _Globals.Items[r] = inst  # see ns2Item() below
     ns.setRepresentedObject_(r)
@@ -306,14 +306,15 @@ class Item(_Item_Type2):
                 if s and callable(s):
                     s(self, v)
                 else:
-                    t = 'Read_Only' if g else 'invalid'
+                    t = 'Read_Only' if g else _invalid_
                     t = _SPACE_(t, 'property', self.typename)
-                    raise NameError(_fmt('%s: %s', t, p))
+                    raise NameError(_COLONSPACE_(t, p))
             except Exception as x:
                 if _Globals.raiser:
-                    x = type(x).__name__
-                    errorf('%s: %s(title=%r, ..., %s=%r) ...', x,
-                                self.typename, self.title, p, v)
+                    x =  type(x).__name__
+                    x = _COLONSPACE_(x, self.typename)
+                    errorf('%s(title=%r, ..., %s=%r) ...',
+                            x, self.title, p, v)
                     raise
 
     def __str__(self):
@@ -463,9 +464,7 @@ class Item(_Item_Type2):
     def isEnabled(self, enable):
         '''Set the item's C{Enabled} property (C{bool}).
         '''
-        b = bool(enable)
-        if b != self.isEnabled:
-            self.NS.setEnabled_(YES if b else NO)
+        self.NS.setEnabled_(YES if bool(enable) else NO)
 
     @property
     def isHidden(self):
@@ -477,9 +476,7 @@ class Item(_Item_Type2):
     def isHidden(self, hidden):
         '''Set the item's C{Hidden} property (C{bool}).
         '''
-        b = bool(hidden)
-        if b != self.isHidden:
-            self.NS.setHidden_(YES if b else NO)
+        self.NS.setHidden_(YES if bool(hidden) else NO)
 
     @property_RO
     def isHighlighted(self):
@@ -742,6 +739,11 @@ class Keys(_Constants):
             return _fmt('%s=%s', n, hex(ord(v)))
         return self._strepr(_fmt2)
 
+    @property_RO
+    def _noKey(self):
+        self.__dict__['_noKey'] = ns = NSStr(_NN_)
+        return ns
+
 Keys = Keys()  # PYCHOK constants
 
 
@@ -837,7 +839,7 @@ class _Menu_Type2(_Type2):
     def _getiteM(self, index, bytitle=None):
         try:
             if isinstance(index, slice):
-                return [self._listM[i] for i in range(*index.indices(len(self)))]
+                return [self._listM[i] for i in self._sliced(index)]
             elif bytitle and isinstance(index, _ByteStrs):
                 inst = bytitle(title=index, dflt=None)
                 if inst:
@@ -1150,7 +1152,7 @@ class Menu(_Menu_Type2):
 
     @property_RO
     def isVisible(self):
-        '''Get the menu's C{isVisible} property (C{bool}) or C{None}.
+        '''Get the menu's C{isVisible} property (C{bool} or C{None} if unknown).
         '''
         try:  # mimick, not an NSMenu property
             return self.superMenu.isVisible
@@ -1686,13 +1688,13 @@ if __name__ == _Dmain_:
 #                    .VT=0xb,
 #  pycocoa.menus.Menu is <class .Menu>,
 #  pycocoa.menus.MenuBar is <class .MenuBar>,
-#  pycocoa.menus.ns2Item is <function .ns2Item at 0x1018d7d80>,
-#  pycocoa.menus.title2action is <function .title2action at 0x1018e1760>,
+#  pycocoa.menus.ns2Item is <function .ns2Item at 0x104a382c0>,
+#  pycocoa.menus.title2action is <function .title2action at 0x104a45c60>,
 # )[7]
-# pycocoa.menus.version 25.2.27, .isLazy 1, Python 3.13.2 64bit arm64, macOS 14.7.3
+# pycocoa.menus.version 25.3.24, .isLazy 1, Python 3.13.2 64bit arm64, macOS 15.3.2
 
 # Item('Quit', 'menuTerminate_', Cmd+q) properties:
-#   NS = <ObjCInstance(NSMenuItem(<Id_t at 0x1018e5450>) of 0x600003505570) at 0x10169a060>
+#   NS = <ObjCInstance(NSMenuItem(<Id_t at 0x1049f34d0>) of 0x600002c1c690) at 0x1047d2650>
 #   NSDelegate = 'NameError("use \'NSd-\', not \'NSD-\'")'
 #   NSdelegate = None
 #   action = 'menuTerminate_'
@@ -1714,7 +1716,7 @@ if __name__ == _Dmain_:
 #   keyEquivalentModifiers = {'alt': False, 'cmd': True, 'ctrl': False, 'shift': False}
 #   keyModifiers = {'alt': False, 'cmd': True, 'ctrl': False, 'shift': False}
 #   nsTarget = None
-#   parent = Menu('Test') at 0x1018b9e80
+#   parent = Menu('Test') at 0x104a1cec0
 #   shift = False
 #   state = 0
 #   subMenu = None
@@ -1724,7 +1726,7 @@ if __name__ == _Dmain_:
 #   typename = 'Item'
 
 # Menu('Test') properties:
-#   NS = <ObjCInstance(NSMenu(<Id_t at 0x1018e4650>) of 0x600000b051c0) at 0x10169e850>
+#   NS = <ObjCInstance(NSMenu(<Id_t at 0x1049f2550>) of 0x60000121c400) at 0x1049e65d0>
 #   NSDelegate = 'NameError("use \'NSd-\', not \'NSD-\'")'
 #   NSdelegate = None
 #   action = None
@@ -1738,17 +1740,17 @@ if __name__ == _Dmain_:
 #   isTornOff = False
 #   isVisible = None
 #   minWidth = 0.0
-#   nsMenuItem = <ObjCInstance(NSMenuItem(<Id_t at 0x1018e60d0>) of 0x600003505730) at 0x1018d0b90>
-#   parent = MenuBar(None) at 0x1018b9be0
+#   nsMenuItem = <ObjCInstance(NSMenuItem(<Id_t at 0x104a4c4d0>) of 0x600002c1c770) at 0x104a08b90>
+#   parent = MenuBar(None) at 0x104a1cd70
 #   showsState = True
-#   size = <NSSize_t(width=101.0, height=32.0) at 0x1018f4550>
+#   size = <NSSize_t(width=101.0, height=32.0) at 0x104a4fc50>
 #   tag = 2
 #   tags = 2
 #   title = 'Test'
 #   typename = 'Menu'
 
 # MenuBar(None) properties:
-#   NS = <ObjCInstance(NSMenu(<Id_t at 0x101873dd0>) of 0x600000b05100) at 0x1018b9d30>
+#   NS = <ObjCInstance(NSMenu(<Id_t at 0x1049f1bd0>) of 0x60000121c340) at 0x104a1cc20>
 #   NSDelegate = 'NameError("use \'NSd-\', not \'NSD-\'")'
 #   NSdelegate = None
 #   action = None
@@ -1762,7 +1764,7 @@ if __name__ == _Dmain_:
 #   minWidth = 0.0
 #   parent = None
 #   showsState = True
-#   size = <NSSize_t(width=85.0, height=32.0) at 0x1018f48d0>
+#   size = <NSSize_t(width=85.0, height=32.0) at 0x104a64050>
 #   tag = None
 #   tags = 2
 #   title = None

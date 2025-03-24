@@ -25,11 +25,11 @@
 '''
 # from pycocoa.bases import _Type0  # in .nsDescription2dict ... circular!
 from pycocoa.getters import get_selector
-from pycocoa.internals import Adict, _bNN_, bytes2str, _ByteStrs, _COMMASPACE_, \
-                             _Dmain_, _DOT_, frozendict, _frozendictbase, _name_, \
-                             _Globals, iterbytes, lambda1, missing, _nameOf, \
-                             _NN_, _no, _NSObject_, property_RO, proxy_RO, \
-                             _Singletons, _SPACE_, _unhandled_
+from pycocoa.internals import Adict, _bNN_, bytes2str, _ByteStrs, _COLONSPACE_, \
+                             _COMMASPACE_, _Dmain_, _DOT_, frozendict, lambda1, \
+                             _frozendictbase, _Globals, iterbytes, missing, \
+                             _name_, _nameOf, _NN_, _no, _NSObject_, proxy_RO, \
+                             _Singletons, property_RO, _SPACE_, _unhandled_
 from pycocoa.lazily import _ALL_LAZY, _Types,  _fmt, _fmt_invalid, _instr
 from pycocoa.octypes import Array_t, Class_t, c_struct_t, _encoding2ctype, Id_t, \
                             NSRect4_t, ObjC_t, SEL_t, Set_t  # NSPoint_t
@@ -47,7 +47,7 @@ from os import linesep as _linesep, path as _os_path
 from time import time as _timestamp
 
 __all__ = _ALL_LAZY.nstypes
-__version__ = '25.02.25'
+__version__ = '25.03.18'
 
 _not_given_ = 'not given'
 _raiser_ns  =  dict(raiser='ns')
@@ -250,9 +250,10 @@ class NSExceptionError(RuntimeError):
         isObjCInstanceOf(nsExc, NSException, raiser='nsExc')
         self.NS = nsExc
         self._timestamp = _timestamp()
-        n = self.name or NSExceptionError.__name__
-        r = self.reason or _not_given_
-        RuntimeError.__init__(self, _fmt('ObjC/%s: %s', n, r))
+        n =  self.name or NSExceptionError.__name__
+        r =  self.reason or _not_given_
+        t = 'ObjC/' + _COLONSPACE_(n, r)
+        RuntimeError.__init__(self, t)
 
     @property_RO
     def datetime(self):
@@ -268,26 +269,30 @@ class NSExceptionError(RuntimeError):
            @see: U{NSExceptionName<https://Developer.Apple.com/
                  documentation/foundation/nsexceptionname>}.
         '''
-        return self.NS.name if self.NS else _NN_
+        ns = self.NS
+        return ns.name if ns else _NN_
 
     @property_RO
     def info(self):
         '''Get additional info about the exception (L{Adict}) or C{None}.
         '''
-        return ns2py(self.NS.userInfo(), dflt=None) if self.NS else None
+        ns = self.NS
+        return ns2py(ns.userInfo(), dflt=None) if ns else None
 
     @property_RO
     def reason(self):
         '''Get the reason for the exception (C{str}) or C{None}.
         '''
-        return ns2py(self.NS.reason(), dflt=None) if self.NS else None
+        ns = self.NS
+        return ns2py(ns.reason(), dflt=None) if ns else None
 
     @property_RO
     def callstack(self):
         '''Get the callstack of this exception (C{iter}), most recent last.
         '''
-        if self.NS:
-            for s in nsIter(self.NS.callStackSymbols()):
+        ns = self.NS
+        if ns:
+            for s in nsIter(ns.callStackSymbols()):
                 s = ns2py(s).rstrip()
                 if s:
                     yield s
@@ -308,23 +313,6 @@ class NSExceptionError(RuntimeError):
 class _NSMain(_Singletons):
     '''Global C{ObjC/NS/CF...} singletons.
     '''
-    _Application   =  None  # NSApplication, see .utils._Globals.App
-    _BooleanNO     =  None
-    _BooleanYES    =  None
-    _Bundle        =  None
-    _BundleName    =  None
-    _FontManager   =  None
-    _LayoutManager =  None
-    _nil           =  None
-    _NO_false      =  NO  # c_byte
-    _Null          =  None
-    _PrintInfo     =  None
-    _Screen        =  None
-    _TableColumn   =  None
-    _YES_true      =  YES  # c_byte
-    _versionstr    = _all_versionstr()
-
-    # all globals are properties to delay instantiation
 
     def __getattr__(self, name):
         if len(name) > 6 and name.startswith('Screen'):
@@ -337,94 +325,83 @@ class _NSMain(_Singletons):
     def Application(self):
         '''Get the C{NSApplication.sharedApplication}.
         '''
-        if self._Application is None:
-            _NSMain._Application = retain(NSApplication.sharedApplication())
-        return self._Application
+        # see .utils._Globals.App
+        return self._set_retain(Application=NSApplication.sharedApplication())
 
     @property_RO
     def BooleanNO(self):
         '''Get C{NSBoolean(NO)}.
         '''
-        if self._BooleanNO is None:
-            _NSMain._BooleanNO = retain(NSBoolean(NO))
-        return self._BooleanNO
+        return self._set_retain(BooleanNO=NSBoolean(NO))
 
     @property_RO
     def BooleanYES(self):
         '''Get C{NSBoolean(YES)}.
         '''
-        if self._BooleanYES is None:
-            _NSMain._BooleanYES = retain(NSBoolean(YES))
-        return self._BooleanYES
+        return self._set_retain(BooleanYES=NSBoolean(YES))
 
     @property_RO
     def Bundle(self):
         '''Get the C{NSBundle.mainBundle}.
         '''
-        if self._Bundle is None:
-            _NSMain._Bundle = retain(NSBundle.mainBundle())
-        return self._Bundle
+        return self._set_retain(Bundle=NSBundle.mainBundle())
 
     @property_RO
     def BundleName(self):
         '''Get the C{NS/CFBundleName}.
         '''
-        if self._BundleName is None:
-            _NSMain._BundleName = retain(NSStr('CFBundleName'))
-        return self._BundleName
+        return self._set_retain(BundleName=NSStr('CFBundleName'))
 
     @property_RO
     def FontManager(self):
         '''Get the C{NSFontManager.sharedFontManager}.
         '''
-        if self._FontManager is None:
-            _NSMain._FontManager = retain(NSFontManager.sharedFontManager())
-        return self._FontManager
+        return self._set_retain(FontManager=NSFontManager.sharedFontManager())
 
     @property_RO
     def LayoutManager(self):
         '''Get the C{NSLayoutManager}.
         '''
-        if self._LayoutManager is None:
-            _NSMain._LayoutManager = retain(NSLayoutManager.alloc().init())
-        return self._LayoutManager
+        return self._set_retain(LayoutManager=NSLayoutManager.alloc().init())
 
     @property_RO
     def nil(self):  # in .runtime
         '''Get C{NSnil}.
         '''
-        return self._nil
+        return self._set(nil=None)
 
     @property_RO
     def NO_false(self):
         '''Get C{NSfalse/NO}.
         '''
-        return self._NO_false
+        return self._set(NO_false=NO)  # c_byte
+
+    @property_RO
+    def Nones(self):
+        return self._set(Nones=(None, NSMain.Null))  # NSMain.nil
 
     @property_RO
     def Null(self):
         '''Get C{NSNull}.
         '''
-        if self._Null is None:
-            _NSMain._Null = retain(NSNull.alloc().init())
-        return self._Null
+        return self._set_retain(Null=NSNull.alloc().init())
 
     @property_RO
     def PrintInfo(self):
         '''Get the C{NSPrintInfo}.
         '''
-        if self._PrintInfo is None:
-            _NSMain._PrintInfo = retain(NSPrintInfo.sharedPrintInfo())
-        return self._PrintInfo
+        return self._set_retain(PrintInfo=NSPrintInfo.sharedPrintInfo())
 
     @property_RO
     def Screen(self):
         '''Get the C{NSScreen.mainScreen}, once.
         '''
-        if self._Screen is None:
-            from pycocoa.screens import Screens
-            _NSMain._Screen = retain(Screens.NS.mainScreen())
-        return self._Screen
+        from pycocoa.screens import Screens  # circular
+        return self._set_retain(Screen=Screens.NS.mainScreen())
+
+    def _set_retain(self, **name_NS):
+        name, NS = name_NS.popitem()
+        return self._set(**{name: retain(NS)})
 
     @property
     def stdlog(self):
@@ -452,26 +429,19 @@ class _NSMain(_Singletons):
     def TableColumn(self):
         '''Get a blank C{NSTableColumn}.
         '''
-        if self._TableColumn is None:
-            _NSMain._TableColumn = retain(NSTableColumn.alloc().init())
-        return self._TableColumn
+        return self._set_retain(TableColumn=NSTableColumn.alloc().init())
 
     @property_RO
     def versionstr(self):
         '''Get the PyCocoa, Python, macOS versions as C{str}.
         '''
-        return self._versionstr
+        return self._set(versionstr=_all_versionstr())
 
     @property_RO
     def YES_true(self):
         '''Get C{NStrue/YES}.
         '''
-        return self._YES_true
-
-    def items(self):  # PYCHOK signature
-        '''Yield 2-tuple (name, value) for each property.
-        '''
-        return _Singletons.items(self, _NSMain.stdlog.fget.__name__)
+        return self._set(YES_true=YES)  # c_byte
 
 NSMain = _NSMain()  # PYCHOK global C{NS...} singletons or constants
 
@@ -586,13 +556,13 @@ def isNone(obj):
 
        @return: True or False (C{bool}).
     '''
-    return obj in (None, NSMain.nil, NSMain.Null)
+    return obj in NSMain.Nones
 
 
 def _nsArray2items(ns):  # helper for nsArray2..., in .printers
-    _f = _libCF.CFArrayGetValueAtIndex
+    I_ = _libCF.CFArrayGetValueAtIndex
     for i in range(_libCF.CFArrayGetCount(ns)):
-        yield _f(ns, i)
+        yield I_(ns, i)
 
 
 def nsArray2listuple(ns, ctype=Array_t, typy=None):  # XXX an NS*Array method?
@@ -763,7 +733,8 @@ def nsDescription2dict(ns, **defaults):
                 v = c_void_p(None)
                 t = _libCF.CFDictionaryGetValueIfPresent(self.NS, n, byref(v))
                 if not t or isNone(v):
-                    t = _fmt('%s (%r)', _DOT_(self.name, name), n)
+                    t = _DOT_(self.name, name)
+                    t = _fmt('%s (%r)', t, n)
                     raise AttributeError(_fmt_invalid(item=t))
                 v = _ns2ctype2py(v, c_void_p)
                 dict.__setitem__(self, name, v)  # NOT _frozendictbase
@@ -863,39 +834,40 @@ def nsException(name=None, reason=_not_given_, **info):
     #        Cocoa/Conceptual/Exceptions/Tasks/RaisingExceptions.html>
     # XXX use NSExceptionName inlieu of NSStr(name) since the latter
     # seems to always become 'NSException' instead of the _name_
-    return NSException.alloc().initWithName_reason_userInfo_(
-                                   NSStr(name or nsException.__name__),
-                                   NSStr(str(reason)), dict2NS(info))
+    n = NSStr(name or nsException.__name__)
+    r = NSStr(str(reason))
+    d = dict2NS(info)
+    return NSException.alloc().initWithName_reason_userInfo_(n, r, d)
 
 
 def nsIter(ns, reverse=False, keys=False):
-    '''Iterate over an C{NS..} ObjC objects's keys or (reverse) values.
+    '''Iterate over an C{NS..} ObjC objects's keys, values or reverse values.
 
        @param ns: The C{NS..} instance to iterate over (L{ObjCInstance}).
-       @keyword reverse: Iterate in reverse order (C{bool}), forward otherwise.
-       @keyword keys: If C{True} and if C{B{reverse}=False}, iterate over the keys
-                      of C{B{ns}}, provided C{B{ns}} is an C{NS[Mutable]Dictionary}.
+       @keyword reverse: If C{True}, iterate in reverse otherwise forward order
+                         over C{B{ns}}' values (C{bool}).
+       @keyword keys: If C{True}, iterate over C{B{ns}}' keys, provided C{B{ns}}
+                      is an C{NS[Mutable]Dictionary} and ignoring C{B{reverse}}.
 
        @return: Yield each object or key (C{NS...}).
 
        @raise TypeError: Invalid I{ns}.
 
        @note: If C{B{ns}} is an C{NS[Mutable]Dictionary} and C{B{keys}=False}, the
-              values of C{B{ns}} are enumerated in forward of C{reverse} order.
+              values of C{B{ns}} are enumerated in forward or  C{reverse} order.
     '''
-    if not isNone(ns):
+    if ns and not isNone(ns):
         try:
-            if reverse:
-                it = ns.reverseObjectEnumerator()
-            elif keys:
-                it = ns.keyEnumerator()
-            else:
-                it = ns.objectEnumerator()
+            E = ns.keyEnumerator           if keys else (
+                ns.reverseObjectEnumerator if reverse else
+                ns.objectEnumerator)
+            e = E().nextObject
         except AttributeError:
-            raise TypeError(_fmt_invalid('iterable', ns=repr(ns)))
+            t = _fmt_invalid('iterable', ns=repr(ns))
+            raise TypeError(t)
 
         while True:
-            ns = it.nextObject()  # nil for end
+            ns = e()  # nil for end
             if isNone(ns):
                 break
             yield ns
@@ -967,17 +939,13 @@ def ns2NSType2(ns):
        @see: Functions L{ns2Type} and L{ns2TypeID2}.
     '''
     T, py = _ns2Tpy2(ns, None, **_raiser_ns)
-    NS = {list:       NSMutableArray,
-          tuple:      NSArray,
-          dict:       NSMutableDictionary,
-          frozendict: NSDictionary,
-          set:        NSMutableSet,
-          frozenset:  NSSet,
-#        _mtbstr:     NSMutableString,
-          str:        NSString}.get(py, None)
     if py is str and ns.objc_class in _NSMtbs.Strs:
-        NS = NSMutableString
-    return NS, (type(T(ns)) if T is ns2py else T)
+        NS =  NSMutableString
+    else:
+        NS = _py2NS_get(py, None)
+    if T is ns2py:
+        T = type(ns2py(ns))
+    return NS, T
 
 
 def nsNull2none(ns):
@@ -991,7 +959,7 @@ def nsNull2none(ns):
 
        @raise ValueError: If I{ns} not C{isNone}.
     '''
-    if isObjCInstanceOf(ns, NSNull, c_void_p, **_raiser_ns) or isNone(ns):
+    if isNone(ns) or isObjCInstanceOf(ns, NSNull, c_void_p):  # **_raiser_ns
         return None
     t = _fmt_invalid(isNone.__name__, ns=repr(ns))
     raise ValueError(t)
@@ -1034,12 +1002,13 @@ def nsOf(inst):
         pass
     if isinstanceOf(inst, ObjCInstance, c_struct_t, ObjC_t):
         return inst  # XXXX ????
-    raise TypeError(_fmt_invalid(_no('.NS'), inst=repr(inst)))
+    t = _fmt_invalid(_no('.NS'), inst=repr(inst))
+    raise TypeError(t)
 
 
 def ns2py(ns, dflt=missing):  # XXX an NSObject method?
-    '''Convert (an instance of) an ObjC class to an instance of
-       the equivalent Python standard type or wrapper and value.
+    '''Convert an ObjC class' instance to the equivalent
+       Python standard type's instance or wrapper and value.
 
        @param ns: The C{NS...} instance (L{ObjCInstance}).
        @keyword dflt: Default for unhandled, unexpected C{NS...}s (C{missing}).
@@ -1063,8 +1032,8 @@ def ns2py(ns, dflt=missing):  # XXX an NSObject method?
         - NSNumber            -> int or float
         - NSNull              -> None
         - NSSet               -> frozenset
-        - NSString            -> str
         - NSStr               -> str
+        - NSString            -> str
 
        @see: U{Converting values between Python and Objective-C
               <https://PythonHosted.org/pyobjc/core/typemapping.html>}
@@ -1167,9 +1136,12 @@ def nsTextView(text, ns_font, scroll=50):
     #        nsalert/1530575-accessoryview>
     w, h, n = nsTextSize3(text, ns_font=ns_font)
     if n > scroll:
-        r = NSRect4_t(0, 0, max(300, w), min(800, h))
+        w, h = max(300, w), min(800, h)
     else:  # make the frame tall enough to avoid overwritten text
-        r = NSRect4_t(0, 0, 300, max(20, min(800, h)))
+        w, h = 300, max(20, min(800, h))
+    r = s = NSRect4_t(0, 0, w,   h)
+    if w > 600:  # min(600, w)
+        s = NSRect4_t(0, 0, 600, h)
 
     # XXX key NSFontAttributeName has a NSString value, no longer a Font?
     # d = NSDictionary.dictionaryWithObject_forKey_(ns_font, NSStr('NSFontAttributeName'))
@@ -1183,8 +1155,7 @@ def nsTextView(text, ns_font, scroll=50):
         ns.setVerticallyResizable_(YES)
         ns.setHorizontallyResizable_(YES)
 
-        r.size.width = min(600, r.size.width)
-        sv = NSScrollView.alloc().initWithFrame_(r)
+        sv = NSScrollView.alloc().initWithFrame_(s)
         sv.setHasVerticalScroller_(YES)
         sv.setHasHorizontalScroller_(YES)
         sv.setAutohidesScrollers_(YES)
@@ -1197,21 +1168,25 @@ def nsTextView(text, ns_font, scroll=50):
 
 
 @proxy_RO
-def _NS2Tpys():
-    # lazily build the C{_NS2Tpys} dict
-    from pycocoa import dicts, lists, sets, strs, tuples  # PYCHOK fill ...
+def _NS2Tpy2s():
+    # lazily build the C{_NS2Tpy2s} dict
+    from pycocoa.dicts import Dict, FrozenDict
+    from pycocoa.lists import List,  Tuple
+    from pycocoa.sets import Set, FrozenSet
+    from pycocoa.strs import Str  # PYCHOK fill _Types...
+#   from pycocoa.tuples import Tuple  # from .lists
     # _Types.Attrs, validate with test/test_Dicts, -_Fonts, -_Lazily
     d = {}
-    for Tpy, NSs in (((_Types.List,       list),       _NSMtbs.Arrays),
-                     ((_Types.Tuple,      tuple),      _NSImms.Arrays),
-                     ((_Types.Dict,      Adict),       _NSMtbs.Dicts),
-                     ((_Types.FrozenDict, frozendict), _NSImms.Dicts),
-                     ((_Types.Set,        set),        _NSMtbs.Sets),
-                     ((_Types.FrozenSet,  frozenset),  _NSImms.Sets),
-                     ((       ns2py,      str),        _NSMtbs.Strs + _NSImms.Strs)):
+    for Tpy2, NSs in (((List,       list),       _NSMtbs.Arrays),
+                      ((Tuple,      tuple),      _NSImms.Arrays),
+                      ((Dict,      Adict),       _NSMtbs.Dicts),
+                      ((FrozenDict, frozendict), _NSImms.Dicts),
+                      ((Set,        set),        _NSMtbs.Sets),
+                      ((FrozenSet,  frozenset),  _NSImms.Sets),
+                      ((ns2py,      str),        _NSMtbs.Strs + _NSImms.Strs)):
         for NS in NSs:
-            # assert all(map(callable, Tpy))
-            d[NS] = Tpy
+            # assert all(map(callable, Tpy2))
+            d[NS] = Tpy2
     return d
 
 
@@ -1221,15 +1196,17 @@ def _ns2Tpy2(ns, typy, *pys, **raiser):
     NS = isObjCInstanceOf(ns, *_NSMtbs) or \
          isObjCInstanceOf(ns, *_NSImms, **raiser)
     try:
-        T, py = _NS2Tpys[NS]
+        T, py = _NS2Tpy2s[NS]
         if (pys and py not in pys) or not callable(T):
             t = _instr(_ns2Tpy2, ns, typy, *map(_nameOf, pys))
-            r = _COMMASPACE_(T, py)
-            raise AssertionError(_fmt('%s: [%r](%s)', t, NS, r))
+            r = _fmt('[%r]%s', NS, (T, py))
+            raise AssertionError(_COLONSPACE_(t, r))
     except KeyError:
         T, py =  ns2py, None  # (pys[0] if pys else lambda1)
 #       printf('ns2Type(%r) -> %s', ns.objc_class, type(ns2py(ns)))
-    return T, (typy if typy and callable(typy) else py)  # override
+    if typy and callable(typy):
+        py = typy  # override
+    return T, py
 
 
 def nsThrow(nsExc):
@@ -1352,21 +1329,31 @@ def nsValue2py(ns, dflt=missing):
     return py
 
 
+_py2NS_get = {list:       NSMutableArray,  # function-like
+              tuple:      NSArray,
+              dict:       NSMutableDictionary,
+              frozendict: NSDictionary,
+              set:        NSMutableSet,
+              frozenset:  NSSet,
+#            _mtbstr:     NSMutableString,
+              str:        NSString}.get
+
+
 class _CFTypeID2ns(dict):  # singleton last
     '''ObjC TypeID to ns to Python converter.
     '''
     def _Error(self, ns, iD, why):
         t = _COMMASPACE_.join(self.itemstrs())
-        t = _fmt('%s[%r]: %r {%s}', 'TypeID', iD, ns, t)
+        t = _fmt('TypeID[%r]: %r {%s}', iD, ns, t)
         return TypeError(_SPACE_(why, t))
 
     def items(self):
-        for iD, _ns2 in dict.items(self):
-            yield int(iD), _ns2.__name__
+        for iD, ns2 in dict.items(self):
+            yield int(iD), ns2.__name__
 
     def itemstrs(self):
         for t in sorted(self.items()):
-            yield _fmt('%s: %s', *t)
+            yield _COLONSPACE_(*t)
 
 _CFTypeID2ns = _CFTypeID2ns({1:          nsValue2py,  # PYCHOK _NSImms.Arrays
          _libCF.CFArrayGetTypeID():      nsArray2listuple,   # 19
@@ -1516,7 +1503,7 @@ if __name__ == _Dmain_:
 #  pycocoa.nstypes.NSView is <ObjCClass(NSView of 0x203d281a8) at 0x103551400>,
 #  pycocoa.nstypes.NSWindow is <ObjCClass(NSWindow of 0x203d283b0) at 0x103551470>,
 # )[102]
-# pycocoa.nstypes.version 25.2.25, .isLazy 1, Python 3.13.2 64bit arm64, macOS 14.7.3
+# pycocoa.nstypes.version 25.3.18, .isLazy 1, Python 3.13.2 64bit arm64, macOS 15.3.2
 
 # MIT License <https://OpenSource.org/licenses/MIT>
 #

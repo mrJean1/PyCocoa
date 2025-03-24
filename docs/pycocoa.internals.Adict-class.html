@@ -171,11 +171,15 @@ object --+
   </tr>
 <tr>
     <td width="15%" align="right" valign="top" class="summary">
-      <span class="summary-type">list of D's (key, value) pairs, as 2-tuples</span>
+      <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
       <table width="100%" cellpadding="0" cellspacing="0" border="0">
         <tr>
-          <td><span class="summary-sig"><a href="pycocoa.internals.Adict-class.html#items" class="summary-sig-name">items</a>(<span class="summary-sig-arg">self</span>)</span></td>
+          <td><span class="summary-sig"><a name="iget"></a><span class="summary-sig-name">iget</span>(<span class="summary-sig-arg">self</span>,
+        <span class="summary-sig-arg">name</span>,
+        <span class="summary-sig-arg">*dflt</span>)</span><br />
+      Get <code>value</code> for case-insensitive <i>name</i> or 
+      <i>dflt</i> or <code>AttributeError</code>.</td>
           <td align="right" valign="top">
             
             
@@ -187,27 +191,15 @@ object --+
   </tr>
 <tr>
     <td width="15%" align="right" valign="top" class="summary">
-      <span class="summary-type">list of D's keys</span>
+      <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
       <table width="100%" cellpadding="0" cellspacing="0" border="0">
         <tr>
-          <td><span class="summary-sig"><a href="pycocoa.internals.Adict-class.html#keys" class="summary-sig-name">keys</a>(<span class="summary-sig-arg">self</span>)</span></td>
-          <td align="right" valign="top">
-            
-            
-          </td>
-        </tr>
-      </table>
-      
-    </td>
-  </tr>
-<tr>
-    <td width="15%" align="right" valign="top" class="summary">
-      <span class="summary-type">list of D's values</span>
-    </td><td class="summary">
-      <table width="100%" cellpadding="0" cellspacing="0" border="0">
-        <tr>
-          <td><span class="summary-sig"><a href="pycocoa.internals.Adict-class.html#values" class="summary-sig-name">values</a>(<span class="summary-sig-arg">self</span>)</span></td>
+          <td><span class="summary-sig"><a name="rget"></a><span class="summary-sig-name">rget</span>(<span class="summary-sig-arg">self</span>,
+        <span class="summary-sig-arg">value</span>,
+        <span class="summary-sig-arg">*dflt</span>)</span><br />
+      Get the <code>name</code> for <i>value</i> or <i>dflt</i> or 
+      <code>ValueError</code>.</td>
           <td align="right" valign="top">
             
             
@@ -242,13 +234,16 @@ object --+
       <code>fromkeys</code>,
       <code>get</code>,
       <code>has_key</code>,
+      <code>items</code>,
       <code>iteritems</code>,
       <code>iterkeys</code>,
       <code>itervalues</code>,
+      <code>keys</code>,
       <code>pop</code>,
       <code>popitem</code>,
       <code>setdefault</code>,
       <code>update</code>,
+      <code>values</code>,
       <code>viewitems</code>,
       <code>viewkeys</code>,
       <code>viewvalues</code>
@@ -287,6 +282,14 @@ object --+
   <td align="left" colspan="2" class="table-header">
     <span class="table-header">Properties</span></td>
 </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="pycocoa.internals.Adict-class.html#typename" class="summary-name">typename</a><br />
+      Get this instance' Python class name (<code>str</code>).
+    </td>
+  </tr>
   <tr>
     <td colspan="2" class="summary">
     <p class="indent-wrapped-lines"><b>Inherited from <code>object</code></b>:
@@ -374,75 +377,33 @@ object --+
   </dl>
 </td></tr></table>
 </div>
-<a name="items"></a>
+<br />
+<!-- ==================== PROPERTY DETAILS ==================== -->
+<a name="section-PropertyDetails"></a>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr bgcolor="#70b0f0" class="table-header">
+  <td align="left" colspan="2" class="table-header">
+    <span class="table-header">Property Details</span></td>
+</tr>
+</table>
+<a name="typename"></a>
 <div>
 <table class="details" border="1" cellpadding="3"
        cellspacing="0" width="100%" bgcolor="white">
 <tr><td>
-  <table width="100%" cellpadding="0" cellspacing="0" border="0">
-  <tr valign="top"><td>
-  <h3 class="epydoc"><span class="sig"><span class="sig-name">items</span>(<span class="sig-arg">self</span>)</span>
-  </h3>
-  </td><td align="right" valign="top"
-    >&nbsp;
-    </td>
-  </tr></table>
-  
-  
+  <h3 class="epydoc">typename</h3>
+  <p>Get this instance' Python class name (<code>str</code>).</p>
   <dl class="fields">
-    <dt>Returns: list of D's (key, value) pairs, as 2-tuples</dt>
-    <dt>Overrides:
-        dict.items
-        <dd><em class="note">(inherited documentation)</em></dd>
-    </dt>
-  </dl>
-</td></tr></table>
-</div>
-<a name="keys"></a>
-<div>
-<table class="details" border="1" cellpadding="3"
-       cellspacing="0" width="100%" bgcolor="white">
-<tr><td>
-  <table width="100%" cellpadding="0" cellspacing="0" border="0">
-  <tr valign="top"><td>
-  <h3 class="epydoc"><span class="sig"><span class="sig-name">keys</span>(<span class="sig-arg">self</span>)</span>
-  </h3>
-  </td><td align="right" valign="top"
-    >&nbsp;
-    </td>
-  </tr></table>
-  
-  
-  <dl class="fields">
-    <dt>Returns: list of D's keys</dt>
-    <dt>Overrides:
-        dict.keys
-        <dd><em class="note">(inherited documentation)</em></dd>
-    </dt>
-  </dl>
-</td></tr></table>
-</div>
-<a name="values"></a>
-<div>
-<table class="details" border="1" cellpadding="3"
-       cellspacing="0" width="100%" bgcolor="white">
-<tr><td>
-  <table width="100%" cellpadding="0" cellspacing="0" border="0">
-  <tr valign="top"><td>
-  <h3 class="epydoc"><span class="sig"><span class="sig-name">values</span>(<span class="sig-arg">self</span>)</span>
-  </h3>
-  </td><td align="right" valign="top"
-    >&nbsp;
-    </td>
-  </tr></table>
-  
-  
-  <dl class="fields">
-    <dt>Returns: list of D's values</dt>
-    <dt>Overrides:
-        dict.values
-        <dd><em class="note">(inherited documentation)</em></dd>
-    </dt>
+    <dt>Get Method:</dt>
+    <dd class="value"><span class="summary-sig">typename(<span class="summary-sig-arg">self</span>)</span>
+        - Get this instance' Python class name (<code>str</code>).
+    </dd>
+    <dt>Set Method:</dt>
+    <dd class="value"><span class="summary-sig">Read_Only(<span class="summary-sig-arg">inst</span>,
+        <span class="summary-sig-arg">value</span>)</span>
+        - Throws an <code>AttributeError</code>, always.
+    </dd>
   </dl>
 </td></tr></table>
 </div>
@@ -478,7 +439,7 @@ object --+
 <table border="0" cellpadding="0" cellspacing="0" width="100%%">
   <tr>
     <td align="left" class="footer">
-    Generated by Epydoc 3.0.1 on Tue Mar 11 15:30:54 2025
+    Generated by Epydoc 3.0.1 on Mon Mar 24 15:10:34 2025
     </td>
     <td align="right" class="footer">
       <a target="mainFrame" href="http://epydoc.sourceforge.net"

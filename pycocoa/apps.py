@@ -13,34 +13,34 @@ from pycocoa.menus import _callMenuItem_name, _handleMenuItem_name, Item, \
 from pycocoa.lazily import _ALL_LAZY, _fmt, _fmt_invalid, _Types
 from pycocoa.nstypes import NSApplication, nsBundleRename, nsOf, _NSStr, \
                             NSConcreteNotification, NSMain, NSNotification
-from pycocoa.oslibs import YES
+from pycocoa.oslibs import NO, YES
 from pycocoa.runtime import isObjCInstanceOf, ObjCDelegate, _ObjCDelegate, \
                             ObjCInstance, _ObjC_log_totals, retain, \
                             send_super_init
 from pycocoa.utils import errorf, isinstanceOf
-# from pycocoa.windows import Window  # see below
+# from pycocoa.windows import Window  # in property window
 
 from threading import Thread
 from time import sleep
 
 __all__ = _ALL_LAZY.apps
-__version__ = '25.03.09'
+__version__ = '25.03.23'
 
 
 class App(_Type2):
     '''Python C{App} Type, wrapping an ObjC C{NSApplication}.
     '''
-    _badge      = None
-    _FullScreen = None
-    _isUp       = None
-    _keyWindow  = None  # Window
-    _lastWindow = None  # most recent key or main
-    _mainWindow = None  # Window
-    _menubar    = None
-    _timeout    = None
-    _window     = None
+    _badge          = None
+    _FullScreenItem = None
+    _isUp           = None
+    _keyWindow      = None  # Window
+    _lastWindow     = None  # most recent key or main
+    _mainWindow     = None  # Window
+    _menubar        = None
+    _timeout        = None
+    _window         = None
 
-    def __init__(self, title='PyCocao', raiser=False, **kwds):
+    def __init__(self, title='PyCocoa', raiser=False, **kwds):
         '''New L{App}.
 
            @keyword title: App name or title (C{str}).
@@ -59,22 +59,21 @@ class App(_Type2):
         # add a method to set the app's title
         self.NS.setTitle_ = nsBundleRename
 #       pool = NSAutoreleasePool.alloc().init()  # created by NSApplication
-        self.title = title
+        self.title = str(title) or type(self).__name__
 
         if kwds:  # optional, additional attributes
             super(App, self).__init__(**kwds)
 
-        self.NSdelegate = retain(NSApplicationDelegate.alloc().init(self))
+        ns = NSApplicationDelegate.alloc().init(self)
+        self.NSdelegate = retain(ns)
 
     def activate(self, active=None, force=True):
         '''Active or de-activate this app.
 
-           @param active: Activate or de-activate (C{bool}) or C{None}.
-           @keyword force: Activate regardless (C{bool}), otheriwse
-                           only activate if no other app is active
+           @param active: Activate or de-activate (C{bool} or C{None}).
+           @keyword force: Activate regardless of current state (C{bool}).
 
-           @return: I{Previous} C{isActive} state (C{bool}) or C{None}
-                    if unkown.
+           @return: I{Previous} C{isActive} state (C{bool} or C{None} if unknown).
 
            @see: U{activate(ignoringOtherApps flag: Bool)
                  <https://Developer.Apple.com/documentation/appkit/
@@ -82,10 +81,15 @@ class App(_Type2):
         '''
         a = self.isActive
         if force or active is not None:
+            ns = self.NS
             if a and not active:
-                self.NS.deactivate()
+                ns.deactivate()
             elif active and not a:
-                self.NS.activateIgnoringOtherApps_(force)
+                try:
+                    ns.activateIgnoringOtherApps_(YES if force else NO)  # deprecated
+                except AttributeError:
+                    # XXX ns.activateWithOptions_(NSApplicationActiveAllWindows)?
+                    ns.activate()
         return a
 
     def append(self, menu):
@@ -99,21 +103,22 @@ class App(_Type2):
 
         if self._menubar is None:
             # create the menu bar, once
+            t = self.title
             b = MenuBar(app=self)
-            m = Menu(title=self.title)
+            m = Menu(title=t)
             f = Item('Full ' + 'Screen', key='f', ctrl=True)  # Ctrl-Cmd-F, en-/disabled
             m.append(  # note key modifier cmd=True is the default
                 f,
                 ItemSeparator(),
-                Item('Hide ' + self.title, self.menuHide_, key='h'),  # Cmd-H
+                Item('Hide ' + t, self.menuHide_, key='h'),  # Cmd-H
                 Item('Hide Others', self.menuOther_, key='h', alt=True),  # Alt-Cmd-H
                 ItemSeparator(),
-                Item('Quit ' + self.title, self.menuTerminate_, key='q'),  # Cmd-Q
+                Item('Quit ' + t, self.menuTerminate_, key='q'),  # Cmd-Q
             )
             b.append(m)
             b.main(app=self)
             self._menubar = b
-            self._FullScreen = f
+            self._FullScreenItem = f
 
         self._menubar.append(menu)
 
@@ -123,16 +128,17 @@ class App(_Type2):
         '''
         # <https://Developer.Apple.com/documentation/appkit/nsdocktile>
         # <https://Developer.Apple.com/documentation/appkit/nsapplication>
-        if self._badge is None:
-            self._badge = Tile(self)
-        return self._badge
+        b = self._badge
+        if b is None:
+            self._badge = b = Tile(self)
+        return b
 
     def full(self, full=None):
         '''Enter or exit full screen mode for this app.
 
-           @param full: Enter or exit (C{bool}) or C{None}.
+           @param full: Enter or exit (C{bool} or C{None} for unchanged).
 
-           @return: Full screen mode (C{bool}) or C{None} if unknown.
+           @return: Full screen mode (C{bool} or C{None} if unknown).
         '''
         ns = None if full is None else self.NS
         if ns:
@@ -144,19 +150,18 @@ class App(_Type2):
     def _fullAble(self, window):
         '''(INTERNAL) En-/disable the C{Full Screen} menu item.
         '''
-        f = (window.isFull or window.isZoomed) if window else None
-        if f is None:
-            f = self.isFull or self.isZoomed
-        if self._FullScreen and f is not None:
-            self._FullScreen.isEnabled = not f
+        f = window.isFull if window else self.isFull
+        if f is not None and self._FullScreenItem \
+                         and window in (self.window, None):
+            self._FullScreenItem.isEnabled = not f
         return f
 
     def hide(self, hide=None):
         '''Hide or show this app's windows.
 
-           @param hide: Hide or show (C{bool}) or C{None}.
+           @param hide: Hide or show (C{bool} or C{None} for unchanged).
 
-           @return: I{Previous} C{isHidden} state (C{bool}) or C{None} if unknown.
+           @return: I{Previous} C{isHidden} state (C{bool} or C{None} if unknown).
 
            @see: U{unhideWithoutActivation
                  <https://Developer.Apple.com/documentation/appkit/
@@ -164,10 +169,11 @@ class App(_Type2):
         '''
         h = self.isHidden
         if hide is not None:
+            ns = self.NS
             if h and not hide:
-                self.NS.unhide_(self.NS)
+                ns.unhide_(ns)
             elif hide and not h:
-                self.NS.hide_(self.NS)
+                ns.hide_(ns)
         return h
 
     def hideOther(self, hide):
@@ -183,31 +189,31 @@ class App(_Type2):
 
     @property_RO
     def isActive(self):
-        '''Get this app's active state (C{bool}) or C{None} if unknown.
+        '''Get this app's active state (C{bool} or C{None} if unknown).
         '''
-        return bool(self.NS.isActive()) if self.NS else None
+        return bool(self.NS.isActive()) if self.NS else None  # NS.active()?
 
     @property_RO
     def isFull(self):
-        '''Get this app's full screen mode or zoomed state (C{bool}) or C{None} if unknown.
+        '''Get this app's full screen mode or zoomed state (C{bool} or C{None} if unknown).
         '''
         return self.window.isFull if self.window else None
 
     @property_RO
     def isFullScreen(self):
-        '''Get this app's full screen mode (C{bool}) or C{None} if unknown.
+        '''Get this app's full screen mode (C{bool} or C{None} if unknown).
         '''
         return self.window.isFullScreen if self.window else None
 
     @property_RO
     def isHidden(self):
-        '''Get this app's hidden state (C{bool}) or C{None} if unknown.
+        '''Get this app's hidden state (C{bool} or C{None} if unknown).
         '''
         return bool(self.NS.isHidden()) if self.NS else None
 
     @property_RO
     def isRunning(self):
-        '''Get this app's running state (C{bool}) or C{None} if unknown.
+        '''Get this app's running state (C{bool} or C{None} if unknown).
         '''
         return bool(self.NS.isRunning()) if self.NS else None
 
@@ -219,13 +225,13 @@ class App(_Type2):
 
     @property_RO
     def isVisible(self):
-        '''Get this apps's visible state (C{bool}) or C{None} if unknown.
+        '''Get this apps's visible state (C{bool} or C{None} if unknown).
         '''
         return self.window.isVisible if self.window else None
 
     @property_RO
     def isZoomed(self):
-        '''Get this apps's zoomed state (C{bool}) or C{None} if unknown.
+        '''Get this apps's zoomed state (C{bool} or C{None} if unknown).
         '''
         return self.window.isZoomed if self.window else None
 
@@ -346,7 +352,7 @@ class App(_Type2):
         if window is not None:
             from pycocoa.windows import Window
             isinstanceOf(window, Window, raiser='window')
-        self._window = Window
+        self._window = window
 
     def windowClose_(self, window):  # PYCHOK window
         '''Closing I{window} callback.
@@ -564,7 +570,7 @@ class _NSApplicationDelegate(object):
            argument was C{True}.
         '''
         item = ns2Item(ns_item)
-        act = item._action
+        act  = item._action
         try:
             act(item)
         except Exception:
@@ -586,7 +592,7 @@ class _NSApplicationDelegate(object):
            argument was C{True}.
         '''
         item = ns2Item(ns_item)
-        act = item._action
+        act  = item._action
         for t, i in ((self.app, item),
                      (self,  ns_item)):
             m = getattr(t, act, None)
@@ -616,8 +622,8 @@ class _NSApplicationDelegate(object):
         return ns_item.isEnabled()  # == ns2Item().isEnabled
 
 
-assert(_NSApplicationDelegate.callMenuItem_.name   == _callMenuItem_name), _callMenuItem_name
-assert(_NSApplicationDelegate.handleMenuItem_.name == _handleMenuItem_name), _handleMenuItem_name
+assert (_NSApplicationDelegate.callMenuItem_.name   == _callMenuItem_name), _callMenuItem_name
+assert (_NSApplicationDelegate.handleMenuItem_.name == _handleMenuItem_name), _handleMenuItem_name
 
 
 @proxy_RO
@@ -681,9 +687,11 @@ def ns2App(ns):
         pass
     elif isObjCInstanceOf(ns, NSConcreteNotification, NSNotification, raiser='ns'):
         ns = ns.object()
-    if ns != _Globals.App.NS:
-        raise RuntimeError(_fmt_invalid(repr(_Globals.App.NS), ns=ns))
-    return _Globals.App
+    A  = _Globals.App
+    NS =  A.NS if A else None
+    if ns != NS:
+        raise RuntimeError(_fmt_invalid(repr(NS), ns=ns))
+    return A
 
 
 NSApplication._Type = _Types.App = App
@@ -703,7 +711,7 @@ if __name__ == _Dmain_:
 #  pycocoa.apps.NSApplicationDelegate is <pycocoa.utils.proxy_RO object at 0x105454690>,
 #  pycocoa.apps.Tile is <class .Tile>,
 # )[5]
-# pycocoa.apps.version 25.02.19, .isLazy 1, Python 3.13.1 64bit arm64, macOS 14.7.3
+# pycocoa.apps.version 25.3.23, .isLazy 1, Python 3.13.2 64bit arm64, macOS 15.3.2
 
 # MIT License <https://OpenSource.org/licenses/MIT>
 #

@@ -160,8 +160,8 @@ def generator2NS(py, frozen=True):
     '''Create an C{NS[Mutable]Array} from a Python C{generator}.
 
        @param py: The value (C{generator}).
-       @keyword frozen: If C{True}, return an immutable C{NSArray}
-                        (C{bool}), otherwise an C{NSMutableArray}.
+       @keyword frozen: If C{True}, return an immutable C{NSArray}, otherwise
+                        an C{NSMutableArray} (C{bool}).
 
        @return: The ObjC instance (C{NSMutableArray} or immutable C{NSArray}).
 
@@ -208,8 +208,8 @@ def iterable2NS(py, frozen=True):
     '''Create an C{NS[Mutable]Array} from a Python C{iterable}.
 
        @param py: The value (C{iterable}).
-       @keyword frozen: If C{True}, return an immutable C{NSArray}
-                        (C{bool}), otherwise an C{NSMutableArray}.
+       @keyword frozen: If C{True}, return an immutable C{NSArray}, otherwise
+                        an C{NSMutableArray} (C{bool}).
 
        @return: The ObjC instance (C{NSMutableArray} or immutable C{NSArray}).
 
@@ -275,8 +275,8 @@ def map2NS(py, frozen=True):
     '''Create an C{NS[Mutable]Array} from a Python C{map}.
 
        @param py: The value (C{map}).
-       @keyword frozen: If C{True}, return an immutable C{NSArray}
-                        (C{bool}), otherwise an C{NSMutableArray}.
+       @keyword frozen: If C{True}, return an immutable C{NSArray}, otherwise
+                        an C{NSMutableArray} (C{bool}).
 
        @return: The ObjC instance (C{NSArray} or C{NSMutableArray}).
     '''
@@ -363,8 +363,8 @@ def range2NS(py, frozen=True):
     '''Create an C{NS[Mutable]Array} from a Python C{range}.
 
        @param py: The value (C{range}).
-       @keyword frozen: If C{True}, return an immutable C{NSArray}
-                        (C{bool}), otherwise an C{NSMutableArray}.
+       @keyword frozen: If C{True}, return an immutable C{NSArray}, otherwise
+                        an C{NSMutableArray} (C{bool}).
 
        @return: The ObjC instance (C{NSMutableArray} or immutable C{NSArray}).
     '''
@@ -424,8 +424,8 @@ def strs2NS(py, frozen=True):
     '''Create an C{NS[Mutable]String} from a Python C{str}.
 
        @param py: The value (C{str}).
-       @keyword frozen: If C{True}, return an immutable C{NSString}
-                        (C{bool}), otherwise an C{NSMutableString}.
+       @keyword frozen: If C{True}, return an immutable C{NSString}, otherwise
+                        an C{NSMutableString} (C{bool}).
 
        @return: The ObjC instance (C{NSMutableString} or immutable C{NSString}).
 

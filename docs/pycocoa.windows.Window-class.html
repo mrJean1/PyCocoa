@@ -120,8 +120,8 @@ bases._Type0 --+
     </td><td class="summary">
       <table width="100%" cellpadding="0" cellspacing="0" border="0">
         <tr>
-          <td><span class="summary-sig"><a name="cascade"></a><span class="summary-sig-name">cascade</span>(<span class="summary-sig-arg">self</span>)</span><br />
-      Cascade window placement (from the top left screen corner).</td>
+          <td><span class="summary-sig"><a href="pycocoa.windows.Window-class.html#close" class="summary-sig-name">close</a>(<span class="summary-sig-arg">self</span>)</span><br />
+      Close this window (by a click of the close button).</td>
           <td align="right" valign="top">
             
             
@@ -137,8 +137,8 @@ bases._Type0 --+
     </td><td class="summary">
       <table width="100%" cellpadding="0" cellspacing="0" border="0">
         <tr>
-          <td><span class="summary-sig"><a href="pycocoa.windows.Window-class.html#close" class="summary-sig-name">close</a>(<span class="summary-sig-arg">self</span>)</span><br />
-      Close this window (by a click of the close button).</td>
+          <td><span class="summary-sig"><a name="cascade"></a><span class="summary-sig-name">cascade</span>(<span class="summary-sig-arg">self</span>)</span><br />
+      Cascade window placement (from the top left screen corner).</td>
           <td align="right" valign="top">
             
             
@@ -227,8 +227,9 @@ bases._Type0 --+
     </td><td class="summary">
       <table width="100%" cellpadding="0" cellspacing="0" border="0">
         <tr>
-          <td><span class="summary-sig"><a href="pycocoa.windows.Window-class.html#windowCloseOK_" class="summary-sig-name">windowCloseOK_</a>(<span class="summary-sig-arg">self</span>)</span><br />
-      Is it OK? to close <i>window</i> callback.</td>
+          <td><span class="summary-sig"><a href="pycocoa.windows.Window-class.html#zoom" class="summary-sig-name">zoom</a>(<span class="summary-sig-arg">self</span>,
+        <span class="summary-sig-arg">zoom</span>)</span><br />
+      Toggle, zoom or un-zoom this window.</td>
           <td align="right" valign="top">
             
             
@@ -246,6 +247,23 @@ bases._Type0 --+
         <tr>
           <td><span class="summary-sig"><a name="windowClose_"></a><span class="summary-sig-name">windowClose_</span>(<span class="summary-sig-arg">self</span>)</span><br />
       Closing <i>window</i> callback.</td>
+          <td align="right" valign="top">
+            
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a href="pycocoa.windows.Window-class.html#windowCloseOK_" class="summary-sig-name">windowCloseOK_</a>(<span class="summary-sig-arg">self</span>)</span><br />
+      Callback Is it OK to close <i>window</i>?</td>
           <td align="right" valign="top">
             
             
@@ -352,25 +370,7 @@ bases._Type0 --+
         <tr>
           <td><span class="summary-sig"><a href="pycocoa.windows.Window-class.html#windowZoomOK_" class="summary-sig-name">windowZoomOK_</a>(<span class="summary-sig-arg">self</span>,
         <span class="summary-sig-arg">frame</span>=<span class="summary-sig-default">None</span>)</span><br />
-      Is it OK? to toggle zoom <i>window</i> callback.</td>
-          <td align="right" valign="top">
-            
-            
-          </td>
-        </tr>
-      </table>
-      
-    </td>
-  </tr>
-<tr>
-    <td width="15%" align="right" valign="top" class="summary">
-      <span class="summary-type">&nbsp;</span>
-    </td><td class="summary">
-      <table width="100%" cellpadding="0" cellspacing="0" border="0">
-        <tr>
-          <td><span class="summary-sig"><a href="pycocoa.windows.Window-class.html#zoom" class="summary-sig-name">zoom</a>(<span class="summary-sig-arg">self</span>,
-        <span class="summary-sig-arg">zoom</span>)</span><br />
-      Toggle, zoom or un-zoom this window.</td>
+      Callback Is it OK to zoom <i>window</i>?</td>
           <td align="right" valign="top">
             
             
@@ -416,22 +416,6 @@ bases._Type0 --+
     <td width="15%" align="right" valign="top" class="summary">
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
-        <a href="pycocoa.windows.Window-class.html#NSview" class="summary-name">NSview</a><br />
-      Get this window's view (<code>NSView...</code>).
-    </td>
-  </tr>
-<tr>
-    <td width="15%" align="right" valign="top" class="summary">
-      <span class="summary-type">&nbsp;</span>
-    </td><td class="summary">
-        <a href="pycocoa.windows.Window-class.html#PMview" class="summary-name">PMview</a><br />
-      Get this window's print view (<code>NSView...</code>).
-    </td>
-  </tr>
-<tr>
-    <td width="15%" align="right" valign="top" class="summary">
-      <span class="summary-type">&nbsp;</span>
-    </td><td class="summary">
         <a href="pycocoa.windows.Window-class.html#alpha" class="summary-name">alpha</a><br />
       Get this window's alpha value (<code>float</code>).
     </td>
@@ -449,9 +433,27 @@ bases._Type0 --+
     <td width="15%" align="right" valign="top" class="summary">
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
+        <a href="pycocoa.windows.Window-class.html#isBuiltIn" class="summary-name">isBuiltIn</a><br />
+      Is this window's screen built-in (<code>bool</code> or 
+      <code>None</code> if unknown)?
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="pycocoa.windows.Window-class.html#isExternal" class="summary-name">isExternal</a><br />
+      Is this window's screen external (<code>bool</code> or 
+      <code>None</code> if unknown)?
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
         <a href="pycocoa.windows.Window-class.html#isFull" class="summary-name">isFull</a><br />
-      Get this window's full screen mode or zoomed state 
-      (<code>bool</code>).
+      Get this window's full screen mode or zoomed state (<code>bool</code>
+      or <code>None</code> if unknown).
     </td>
   </tr>
 <tr>
@@ -459,7 +461,8 @@ bases._Type0 --+
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
         <a href="pycocoa.windows.Window-class.html#isFullScreen" class="summary-name">isFullScreen</a><br />
-      Get this window's full screen mode (<code>bool</code>).
+      Get this window's full screen mode (<code>bool</code> or 
+      <code>None</code> if unknown).
     </td>
   </tr>
 <tr>
@@ -514,8 +517,24 @@ bases._Type0 --+
     <td width="15%" align="right" valign="top" class="summary">
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
+        <a href="pycocoa.windows.Window-class.html#NSview" class="summary-name">NSview</a><br />
+      Get this window's view (<code>NSView...</code>).
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
         <a href="pycocoa.windows.Window-class.html#opaque" class="summary-name">opaque</a><br />
       Get this window's opaque setting (<code>bool</code>).
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="pycocoa.windows.Window-class.html#PMview" class="summary-name">PMview</a><br />
+      Get this window's print view (<code>NSView...</code>).
     </td>
   </tr>
 <tr>
@@ -760,6 +779,31 @@ bases._Type0 --+
   </dl>
 </td></tr></table>
 </div>
+<a name="zoom"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">zoom</span>(<span class="sig-arg">self</span>,
+        <span class="sig-arg">zoom</span>)</span>
+  </h3>
+  </td><td align="right" valign="top"
+    >&nbsp;
+    </td>
+  </tr></table>
+  
+  <p>Toggle, zoom or un-zoom this window.</p>
+  <dl class="fields">
+    <dt>Parameters:</dt>
+    <dd><ul class="nomargin-top">
+        <li><strong class="pname"><code>zoom</code></strong> - Use <code>True</code> to zoom, <code>False</code> to un-zoom or 
+          <code>None</code> to toggle.</li>
+    </ul></dd>
+  </dl>
+</td></tr></table>
+</div>
 <a name="windowCloseOK_"></a>
 <div>
 <table class="details" border="1" cellpadding="3"
@@ -774,10 +818,10 @@ bases._Type0 --+
     </td>
   </tr></table>
   
-  <p>Is it OK? to close <i>window</i> callback.</p>
+  <p>Callback Is it OK to close <i>window</i>?</p>
   <dl class="fields">
     <dt>Returns:</dt>
-        <dd>True if OK to close, False otherwise.</dd>
+        <dd><code>True</code> if OK to close, <code>False</code> otherwise.</dd>
   </dl>
 </td></tr></table>
 </div>
@@ -849,8 +893,8 @@ bases._Type0 --+
   <dl class="fields">
     <dt>Parameters:</dt>
     <dd><ul class="nomargin-top">
-        <li><strong class="pname"><code>change</code></strong> - <code>True</code> if the screen or <code>False</code> if the 
-          profile changed (<code>bool</code>).</li>
+        <li><strong class="pname"><code>change</code></strong> - <code>True</code> if the screen changed or <code>False</code> if 
+          the profile changed (<code>bool</code>).</li>
     </ul></dd>
   </dl>
 <div class="fields">      <p><strong>Note:</strong>
@@ -874,7 +918,7 @@ bases._Type0 --+
     </td>
   </tr></table>
   
-  <p>Is it OK? to toggle zoom <i>window</i> callback.</p>
+  <p>Callback Is it OK to zoom <i>window</i>?</p>
   <dl class="fields">
     <dt>Parameters:</dt>
     <dd><ul class="nomargin-top">
@@ -882,32 +926,7 @@ bases._Type0 --+
           class="link">Rect</a>).</li>
     </ul></dd>
     <dt>Returns:</dt>
-        <dd>True if OK to toggle, False otherwise.</dd>
-  </dl>
-</td></tr></table>
-</div>
-<a name="zoom"></a>
-<div>
-<table class="details" border="1" cellpadding="3"
-       cellspacing="0" width="100%" bgcolor="white">
-<tr><td>
-  <table width="100%" cellpadding="0" cellspacing="0" border="0">
-  <tr valign="top"><td>
-  <h3 class="epydoc"><span class="sig"><span class="sig-name">zoom</span>(<span class="sig-arg">self</span>,
-        <span class="sig-arg">zoom</span>)</span>
-  </h3>
-  </td><td align="right" valign="top"
-    >&nbsp;
-    </td>
-  </tr></table>
-  
-  <p>Toggle, zoom or un-zoom this window.</p>
-  <dl class="fields">
-    <dt>Parameters:</dt>
-    <dd><ul class="nomargin-top">
-        <li><strong class="pname"><code>zoom</code></strong> - Zoom or un-zoom (<code>bool</code>) or <code>None</code> to 
-          toggle.</li>
-    </ul></dd>
+        <dd><code>True</code> if OK to zoom, <code>False</code> otherwise.</dd>
   </dl>
 </td></tr></table>
 </div>
@@ -921,46 +940,6 @@ bases._Type0 --+
     <span class="table-header">Property Details</span></td>
 </tr>
 </table>
-<a name="NSview"></a>
-<div>
-<table class="details" border="1" cellpadding="3"
-       cellspacing="0" width="100%" bgcolor="white">
-<tr><td>
-  <h3 class="epydoc">NSview</h3>
-  <p>Get this window's view (<code>NSView...</code>).</p>
-  <dl class="fields">
-    <dt>Get Method:</dt>
-    <dd class="value"><span class="summary-sig">NSview(<span class="summary-sig-arg">self</span>)</span>
-        - Get this window's view (<code>NSView...</code>).
-    </dd>
-    <dt>Set Method:</dt>
-    <dd class="value"><span class="summary-sig">NSview(<span class="summary-sig-arg">self</span>,
-        <span class="summary-sig-arg">ns_view</span>)</span>
-        - Set this window's view (<code>NSView...</code>).
-    </dd>
-  </dl>
-</td></tr></table>
-</div>
-<a name="PMview"></a>
-<div>
-<table class="details" border="1" cellpadding="3"
-       cellspacing="0" width="100%" bgcolor="white">
-<tr><td>
-  <h3 class="epydoc">PMview</h3>
-  <p>Get this window's print view (<code>NSView...</code>).</p>
-  <dl class="fields">
-    <dt>Get Method:</dt>
-    <dd class="value"><span class="summary-sig">PMview(<span class="summary-sig-arg">self</span>)</span>
-        - Get this window's print view (<code>NSView...</code>).
-    </dd>
-    <dt>Set Method:</dt>
-    <dd class="value"><span class="summary-sig">PMview(<span class="summary-sig-arg">self</span>,
-        <span class="summary-sig-arg">ns_view</span>)</span>
-        - Set this window's print view (<code>NSView...</code>).
-    </dd>
-  </dl>
-</td></tr></table>
-</div>
 <a name="alpha"></a>
 <div>
 <table class="details" border="1" cellpadding="3"
@@ -1005,18 +984,63 @@ None).
   </dl>
 </td></tr></table>
 </div>
+<a name="isBuiltIn"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <h3 class="epydoc">isBuiltIn</h3>
+  <p>Is this window's screen built-in (<code>bool</code> or 
+  <code>None</code> if unknown)?</p>
+  <dl class="fields">
+    <dt>Get Method:</dt>
+    <dd class="value"><span class="summary-sig">isBuiltIn(<span class="summary-sig-arg">self</span>)</span>
+        - Is this window's screen built-in (<code>bool</code> or <code>None</code> if
+unknown)?
+    </dd>
+    <dt>Set Method:</dt>
+    <dd class="value"><span class="summary-sig">Read_Only(<span class="summary-sig-arg">inst</span>,
+        <span class="summary-sig-arg">value</span>)</span>
+        - Throws an <code>AttributeError</code>, always.
+    </dd>
+  </dl>
+</td></tr></table>
+</div>
+<a name="isExternal"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <h3 class="epydoc">isExternal</h3>
+  <p>Is this window's screen external (<code>bool</code> or 
+  <code>None</code> if unknown)?</p>
+  <dl class="fields">
+    <dt>Get Method:</dt>
+    <dd class="value"><span class="summary-sig">isExternal(<span class="summary-sig-arg">self</span>)</span>
+        - Is this window's screen external (<code>bool</code> or <code>None</code> if
+unknown)?
+    </dd>
+    <dt>Set Method:</dt>
+    <dd class="value"><span class="summary-sig">Read_Only(<span class="summary-sig-arg">inst</span>,
+        <span class="summary-sig-arg">value</span>)</span>
+        - Throws an <code>AttributeError</code>, always.
+    </dd>
+  </dl>
+</td></tr></table>
+</div>
 <a name="isFull"></a>
 <div>
 <table class="details" border="1" cellpadding="3"
        cellspacing="0" width="100%" bgcolor="white">
 <tr><td>
   <h3 class="epydoc">isFull</h3>
-  <p>Get this window's full screen mode or zoomed state 
-  (<code>bool</code>).</p>
+  <p>Get this window's full screen mode or zoomed state (<code>bool</code> 
+  or <code>None</code> if unknown).</p>
   <dl class="fields">
     <dt>Get Method:</dt>
     <dd class="value"><span class="summary-sig">isFull(<span class="summary-sig-arg">self</span>)</span>
-        - Get this window's full screen mode or zoomed state (<code>bool</code>).
+        - Get this window's full screen mode or zoomed state (<code>bool</code> or 
+<code>None</code> if unknown).
     </dd>
     <dt>Set Method:</dt>
     <dd class="value"><span class="summary-sig">Read_Only(<span class="summary-sig-arg">inst</span>,
@@ -1032,11 +1056,13 @@ None).
        cellspacing="0" width="100%" bgcolor="white">
 <tr><td>
   <h3 class="epydoc">isFullScreen</h3>
-  <p>Get this window's full screen mode (<code>bool</code>).</p>
+  <p>Get this window's full screen mode (<code>bool</code> or 
+  <code>None</code> if unknown).</p>
   <dl class="fields">
     <dt>Get Method:</dt>
     <dd class="value"><span class="summary-sig">isFullScreen(<span class="summary-sig-arg">self</span>)</span>
-        - Get this window's full screen mode (<code>bool</code>).
+        - Get this window's full screen mode (<code>bool</code> or <code>None</code> 
+if unknown).
     </dd>
     <dt>Set Method:</dt>
     <dd class="value"><span class="summary-sig">Read_Only(<span class="summary-sig-arg">inst</span>,
@@ -1166,6 +1192,26 @@ None).
   </dl>
 </td></tr></table>
 </div>
+<a name="NSview"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <h3 class="epydoc">NSview</h3>
+  <p>Get this window's view (<code>NSView...</code>).</p>
+  <dl class="fields">
+    <dt>Get Method:</dt>
+    <dd class="value"><span class="summary-sig">NSview(<span class="summary-sig-arg">self</span>)</span>
+        - Get this window's view (<code>NSView...</code>).
+    </dd>
+    <dt>Set Method:</dt>
+    <dd class="value"><span class="summary-sig">NSview(<span class="summary-sig-arg">self</span>,
+        <span class="summary-sig-arg">ns_view</span>)</span>
+        - Set this window's view (<code>NSView...</code>).
+    </dd>
+  </dl>
+</td></tr></table>
+</div>
 <a name="opaque"></a>
 <div>
 <table class="details" border="1" cellpadding="3"
@@ -1182,6 +1228,26 @@ None).
     <dd class="value"><span class="summary-sig">opaque(<span class="summary-sig-arg">self</span>,
         <span class="summary-sig-arg">opaque</span>)</span>
         - Make this window opaque or not (<code>bool</code>).
+    </dd>
+  </dl>
+</td></tr></table>
+</div>
+<a name="PMview"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <h3 class="epydoc">PMview</h3>
+  <p>Get this window's print view (<code>NSView...</code>).</p>
+  <dl class="fields">
+    <dt>Get Method:</dt>
+    <dd class="value"><span class="summary-sig">PMview(<span class="summary-sig-arg">self</span>)</span>
+        - Get this window's print view (<code>NSView...</code>).
+    </dd>
+    <dt>Set Method:</dt>
+    <dd class="value"><span class="summary-sig">PMview(<span class="summary-sig-arg">self</span>,
+        <span class="summary-sig-arg">ns_view</span>)</span>
+        - Set this window's print view (<code>NSView...</code>).
     </dd>
   </dl>
 </td></tr></table>
@@ -1302,7 +1368,7 @@ class="link">Screen</a>) or <code>None</code> if this window is off-screen.
 <table border="0" cellpadding="0" cellspacing="0" width="100%%">
   <tr>
     <td align="left" class="footer">
-    Generated by Epydoc 3.0.1 on Tue Mar 11 15:30:55 2025
+    Generated by Epydoc 3.0.1 on Mon Mar 24 15:10:34 2025
     </td>
     <td align="right" class="footer">
       <a target="mainFrame" href="http://epydoc.sourceforge.net"

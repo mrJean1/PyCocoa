@@ -3,7 +3,7 @@
           "DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
 <head>
-  <title>pycocoa.screens.BuiltInScreen</title>
+  <title>pycocoa.deprecated.ExternalScreen</title>
   <link rel="stylesheet" href="epydoc.css" type="text/css" />
   <script type="text/javascript" src="epydoc.js"></script>
 </head>
@@ -43,8 +43,8 @@
     <td width="100%">
       <span class="breadcrumbs">
         <a href="pycocoa-module.html">Package&nbsp;pycocoa</a> ::
-        <a href="pycocoa.screens-module.html">Module&nbsp;screens</a> ::
-        Class&nbsp;BuiltInScreen
+        <a href="pycocoa.deprecated-module.html">Module&nbsp;deprecated</a> ::
+        Class&nbsp;ExternalScreen
       </span>
     </td>
     <td>
@@ -52,26 +52,28 @@
         <!-- hide/show private -->
         <tr><td align="right"><span class="options"
             >[<a href="frames.html" target="_top">frames</a
-            >]&nbsp;|&nbsp;<a href="pycocoa.screens.BuiltInScreen-class.html"
+            >]&nbsp;|&nbsp;<a href="pycocoa.deprecated.ExternalScreen-class.html"
             target="_top">no&nbsp;frames</a>]</span></td></tr>
       </table>
     </td>
   </tr>
 </table>
 <!-- ==================== CLASS DESCRIPTION ==================== -->
-<h1 class="epydoc">Class BuiltInScreen</h1><p class="nomargin-top"></p>
+<h1 class="epydoc">Class ExternalScreen</h1><p class="nomargin-top"></p>
 <pre class="base-tree">
-  object --+        
-           |        
-bases._Type0 --+    
-               |    
-          <a href="pycocoa.screens.Screen-class.html">Screen</a> --+
-                   |
-                  <strong class="uidshort">BuiltInScreen</strong>
+  object --+            
+           |            
+bases._Type0 --+        
+               |        
+  <a href="pycocoa.screens.Screen-class.html">screens.Screen</a> --+    
+                   |    
+   _DeprecatedScreen --+
+                       |
+                      <strong class="uidshort">ExternalScreen</strong>
 </pre>
 
 <hr />
-<p>The BuiltIn screen.</p>
+<p>DEPRECATED on 2025.03.16, use <code>Screens.External</code>.</p>
 
 <!-- ==================== INSTANCE METHODS ==================== -->
 <a name="section-InstanceMethods"></a>
@@ -83,12 +85,14 @@ bases._Type0 --+
 </tr>
   <tr>
     <td colspan="2" class="summary">
-    <p class="indent-wrapped-lines"><b>Inherited from <code><a href="pycocoa.screens.Screen-class.html">Screen</a></code></b>:
+    <p class="indent-wrapped-lines"><b>Inherited from <code>_DeprecatedScreen</code></b>:
+      <code>__init__</code>
+      </p>
+    <p class="indent-wrapped-lines"><b>Inherited from <code><a href="pycocoa.screens.Screen-class.html">screens.Screen</a></code></b>:
       <code><a href="pycocoa.screens.Screen-class.html#__eq__">__eq__</a></code>,
       <code><a href="pycocoa.screens.Screen-class.html#cascade">cascade</a></code>
       </p>
     <p class="indent-wrapped-lines"><b>Inherited from <code>bases._Type0</code></b>:
-      <code>__init__</code>,
       <code>__repr__</code>,
       <code>__str__</code>,
       <code>type2strepr</code>
@@ -117,7 +121,7 @@ bases._Type0 --+
 </tr>
   <tr>
     <td colspan="2" class="summary">
-    <p class="indent-wrapped-lines"><b>Inherited from <code><a href="pycocoa.screens.Screen-class.html">Screen</a></code></b>:
+    <p class="indent-wrapped-lines"><b>Inherited from <code><a href="pycocoa.screens.Screen-class.html">screens.Screen</a></code></b>:
       <code><a href="pycocoa.screens.Screen-class.html#__new__">__new__</a></code>
       </p>
     </td>
@@ -133,7 +137,7 @@ bases._Type0 --+
 </tr>
   <tr>
     <td colspan="2" class="summary">
-    <p class="indent-wrapped-lines"><b>Inherited from <code><a href="pycocoa.screens.Screen-class.html">Screen</a></code></b>:
+    <p class="indent-wrapped-lines"><b>Inherited from <code><a href="pycocoa.screens.Screen-class.html">screens.Screen</a></code></b>:
       <code><a href="pycocoa.screens.Screen-class.html#bottom">bottom</a></code>,
       <code><a href="pycocoa.screens.Screen-class.html#bottomleft">bottomleft</a></code>,
       <code><a href="pycocoa.screens.Screen-class.html#bottomright">bottomright</a></code>,
@@ -145,6 +149,7 @@ bases._Type0 --+
       <code><a href="pycocoa.screens.Screen-class.html#frame">frame</a></code>,
       <code><a href="pycocoa.screens.Screen-class.html#isBuiltIn">isBuiltIn</a></code>,
       <code><a href="pycocoa.screens.Screen-class.html#isExternal">isExternal</a></code>,
+      <code><a href="pycocoa.screens.Screen-class.html#isMain">isMain</a></code>,
       <code><a href="pycocoa.screens.Screen-class.html#isPrinter">isPrinter</a></code>,
       <code><a href="pycocoa.screens.Screen-class.html#isScreen">isScreen</a></code>,
       <code><a href="pycocoa.screens.Screen-class.html#left">left</a></code>,
@@ -203,7 +208,7 @@ bases._Type0 --+
 <table border="0" cellpadding="0" cellspacing="0" width="100%%">
   <tr>
     <td align="left" class="footer">
-    Generated by Epydoc 3.0.1 on Tue Mar 11 15:30:55 2025
+    Generated by Epydoc 3.0.1 on Mon Mar 24 15:10:34 2025
     </td>
     <td align="right" class="footer">
       <a target="mainFrame" href="http://epydoc.sourceforge.net"

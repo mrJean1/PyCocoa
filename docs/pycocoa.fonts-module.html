@@ -64,7 +64,7 @@
 
 <hr />
 <div class="fields">      <p><strong>Version:</strong>
-        25.03.08
+        25.03.18
       </p>
 </div><!-- ==================== CLASSES ==================== -->
 <a name="section-Classes"></a>
@@ -113,7 +113,7 @@
     </td><td class="summary">
       <table width="100%" cellpadding="0" cellspacing="0" border="0">
         <tr>
-          <td><span class="summary-sig"><a href="pycocoa.fonts-module.html#fontfamilies" class="summary-sig-name">fontfamilies</a>(<span class="summary-sig-arg">*prefixes</span>)</span><br />
+          <td><span class="summary-sig"><a href="pycocoa.fonts-module.html#fontFamilies" class="summary-sig-name">fontFamilies</a>(<span class="summary-sig-arg">*prefixes</span>)</span><br />
       Yield the installed font families.</td>
           <td align="right" valign="top">
             
@@ -130,7 +130,7 @@
     </td><td class="summary">
       <table width="100%" cellpadding="0" cellspacing="0" border="0">
         <tr>
-          <td><span class="summary-sig"><a href="pycocoa.fonts-module.html#fontnamesof" class="summary-sig-name">fontnamesof</a>(<span class="summary-sig-arg">family</span>)</span><br />
+          <td><span class="summary-sig"><a href="pycocoa.fonts-module.html#fontNamesOf" class="summary-sig-name">fontNamesOf</a>(<span class="summary-sig-arg">family</span>)</span><br />
       Yield the available font names of a family.</td>
           <td align="right" valign="top">
             
@@ -147,7 +147,7 @@
     </td><td class="summary">
       <table width="100%" cellpadding="0" cellspacing="0" border="0">
         <tr>
-          <td><span class="summary-sig"><a href="pycocoa.fonts-module.html#fontsof" class="summary-sig-name">fontsof</a>(<span class="summary-sig-arg">family</span>,
+          <td><span class="summary-sig"><a href="pycocoa.fonts-module.html#fontsOf" class="summary-sig-name">fontsOf</a>(<span class="summary-sig-arg">family</span>,
         <span class="summary-sig-arg">size</span>=<span class="summary-sig-default">0</span>,
         <span class="summary-sig-arg">weight</span>=<span class="summary-sig-default">None</span>)</span><br />
       Yield the available fonts of a family.</td>
@@ -166,7 +166,7 @@
     </td><td class="summary">
       <table width="100%" cellpadding="0" cellspacing="0" border="0">
         <tr>
-          <td><span class="summary-sig"><a href="pycocoa.fonts-module.html#fontsof4" class="summary-sig-name">fontsof4</a>(<span class="summary-sig-arg">family</span>)</span><br />
+          <td><span class="summary-sig"><a href="pycocoa.fonts-module.html#fontsOf4" class="summary-sig-name">fontsOf4</a>(<span class="summary-sig-arg">family</span>)</span><br />
       Yield the available fonts of a family.</td>
           <td align="right" valign="top">
             
@@ -184,7 +184,7 @@
       <table width="100%" cellpadding="0" cellspacing="0" border="0">
         <tr>
           <td><span class="summary-sig"><a href="pycocoa.fonts-module.html#fontTraits" class="summary-sig-name">fontTraits</a>(<span class="summary-sig-arg">*traits</span>)</span><br />
-      Return a font traits mask for the named traits.</td>
+      Return the traits mask for the named traits.</td>
           <td align="right" valign="top">
             
             
@@ -201,7 +201,7 @@
       <table width="100%" cellpadding="0" cellspacing="0" border="0">
         <tr>
           <td><span class="summary-sig"><a href="pycocoa.fonts-module.html#fontTraitstrs" class="summary-sig-name">fontTraitstrs</a>(<span class="summary-sig-arg">traits</span>)</span><br />
-      Return font traits as names.</td>
+      Return the font trait names for a traits mask.</td>
           <td align="right" valign="top">
             
             
@@ -231,6 +231,33 @@
     <td width="15%" align="right" valign="top" class="summary">
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
+        <a href="pycocoa.fonts-module.html#FontDesign" class="summary-name">FontDesign</a> = <code title="FontDesign.Default=0,
+          .MonoSpaced=1,
+          .Rounded=2,
+          .Serif=3">FontDesign.Default<code class="variable-ellipsis">...</code></code><br />
+      Font design constants (<code>int</code>), arbitrary.
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="pycocoa.fonts-module.html#FontTextStyle" class="summary-name">FontTextStyle</a> = <code title="FontTextStyle.Body=11,
+             .Callout=31,
+             .Caption=21,
+             .Caption2=22,
+             .Footnote=41,
+             .Headline=51,
+             .HeadlineSub=50,
+             .SubHeadline=50,
+...">FontTextStyle.Body=<code class="variable-ellipsis">...</code></code><br />
+      Font text style constants (<code>int</code>), arbitrary.
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
         <a href="pycocoa.fonts-module.html#FontTrait" class="summary-name">FontTrait</a> = <code title="FontTrait.Bold=2,
          .Compressed=512 or 1&lt;&lt;9,
          .Condensed=64 or 1&lt;&lt;6,
@@ -247,17 +274,177 @@
     <td width="15%" align="right" valign="top" class="summary">
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
-        <a href="pycocoa.fonts-module.html#Fonts" class="summary-name">Fonts</a> = <code title="Fonts.App=Font({family='Helvetica', name='Helvetica', size=12, weight=\
-5}),
-     .Bold=Font({family='.AppleSystemUIFont', name='.AppleSystemUIFont\
-Bold', size=13, traits='Bold', weight=9}),
-     .BoldItalic=Font({family='.AppleSystemUIFont', name='.AppleSystem\
-UIFontEmphasizedItalic', size=13, traits='Bold Italic', weight=9}),
-     .Italic=Font({family='.AppleSystemUIFont', name='.AppleSystemUIFo\
-ntItalic', size=13, traits='Italic', weight=5}),
-...">Fonts.App=Font({family='Helvetica', name='Helvetica', <code class="variable-ellipsis">...</code></code><br />
+        <a href="pycocoa.fonts-module.html#FontWeight" class="summary-name">FontWeight</a> = <code title="FontWeight.Black=12 or 3&lt;&lt;2,
+          .Bold=9,
+          .BoldSemi=8 or 1&lt;&lt;3,
+          .Hairline=1,
+          .Heavy=15,
+          .Light=1,
+          .Medium=7,
+          .Normal=5,
+...">FontWeight.Black=12 or 3&lt;<code class="variable-ellipsis">...</code></code><br />
+      Font weight constants (<code>int</code>).
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="pycocoa.fonts-module.html#Fonts" class="summary-name">Fonts</a> = <code title="Fonts.App=Font.Helvetica(family=Helvetica, size=12, weight=5),
+     .Bold=Font..AppleSystemUIFontBold(family=.AppleSystemUIFont, size\
+=13, traits='Bold', weight=9),
+     .BoldItalic=Font..AppleSystemUIFontEmphasizedItalic(family=.Apple\
+SystemUIFont, size=13, traits='Italic Bold', weight=9),
+     .Italic=Font..AppleSystemUIFontItalic(family=.AppleSystemUIFont, \
+size=13, traits='Italic', weight=5),
+     .Label=Font..AppleSystemUIFont(family=.AppleSystemUIFont, size=10\
+...">Fonts.App=Font.Helvetica(family=Helvetica, size=12, we<code class="variable-ellipsis">...</code></code><br />
       Pre-defined system fonts, all <a href="pycocoa.fonts.Font-class.html"
       class="link">Font</a> instances.
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a name="FontDesign.Default"></a><span class="summary-name">FontDesign.Default</span><br />
+      0
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a name="FontDesign.MonoSpaced"></a><span class="summary-name">FontDesign.MonoSpaced</span><br />
+      1
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a name="FontDesign.Rounded"></a><span class="summary-name">FontDesign.Rounded</span><br />
+      2
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a name="FontDesign.Serif"></a><span class="summary-name">FontDesign.Serif</span><br />
+      3
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a name="FontTextStyle.Body"></a><span class="summary-name">FontTextStyle.Body</span><br />
+      11
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a name="FontTextStyle.Callout"></a><span class="summary-name">FontTextStyle.Callout</span><br />
+      31
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a name="FontTextStyle.Caption"></a><span class="summary-name">FontTextStyle.Caption</span><br />
+      21
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a name="FontTextStyle.Caption2"></a><span class="summary-name">FontTextStyle.Caption2</span><br />
+      22
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a name="FontTextStyle.Footnote"></a><span class="summary-name">FontTextStyle.Footnote</span><br />
+      41
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a name="FontTextStyle.Headline"></a><span class="summary-name">FontTextStyle.Headline</span><br />
+      51
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a name="FontTextStyle.HeadlineSub"></a><span class="summary-name">FontTextStyle.HeadlineSub</span><br />
+      50
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a name="FontTextStyle.SubHeadline"></a><span class="summary-name">FontTextStyle.SubHeadline</span><br />
+      50
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a name="FontTextStyle.Title"></a><span class="summary-name">FontTextStyle.Title</span><br />
+      61
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a name="FontTextStyle.Title2"></a><span class="summary-name">FontTextStyle.Title2</span><br />
+      62
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a name="FontTextStyle.Title3"></a><span class="summary-name">FontTextStyle.Title3</span><br />
+      63
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a name="FontTextStyle.TitleExtraLarge"></a><span class="summary-name">FontTextStyle.TitleExtraLarge</span><br />
+      72
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a name="FontTextStyle.TitleExtraLarge2"></a><span class="summary-name">FontTextStyle.TitleExtraLarge2</span><br />
+      73
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a name="FontTextStyle.TitleLarge"></a><span class="summary-name">FontTextStyle.TitleLarge</span><br />
+      82
     </td>
   </tr>
 <tr>
@@ -354,6 +541,94 @@ ntItalic', size=13, traits='Italic', weight=5}),
     </td><td class="summary">
         <a name="FontTrait.UnItalic"></a><span class="summary-name">FontTrait.UnItalic</span><br />
       0x1000000
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a name="FontWeight.Black"></a><span class="summary-name">FontWeight.Black</span><br />
+      12
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a name="FontWeight.Bold"></a><span class="summary-name">FontWeight.Bold</span><br />
+      9
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a name="FontWeight.BoldSemi"></a><span class="summary-name">FontWeight.BoldSemi</span><br />
+      8
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a name="FontWeight.Hairline"></a><span class="summary-name">FontWeight.Hairline</span><br />
+      0
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a name="FontWeight.Heavy"></a><span class="summary-name">FontWeight.Heavy</span><br />
+      15
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a name="FontWeight.Light"></a><span class="summary-name">FontWeight.Light</span><br />
+      0
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a name="FontWeight.Medium"></a><span class="summary-name">FontWeight.Medium</span><br />
+      7
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a name="FontWeight.Normal"></a><span class="summary-name">FontWeight.Normal</span><br />
+      5
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a name="FontWeight.Regular"></a><span class="summary-name">FontWeight.Regular</span><br />
+      5
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a name="FontWeight.SemiBold"></a><span class="summary-name">FontWeight.SemiBold</span><br />
+      8
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a name="FontWeight.Thin"></a><span class="summary-name">FontWeight.Thin</span><br />
+      2
     </td>
   </tr>
 <tr>
@@ -468,6 +743,14 @@ ntItalic', size=13, traits='Italic', weight=5}),
       Get the <code>TitleFont</code>.
     </td>
   </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a name="Fonts.TitleBar"></a><span class="summary-name">Fonts.TitleBar</span><br />
+      Get the <code>TitleBarFont</code>.
+    </td>
+  </tr>
 </table>
 <!-- ==================== FUNCTION DETAILS ==================== -->
 <a name="section-FunctionDetails"></a>
@@ -478,14 +761,14 @@ ntItalic', size=13, traits='Italic', weight=5}),
     <span class="table-header">Function Details</span></td>
 </tr>
 </table>
-<a name="fontfamilies"></a>
+<a name="fontFamilies"></a>
 <div>
 <table class="details" border="1" cellpadding="3"
        cellspacing="0" width="100%" bgcolor="white">
 <tr><td>
   <table width="100%" cellpadding="0" cellspacing="0" border="0">
   <tr valign="top"><td>
-  <h3 class="epydoc"><span class="sig"><span class="sig-name">fontfamilies</span>(<span class="sig-arg">*prefixes</span>)</span>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">fontFamilies</span>(<span class="sig-arg">*prefixes</span>)</span>
   </h3>
   </td><td align="right" valign="top"
     >&nbsp;
@@ -503,14 +786,14 @@ ntItalic', size=13, traits='Italic', weight=5}),
   </dl>
 </td></tr></table>
 </div>
-<a name="fontnamesof"></a>
+<a name="fontNamesOf"></a>
 <div>
 <table class="details" border="1" cellpadding="3"
        cellspacing="0" width="100%" bgcolor="white">
 <tr><td>
   <table width="100%" cellpadding="0" cellspacing="0" border="0">
   <tr valign="top"><td>
-  <h3 class="epydoc"><span class="sig"><span class="sig-name">fontnamesof</span>(<span class="sig-arg">family</span>)</span>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">fontNamesOf</span>(<span class="sig-arg">family</span>)</span>
   </h3>
   </td><td align="right" valign="top"
     >&nbsp;
@@ -529,14 +812,14 @@ ntItalic', size=13, traits='Italic', weight=5}),
   </dl>
 </td></tr></table>
 </div>
-<a name="fontsof"></a>
+<a name="fontsOf"></a>
 <div>
 <table class="details" border="1" cellpadding="3"
        cellspacing="0" width="100%" bgcolor="white">
 <tr><td>
   <table width="100%" cellpadding="0" cellspacing="0" border="0">
   <tr valign="top"><td>
-  <h3 class="epydoc"><span class="sig"><span class="sig-name">fontsof</span>(<span class="sig-arg">family</span>,
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">fontsOf</span>(<span class="sig-arg">family</span>,
         <span class="sig-arg">size</span>=<span class="sig-default">0</span>,
         <span class="sig-arg">weight</span>=<span class="sig-default">None</span>)</span>
   </h3>
@@ -556,7 +839,7 @@ ntItalic', size=13, traits='Italic', weight=5}),
     </ul></dd>
     <dt>Returns:</dt>
         <dd>A (<a href="pycocoa.fonts.Font-class.html" class="link">Font</a>)
-          instance for each font.</dd>
+          instance for each family font.</dd>
     <dt>Raises:</dt>
     <dd><ul class="nomargin-top">
         <li><code><strong class='fraise'>ValueError</strong></code> - Invalid <i>weight</i>.</li>
@@ -564,14 +847,14 @@ ntItalic', size=13, traits='Italic', weight=5}),
   </dl>
 </td></tr></table>
 </div>
-<a name="fontsof4"></a>
+<a name="fontsOf4"></a>
 <div>
 <table class="details" border="1" cellpadding="3"
        cellspacing="0" width="100%" bgcolor="white">
 <tr><td>
   <table width="100%" cellpadding="0" cellspacing="0" border="0">
   <tr valign="top"><td>
-  <h3 class="epydoc"><span class="sig"><span class="sig-name">fontsof4</span>(<span class="sig-arg">family</span>)</span>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">fontsOf4</span>(<span class="sig-arg">family</span>)</span>
   </h3>
   </td><td align="right" valign="top"
     >&nbsp;
@@ -586,9 +869,9 @@ ntItalic', size=13, traits='Italic', weight=5}),
           &quot;Helvetica&quot;.</li>
     </ul></dd>
     <dt>Returns:</dt>
-        <dd>4-Tuple (name, attributes, weight, traits) of (<code>str</code>, 
-          <code>str</code>, <code>int</code>, <code>int</code>) for each 
-          font.</dd>
+        <dd>4-Tuple (fontname, attributes, weight, traits) of 
+          (<code>str</code>, <code>str</code>, <code>int</code>, 
+          <code>mask</code>) for each family font.</dd>
   </dl>
 </td></tr></table>
 </div>
@@ -606,17 +889,18 @@ ntItalic', size=13, traits='Italic', weight=5}),
     </td>
   </tr></table>
   
-  <p>Return a font traits mask for the named traits.</p>
+  <p>Return the traits mask for the named traits.</p>
   <dl class="fields">
     <dt>Parameters:</dt>
     <dd><ul class="nomargin-top">
         <li><strong class="pname"><code>traits</code></strong> - Trait names (<code>str</code>s), case-insensitive.</li>
     </ul></dd>
     <dt>Returns:</dt>
-        <dd>Combined traits (<code>FontTrait</code><code>s mask</code>).</dd>
+        <dd>Combined traits (<code>mask</code>).</dd>
     <dt>Raises:</dt>
     <dd><ul class="nomargin-top">
-        <li><code><strong class='fraise'><a href="pycocoa.fonts.FontTraitError-class.html">FontTraitError</a></strong></code> - One or more <i>traits</i> are invalid.</li>
+        <li><code><strong class='fraise'><a href="pycocoa.fonts.FontTraitError-class.html">FontTraitError</a></strong></code> - One or more <i>traits</i> are invalid or incompatible, mutually 
+        exclusive.</li>
     </ul></dd>
   </dl>
 </td></tr></table>
@@ -635,11 +919,11 @@ ntItalic', size=13, traits='Italic', weight=5}),
     </td>
   </tr></table>
   
-  <p>Return font traits as names.</p>
+  <p>Return the font trait names for a traits mask.</p>
   <dl class="fields">
     <dt>Parameters:</dt>
     <dd><ul class="nomargin-top">
-        <li><strong class="pname"><code>traits</code></strong> - Traits (<code>FontTrait</code><code>s mask</code>).</li>
+        <li><strong class="pname"><code>traits</code></strong> - The traits (<code>mask</code>).</li>
     </ul></dd>
     <dt>Returns:</dt>
         <dd>Tuple of trait names (<code>str</code>s).</dd>
@@ -656,6 +940,53 @@ ntItalic', size=13, traits='Italic', weight=5}),
     <span class="table-header">Variables Details</span></td>
 </tr>
 </table>
+<a name="FontDesign"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <h3 class="epydoc">FontDesign</h3>
+  Font design constants (<code>int</code>), arbitrary.
+  <dl class="fields">
+  </dl>
+  <dl class="fields">
+    <dt>Value:</dt>
+      <dd><table><tr><td><pre class="variable">
+FontDesign.Default=0,
+          .MonoSpaced=1,
+          .Rounded=2,
+          .Serif=3
+</pre></td></tr></table>
+</dd>
+  </dl>
+</td></tr></table>
+</div>
+<a name="FontTextStyle"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <h3 class="epydoc">FontTextStyle</h3>
+  Font text style constants (<code>int</code>), arbitrary.
+  <dl class="fields">
+  </dl>
+  <dl class="fields">
+    <dt>Value:</dt>
+      <dd><table><tr><td><pre class="variable">
+FontTextStyle.Body=11,
+             .Callout=31,
+             .Caption=21,
+             .Caption2=22,
+             .Footnote=41,
+             .Headline=51,
+             .HeadlineSub=50,
+             .SubHeadline=50,
+<code class="variable-ellipsis">...</code>
+</pre></td></tr></table>
+</dd>
+  </dl>
+</td></tr></table>
+</div>
 <a name="FontTrait"></a>
 <div>
 <table class="details" border="1" cellpadding="3"
@@ -682,6 +1013,32 @@ FontTrait.Bold=2,
   </dl>
 </td></tr></table>
 </div>
+<a name="FontWeight"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <h3 class="epydoc">FontWeight</h3>
+  Font weight constants (<code>int</code>).
+  <dl class="fields">
+  </dl>
+  <dl class="fields">
+    <dt>Value:</dt>
+      <dd><table><tr><td><pre class="variable">
+FontWeight.Black=12 or 3&lt;&lt;2,
+          .Bold=9,
+          .BoldSemi=8 or 1&lt;&lt;3,
+          .Hairline=1,
+          .Heavy=15,
+          .Light=1,
+          .Medium=7,
+          .Normal=5,
+<code class="variable-ellipsis">...</code>
+</pre></td></tr></table>
+</dd>
+  </dl>
+</td></tr></table>
+</div>
 <a name="Fonts"></a>
 <div>
 <table class="details" border="1" cellpadding="3"
@@ -695,14 +1052,14 @@ FontTrait.Bold=2,
   <dl class="fields">
     <dt>Value:</dt>
       <dd><table><tr><td><pre class="variable">
-Fonts.App=Font({family='Helvetica', name='Helvetica', size=12, weight=<span class="variable-linewrap"><img src="crarr.png" alt="\" /></span>
-5}),
-     .Bold=Font({family='.AppleSystemUIFont', name='.AppleSystemUIFont<span class="variable-linewrap"><img src="crarr.png" alt="\" /></span>
-Bold', size=13, traits='Bold', weight=9}),
-     .BoldItalic=Font({family='.AppleSystemUIFont', name='.AppleSystem<span class="variable-linewrap"><img src="crarr.png" alt="\" /></span>
-UIFontEmphasizedItalic', size=13, traits='Bold Italic', weight=9}),
-     .Italic=Font({family='.AppleSystemUIFont', name='.AppleSystemUIFo<span class="variable-linewrap"><img src="crarr.png" alt="\" /></span>
-ntItalic', size=13, traits='Italic', weight=5}),
+Fonts.App=Font.Helvetica(family=Helvetica, size=12, weight=5),
+     .Bold=Font..AppleSystemUIFontBold(family=.AppleSystemUIFont, size<span class="variable-linewrap"><img src="crarr.png" alt="\" /></span>
+=13, traits='Bold', weight=9),
+     .BoldItalic=Font..AppleSystemUIFontEmphasizedItalic(family=.Apple<span class="variable-linewrap"><img src="crarr.png" alt="\" /></span>
+SystemUIFont, size=13, traits='Italic Bold', weight=9),
+     .Italic=Font..AppleSystemUIFontItalic(family=.AppleSystemUIFont, <span class="variable-linewrap"><img src="crarr.png" alt="\" /></span>
+size=13, traits='Italic', weight=5),
+     .Label=Font..AppleSystemUIFont(family=.AppleSystemUIFont, size=10<span class="variable-linewrap"><img src="crarr.png" alt="\" /></span>
 <code class="variable-ellipsis">...</code>
 </pre></td></tr></table>
 </dd>
@@ -741,7 +1098,7 @@ ntItalic', size=13, traits='Italic', weight=5}),
 <table border="0" cellpadding="0" cellspacing="0" width="100%%">
   <tr>
     <td align="left" class="footer">
-    Generated by Epydoc 3.0.1 on Tue Mar 11 15:30:54 2025
+    Generated by Epydoc 3.0.1 on Mon Mar 24 15:10:34 2025
     </td>
     <td align="right" class="footer">
       <a target="mainFrame" href="http://epydoc.sourceforge.net"

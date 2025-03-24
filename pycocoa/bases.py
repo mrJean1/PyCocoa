@@ -13,7 +13,7 @@ from pycocoa.runtime import ObjCInstance, release
 from pycocoa.utils import isinstanceOf, type2strepr
 
 __all__ = _ALL_LAZY.bases
-__version__ = '25.02.15'
+__version__ = '25.03.23'
 
 _NSD_Error = NameError("use 'NSd-', not 'NSD-'")  # PYCHOK used!
 
@@ -65,6 +65,12 @@ class _Type0(object):
     def NSDelegate(self, unused):
         raise _NSD_Error
 
+    def _sliced(self, slindex):
+        '''(INTERNAL) Convert a C{slice} index to C{range}.
+        '''
+        # assert isinstance(slindex, slice)
+        return range(*slindex.indices(len(self)))
+
     @property_RO
     def typename(self):
         '''Get this instance' Python class name (C{str}).
@@ -106,7 +112,7 @@ class _Type1(_Type0):
         '''Set the class' delegate.
         '''
         if not isNone(delegate):
-            isinstanceOf(delegate, ObjCInstance, raiser='delegate')  # XXXX ????
+            isinstanceOf(delegate, ObjCInstance, raiser='delegate')  # XXX ???
             self.NS.setDelegate_(delegate)
 
 
@@ -135,12 +141,12 @@ class _Type2(_Type1):
                 pass
             title = nsString2str(title)
         else:
+            ns = NSStr(title)
             try:
-                t = NSStr(title)
-                self.NS.setTitle_(t)
-                release(t)
+                self.NS.setTitle_(ns)
+                release(ns)
             except AttributeError:  # no NSApplication.setTitle_
-                t.release()
+                ns.release()
         self._title = bytes2str(title)
 
 
@@ -154,7 +160,7 @@ if __name__ == _Dmain_:
 #
 # pycocoa.bases.__all__ = tuple(
 # )[0]
-# pycocoa.bases.version 25.2.15, .isLazy 1, Python 3.13.1 64bit arm64, macOS 14.7.3
+# pycocoa.bases.version 25.3.23, .isLazy 1, Python 3.13.2 64bit arm64, macOS 15.3.2
 
 # MIT License <https://OpenSource.org/licenses/MIT>
 #

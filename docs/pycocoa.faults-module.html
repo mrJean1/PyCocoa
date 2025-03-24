@@ -68,7 +68,7 @@
   target="_top">faulthandler</a> may be enabled by (a) calling function 
   <code>faulthandler.enable</code> or (b) setting env variable <a 
   href="https://Docs.Python.org/3/using/cmdline.html#envvar-PYTHONFAULTHANDLER"
-  target="_top">PYTHONFAULTHANDLER</a> to any no-empty string or (c) 
+  target="_top">PYTHONFAULTHANDLER</a> to any non-empty string or (c) 
   including option <code>-X faulthandler</code> on the python command 
   line.</p>
   <p>Command line option <code>-X faulthandler</code> is not available in 
@@ -78,35 +78,49 @@
   function <a href="pycocoa.faults-module.html#enable" 
   class="link">faults.enable</a> or (b) setting env variable <a 
   href="https://Docs.Python.org/3/using/cmdline.html#envvar-PYTHONFAULTHANDLER"
-  target="_top">PYTHONFAULTHANDLER</a> to any no-empty string.</p>
-  <p><b>NOTE, if in Python 3.3 or later,</b> the env variable is defined as
-  <b><a href="https://PYTHONFAULTHANDLER=pycocoa" 
-  target="_top">PYTHONFAULTHANDLER=pycocoa</a></b>, the Python 
-  <code>faulthandler</code> will be overridden <i>by this module</i> <a 
-  href="pycocoa.faults-module.html" class="link">pycocoa.faults</a>.</p>
+  target="_top">PYTHONFAULTHANDLER</a> to any non-empty string.</p>
+  <p>If env variable <b><code>PYTHONFAULTHANDLER=pycocoa</code></b> (in 
+  Python 3.3 or later), the Python <code>faulthandler</code> will be 
+  overridden <i>by this module</i> <a href="pycocoa.faults-module.html" 
+  class="link">pycocoa.faults</a>.</p>
+  <p>See function <a href="pycocoa.faults-module.html#segfaulty" 
+  class="link">segfaulty</a> for details about <b><code>SEGFAULTs, 
+  indefinite hangs</code></b> and env variable 
+  <code>PYCOCOA_SEGFAULTY</code>.</p>
 
 <hr />
 <div class="fields">      <p><strong>Note:</strong>
-        Functions <a href="pycocoa.faults-module.html#disable" 
-        class="link">faults.disable</a>, <a 
-        href="pycocoa.faults-module.html#enable" 
-        class="link">faults.enable</a>, <a 
-        href="pycocoa.faults-module.html#exiting" 
-        class="link">faults.exiting</a>, <a 
-        href="pycocoa.faults-module.html#is_enabled" 
-        class="link">faults.is_enabled</a> and <a 
-        href="pycocoa.faults-module.html#SIGs_enabled" 
-        class="link">faults.SIGs_enabled</a> are <i>not exported, 
-        publicly</i> , only functions <a 
+        Only functions <a href="pycocoa.faults-module.html#segfaulty" 
+        class="link">segfaulty</a>, <a 
         href="pycocoa.faults-module.html#getUncaughtExceptionHandler" 
         class="link">getUncaughtExceptionHandler</a> and <a 
         href="pycocoa.faults-module.html#setUncaughtExceptionHandler" 
-        class="link">setUncaughtExceptionHandler</a> are.
+        class="link">setUncaughtExceptionHandler</a> and class <a 
+        href="pycocoa.faults.SegfaultError-class.html" 
+        class="link">SegfaultError</a> are public.
       </p>
       <p><strong>Version:</strong>
-        25.02.27
+        25.03.24
       </p>
-</div><!-- ==================== FUNCTIONS ==================== -->
+</div><!-- ==================== CLASSES ==================== -->
+<a name="section-Classes"></a>
+<table class="summary" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr bgcolor="#70b0f0" class="table-header">
+  <td align="left" colspan="2" class="table-header">
+    <span class="table-header">Classes</span></td>
+</tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="pycocoa.faults.SegfaultError-class.html" class="summary-name">SegfaultError</a><br />
+      Error raised instead of SEGFAULT, see module <a 
+        href="pycocoa.faults-module.html" class="link">pycocoa.faults</a>.
+    </td>
+  </tr>
+</table>
+<!-- ==================== FUNCTIONS ==================== -->
 <a name="section-Functions"></a>
 <table class="summary" border="1" cellpadding="3"
        cellspacing="0" width="100%" bgcolor="white">
@@ -114,6 +128,27 @@
   <td align="left" colspan="2" class="table-header">
     <span class="table-header">Functions</span></td>
 </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a href="pycocoa.faults-module.html#segfaulty" class="summary-sig-name">segfaulty</a>()</span><br />
+      Return <code>True</code> if <a 
+      href="pycocoa.faults.SegfaultError-class.html" 
+      class="link">SegfaultError</a>s are raised to prevent <i>certain</i> 
+      SEGFAULTs, <code>False</code> if SEGFAULTs are not expected or 
+      <code>None</code> if unknown.</td>
+          <td align="right" valign="top">
+            
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
 <tr>
     <td width="15%" align="right" valign="top" class="summary">
       <span class="summary-type">&nbsp;</span>
@@ -141,7 +176,7 @@
     </td><td class="summary">
       <table width="100%" cellpadding="0" cellspacing="0" border="0">
         <tr>
-          <td><span class="summary-sig"><a href="pycocoa.faults-module.html#enable" class="summary-sig-name">enable</a>(<span class="summary-sig-arg">file</span>=<span class="summary-sig-default">_sys.stdout</span>,
+          <td><span class="summary-sig"><a href="pycocoa.faults-module.html#enable" class="summary-sig-name">enable</a>(<span class="summary-sig-arg">file</span>=<span class="summary-sig-default">sys.stderr</span>,
         <span class="summary-sig-arg">**unused</span>)</span><br />
       Enable <code>fault</code> handling similar to the <a 
       href="https://Docs.Python.org/3/library/faulthandler.html" 
@@ -270,6 +305,13 @@
     <td width="15%" align="right" valign="top" class="summary">
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
+        <a name="args"></a><span class="summary-name">args</span> = <code title="sys.argv [1:]">sys.argv [1:]</code>
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
         <a name="r"></a><span class="summary-name">r</span> = <code title="NSColor.redColor()">NSColor.redColor()</code>
     </td>
   </tr>
@@ -290,6 +332,44 @@
     <span class="table-header">Function Details</span></td>
 </tr>
 </table>
+<a name="segfaulty"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">segfaulty</span>()</span>
+  </h3>
+  </td><td align="right" valign="top"
+    >&nbsp;
+    </td>
+  </tr></table>
+  
+  <p>Return <code>True</code> if <a 
+  href="pycocoa.faults.SegfaultError-class.html" 
+  class="link">SegfaultError</a>s are raised to prevent <i>certain</i> 
+  SEGFAULTs, <code>False</code> if SEGFAULTs are not expected or 
+  <code>None</code> if unknown.</p>
+  <dl class="fields">
+  </dl>
+<div class="fields">      <p><strong>Note:</strong>
+        Functions <code>pycocoa.get_classes</code>, 
+        <code>pycocoa.get_classname</code>, 
+        <code>pycocoa.get_classnameof</code> and 
+        <code>pycocoa.get_classof</code> <i>may SEGFAULT or hang 
+        infinitely</i> since macOS 15.0 Sequoia on Intel 
+        (<code>x86_64</code>) and Intel <i>emulation</i> 
+        (<code>&quot;arm64_x86_64&quot;</code>.  By default 
+        <code>pycocoa</code> raises a <code>SegfaultError</code> in that 
+        case unless <code>fault handling</code> is enabled, see module <a 
+        href="pycocoa.faults-module.html" class="link">pycocoa.faults</a>.
+        Set env variable <code>PYCOCOA_SEGFAULTY</code> to any non-empty 
+        string to suppress <code>SegfaultError</code> exceptions <i>and to 
+        risk SEGFAULTs and hangs</i>.
+      </p>
+</div></td></tr></table>
+</div>
 <a name="disable"></a>
 <div>
 <table class="details" border="1" cellpadding="3"
@@ -322,7 +402,7 @@
 <tr><td>
   <table width="100%" cellpadding="0" cellspacing="0" border="0">
   <tr valign="top"><td>
-  <h3 class="epydoc"><span class="sig"><span class="sig-name">enable</span>(<span class="sig-arg">file</span>=<span class="sig-default">_sys.stdout</span>,
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">enable</span>(<span class="sig-arg">file</span>=<span class="sig-default">sys.stderr</span>,
         <span class="sig-arg">**unused</span>)</span>
   </h3>
   </td><td align="right" valign="top"
@@ -426,8 +506,8 @@
         <li><strong class="pname"><code>status</code></strong> - The exit &quot;door&quot; and status code to be used (<code>small
           int</code>) or <code>None</code> to leave unchanged.  A 
           <i>negative</i> <b><code>status</code></b> invokes 
-          <code>os._exit(abs(status))</code> to terminate without normal 
-          exit processing, while a <i>non-negative</i> 
+          <code>os._exit(abs(status))</code> to terminate <i>without normal
+          exit processing</i>, while a <i>non-negative</i> 
           <b><code>status</code></b> uses <code>sys.exit(status)</code> 
           after a <code>fault</code>.</li>
     </ul></dd>
@@ -586,7 +666,7 @@
 <table border="0" cellpadding="0" cellspacing="0" width="100%%">
   <tr>
     <td align="left" class="footer">
-    Generated by Epydoc 3.0.1 on Tue Mar 11 15:30:54 2025
+    Generated by Epydoc 3.0.1 on Mon Mar 24 15:10:34 2025
     </td>
     <td align="right" class="footer">
       <a target="mainFrame" href="http://epydoc.sourceforge.net"

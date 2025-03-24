@@ -91,7 +91,7 @@ bases._Type0 --+
       <table width="100%" cellpadding="0" cellspacing="0" border="0">
         <tr>
           <td><span class="summary-sig"><a href="pycocoa.apps.App-class.html#__init__" class="summary-sig-name">__init__</a>(<span class="summary-sig-arg">self</span>,
-        <span class="summary-sig-arg">title</span>=<span class="summary-sig-default"><code class="variable-quote">'</code><code class="variable-string">PyCocao</code><code class="variable-quote">'</code></span>,
+        <span class="summary-sig-arg">title</span>=<span class="summary-sig-default"><code class="variable-quote">'</code><code class="variable-string">PyCocoa</code><code class="variable-quote">'</code></span>,
         <span class="summary-sig-arg">raiser</span>=<span class="summary-sig-default">False</span>,
         <span class="summary-sig-arg">**kwds</span>)</span><br />
       New <a href="pycocoa.apps.App-class.html" class="link">App</a>.</td>
@@ -531,8 +531,8 @@ bases._Type0 --+
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
         <a href="pycocoa.apps.App-class.html#isActive" class="summary-name">isActive</a><br />
-      Get this app's active state (<code>bool</code>) or <code>None</code> 
-      if unknown.
+      Get this app's active state (<code>bool</code> or <code>None</code> 
+      if unknown).
     </td>
   </tr>
 <tr>
@@ -540,8 +540,8 @@ bases._Type0 --+
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
         <a href="pycocoa.apps.App-class.html#isFull" class="summary-name">isFull</a><br />
-      Get this app's full screen mode or zoomed state (<code>bool</code>) 
-      or <code>None</code> if unknown.
+      Get this app's full screen mode or zoomed state (<code>bool</code> or
+      <code>None</code> if unknown).
     </td>
   </tr>
 <tr>
@@ -549,8 +549,8 @@ bases._Type0 --+
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
         <a href="pycocoa.apps.App-class.html#isFullScreen" class="summary-name">isFullScreen</a><br />
-      Get this app's full screen mode (<code>bool</code>) or 
-      <code>None</code> if unknown.
+      Get this app's full screen mode (<code>bool</code> or 
+      <code>None</code> if unknown).
     </td>
   </tr>
 <tr>
@@ -558,8 +558,8 @@ bases._Type0 --+
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
         <a href="pycocoa.apps.App-class.html#isHidden" class="summary-name">isHidden</a><br />
-      Get this app's hidden state (<code>bool</code>) or <code>None</code> 
-      if unknown.
+      Get this app's hidden state (<code>bool</code> or <code>None</code> 
+      if unknown).
     </td>
   </tr>
 <tr>
@@ -567,8 +567,8 @@ bases._Type0 --+
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
         <a href="pycocoa.apps.App-class.html#isRunning" class="summary-name">isRunning</a><br />
-      Get this app's running state (<code>bool</code>) or <code>None</code>
-      if unknown.
+      Get this app's running state (<code>bool</code> or <code>None</code> 
+      if unknown).
     </td>
   </tr>
 <tr>
@@ -584,8 +584,8 @@ bases._Type0 --+
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
         <a href="pycocoa.apps.App-class.html#isVisible" class="summary-name">isVisible</a><br />
-      Get this apps's visible state (<code>bool</code>) or 
-      <code>None</code> if unknown.
+      Get this apps's visible state (<code>bool</code> or <code>None</code>
+      if unknown).
     </td>
   </tr>
 <tr>
@@ -593,8 +593,8 @@ bases._Type0 --+
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
         <a href="pycocoa.apps.App-class.html#isZoomed" class="summary-name">isZoomed</a><br />
-      Get this apps's zoomed state (<code>bool</code>) or <code>None</code>
-      if unknown.
+      Get this apps's zoomed state (<code>bool</code> or <code>None</code> 
+      if unknown).
     </td>
   </tr>
 <tr>
@@ -689,7 +689,7 @@ bases._Type0 --+
   <table width="100%" cellpadding="0" cellspacing="0" border="0">
   <tr valign="top"><td>
   <h3 class="epydoc"><span class="sig"><span class="sig-name">__init__</span>(<span class="sig-arg">self</span>,
-        <span class="sig-arg">title</span>=<span class="sig-default"><code class="variable-quote">'</code><code class="variable-string">PyCocao</code><code class="variable-quote">'</code></span>,
+        <span class="sig-arg">title</span>=<span class="sig-default"><code class="variable-quote">'</code><code class="variable-string">PyCocoa</code><code class="variable-quote">'</code></span>,
         <span class="sig-arg">raiser</span>=<span class="sig-default">False</span>,
         <span class="sig-arg">**kwds</span>)</span>
     <br /><em class="fname">(Constructor)</em>
@@ -738,13 +738,12 @@ bases._Type0 --+
   <dl class="fields">
     <dt>Parameters:</dt>
     <dd><ul class="nomargin-top">
-        <li><strong class="pname"><code>active</code></strong> - Activate or de-activate (<code>bool</code>) or <code>None</code>.</li>
-        <li><strong class="pname"><code>force</code></strong> - Activate regardless (<code>bool</code>), otheriwse only activate 
-          if no other app is active</li>
+        <li><strong class="pname"><code>active</code></strong> - Activate or de-activate (<code>bool</code> or <code>None</code>).</li>
+        <li><strong class="pname"><code>force</code></strong> - Activate regardless of current state (<code>bool</code>).</li>
     </ul></dd>
     <dt>Returns:</dt>
-        <dd><i>Previous</i> <code>isActive</code> state (<code>bool</code>) 
-          or <code>None</code> if unkown.</dd>
+        <dd><i>Previous</i> <code>isActive</code> state (<code>bool</code> or
+          <code>None</code> if unknown).</dd>
   </dl>
 <div class="fields">      <p><strong>See Also:</strong>
         <a 
@@ -800,11 +799,12 @@ bases._Type0 --+
   <dl class="fields">
     <dt>Parameters:</dt>
     <dd><ul class="nomargin-top">
-        <li><strong class="pname"><code>full</code></strong> - Enter or exit (<code>bool</code>) or <code>None</code>.</li>
+        <li><strong class="pname"><code>full</code></strong> - Enter or exit (<code>bool</code> or <code>None</code> for 
+          unchanged).</li>
     </ul></dd>
     <dt>Returns:</dt>
-        <dd>Full screen mode (<code>bool</code>) or <code>None</code> if 
-          unknown.</dd>
+        <dd>Full screen mode (<code>bool</code> or <code>None</code> if 
+          unknown).</dd>
   </dl>
 </td></tr></table>
 </div>
@@ -827,11 +827,12 @@ bases._Type0 --+
   <dl class="fields">
     <dt>Parameters:</dt>
     <dd><ul class="nomargin-top">
-        <li><strong class="pname"><code>hide</code></strong> - Hide or show (<code>bool</code>) or <code>None</code>.</li>
+        <li><strong class="pname"><code>hide</code></strong> - Hide or show (<code>bool</code> or <code>None</code> for 
+          unchanged).</li>
     </ul></dd>
     <dt>Returns:</dt>
-        <dd><i>Previous</i> <code>isHidden</code> state (<code>bool</code>) 
-          or <code>None</code> if unknown.</dd>
+        <dd><i>Previous</i> <code>isHidden</code> state (<code>bool</code> or
+          <code>None</code> if unknown).</dd>
   </dl>
 <div class="fields">      <p><strong>See Also:</strong>
         <a 
@@ -1007,13 +1008,13 @@ class="link">Tile</a>).
        cellspacing="0" width="100%" bgcolor="white">
 <tr><td>
   <h3 class="epydoc">isActive</h3>
-  <p>Get this app's active state (<code>bool</code>) or <code>None</code> 
-  if unknown.</p>
+  <p>Get this app's active state (<code>bool</code> or <code>None</code> if
+  unknown).</p>
   <dl class="fields">
     <dt>Get Method:</dt>
     <dd class="value"><span class="summary-sig">isActive(<span class="summary-sig-arg">self</span>)</span>
-        - Get this app's active state (<code>bool</code>) or <code>None</code> if 
-unknown.
+        - Get this app's active state (<code>bool</code> or <code>None</code> if 
+unknown).
     </dd>
     <dt>Set Method:</dt>
     <dd class="value"><span class="summary-sig">Read_Only(<span class="summary-sig-arg">inst</span>,
@@ -1029,13 +1030,13 @@ unknown.
        cellspacing="0" width="100%" bgcolor="white">
 <tr><td>
   <h3 class="epydoc">isFull</h3>
-  <p>Get this app's full screen mode or zoomed state (<code>bool</code>) or
-  <code>None</code> if unknown.</p>
+  <p>Get this app's full screen mode or zoomed state (<code>bool</code> or 
+  <code>None</code> if unknown).</p>
   <dl class="fields">
     <dt>Get Method:</dt>
     <dd class="value"><span class="summary-sig">isFull(<span class="summary-sig-arg">self</span>)</span>
-        - Get this app's full screen mode or zoomed state (<code>bool</code>) or 
-<code>None</code> if unknown.
+        - Get this app's full screen mode or zoomed state (<code>bool</code> or 
+<code>None</code> if unknown).
     </dd>
     <dt>Set Method:</dt>
     <dd class="value"><span class="summary-sig">Read_Only(<span class="summary-sig-arg">inst</span>,
@@ -1051,13 +1052,13 @@ unknown.
        cellspacing="0" width="100%" bgcolor="white">
 <tr><td>
   <h3 class="epydoc">isFullScreen</h3>
-  <p>Get this app's full screen mode (<code>bool</code>) or 
-  <code>None</code> if unknown.</p>
+  <p>Get this app's full screen mode (<code>bool</code> or 
+  <code>None</code> if unknown).</p>
   <dl class="fields">
     <dt>Get Method:</dt>
     <dd class="value"><span class="summary-sig">isFullScreen(<span class="summary-sig-arg">self</span>)</span>
-        - Get this app's full screen mode (<code>bool</code>) or <code>None</code> if
-unknown.
+        - Get this app's full screen mode (<code>bool</code> or <code>None</code> if 
+unknown).
     </dd>
     <dt>Set Method:</dt>
     <dd class="value"><span class="summary-sig">Read_Only(<span class="summary-sig-arg">inst</span>,
@@ -1073,13 +1074,13 @@ unknown.
        cellspacing="0" width="100%" bgcolor="white">
 <tr><td>
   <h3 class="epydoc">isHidden</h3>
-  <p>Get this app's hidden state (<code>bool</code>) or <code>None</code> 
-  if unknown.</p>
+  <p>Get this app's hidden state (<code>bool</code> or <code>None</code> if
+  unknown).</p>
   <dl class="fields">
     <dt>Get Method:</dt>
     <dd class="value"><span class="summary-sig">isHidden(<span class="summary-sig-arg">self</span>)</span>
-        - Get this app's hidden state (<code>bool</code>) or <code>None</code> if 
-unknown.
+        - Get this app's hidden state (<code>bool</code> or <code>None</code> if 
+unknown).
     </dd>
     <dt>Set Method:</dt>
     <dd class="value"><span class="summary-sig">Read_Only(<span class="summary-sig-arg">inst</span>,
@@ -1095,13 +1096,13 @@ unknown.
        cellspacing="0" width="100%" bgcolor="white">
 <tr><td>
   <h3 class="epydoc">isRunning</h3>
-  <p>Get this app's running state (<code>bool</code>) or <code>None</code> 
-  if unknown.</p>
+  <p>Get this app's running state (<code>bool</code> or <code>None</code> 
+  if unknown).</p>
   <dl class="fields">
     <dt>Get Method:</dt>
     <dd class="value"><span class="summary-sig">isRunning(<span class="summary-sig-arg">self</span>)</span>
-        - Get this app's running state (<code>bool</code>) or <code>None</code> if 
-unknown.
+        - Get this app's running state (<code>bool</code> or <code>None</code> if 
+unknown).
     </dd>
     <dt>Set Method:</dt>
     <dd class="value"><span class="summary-sig">Read_Only(<span class="summary-sig-arg">inst</span>,
@@ -1137,13 +1138,13 @@ unknown.
        cellspacing="0" width="100%" bgcolor="white">
 <tr><td>
   <h3 class="epydoc">isVisible</h3>
-  <p>Get this apps's visible state (<code>bool</code>) or <code>None</code>
-  if unknown.</p>
+  <p>Get this apps's visible state (<code>bool</code> or <code>None</code> 
+  if unknown).</p>
   <dl class="fields">
     <dt>Get Method:</dt>
     <dd class="value"><span class="summary-sig">isVisible(<span class="summary-sig-arg">self</span>)</span>
-        - Get this apps's visible state (<code>bool</code>) or <code>None</code> if 
-unknown.
+        - Get this apps's visible state (<code>bool</code> or <code>None</code> if 
+unknown).
     </dd>
     <dt>Set Method:</dt>
     <dd class="value"><span class="summary-sig">Read_Only(<span class="summary-sig-arg">inst</span>,
@@ -1159,13 +1160,13 @@ unknown.
        cellspacing="0" width="100%" bgcolor="white">
 <tr><td>
   <h3 class="epydoc">isZoomed</h3>
-  <p>Get this apps's zoomed state (<code>bool</code>) or <code>None</code> 
-  if unknown.</p>
+  <p>Get this apps's zoomed state (<code>bool</code> or <code>None</code> 
+  if unknown).</p>
   <dl class="fields">
     <dt>Get Method:</dt>
     <dd class="value"><span class="summary-sig">isZoomed(<span class="summary-sig-arg">self</span>)</span>
-        - Get this apps's zoomed state (<code>bool</code>) or <code>None</code> if 
-unknown.
+        - Get this apps's zoomed state (<code>bool</code> or <code>None</code> if 
+unknown).
     </dd>
     <dt>Set Method:</dt>
     <dd class="value"><span class="summary-sig">Read_Only(<span class="summary-sig-arg">inst</span>,
@@ -1339,7 +1340,7 @@ class="link">Window</a>) or <code>None</code>.
 <table border="0" cellpadding="0" cellspacing="0" width="100%%">
   <tr>
     <td align="left" class="footer">
-    Generated by Epydoc 3.0.1 on Tue Mar 11 15:30:54 2025
+    Generated by Epydoc 3.0.1 on Mon Mar 24 15:10:34 2025
     </td>
     <td align="right" class="footer">
       <a target="mainFrame" href="http://epydoc.sourceforge.net"

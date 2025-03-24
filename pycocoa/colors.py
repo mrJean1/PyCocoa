@@ -3,11 +3,10 @@
 
 # License at the end of this file.
 
-'''Types L{Color}, L{ColorError}, L{CMYColor}, L{GrayScaleColor}, L{HSBColor},
-L{RGBColor}, L{TintColor} and L{UIColor} wrapping Cocoa's C{NSColor} and
-C{enum}-like constants L{CMYColors}, L{GrayScaleColors}, L{HSBColors},
-L{RGBColors}, L{TintColor}, L{TintColors}, L{UIColors} and all L{Colors}
-accessible by color space acronym like C{CMY}, C{GS}, C{RGB}, etc.
+'''Types L{Color}, L{ColorError}, L{CMYColor}, L{GrayScaleColor}, L{HSBColor}, L{RGBColor},
+L{TintColor} and L{UIColor} wrapping Cocoa's C{NSColor} and C{enum}-like constants
+L{CMYColors}, L{GrayScaleColors}, L{HSBColors}, L{RGBColors}, L{TintColor}, L{TintColors},
+L{UIColors} and all L{Colors} accessible by color space acronym like C{CMY}, C{GS}, C{RGB}, etc.
 
 @var Colors: Colors by color space acronym, like C{Colors.RGB.Red}, C{Colors.Tint.Red} (C{enum}).
 @var Colors.CMY: Some standard C{Cyan-Magenta-Yellow} colors, all L{CMYColor} instances (C{enum}).
@@ -79,7 +78,7 @@ from copy import copy as _copy
 # from enum import Enum
 
 __all__ = _ALL_LAZY.colors
-__version__ = '25.02.19'
+__version__ = '25.03.13'
 
 
 def _Xhandler(unused):
@@ -110,14 +109,13 @@ class Color(_Type0):
               <https://PyPI.org/project/colormath/>} are
               not supported (yet).
     '''
-
     _name    = None
     _nsColor = None
 
     def __init__(self, name, nsColor=_NN_):
         ''' New L{Color} from an existing C{NSColor}.
 
-           @arg name: Given color nsme (C{str}).
+           @arg name: Given color name (C{str}).
            @kwarg nsColor: Optionally, the name of an
                            existing C{NSColor} (C{str}).
 
@@ -131,10 +129,10 @@ class Color(_Type0):
         '''
         if nsColor:
             c = nsColor
-        elif name.endswith('Color'):
+        elif name.endswith(Color.__name__):
             raise ColorError(_fmt_invalid(name=repr(name)))
         else:
-            c = name + 'Color'
+            c = name + Color.__name__
         ns = getattr(NSColor, c, None)
         if ns is None or not callable(ns):
             raise ColorError(_fmt_invalid(color=repr(c)))
@@ -230,8 +228,9 @@ class Color(_Type0):
     def name(self, name):
         '''Set the given name of this color (C{str}).
         '''
-        if name[:1].islower():
-            name = name[:1].upper() + name[1:]
+        n = name[:1]
+        if n.islower():  # NOT name.capitalize()!
+            name = n.upper() + name[1:]
         self._name = name
 
     @property_RO
@@ -477,11 +476,11 @@ class UIColors(_Constants):
     Highlight         = UIColor('highlight')
     Label             = UIColor('label')
     Link              = UIColor('link')
+    SelectedText      = UIColor('selectedText')
     try:
         Separator     = UIColor('separator')
     except ColorError:
         pass
-    SelectedText      = UIColor('selectedText')
     Shadow            = UIColor('shadow')
     Text              = UIColor('text')
     WindowBackground  = UIColor('windowBackground')
@@ -585,7 +584,7 @@ if __name__ == _Dmain_:
 #                         .Text=UIColor(NSDynamicSystemColor, name='Text'),
 #                         .WindowBackground=UIColor(NSDynamicSystemColor, name='WindowBackground'),
 # )[15]
-# pycocoa.colors.version 25.2.19, .isLazy 1, Python 3.13.1 64bit arm64, macOS 14.7.3
+# pycocoa.colors.version 25.3.13, .isLazy 1, Python 3.13.2 64bit arm64, macOS 14.7.3
 
 # MIT License <https://OpenSource.org/licenses/MIT>
 #

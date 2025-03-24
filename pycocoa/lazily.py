@@ -16,33 +16,38 @@ each lazily imported module and attribute, similar to environment variable
 C{PYTHONVERBOSE} showing imports.  Using C{3} or higher also shows the
 importing file name and line number.
 
+Set env variable C{PYCOCOA_INIT__ALL__} to C{"__all__"} to force import of
+all C{pycocoa} modules when attribute C{pygeodesy.__all__} is referenced.
+
 @note: C{Lazy import} applies only to top-level modules of C{pycocoa}.
-A C{lazy import} of a top-level module also loads all sub-modules
-imported by that top-level module.
+       A C{lazy import} of a top-level module also loads all sub-modules
+       imported by that top-level module.
 
 @var isLazy: Lazy import setting (C{int} 0, 1, 2 or 3+) from environment
              variable C{PYCOCOA_LAZY_IMPORT}, or C{None} if C{lazy import}
              is not supported or not enabled, or C{False} if initializing
              C{lazy import} failed.
 '''
-from pycocoa.internals import __all__ as _internals_all_, _COMMASPACE_, _Dall_, \
-                              _Dfile_, _Dmain_, _Dpackage_, _DOT_, _fmt_invalid, \
-                              _fmt, _instr, _MutableConstants, _NA_, _NN_, _no, \
-                              _NSObject_, _pycocoa_, property_RO, _sys, _UNDER_
+from pycocoa.internals import __all__ as _internals_all_, _COLONSPACE_, \
+                              _COMMASPACE_, _Dall_, _Dfile_, _Dmain_, \
+                              _Dpackage_, _DOT_, _fmt, _fmt_invalid, \
+                              _instr, _MutableConstants, _NA_, _NN_, \
+                              _no, _NSObject_, _pycocoa_, property_RO, \
+                              _UNDER_,  sys
 from os import environ as _environ
 from os.path import basename as _basename
-# import sys as _sys  # from .internals
+# import sys  # from .internals
 
 _C_XTYPES = 'c_ptrdiff_t', 'c_struct_t', 'c_void'  # exported
 _FOR_DOCS = _environ.get('PYCOCOA_FOR_DOCS', None)
 _PY_FH    = _environ.get('PYTHONFAULTHANDLER', None)  # PYCHOK .faults, .__init__
 
 # @module_property[_RO?] <https://GitHub.com/jtushman/proxy_tools/>
-isLazy          =  None  # see @var isLazy above
-# _isPython2    = _sys.version_info.major < 3  # PYCHOK in .runtime
-_isPython3      = _sys.version_info.major > 2  # PYCHOK in .utils, .windows
-_None           =  object()   # NOT None!
-_Python_version = _sys.version.split()[0]
+isLazy          = None  # see @var isLazy above
+# _isPython2    = sys.version_info.major < 3  # PYCHOK in .runtime
+_isPython3      = sys.version_info.major > 2  # PYCHOK in .utils, .windows
+_None           = object()   # NOT None!
+_Python_version = sys.version.split()[0]
 
 
 class LazyAttributeError(AttributeError):
@@ -144,7 +149,7 @@ class _Types(_MutableConstants):
 
     @property_RO
     def pycocoa(self):  # get pycocoa, I{once}
-        pycocoa = _sys.modules[_pycocoa_]  # without re-import, isLazy=0?
+        pycocoa = sys.modules[_pycocoa_]  # without re-import, isLazy=0?
         _Types.__class__.pycocoa = pycocoa  # overwrite property_RO
         return pycocoa
 
@@ -171,15 +176,16 @@ _ALL_LAZY = _NamedEnum_RO(_name='_ALL_LAZY',
                           bases=(),  # module only
                          colors=('CMYColor', 'CMYColors', 'Color', 'ColorError', 'Colors', 'GrayScaleColor', 'GrayScaleColors',
                                  'HSBColor', 'HSBColors', 'RGBColor', 'RGBColors', 'TintColor', 'TintColors', 'UIColor', 'UIColors'),
-                     deprecated=('Cache2', 'module_property_RO',
-                                 'get_libPC', 'get_libs', 'property2', 'sortuples',
+                     deprecated=('Cache2','BuiltInScreen', 'DeepestScreen', 'ExternalScreen', 'MainScreen', 'module_property_RO',
+                                 'fontfamilies', 'fontnamesof', 'fontsof', 'fontsof4',
                                  'libAppKit', 'libCF', 'libCG', 'libCT', 'libFoundation', 'libPC', 'libobjc',
                                  'OBJC_ASSOCIATION_ASSIGN', 'OBJC_ASSOCIATION_COPY', 'OBJC_ASSOCIATION_COPY_NONATOMIC',
-                                 'OBJC_ASSOCIATION_RETAIN', 'OBJC_ASSOCIATION_RETAIN_NONATOMIC'),
+                                 'OBJC_ASSOCIATION_RETAIN', 'OBJC_ASSOCIATION_RETAIN_NONATOMIC',
+                                 'get_libPC', 'get_libs', 'property2', 'sortuples'),
                           dicts=('Dict', 'FrozenDict'),
-                         faults=('getUncaughtExceptionHandler', 'setUncaughtExceptionHandler',),  # disable, enable, exiting, is_enabled, SIGs_enabled
-                          fonts=('Font', 'FontError', 'fontfamilies', 'fontnamesof', 'Fonts',
-                                 'fontsof', 'fontsof4', 'FontTrait', 'FontTraitError', 'fontTraits', 'fontTraitstrs'),
+                         faults=('SegfaultError', 'getUncaughtExceptionHandler', 'segfaulty', 'setUncaughtExceptionHandler',),  # disable, enable, exiting, is_enabled, SIGs_enabled
+                          fonts=('Font', 'FontDesign', 'FontError', 'FontTextStyle', 'FontTrait', 'FontTraitError', 'Fonts', 'FontWeight',
+                                 'fontFamilies', 'fontNamesOf', 'fontsOf', 'fontsOf4', 'fontTraits', 'fontTraitstrs'),
                        geometry=('Point', 'Point2', 'Rect', 'Rect4', 'Size', 'Size2'),
                         getters=('get_c_func_t', 'get_class', 'get_classes', 'get_classname', 'get_classnameof',
                                  'get_classof', 'get_inheritance', 'get_ivar', 'get_ivars', 'get_metaclass',
@@ -280,14 +286,15 @@ _ALL_LAZY = _NamedEnum_RO(_name='_ALL_LAZY',
                                  'ObjCBoundClassMethod', 'ObjCBoundMethod', 'ObjCClass', 'ObjCClassMethod',
                                  'ObjCConstant', 'ObjCDelegate', 'ObjCInstance', 'ObjCMethod', 'ObjCSubclass',
                                  'register_subclass', 'release', 'retain', 'send_message', 'send_super', 'send_super_init', 'set_ivar'),
-                        screens=('BuiltInScreen', 'DeepestScreen', 'ExternalScreen', 'Frame', 'MainScreen', 'Screen', 'Screens'),
+                        screens=('Frame', 'Screen', 'Screens'),
                            sets=('FrozenSet', 'Set'),
                            strs=('Str', 'StrAttd'),
                          tables=('closeTables', 'NSTableViewDelegate', 'Table', 'TableWindow'),
                          tuples=('Tuple',),
                           utils=('aspect_ratio', 'clipstr', 'errorf', 'flint', 'gcd',
-                                 'inst2strepr', 'isinstanceOf', 'islistuple', 'logf',
-                                 'machine', 'name2objc', 'name2py', 'name2pymethod',
+                                 'inst2strepr', 'isinstanceOf', 'islistuple',
+                                 'logf', 'machine', 'macOSver', 'macOSver2',
+                                 'name2objc', 'name2py', 'name2pymethod',
                                  'printf', 'properties',
                                  'terminating', 'type2strepr', 'z1000str', 'zfstr', 'zSIstr'),
                         windows=('AutoResize', 'AutoResizeError', 'autoResizes', 'BezelStyle', 'Border', 'MediaWindow', 'ns2Window',
@@ -296,9 +303,6 @@ _ALL_LAZY = _NamedEnum_RO(_name='_ALL_LAZY',
 # DEPRECATED __all__ names overloading those in _ALL_LAZY.deprecated where
 # the new name is fully backward compatible in signature and return value
 _ALL_OVERRIDING = _NamedEnum_RO(_name='_ALL_OVERRIDING')  # all DEPRECATED
-
-__all__ = _ALL_LAZY.lazily
-__version__ = '25.02.25'
 
 
 def _all_imports(**more):
@@ -312,16 +316,14 @@ def _all_imports(**more):
     imports = _Dict()
     imports_add = imports.add
 
-    for _all_ in (_ALL_LAZY, _ALL_OVERRIDING, more):
-        for mod, attrs in _all_.items():
-            if isinstance(attrs, tuple) and not mod.startswith(_UNDER_):
-                imports_add(mod, mod)
-                for attr in attrs:
-                    attr, _, _as_ = attr.partition(' as ')
-                    if _as_:
-                        imports_add(_as_, _DOT_(mod, attr))
-                    else:
-                        imports_add(attr, mod)
+    for mod, attrs in _all_mod_attrs(**more):
+        imports_add(mod, mod)
+        for attr in attrs:
+            attr, _, _as_ = attr.partition(' as ')
+            if _as_:
+                imports_add(_as_, _DOT_(mod, attr))
+            else:
+                imports_add(attr, mod)
     return imports
 
 
@@ -339,13 +341,21 @@ def _all_missing2(_all):
             (_DOT_(_pycocoa_, _Dall_),                _all_missing(_imp, _all)))
 
 
+def _all_mod_attrs(**more):
+    # helper form ._all_imports and ._lazy_import(_Dall_)
+    for _all_ in (_ALL_LAZY, _ALL_OVERRIDING, more):
+        for mod, attrs in _all_.items():
+            if isinstance(attrs, tuple) and not mod.startswith(_UNDER_):
+                yield mod, attrs
+
+
 def _caller3(up):  # in .named
     '''(INTERNAL) Get 3-tuple C{(caller name, file name, line number)}
        for the caller B{C{up}} stack frames in the Python call stack.
     '''
     # sys._getframe(1) ... 'importlib._bootstrap' line 1032,
     # may throw a ValueError('call stack not deep enough')
-    f = _sys._getframe(up + 1)
+    f = sys._getframe(up + 1)
     return (f.f_code.co_name,  # caller name
            _basename(f.f_code.co_filename),  # file name
             f.f_lineno)  # line number
@@ -358,10 +368,10 @@ def _lazy_import(name):  # overwritten below in Python 3.7+, in .internals
         return getattr(_Types.pycocoa, name)  # XXX _None or missing?
     except (AttributeError, ImportError) as x:
         t = _instr(_lazy_import, name)
-        raise LazyImportError('%s: %s', t, x)
+        raise LazyImportError(_COLONSPACE_(t, x))
 
 
-def _lazy_import2(pack):  # MCCABE 15
+def _lazy_import2(pack):  # MCCABE 18
     '''Check for and set up lazy importing.
 
        @arg pack: The name of the package (C{str}) performing the imports,
@@ -388,7 +398,7 @@ def _lazy_import2(pack):  # MCCABE 15
     '''
     global isLazy
 
-    if _sys.version_info[:2] < (3, 7):  # not supported
+    if sys.version_info[:2] < (3, 7):  # not supported
         t = _no(_DOT_(pack, _lazy_import2.__name__), 'for')
         raise LazyImportError('%s Python %s', t, _Python_version)
 
@@ -420,6 +430,16 @@ def _lazy_import2(pack):  # MCCABE 15
 
         elif name in (_Dall_,):  # XXX _Ddir_, _Dmembers_?
             imported = _ALL_INIT + tuple(imports.keys())
+            if _environ.get('PYCOCOA_INIT__ALL__', _NN_) == _Dall_:
+                m = len(_ALL_INIT)
+                for mod, attrs in _all_mod_attrs():
+                    import_module(_DOT_(pack, mod), parent)
+                    m += len(attrs) + 1
+                n = len(imported)
+                s = len(set(imported))
+                if not (m == n == s):
+                    t = ' == '.join(map(str, (n, m, s)))
+                    raise AssertionError(_COLONSPACE_(_Dall_, t))
             mod = _NN_
         else:
             raise LazyAttributeError(_no('module', 'or', 'attribute', _DOT_(parent, name)))
@@ -477,7 +497,7 @@ def _lazy_init3(pack):
         isLazy = int(z) if z.isdigit() else (1 if z else 0)
         if isLazy < 1:  # not enabled
             raise LazyImportError('env %s=%r', 'PYCOCOA_LAZY_IMPORT', z)
-        if _sys.flags.verbose:  # _environ.get('PYTHONVERBOSE', None)
+        if sys.flags.verbose:  # _environ.get('PYTHONVERBOSE', None)
             isLazy += 1
 
         package = import_module(pack)
@@ -492,11 +512,14 @@ def _lazy_init3(pack):
     return import_module, package, parent
 
 
+__all__ = _ALL_LAZY.lazily
+__version__ = '25.03.24'
+
 if __name__ == _Dmain_:
 
     # the following warning appears when running this module with Python 3.7 or later as ...
     #
-    # % python3 -m pycocoa.lazily
+    # % [env PYCOCOA_INIT__ALL__=__all__]  python3  [-W ignore]  -m pycocoa.lazily
     #
     # /Library/Frameworks/Python.framework/Versions/3.9/lib/python3.9/runpy.py:127: RuntimeWarning:
     # 'pycocoa.lazily' found in sys.modules after import of package 'pycocoa', but prior to execution
@@ -504,16 +527,31 @@ if __name__ == _Dmain_:
     #
     # <https://StackOverflow.com/questions/43393764/python-3-6-project-structure-leads-to-runtimewarning>
 
-    for n, m in _sys.modules.items():  # show any pre-loaded modules
+    from pycocoa import printf
+
+    for n, m in sys.modules.items():  # show any pre-loaded modules
         if n in _ALL_LAZY or getattr(m, _Dpackage_, _NN_) == _pycocoa_:
-            print(_fmt('pre-loaded %s: %s?', n, getattr(m, _Dfile_, _NA_)))
+            printf('pre-loaded %s: %s?', n, getattr(m, _Dfile_, _NA_))
+
+    from pycocoa import __all__ as a
+    printf('%d len(%s)', len(a), _Dall_)
+    del a, n, m, printf
+
 
 # % python3 -m pycocoa.lazily
 #
-# ... runpy.py:128: RuntimeWarning: ...
-# pre-loaded __main__: .../PyCocoa/pycocoa/lazily.py?
-# pre-loaded pycocoa.lazily: .../PyCocoa/pycocoa/lazily.py?
-# pre-loaded pycocoa: .../PyCocoa/pycocoa/__init__.py?
+# ... runpy>.py:128: RuntimeWarning: 'pycocoa.lazily' found ...
+# pycocoa pre-loaded pycocoa.internals: .../pycocoa/internals.py?
+# pycocoa pre-loaded pycocoa.lazily: .../pycocoa/lazily.py?
+# pycocoa pre-loaded pycocoa.utils: .../pycocoa/utils.py?
+# pycocoa pre-loaded pycocoa.octypes: .../pycocoa/octypes.py?
+# pycocoa pre-loaded pycocoa.oslibs: .../pycocoa/oslibs.py?
+# pycocoa pre-loaded pycocoa.getters: .../pycocoa/getters.py?
+# pycocoa pre-loaded pycocoa.runtime: .../pycocoa/runtime.py?
+# pycocoa pre-loaded pycocoa.nstypes: .../pycocoa/nstypes.py?
+# pycocoa pre-loaded pycocoa.faults: .../pycocoa/faults.py?
+# pycocoa pre-loaded pycocoa: .../pycocoa/__init__.py?
+# pycocoa 598 len(__all__)
 
 # MIT License <https://OpenSource.org/licenses/MIT>
 #

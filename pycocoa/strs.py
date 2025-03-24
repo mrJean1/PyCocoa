@@ -14,7 +14,7 @@ from pycocoa.runtime import isImmutable, isMutable
 from pycocoa.pytypes import dict2NS, str2NS
 
 __all__ = _ALL_LAZY.strs
-__version__ = '25.02.16'
+__version__ = '25.03.13'
 
 
 class Str(str, _Type0):  # str, first to maintain str behavior
@@ -44,10 +44,7 @@ class Str(str, _Type0):  # str, first to maintain str behavior
 
           @return: The copy (L{Str}).
         '''
-        if ranged:
-            s = self[slice(*ranged)]
-        else:
-            s = self
+        s = self[slice(*ranged)] if ranged else self
         return type(self)(s)
 
     @property_RO
@@ -201,9 +198,9 @@ class StrAttd(Str, _Type0):
         '''Get the ObjC instance (C{NSAttributedString}).
         '''
         # self._NS == Str._NS
+        N_ = NSAttributedString.alloc().initWithString_attributes_
         ns = dict2NS({}, frozen=True)
-        return NSAttributedString.alloc().initWithString_attributes_(
-                                          self._NS, ns)
+        return N_(self._NS, ns)
 
     @property
     def paragraphStyle(self):
@@ -269,7 +266,7 @@ if __name__ == _Dmain_:
 #  pycocoa.strs.Str is <class .Str>,
 #  pycocoa.strs.StrAttd is <class .StrAttd>,
 # )[2]
-# pycocoa.strs.version 25.2.16, .isLazy 1, Python 3.13.1 64bit arm64, macOS 14.7.3
+# pycocoa.strs.version 25.3.13, .isLazy 1, Python 3.13.2 64bit arm64, macOS 14.7.3
 
 # MIT License <https://OpenSource.org/licenses/MIT>
 #

@@ -13,8 +13,8 @@ try:
     _getargspec = _inspect.getfullargspec  # Python 3+
 except AttributeError:
     _getargspec = _inspect.getargspec  # Python 2
-import os  as _os
-import sys as _sys  # PYCHOK used!
+import os
+import sys  # PYCHOK used!
 
 from platform import machine as _m
 _m = _m()  # see .utils.machine
@@ -32,11 +32,11 @@ class _Str(str):
         '''
         return self.join(map(str, args))
 
-
 _alloc_          = 'alloc'     # PYCHOK .printers, .runtime
 _bNN_            = b''         # PYCHOK bytes(_NN_)
 _COLON_          = _Str(':')   # PYCHOK expected
-_COMMA_          = _Str(',')   # in .utils
+_COLONSPACE_     = _Str(': ')
+_COMMA_          = _Str(',')   # in .getters, .utils
 _COMMASPACE_     = _Str(', ')
 _Dall_           = '__all__'   # PYCHOK _DUNDER_all_
 _Ddoc_           = '__doc__'   # PYCHOK _DUNDER_doc_
@@ -48,12 +48,14 @@ _Dpackage_       = '__package__'  # PYCHOK _DUNDER_package_
 _Dversion_       = '__version__'  # PYCHOK _DUNDER_version_
 _DOT_            = _Str('.')
 _EQUALS_         = _Str('=')
+_invalid_        = 'invalid'
 _NN_             = _Str('')     # empty string, I{Nomen Nescio}
 _NA_             = 'N/A'
 _name_           = 'name'       # PYCHOK .nstypes, ...
-_NL_             = _os.linesep  # PYCHOK ...
-_NSObject_       = 'NSObject'   # PYCHOK  NSObject.name
-_pycocoa_        = 'pycocoa'    # pycocoa._pycocoa_package
+_NL_             =  os.linesep  # PYCHOK ...
+_not_            = 'not'
+_NSObject_       = 'NSObject'   # PYCHOK NSObject.name
+_pycocoa_        = 'pycocoa'    # PYCHOK pycocoa._pycocoa_package
 _SPACE_          = _Str(' ')
 _UNDER_          = _Str('_')
 _unhandled_      = 'unhandled'  # PYCHOK .nstypes, .pytypes
@@ -134,8 +136,8 @@ class Adict(dict):
         '''
         try:
             return self[name]
-        except KeyError as x:
-            raise AttributeError(str(x))
+        except KeyError:
+            raise AttributeError(self._invalid(name))
 
     def __setattr__(self, name, value):
         '''Set the value of a I{known} item by B{C{name}}.
@@ -146,21 +148,48 @@ class Adict(dict):
     def __str__(self):
         '''Return this C{Adict} as C{str}.
         '''
-        return _fmt('{%s}', _COMMASPACE_.join(_kwdstr(self, repr)))
+        return _fmt('{%s}', _kwdstr(self, repr))
 
     def copy(self):
         '''Return a shallow copy.
         '''
         return dict.copy(self)
 
-    def items(self):
-        return dict.items(self)
+    def iget(self, name, *dflt):  # in _MutableConstants.iget
+        '''Get C{value} for case-insensitive I{name} or I{dflt} or C{AttributeError}.
+        '''
+        try:
+            return self.get(name)
+        except AttributeError:
+            pass
+        n = name.lower()
+        for k in self.keys():
+            if k.lower() == n:
+                return getattr(self, k)
+        if dflt:
+            return dflt[0]
+        raise AttributeError(self._invalid(name))
 
-    def keys(self):
-        return dict.keys(self)
+    def _invalid(self, name):
+        n = _DOT_(self.typename, name)
+        return _COLONSPACE_(n, _invalid_)
 
-    def values(self):
-        return dict.values(self)
+    def rget(self, value, *dflt):  # in _MutableConstants.rget
+        '''Get the C{name} for I{value} or I{dflt} or C{ValueError}.
+        '''
+        for n, v in self.items():
+            if v == value:
+                return n
+        if dflt:
+            return dflt[0]
+        t = _fmt_invalid(self.typename, value=value)
+        raise ValueError(t)
+
+    @property_RO
+    def typename(self):
+        '''Get this instance' Python class name (C{str}).
+        '''
+        return type(self).__name__
 
 
 class _frozendictbase(dict):  # in nstypes.nsDescription2dict
@@ -238,16 +267,41 @@ class frozendict(_frozendictbase):
 class _Globals(object):
     '''(INTERNAL) Some PyCocoa globals
     '''
-    App       =  None        # set by .apps.App.__init__, not an NSApplication!
-    argv0     = _pycocoa_    # set by .nstypes.nsBundleRename, _allisting, test/simple_VLCplayer
-    Items     = {}           # set by .menus.Item.__init__, gotten by .menus.ns2Item
-    MenuBar   =  None        # set by .menus.MenuBar.__init__
-#   Menus     = {}           # set by .menus._Menu_Type2._initM
-    raiser    =  False       # set by .apps.App.__init__
-    stdlog    = _sys.stdout  # set by .faults
-    Tables    = []           # set by .tables.TableWindow.__init__
-    Windows   = {}           # set by .windows.Window.__init__
-    Xhandler2 =  None        # set by .faults.setUncaughtExceptionHandler
+    App       =  None       # set by .apps.App.__init__, not an NSApplication!
+    argv0     = _pycocoa_   # set by .nstypes.nsBundleRename, _allisting, test/simple_VLCplayer
+    exiting   = -9          # set by .faults.exiting, default _exit and status
+    Items     = {}          # set by .menus.Item.__init__, gotten by .menus.ns2Item
+    MenuBar   =  None       # set by .menus.MenuBar.__init__
+#   Menus     = {}          # set by .menus._Menu_Type2._initM
+    raiser    =  False      # set by .apps.App.__init__
+#  _Segfaulty =  None       # see property
+    stdlog    = sys.stdout  # set by .faults
+    Tables    = []          # set by .tables.TableWindow.__init__
+    Windows   = {}          # set by .windows.Window.__init__
+    Xhandler2 =  None       # set by .faults.setUncaughtExceptionHandler
+
+    def __setattr__(self, name, value):
+        if not hasattr(type(self), name):
+            raise AttributeError(_fmt_invalid(name=repr(name)))
+        setattr(type(self), name, value)
+
+    @property
+    def Segfaulty(self):
+        try:
+            S = self._Segfaulty
+        except AttributeError:
+            from pycocoa.faults import _Segfaulty
+            type(self)._Segfaulty = S = _Segfaulty()
+        return S
+
+    @Segfaulty.setter  # PYCHOK property.setter
+    def Segfaulty(self, S):
+        from pycocoa.faults import SegfaultError
+        if S not in (None, False) and not isinstance(S, SegfaultError):
+            raise AssertionError(_fmt_invalid(S=repr(S)))
+        type(self)._Segfaulty = S
+
+_Globals = _Globals()  # PYCHOK singleton
 
 
 class missing(object):
@@ -280,16 +334,18 @@ missing = missing()  # PYCHOK private, singleton
 class _MutableConstants(object):  # in .lazily
     '''(INTERNAL) Enum-like, settable "constants".
     '''
-    def __setattr__(self, name, value):
-        if not (hasattr(self, name) or hasattr(type(self), name)):
-            n = _DOT_(self.typename, name)
-            raise NameError(_fmt_invalid(constant=n))
-        super(_MutableConstants, self).__setattr__(name, value)
+    def __contains__(self, name):
+        return self._isAlnum(name) and name in type(self).__dict__
 
     def __repr__(self):
         def _fmt2(n, v):
             return _EQUALS_(n, _int2str(v))
         return self._strepr(_fmt2)
+
+    def __setattr__(self, name, value):
+        if not self._isAlnum(name):
+            raise AttributeError(self._invalid(name))
+        super(_MutableConstants, self).__setattr__(name, value)
 
     def __str__(self):
         def _fmt2(n, unused):
@@ -297,9 +353,30 @@ class _MutableConstants(object):  # in .lazily
         return self._strepr(_fmt2)
 
     def get(self, name, *dflt):
-        '''Get C{value} for I{name} or I{dflt}.
+        '''Get C{value} for I{name} or I{dflt} or C{AttributeError}.
         '''
-        return getattr(self, name, *dflt)
+        if self._isAlnum(name):
+            try:
+                return getattr(self, name, *dflt)
+            except AttributeError:
+                if dflt:
+                    return dflt[0]
+        raise AttributeError(self._invalid(name))
+
+    def iget(self, name, *dflt):
+        '''Get C{value} for case-insensitive I{name} or I{dflt} or C{AttributeError}.
+        '''
+        return Adict.iget(self, name, *dflt)
+
+    def _invalid(self, name):
+        n = _DOT_(self.typename, name)
+        return _fmt_invalid(constant=n)
+
+    def _isAlnum(self, name):
+        return isinstance(name, str) and name.isalnum() \
+                                     and name[:1].isupper() \
+                                     and (hasattr(self, name) or
+                                          hasattr(type(self), name))
 
     def items(self):
         '''Yield 2-tuple (name, value) for each constant.
@@ -317,23 +394,18 @@ class _MutableConstants(object):  # in .lazily
                     yield n, v
 
     def keys(self):
-        '''Yield each constant name.
+        '''Yield each Constant's name.
         '''
-        for n in dir(self):
-            if n[:1].isupper():
+        for n in type(self).__dict__.keys():
+            if self._isAlnum(n):
                 yield n
 
-    def rget(self, value, dflt):
-        '''Get C{name} for I{value} or I{dflt}.
+    def rget(self, value, *dflt):
+        '''Get the C{name} for I{value} or I{dflt} or C{ValueError}.
         '''
-        for n in self.keys():
-            if getattr(self, n) == value:
-                break
-        else:
-            n = dflt
-        return n
+        return Adict.rget(self, value, *dflt)
 
-    def _strepr(self, _fmt2):  # helper for __repr__ and __str__
+    def _strepr(self, _fmt2=_EQUALS_):  # helper for __repr__ and __str__
         n =  self.typename.lstrip(_UNDER_)
         j = _NN_(_COMMA_, _NL_, _SPACE_ * len(n), _DOT_)
         t = (_fmt2(*t) for t in _sortuples(self.items()))
@@ -357,46 +429,49 @@ class _Constants(_MutableConstants):  # _ImmutableConstants
     '''
     def __setattr__(self, name, value):
         t = _DOT_(self.typename, name)
-        t = _fmt('%s = %r, immutable', t, value)
+        t = _fmt('%s = %r', t, value)
+        t = _COLONSPACE_(t, 'immutable')
         raise TypeError(t)
 
-    def _masks(self, *names):
+    def _masks(self, *names):  # in .windows
         ns = []
         for n in names:
             ns.extend(n.strip().lower().split())
-        ns, c = set(ns), 0
-        for n, m in self.items():
-            n = n.lower()
-            if n in ns:
-                c |= m
-                ns.remove(n)
-        ns = _SPACE_.join(map(repr, ns)) if ns else None
-        return c, ns  # some invalid names or None
-
-    def astrs(self, mask):
-        '''Return constants mask as names (C{str}s).
-        '''
-        return _SPACE_.join(n for n, m in self.items() if (mask & m))
+        M, ms, ns = 0, [], list(set(ns))
+        while ns:
+            n = ns.pop()
+            try:
+                M |= getattr(self, n)
+            except AttributeError:
+                ms.append(n)
+        ms = _COMMASPACE_(*map(repr, ms)) if ms else None
+        return M, ms  # some invalid names or None
 
 
 class _Singletons(_MutableConstants):
     '''(INTERNAL) Global, single instances.
     '''
-    def __repr__(self):
-        def _fmt2(n, v):
-            return _EQUALS_(n, v)
-        return self._strepr(_fmt2)
+    def _isAlnum(self, name):  # overloading
+        try:  # non-Camelized, alnum property
+            p = type(self).__dict__[name]
+            return isinstance(p, property) and name.isalnum()
+        except KeyError:
+            return False
 
-    def items(self, *extra):  # PYCHOK signature
-        '''Yield 2-tuple (name, value) for each singleton.
+    def reset(self):
+        '''Rest all cached attributes.
         '''
-        c = type(self)
-        for n in dir(self):
-            if not n.startswith(_UNDER_):
-                g, _ = _property2(self, n)
-                if g and (n in extra or hasattr(c, _UNDER_(_NN_, n))):
-                    # XXX resolves the property
-                    yield n, g(self)
+        d = self.__dict__
+        u = len(d)
+        for n in d:
+            if self._isAlnum(n):
+                _ = d.pop(n)
+        return u - len(d)
+
+    def _set(self, **name_value):
+        n, v = name_value.popitem()
+        self.__dict__[n] = v  # cached
+        return v
 
 
 def _TypeError(name, inst, func, *classes):  # in .runtime
@@ -404,8 +479,8 @@ def _TypeError(name, inst, func, *classes):  # in .runtime
     '''
     c = _COMMASPACE_(name, *map(_nameOf, classes))
     n = _nameOf(func)
-    t = _fmt('not %s(%s): %r', n, c, inst) if name else \
-        _fmt('invalid %s(%r%s)', n, inst, c)
+    t = _fmt('%s %s(%s): %r', _not_, n, c, inst) if name else \
+        _fmt('%s %s(%r%s)', _invalid_, n, inst, c)
     return TypeError(t)
 
 
@@ -538,6 +613,33 @@ def _dflt(dflt, func, arg, name=_NN_):  # PYCHOK helper above
     return dflt
 
 
+def _caller3(up):
+    '''(INTERNAL) Get 3-tuple C{(caller name, file name, line number)}
+       for the caller B{C{up}} frames back in the Python call stack.
+    '''
+    f = None
+    try:
+        f =  sys._getframe(up + 1)  # == _inspect.stack()[up + 1][0]
+        t = _inspect.getframeinfo(f)
+        t =  t.function, t.filename, t.lineno
+# or ...
+#       t = _inspect.stack()[up + 1]  # (frame, filename, lineno, function, ...)
+#       t =  t[3], t[1], t[2]
+# or ...
+#       f =  sys._getframe(up + 1)
+#       c =  f.f_code
+#       t = (c.co_name,      # caller name
+#            c.co_filename,  # file name .py
+#            f.f_lineno)     # line number
+    except (AttributeError, IndexError, ValueError):
+        # sys._getframe(1) ... 'importlib._bootstrap' line 1032,
+        # may throw a ValueError('call stack not deep enough')
+        t = _NN_, _NN_, 0
+    finally:
+        del f  # break ref cycle
+    return t
+
+
 def _c_tstr(*c_ts):
     '''(INTERNAL) Simplify names of C{c_..._t} result or argument types.
     '''
@@ -547,7 +649,7 @@ def _c_tstr(*c_ts):
 def _filexists(name):
     '''(INTERNAL) Does file I{name} exist?
     '''
-    return _os.access(name, _os.F_OK)
+    return os.access(name, os.F_OK)
 
 
 def _fmt(fmtxt, *args):
@@ -572,9 +674,10 @@ def _fmt_frozen(*inst_arg_value):
 def _fmt_invalid(*nots, **kwd1):
     '''(INTERNAL) Format an "invalid <name>: <value>" string.
     '''
-    t = _fmt('invalid %s: %s', *kwd1.popitem())
+    t = _SPACE_(_invalid_, _COLONSPACE_(*kwd1.popitem()))
     if nots:
-        t = _NN_(t, ', not ', _COMMASPACE_(*nots))
+        t = _COMMASPACE_(t, _not_)
+        t = _SPACE_(t, _COMMASPACE_(*nots))
     return t
 
 
@@ -582,7 +685,7 @@ def _instr(name, *args, **kwds):
     '''(INTERNAL) Format an instance "<name>(*<args>)" string.
     '''
     if kwds:
-        args += tuple(_kwdstr(kwds))
+        args += tuple(_kwdstr(kwds, sep=None))
     return _fmt('%s(%s)', _nameOf(name), _COMMASPACE_(*args))
 
 
@@ -621,10 +724,12 @@ def _isiterable(obj):
                                     and hasattr(obj, '__getitem__'))
 
 
-def _kwdstr(kwds, strepr=str):
-    '''(INTERNAL) Format I{kwds} as an iterable of strings.
+def _kwdstr(kwds, strepr=str, sep=_COMMASPACE_):
+    '''(INTERNAL) Format I{kwds} as a comma-separated C{str}ing or
+       as an iterable of C{str}ings .
     '''
-    return (_EQUALS_(k, strepr(v)) for k, v in sorted(kwds.items()))
+    t = (_EQUALS_(k, strepr(v)) for k, v in sorted(kwds.items()))
+    return sep.join(t) if sep else t
 
 
 def lambda1(arg):
@@ -665,6 +770,16 @@ def _no(*args):
     return _SPACE_('no', *args)
 
 
+def _presegfaulty(S=None):  # in .__init__, .__main__
+    '''(INTERNAL) Print and set C{Segfaulty}, return previous setting.
+    '''
+    s = _Globals.Segfaulty
+    if s:
+        _writef('%s may raise %rs', (_Globals.argv0, s), flush=True)
+        _Globals.Segfaulty = S
+    return s
+
+
 def _property2(inst, name):
     '''(INTERNAL) Return the property C{get} and C{set} method.
 
@@ -693,11 +808,27 @@ def _sortuples(iterable):  # in .deprecated
     return sorted(iterable, key=_tup)
 
 
+def _writef(fmtxt, args, file=sys.stdout, flush=False,
+                         nl=0, nt=1, argv0=missing):
+    '''(INTERNAL) Write a formatted string to C{file}.
+    '''
+    t = _fmt(fmtxt, *args)
+    a = _Globals.argv0 if argv0 is missing else argv0
+    if a:
+        t =  t.replace(_NL_, _NN_(_NL_, a, _SPACE_))
+        t = _SPACE_(a, t)
+    t = _NN_(_NL_ * nl, t, _NL_ * nt)
+    n =  file.write(t)
+    if flush:
+        file.flush()
+    return n
+
+
 __all__ = tuple(_.__name__ for _ in (Adict, bytes2repr, bytes2str,
                                      frozendict, iterbytes,
                                      lambda1, missing.__class__,
                                      property_RO, proxy_RO, str2bytes))
-__version__ = '25.02.27'
+__version__ = '25.03.24'
 
 if __name__ == _Dmain_:
 
@@ -719,7 +850,7 @@ if __name__ == _Dmain_:
 #  pycocoa.internals.proxy_RO is <class .proxy_RO>,
 #  pycocoa.internals.str2bytes is <function .str2bytes at 0x102890900>,
 # )[10]
-# pycocoa.internals.version 25.2.27, .isLazy 1, Python 3.13.2 64bit arm64, macOS 14.7.3
+# pycocoa.internals.version 25.3.24, .isLazy 1, Python 3.13.2 64bit arm64, macOS 15.3.2
 
 # MIT License <https://OpenSource.org/licenses/MIT>
 #

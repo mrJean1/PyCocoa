@@ -29,7 +29,7 @@ from ctypes import ArgumentError, byref, cast, c_char_p, c_double, \
                    c_int, c_void_p, POINTER, sizeof
 
 __all__ = _ALL_LAZY.printers
-__version__ = '25.03.08'
+__version__ = '25.03.13'
 
 kPMServerLocal        = None
 kPMPPDDescriptionType = cfString('PMPPDDescriptionType')  # PYCHOK false
@@ -325,9 +325,10 @@ class PaperCustom(Paper):
         if name:
             n =  str(name)
             i = _SPACE_(n, i)
-        pm = PMPaper_t()
-        self._libPCcall(_libPC.PMPaperCreateCustom, p, NSStr(n),
-                         NSStr(str(ID) or i), w, h, m, byref(pm))
+        iD =  NSStr(str(ID) or i)
+        pm =  PMPaper_t()
+        _P = _libPC.PMPaperCreateCustom
+        self._libPCcall(_P, p, NSStr(n), iD, w, h, m, byref(pm))
         Paper.__init__(self, pm)
 
 
@@ -383,11 +384,13 @@ class Printer(_PM_Type0):
                     ns = _nsPrinter(p.name, pm)
                     break
             else:
-                raise PrintError(_fmt_invalid(Printer=name_ns_pm))
+                t = _fmt_invalid(Printer=name_ns_pm)
+                raise PrintError(t)
 
         elif isinstanceOf(name_ns_pm, PMPrinter_t):
             pm =  name_ns_pm
-            ns = _nsPrinter(cfString2str(_libPC.PMPrinterGetName(pm)), pm)
+            ns = _libPC.PMPrinterGetName(pm)
+            ns = _nsPrinter(cfString2str(ns), pm)
 
         elif isObjCInstanceOf(name_ns_pm, NSPrinter, raiser='name_ns_pm'):
             ns = name_ns_pm
@@ -409,11 +412,13 @@ class Printer(_PM_Type0):
     def deviceDescription(self):
         '''Get the C{NSDevice} description (L{Adict}).
         '''
-        if self._deviceDescription is None:
+        d = self._deviceDescription
+        if d is None:
             # d = nsDescription2dict(self.NS.deviceDescription())
             # _ = d.NSDeviceIsPrinter  # preload
-            self._deviceDescription = ns2py(self.NS.deviceDescription())
-        return self._deviceDescription
+            d = ns2py(self.NS.deviceDescription())
+            self._deviceDescription = d
+        return d
 
     @property_RO
     def deviceURI(self):
@@ -428,7 +433,8 @@ class Printer(_PM_Type0):
     def ID(self):
         '''Get the printer IDentifier (C{str}) or C{""}.
         '''
-        return cfString2str(_libPC.PMPrinterGetID(self.PM)).strip()
+        s = _libPC.PMPrinterGetID(self.PM)
+        return cfString2str(s).strip()
 
     @property_RO
     def isColor(self):
@@ -476,9 +482,11 @@ class Printer(_PM_Type0):
     def name(self):
         '''Get the printer name (C{str}) or C{""}.
         '''
-        if self._name is None:
-            self._name = cfString2str(_libPC.PMPrinterGetName(self.PM)).strip()
-        return self._name
+        n = self._name
+        if n is None:
+            s = _libPC.PMPrinterGetName(self.PM)
+            self._name = n = cfString2str(s).strip()
+        return n
 
     @property_RO
     def NS(self):
@@ -496,8 +504,8 @@ class Printer(_PM_Type0):
     def PPD(self):
         '''Get the printer PPD description (C{URL}).
         '''
-        return self._2ustr(_libPC.PMPrinterCopyDescriptionURL,
-                                        kPMPPDDescriptionType)
+        _U = _libPC.PMPrinterCopyDescriptionURL
+        return self._2ustr(_U, kPMPPDDescriptionType)
 
     @property_RO
     def psCapable(self):
@@ -560,13 +568,13 @@ class Printer(_PM_Type0):
                     raise PrintError(_fmt_invalid(toPDF=toPDF))
                 # <https://Developer.Apple.com/documentation/appkit/
                 #        nsprintoperation/1534130-pdfoperationwithview>
-                i_ = po.PDFOperationWithView_insideRect_toPath_printInfo_
-                po = i_(PMview, PMview.frame(), NSStr(toPDF), pi)
+                I_ = po.PDFOperationWithView_insideRect_toPath_printInfo_
+                po = I_(PMview, PMview.frame(), NSStr(toPDF), pi)
             else:
                 # <https://StackOverflow.com/questions/6452144/
                 #        how-to-make-a-print-dialog-with-preview-for-printing-an-image-file>
-                i_ = po.printOperationWithView_printInfo_
-                po = i_(PMview, pi)
+                I_ = po.printOperationWithView_printInfo_
+                po = I_(PMview, pi)
 
             if not wait:
                 po.setCanSpawnSeparateThread_(YES)
@@ -999,7 +1007,7 @@ if __name__ == _Dmain_:
 #  pycocoa.printers.PaperMargins is <class .PaperMargins>,
 #  pycocoa.printers.Printer is <class .Printer>,
 # )[9]
-# pycocoa.printers.version 25.2.25, .isLazy 1, Python 3.13.2 64bit arm64, macOS 14.7.3
+# pycocoa.printers.version 25.3.13, .isLazy 1, Python 3.13.2 64bit arm64, macOS 14.7.3
 
 # MIT License <https://OpenSource.org/licenses/MIT>
 #

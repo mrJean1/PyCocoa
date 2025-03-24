@@ -36,7 +36,7 @@ from pycocoa.octypes import Allocator_t, Array_t, BOOL_t, CFIndex_t, CFRange_t, 
                             objc_property_t, objc_property_attribute_t, Protocol_t, \
                             RunLoop_t, SEL_t, Set_t, String_t, TypeID_t, TypeRef_t, \
                             UniChar_t, URL_t
-from pycocoa.utils import _macOSver2
+from pycocoa.utils import macOSver2 as _macOSver2
 
 from copy import copy as _copy
 from ctypes import byref, cast, CDLL, c_buffer, c_byte, c_char, \
@@ -52,7 +52,7 @@ except ImportError:  # XXX Pythonista/iOS
 from os.path import join as _join, sep as _SEP
 
 __all__ = _ALL_LAZY.oslibs
-__version__ = '25.02.27'
+__version__ = '25.03.24'
 
 _framework_ = 'framework'
 _leaked2    = []  # leaked memory, 2-tuples (ptr, size)
@@ -455,7 +455,7 @@ def cfNumber2bool(ns, dflt=None):
 
        @raise TypeError: Unexpected C{NumberType}.
 
-       @return: The bool (C{bool}) or I{dflt}.
+       @return: The bool number (C{bool}) or C{B{dflt}}.
     '''
     nType = _libCF.CFNumberGetType(ns)
     if nType != kCFNumberCharType:
@@ -1399,7 +1399,7 @@ if __name__ == _Dmain_:
 #  pycocoa.oslibs.OSlibError is <class .OSlibError>,
 #  pycocoa.oslibs.YES is True or 0x1,
 # )[153]
-# pycocoa.oslibs.version 25.2.27, .isLazy 1, Python 3.13.2 64bit arm64, macOS 14.7.3, oslibs [AppKit, C, CoreFoundation, CoreGraphics, CoreText, Foundation, libc, libobjc, ObjC, Quartz]
+# pycocoa.oslibs.version 25.3.24, .isLazy 1, Python 3.13.2 64bit arm64, macOS 15.3.2, oslibs [AppKit, C, CoreFoundation, CoreGraphics, CoreText, Foundation, libc, libobjc, ObjC, Quartz]
 
 # MIT License <https://OpenSource.org/licenses/MIT>
 #
