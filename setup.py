@@ -25,7 +25,7 @@ from os import getenv
 from setuptools import setup
 
 __all__ = ()
-__version__ = '25.01.16'
+__version__ = '25.03.25'
 
 _pycocoa_ = 'pycocoa'
 _PACKAGE  = _pycocoa_  # 'PyCocoa'
@@ -52,13 +52,13 @@ def _version():
                 return '.'.join(map(str, map(int, v.split('.')))) + c
 
 
-_KeyWords=('Apple-Silicon',
+_KeyWords=('Apple-Si', 'Apple-Silicon',
            'Cocoa', 'cocoa-python', 'cocoavlc', 'ctypes',
            'fault', 'faults', 'faulthandler',
            'macOS', 'MacOSX',
            'Obj-C', 'Objective-C',
            _pycocoa_, 'Python-VLC',
-           'transparent',
+           'segfaulty', 'transparent',
            'VLC', 'VLCplayer')
 
 setup(name=_PACKAGE,

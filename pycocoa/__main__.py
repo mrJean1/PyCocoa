@@ -84,7 +84,7 @@ __version__ = '25.03.23'
 #  pycocoa.z1000str is <function pycocoa.utils.z1000str at 0x104de2480>,
 #  pycocoa.zfstr is <function pycocoa.utils.zfstr at 0x104de2520>,
 #  pycocoa.zSIstr is <function pycocoa.utils.zSIstr at 0x104de25c0>,
-# )[598]
+# )[600]
 # pycocoa.version 25.3.25, .isLazy 1, Python 3.13.2 64bit arm64, macOS 15.3.2, oslibs [AppKit, C, CoreFoundation, CoreGraphics, CoreText, Foundation, libc, libobjc, ObjC, PrintCore, Quartz]
 
 # % python3.13 -m pycocoa

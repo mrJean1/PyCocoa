@@ -71,7 +71,7 @@ from ctypes import alignment, ArgumentError, byref, cast, c_buffer, \
 # import sys  # from .internals
 
 __all__ = _ALL_LAZY.runtime
-__version__ = '25.03.23'
+__version__ = '25.03.24'
 
 _OBJC_ENV = 'PYCOCOA_OBJC_LOG'
 _OBJC_LOG =  dict((_, 0) for _ in _environ.get(_OBJC_ENV, _NN_).upper()
@@ -1777,14 +1777,14 @@ class _ObjCDeallocObserver(object):  # XXX (_ObjCBase):  # must be last
         '''(INTERNAL) Check that C{_ObjCDeallocObserver} has exactly one C{ivar}.
         '''
         from pycocoa.getters import get_ivars
-
-        i = None
-        for n, _, c, i in get_ivars(get_class(_ObjCDeallocObserver.__name__)):
+        t = _fmt_invalid('found', ivar=_Ivar1.astr())
+        for n, _, c, i in get_ivars(_ObjCDeallocObserver._ObjC):
             if n != _Ivar1.name or c != _Ivar1.c_t:
                 t = _fmt_invalid(_Ivar1.astr(), ivar=_Ivar1.astr(n, c))
-                raise AssertionError(t)
-        if i is None:
-            t = _fmt_invalid('found', ivar=_Ivar1.astr())
+            else:
+                t =  None
+            break
+        if t:
             raise AssertionError(t)
 
 
@@ -1836,7 +1836,7 @@ if __name__ == _Dmain_:
 #  pycocoa.runtime.send_super_init is <function .send_super_init at 0x1013d2b60>,
 #  pycocoa.runtime.set_ivar is <function .set_ivar at 0x1013d2c00>,
 # )[27]
-# pycocoa.runtime.version 25.3.23, .isLazy 1, Python 3.13.2 64bit arm64, macOS 15.3.2
+# pycocoa.runtime.version 25.3.24, .isLazy 1, Python 3.13.2 64bit arm64, macOS 15.3.2
 
 # MIT License <https://OpenSource.org/licenses/MIT>
 #
