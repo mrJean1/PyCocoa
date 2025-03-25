@@ -51,8 +51,8 @@ tests run with and without C{lazy import} in Python 3.
 
 Python 3.13.2, 3.12.7 and 3.11.5 run on Apple Silicon (C{arm64} I{natively}), other
 Python versions run on Intel (C{x86_64}) or Intel I{emulation} (C{"arm64_x86_64"},
-see function L{pycocoa.machine}), but only I{before macOS 15 Sequoia} (see module
-L{pycocoa.faults}).
+see function L{pycocoa.machine}), but only I{before macOS 15 Sequoia} (see function
+L{pycocoa.segfaulty}).
 
 Previously, C{pycocoa} was tested with 64-bit Python 3.10.0, 3.9.6, 3.8.6, 3.8.3, 3.8.1,
 3.7.4-6, 3.6.5, 2.7.17 and macOS' 2.7.16.  However, C{pycocoa} has I{not been tested} on
