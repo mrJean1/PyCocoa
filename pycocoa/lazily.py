@@ -28,14 +28,13 @@ all C{pycocoa} modules when attribute C{pygeodesy.__all__} is referenced.
              is not supported or not enabled, or C{False} if initializing
              C{lazy import} failed.
 '''
-from pycocoa.internals import __all__ as _internals_all_, _COLONSPACE_, \
-                              _COMMASPACE_, _Dall_, _Dfile_, _Dmain_, \
-                              _Dpackage_, _DOT_, _fmt, _fmt_invalid, \
-                              _instr, _MutableConstants, _NA_, _NN_, \
-                              _no, _NSObject_, _pycocoa_, property_RO, \
-                              _UNDER_,  sys
+from pycocoa.internals import __all__ as _internals_all_, _caller3, \
+                              _COLONSPACE_, _COMMASPACE_, _Dall_, \
+                              _Dfile_, _Dmain_, _DOT_, _Dpackage_, \
+                              _fmt, _fmt_invalid, _instr, _NA_, _NN_, \
+                              _MutableConstants, _no, _NSObject_, \
+                              _pycocoa_, property_RO, _UNDER_,  sys
 from os import environ as _environ
-from os.path import basename as _basename
 # import sys  # from .internals
 
 _C_XTYPES = 'c_ptrdiff_t', 'c_struct_t', 'c_void'  # exported
@@ -48,20 +47,6 @@ isLazy          = None  # see @var isLazy above
 _isPython3      = sys.version_info.major > 2  # PYCHOK in .utils, .windows
 _None           = object()   # NOT None!
 _Python_version = sys.version.split()[0]
-
-
-class LazyAttributeError(AttributeError):
-    '''Raised if a C{lazily imported} attribute is missing or invalid.
-    '''
-    def __init__(self, fmtxt, *args):
-        AttributeError.__init__(self, _fmt(fmtxt, *args))
-
-
-class LazyImportError(ImportError):
-    '''Raised if C{lazy import} is not supported, disabled or failed.
-    '''
-    def __init__(self, fmtxt, *args):
-        ImportError.__init__(self, _fmt(fmtxt, *args))
 
 
 class _Dict(dict):
@@ -80,6 +65,18 @@ class _Dict(dict):
                 raise AssertionError(t)
         else:
             self[key] = value
+
+
+class LazyAttributeError(AttributeError):
+    '''Raised if an attribute can't be C{lazily imported}.
+    '''
+    pass
+
+
+class LazyImportError(ImportError):
+    '''Raised if C{lazy import} is not supported, disabled or failed.
+    '''
+    pass
 
 
 class _NamedEnum_RO(dict):
@@ -125,6 +122,7 @@ class _Types(_MutableConstants):
     PaperCustom   = None  # set by .printer
     PaperMargins  = None  # set by .printer
     Printer       = None  # set by .printer
+#   pycocoa       = Noe   # see property_RO
     SavePanel     = None  # set by .panels
     Screen        = None  # set by .screens
     Set           = None  # set by .sets
@@ -150,7 +148,7 @@ class _Types(_MutableConstants):
     @property_RO
     def pycocoa(self):  # get pycocoa, I{once}
         pycocoa = sys.modules[_pycocoa_]  # without re-import, isLazy=0?
-        _Types.__class__.pycocoa = pycocoa  # overwrite property_RO
+        type(self).pycocoa = pycocoa  # overwrite property_RO
         return pycocoa
 
 _Types = _Types()  # PYCHOK singleton
@@ -168,7 +166,7 @@ else:
         return ()
 
 
-_ALL_INIT = 'pycocoa_abspath', 'version'  # exported by pycocoa.__init__,py
+_ALL_INIT = 'pycocoa_abspath', 'version'  # exported by .__init__
 
 # __all__ value for most modules, accessible as _ALL_LAZY.<module>
 _ALL_LAZY = _NamedEnum_RO(_name='_ALL_LAZY',
@@ -349,18 +347,6 @@ def _all_mod_attrs(**more):
                 yield mod, attrs
 
 
-def _caller3(up):  # in .named
-    '''(INTERNAL) Get 3-tuple C{(caller name, file name, line number)}
-       for the caller B{C{up}} stack frames in the Python call stack.
-    '''
-    # sys._getframe(1) ... 'importlib._bootstrap' line 1032,
-    # may throw a ValueError('call stack not deep enough')
-    f = sys._getframe(up + 1)
-    return (f.f_code.co_name,  # caller name
-           _basename(f.f_code.co_filename),  # file name
-            f.f_lineno)  # line number
-
-
 def _lazy_import(name):  # overwritten below in Python 3.7+, in .internals
     '''(INTERNAL) Lazily import an attribute by C{name}.
     '''
@@ -399,8 +385,8 @@ def _lazy_import2(pack):  # MCCABE 18
     global isLazy
 
     if sys.version_info[:2] < (3, 7):  # not supported
-        t = _no(_DOT_(pack, _lazy_import2.__name__), 'for')
-        raise LazyImportError('%s Python %s', t, _Python_version)
+        t = _DOT_(pack, _lazy_import2.__name__)
+        raise LazyImportError(_no(t, 'for', 'Python', _Python_version))
 
     import_module, package, parent = _lazy_init3(pack)
 
@@ -419,7 +405,7 @@ def _lazy_import2(pack):  # MCCABE 18
             imported = import_module(_DOT_(pack, mod), parent)
             pkg = getattr(imported, _Dpackage_, None)
             if pkg not in packages:
-                raise LazyImportError('%s %r', _DOT_(mod, _Dpackage_), pkg)
+                raise LazyImportError(_fmt('%s %r', _DOT_(mod, _Dpackage_), pkg))
             # import the module or module attribute
             if attr:
                 imported = getattr(imported, attr, _None)
@@ -496,7 +482,7 @@ def _lazy_init3(pack):
         z =  z.strip()  # like PYTHONVERBOSE et.al.
         isLazy = int(z) if z.isdigit() else (1 if z else 0)
         if isLazy < 1:  # not enabled
-            raise LazyImportError('env %s=%r', 'PYCOCOA_LAZY_IMPORT', z)
+            raise LazyImportError(_fmt('env %s=%r', 'PYCOCOA_LAZY_IMPORT', z))
         if sys.flags.verbose:  # _environ.get('PYTHONVERBOSE', None)
             isLazy += 1
 
@@ -507,7 +493,7 @@ def _lazy_init3(pack):
 
     except (AttributeError, ImportError) as x:
         isLazy = False  # failed
-        raise LazyImportError('init failed: %s', x)
+        raise LazyImportError(_fmt('init failed: %s', x))
 
     return import_module, package, parent
 
@@ -551,7 +537,7 @@ if __name__ == _Dmain_:
 # pycocoa pre-loaded pycocoa.nstypes: .../pycocoa/nstypes.py?
 # pycocoa pre-loaded pycocoa.faults: .../pycocoa/faults.py?
 # pycocoa pre-loaded pycocoa: .../pycocoa/__init__.py?
-# pycocoa 598 len(__all__)
+# pycocoa 600 len(__all__)
 
 # MIT License <https://OpenSource.org/licenses/MIT>
 #

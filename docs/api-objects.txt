@@ -728,7 +728,7 @@ pycocoa.lazily._ALL_INIT	pycocoa.lazily-module.html#_ALL_INIT
 pycocoa.lazily._instr	pycocoa.internals-module.html#_instr
 pycocoa.lazily._environ	pycocoa.lazily-module.html#_environ
 pycocoa.lazily.__package__	pycocoa.lazily-module.html#__package__
-pycocoa.lazily._caller3	pycocoa.lazily-module.html#_caller3
+pycocoa.lazily._caller3	pycocoa.internals-module.html#_caller3
 pycocoa.lazily._no	pycocoa.internals-module.html#_no
 pycocoa.lazily._C_XTYPES	pycocoa.lazily-module.html#_C_XTYPES
 pycocoa.lazily._NN_	pycocoa.lazily-module.html#_NN_
@@ -2215,9 +2215,7 @@ pycocoa.internals.proxy_RO.__getattr__	pycocoa.internals.proxy_RO-class.html#__g
 pycocoa.internals.proxy_RO.__init__	pycocoa.internals.proxy_RO-class.html#__init__
 pycocoa.internals.proxy_RO._dict	pycocoa.internals.proxy_RO-class.html#_dict
 pycocoa.lazily.LazyAttributeError	pycocoa.lazily.LazyAttributeError-class.html
-pycocoa.lazily.LazyAttributeError.__init__	pycocoa.lazily.LazyAttributeError-class.html#__init__
 pycocoa.lazily.LazyImportError	pycocoa.lazily.LazyImportError-class.html
-pycocoa.lazily.LazyImportError.__init__	pycocoa.lazily.LazyImportError-class.html#__init__
 pycocoa.lists.List	pycocoa.lists.List-class.html
 pycocoa.tuples.Tuple._NS_copy	pycocoa.tuples.Tuple-class.html#_NS_copy
 pycocoa.tuples.Tuple._TypeError	pycocoa.tuples.Tuple-class.html#_TypeError
