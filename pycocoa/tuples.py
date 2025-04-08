@@ -5,10 +5,10 @@
 
 '''Type L{Tuple}, wrapping (immutable) ObjC C{NSArray}.
 '''
-from pycocoa.bases import _Type0
-from pycocoa.internals import _Dmain_, _DOT_, _fmt, \
-                             _fmt_invalid, _Ints, _instr
-from pycocoa.lazily import _ALL_LAZY, _Types
+from pycocoa.baseTypes import _Type0,  _Types
+from pycocoa.internals import _Dmain_, _DOT_, _fmt_invalid, \
+                              _fmt, _Ints, _instr, _nameOf
+from pycocoa.lazily import _ALL_LAZY
 from pycocoa.octypes import NSNotFound, NSRange_t
 from pycocoa.oslibs import _libCF
 from pycocoa.nstypes import NSArray, _NSImms, nsIter2, \
@@ -18,7 +18,7 @@ from pycocoa.runtime import isImmutable, isinstanceOf
 # from pycocoa.utils import isinstanceOf  # from .runtime
 
 __all__ = _ALL_LAZY.tuples
-__version__ = '25.03.13'
+__version__ = '25.04.07'
 
 
 def _at(inst, index):
@@ -32,7 +32,7 @@ def _at(inst, index):
         n = _fmt('in range(%s)', n)
         E =  IndexError
     else:
-        n = ' or '.join(i.__name__ for i in _Ints)
+        n = ' or '.join(map(_nameOf, _Ints))
         E = TypeError
     raise E(_fmt_invalid(n, index=repr(index)))
 
@@ -196,7 +196,7 @@ class Tuple(_Type0):  # note, List subclasses Tuple
         return ns
 
     def _TypeError(self, where, *args):
-        m = _DOT_(self, where.__name__)
+        m = _DOT_(self, _nameOf(where))
         return TypeError(_instr(m, *map(repr, args)))
 
 
@@ -213,7 +213,7 @@ if __name__ == _Dmain_:
 # pycocoa.tuples.__all__ = tuple(
 #  pycocoa.tuples.Tuple is <class .Tuple>,
 # )[1]
-# pycocoa.tuples.version 25.3.13, .isLazy 1, Python 3.13.2 64bit arm64, macOS 14.7.3
+# pycocoa.tuples.version 25.4.7, .isLazy 1, Python 3.13.2 64bit arm64, macOS 15.4
 
 # MIT License <https://OpenSource.org/licenses/MIT>
 #

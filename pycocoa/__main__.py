@@ -4,7 +4,8 @@
 u'''Print L{pycocoa} all public attributes, pycocoa version, Python
 release, etc. by using C{python -m pycocoa [-all]} from the command line.
 '''
-from pycocoa.internals import _presegfaulty, _pycocoa_
+from pycocoa.basics import _presegfaulty
+from pycocoa.internals import _pycocoa_
 from pycocoa.lazily import _isPython3,  sys
 from pycocoa.utils import _all_listing, _all_versions  # PYCHOK expected
 # import sys  # from .lazily
@@ -23,11 +24,11 @@ else:
     _ObjCDeallocObserver._testIvar1()
 
 __all__ = ()
-__version__ = '25.03.23'
+__version__ = '25.04.04'
 
 # % python3 -m pycocoa -all
 #
-# pycocoa.version 25.3.25, .isLazy 1, Python 3.13.2 64bit arm64, macOS 15.3.2
+# pycocoa.version 25.4.4, .isLazy 1, Python 3.13.2 64bit arm64, macOS 15.4
 #
 # pycocoa.__all__ = tuple(
 #  pycocoa.add_ivar is <function pycocoa.runtime.add_ivar at 0x1052e82c0>,
@@ -58,34 +59,34 @@ __version__ = '25.03.23'
 
 #  ... <deleted> ...
 
-#  pycocoa.UniChar_t is <class ctypes.c_ushort>,
 #  pycocoa.unichar_t is <class ctypes.c_wchar>,
-#  pycocoa.unicode2NS is <function pycocoa.pytypes.unicode2NS at 0x105181260>,
+#  pycocoa.unicode2NS is <function pycocoa.pytypes.unicode2NS at 0x102a5e8e0>,
+#  pycocoa.unicodec is <function pycocoa.internals.unicodec at 0x1025ab2e0>,
 #  pycocoa.Union_t is <class pycocoa.octypes.Union_t>,
 #  pycocoa.Unknown_t is <class pycocoa.octypes.Unknown_t>,
 #  pycocoa.UnknownPtr_t is <class pycocoa.octypes.UnknownPtr_t>,
-#  pycocoa.url2NS is <function pycocoa.pytypes.url2NS at 0x105181300>,
+#  pycocoa.url2NS is <function pycocoa.pytypes.url2NS at 0x102a5e980>,
 #  pycocoa.URL_t is <class pycocoa.octypes.URL_t>,
 #  pycocoa.utils is <module 'pycocoa.utils' from '/Users/jean/Dropbox/Projects/ObjC-Cocoa/PyCocoa/pycocoa/utils.py'>,
-#  pycocoa.version is '25.3.18',
+#  pycocoa.version is '25.4.10',
 #  pycocoa.VoidPtr_t is <class pycocoa.octypes.VoidPtr_t>,
 #  pycocoa.Window is <class pycocoa.windows.Window>,
 #  pycocoa.WindowError is <class pycocoa.windows.WindowError>,
 #  pycocoa.windows is <module 'pycocoa.windows' from '/Users/jean/Dropbox/Projects/ObjC-Cocoa/PyCocoa/pycocoa/windows.py'>,
 #  pycocoa.WindowStyle.Closable=2,
 #                     .Miniaturizable=4 or 1<<2,
-#                     .Resizable=8 or 1<<3,
+#                     .Resizable=8 or 2<<2,
 #                     .Titled=1,
 #                     .Typical=15,
 #                     .Utility=16 or 1<<4,
 #  pycocoa.WindowStyleError is <class pycocoa.windows.WindowStyleError>,
-#  pycocoa.windowStyles is <function pycocoa.windows.windowStyles at 0x1089aa660>,
+#  pycocoa.windowStyles is <function pycocoa.windows.windowStyles at 0x102bc00e0>,
 #  pycocoa.YES is True or 0x1,
-#  pycocoa.z1000str is <function pycocoa.utils.z1000str at 0x104de2480>,
-#  pycocoa.zfstr is <function pycocoa.utils.zfstr at 0x104de2520>,
-#  pycocoa.zSIstr is <function pycocoa.utils.zSIstr at 0x104de25c0>,
-# )[600]
-# pycocoa.version 25.3.25, .isLazy 1, Python 3.13.2 64bit arm64, macOS 15.3.2, oslibs [AppKit, C, CoreFoundation, CoreGraphics, CoreText, Foundation, libc, libobjc, ObjC, PrintCore, Quartz]
+#  pycocoa.z1000str is <function pycocoa.utils.z1000str at 0x1025b2200>,
+#  pycocoa.zfstr is <function pycocoa.utils.zfstr at 0x1025b22a0>,
+#  pycocoa.zSIstr is <function pycocoa.utils.zSIstr at 0x1025b2340>,
+# )[611]
+# pycocoa.version 25.4.4, .isLazy 1, Python 3.13.2 64bit arm64, macOS 15.4, oslibs [AppKit, C, CoreFoundation, CoreGraphics, CoreText, Foundation, libc, libobjc, ObjC, PrintCore, Quartz]
 
 # % python3.13 -m pycocoa
 # pycocoa.version 25.2.25, .isLazy 1, Python 3.13.2 64bit arm64, macOS 14.7.3

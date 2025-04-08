@@ -60,11 +60,16 @@
 <!-- ==================== MODULE DESCRIPTION ==================== -->
 <h1 class="epydoc">Module getters</h1><p class="nomargin-top"></p>
 <p><code>get_...</code> functions to obtain ObjC classes, methods, 
-  protocols, etc.</p>
+  protocols, instance variables, etc. of ObjC objects.</p>
 
 <hr />
-<div class="fields">      <p><strong>Version:</strong>
-        25.03.23
+<div class="fields">      <p><strong>Note:</strong>
+        Some functions may SEGFAULT or hand infinitely, see function <a 
+        href="pycocoa.faults-module.html#segfaulty" 
+        class="link">segfaulty</a>.
+      </p>
+      <p><strong>Version:</strong>
+        25.04.03
       </p>
 </div><!-- ==================== FUNCTIONS ==================== -->
 <a name="section-Functions"></a>
@@ -116,9 +121,26 @@
     </td><td class="summary">
       <table width="100%" cellpadding="0" cellspacing="0" border="0">
         <tr>
-          <td><span class="summary-sig"><a href="pycocoa.getters-module.html#get_classes" class="summary-sig-name">get_classes</a>(<span class="summary-sig-arg">*prefixes</span>)</span><br />
+          <td><span class="summary-sig"><a href="pycocoa.getters-module.html#get_classes2" class="summary-sig-name">get_classes2</a>(<span class="summary-sig-arg">*prefixes</span>)</span><br />
       Yield all loaded ObjC classes with a name starting with one of the 
       given prefixes.</td>
+          <td align="right" valign="top">
+            
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a name="get_classes_len"></a><span class="summary-sig-name">get_classes_len</span>()</span><br />
+      Get the number of ObjC classes loaded (<code>int</code>).</td>
           <td align="right" valign="top">
             
             
@@ -206,10 +228,28 @@
     </td><td class="summary">
       <table width="100%" cellpadding="0" cellspacing="0" border="0">
         <tr>
-          <td><span class="summary-sig"><a href="pycocoa.getters-module.html#get_ivars" class="summary-sig-name">get_ivars</a>(<span class="summary-sig-arg">clas</span>,
+          <td><span class="summary-sig"><a href="pycocoa.getters-module.html#get_ivars4" class="summary-sig-name">get_ivars4</a>(<span class="summary-sig-arg">clas</span>,
         <span class="summary-sig-arg">*prefixes</span>)</span><br />
       Yield all instance variables (ivar) of an ObjC class with a name 
       starting with one of the given prefixes.</td>
+          <td align="right" valign="top">
+            
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a name="get_ivars_len"></a><span class="summary-sig-name">get_ivars_len</span>(<span class="summary-sig-arg">clas</span>)</span><br />
+      Get the number of instance variables (ivar) of an ObjC class 
+      (<code>int</code>).</td>
           <td align="right" valign="top">
             
             
@@ -277,7 +317,7 @@
     </td><td class="summary">
       <table width="100%" cellpadding="0" cellspacing="0" border="0">
         <tr>
-          <td><span class="summary-sig"><a href="pycocoa.getters-module.html#get_methods" class="summary-sig-name">get_methods</a>(<span class="summary-sig-arg">clas</span>,
+          <td><span class="summary-sig"><a href="pycocoa.getters-module.html#get_methods4" class="summary-sig-name">get_methods4</a>(<span class="summary-sig-arg">clas</span>,
         <span class="summary-sig-arg">*prefixes</span>)</span><br />
       Yield all methods of an ObjC class with a name starting with one of 
       the given prefixes.</td>
@@ -296,7 +336,7 @@
     </td><td class="summary">
       <table width="100%" cellpadding="0" cellspacing="0" border="0">
         <tr>
-          <td><span class="summary-sig"><a href="pycocoa.getters-module.html#get_properties" class="summary-sig-name">get_properties</a>(<span class="summary-sig-arg">clas_or_proto</span>,
+          <td><span class="summary-sig"><a href="pycocoa.getters-module.html#get_properties4" class="summary-sig-name">get_properties4</a>(<span class="summary-sig-arg">clas_or_proto</span>,
         <span class="summary-sig-arg">*prefixes</span>)</span><br />
       Yield all properties of an ObjC class or protocol with a name 
       starting with one of the given prefixes.</td>
@@ -332,7 +372,7 @@
     </td><td class="summary">
       <table width="100%" cellpadding="0" cellspacing="0" border="0">
         <tr>
-          <td><span class="summary-sig"><a href="pycocoa.getters-module.html#get_protocols" class="summary-sig-name">get_protocols</a>(<span class="summary-sig-arg">clas</span>,
+          <td><span class="summary-sig"><a href="pycocoa.getters-module.html#get_protocols2" class="summary-sig-name">get_protocols2</a>(<span class="summary-sig-arg">clas</span>,
         <span class="summary-sig-arg">*prefixes</span>)</span><br />
       Yield all protocols of an ObjC class with a name starting with one of
       the given prefixes.</td>
@@ -465,6 +505,20 @@
         <a name="__all__"></a><span class="summary-name">__all__</span> = <code title="_ALL_LAZY.getters">_ALL_LAZY.getters</code>
     </td>
   </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a name="ps"></a><span class="summary-name">ps</span> = <code title="sys.argv [1:]">sys.argv [1:]</code>
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a name="i"></a><span class="summary-name">i</span> = <code title="0">0</code>
+    </td>
+  </tr>
 </table>
 <!-- ==================== FUNCTION DETAILS ==================== -->
 <a name="section-FunctionDetails"></a>
@@ -542,14 +596,14 @@
   </dl>
 </td></tr></table>
 </div>
-<a name="get_classes"></a>
+<a name="get_classes2"></a>
 <div>
 <table class="details" border="1" cellpadding="3"
        cellspacing="0" width="100%" bgcolor="white">
 <tr><td>
   <table width="100%" cellpadding="0" cellspacing="0" border="0">
   <tr valign="top"><td>
-  <h3 class="epydoc"><span class="sig"><span class="sig-name">get_classes</span>(<span class="sig-arg">*prefixes</span>)</span>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">get_classes2</span>(<span class="sig-arg">*prefixes</span>)</span>
   </h3>
   </td><td align="right" valign="top"
     >&nbsp;
@@ -568,6 +622,11 @@
           <i>name</i> is the class name and <i>class</i> is the ObjC <a 
           href="pycocoa.octypes.Class_t-class.html" 
           class="link">Class_t</a> object.</dd>
+    <dt>Raises:</dt>
+    <dd><ul class="nomargin-top">
+        <li><code><strong class='fraise'><a href="pycocoa.faults.SegfaultError-class.html">SegfaultError</a></strong></code> - See function <a href="pycocoa.faults-module.html#segfaulty" 
+        class="link">segfaulty</a>.</li>
+    </ul></dd>
   </dl>
 </td></tr></table>
 </div>
@@ -695,14 +754,14 @@
   </dl>
 </td></tr></table>
 </div>
-<a name="get_ivars"></a>
+<a name="get_ivars4"></a>
 <div>
 <table class="details" border="1" cellpadding="3"
        cellspacing="0" width="100%" bgcolor="white">
 <tr><td>
   <table width="100%" cellpadding="0" cellspacing="0" border="0">
   <tr valign="top"><td>
-  <h3 class="epydoc"><span class="sig"><span class="sig-name">get_ivars</span>(<span class="sig-arg">clas</span>,
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">get_ivars4</span>(<span class="sig-arg">clas</span>,
         <span class="sig-arg">*prefixes</span>)</span>
   </h3>
   </td><td align="right" valign="top"
@@ -811,14 +870,14 @@
   </dl>
 </td></tr></table>
 </div>
-<a name="get_methods"></a>
+<a name="get_methods4"></a>
 <div>
 <table class="details" border="1" cellpadding="3"
        cellspacing="0" width="100%" bgcolor="white">
 <tr><td>
   <table width="100%" cellpadding="0" cellspacing="0" border="0">
   <tr valign="top"><td>
-  <h3 class="epydoc"><span class="sig"><span class="sig-name">get_methods</span>(<span class="sig-arg">clas</span>,
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">get_methods4</span>(<span class="sig-arg">clas</span>,
         <span class="sig-arg">*prefixes</span>)</span>
   </h3>
   </td><td align="right" valign="top"
@@ -847,14 +906,14 @@
   </dl>
 </td></tr></table>
 </div>
-<a name="get_properties"></a>
+<a name="get_properties4"></a>
 <div>
 <table class="details" border="1" cellpadding="3"
        cellspacing="0" width="100%" bgcolor="white">
 <tr><td>
   <table width="100%" cellpadding="0" cellspacing="0" border="0">
   <tr valign="top"><td>
-  <h3 class="epydoc"><span class="sig"><span class="sig-name">get_properties</span>(<span class="sig-arg">clas_or_proto</span>,
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">get_properties4</span>(<span class="sig-arg">clas_or_proto</span>,
         <span class="sig-arg">*prefixes</span>)</span>
   </h3>
   </td><td align="right" valign="top"
@@ -875,13 +934,17 @@
         <li><strong class="pname"><code>prefixes</code></strong> - No, one or more property names to match (<code>str</code>-s).</li>
     </ul></dd>
     <dt>Returns:</dt>
-        <dd>For each property, yield a 3-tuple (<i>name</i>, 
+        <dd>For each property, yield a 4-tuple (<i>name</i>, 
           <i>attributes</i>, <i>setter</i>, <i>property</i>) where 
           <i>attributes</i> is a comma-separated list of the property 
           attibutes, <i>setter</i> is the name of the property setter 
           method, provided the property is writable and <i>property</i> is 
           the <code>Property</code> object.  For read-only properties, the 
           <i>setter</i> is an empty name <code>&quot;&quot;</code>.</dd>
+    <dt>Raises:</dt>
+    <dd><ul class="nomargin-top">
+        <li><code><strong class='fraise'>TypeError</strong></code> - Invalid <b><code>clas_or_proto</code></b>.</li>
+    </ul></dd>
   </dl>
 <div class="fields">      <p><strong>Note:</strong>
         ObjC Property Attributes:
@@ -955,14 +1018,14 @@
   </dl>
 </td></tr></table>
 </div>
-<a name="get_protocols"></a>
+<a name="get_protocols2"></a>
 <div>
 <table class="details" border="1" cellpadding="3"
        cellspacing="0" width="100%" bgcolor="white">
 <tr><td>
   <table width="100%" cellpadding="0" cellspacing="0" border="0">
   <tr valign="top"><td>
-  <h3 class="epydoc"><span class="sig"><span class="sig-name">get_protocols</span>(<span class="sig-arg">clas</span>,
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">get_protocols2</span>(<span class="sig-arg">clas</span>,
         <span class="sig-arg">*prefixes</span>)</span>
   </h3>
   </td><td align="right" valign="top"
@@ -1153,6 +1216,8 @@
         <dd>The object'ssuper-class name (<code>str</code>).</dd>
     <dt>Raises:</dt>
     <dd><ul class="nomargin-top">
+        <li><code><strong class='fraise'><a href="pycocoa.faults.SegfaultError-class.html">SegfaultError</a></strong></code> - See function <a href="pycocoa.faults-module.html#segfaulty" 
+        class="link">segfaulty</a>.</li>
         <li><code><strong class='fraise'>ValueError</strong></code> - Invalid <i>objc</i>, iff no <i>dflt</i> provided.</li>
     </ul></dd>
   </dl>
@@ -1190,7 +1255,7 @@
 <table border="0" cellpadding="0" cellspacing="0" width="100%%">
   <tr>
     <td align="left" class="footer">
-    Generated by Epydoc 3.0.1 on Wed Mar 26 10:28:31 2025
+    Generated by Epydoc 3.0.1 on Tue Apr  8 11:26:16 2025
     </td>
     <td align="right" class="footer">
       <a target="mainFrame" href="http://epydoc.sourceforge.net"

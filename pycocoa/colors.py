@@ -68,21 +68,31 @@ L{UIColors} and all L{Colors} accessible by color space acronym like C{CMY}, C{G
 @var UIColors.Text: I{Dynamic} color for User-Interface elements, adaptable to vibrancy and accessibility settings.
 @var UIColors.WindowBackground: I{Dynamic} color for User-Interface elements, adaptable to vibrancy and accessibility settings.
 '''
-from pycocoa.bases import _Type0
-from pycocoa.internals import _Constants, _Dmain_, _EQUALS_, \
-                              _NN_, property_RO
-from pycocoa.lazily import _ALL_LAZY,  _fmt_invalid, _Types
+from pycocoa.baseTypes import _Type0,  _Types
+from pycocoa.basics import _Constants
+from pycocoa.internals import _Dmain_, _EQUALS_, _nameOf, _NN_, property_RO
+from pycocoa.lazily import _ALL_LAZY,  _fmt_invalid
 from pycocoa.nstypes import  NSColor
 
 from copy import copy as _copy
 # from enum import Enum
 
 __all__ = _ALL_LAZY.colors
-__version__ = '25.03.13'
+__version__ = '25.04.07'
 
 
-def _Xhandler(unused):
-    raise ColorError
+class _ColorConstants(_Constants):
+    '''(INTERNAL) Base C{Colors} class.
+    '''
+    _items_Class = None
+
+    def items_(self, *classes):
+        '''See mthods L{items_<_Constants.items_>}.
+        '''
+        if not classes:
+            assert self._items_Class  # is not None
+            classes = (self._items_Class,)
+        return super(_ColorConstants, self).items_(*classes)
 
 
 class ColorError(ValueError):
@@ -93,21 +103,20 @@ class ColorError(ValueError):
 
 # <https://Developer.Apple.com/documentation/appkit/nscolor>
 class Color(_Type0):
-    '''Base C{Color} class wrapping C{NSColor} objects,
-       intended I{specifically} to avoid fatal exceptions
-       when accessing I{non-applicable} C{NSColor} attributes.
+    '''Base C{Color} class wrapping C{NSColor} objects, intended
+       I{specifically} to avoid fatal exceptions when accessing
+       I{non-applicable} C{NSColor} attributes.
 
-       For example, getting the C{cyanComponent} of an RGB
-       C{NSColor} instance throws an C{NSException}, but
-       using L{Color.cyan} for any non-L{CMYColor} safely
-       returns C{None}.  Likewise for other attributes.
+       For example, getting the C{cyanComponent} of an RGB C{NSColor}
+       instance throws an C{NSException}, but using L{Color.cyan} for
+       any non-L{CMYColor} safely returns C{None}.  Likewise for other
+       attributes.
 
-       @note: Only pre-existing C{NSColor} can be wrapped,
-              creating new C{NSColor} is reserved for a
-              future C{PyCocoa} release.  Also, color
-              conversion and any other U{"color math"
-              <https://PyPI.org/project/colormath/>} are
-              not supported (yet).
+       @note: Only pre-existing C{NSColor} can be wrapped, creating
+              new C{NSColor} is reserved for a future C{PyCocoa}
+              release.  Also, color conversion and any other U{"color
+              math"<https://PyPI.org/project/colormath/>} are not
+              supported (yet).
     '''
     _name    = None
     _nsColor = None
@@ -116,23 +125,22 @@ class Color(_Type0):
         ''' New L{Color} from an existing C{NSColor}.
 
            @arg name: Given color name (C{str}).
-           @kwarg nsColor: Optionally, the name of an
-                           existing C{NSColor} (C{str}).
+           @kwarg nsColor: Optionally, the name of an existing
+                           C{NSColor} (C{str}).
 
-           @note: If no B{C{nsColor}} is specified, it is
-                  assumed to be the value of B{C{name}}
-                  suffixed with C{"Color"}, provided
-                  B{C{name}} does not end with C{"Color"}.
+           @note: If no B{C{nsColor}} is specified, it is assumed
+                  to be the value of B{C{name}} suffixed with
+                  C{"Color"}, provided B{C{name}} does not end with
+                  C{"Color"}.
 
-           @raise ColorError: Invalid B{C{name}} or
-                              B{C{nsColor}}.
+           @raise ColorError: Invalid B{C{name}} or B{C{nsColor}}.
         '''
         if nsColor:
             c = nsColor
-        elif name.endswith(Color.__name__):
+        elif name.endswith(_nameOf(Color)):
             raise ColorError(_fmt_invalid(name=repr(name)))
         else:
-            c = name + Color.__name__
+            c = name + _nameOf(Color)
         ns = getattr(NSColor, c, None)
         if ns is None or not callable(ns):
             raise ColorError(_fmt_invalid(color=repr(c)))
@@ -310,12 +318,14 @@ class CMYColor(Color):
 
 
 # <https://Developer.Apple.com/documentation/appkit/nscolor/standard_colors>
-class CMYColors(_Constants):
+class CMYColors(_ColorConstants):
     '''Some standard C{Cyan-Magenta-Yellow} colors, all L{CMYColor} instances (C{enum}).
     '''
-    Cyan    = CMYColor('cyan')
-    Magenta = CMYColor('magenta')
-    Yellow  = CMYColor('yellow')
+    _items_Class = CMYColor
+
+    Cyan         = CMYColor('cyan')
+    Magenta      = CMYColor('magenta')
+    Yellow       = CMYColor('yellow')
 
 CMYColors = CMYColors()  # PYCHOK singleton
 
@@ -337,16 +347,18 @@ class GrayScaleColor(Color):
 
 
 # <https://Developer.Apple.com/documentation/appkit/nscolor/standard_colors>
-class GrayScaleColors(_Constants):
+class GrayScaleColors(_ColorConstants):
     '''Some standard C{Gray-Scale} colors, all L{GrayScaleColor} instances (C{enum}).
     '''
-    Black      = GrayScaleColor('black')
-    Clear      = GrayScaleColor('clear')
-    DarkGray   = GrayScaleColor('darkGray')
-    Gray       = GrayScaleColor('gray')
-    LightGray  = GrayScaleColor('lightGray')
-    Tansparent = Clear.copy('transparent')
-    White      = GrayScaleColor('white')
+    _items_Class = GrayScaleColor
+
+    Black        = GrayScaleColor('black')
+    Clear        = GrayScaleColor('clear')
+    DarkGray     = GrayScaleColor('darkGray')
+    Gray         = GrayScaleColor('gray')
+    LightGray    = GrayScaleColor('lightGray')
+    Tansparent   = Clear.copy('transparent')
+    White        = GrayScaleColor('white')
 
 GrayScaleColors = GrayScaleColors()  # PYCHOK singleton
 
@@ -374,10 +386,11 @@ class HSBColor(Color):
 
 
 # <https://Developer.Apple.com/documentation/appkit/nscolor/standard_colors>
-class HSBColors(_Constants):
+class HSBColors(_ColorConstants):
     '''I{No} standard C{Hue-Saturation-Brightness} colors, L{HSBColor} instances (C{enum}).
     '''
-    NoneYet=None
+    _items_Class = HSBColor
+    NoneYet      = None
 
 HSBColors = HSBColors()  # PYCHOK singleton
 
@@ -405,16 +418,18 @@ class RGBColor(Color):
 
 
 # <https://Developer.Apple.com/documentation/appkit/nscolor/standard_colors>
-class RGBColors(_Constants):
+class RGBColors(_ColorConstants):
     '''Some standard C{Red-Green-Blue} colors, all L{RGBColor} instances (C{enum}).
     '''
-    Red    = RGBColor('red')
-    Green  = RGBColor('green')
-    Blue   = RGBColor('blue')
+    _items_Class = RGBColor
 
-    Brown  = RGBColor('brown')
-    Orange = RGBColor('orange')
-    Purple = RGBColor('purple')
+    Red          = RGBColor('red')
+    Green        = RGBColor('green')
+    Blue         = RGBColor('blue')
+
+    Brown        = RGBColor('brown')
+    Orange       = RGBColor('orange')
+    Purple       = RGBColor('purple')
 
 RGBColors = RGBColors()  # PYCHOK singleton
 
@@ -438,23 +453,25 @@ class TintColor(_SystemColor):
 
 
 # <https://Developer.Apple.com/documentation/appkit/nscolor/standard_colors>
-class TintColors(_Constants):
+class TintColors(_ColorConstants):
     '''Some I{dynamic} tints, adaptable to vibrancy and accessibility settings, all L{TintColor} instances (C{enum}).
     '''
-    Blue       = TintColor('Blue')
-    Brown      = TintColor('Brown')
-    Gray       = TintColor('Gray')
-    Green      = TintColor('Green')
+    _items_Class = TintColor
+
+    Blue         = TintColor('Blue')
+    Brown        = TintColor('Brown')
+    Gray         = TintColor('Gray')
+    Green        = TintColor('Green')
     try:  # may not exist
-        Indigo = TintColor('Indigo')
+        Indigo   = TintColor('Indigo')
     except ColorError:
         pass
-    Orange     = TintColor('Orange')
-    Pink       = TintColor('Pink')
-    Purple     = TintColor('Purple')
-    Red        = TintColor('Red')
-    Teal       = TintColor('Teal')
-    Yellow     = TintColor('Yellow')
+    Orange       = TintColor('Orange')
+    Pink         = TintColor('Pink')
+    Purple       = TintColor('Purple')
+    Red          = TintColor('Red')
+    Teal         = TintColor('Teal')
+    Yellow       = TintColor('Yellow')
 
 TintColors = TintColors()  # PYCHOK singleton
 
@@ -466,9 +483,11 @@ class UIColor(_SystemColor):
 
 
 # <https://Developer.Apple.com/documentation/appkit/nscolor/ui_element_colors>
-class UIColors(_Constants):
+class UIColors(_ColorConstants):
     '''Some I{dynamic} UI element colors, adaptable to vibrancy and accessibility settings, all L{UIColor} instances (C{enum}).
     '''
+    _items_Class      = UIColor
+
     Control           = UIColor('control')
     ControlBackground = UIColor('controlBackground')
     Grid              = UIColor('grid')
@@ -488,7 +507,7 @@ class UIColors(_Constants):
 UIColors = UIColors()  # PYCHOK singleton
 
 
-class Colors(_Constants):
+class Colors(_ColorConstants):
     '''Colors by color space acronym, like C{Colors.RGB.Red}, C{Colors.Tint.Red} (C{enum}).
     '''
     CMY  = CMYColors
@@ -503,9 +522,11 @@ class Colors(_Constants):
 #   Lab  = None
 #   sRGB = None
 
+    _items_Class = _ColorConstants
+
     def __repr__(self):
         def _fmt2(n, v):  # just XYZColor class names
-            return _EQUALS_(n, type(v).__name__)
+            return _EQUALS_(n, _nameOf(type(v)))
         return self._strepr(_fmt2)
 
 Colors = Colors()  # PYCHOK singleton
@@ -584,7 +605,7 @@ if __name__ == _Dmain_:
 #                         .Text=UIColor(NSDynamicSystemColor, name='Text'),
 #                         .WindowBackground=UIColor(NSDynamicSystemColor, name='WindowBackground'),
 # )[15]
-# pycocoa.colors.version 25.3.13, .isLazy 1, Python 3.13.2 64bit arm64, macOS 14.7.3
+# pycocoa.colors.version 25.4.7, .isLazy 1, Python 3.13.2 64bit arm64, macOS 15.4
 
 # MIT License <https://OpenSource.org/licenses/MIT>
 #

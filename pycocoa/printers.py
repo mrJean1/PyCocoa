@@ -7,12 +7,12 @@
 wrapping ObjC C{NSPrinter}, C{PMPrinter}, C{PMPaper} respectively
 C{PMPaperMargins} plus several C{get_...} print functions.
 '''
-from pycocoa.bases import _Type0
-from pycocoa.internals import Adict, _alloc_, _Dmain_, _DOT_, \
-                             _filexists, _fmt, _fmt_invalid, \
-                             _instr, _name_, _NN_, property_RO, \
-                             _SPACE_, _Strs
-from pycocoa.lazily import _ALL_LAZY, _Types
+from pycocoa.baseTypes import _Type0,  _Types
+from pycocoa.basics import Adict
+from pycocoa.internals import _alloc_, _Dmain_, _DOT_, _filexists, _fmt, \
+                              _fmt_invalid, _instr, _name_, _nameOf, \
+                              _NN_, property_RO, _SPACE_, _Strs
+# from pycocoa.lazily import _ALL_LAZY  # from .utils
 from pycocoa.nstypes import _nsArray2items, nsDictionary2dict, \
                              NSImageView, NSMain, NSPrinter, \
                              NSPrintInfo, NSPrintOperation, ns2py, \
@@ -23,13 +23,13 @@ from pycocoa.oslibs import cfNumber2bool, cfString, cfString2str, \
                            cfURL2str, _csignature, _free_memory, \
                            get_lib_framework, YES
 from pycocoa.runtime import isObjCInstanceOf, send_message, _Xargs
-from pycocoa.utils import isinstanceOf, zfstr
+from pycocoa.utils import isinstanceOf, zfstr,  _ALL_LAZY
 
 from ctypes import ArgumentError, byref, cast, c_char_p, c_double, \
                    c_int, c_void_p, POINTER, sizeof
 
 __all__ = _ALL_LAZY.printers
-__version__ = '25.03.13'
+__version__ = '25.04.07'
 
 kPMServerLocal        = None
 kPMPPDDescriptionType = cfString('PMPPDDescriptionType')  # PYCHOK false
@@ -609,7 +609,7 @@ class _PrintError(PrintError):
     '''C{OSStatus} printer or printing error.
     '''
     def __init__(self, sts, txt):
-        k =  kPMErrors.rget(sts, OSStatus_t.__name__[:-2])
+        k =  kPMErrors.rget(sts, _nameOf(OSStatus_t)[:-2])
         t = _fmt('%s (%s) %s', k, sts, txt)
         PrintError.__init__(self, t)
 
@@ -1007,7 +1007,7 @@ if __name__ == _Dmain_:
 #  pycocoa.printers.PaperMargins is <class .PaperMargins>,
 #  pycocoa.printers.Printer is <class .Printer>,
 # )[9]
-# pycocoa.printers.version 25.3.13, .isLazy 1, Python 3.13.2 64bit arm64, macOS 14.7.3
+# pycocoa.printers.version 25.4.7, .isLazy 1, Python 3.13.2 64bit arm64, macOS 15.4
 
 # MIT License <https://OpenSource.org/licenses/MIT>
 #

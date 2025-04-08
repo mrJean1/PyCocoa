@@ -9,11 +9,10 @@
 @var Screens.BuiltIn: Get the I{BuiltIn} screen (C{Screen}).
 @var Screens.External: Get an External screen (C{Screen}) or C{None}.
 '''
-from pycocoa.bases import _Type0
+from pycocoa.baseTypes import _Type0,  _Types
 from pycocoa.geometry import Point, Rect, Size
-from pycocoa.internals import _COMMASPACE_, _Dmain_, _fmt, \
-                              _fmt_invalid, _Ints, property_RO
-from pycocoa.lazily import _ALL_LAZY, _Types
+from pycocoa.internals import _COMMASPACE_, _Dmain_, _Ints, property_RO
+from pycocoa.lazily import _ALL_LAZY,  _fmt, _fmt_invalid
 from pycocoa.nstypes import ns2py, NSScreen, nsString2str
 from pycocoa.octypes import NSRect_t
 from pycocoa.oslibs import _libCG  # PYCHOK used!
@@ -21,7 +20,7 @@ from pycocoa.runtime import isObjCInstanceOf,  isinstanceOf
 # from pycocoa.utils import isinstanceOf  # from .runtime
 
 __all__ = _ALL_LAZY.screens
-__version__ = '25.03.16'
+__version__ = '25.04.03'
 
 
 class Frame(Rect):
@@ -516,7 +515,7 @@ if __name__ == _Dmain_:
 #  pycocoa.screens.Screen is <class .Screen>,
 #  pycocoa.screens.Screens is (Screen(NSScreen, name='BuiltIn'), Screen(NSScreen, name='External')),
 # )[3]
-# pycocoa.screens.version 25.3.16, .isLazy 1, Python 3.13.2 64bit arm64, macOS 14.7.3
+# pycocoa.screens.version 25.4.3, .isLazy 1, Python 3.13.2 64bit arm64, macOS 15.4
 
 # MIT License <https://OpenSource.org/licenses/MIT>
 #

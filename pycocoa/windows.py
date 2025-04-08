@@ -45,11 +45,12 @@ L{WindowStyle}, wrapping ObjC C{NSWindow}, etc.
 @var WindowStyle.Typical: 0xf
 @var WindowStyle.Utility: 0x10
 '''
-from pycocoa.bases import _Type2
+from pycocoa.baseTypes import _Type2,  _Types
+from pycocoa.basics import _Constants, _Globals, Proxy1ce
 from pycocoa.geometry import Rect
-from pycocoa.internals import _Dmain_, bytes2str, _Constants, _fmt_invalid, \
-                              _fmt, _Globals, _Ints, property_RO, proxy_RO
-from pycocoa.lazily import _ALL_LAZY, _isPython3, _Types
+from pycocoa.internals import _Dmain_, bytes2str, _fmt, _fmt_invalid, \
+                              _Ints, property_RO
+from pycocoa.lazily import _ALL_LAZY, _isPython3
 from pycocoa.nstypes import isNone, NSConcreteNotification, NSFont, \
                             NSImageView, NSMain, NSNotification, \
                             NSScreen, NSScrollView, _NSStr, NSTableView, \
@@ -70,7 +71,7 @@ from pycocoa.utils import aspect_ratio, isinstanceOf, _text_title2
 # from enum import Enum
 
 __all__ = _ALL_LAZY.windows
-__version__ = '25.03.18'
+__version__ = '25.04.03'
 
 
 class AutoResizeError(ValueError):
@@ -845,7 +846,7 @@ class _NSWindowDelegate(object):
 #       return NSMain.Null
 
 
-@proxy_RO
+@Proxy1ce
 def NSWindowDelegate():
     '''The L{ObjCClass}C{(_NSWindowDelegate.__name__)}.
     '''
@@ -927,7 +928,7 @@ if __name__ == _Dmain_:
 #                        .No=0,
 #  pycocoa.windows.MediaWindow is <class .MediaWindow>,
 #  pycocoa.windows.ns2Window is <function .ns2Window at 0x100f3e7a0>,
-#  pycocoa.windows.NSWindowDelegate is <pycocoa.internals.proxy_RO object at 0x100f282d0>,
+#  pycocoa.windows.NSWindowDelegate is <pycocoa.internals.Proxy1ce object at 0x100f282d0>,
 #  pycocoa.windows.TextWindow is <class .TextWindow>,
 #  pycocoa.windows.Window is <class .Window>,
 #  pycocoa.windows.WindowError is <class .WindowError>,
@@ -940,7 +941,7 @@ if __name__ == _Dmain_:
 #  pycocoa.windows.WindowStyleError is <class .WindowStyleError>,
 #  pycocoa.windows.windowStyles is <function .windowStyles at 0x100f128e0>,
 # )[14]
-# pycocoa.windows.version 25.3.18, .isLazy 1, Python 3.13.2 64bit arm64, macOS 15.3.2
+# pycocoa.windows.version 25.4.3, .isLazy 1, Python 3.13.2 64bit arm64, macOS 15.4
 
 # MIT License <https://OpenSource.org/licenses/MIT>
 #

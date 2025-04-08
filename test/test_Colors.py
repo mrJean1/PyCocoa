@@ -3,7 +3,7 @@
 
 # Test the lazy import module lazily.
 
-__version__ = '25.02.09'
+__version__ = '25.03.28'
 
 if __name__ == '__main__':
 
@@ -11,8 +11,8 @@ if __name__ == '__main__':
     import sys
 
     e = i = 0
-    for S, s in pycocoa.Colors.items_(pycocoa.internals._Constants):
-        for n, c in s.items_(pycocoa.Color):
+    for S, s in pycocoa.Colors.items_():
+        for n, c in s.items_():
             i += 1
             t  = ['']
             for a in ('name', 'nsColor',

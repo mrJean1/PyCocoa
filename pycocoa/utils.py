@@ -3,14 +3,15 @@
 
 # License at the end of this file.
 
-'''Private and public utility functions.
+'''Public and private (INTERNAL) utility functions.
 '''
-from pycocoa.internals import bytes2str, _ByteStrs, _COLON_, _COMMA_, \
-                             _COLONSPACE_, _COMMASPACE_, _Ddoc_, _Dmain_,\
-                             _DOT_, _EQUALS_, _fmt, _fmt_invalid, _Globals, \
-                             _instr, _int2, _Ints, _kwdstr, missing, _NL_, \
-                             _NN_, _SPACE_, str2bytes, _TypeError, \
-                             _UNDER_, _writef,  sys   # _Dall_, _Dfile_, _Dversion_
+from pycocoa.basics import _Globals, _writef
+from pycocoa.internals import _arm64_, bytes2str, _ByteStrs, _COLON_, _COMMA_, \
+                              _COLONSPACE_, _COMMASPACE_, _Dmain_, _docOf, _DOT_, \
+                              _EQUALS_, _fmt, _fmt_invalid, _instr, _int2, _Ints, \
+                              _istr, _kwdstr, missing, _nameOf, _NL_, _NN_, \
+                              _raiser_name, _SPACE_, str2bytes, _UNDER_, \
+                              _TypeError,  sys   # _Dall_, _Dfile_, _Dversion_
 from pycocoa.lazily import _ALL_LAZY, isLazy, _Python_version
 
 import os.path as _os_path
@@ -18,9 +19,14 @@ import platform as _platform
 # import sys  # from .lazily
 
 __all__ = _ALL_LAZY.utils
-__version__ = '25.03.24'
+__version__ = '25.04.07'
 
-_bCOL = b':'  # in .octypes
+_bCOL      = b':'  # in .octypes
+_MACHINE   = _platform.machine().replace(_COMMA_, _UNDER_)  # arm64, x86_64, other?
+__arm64__  = _MACHINE == _arm64_   # PYCHOK see .oslibs._isAppleSi
+__i386__   = _MACHINE == 'i386'    # PYCHOK expected
+_x86_64_   =             'x86_64'
+__x86_64__ = _MACHINE == _x86_64_  # PYCHOK also Intel emulation
 
 
 def _all_listing(alls, localls, libs=False, _file_=_NN_, argv0='#'):
@@ -36,7 +42,7 @@ def _all_listing(alls, localls, libs=False, _file_=_NN_, argv0='#'):
             t = _SPACE_(missing, t)
             raise NameError(t)
 
-    t =  alls.__class__.__name__
+    t = _nameOf(type(alls))
     f = _file_ or localls.get(_Dfile_, _NN_)
     m, n = _dirbasename2(f)
     printf('%s = %s(', _DOT_(m, _Dall_), t, argv0=argv0, nl=1)
@@ -77,7 +83,7 @@ def _all_listing(alls, localls, libs=False, _file_=_NN_, argv0='#'):
         printf(' %s,', _DOT_(m, r), argv0=argv0)
         i += 1
     if d:
-        d = _NN_(_SPACE_, d, ' DUPLICATE', 's' if d > 1 else _NN_)
+        d = _NN_(_SPACE_, d, ' DUPLICATE', ('s' if d > 1 else _NN_))
     else:
         d = _NN_
     printf(')[%d]%s', i, d, argv0=argv0)
@@ -109,7 +115,7 @@ def _all_versionstr(libs=False, _file_=_NN_, _version_=_NN_):
 
 
 def _asorted(sortable):
-    return sorted(sortable, key=str.lower)
+    return sorted(sortable, key=_istr)
 
 
 def aspect_ratio(width, *height, **Error_kwds):
@@ -300,16 +306,16 @@ def machine():
     '''Return the C{platform.machine} string, distinguishing Intel from
        I{emulating} Intel on Apple Silicon (on macOS).
 
-       @return: Machine C{'arm64'} for Apple Silicon, C{"arm64_x86_64"} for
-                Intel I{emulated}, C{'x86_64'} for Intel, etc. (C{str} with
+       @return: Machine C{'arm64'} for Apple Silicon, C{'x86_64'} for Intel,
+                C{"arm64_x86_64"} for Intel I{emulated}, etc. (C{str} with
                 any C{comma}s replaced by C{underscore}).
     '''
-    m = _platform.machine().replace(_COMMA_, _UNDER_)  # arm64 Apple Si, x86_64, other?
-    if m == 'x86_64' and macOSver():  # only on Intel or Rosetta2
+    m = _MACHINE
+    if m == _x86_64_ and macOSver():  # only on Intel or Rosetta2
         # <https://Developer.Apple.com/forums/thread/659846>
         if _sysctl_uint('sysctl.proc_translated') == 1:  # and \
 #          _sysctl_uint('hw.optional.arm64') == 1:  # PYCHOK indent
-            m = _UNDER_('arm64', m)  # Apple Silicon emulating Intel x86
+            m = _UNDER_(_arm64_, m)  # Apple Si emulating Intel x86
     return m
 
 
@@ -413,10 +419,6 @@ def properties(inst):
     return pd
 
 
-def _raiser_name(raiser=None, name=None):  # in .runtime
-    return raiser or name
-
-
 def _sysctl_uint(name):
     '''(INTERNAL) Get an unsigned int sysctl item by name (on macOS).
     '''
@@ -516,16 +518,12 @@ def _varstr(constants, strepr=None):
     '''
     def _doc1(c, n, f):
         # get class c's 1st __doc__ line or value from f(c)
-        if callable(f):
-            t = f(c)
-        else:
-            d = getattr(c, _Ddoc_) or _NN_
-            t = d.split(_NL_)[0].strip()
-            t = t.rstrip('.,;:') + _DOT_
+        t =  f(c) if callable(f) else (
+            _docOf(c, line=0).rstrip('.,;:') + _DOT_)
         return _SPACE_('@var', _COLONSPACE_(n, t))
 
-    C = constants.__class__
-    N = C.__name__.lstrip(_UNDER_)
+    C =  type(constants)
+    N = _nameOf(C).lstrip(_UNDER_)
     v = [_NN_, _doc1(C, N, None)]
     for n in _asorted(constants.keys()):
         v.append(_doc1(getattr(C, n), _DOT_(N, n), strepr))
@@ -646,7 +644,7 @@ if __name__ == _Dmain_:
 #  pycocoa.utils.zfstr is <function .zfstr at 0x102575d00>,
 #  pycocoa.utils.zSIstr is <function .zSIstr at 0x102575da0>,
 # )[22]
-# pycocoa.utils.version 25.3.24, .isLazy 1, Python 3.13.2 64bit arm64, macOS 15.3.2
+# pycocoa.utils.version 25.4.7, .isLazy 1, Python 3.13.2 64bit arm64, macOS 15.4
 
 # MIT License <https://OpenSource.org/licenses/MIT>
 #

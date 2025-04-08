@@ -5,16 +5,16 @@
 
 '''Type L{Str}, wrapping ObjC C{NSStr[ing]}.
 '''
-from pycocoa.bases import _Type0
+from pycocoa.baseTypes import _Type0,  _Types
 from pycocoa.internals import _Dmain_, _NN_, property_RO, _Strs
-from pycocoa.lazily import _ALL_LAZY, _Types
+from pycocoa.lazily import _ALL_LAZY
 from pycocoa.nstypes import NSAttributedString, NSConstantString, _NSImms, \
                            _NSMtbs, NSStr, NSString, nsString2str
 from pycocoa.runtime import isImmutable, isMutable
 from pycocoa.pytypes import dict2NS, str2NS
 
 __all__ = _ALL_LAZY.strs
-__version__ = '25.03.13'
+__version__ = '25.04.03'
 
 
 class Str(str, _Type0):  # str, first to maintain str behavior
@@ -266,7 +266,7 @@ if __name__ == _Dmain_:
 #  pycocoa.strs.Str is <class .Str>,
 #  pycocoa.strs.StrAttd is <class .StrAttd>,
 # )[2]
-# pycocoa.strs.version 25.3.13, .isLazy 1, Python 3.13.2 64bit arm64, macOS 14.7.3
+# pycocoa.strs.version 25.4.3, .isLazy 1, Python 3.13.2 64bit arm64, macOS 15.4
 
 # MIT License <https://OpenSource.org/licenses/MIT>
 #

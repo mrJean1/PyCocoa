@@ -71,11 +71,11 @@
 @var FontWeight.SemiBold: 8
 @var FontWeight.Thin: 2
 '''
-from pycocoa.bases import _Type0
-from pycocoa.internals import _Constants, _Dmain_, _DOT_, bytes2str, \
-                              _ByteStrs, _fmt_invalid, _instr, _Ints, \
-                              _NN_, property_RO, _Singletons, _SPACE_
-from pycocoa.lazily import _ALL_LAZY, _Types
+from pycocoa.baseTypes import _Type0,  _Types
+from pycocoa.basics import _Constants, _Singletons
+from pycocoa.internals import _Dmain_, _DOT_, bytes2str, _ByteStrs, \
+                              _instr, _Ints, _NN_, property_RO, _SPACE_
+from pycocoa.lazily import _ALL_LAZY, _fmt_invalid
 from pycocoa.nstypes import isNone, NSFont, nsIter, NSMain, NSStr, \
                            _NSStr, nsString2str, ns2Type
 from pycocoa.oslibs import NSFontBoldMask, NSFontItalicMask, \
@@ -89,7 +89,7 @@ from pycocoa.strs import Str
 from pycocoa.utils import flint, isinstanceOf
 
 __all__ = _ALL_LAZY.fonts
-__version__ = '25.03.18'
+__version__ = '25.04.03'
 
 # <https://Developer.Apple.com/documentation/appkit/nsfont.weight>
 # _NSFontWeigthHeavy      = 13 ?
@@ -588,7 +588,7 @@ class FontTrait(_Constants):
                     t = _fmt_invalid(trait=repr(t))
                     raise FontTraitError(t)
         elif isinstance(traits, _Ints):
-            M  = int(traits)
+            M =  int(traits)
         else:
             t = _fmt_invalid(traits=repr(traits))
             raise FontTraitError(t)
@@ -983,7 +983,7 @@ if __name__ == _Dmain_:
 #                          .SemiBold=8 or 1<<3,
 #                          .Thin=2,
 # )[14]
-# pycocoa.fonts.version 25.3.18, .isLazy 1, Python 3.13.2 64bit arm64, macOS 15.3.2
+# pycocoa.fonts.version 25.4.3, .isLazy 1, Python 3.13.2 64bit arm64, macOS 15.4
 
 # MIT License <https://OpenSource.org/licenses/MIT>
 #

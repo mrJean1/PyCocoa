@@ -5,7 +5,7 @@
 
 '''Types L{Point}, L{Rect} and L{Size}, wrapping ObjC C{NSPoint_t}, L{NSRect_t}, C{NSSize_t}.
 '''
-from pycocoa.bases import _Type0
+from pycocoa.baseTypes import _Type0
 from pycocoa.internals import _Dmain_, _fmt_invalid, property_RO
 from pycocoa.lazily import _ALL_LAZY
 from pycocoa.nstypes import nsValue2py
@@ -13,7 +13,7 @@ from pycocoa.octypes import NSPoint_t, NSRect_t, NSRect4_t, NSSize_t
 from pycocoa.utils import aspect_ratio, isinstanceOf, islistuple, type2strepr
 
 __all__ = _ALL_LAZY.geometry
-__version__ = '25.02.16'
+__version__ = '25.04.03'
 
 
 class Point(_Type0):
@@ -402,7 +402,7 @@ if __name__ == _Dmain_:
 #  pycocoa.geometry.Size is <class .Size>,
 #  pycocoa.geometry.Size2 is <class .Size2>,
 # )[6]
-# pycocoa.geometry.version 25.2.16, .isLazy 1, Python 3.13.1 64bit arm64, macOS 14.7.3
+# pycocoa.geometry.version 25.4.3, .isLazy 1, Python 3.13.1 64bit arm64, macOS 15.4
 
 # MIT License <https://OpenSource.org/licenses/MIT>
 #

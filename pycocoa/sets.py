@@ -5,16 +5,16 @@
 
 '''Types L{FrozenSet} and L{Set}, wrapping ObjC C{NS[Mutable]Set}.
 '''
-from pycocoa.bases import _Type0
+from pycocoa.baseTypes import _Type0,  _Types
 from pycocoa.internals import _Dmain_, property_RO
-from pycocoa.lazily import _ALL_LAZY, _Types
+from pycocoa.lazily import _ALL_LAZY
 from pycocoa.nstypes import _NSImms, NSMutableSet, _NSMtbs, \
                              NSSet, nsSet2set  # ns2py
 from pycocoa.pytypes import frozenset2NS, set2NS
 from pycocoa.runtime import isImmutable, isinstanceOf, isMutable
 
 __all__ = _ALL_LAZY.sets
-__version__ = '25.03.13'
+__version__ = '25.04.03'
 
 if True:  # MCCABE 71
 
@@ -244,7 +244,7 @@ if True:  # MCCABE 71
 #               self._pyset = set(ns_set)
 #           elif isinstanceOf(ns_set, Set, FrozenSet):
 #               self._pyset = set(ns_set._pyset)
-#           elif isMutable(ns_set, *_NSMtbs.Sets, raiser=Set.__name__):
+#           elif isMutable(ns_set, *_NSMtbs.Sets, raiser=_nameOf(Set)):
 #               self._pyset = nsSet2set(ns_set)
 #
 #       def __iand__(self, elem):
@@ -326,7 +326,7 @@ if __name__ == _Dmain_:
 #  pycocoa.sets.FrozenSet is <class .FrozenSet>,
 #  pycocoa.sets.Set is <class .Set>,
 # )[2]
-# pycocoa.sets.version 25.3.13, .isLazy 1, Python 3.13.2 64bit arm64, macOS 14.7.3
+# pycocoa.sets.version 25.4.3, .isLazy 1, Python 3.13.2 64bit arm64, macOS 15.4
 
 # MIT License <https://OpenSource.org/licenses/MIT>
 #

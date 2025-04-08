@@ -3,7 +3,7 @@
 
 # Test the lazy import module lazily.
 
-__version__ = '23.01.18'
+__version__ = '23.03.28'
 
 if __name__ == '__main__':
 
@@ -27,10 +27,12 @@ if __name__ == '__main__':
             PyCocoa_dir = '~' + PyCocoa_dir[len(_HOME):]
     del _HOME
 
+    t, _type2strepr = 0, pycocoa.type2strepr
     for a in sorted(pycocoa.__all__, key=str.lower):
-        v = getattr(pycocoa, a, None)
-        v = pycocoa.type2strepr(v).replace('()', '').strip()
-        print('pycocoa.%s: %s' % (a, v))
+        v =  getattr(pycocoa, a, None)
+        v = _type2strepr(v).replace('()', '').strip()
+        t += 1
+        print('%s pycocoa.%s: %s' % (t, a, v))
 
     t = 0
     z = pycocoa.isLazy

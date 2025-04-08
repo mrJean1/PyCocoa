@@ -80,15 +80,16 @@ wrapping ObjC C{NSMenuItem} and C{NSMenu} and L{Keys}.
 @var Keys.VerticalTab: '\x0b'
 @var Keys.VT: '\x0b'
 '''
-from pycocoa.bases import _Type2
+from pycocoa.baseTypes import _Type2,  _Types
+from pycocoa.basics import Adict, _Constants, _Globals
 from pycocoa.fonts import Font
 from pycocoa.geometry import Size
 from pycocoa.getters import get_selector, get_selectornameof
-from pycocoa.internals import Adict, bytes2str, _ByteStrs, _COLONSPACE_, \
-                             _Constants, _Dmain_, _DOT_, _Globals, _Ints, \
-                             _invalid_, _NA_, missing, _nargs, _NN_, _no, \
-                             _property2, property_RO, _SPACE_, _Strs, _UNDER_
-from pycocoa.lazily import _ALL_LAZY, _Types,  _fmt, _fmt_invalid, _instr
+from pycocoa.internals import bytes2str, _ByteStrs, _COLONSPACE_, _Dmain_, \
+                             _DOT_, _instr, _Ints, _invalid_, missing, _NA_, \
+                             _nameOf, _nargs, _NN_, _no, _property2, property_RO, \
+                             _SPACE_, _Strs, _UNDER_
+from pycocoa.lazily import _ALL_LAZY,  _fmt, _fmt_invalid
 from pycocoa.nstypes import isNone, NSMain, NSMenu, NSMenuItem, nsOf, NSStr, \
                             nsString2str
 from pycocoa.pytypes import int2NS
@@ -120,7 +121,7 @@ from pycocoa.utils import errorf, isinstanceOf, name2pymethod
 # from types import FunctionType, MethodType
 
 __all__ = _ALL_LAZY.menus
-__version__ = '25.03.24'
+__version__ = '25.04.07'
 
 # Method _NSApplicationDelegate.handleMenuItem_ in .apps.py
 # is the handler ('selector') for all menu items specified
@@ -311,7 +312,7 @@ class Item(_Item_Type2):
                     raise NameError(_COLONSPACE_(t, p))
             except Exception as x:
                 if _Globals.raiser:
-                    x =  type(x).__name__
+                    x = _nameOf(type(x))
                     x = _COLONSPACE_(x, self.typename)
                     errorf('%s(title=%r, ..., %s=%r) ...',
                             x, self.title, p, v)
@@ -1075,7 +1076,7 @@ class Menu(_Menu_Type2):
         if item._SEL_ is _CALL_:  # .callMenuItem_
             item._action(item)
         else:  # if item._SEL_ is _HANDLE_:  # .handleMenuItem_
-            t = _DOT_(self, self.click.__name__)
+            t = _DOT_(self, _nameOf(self.click))
             raise NotImplementedError(_instr(t, item))
         if highlight:
             # <https://Stackoverflow.com/questions/6169930/
@@ -1688,13 +1689,13 @@ if __name__ == _Dmain_:
 #                    .VT=0xb,
 #  pycocoa.menus.Menu is <class .Menu>,
 #  pycocoa.menus.MenuBar is <class .MenuBar>,
-#  pycocoa.menus.ns2Item is <function .ns2Item at 0x104a382c0>,
-#  pycocoa.menus.title2action is <function .title2action at 0x104a45c60>,
+#  pycocoa.menus.ns2Item is <function .ns2Item at 0x1012b45e0>,
+#  pycocoa.menus.title2action is <function .title2action at 0x1012ba0c0>,
 # )[7]
-# pycocoa.menus.version 25.3.24, .isLazy 1, Python 3.13.2 64bit arm64, macOS 15.3.2
+# pycocoa.menus.version 25.4.7, .isLazy 1, Python 3.13.2 64bit arm64, macOS 15.4
 
 # Item('Quit', 'menuTerminate_', Cmd+q) properties:
-#   NS = <ObjCInstance(NSMenuItem(<Id_t at 0x1049f34d0>) of 0x600002c1c690) at 0x1047d2650>
+#   NS = <ObjCInstance(NSMenuItem(<Id_t at 0x101283750>) of 0x600003940150) at 0x10123a3f0>
 #   NSDelegate = 'NameError("use \'NSd-\', not \'NSD-\'")'
 #   NSdelegate = None
 #   action = 'menuTerminate_'
@@ -1716,7 +1717,7 @@ if __name__ == _Dmain_:
 #   keyEquivalentModifiers = {'alt': False, 'cmd': True, 'ctrl': False, 'shift': False}
 #   keyModifiers = {'alt': False, 'cmd': True, 'ctrl': False, 'shift': False}
 #   nsTarget = None
-#   parent = Menu('Test') at 0x104a1cec0
+#   parent = Menu('Test') at 0x101285940
 #   shift = False
 #   state = 0
 #   subMenu = None
@@ -1726,7 +1727,7 @@ if __name__ == _Dmain_:
 #   typename = 'Item'
 
 # Menu('Test') properties:
-#   NS = <ObjCInstance(NSMenu(<Id_t at 0x1049f2550>) of 0x60000121c400) at 0x1049e65d0>
+#   NS = <ObjCInstance(NSMenu(<Id_t at 0x101282450>) of 0x600000740640) at 0x101252d50>
 #   NSDelegate = 'NameError("use \'NSd-\', not \'NSD-\'")'
 #   NSdelegate = None
 #   action = None
@@ -1740,17 +1741,17 @@ if __name__ == _Dmain_:
 #   isTornOff = False
 #   isVisible = None
 #   minWidth = 0.0
-#   nsMenuItem = <ObjCInstance(NSMenuItem(<Id_t at 0x104a4c4d0>) of 0x600002c1c770) at 0x104a08b90>
-#   parent = MenuBar(None) at 0x104a1cd70
+#   nsMenuItem = <ObjCInstance(NSMenuItem(<Id_t at 0x1012d0e50>) of 0x60000394ccb0) at 0x101289370>
+#   parent = MenuBar(None) at 0x101285550
 #   showsState = True
-#   size = <NSSize_t(width=101.0, height=32.0) at 0x104a4fc50>
+#   size = <NSSize_t(width=101.0, height=32.0) at 0x1012d87d0>
 #   tag = 2
 #   tags = 2
 #   title = 'Test'
 #   typename = 'Menu'
 
 # MenuBar(None) properties:
-#   NS = <ObjCInstance(NSMenu(<Id_t at 0x1049f1bd0>) of 0x60000121c340) at 0x104a1cc20>
+#   NS = <ObjCInstance(NSMenu(<Id_t at 0x101280ad0>) of 0x600000740500) at 0x101285400>
 #   NSDelegate = 'NameError("use \'NSd-\', not \'NSD-\'")'
 #   NSdelegate = None
 #   action = None
@@ -1764,7 +1765,7 @@ if __name__ == _Dmain_:
 #   minWidth = 0.0
 #   parent = None
 #   showsState = True
-#   size = <NSSize_t(width=85.0, height=32.0) at 0x104a64050>
+#   size = <NSSize_t(width=85.0, height=32.0) at 0x1012d8b50>
 #   tag = None
 #   tags = 2
 #   title = None

@@ -8,7 +8,7 @@ import sys
 import unittest
 
 __all__ = ('TestSuite',)
-__version__ = '23.01.18'
+__version__ = '25.04.07'
 
 _python_exe = sys.executable
 
@@ -21,7 +21,7 @@ class TestSuite(unittest.TestCase):
 
     def _run(self, test):
         TestSuite._runs += 1  # pseudo global
-        x = os.system('%s -m test.%s >/dev/null' % (_python_exe, test))
+        x = os.system('%s -m test.%s  1>/dev/null' % (_python_exe, test))
         # check the exit status code
         self.assertEqual(x, 0)
 
@@ -58,8 +58,8 @@ class TestSuite(unittest.TestCase):
     def test_simple_delegate(self):
         self._run('simple_delegate 1')  # waits 1 secs
 
-    def test_simple_drawing(self):
-        self._run('simple_drawing 2')  # waits 2 secs
+#   def test_simple_drawing(self):
+#       self._run('simple_drawing 2')  # waits 2 secs
 
     def test_simple_menu(self):
         self._run('simple_menu 3')

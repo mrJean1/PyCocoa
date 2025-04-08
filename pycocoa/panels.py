@@ -20,10 +20,11 @@
 @var PanelButton.Suppressed: -2
 @var PanelButton.TimedOut: -1
 '''
-from pycocoa.bases import _Type2
-from pycocoa.internals import _Constants, _Dmain_, _DOT_, _NN_, \
-                               property_RO, proxy_RO, _SPACE_, _Strs
-from pycocoa.lazily import _ALL_LAZY, _Types,  _fmt, _fmt_invalid
+from pycocoa.baseTypes import _Type2,  _Types
+from pycocoa.basics import _Constants, Proxy1ce
+from pycocoa.internals import _Dmain_, _DOT_, _NN_, property_RO, \
+                              _SPACE_, _Strs
+from pycocoa.lazily import _ALL_LAZY,  _fmt, _fmt_invalid
 from pycocoa.nstypes import NSAlert, NSError, NSFont, NSMain, \
                             NSNotificationCenter, NSOpenPanel, \
                             NSSavePanel, _NSStr, nsString2str, \
@@ -48,7 +49,7 @@ except ImportError:
     _Browser, _BrowserError = None, ImportError
 
 __all__ = _ALL_LAZY.panels
-__version__ = '25.03.16'
+__version__ = '25.04.03'
 
 
 class AlertStyle(_Constants):  # Enum?
@@ -304,7 +305,7 @@ class _NSAlertDelegate(object):
         return t.show(self.help)
 
 
-@proxy_RO
+@Proxy1ce
 def NSAlertDelegate():
     '''The L{ObjCClass}C{(_NSAlertDelegate.__name__)}.
     '''
@@ -581,7 +582,7 @@ if __name__ == _Dmain_:
 #                           .Warning=0,
 #  pycocoa.panels.BrowserPanel is <class .BrowserPanel>,
 #  pycocoa.panels.ErrorPanel is <class .ErrorPanel>,
-#  pycocoa.panels.NSAlertDelegate is <pycocoa.internals.proxy_RO object at 0x104b55a90>,
+#  pycocoa.panels.NSAlertDelegate is <pycocoa.internals.Proxy1ce object at 0x104b55a90>,
 #  pycocoa.panels.OpenPanel is <class .OpenPanel>,
 #  pycocoa.panels.PanelButton.Cancel=0,
 #                            .Close=1,
@@ -593,7 +594,7 @@ if __name__ == _Dmain_:
 #  pycocoa.panels.SavePanel is <class .SavePanel>,
 #  pycocoa.panels.TextPanel is <class .TextPanel>,
 # )[9]
-# pycocoa.panels.version 25.3.16, .isLazy 1, Python 3.13.2 64bit arm64, macOS 14.7.3
+# pycocoa.panels.version 25.4.3, .isLazy 1, Python 3.13.2 64bit arm64, macOS 15.4
 
 # MIT License <https://OpenSource.org/licenses/MIT>
 #

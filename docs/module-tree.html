@@ -68,7 +68,13 @@
         and <a href="pycocoa.apps.Tile-class.html" class="link">Tile</a>, 
         wrapping ObjC <code>NSApplication</code> and 
         <code>NSDocktile</code>.</em>    </li>
-    <li> <strong class="uidlink"><a href="pycocoa.bases-module.html">pycocoa.bases</a></strong>: <em class="summary">(INTERNAL) Base classes for Python <code>Types</code>.</em>    </li>
+    <li> <strong class="uidlink"><a href="pycocoa.baseTypes-module.html">pycocoa.baseTypes</a></strong>: <em class="summary">(INTERNAL) Base classes for Python <code>Types</code>.</em>    </li>
+    <li> <strong class="uidlink"><a href="pycocoa.basics-module.html">pycocoa.basics</a></strong>: <em class="summary">Classes <a href="pycocoa.basics.Adict-class.html" 
+        class="link">Adict</a>, <a 
+        href="pycocoa.basics.frozendict-class.html" 
+        class="link">frozendict</a>, decorator <a 
+        href="pycocoa.basics.Proxy1ce-class.html" class="link">Proxy1ce</a>
+        and private (INTERNAL) functions and singletons.</em>    </li>
     <li> <strong class="uidlink"><a href="pycocoa.colors-module.html">pycocoa.colors</a></strong>: <em class="summary">Types <a href="pycocoa.colors.Color-class.html" 
         class="link">Color</a>, <a 
         href="pycocoa.colors.ColorError-class.html" 
@@ -102,7 +108,7 @@
         href="pycocoa.colors-module.html#Colors" class="link">Colors</a> 
         accessible by color space acronym like <code>CMY</code>, 
         <code>GS</code>, <code>RGB</code>, etc.</em>    </li>
-    <li> <strong class="uidlink"><a href="pycocoa.deprecated-module.html">pycocoa.deprecated</a></strong>: <em class="summary">Deprecated classes, constants, functions, internals, etc.</em>    </li>
+    <li> <strong class="uidlink"><a href="pycocoa.deprecated-module.html">pycocoa.deprecated</a></strong>: <em class="summary">DEPRECATED classes, constants, functions, internals, modules, etc.</em>    </li>
     <li> <strong class="uidlink"><a href="pycocoa.dicts-module.html">pycocoa.dicts</a></strong>: <em class="summary">Types <a href="pycocoa.dicts.FrozenDict-class.html" 
         class="link">FrozenDict</a> and <a 
         href="pycocoa.dicts.Dict-class.html" class="link">Dict</a>, 
@@ -120,8 +126,22 @@
         href="pycocoa.octypes.NSRect_t-class.html" 
         class="link">NSRect_t</a>, <code>NSSize_t</code>.</em>    </li>
     <li> <strong class="uidlink"><a href="pycocoa.getters-module.html">pycocoa.getters</a></strong>: <em class="summary"><code>get_...</code> functions to obtain ObjC classes, methods, 
-        protocols, etc.</em>    </li>
-    <li> <strong class="uidlink"><a href="pycocoa.internals-module.html">pycocoa.internals</a></strong>: <em class="summary">Mostly INTERNAL, private classes, functions, constants, etc.</em>    </li>
+        protocols, instance variables, etc.</em>    </li>
+    <li> <strong class="uidlink"><a href="pycocoa.internals-module.html">pycocoa.internals</a></strong>: <em class="summary">Decorator <a href="pycocoa.internals-module.html#property_RO" 
+        class="link">property_RO</a>, functions <a 
+        href="pycocoa.internals-module.html#bytes2repr" 
+        class="link">bytes2repr</a>, <a 
+        href="pycocoa.internals-module.html#bytes2str" 
+        class="link">bytes2str</a>, <a 
+        href="pycocoa.internals-module.html#iterbytes" 
+        class="link">iterbytes</a>, <a 
+        href="pycocoa.basics-module.html#lambda1" class="link">lambda1</a>,
+        <a href="pycocoa.internals-module.html#str2bytes" 
+        class="link">str2bytes</a> and <a 
+        href="pycocoa.internals-module.html#unicodec" 
+        class="link">unicodec</a>, singleton <a 
+        href="pycocoa.internals-module.html#missing" 
+        class="link">missing</a> and private (INTERNAL) constants.</em>    </li>
     <li> <strong class="uidlink"><a href="pycocoa.lazily-module.html">pycocoa.lazily</a></strong>: <em class="summary">Lazily import <code>pycocoa</code> modules and attributes, based on
         <a href="https://modutil.ReadTheDocs.io/en/latest/#lazy_import" 
         target="_top">lazy_import</a> from Brett Cannon's <a 
@@ -177,7 +197,7 @@
     <li> <strong class="uidlink"><a href="pycocoa.tuples-module.html">pycocoa.tuples</a></strong>: <em class="summary">Type <a href="pycocoa.tuples.Tuple-class.html" 
         class="link">Tuple</a>, wrapping (immutable) ObjC 
         <code>NSArray</code>.</em>    </li>
-    <li> <strong class="uidlink"><a href="pycocoa.utils-module.html">pycocoa.utils</a></strong>: <em class="summary">Private and public utility functions.</em>    </li>
+    <li> <strong class="uidlink"><a href="pycocoa.utils-module.html">pycocoa.utils</a></strong>: <em class="summary">Public and private (INTERNAL) utility functions.</em>    </li>
     <li> <strong class="uidlink"><a href="pycocoa.windows-module.html">pycocoa.windows</a></strong>: <em class="summary">Types <a href="pycocoa.windows-module.html#AutoResize" 
         class="link">AutoResize</a>, <a 
         href="pycocoa.windows.Window-class.html" class="link">Window</a>, 
@@ -221,7 +241,7 @@
 <table border="0" cellpadding="0" cellspacing="0" width="100%%">
   <tr>
     <td align="left" class="footer">
-    Generated by Epydoc 3.0.1 on Wed Mar 26 10:28:30 2025
+    Generated by Epydoc 3.0.1 on Tue Apr  8 11:26:16 2025
     </td>
     <td align="right" class="footer">
       <a target="mainFrame" href="http://epydoc.sourceforge.net"

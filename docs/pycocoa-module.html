@@ -102,7 +102,7 @@
     href="https://PyPI.org/project/python-vlc" target="_top">Python-VLC</a>
     3.0.21, 3.0.18, 3.0.16, 3.0.12, 3.0.11, 3.0.10, 3.0.8, 3.0.6, 3.0.4 and
     2.2.8 (with the compatible <a href="https://www.VideoLan.org/vlc" 
-    target="_top">VLC App</a>) on macOS 15.3.2 Sequoia (on 
+    target="_top">VLC App</a>) on macOS 15.4-3.2 Sequoia (on 
     <code>arm64</code> <i>natively</i> only), 14.7.3 Sonoma, 13.2 Ventura, 
     12.0.1 Monterey, 11.6.1 and 11.5.2 Big Sur (aka 10.16), 10.15.7 
     Catalina, 10.14.6 Mojave or 10.13.6 High Sierra.  The tests run with 
@@ -133,7 +133,7 @@
     target="_top">PyCodeStyle</a> (formerly Pep8) and <a 
     href="https://PyPI.org/project/mccabe" target="_top">McCabe</a> using 
     64-bit Python 2.7.18 and with <a href="https://PyPI.org/project/flake8"
-    target="_top">Flake8</a> using 64-bit Python 3.13.2 on macOS 15.3.2 
+    target="_top">Flake8</a> using 64-bit Python 3.13.2 on macOS 15.4 
     Sequoia.</p>
     <p>Some alternatives to <code>pycocoa</code> are (a) <a 
     href="https://PyPI.org/project/pyobjc" target="_top">PyObjC</a>, the 
@@ -170,6 +170,11 @@
         <code>PYCOCOA_SEGFAULTY</code> - see function <a 
         href="pycocoa.faults-module.html#segfaulty" 
         class="link">segfaulty</a>.
+      </li>
+      <li>
+        <code>PYCOCOA_UNICODEC</code> - see function <a 
+        href="pycocoa.internals-module.html#unicodec" 
+        class="link">unicodec</a>.
       </li>
     </ul>
     <p>plus during development:</p>
@@ -241,7 +246,7 @@
 
 <hr />
 <div class="fields">      <p><strong>Version:</strong>
-        25.03.25
+        25.04.08
       </p>
 </div><!-- ==================== SUBMODULES ==================== -->
 <a name="section-Submodules"></a>
@@ -259,7 +264,13 @@
         and <a href="pycocoa.apps.Tile-class.html" class="link">Tile</a>, 
         wrapping ObjC <code>NSApplication</code> and 
         <code>NSDocktile</code>.</em>    </li>
-    <li> <strong class="uidlink"><a href="pycocoa.bases-module.html">pycocoa.bases</a></strong>: <em class="summary">(INTERNAL) Base classes for Python <code>Types</code>.</em>    </li>
+    <li> <strong class="uidlink"><a href="pycocoa.baseTypes-module.html">pycocoa.baseTypes</a></strong>: <em class="summary">(INTERNAL) Base classes for Python <code>Types</code>.</em>    </li>
+    <li> <strong class="uidlink"><a href="pycocoa.basics-module.html">pycocoa.basics</a></strong>: <em class="summary">Classes <a href="pycocoa.basics.Adict-class.html" 
+        class="link">Adict</a>, <a 
+        href="pycocoa.basics.frozendict-class.html" 
+        class="link">frozendict</a>, decorator <a 
+        href="pycocoa.basics.Proxy1ce-class.html" class="link">Proxy1ce</a>
+        and private (INTERNAL) functions and singletons.</em>    </li>
     <li> <strong class="uidlink"><a href="pycocoa.colors-module.html">pycocoa.colors</a></strong>: <em class="summary">Types <a href="pycocoa.colors.Color-class.html" 
         class="link">Color</a>, <a 
         href="pycocoa.colors.ColorError-class.html" 
@@ -293,7 +304,7 @@
         href="pycocoa.colors-module.html#Colors" class="link">Colors</a> 
         accessible by color space acronym like <code>CMY</code>, 
         <code>GS</code>, <code>RGB</code>, etc.</em>    </li>
-    <li> <strong class="uidlink"><a href="pycocoa.deprecated-module.html">pycocoa.deprecated</a></strong>: <em class="summary">Deprecated classes, constants, functions, internals, etc.</em>    </li>
+    <li> <strong class="uidlink"><a href="pycocoa.deprecated-module.html">pycocoa.deprecated</a></strong>: <em class="summary">DEPRECATED classes, constants, functions, internals, modules, etc.</em>    </li>
     <li> <strong class="uidlink"><a href="pycocoa.dicts-module.html">pycocoa.dicts</a></strong>: <em class="summary">Types <a href="pycocoa.dicts.FrozenDict-class.html" 
         class="link">FrozenDict</a> and <a 
         href="pycocoa.dicts.Dict-class.html" class="link">Dict</a>, 
@@ -311,8 +322,22 @@
         href="pycocoa.octypes.NSRect_t-class.html" 
         class="link">NSRect_t</a>, <code>NSSize_t</code>.</em>    </li>
     <li> <strong class="uidlink"><a href="pycocoa.getters-module.html">pycocoa.getters</a></strong>: <em class="summary"><code>get_...</code> functions to obtain ObjC classes, methods, 
-        protocols, etc.</em>    </li>
-    <li> <strong class="uidlink"><a href="pycocoa.internals-module.html">pycocoa.internals</a></strong>: <em class="summary">Mostly INTERNAL, private classes, functions, constants, etc.</em>    </li>
+        protocols, instance variables, etc.</em>    </li>
+    <li> <strong class="uidlink"><a href="pycocoa.internals-module.html">pycocoa.internals</a></strong>: <em class="summary">Decorator <a href="pycocoa.internals-module.html#property_RO" 
+        class="link">property_RO</a>, functions <a 
+        href="pycocoa.internals-module.html#bytes2repr" 
+        class="link">bytes2repr</a>, <a 
+        href="pycocoa.internals-module.html#bytes2str" 
+        class="link">bytes2str</a>, <a 
+        href="pycocoa.internals-module.html#iterbytes" 
+        class="link">iterbytes</a>, <a 
+        href="pycocoa.basics-module.html#lambda1" class="link">lambda1</a>,
+        <a href="pycocoa.internals-module.html#str2bytes" 
+        class="link">str2bytes</a> and <a 
+        href="pycocoa.internals-module.html#unicodec" 
+        class="link">unicodec</a>, singleton <a 
+        href="pycocoa.internals-module.html#missing" 
+        class="link">missing</a> and private (INTERNAL) constants.</em>    </li>
     <li> <strong class="uidlink"><a href="pycocoa.lazily-module.html">pycocoa.lazily</a></strong>: <em class="summary">Lazily import <code>pycocoa</code> modules and attributes, based on
         <a href="https://modutil.ReadTheDocs.io/en/latest/#lazy_import" 
         target="_top">lazy_import</a> from Brett Cannon's <a 
@@ -368,7 +393,7 @@
     <li> <strong class="uidlink"><a href="pycocoa.tuples-module.html">pycocoa.tuples</a></strong>: <em class="summary">Type <a href="pycocoa.tuples.Tuple-class.html" 
         class="link">Tuple</a>, wrapping (immutable) ObjC 
         <code>NSArray</code>.</em>    </li>
-    <li> <strong class="uidlink"><a href="pycocoa.utils-module.html">pycocoa.utils</a></strong>: <em class="summary">Private and public utility functions.</em>    </li>
+    <li> <strong class="uidlink"><a href="pycocoa.utils-module.html">pycocoa.utils</a></strong>: <em class="summary">Public and private (INTERNAL) utility functions.</em>    </li>
     <li> <strong class="uidlink"><a href="pycocoa.windows-module.html">pycocoa.windows</a></strong>: <em class="summary">Types <a href="pycocoa.windows-module.html#AutoResize" 
         class="link">AutoResize</a>, <a 
         href="pycocoa.windows.Window-class.html" class="link">Window</a>, 
@@ -403,7 +428,7 @@
     <td width="15%" align="right" valign="top" class="summary">
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
-        <a href="pycocoa.internals.Adict-class.html" class="summary-name">Adict</a><br />
+        <a href="pycocoa.basics.Adict-class.html" class="summary-name">Adict</a><br />
       A <code>dict</code> with key <i>and</i> attribute access to the 
         items and callable to add items.
     </td>
@@ -1167,6 +1192,16 @@
     <td width="15%" align="right" valign="top" class="summary">
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
+        <a href="pycocoa.basics.Proxy1ce-class.html" class="summary-name">Proxy1ce</a><br />
+      Decorator for a lazily evaluated dict or lazily imported module or 
+        singleton, <i>avoiding circular imports</i> and providing access to
+        the dict's items or the singleton's or module's attributes.
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
         <a href="pycocoa.colors.RGBColor-class.html" class="summary-name">RGBColor</a><br />
       Color in the Red-Green-Blue space.
     </td>
@@ -1503,7 +1538,7 @@
     <td width="15%" align="right" valign="top" class="summary">
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
-        <a href="pycocoa.internals.frozendict-class.html" class="summary-name">frozendict</a><br />
+        <a href="pycocoa.basics.frozendict-class.html" class="summary-name">frozendict</a><br />
       An immutable Python <code>dict</code> with key <i>and</i> attribute
         access to the items.
     </td>
@@ -1513,7 +1548,7 @@
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
         <a href="pycocoa.deprecated.module_property_RO-class.html" class="summary-name">module_property_RO</a><br />
-      DEPRECATED on 2025.02.09, use <code>proxy_RO</code>.
+      DEPRECATED on 2025.02.09, use <code>Proxy1ce</code>.
     </td>
   </tr>
 <tr>
@@ -1555,9 +1590,8 @@
     <td width="15%" align="right" valign="top" class="summary">
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
-        <a href="pycocoa.internals.proxy_RO-class.html" class="summary-name">proxy_RO</a><br />
-      Decorator for a lazy module <code>dict</code> or 
-        <code>Read-Only</code> module property.
+        <a href="pycocoa.deprecated.proxy_RO-class.html" class="summary-name">proxy_RO</a><br />
+      DEPRECATED on 2025.04.03, use <code>Proxy1ce</code>.
     </td>
   </tr>
 <tr>
@@ -2338,9 +2372,43 @@
     </td><td class="summary">
       <table width="100%" cellpadding="0" cellspacing="0" border="0">
         <tr>
-          <td><span class="summary-sig"><a href="pycocoa-module.html#get_classes" class="summary-sig-name">get_classes</a>(<span class="summary-sig-arg">*prefixes</span>)</span><br />
+          <td><span class="summary-sig"><a name="get_classes"></a><span class="summary-sig-name">get_classes</span>(<span class="summary-sig-arg">*prefixes</span>)</span><br />
+      DEPRECATED on 25.03.30, use <code>get_classes2</code>.</td>
+          <td align="right" valign="top">
+            
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a href="pycocoa-module.html#get_classes2" class="summary-sig-name">get_classes2</a>(<span class="summary-sig-arg">*prefixes</span>)</span><br />
       Yield all loaded ObjC classes with a name starting with one of the 
       given prefixes.</td>
+          <td align="right" valign="top">
+            
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a name="get_classes_len"></a><span class="summary-sig-name">get_classes_len</span>()</span><br />
+      Get the number of ObjC classes loaded (<code>int</code>).</td>
           <td align="right" valign="top">
             
             
@@ -2445,10 +2513,46 @@
     </td><td class="summary">
       <table width="100%" cellpadding="0" cellspacing="0" border="0">
         <tr>
-          <td><span class="summary-sig"><a href="pycocoa-module.html#get_ivars" class="summary-sig-name">get_ivars</a>(<span class="summary-sig-arg">clas</span>,
+          <td><span class="summary-sig"><a name="get_ivars"></a><span class="summary-sig-name">get_ivars</span>(<span class="summary-sig-arg">clas</span>,
+        <span class="summary-sig-arg">*prefixes</span>)</span><br />
+      DEPRECATED on 25.03.30, use <code>get_ivars4</code>.</td>
+          <td align="right" valign="top">
+            
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a href="pycocoa-module.html#get_ivars4" class="summary-sig-name">get_ivars4</a>(<span class="summary-sig-arg">clas</span>,
         <span class="summary-sig-arg">*prefixes</span>)</span><br />
       Yield all instance variables (ivar) of an ObjC class with a name 
       starting with one of the given prefixes.</td>
+          <td align="right" valign="top">
+            
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a name="get_ivars_len"></a><span class="summary-sig-name">get_ivars_len</span>(<span class="summary-sig-arg">clas</span>)</span><br />
+      Get the number of instance variables (ivar) of an ObjC class 
+      (<code>int</code>).</td>
           <td align="right" valign="top">
             
             
@@ -2570,7 +2674,25 @@
     </td><td class="summary">
       <table width="100%" cellpadding="0" cellspacing="0" border="0">
         <tr>
-          <td><span class="summary-sig"><a href="pycocoa-module.html#get_methods" class="summary-sig-name">get_methods</a>(<span class="summary-sig-arg">clas</span>,
+          <td><span class="summary-sig"><a name="get_methods"></a><span class="summary-sig-name">get_methods</span>(<span class="summary-sig-arg">clas</span>,
+        <span class="summary-sig-arg">*prefixes</span>)</span><br />
+      DEPRECATED on 25.03.30, use <code>get_methods4</code>.</td>
+          <td align="right" valign="top">
+            
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a href="pycocoa-module.html#get_methods4" class="summary-sig-name">get_methods4</a>(<span class="summary-sig-arg">clas</span>,
         <span class="summary-sig-arg">*prefixes</span>)</span><br />
       Yield all methods of an ObjC class with a name starting with one of 
       the given prefixes.</td>
@@ -2657,7 +2779,25 @@
     </td><td class="summary">
       <table width="100%" cellpadding="0" cellspacing="0" border="0">
         <tr>
-          <td><span class="summary-sig"><a href="pycocoa-module.html#get_properties" class="summary-sig-name">get_properties</a>(<span class="summary-sig-arg">clas_or_proto</span>,
+          <td><span class="summary-sig"><a name="get_properties"></a><span class="summary-sig-name">get_properties</span>(<span class="summary-sig-arg">clas_or_proto</span>,
+        <span class="summary-sig-arg">*prefixes</span>)</span><br />
+      DEPRECATED on 25.03.30, use <code>get_properties4</code>.</td>
+          <td align="right" valign="top">
+            
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a href="pycocoa-module.html#get_properties4" class="summary-sig-name">get_properties4</a>(<span class="summary-sig-arg">clas_or_proto</span>,
         <span class="summary-sig-arg">*prefixes</span>)</span><br />
       Yield all properties of an ObjC class or protocol with a name 
       starting with one of the given prefixes.</td>
@@ -2693,7 +2833,25 @@
     </td><td class="summary">
       <table width="100%" cellpadding="0" cellspacing="0" border="0">
         <tr>
-          <td><span class="summary-sig"><a href="pycocoa-module.html#get_protocols" class="summary-sig-name">get_protocols</a>(<span class="summary-sig-arg">clas</span>,
+          <td><span class="summary-sig"><a name="get_protocols"></a><span class="summary-sig-name">get_protocols</span>(<span class="summary-sig-arg">clas</span>,
+        <span class="summary-sig-arg">*prefixes</span>)</span><br />
+      DEPRECATED on 25.03.30, use <code>get_protocols2</code>.</td>
+          <td align="right" valign="top">
+            
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a href="pycocoa-module.html#get_protocols2" class="summary-sig-name">get_protocols2</a>(<span class="summary-sig-arg">clas</span>,
         <span class="summary-sig-arg">*prefixes</span>)</span><br />
       Yield all protocols of an ObjC class with a name starting with one of
       the given prefixes.</td>
@@ -2889,7 +3047,7 @@
       <table width="100%" cellpadding="0" cellspacing="0" border="0">
         <tr>
           <td><span class="summary-sig"><a href="pycocoa-module.html#isClass" class="summary-sig-name">isClass</a>(<span class="summary-sig-arg">objc</span>)</span><br />
-      Check whether an object is an ObjC clas.</td>
+      Check whether an object is an ObjC class.</td>
           <td align="right" valign="top">
             
             
@@ -3091,7 +3249,7 @@
       <table width="100%" cellpadding="0" cellspacing="0" border="0">
         <tr>
           <td><span class="summary-sig"><a name="iterbytes"></a><span class="summary-sig-name">iterbytes</span>(<span class="summary-sig-arg">bytestr</span>)</span><br />
-      Iterate <code>bytes</code>, yielding each as <code>byte</code>.</td>
+      Iterate <code>bytes</code>, yielding each as <code>1-str/byte</code>.</td>
           <td align="right" valign="top">
             
             
@@ -3108,7 +3266,7 @@
       <table width="100%" cellpadding="0" cellspacing="0" border="0">
         <tr>
           <td><span class="summary-sig"><a name="lambda1"></a><span class="summary-sig-name">lambda1</span>(<span class="summary-sig-arg">arg</span>)</span><br />
-      Inlieu of using <i class="math">lambda arg: arg</i>.</td>
+      Inlieu of <i class="math">lambda arg: arg</i>.</td>
           <td align="right" valign="top">
             
             
@@ -4466,6 +4624,23 @@
     </td><td class="summary">
       <table width="100%" cellpadding="0" cellspacing="0" border="0">
         <tr>
+          <td><span class="summary-sig"><a href="pycocoa-module.html#unicodec" class="summary-sig-name">unicodec</a>(<span class="summary-sig-arg">codec</span>=<span class="summary-sig-default">None</span>)</span><br />
+      Get/set the unicode encoding, default <code>&quot;utf-8&quot;</code>.</td>
+          <td align="right" valign="top">
+            
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
           <td><span class="summary-sig"><a href="pycocoa-module.html#url2NS" class="summary-sig-name">url2NS</a>(<span class="summary-sig-arg">py</span>,
         <span class="summary-sig-arg">url2</span>=<span class="summary-sig-default">None</span>)</span><br />
       Create an <code>NSURL</code> instance from a Python string.</td>
@@ -4570,7 +4745,7 @@
     <td width="15%" align="right" valign="top" class="summary">
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
-        <a name="version"></a><span class="summary-name">version</span> = <code title="'25.3.25'"><code class="variable-quote">'</code><code class="variable-string">25.3.25</code><code class="variable-quote">'</code></code>
+        <a name="version"></a><span class="summary-name">version</span> = <code title="'25.4.8'"><code class="variable-quote">'</code><code class="variable-string">25.4.8</code><code class="variable-quote">'</code></code>
     </td>
   </tr>
 <tr>
@@ -4589,9 +4764,9 @@
     </td><td class="summary">
         <a href="pycocoa-module.html#AutoResize" class="summary-name">AutoResize</a> = <code title="AutoResize.HeightSizable=16 or 1&lt;&lt;4,
           .MaxXMargin=4 or 1&lt;&lt;2,
-          .MaxYMargin=32 or 1&lt;&lt;5,
+          .MaxYMargin=32 or 2&lt;&lt;4,
           .MinXMargin=1,
-          .MinYMargin=8 or 1&lt;&lt;3,
+          .MinYMargin=8 or 2&lt;&lt;2,
           .NotSizable=0,
           .Sizable=18,
           .WidthSizable=2">AutoResize.HeightSizable=16 or 1&lt;<code class="variable-ellipsis">...</code></code>
@@ -4701,9 +4876,9 @@
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
         <a href="pycocoa-module.html#FontTrait" class="summary-name">FontTrait</a> = <code title="FontTrait.Bold=2,
-         .Compressed=512 or 1&lt;&lt;9,
+         .Compressed=512 or 2&lt;&lt;8,
          .Condensed=64 or 1&lt;&lt;6,
-         .Expanded=32 or 1&lt;&lt;5,
+         .Expanded=32 or 2&lt;&lt;4,
          .Italic=1,
          .MonoSpace=1024 or 1&lt;&lt;10,
          .Narrow=16 or 1&lt;&lt;4,
@@ -4717,7 +4892,7 @@
     </td><td class="summary">
         <a href="pycocoa-module.html#FontWeight" class="summary-name">FontWeight</a> = <code title="FontWeight.Black=12 or 3&lt;&lt;2,
           .Bold=9,
-          .BoldSemi=8 or 1&lt;&lt;3,
+          .BoldSemi=8 or 2&lt;&lt;2,
           .Hairline=1,
           .Heavy=15,
           .Light=1,
@@ -4783,12 +4958,12 @@ arkGray'),
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
         <a href="pycocoa-module.html#Libs" class="summary-name">Libs</a> = <code title="{'CoreFoundation': &lt;CDLL 'CoreFoundation.framework/CoreFoundation', ha\
-ndle 7fffa779e3a0 at 7f7aa057d590&gt;, 'Foundation': &lt;CDLL 'Foundation.fr\
-amework/Foundation', handle 7fffa77919a8 at 7f7a902da390&gt;, 'C': &lt;CDLL \
-'libc.dylib', handle 7fffa77a7ce0 at 7f7aa057d2d0&gt;, 'Quartz': &lt;CDLL 'C\
-oreGraphics.framework/CoreGraphics', handle 7fffa7794520 at 7f7aa057df\
-10&gt;, 'libc': &lt;CDLL 'libc.dylib', handle 7fffa77a7ce0 at 7f7aa057d2d0&gt;,\
- 'ObjC': &lt;CDLL 'libobjc.dylib', handle 7fffa779dc6c at 7f7a902da650&gt;, \
+ndle 7fff98d81558 at 7fead04c0d90&gt;, 'Foundation': &lt;CDLL 'Foundation.fr\
+amework/Foundation', handle 7fff98d80b38 at 7fead02d9b90&gt;, 'C': &lt;CDLL \
+'libc.dylib', handle 7fff98e76e60 at 7fead04c0ad0&gt;, 'Quartz': &lt;CDLL 'C\
+oreGraphics.framework/CoreGraphics', handle 7fff98d876c0 at 7fead03038\
+d0&gt;, 'libc': &lt;CDLL 'libc.dylib', handle 7fff98e76e60 at 7fead04c0ad0&gt;,\
+ 'ObjC': &lt;CDLL 'libobjc.dylib', handle 7fff98d9ce24 at 7fead02d9e50&gt;, \
 'PrintCore': &lt;CDLL '/System/Library/Frameworks/ApplicationServices.fra\
 ...">{'CoreFoundation': &lt;CDLL 'CoreFoundation.framework/Core<code class="variable-ellipsis">...</code></code>
     </td>
@@ -4818,7 +4993,7 @@ oreGraphics.framework/CoreGraphics', handle 7fffa7794520 at 7f7aa057df\
     <td width="15%" align="right" valign="top" class="summary">
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
-        <a href="pycocoa-module.html#NSAlertDelegate" class="summary-name">NSAlertDelegate</a> = <code title="&lt;pycocoa.internals.proxy_RO object at 0x7f7aa04b4290&gt;">&lt;pycocoa.internals.proxy_RO object at 0x7f7a<code class="variable-ellipsis">...</code></code>
+        <a href="pycocoa-module.html#NSAlertDelegate" class="summary-name">NSAlertDelegate</a> = <code title="&lt;pycocoa.basics.Proxy1ce object at 0x7feac0563c50&gt;">&lt;pycocoa.basics.Proxy1ce object at 0x7feac05<code class="variable-ellipsis">...</code></code>
     </td>
   </tr>
 <tr>
@@ -4881,21 +5056,21 @@ oreGraphics.framework/CoreGraphics', handle 7fffa7794520 at 7f7aa057df\
     <td width="15%" align="right" valign="top" class="summary">
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
-        <a href="pycocoa-module.html#NSApplicationDelegate" class="summary-name">NSApplicationDelegate</a> = <code title="&lt;pycocoa.internals.proxy_RO object at 0x7f7a902b4450&gt;">&lt;pycocoa.internals.proxy_RO object at <code class="variable-ellipsis">...</code></code>
+        <a href="pycocoa-module.html#NSApplicationDelegate" class="summary-name">NSApplicationDelegate</a> = <code title="&lt;pycocoa.basics.Proxy1ce object at 0x7feac068da90&gt;">&lt;pycocoa.basics.Proxy1ce object at 0x7<code class="variable-ellipsis">...</code></code>
     </td>
   </tr>
 <tr>
     <td width="15%" align="right" valign="top" class="summary">
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
-        <a name="NSApplicationDidHideNotification"></a><span class="summary-name">NSApplicationDidHideNotification</span> = <code title="c_void_p(140704673184176)">c_void_p(140704673184176)</code>
+        <a name="NSApplicationDidHideNotification"></a><span class="summary-name">NSApplicationDidHideNotification</span> = <code title="c_void_p(140704496894720)">c_void_p(140704496894720)</code>
     </td>
   </tr>
 <tr>
     <td width="15%" align="right" valign="top" class="summary">
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
-        <a name="NSApplicationDidUnhideNotification"></a><span class="summary-name">NSApplicationDidUnhideNotification</span> = <code title="c_void_p(140704673184272)">c_void_p(140704673184272)</code>
+        <a name="NSApplicationDidUnhideNotification"></a><span class="summary-name">NSApplicationDidUnhideNotification</span> = <code title="c_void_p(140704496894816)">c_void_p(140704496894816)</code>
     </td>
   </tr>
 <tr>
@@ -5721,15 +5896,15 @@ oreGraphics.framework/CoreGraphics', handle 7fffa7794520 at 7f7aa057df\
     <td width="15%" align="right" valign="top" class="summary">
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
-        <a href="pycocoa-module.html#NSMain" class="summary-name">NSMain</a> = <code title="NSMain.Application=NSApplication(&lt;Id_t at 0x7f7aa0cb0b90&gt;) of 0x7f7a79\
-286990,
-      .BooleanNO=NSBoolean(&lt;Id_t at 0x7f7aa0cb0830&gt;) of 0x7ff85bd2f088\
+        <a href="pycocoa-module.html#NSMain" class="summary-name">NSMain</a> = <code title="NSMain.Application=NSApplication(&lt;Id_t at 0x7feab0586c20&gt;) of 0x7feaad\
+8e3db0,
+      .BooleanNO=NSBoolean(&lt;Id_t at 0x7feab0595050&gt;) of 0x7ff85151bf68\
 ,
-      .BooleanYES=NSBoolean(&lt;Id_t at 0x7f7aa0cb37a0&gt;) of 0x7ff85bd2f07\
+      .BooleanYES=NSBoolean(&lt;Id_t at 0x7feab0583d40&gt;) of 0x7ff85151bf5\
 8,
-      .Bundle=NSBundle(&lt;Id_t at 0x7f7aa0cb04d0&gt;) of 0x600000aecc80,
+      .Bundle=NSBundle(&lt;Id_t at 0x7feab058a200&gt;) of 0x60000340c460,
       .BundleName=NSConstantString('CFBundleName'),
-...">NSMain.Application=NSApplication(&lt;Id_t at 0x7f7aa0cb0<code class="variable-ellipsis">...</code></code>
+...">NSMain.Application=NSApplication(&lt;Id_t at 0x7feab0586<code class="variable-ellipsis">...</code></code>
     </td>
   </tr>
 <tr>
@@ -6121,7 +6296,7 @@ oreGraphics.framework/CoreGraphics', handle 7fffa7794520 at 7f7aa057df\
     <td width="15%" align="right" valign="top" class="summary">
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
-        <a href="pycocoa-module.html#NSTableViewDelegate" class="summary-name">NSTableViewDelegate</a> = <code title="&lt;pycocoa.internals.proxy_RO object at 0x7f7aa04bd550&gt;">&lt;pycocoa.internals.proxy_RO object at 0x<code class="variable-ellipsis">...</code></code>
+        <a href="pycocoa-module.html#NSTableViewDelegate" class="summary-name">NSTableViewDelegate</a> = <code title="&lt;pycocoa.basics.Proxy1ce object at 0x7feac0594210&gt;">&lt;pycocoa.basics.Proxy1ce object at 0x7fe<code class="variable-ellipsis">...</code></code>
     </td>
   </tr>
 <tr>
@@ -6317,7 +6492,7 @@ oreGraphics.framework/CoreGraphics', handle 7fffa7794520 at 7f7aa057df\
     <td width="15%" align="right" valign="top" class="summary">
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
-        <a href="pycocoa-module.html#NSWindowDelegate" class="summary-name">NSWindowDelegate</a> = <code title="&lt;pycocoa.internals.proxy_RO object at 0x7f7aa0644210&gt;">&lt;pycocoa.internals.proxy_RO object at 0x7f7<code class="variable-ellipsis">...</code></code>
+        <a href="pycocoa-module.html#NSWindowDelegate" class="summary-name">NSWindowDelegate</a> = <code title="&lt;pycocoa.basics.Proxy1ce object at 0x7feac058ef10&gt;">&lt;pycocoa.basics.Proxy1ce object at 0x7feac0<code class="variable-ellipsis">...</code></code>
     </td>
   </tr>
 <tr>
@@ -6403,7 +6578,9 @@ oreGraphics.framework/CoreGraphics', handle 7fffa7794520 at 7f7aa057df\
     </td><td class="summary">
         <a href="pycocoa-module.html#OBJC_ASSOCIATION" class="summary-name">OBJC_ASSOCIATION</a> = <code title="OBJC_ASSOCIATION.ASSIGN=0,
                 .COPY=771,
-                .RETAIN=769">OBJC_ASSOCIATION.ASSIGN<code class="variable-ellipsis">...</code></code>
+                .COPY_NONATOMIC=3,
+                .RETAIN=769,
+                .RETAIN_NONATOMIC=1">OBJC_ASSOCIATION.ASSIGN<code class="variable-ellipsis">...</code></code>
     </td>
   </tr>
 <tr>
@@ -6516,7 +6693,7 @@ Background'),
     </td><td class="summary">
         <a href="pycocoa-module.html#WindowStyle" class="summary-name">WindowStyle</a> = <code title="WindowStyle.Closable=2,
            .Miniaturizable=4 or 1&lt;&lt;2,
-           .Resizable=8 or 1&lt;&lt;3,
+           .Resizable=8 or 2&lt;&lt;2,
            .Titled=1,
            .Typical=15,
            .Utility=16 or 1&lt;&lt;4">WindowStyle.Closable<code class="variable-ellipsis">...</code></code>
@@ -6527,6 +6704,13 @@ Background'),
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
         <a name="YES"></a><span class="summary-name">YES</span> = <code title="True">True</code>
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a name="bases"></a><span class="summary-name">bases</span> = <code title="&lt;pycocoa.basics.Proxy1ce object at 0x7feac05c3390&gt;">&lt;pycocoa.basics.Proxy1ce object at 0x7feac05c3390&gt;</code>
     </td>
   </tr>
 <tr>
@@ -6549,55 +6733,56 @@ Background'),
     <td width="15%" align="right" valign="top" class="summary">
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
-        <a href="pycocoa-module.html#libAppKit" class="summary-name">libAppKit</a> = <code title="&lt;CDLL 'AppKit.framework/AppKit', handle 7fffa7793f68 at 7f7aa057dd50&gt;">&lt;CDLL 'AppKit.framework/AppKit', handle 7fffa7793f<code class="variable-ellipsis">...</code></code>
+        <a href="pycocoa-module.html#libAppKit" class="summary-name">libAppKit</a> = <code title="&lt;_DeprecatedCDLL 'AppKit.framework/AppKit', handle 7fff98d85100 at 7fe\
+ac04a9cd0&gt;">&lt;_DeprecatedCDLL 'AppKit.framework/AppKit', handle<code class="variable-ellipsis">...</code></code>
     </td>
   </tr>
 <tr>
     <td width="15%" align="right" valign="top" class="summary">
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
-        <a href="pycocoa-module.html#libCF" class="summary-name">libCF</a> = <code title="&lt;CDLL 'CoreFoundation.framework/CoreFoundation', handle 7fffa779e3a0 a\
-t 7f7aa057d590&gt;">&lt;CDLL 'CoreFoundation.framework/CoreFoundation', handl<code class="variable-ellipsis">...</code></code>
+        <a href="pycocoa-module.html#libCF" class="summary-name">libCF</a> = <code title="&lt;_DeprecatedCDLL 'CoreFoundation.framework/CoreFoundation', handle 7ff\
+f98d81558 at 7feac04a9d50&gt;">&lt;_DeprecatedCDLL 'CoreFoundation.framework/CoreFoundat<code class="variable-ellipsis">...</code></code>
     </td>
   </tr>
 <tr>
     <td width="15%" align="right" valign="top" class="summary">
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
-        <a href="pycocoa-module.html#libCG" class="summary-name">libCG</a> = <code title="&lt;CDLL 'CoreGraphics.framework/CoreGraphics', handle 7fffa7794520 at 7f\
-7aa057df10&gt;">&lt;CDLL 'CoreGraphics.framework/CoreGraphics', handle 7f<code class="variable-ellipsis">...</code></code>
+        <a href="pycocoa-module.html#libCG" class="summary-name">libCG</a> = <code title="&lt;_DeprecatedCDLL 'CoreGraphics.framework/CoreGraphics', handle 7fff98d\
+876c0 at 7feac04a9d90&gt;">&lt;_DeprecatedCDLL 'CoreGraphics.framework/CoreGraphics'<code class="variable-ellipsis">...</code></code>
     </td>
   </tr>
 <tr>
     <td width="15%" align="right" valign="top" class="summary">
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
-        <a href="pycocoa-module.html#libCT" class="summary-name">libCT</a> = <code title="&lt;CDLL 'CoreText.framework/CoreText', handle 7fffa7790430 at 7f7a902c9e\
-90&gt;">&lt;CDLL 'CoreText.framework/CoreText', handle 7fffa77904<code class="variable-ellipsis">...</code></code>
+        <a href="pycocoa-module.html#libCT" class="summary-name">libCT</a> = <code title="&lt;_DeprecatedCDLL 'CoreText.framework/CoreText', handle 7fff98d835c0 at\
+ 7feac04a9dd0&gt;">&lt;_DeprecatedCDLL 'CoreText.framework/CoreText', handle<code class="variable-ellipsis">...</code></code>
     </td>
   </tr>
 <tr>
     <td width="15%" align="right" valign="top" class="summary">
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
-        <a href="pycocoa-module.html#libFoundation" class="summary-name">libFoundation</a> = <code title="&lt;CDLL 'Foundation.framework/Foundation', handle 7fffa77919a8 at 7f7a90\
-2da390&gt;">&lt;CDLL 'Foundation.framework/Foundation', handl<code class="variable-ellipsis">...</code></code>
+        <a href="pycocoa-module.html#libFoundation" class="summary-name">libFoundation</a> = <code title="&lt;_DeprecatedCDLL 'Foundation.framework/Foundation', handle 7fff98d80b3\
+8 at 7feac04aa7d0&gt;">&lt;_DeprecatedCDLL 'Foundation.framework/Foundat<code class="variable-ellipsis">...</code></code>
     </td>
   </tr>
 <tr>
     <td width="15%" align="right" valign="top" class="summary">
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
-        <a href="pycocoa-module.html#libPC" class="summary-name">libPC</a> = <code title="&lt;CDLL '/System/Library/Frameworks/ApplicationServices.framework/Framew\
-orks/PrintCore.framework/PrintCore', handle 7fffa77b1d38 at 7f7aa06242\
-d0&gt;">&lt;CDLL '/System/Library/Frameworks/ApplicationServices.<code class="variable-ellipsis">...</code></code>
+        <a href="pycocoa-module.html#libPC" class="summary-name">libPC</a> = <code title="&lt;_DeprecatedCDLL '/System/Library/Frameworks/ApplicationServices.frame\
+work/Frameworks/PrintCore.framework/PrintCore', handle 7fff98e60c58 at\
+ 7fead03d9490&gt;">&lt;_DeprecatedCDLL '/System/Library/Frameworks/Applicati<code class="variable-ellipsis">...</code></code>
     </td>
   </tr>
 <tr>
     <td width="15%" align="right" valign="top" class="summary">
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
-        <a href="pycocoa-module.html#libobjc" class="summary-name">libobjc</a> = <code title="&lt;CDLL 'libobjc.dylib', handle 7fffa779dc6c at 7f7a902da650&gt;">&lt;CDLL 'libobjc.dylib', handle 7fffa779dc6c at 7f7a90<code class="variable-ellipsis">...</code></code>
+        <a href="pycocoa-module.html#libobjc" class="summary-name">libobjc</a> = <code title="&lt;_DeprecatedCDLL 'libobjc.dylib', handle 7fff98d9ce24 at 7fead03d9410&gt;">&lt;_DeprecatedCDLL 'libobjc.dylib', handle 7fff98d9ce2<code class="variable-ellipsis">...</code></code>
     </td>
   </tr>
 <tr>
@@ -6664,7 +6849,7 @@ d0&gt;">&lt;CDLL '/System/Library/Frameworks/ApplicationServices.<code class="va
   <p>Return the signals currently handled as <code>fault</code>.</p>
   <dl class="fields">
     <dt>Returns:</dt>
-        <dd>An <a href="pycocoa.internals.Adict-class.html" 
+        <dd>An <a href="pycocoa.basics.Adict-class.html" 
           class="link">Adict</a> with the <code>SIG*</code> name and value 
           of the currently handled signals, if any.</dd>
   </dl>
@@ -7026,14 +7211,15 @@ d0&gt;">&lt;CDLL '/System/Library/Frameworks/ApplicationServices.<code class="va
         <li><strong class="pname"><code>bytestr</code></strong> - Original <code>bytes</code>, <code>str</code> or 
           <code>unicode</code>.</li>
         <li><strong class="pname"><code>dflt</code></strong> - Optional, default return value.</li>
-        <li><strong class="pname"><code>name</code></strong> - Optional name of <i>bytestr</i> argument.</li>
+        <li><strong class="pname"><code>name</code></strong> - Optional name of <i>bytestr</i> argument, used for errors and 
+          missing <code>dflt</code> only.</li>
     </ul></dd>
     <dt>Returns:</dt>
         <dd>The <code>str</code> or <i>dflt</i>.</dd>
     <dt>Raises:</dt>
     <dd><ul class="nomargin-top">
-        <li><code><strong class='fraise'>TypeError</strong></code> - If neither <code>str</code> nor <code>bytes</code>, but only if no 
-        <i>dflt</i> is specified.</li>
+        <li><code><strong class='fraise'>TypeError</strong></code> - If <code>bytestr</code> is not <code>bytes</code>, <code>str</code>
+        or <code>unicode</code> and if <i>dflt</i> is missing.</li>
     </ul></dd>
   </dl>
 </td></tr></table>
@@ -7684,14 +7870,14 @@ d0&gt;">&lt;CDLL '/System/Library/Frameworks/ApplicationServices.<code class="va
   </dl>
 </td></tr></table>
 </div>
-<a name="get_classes"></a>
+<a name="get_classes2"></a>
 <div>
 <table class="details" border="1" cellpadding="3"
        cellspacing="0" width="100%" bgcolor="white">
 <tr><td>
   <table width="100%" cellpadding="0" cellspacing="0" border="0">
   <tr valign="top"><td>
-  <h3 class="epydoc"><span class="sig"><span class="sig-name">get_classes</span>(<span class="sig-arg">*prefixes</span>)</span>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">get_classes2</span>(<span class="sig-arg">*prefixes</span>)</span>
   </h3>
   </td><td align="right" valign="top"
     >&nbsp;
@@ -7710,6 +7896,11 @@ d0&gt;">&lt;CDLL '/System/Library/Frameworks/ApplicationServices.<code class="va
           <i>name</i> is the class name and <i>class</i> is the ObjC <a 
           href="pycocoa.octypes.Class_t-class.html" 
           class="link">Class_t</a> object.</dd>
+    <dt>Raises:</dt>
+    <dd><ul class="nomargin-top">
+        <li><code><strong class='fraise'><a href="pycocoa.faults.SegfaultError-class.html">SegfaultError</a></strong></code> - See function <a href="pycocoa.faults-module.html#segfaulty" 
+        class="link">segfaulty</a>.</li>
+    </ul></dd>
   </dl>
 </td></tr></table>
 </div>
@@ -7864,14 +8055,14 @@ d0&gt;">&lt;CDLL '/System/Library/Frameworks/ApplicationServices.<code class="va
   </dl>
 </td></tr></table>
 </div>
-<a name="get_ivars"></a>
+<a name="get_ivars4"></a>
 <div>
 <table class="details" border="1" cellpadding="3"
        cellspacing="0" width="100%" bgcolor="white">
 <tr><td>
   <table width="100%" cellpadding="0" cellspacing="0" border="0">
   <tr valign="top"><td>
-  <h3 class="epydoc"><span class="sig"><span class="sig-name">get_ivars</span>(<span class="sig-arg">clas</span>,
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">get_ivars4</span>(<span class="sig-arg">clas</span>,
         <span class="sig-arg">*prefixes</span>)</span>
   </h3>
   </td><td align="right" valign="top"
@@ -8033,14 +8224,14 @@ d0&gt;">&lt;CDLL '/System/Library/Frameworks/ApplicationServices.<code class="va
   </dl>
 </td></tr></table>
 </div>
-<a name="get_methods"></a>
+<a name="get_methods4"></a>
 <div>
 <table class="details" border="1" cellpadding="3"
        cellspacing="0" width="100%" bgcolor="white">
 <tr><td>
   <table width="100%" cellpadding="0" cellspacing="0" border="0">
   <tr valign="top"><td>
-  <h3 class="epydoc"><span class="sig"><span class="sig-name">get_methods</span>(<span class="sig-arg">clas</span>,
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">get_methods4</span>(<span class="sig-arg">clas</span>,
         <span class="sig-arg">*prefixes</span>)</span>
   </h3>
   </td><td align="right" valign="top"
@@ -8177,14 +8368,14 @@ d0&gt;">&lt;CDLL '/System/Library/Frameworks/ApplicationServices.<code class="va
   </dl>
 </td></tr></table>
 </div>
-<a name="get_properties"></a>
+<a name="get_properties4"></a>
 <div>
 <table class="details" border="1" cellpadding="3"
        cellspacing="0" width="100%" bgcolor="white">
 <tr><td>
   <table width="100%" cellpadding="0" cellspacing="0" border="0">
   <tr valign="top"><td>
-  <h3 class="epydoc"><span class="sig"><span class="sig-name">get_properties</span>(<span class="sig-arg">clas_or_proto</span>,
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">get_properties4</span>(<span class="sig-arg">clas_or_proto</span>,
         <span class="sig-arg">*prefixes</span>)</span>
   </h3>
   </td><td align="right" valign="top"
@@ -8205,13 +8396,17 @@ d0&gt;">&lt;CDLL '/System/Library/Frameworks/ApplicationServices.<code class="va
         <li><strong class="pname"><code>prefixes</code></strong> - No, one or more property names to match (<code>str</code>-s).</li>
     </ul></dd>
     <dt>Returns:</dt>
-        <dd>For each property, yield a 3-tuple (<i>name</i>, 
+        <dd>For each property, yield a 4-tuple (<i>name</i>, 
           <i>attributes</i>, <i>setter</i>, <i>property</i>) where 
           <i>attributes</i> is a comma-separated list of the property 
           attibutes, <i>setter</i> is the name of the property setter 
           method, provided the property is writable and <i>property</i> is 
           the <code>Property</code> object.  For read-only properties, the 
           <i>setter</i> is an empty name <code>&quot;&quot;</code>.</dd>
+    <dt>Raises:</dt>
+    <dd><ul class="nomargin-top">
+        <li><code><strong class='fraise'>TypeError</strong></code> - Invalid <b><code>clas_or_proto</code></b>.</li>
+    </ul></dd>
   </dl>
 <div class="fields">      <p><strong>Note:</strong>
         ObjC Property Attributes:
@@ -8285,14 +8480,14 @@ d0&gt;">&lt;CDLL '/System/Library/Frameworks/ApplicationServices.<code class="va
   </dl>
 </td></tr></table>
 </div>
-<a name="get_protocols"></a>
+<a name="get_protocols2"></a>
 <div>
 <table class="details" border="1" cellpadding="3"
        cellspacing="0" width="100%" bgcolor="white">
 <tr><td>
   <table width="100%" cellpadding="0" cellspacing="0" border="0">
   <tr valign="top"><td>
-  <h3 class="epydoc"><span class="sig"><span class="sig-name">get_protocols</span>(<span class="sig-arg">clas</span>,
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">get_protocols2</span>(<span class="sig-arg">clas</span>,
         <span class="sig-arg">*prefixes</span>)</span>
   </h3>
   </td><td align="right" valign="top"
@@ -8484,6 +8679,8 @@ d0&gt;">&lt;CDLL '/System/Library/Frameworks/ApplicationServices.<code class="va
         <dd>The object'ssuper-class name (<code>str</code>).</dd>
     <dt>Raises:</dt>
     <dd><ul class="nomargin-top">
+        <li><code><strong class='fraise'><a href="pycocoa.faults.SegfaultError-class.html">SegfaultError</a></strong></code> - See function <a href="pycocoa.faults-module.html#segfaulty" 
+        class="link">segfaulty</a>.</li>
         <li><code><strong class='fraise'>ValueError</strong></code> - Invalid <i>objc</i>, iff no <i>dflt</i> provided.</li>
     </ul></dd>
   </dl>
@@ -8633,14 +8830,15 @@ d0&gt;">&lt;CDLL '/System/Library/Frameworks/ApplicationServices.<code class="va
     </td>
   </tr></table>
   
-  <p>Check whether an object is an ObjC clas.</p>
+  <p>Check whether an object is an ObjC class.</p>
   <dl class="fields">
     <dt>Parameters:</dt>
     <dd><ul class="nomargin-top">
         <li><strong class="pname"><code>objc</code></strong> - Object to check (<code>Object</code> or <code>Class</code>).</li>
     </ul></dd>
     <dt>Returns:</dt>
-        <dd>True if the <i>objc</i> is a clas, False otherwise.</dd>
+        <dd><code>True</code> if the <i>objc</i> is a clas, 
+          <code>False</code> if not or <code>None</code>is unknown.</dd>
   </dl>
 </td></tr></table>
 </div>
@@ -8734,7 +8932,8 @@ d0&gt;">&lt;CDLL '/System/Library/Frameworks/ApplicationServices.<code class="va
         <li><strong class="pname"><code>objc</code></strong> - Object to check (<code>Object</code> or <code>Class</code>).</li>
     </ul></dd>
     <dt>Returns:</dt>
-        <dd>True if the <i>objc</i> is a metaclass, False otherwise.</dd>
+        <dd><code>True</code> if the <i>objc</i> is a metaclass, 
+          <code>False</code> if not or <code>None</code> if unknown.</dd>
   </dl>
 </td></tr></table>
 </div>
@@ -9133,9 +9332,10 @@ d0&gt;">&lt;CDLL '/System/Library/Frameworks/ApplicationServices.<code class="va
   <dl class="fields">
     <dt>Returns:</dt>
         <dd>Machine <code>'arm64'</code> for Apple Silicon, 
+          <code>'x86_64'</code> for Intel, 
           <code>&quot;arm64_x86_64&quot;</code> for Intel <i>emulated</i>, 
-          <code>'x86_64'</code> for Intel, etc. (<code>str</code> with any 
-          <code>comma</code>s replaced by <code>underscore</code>).</dd>
+          etc. (<code>str</code> with any <code>comma</code>s replaced by 
+          <code>underscore</code>).</dd>
   </dl>
 </td></tr></table>
 </div>
@@ -9828,7 +10028,7 @@ d0&gt;">&lt;CDLL '/System/Library/Frameworks/ApplicationServices.<code class="va
           type.</li>
     </ul></dd>
     <dt>Returns:</dt>
-        <dd>The dict (<a href="pycocoa.internals.Adict-class.html" 
+        <dd>The dict (<a href="pycocoa.basics.Adict-class.html" 
           class="link">Adict</a> or <code>frozendict</code> or 
           <code>typy</code>).</dd>
     <dt>Raises:</dt>
@@ -10786,10 +10986,10 @@ d0&gt;">&lt;CDLL '/System/Library/Frameworks/ApplicationServices.<code class="va
   <dl class="fields">
   </dl>
 <div class="fields">      <p><strong>Note:</strong>
-        Functions <code>pycocoa.get_classes</code>, 
+        Functions <code>pycocoa.get_classes2</code>, 
         <code>pycocoa.get_classname</code>, 
-        <code>pycocoa.get_classnameof</code> and 
-        <code>pycocoa.get_classof</code> <i>may SEGFAULT or hang 
+        <code>pycocoa.get_classnameof</code>, 
+        <code>pycocoa.get_classof</code>, etc. <i>may SEGFAULT or hang 
         infinitely</i> since macOS 15.0 Sequoia on Intel 
         (<code>x86_64</code>) and Intel <i>emulation</i> 
         (<code>&quot;arm64_x86_64&quot;</code>.  By default 
@@ -10975,9 +11175,9 @@ d0&gt;">&lt;CDLL '/System/Library/Frameworks/ApplicationServices.<code class="va
   href="pycocoa.nstypes.NSExceptionError-class.html" 
   class="link">NSExceptionError</a> instance.  It should return that same 
   <code>error</code>, an <a href="pycocoa.faults-module.html#exiting" 
-  class="link">exiting</a> <code>status</code> or <code>None</code>.  In in
-  former case, that <code>error</code> will subsequently be raised as 
-  Python exception.</p>
+  class="link">exiting</a> <code>status</code> or <code>None</code>.  If an
+  <code>error</code>, that <code>error</code> will subsequently be raised 
+  as Python exception.</p>
   <dl class="fields">
     <dt>Parameters:</dt>
     <dd><ul class="nomargin-top">
@@ -11365,14 +11565,16 @@ d0&gt;">&lt;CDLL '/System/Library/Frameworks/ApplicationServices.<code class="va
         <li><strong class="pname"><code>strbytes</code></strong> - Original <code>str</code>, <code>bytes</code> or 
           <code>unicode</code>.</li>
         <li><strong class="pname"><code>dflt</code></strong> - Optional, default return value.</li>
-        <li><strong class="pname"><code>name</code></strong> - Optional name of <i>bytestr</i> argument.</li>
+        <li><strong class="pname"><code>name</code></strong> - Optional name of <i>bytestr</i> argument, used for errors and 
+          missing <code>dflt</code> only.</li>
     </ul></dd>
     <dt>Returns:</dt>
         <dd>The <code>bytes</code> or <i>dflt</i>.</dd>
     <dt>Raises:</dt>
     <dd><ul class="nomargin-top">
-        <li><code><strong class='fraise'>TypeError</strong></code> - If neither <code>bytes</code> nor <code>str</code>, but only if no 
-        <i>dflt</i> is specified.</li>
+        <li><code><strong class='fraise'>TypeError</strong></code> - If <code>strbytes</code> is not <code>str</code>, 
+        <code>bytes</code> or <code>unicode</code> and if <i>dflt</i> is 
+        missing.</li>
     </ul></dd>
   </dl>
 </td></tr></table>
@@ -11625,6 +11827,37 @@ d0&gt;">&lt;CDLL '/System/Library/Frameworks/ApplicationServices.<code class="va
   </dl>
 </td></tr></table>
 </div>
+<a name="unicodec"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">unicodec</span>(<span class="sig-arg">codec</span>=<span class="sig-default">None</span>)</span>
+  </h3>
+  </td><td align="right" valign="top"
+    >&nbsp;
+    </td>
+  </tr></table>
+  
+  <p>Get/set the unicode encoding, default 
+  <code>&quot;utf-8&quot;</code>.</p>
+  <dl class="fields">
+    <dt>Parameters:</dt>
+    <dd><ul class="nomargin-top">
+        <li><strong class="pname"><code>codec</code></strong> - A encoding (<code>str</code> or <code>None</code>).</li>
+    </ul></dd>
+    <dt>Returns:</dt>
+        <dd>The previous encoding (<code>str</code>).</dd>
+  </dl>
+<div class="fields">      <p><strong>See Also:</strong>
+        <a 
+        href="https://docs.Python.org/3/library/codecs.html#standard-encodings"
+        target="_top">Codecs</a>.
+      </p>
+</div></td></tr></table>
+</div>
 <a name="url2NS"></a>
 <div>
 <table class="details" border="1" cellpadding="3"
@@ -11836,9 +12069,9 @@ AlertStyle.Critical=2,
       <dd><table><tr><td><pre class="variable">
 AutoResize.HeightSizable=16 or 1&lt;&lt;4,
           .MaxXMargin=4 or 1&lt;&lt;2,
-          .MaxYMargin=32 or 1&lt;&lt;5,
+          .MaxYMargin=32 or 2&lt;&lt;4,
           .MinXMargin=1,
-          .MinYMargin=8 or 1&lt;&lt;3,
+          .MinYMargin=8 or 2&lt;&lt;2,
           .NotSizable=0,
           .Sizable=18,
           .WidthSizable=2
@@ -11997,9 +12230,9 @@ FontTextStyle.Body=11,
     <dt>Value:</dt>
       <dd><table><tr><td><pre class="variable">
 FontTrait.Bold=2,
-         .Compressed=512 or 1&lt;&lt;9,
+         .Compressed=512 or 2&lt;&lt;8,
          .Condensed=64 or 1&lt;&lt;6,
-         .Expanded=32 or 1&lt;&lt;5,
+         .Expanded=32 or 2&lt;&lt;4,
          .Italic=1,
          .MonoSpace=1024 or 1&lt;&lt;10,
          .Narrow=16 or 1&lt;&lt;4,
@@ -12024,7 +12257,7 @@ FontTrait.Bold=2,
       <dd><table><tr><td><pre class="variable">
 FontWeight.Black=12 or 3&lt;&lt;2,
           .Bold=9,
-          .BoldSemi=8 or 1&lt;&lt;3,
+          .BoldSemi=8 or 2&lt;&lt;2,
           .Hairline=1,
           .Heavy=15,
           .Light=1,
@@ -12127,12 +12360,12 @@ Keys.ACK=0x6,
     <dt>Value:</dt>
       <dd><table><tr><td><pre class="variable">
 {'CoreFoundation': &lt;CDLL 'CoreFoundation.framework/CoreFoundation', ha<span class="variable-linewrap"><img src="crarr.png" alt="\" /></span>
-ndle 7fffa779e3a0 at 7f7aa057d590&gt;, 'Foundation': &lt;CDLL 'Foundation.fr<span class="variable-linewrap"><img src="crarr.png" alt="\" /></span>
-amework/Foundation', handle 7fffa77919a8 at 7f7a902da390&gt;, 'C': &lt;CDLL <span class="variable-linewrap"><img src="crarr.png" alt="\" /></span>
-'libc.dylib', handle 7fffa77a7ce0 at 7f7aa057d2d0&gt;, 'Quartz': &lt;CDLL 'C<span class="variable-linewrap"><img src="crarr.png" alt="\" /></span>
-oreGraphics.framework/CoreGraphics', handle 7fffa7794520 at 7f7aa057df<span class="variable-linewrap"><img src="crarr.png" alt="\" /></span>
-10&gt;, 'libc': &lt;CDLL 'libc.dylib', handle 7fffa77a7ce0 at 7f7aa057d2d0&gt;,<span class="variable-linewrap"><img src="crarr.png" alt="\" /></span>
- 'ObjC': &lt;CDLL 'libobjc.dylib', handle 7fffa779dc6c at 7f7a902da650&gt;, <span class="variable-linewrap"><img src="crarr.png" alt="\" /></span>
+ndle 7fff98d81558 at 7fead04c0d90&gt;, 'Foundation': &lt;CDLL 'Foundation.fr<span class="variable-linewrap"><img src="crarr.png" alt="\" /></span>
+amework/Foundation', handle 7fff98d80b38 at 7fead02d9b90&gt;, 'C': &lt;CDLL <span class="variable-linewrap"><img src="crarr.png" alt="\" /></span>
+'libc.dylib', handle 7fff98e76e60 at 7fead04c0ad0&gt;, 'Quartz': &lt;CDLL 'C<span class="variable-linewrap"><img src="crarr.png" alt="\" /></span>
+oreGraphics.framework/CoreGraphics', handle 7fff98d876c0 at 7fead03038<span class="variable-linewrap"><img src="crarr.png" alt="\" /></span>
+d0&gt;, 'libc': &lt;CDLL 'libc.dylib', handle 7fff98e76e60 at 7fead04c0ad0&gt;,<span class="variable-linewrap"><img src="crarr.png" alt="\" /></span>
+ 'ObjC': &lt;CDLL 'libobjc.dylib', handle 7fff98d9ce24 at 7fead02d9e50&gt;, <span class="variable-linewrap"><img src="crarr.png" alt="\" /></span>
 'PrintCore': &lt;CDLL '/System/Library/Frameworks/ApplicationServices.fra<span class="variable-linewrap"><img src="crarr.png" alt="\" /></span>
 <code class="variable-ellipsis">...</code>
 </pre></td></tr></table>
@@ -12152,7 +12385,7 @@ oreGraphics.framework/CoreGraphics', handle 7fffa7794520 at 7f7aa057df<span clas
   <dl class="fields">
     <dt>Value:</dt>
       <dd><table><tr><td><pre class="variable">
-&lt;pycocoa.internals.proxy_RO object at 0x7f7aa04b4290&gt;
+&lt;pycocoa.basics.Proxy1ce object at 0x7feac0563c50&gt;
 </pre></td></tr></table>
 </dd>
   </dl>
@@ -12170,7 +12403,7 @@ oreGraphics.framework/CoreGraphics', handle 7fffa7794520 at 7f7aa057df<span clas
   <dl class="fields">
     <dt>Value:</dt>
       <dd><table><tr><td><pre class="variable">
-&lt;pycocoa.internals.proxy_RO object at 0x7f7a902b4450&gt;
+&lt;pycocoa.basics.Proxy1ce object at 0x7feac068da90&gt;
 </pre></td></tr></table>
 </dd>
   </dl>
@@ -12224,13 +12457,13 @@ _dllattr(_libAppKit, NSEventTrackingRunLoopMode= RunLoop_t)
   <dl class="fields">
     <dt>Value:</dt>
       <dd><table><tr><td><pre class="variable">
-NSMain.Application=NSApplication(&lt;Id_t at 0x7f7aa0cb0b90&gt;) of 0x7f7a79<span class="variable-linewrap"><img src="crarr.png" alt="\" /></span>
-286990,
-      .BooleanNO=NSBoolean(&lt;Id_t at 0x7f7aa0cb0830&gt;) of 0x7ff85bd2f088<span class="variable-linewrap"><img src="crarr.png" alt="\" /></span>
+NSMain.Application=NSApplication(&lt;Id_t at 0x7feab0586c20&gt;) of 0x7feaad<span class="variable-linewrap"><img src="crarr.png" alt="\" /></span>
+8e3db0,
+      .BooleanNO=NSBoolean(&lt;Id_t at 0x7feab0595050&gt;) of 0x7ff85151bf68<span class="variable-linewrap"><img src="crarr.png" alt="\" /></span>
 ,
-      .BooleanYES=NSBoolean(&lt;Id_t at 0x7f7aa0cb37a0&gt;) of 0x7ff85bd2f07<span class="variable-linewrap"><img src="crarr.png" alt="\" /></span>
+      .BooleanYES=NSBoolean(&lt;Id_t at 0x7feab0583d40&gt;) of 0x7ff85151bf5<span class="variable-linewrap"><img src="crarr.png" alt="\" /></span>
 8,
-      .Bundle=NSBundle(&lt;Id_t at 0x7f7aa0cb04d0&gt;) of 0x600000aecc80,
+      .Bundle=NSBundle(&lt;Id_t at 0x7feab058a200&gt;) of 0x60000340c460,
       .BundleName=NSConstantString('CFBundleName'),
 <code class="variable-ellipsis">...</code>
 </pre></td></tr></table>
@@ -12250,7 +12483,7 @@ NSMain.Application=NSApplication(&lt;Id_t at 0x7f7aa0cb0b90&gt;) of 0x7f7a79<spa
   <dl class="fields">
     <dt>Value:</dt>
       <dd><table><tr><td><pre class="variable">
-&lt;pycocoa.internals.proxy_RO object at 0x7f7aa04bd550&gt;
+&lt;pycocoa.basics.Proxy1ce object at 0x7feac0594210&gt;
 </pre></td></tr></table>
 </dd>
   </dl>
@@ -12268,7 +12501,7 @@ NSMain.Application=NSApplication(&lt;Id_t at 0x7f7aa0cb0b90&gt;) of 0x7f7a79<spa
   <dl class="fields">
     <dt>Value:</dt>
       <dd><table><tr><td><pre class="variable">
-&lt;pycocoa.internals.proxy_RO object at 0x7f7aa0644210&gt;
+&lt;pycocoa.basics.Proxy1ce object at 0x7feac058ef10&gt;
 </pre></td></tr></table>
 </dd>
   </dl>
@@ -12288,7 +12521,9 @@ NSMain.Application=NSApplication(&lt;Id_t at 0x7f7aa0cb0b90&gt;) of 0x7f7a79<spa
       <dd><table><tr><td><pre class="variable">
 OBJC_ASSOCIATION.ASSIGN=0,
                 .COPY=771,
-                .RETAIN=769
+                .COPY_NONATOMIC=3,
+                .RETAIN=769,
+                .RETAIN_NONATOMIC=1
 </pre></td></tr></table>
 </dd>
   </dl>
@@ -12425,7 +12660,7 @@ Background'),
       <dd><table><tr><td><pre class="variable">
 WindowStyle.Closable=2,
            .Miniaturizable=4 or 1&lt;&lt;2,
-           .Resizable=8 or 1&lt;&lt;3,
+           .Resizable=8 or 2&lt;&lt;2,
            .Titled=1,
            .Typical=15,
            .Utility=16 or 1&lt;&lt;4
@@ -12446,7 +12681,8 @@ WindowStyle.Closable=2,
   <dl class="fields">
     <dt>Value:</dt>
       <dd><table><tr><td><pre class="variable">
-&lt;CDLL 'AppKit.framework/AppKit', handle 7fffa7793f68 at 7f7aa057dd50&gt;
+&lt;_DeprecatedCDLL 'AppKit.framework/AppKit', handle 7fff98d85100 at 7fe<span class="variable-linewrap"><img src="crarr.png" alt="\" /></span>
+ac04a9cd0&gt;
 </pre></td></tr></table>
 </dd>
   </dl>
@@ -12464,8 +12700,8 @@ WindowStyle.Closable=2,
   <dl class="fields">
     <dt>Value:</dt>
       <dd><table><tr><td><pre class="variable">
-&lt;CDLL 'CoreFoundation.framework/CoreFoundation', handle 7fffa779e3a0 a<span class="variable-linewrap"><img src="crarr.png" alt="\" /></span>
-t 7f7aa057d590&gt;
+&lt;_DeprecatedCDLL 'CoreFoundation.framework/CoreFoundation', handle 7ff<span class="variable-linewrap"><img src="crarr.png" alt="\" /></span>
+f98d81558 at 7feac04a9d50&gt;
 </pre></td></tr></table>
 </dd>
   </dl>
@@ -12483,8 +12719,8 @@ t 7f7aa057d590&gt;
   <dl class="fields">
     <dt>Value:</dt>
       <dd><table><tr><td><pre class="variable">
-&lt;CDLL 'CoreGraphics.framework/CoreGraphics', handle 7fffa7794520 at 7f<span class="variable-linewrap"><img src="crarr.png" alt="\" /></span>
-7aa057df10&gt;
+&lt;_DeprecatedCDLL 'CoreGraphics.framework/CoreGraphics', handle 7fff98d<span class="variable-linewrap"><img src="crarr.png" alt="\" /></span>
+876c0 at 7feac04a9d90&gt;
 </pre></td></tr></table>
 </dd>
   </dl>
@@ -12502,8 +12738,8 @@ t 7f7aa057d590&gt;
   <dl class="fields">
     <dt>Value:</dt>
       <dd><table><tr><td><pre class="variable">
-&lt;CDLL 'CoreText.framework/CoreText', handle 7fffa7790430 at 7f7a902c9e<span class="variable-linewrap"><img src="crarr.png" alt="\" /></span>
-90&gt;
+&lt;_DeprecatedCDLL 'CoreText.framework/CoreText', handle 7fff98d835c0 at<span class="variable-linewrap"><img src="crarr.png" alt="\" /></span>
+ 7feac04a9dd0&gt;
 </pre></td></tr></table>
 </dd>
   </dl>
@@ -12521,8 +12757,8 @@ t 7f7aa057d590&gt;
   <dl class="fields">
     <dt>Value:</dt>
       <dd><table><tr><td><pre class="variable">
-&lt;CDLL 'Foundation.framework/Foundation', handle 7fffa77919a8 at 7f7a90<span class="variable-linewrap"><img src="crarr.png" alt="\" /></span>
-2da390&gt;
+&lt;_DeprecatedCDLL 'Foundation.framework/Foundation', handle 7fff98d80b3<span class="variable-linewrap"><img src="crarr.png" alt="\" /></span>
+8 at 7feac04aa7d0&gt;
 </pre></td></tr></table>
 </dd>
   </dl>
@@ -12540,9 +12776,9 @@ t 7f7aa057d590&gt;
   <dl class="fields">
     <dt>Value:</dt>
       <dd><table><tr><td><pre class="variable">
-&lt;CDLL '/System/Library/Frameworks/ApplicationServices.framework/Framew<span class="variable-linewrap"><img src="crarr.png" alt="\" /></span>
-orks/PrintCore.framework/PrintCore', handle 7fffa77b1d38 at 7f7aa06242<span class="variable-linewrap"><img src="crarr.png" alt="\" /></span>
-d0&gt;
+&lt;_DeprecatedCDLL '/System/Library/Frameworks/ApplicationServices.frame<span class="variable-linewrap"><img src="crarr.png" alt="\" /></span>
+work/Frameworks/PrintCore.framework/PrintCore', handle 7fff98e60c58 at<span class="variable-linewrap"><img src="crarr.png" alt="\" /></span>
+ 7fead03d9490&gt;
 </pre></td></tr></table>
 </dd>
   </dl>
@@ -12560,7 +12796,7 @@ d0&gt;
   <dl class="fields">
     <dt>Value:</dt>
       <dd><table><tr><td><pre class="variable">
-&lt;CDLL 'libobjc.dylib', handle 7fffa779dc6c at 7f7a902da650&gt;
+&lt;_DeprecatedCDLL 'libobjc.dylib', handle 7fff98d9ce24 at 7fead03d9410&gt;
 </pre></td></tr></table>
 </dd>
   </dl>
@@ -12598,7 +12834,7 @@ d0&gt;
 <table border="0" cellpadding="0" cellspacing="0" width="100%%">
   <tr>
     <td align="left" class="footer">
-    Generated by Epydoc 3.0.1 on Wed Mar 26 10:28:31 2025
+    Generated by Epydoc 3.0.1 on Tue Apr  8 11:26:16 2025
     </td>
     <td align="right" class="footer">
       <a target="mainFrame" href="http://epydoc.sourceforge.net"

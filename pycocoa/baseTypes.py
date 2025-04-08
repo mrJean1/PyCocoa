@@ -5,20 +5,22 @@
 
 '''(INTERNAL) Base classes for Python C{Types}.
 '''
-from pycocoa.internals import bytes2str, _Dmain_, property_RO
-from pycocoa.lazily import _ALL_LAZY,  _fmt, _instr
+from pycocoa.basics import _MutableConstants, Proxy1ce, _Objectype
+from pycocoa.internals import bytes2str, _Dmain_, _fmt_invalid, \
+                             _fmt, _instr
+# from pycocoa.lazily import _ALL_LAZY  # from .utils
 from pycocoa.nstypes import isNone, NSStr, nsString2str
 from pycocoa.octypes import c_struct_t, ObjC_t
 from pycocoa.runtime import ObjCInstance, release
-from pycocoa.utils import isinstanceOf, type2strepr
+from pycocoa.utils import isinstanceOf, type2strepr,  _ALL_LAZY
 
-__all__ = _ALL_LAZY.bases
-__version__ = '25.03.23'
+__all__ = _ALL_LAZY.baseTypes
+__version__ = '25.04.08'
 
 _NSD_Error = NameError("use 'NSd-', not 'NSD-'")  # PYCHOK used!
 
 
-class _Type0(object):
+class _Type0(_Objectype):
     '''(INTERNAL) The base Type, just property NS.
     '''
     _NS = None  # NSMain.Null
@@ -70,12 +72,6 @@ class _Type0(object):
         '''
         # assert isinstance(slindex, slice)
         return range(*slindex.indices(len(self)))
-
-    @property_RO
-    def typename(self):
-        '''Get this instance' Python class name (C{str}).
-        '''
-        return type(self).__name__
 
 
 class _Type1(_Type0):
@@ -150,17 +146,77 @@ class _Type2(_Type1):
         self._title = bytes2str(title)
 
 
+class _Types(_MutableConstants):
+    '''Python Types, to avoid circular imports, lazily set.
+    '''
+    AlertPanel    = None  # set by .panels
+    App           = None  # set by .apps
+    Color         = None  # set by .colors
+    Dict          = None  # set by .dicts
+    ErrorPanel    = None  # set by .panels
+    Font          = None  # sef by .fonts
+    FrozenDict    = None  # set by .dicts
+    FrozenSet     = None  # set by .sets
+    Item          = None  # set by .menus
+    ItemSeparator = None  # set by .menus
+    List          = None  # set by .lists
+    MediaWindow   = None  # set by .windows
+    Menu          = None  # set by .menus
+    MenuBar       = None  # set by .menus
+    OpenPanel     = None  # set by .panels
+    Paper         = None  # set by .printer
+    PaperCustom   = None  # set by .printer
+    PaperMargins  = None  # set by .printer
+    Printer       = None  # set by .printer
+    SavePanel     = None  # set by .panels
+    Screen        = None  # set by .screens
+    Set           = None  # set by .sets
+    Str           = None  # set by .strs
+    StrAttd       = None  # set by .strs
+    Table         = None  # set by .tables
+    TableWindow   = None  # set by .tables
+    TextPanel     = None  # set by .panels
+    TextWindow    = None  # set by .windows
+    Tuple         = None  # set by .tuples
+    Window        = None  # set by .windows
+
+    def __setattr__(self, name, value):
+        t = type(self)
+        if not hasattr(t, name):
+            t = _fmt_invalid(name=repr(name))
+            raise AttributeError(t)
+        setattr(t, name, value)
+
+    def __getattr__(self, name):  # called when .__getattribute__ failed
+        '''(INTERNAL) Get _Types.name or import lazily if still C{None}.
+        '''
+        return _MutableConstants.__getattr__(self, name) or _lazily._lazy_import(name)
+
+    def __getattribute__(self, name):  # called when .name accessed
+        '''(INTERNAL) Get _Types.name or import lazily if still C{None}.
+        '''
+        return _MutableConstants.__getattribute__(self, name)  # or _lazily._lazy_import(name)
+
+_Types = _Types()  # PYCHOK singleton
+
+
+@Proxy1ce  # PYCHOK used!
+def _lazily():  # lazily import lazily, I{once}
+    from pycocoa import lazily
+    return lazily
+
+
 if __name__ == _Dmain_:
 
     from pycocoa.utils import _all_listing
 
     _all_listing(__all__, locals())
 
-# % python3 -m pycocoa.bases
+# % python3 -m pycocoa.baseTypes
 #
-# pycocoa.bases.__all__ = tuple(
+# pycocoa.baseTypes.__all__ = tuple(
 # )[0]
-# pycocoa.bases.version 25.3.23, .isLazy 1, Python 3.13.2 64bit arm64, macOS 15.3.2
+# pycocoa.baseTypes.version 25.4.8, .isLazy 1, Python 3.13.2 64bit arm64, macOS 15.4
 
 # MIT License <https://OpenSource.org/licenses/MIT>
 #

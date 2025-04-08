@@ -30,8 +30,9 @@ indefinite hangs}} and env variable C{PYCOCOA_SEGFAULTY}.
 @note: Only functions L{segfaulty}, L{getUncaughtExceptionHandler} and
        L{setUncaughtExceptionHandler} and class L{SegfaultError} are public.
 '''
-from pycocoa.internals import Adict, _Dmain_, _DOT_, _fmt_invalid, _Globals, \
-                             _instr, _NL_, _NN_, _no, _pycocoa_, _SPACE_
+from pycocoa.basics import Adict, _docOf, _Globals, _isEpydoc, _isPyChOK, _nameOf
+from pycocoa.internals import _arm64_, _Dmain_, _DOT_, _env_get, _fmt_invalid, \
+                              _instr, _NL_, _NN_, _no, _pycocoa_, _SPACE_
 from pycocoa.lazily import _ALL_DOCS, _ALL_LAZY, _PY_FH
 from pycocoa.nstypes import _not_given_, NSExceptionError, NSMain
 from pycocoa.oslibs import _setUncaughtExceptionHandler, _UncaughtExceptionHandler_t
@@ -43,15 +44,16 @@ import signal
 import sys
 
 __all__ = _ALL_LAZY.faults
-__version__ = '25.03.24'
+__version__ = '25.04.08'
 
+_SIG_    = 'SIG'
 # SIGnals handled by Python 3 C{faulthandler}
 _SIGnals = (signal.SIGABRT,  # critical
             signal.SIGBUS, signal.SIGFPE,
             signal.SIGILL, signal.SIGSEGV)
 
 
-class SegfaultError(RuntimeError):
+class SegfaultError(RuntimeError):  # in .basics
     '''Error raised instead of SEGFAULT, see module L{pycocoa.faults}.
     '''
     pass
@@ -70,19 +72,20 @@ def _bye(name):
         sys.exit(s)
 
 
-def _Segfaulty():  # in .internals
-    '''Set the C{SegfaultError}, C{False} or C{None}.
+def _Segfaulty():  # in .basics
+    '''Get the C{SegfaultError} or C{False} or C{None}.
     '''
-    r, m = False, machine()
-    if m != 'arm64':  # Intel/-emulation
-        v = macOSver2()
-        if v >= (15, 0) or v == (10, 16):
-            if os.environ.get('PYCOCOA_SEGFAULTY', None) or \
-              (is_enabled() and sys.version_info > (3, 7)):
-                r = None  # risk SEGFAULTs and hangs
+    r, v = False, macOSver2()
+    if v >= (15, 0) or v == (10, 16):
+        m = machine()
+        if m != _arm64_:  # i.e. Intel or Intel-emulation
+            if _env_get('PYCOCOA_SEGFAULTY', None) or \
+               _isEpydoc() or _isPyChOK() or \
+               (is_enabled() and sys.version_info > (3, 7)):
+                r =  None  # risking SEGFAULTs and hangs
             else:
                 from pycocoa import version as p
-                p = _SPACE_(_pycocoa_, p, segfaulty.__name__)
+                p = _SPACE_(_pycocoa_, p, _nameOf(segfaulty))
                 m = _SPACE_('macOS', _DOT_(*v), 'and', m)
                 r =  SegfaultError(_SPACE_(p, 'on', m))
     return r
@@ -92,8 +95,8 @@ def segfaulty():
     '''Return C{True} if L{SegfaultError}s are raised to prevent I{certain}
        SEGFAULTs, C{False} if SEGFAULTs are not expected or C{None} if unknown.
 
-       @note: Functions C{pycocoa.get_classes}, C{pycocoa.get_classname},
-              C{pycocoa.get_classnameof} and C{pycocoa.get_classof} I{may
+       @note: Functions C{pycocoa.get_classes2}, C{pycocoa.get_classname},
+              C{pycocoa.get_classnameof}, C{pycocoa.get_classof}, etc. I{may
               SEGFAULT or hang infinitely} since macOS 15.0 Sequoia on Intel
               (C{x86_64}) and Intel I{emulation} (C{"arm64_x86_64"}.  By default
               C{pycocoa} raises a C{SegfaultError} in that case unless C{fault
@@ -110,17 +113,17 @@ def _SIGdict(sigs, enabled):
     '''
     if not sigs:
         sigs = _SIGnals
-    return Adict((_SIGname(sig), sig) for sig in enabled if sig in sigs)
+    return Adict((_SIGname(s), s) for s in enabled if s in sigs)
 
 
 def _SIGname(sig):
     '''(INTERNAL) Get the name of signal B{C{sig}}.
     '''
     for S in dir(signal):
-        if S.isupper() and S.startswith('SIG') \
+        if S.isupper() and S.startswith(_SIG_) \
                        and getattr(signal, S) == sig:
             return S
-    return _NN_('SIG', sig)
+    return _NN_(_SIG_, sig)
 
 
 try:  # MCCABE 26
@@ -131,12 +134,12 @@ try:  # MCCABE 26
 
     def disable():
         _fh.disable()
-    disable.__doc__ = _fh.disable.__doc__
+    disable.__doc__ = _docOf(_fh.disable)
 
     def enable(file=sys.stderr, **kwds):
         NSMain.stdlog = file
         _fh.enable(file=file, **kwds)
-    enable.__doc__ = _fh.enable.__doc__
+    enable.__doc__ = _docOf(_fh.enable)
 
     def is_enabled(sig=None):
         '''Check whether the C{faulthandler} is enabled.
@@ -299,9 +302,8 @@ def setUncaughtExceptionHandler(handler, log=True, raiser=False):
 
        The C{B{handler}(error)} is called with one argument C{error},
        an L{NSExceptionError} instance.  It should return that same
-       C{error}, an L{exiting} C{status} or C{None}.  In in former
-       case, that C{error} will subsequently be raised as Python
-       exception.
+       C{error}, an L{exiting} C{status} or C{None}.  If an C{error},
+       that C{error} will subsequently be raised as Python exception.
 
        @param handler: A callable to be invoked with a single argument
                        C{error}, an L{NSExceptionError} instance and to
@@ -343,7 +345,7 @@ def setUncaughtExceptionHandler(handler, log=True, raiser=False):
              ErrorHandling/ErrorHandling.html#//apple_ref/doc/uid/TP40001806>}.
     '''
     if not callable(handler):
-        t = _fmt_invalid(callable.__name__, handler=repr(handler))
+        t = _fmt_invalid(_nameOf(callable), handler=repr(handler))
         raise TypeError(t)
 
     @_UncaughtExceptionHandler_t
@@ -365,7 +367,7 @@ def setUncaughtExceptionHandler(handler, log=True, raiser=False):
         elif isinstance(r, int):
             exiting(r)
 
-        _bye(handler.__name__)
+        _bye(_nameOf(handler))
 
     h = None
     if _setUncaughtExceptionHandler:
@@ -375,7 +377,7 @@ def setUncaughtExceptionHandler(handler, log=True, raiser=False):
             del _h  # release(_h)
         _Globals.Xhandler2 = (handler, _handler)  # retain(_handler)
     elif raiser:
-        t = setUncaughtExceptionHandler.__name__
+        t = _nameOf(setUncaughtExceptionHandler)
         raise RuntimeError(_no(t))
     return h  # previous
 
@@ -388,20 +390,20 @@ __all__ += _ALL_DOCS(disable, enable, exiting, is_enabled, SIGs_enabled)
 
 if __name__ == _Dmain_:
 
+    from pycocoa.nstypes import NSColor, nsRaise
+
     args = sys.argv[1:]
     if is_enabled() and '-X' in args:   # -X faulthandler
         # test fault handling
         enable(sys.stdout)
-        logf('%s: %s', SIGs_enabled.__name__, SIGs_enabled())
+        logf('%s: %s', _nameOf(SIGs_enabled), SIGs_enabled())
 
-        from pycocoa.nstypes import NSColor
         r = NSColor.redColor()
         c = r.cyanComponent()  # bye ...
 
     elif _PY_FH and '-raise' in args:
         # throw an ObjC/NSException and catch it
-        from pycocoa.nstypes import nsRaise
-        logf('%s ...', nsRaise.__name__)
+        logf('%s ...', _nameOf(nsRaise))
 
         nsRaise(reason='testing', _PY_FH=_PY_FH)
 
@@ -410,13 +412,12 @@ if __name__ == _Dmain_:
         # raise the NSExceptionError and then try to
         # catch that as a regular Python exception:
         # - doesn't work, the exception never forces
-        # return of control to Python: instead the
-        # process terminates with Abrt
+        #   return of control to Python: instead the
+        #   process terminates with Abrt
         # - even setting a SIGABRT handler inside the
-        # uncaught ObjC/NSException handler to try
-        # to override ObjC/NS does not help, same
-        # result: terminated by Abrt
-        from pycocoa.nstypes import nsRaise  # PYCHOK twice
+        #   uncaught ObjC/NSException handler to try
+        #   to override ObjC/NS does not help, same
+        #   result: terminated by Abrt
         logf('%s ...', 'try:')
 
         def _h(x):
@@ -441,7 +442,7 @@ if __name__ == _Dmain_:
 #  pycocoa.faults.segfaulty is <function .segfaulty at 0x1046c85e0>,
 #  pycocoa.faults.setUncaughtExceptionHandler is <function .setUncaughtExceptionHandler at 0x104a6bc40>,
 # )[4]
-# pycocoa.faults.version 25.3.24, .isLazy 1, Python 3.13.2 64bit arm64, macOS 15.3.2
+# pycocoa.faults.version 25.4.8, .isLazy 1, Python 3.13.2 64bit arm64, macOS 15.4
 
 # MIT License <https://OpenSource.org/licenses/MIT>
 #

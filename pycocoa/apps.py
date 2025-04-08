@@ -5,12 +5,12 @@
 
 '''Types L{App} and L{Tile}, wrapping ObjC C{NSApplication} and C{NSDocktile}.
 '''
-from pycocoa.bases import _Type2
-from pycocoa.internals import bytes2str, _Dmain_, _Globals, _NN_, \
-                              property_RO, proxy_RO
+from pycocoa.baseTypes import _Type2,  _Types
+from pycocoa.basics import _Globals, Proxy1ce
+from pycocoa.internals import bytes2str, _Dmain_, _NN_, property_RO
 from pycocoa.menus import _callMenuItem_name, _handleMenuItem_name, Item, \
                            ItemSeparator, Menu, MenuBar, ns2Item
-from pycocoa.lazily import _ALL_LAZY, _fmt, _fmt_invalid, _Types
+from pycocoa.lazily import _ALL_LAZY, _fmt, _fmt_invalid
 from pycocoa.nstypes import NSApplication, nsBundleRename, nsOf, _NSStr, \
                             NSConcreteNotification, NSMain, NSNotification
 from pycocoa.oslibs import NO, YES
@@ -24,7 +24,7 @@ from threading import Thread
 from time import sleep
 
 __all__ = _ALL_LAZY.apps
-__version__ = '25.03.23'
+__version__ = '25.04.03'
 
 
 class App(_Type2):
@@ -59,7 +59,7 @@ class App(_Type2):
         # add a method to set the app's title
         self.NS.setTitle_ = nsBundleRename
 #       pool = NSAutoreleasePool.alloc().init()  # created by NSApplication
-        self.title = str(title) or type(self).__name__
+        self.title = str(title) or self.typename
 
         if kwds:  # optional, additional attributes
             super(App, self).__init__(**kwds)
@@ -626,7 +626,7 @@ assert (_NSApplicationDelegate.callMenuItem_.name   == _callMenuItem_name), _cal
 assert (_NSApplicationDelegate.handleMenuItem_.name == _handleMenuItem_name), _handleMenuItem_name
 
 
-@proxy_RO
+@Proxy1ce
 def NSApplicationDelegate():
     '''The L{ObjCClass}C{(_NSApplicationDelegate.__name__)}.
     '''
@@ -708,10 +708,10 @@ if __name__ == _Dmain_:
 #  pycocoa.apps.App is <class .App>,
 #  pycocoa.apps.app_title is <function .app_title at 0x1054c6fc0>,
 #  pycocoa.apps.ns2App is <function .ns2App at 0x1054c79c0>,
-#  pycocoa.apps.NSApplicationDelegate is <pycocoa.utils.proxy_RO object at 0x105454690>,
+#  pycocoa.apps.NSApplicationDelegate is <pycocoa.utils.Proxy1ce object at 0x105454690>,
 #  pycocoa.apps.Tile is <class .Tile>,
 # )[5]
-# pycocoa.apps.version 25.3.23, .isLazy 1, Python 3.13.2 64bit arm64, macOS 15.3.2
+# pycocoa.apps.version 25.4.3, .isLazy 1, Python 3.13.2 64bit arm64, macOS 15.4
 
 # MIT License <https://OpenSource.org/licenses/MIT>
 #

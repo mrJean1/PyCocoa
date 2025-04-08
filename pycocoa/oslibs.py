@@ -20,12 +20,11 @@
 
 @var NO:  ObjC's False (C{const c_byte}).
 @var YES: ObjC's True (C{const c_byte}).
-
 '''
-from pycocoa.internals import Adict, __arm64__, _bNN_, bytes2str, _COMMASPACE_, \
-                             _Dmain_, _DOT_, _EQUALS_, __i386__, str2bytes, \
-                             _NN_, __x86_64__
-from pycocoa.lazily import _ALL_LAZY,  _fmt, _fmt_invalid
+from pycocoa.basics import Adict
+from pycocoa.internals import _bNN_, bytes2str, _COMMASPACE_, _Dmain_, _DOT_, \
+                              _EQUALS_, _fmt, _fmt_invalid, _NN_, str2bytes  # _UNICODEC
+# from pycocoa.lazily import _ALL_LAZY  # from .utils
 from pycocoa.octypes import Allocator_t, Array_t, BOOL_t, CFIndex_t, CFRange_t, \
                             CGBitmapInfo_t, CGDirectDisplayID_t, CGError_t, \
                             CGFloat_t, CGGlyph_t, CGPoint_t, CGRect_t, CGSize_t, \
@@ -36,7 +35,7 @@ from pycocoa.octypes import Allocator_t, Array_t, BOOL_t, CFIndex_t, CFRange_t, 
                             objc_property_t, objc_property_attribute_t, Protocol_t, \
                             RunLoop_t, SEL_t, Set_t, String_t, TypeID_t, TypeRef_t, \
                             UniChar_t, URL_t
-from pycocoa.utils import macOSver2 as _macOSver2
+from pycocoa.utils import __arm64__, __i386__, macOSver2, __x86_64__,  _ALL_LAZY
 
 from copy import copy as _copy
 from ctypes import byref, cast, CDLL, c_buffer, c_byte, c_char, \
@@ -52,14 +51,13 @@ except ImportError:  # XXX Pythonista/iOS
 from os.path import join as _join, sep as _SEP
 
 __all__ = _ALL_LAZY.oslibs
-__version__ = '25.03.24'
+__version__ = '25.04.07'
 
 _framework_ = 'framework'
 _leaked2    = []  # leaked memory, 2-tuples (ptr, size)
 # 'PointerType' in Python 2.6-, 'PyCPointerType' later
 _POINTER_ts =  set(type(POINTER(_)) for _ in (Ivar_t, Method_t, Protocol_t,
                objc_method_description_t, objc_property_t, objc_property_attribute_t))
-# _thismodule = sys.modules[__name__]
 
 NO  = False  # c_byte(0)
 YES = True   # c_byte(1)
@@ -111,7 +109,7 @@ def _csignature_list(libfunc, restype, *argtypes):
     # the result type must be a pointer to some other type
     # and the result must be a NULL-terminated array
     if type(restype) in _POINTER_ts:
-        # ... and/or restype.__name__.startswith('LP_'):
+        # ... and/or _nameOf(restype).startswith('LP_'):
         libfunc.errcheck = _listdup
     return libfunc
 
@@ -146,7 +144,7 @@ def _dllattr(dll, *arg_ctype, **kwd_ctype):  # in .runtime
     # duplicate a C{dll} attribute
     n,  _t = arg_ctype or kwd_ctype.popitem()
     v = _t.in_dll(dll, n)
-    # setattr(_thismodule, n, v)  # into C{this module}
+    # setattr(sys.modules[__name__], n, v)  # into C{this module}
     return v
 
 
@@ -154,7 +152,7 @@ def _dlllist():  # list all installed C{dylib}s
     try:
         from os import fsdecode as _d
     except ImportError:
-        from pycocoa.internals import lambda1 as _d
+        from pycocoa.basics import lambda1 as _d
     # <https://GitHub.com/python/cpython/blob/main/Lib/ctypes/util.py>
     if _libc:
         _n = _libc._dyld_get_image_name
@@ -182,7 +180,7 @@ def _dup(result, ctype):
     return dup
 
 
-if _macOSver2() > (10, 15):  # Big Sur and later
+if macOSver2() > (10, 15):  # Big Sur and later
     # macOS 11+ (aka 10.16) no longer provides direct loading of
     # system libraries, instead it installs the library after a
     # low-level dlopen(name) call with the library base name,
@@ -502,7 +500,7 @@ def cfString2str(ns, dflt=None):  # XXX an NS*String method
     r = _libCF.CFStringGetCString(ns, b, len(b), CFStringEncoding)
     # XXX if r: assert isinstance(b.value, _Bytes), 'bytes expected'
     # bytes to unicode in Python 2, to str in Python 3+
-    return bytes2str(b.value) if r else dflt  # XXX was .decode(_DEFAULT_UNICODE)
+    return bytes2str(b.value) if r else dflt  # XXX was .decode(_UNICODEC)
 
 
 def cfString(ustr):
@@ -1117,7 +1115,7 @@ if _libObjC:
     _csignature(_libObjC.objc_msgSend, Id_t, Id_t, SEL_t)
     # Id_t objc_msgSendSuper(struct objc_super_t *super, SEL_t op, ...)
     _csignature(_libObjC.objc_msgSendSuper, Id_t, c_void_p, SEL_t)
-    if __i386__ or __x86_64__:  # only for Intel processor
+    if __i386__ or __x86_64__:  # only for Intel processor and Intel emulatiom
         # double objc_msgSend_fpret(Id_t self, SEL_t op, ...)
         _csignature(_libObjC.objc_msgSend_fpret, c_float, Id_t, SEL_t)  # c_float, c_longdouble
         # void objc_msgSend_stret(void *stretAddr, Id_t theReceiver, SEL_t theSelector,  ...)
@@ -1399,7 +1397,7 @@ if __name__ == _Dmain_:
 #  pycocoa.oslibs.OSlibError is <class .OSlibError>,
 #  pycocoa.oslibs.YES is True or 0x1,
 # )[153]
-# pycocoa.oslibs.version 25.3.24, .isLazy 1, Python 3.13.2 64bit arm64, macOS 15.3.2, oslibs [AppKit, C, CoreFoundation, CoreGraphics, CoreText, Foundation, libc, libobjc, ObjC, Quartz]
+# pycocoa.oslibs.version 25.4.7, .isLazy 1, Python 3.13.2 64bit arm64, macOS 15.4, oslibs [AppKit, C, CoreFoundation, CoreGraphics, CoreText, Foundation, libc, libobjc, ObjC, Quartz]
 
 # MIT License <https://OpenSource.org/licenses/MIT>
 #

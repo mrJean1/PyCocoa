@@ -4,9 +4,9 @@
 # The setuptools script to build, install and test a PyCocoa distribution.
 
 # Tested with 64-bit Python 3.13, 3.12, 3.11, 3.10, 3.9, 3.8.6, 3.7, 3.6,5
-# and 2.7.14-18 (and setuptools 28.8.0) but only on macOS 14.6.1 Sonoma,
-# 13.0.1 Ventura, 12.0.1 Monterey, macOS 11.0.1-6.1 (10.16) Big Sur,
-# 10.15.5-7 Catalina, 10.13 High Sierra and 10.12 Sierra.
+# and 2.7.14-18 (and setuptools 28.8.0) but only on macOS 15.3-4 Sequoia,
+# 14.6.1 Sonoma, 13.0.1 Ventura, 12.0.1 Monterey, macOS 11.0.1-6.1 (10.16)
+# Big Sur, 10.15.5-7 Catalina, 10.13 High Sierra and 10.12 Sierra.
 
 # python setup.py sdist --formats=gztar,bztar,zip  # ztar,tar
 # python setup.py bdist_wheel --universal  # XXX
@@ -25,7 +25,7 @@ from os import getenv
 from setuptools import setup
 
 __all__ = ()
-__version__ = '25.03.25'
+__version__ = '25.04.03'
 
 _pycocoa_ = 'pycocoa'
 _PACKAGE  = _pycocoa_  # 'PyCocoa'
@@ -52,7 +52,7 @@ def _version():
                 return '.'.join(map(str, map(int, v.split('.')))) + c
 
 
-_KeyWords=('Apple-Si', 'Apple-Silicon',
+_KeyWords=('Apple-Si', 'Apple-Silicon', 'arm64_x86_64',
            'Cocoa', 'cocoa-python', 'cocoavlc', 'ctypes',
            'fault', 'faults', 'faulthandler',
            'macOS', 'MacOSX',

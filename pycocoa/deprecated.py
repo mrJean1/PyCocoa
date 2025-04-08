@@ -3,53 +3,81 @@
 
 # License at the end of this file.
 
-'''Deprecated classes, constants, functions, internals, etc.
+'''DEPRECATED classes, constants, functions, internals, modules, etc.
 '''
-from pycocoa import fonts as _fonts
-from pycocoa.getters import _Cache2
-from pycocoa.internals import _property2, proxy_RO, _sortuples
-from pycocoa.lazily import _ALL_LAZY, _Dmain_
-from pycocoa.oslibs import Libs
+from pycocoa import fonts as _fonts, getters as _getters
+from pycocoa.basics import Proxy1ce
+from pycocoa.internals import _Dmain_, _nameOf, _property2, _sortuples
+from pycocoa.lazily import _ALL_LAZY
+from pycocoa.oslibs import Libs,  CDLL
 from pycocoa.printers import _libPC
 from pycocoa.runtime import OBJC_ASSOCIATION as _OBJC_AN
 from pycocoa.screens import Screen as _Screen
 
+# from ctypes import CDLL  # from .oslibs
+
 __all__ = _ALL_LAZY.deprecated
-__version__ = '25.03.16'
+__version__ = '25.04.08'
 
-libAppKit     =  Libs.AppKit
-'''DEPRECATED on 2025.02.25, use C{Libs.AppKit}'''
-libCF         =  Libs.CoreFoundation
-'''DEPRECATED on 2025.02.25, use C{Libs.CoreFoundation}'''
-libCG         =  Libs.CoreGraphics
-'''DEPRECATED on 2025.02.25, use C{Libs.CoreGraphics}'''
-libCT         =  Libs.CoreText
-'''DEPRECATED on 2025.02.25, use C{Libs.CoreText}'''
-libFoundation =  Libs.Foundation
-'''DEPRECATED on 2025.02.25, use C{Libs.Foundation}'''
-libobjc       =  Libs.ObjC
-'''DEPRECATED on 2025.02.25, use C{Libs.ObjC}'''
-libPC         = _libPC
-'''DEPRECATED on 2025.02.25, use C{Libs.PrintCore}'''
 
-OBJC_ASSOCIATION_ASSIGN           = _OBJC_AN.ASSIGN
-'''DEPRECATED on 2025.02.20, use C{OBJC_ASSOCIATION.ASSIGN}.'''
-OBJC_ASSOCIATION_COPY             = _OBJC_AN.COPY
-'''DEPRECATED on 2025.02.20, use C{OBJC_ASSOCIATION.COPY}.'''
-OBJC_ASSOCIATION_COPY_NONATOMIC   = _OBJC_AN.COPY_NONATOMIC
-'''DEPRECATED on 2025.02.20, use C{OBJC_ASSOCIATION.COPY_NONATOMIC}.'''
-OBJC_ASSOCIATION_RETAIN           = _OBJC_AN.RETAIN
-'''DEPRECATED on 2025.02.20, use C{OBJC_ASSOCIATION.RETAIN}.'''
-OBJC_ASSOCIATION_RETAIN_NONATOMIC = _OBJC_AN.RETAIN_NONATOMIC
-'''DEPRECATED on 2025.02.20, use C{OBJC_ASSOCIATION.RETAIN_NONATOMIC}.'''
+class _DeprecatedCDLL(CDLL):
+    '''(INTERNAL) DEPRECATED C{ctypes.CDLL}.'''
+    def __init__(self, lib, doc):
+        CDLL.__init__(self, lib._name)
+        self.__doc__ = doc
+#       self.__lib__ = lib
+
+
+class _DeprecatedInt(int):
+    '''(INTERNAL) DEPRECATED C{int}.'''
+    # int.__init__ refuses 2nd arg,
+    # hence this __call__ method
+    def __call__(self, doc):
+        self.__doc__ = doc
+        return self
 
 
 class _DeprecatedScreen(_Screen):
     '''(INTERNAL) DEPRECATED C{Screen}s.'''
     # _name = ...
     def __init__(self, *args, **kwds):  # PYCHOK signature
-        _DeprecatedScreen._name = type(self).__name__[:-6]
+        _DeprecatedScreen._name = _nameOf(type(self))[:-6]
         _Screen.__init__(self, *args, **kwds)
+
+
+@Proxy1ce
+def bases():  # lazily import bases, I{once}
+    '''DEPRECATED on 2025.03.28, use C{pycocoa.baseTypes}.'''
+    from pycocoa import baseTypes as bases
+#   bases.__name__ = 'bases'
+    return bases
+
+
+libAppKit     = _DeprecatedCDLL(Libs.AppKit,
+'''DEPRECATED on 2025.02.25, use C{Libs.AppKit}''')
+libCF         = _DeprecatedCDLL(Libs.CoreFoundation,
+'''DEPRECATED on 2025.02.25, use C{Libs.CoreFoundation}''')
+libCG         = _DeprecatedCDLL(Libs.CoreGraphics,
+'''DEPRECATED on 2025.02.25, use C{Libs.CoreGraphics}''')
+libCT         = _DeprecatedCDLL(Libs.CoreText,
+'''DEPRECATED on 2025.02.25, use C{Libs.CoreText}''')
+libFoundation = _DeprecatedCDLL(Libs.Foundation,
+'''DEPRECATED on 2025.02.25, use C{Libs.Foundation}''')
+libobjc       = _DeprecatedCDLL(Libs.ObjC,
+'''DEPRECATED on 2025.02.25, use C{Libs.ObjC}''')
+libPC         = _DeprecatedCDLL(_libPC,
+'''DEPRECATED on 2025.02.25, use C{Libs.PrintCore}''')
+
+OBJC_ASSOCIATION_ASSIGN           = _DeprecatedInt(_OBJC_AN.ASSIGN)(
+'''DEPRECATED on 2025.02.20, use C{OBJC_ASSOCIATION.ASSIGN}.''')
+OBJC_ASSOCIATION_COPY             = _DeprecatedInt(_OBJC_AN.COPY)(
+'''DEPRECATED on 2025.02.20, use C{OBJC_ASSOCIATION.COPY}.''')
+OBJC_ASSOCIATION_COPY_NONATOMIC   = _DeprecatedInt(_OBJC_AN.COPY_NONATOMIC)(
+'''DEPRECATED on 2025.02.20, use C{OBJC_ASSOCIATION.COPY_NONATOMIC}.''')
+OBJC_ASSOCIATION_RETAIN           = _DeprecatedInt(_OBJC_AN.RETAIN)(
+'''DEPRECATED on 2025.02.20, use C{OBJC_ASSOCIATION.RETAIN}.''')
+OBJC_ASSOCIATION_RETAIN_NONATOMIC = _DeprecatedInt(_OBJC_AN.RETAIN_NONATOMIC)(
+'''DEPRECATED on 2025.02.20, use C{OBJC_ASSOCIATION.RETAIN_NONATOMIC}.''')
 
 
 class BuiltInScreen(_DeprecatedScreen):
@@ -57,7 +85,7 @@ class BuiltInScreen(_DeprecatedScreen):
     pass
 
 
-class Cache2(_Cache2):
+class Cache2(_getters._Cache2):
     '''DEPRECATED on 2025.02.15, I{to be removed}.'''
     pass
 
@@ -77,8 +105,13 @@ class MainScreen(_DeprecatedScreen):
     pass
 
 
-class module_property_RO(proxy_RO):
-    '''DEPRECATED on 2025.02.09, use C{proxy_RO}.'''
+class module_property_RO(Proxy1ce):
+    '''DEPRECATED on 2025.02.09, use C{Proxy1ce}.'''
+    pass
+
+
+class proxy_RO(Proxy1ce):
+    '''DEPRECATED on 2025.04.03, use C{Proxy1ce}.'''
     pass
 
 
@@ -102,6 +135,16 @@ def fontsof4(family):
     return _fonts.fontsOf4(family)
 
 
+def get_classes(*prefixes):
+    '''DEPRECATED on 25.03.30, use C{get_classes2}.'''
+    return _getters.get_classes2(*prefixes)
+
+
+def get_ivars(clas, *prefixes):
+    '''DEPRECATED on 25.03.30, use C{get_ivars4}.'''
+    return _getters.get_ivars4(clas, *prefixes)
+
+
 def get_libPC():
     '''DEPRECATED on 25.02.25, use C{Libs.PrintCore}.'''
     return libPC
@@ -110,6 +153,21 @@ def get_libPC():
 def get_libs():
     '''DEPRECATED on 25.02.25, use C{Libs}.'''
     return Libs.copy()
+
+
+def get_methods(clas, *prefixes):
+    '''DEPRECATED on 25.03.30, use C{get_methods4}.'''
+    return _getters.get_methods4(clas, *prefixes)
+
+
+def get_properties(clas_or_proto, *prefixes):
+    '''DEPRECATED on 25.03.30, use C{get_properties4}.'''
+    return _getters.get_properties4(clas_or_proto, *prefixes)
+
+
+def get_protocols(clas, *prefixes):
+    '''DEPRECATED on 25.03.30, use C{get_protocols2}.'''
+    return _getters.get_protocols2(clas, *prefixes)
 
 
 def property2(inst, name):
@@ -131,23 +189,29 @@ if __name__ == _Dmain_:
 #  % python3 -m pycocoa.deprecated
 
 # pycocoa.deprecated.__all__ = tuple(
+#  pycocoa.deprecated.bases is <pycocoa.basics.Proxy1ce object at 0x1051a4c00>,
 #  pycocoa.deprecated.BuiltInScreen is <class .BuiltInScreen>,
 #  pycocoa.deprecated.Cache2 is <class .Cache2>,
 #  pycocoa.deprecated.DeepestScreen is <class .DeepestScreen>,
 #  pycocoa.deprecated.ExternalScreen is <class .ExternalScreen>,
-#  pycocoa.deprecated.fontfamilies is <function .fontfamilies at 0x1015887c0>,
-#  pycocoa.deprecated.fontnamesof is <function .fontnamesof at 0x101908400>,
-#  pycocoa.deprecated.fontsof is <function .fontsof at 0x1019084a0>,
-#  pycocoa.deprecated.fontsof4 is <function .fontsof4 at 0x101908540>,
-#  pycocoa.deprecated.get_libPC is <function .get_libPC at 0x1019085e0>,
-#  pycocoa.deprecated.get_libs is <function .get_libs at 0x101908680>,
-#  pycocoa.deprecated.libAppKit is <CDLL '/System/Library/Frameworks/AppKit.framework/AppKit', handle 3eed350a0 at 0x1015d5e50>,
-#  pycocoa.deprecated.libCF is <CDLL '/System/Library/Frameworks/CoreFoundation.framework/CoreFoundation', handle 3eed394f8 at 0x1015d5a90>,
-#  pycocoa.deprecated.libCG is <CDLL '/System/Library/Frameworks/CoreGraphics.framework/CoreGraphics', handle 3eed375c0 at 0x1015d6710>,
-#  pycocoa.deprecated.libCT is <CDLL '/System/Library/Frameworks/CoreText.framework/CoreText', handle 3eed3b5b0 at 0x1015d6850>,
-#  pycocoa.deprecated.libFoundation is <CDLL '/System/Library/Frameworks/Foundation.framework/Foundation', handle 3eed38b28 at 0x1015d6990>,
-#  pycocoa.deprecated.libobjc is <CDLL '/usr/lib/libobjc.dylib', handle 3eed3ce04 at 0x1015d6ad0>,
-#  pycocoa.deprecated.libPC is <CDLL '/System/Library/Frameworks/ApplicationServices.framework/Frameworks/PrintCore.framework/PrintCore', handle 3ee2d8b38 at 0x10126b750>,
+#  pycocoa.deprecated.fontfamilies is <function .fontfamilies at 0x1051b7ec0>,
+#  pycocoa.deprecated.fontnamesof is <function .fontnamesof at 0x1051b8180>,
+#  pycocoa.deprecated.fontsof is <function .fontsof at 0x1051b8220>,
+#  pycocoa.deprecated.fontsof4 is <function .fontsof4 at 0x1051b82c0>,
+#  pycocoa.deprecated.get_classes is <function .get_classes at 0x1051b8360>,
+#  pycocoa.deprecated.get_ivars is <function .get_ivars at 0x1051b8400>,
+#  pycocoa.deprecated.get_libPC is <function .get_libPC at 0x1051b84a0>,
+#  pycocoa.deprecated.get_libs is <function .get_libs at 0x1051b8540>,
+#  pycocoa.deprecated.get_methods is <function .get_methods at 0x1051b85e0>,
+#  pycocoa.deprecated.get_properties is <function .get_properties at 0x1051b8680>,
+#  pycocoa.deprecated.get_protocols is <function .get_protocols at 0x1051b8720>,
+#  pycocoa.deprecated.libAppKit is <_DeprecatedCDLL '/System/Library/Frameworks/AppKit.framework/AppKit', handle 3316bddb8 at 0x105184830>,
+#  pycocoa.deprecated.libCF is <_DeprecatedCDLL '/System/Library/Frameworks/CoreFoundation.framework/CoreFoundation', handle 3316b9f70 at 0x105141a90>,
+#  pycocoa.deprecated.libCG is <_DeprecatedCDLL '/System/Library/Frameworks/CoreGraphics.framework/CoreGraphics', handle 3316a04f8 at 0x105141d10>,
+#  pycocoa.deprecated.libCT is <_DeprecatedCDLL '/System/Library/Frameworks/CoreText.framework/CoreText', handle 3316bc168 at 0x105135e00>,
+#  pycocoa.deprecated.libFoundation is <_DeprecatedCDLL '/System/Library/Frameworks/Foundation.framework/Foundation', handle 3316bb660 at 0x105135cd0>,
+#  pycocoa.deprecated.libobjc is <_DeprecatedCDLL '/usr/lib/libobjc.dylib', handle 3316b76a8 at 0x105167650>,
+#  pycocoa.deprecated.libPC is <_DeprecatedCDLL '/System/Library/Frameworks/ApplicationServices.framework/Frameworks/PrintCore.framework/PrintCore', handle 3316dcb70 at 0x1051a4d10>,
 #  pycocoa.deprecated.MainScreen is <class .MainScreen>,
 #  pycocoa.deprecated.module_property_RO is <class .module_property_RO>,
 #  pycocoa.deprecated.OBJC_ASSOCIATION_ASSIGN is 0 or 0x0,
@@ -155,10 +219,11 @@ if __name__ == _Dmain_:
 #  pycocoa.deprecated.OBJC_ASSOCIATION_COPY_NONATOMIC is 3 or 0x3,
 #  pycocoa.deprecated.OBJC_ASSOCIATION_RETAIN is 769 or 0x301,
 #  pycocoa.deprecated.OBJC_ASSOCIATION_RETAIN_NONATOMIC is 1 or 0x1,
-#  pycocoa.deprecated.property2 is <function .property2 at 0x101908720>,
-#  pycocoa.deprecated.sortuples is <function .sortuples at 0x1019087c0>,
-# )[26]
-# pycocoa.deprecated.version 25.3.16, .isLazy 1, Python 3.13.2 64bit arm64, macOS 15.3.2
+#  pycocoa.deprecated.property2 is <function .property2 at 0x1051b87c0>,
+#  pycocoa.deprecated.proxy_RO is <class .proxy_RO>,
+#  pycocoa.deprecated.sortuples is <function .sortuples at 0x1051b8860>,
+# )[33]
+# pycocoa.deprecated.version 25.4.8, .isLazy 1, Python 3.13.2 64bit arm64, macOS 15.4
 
 # MIT License <https://OpenSource.org/licenses/MIT>
 #

@@ -5,8 +5,9 @@
 
 '''Type L{List}, wrapping ObjC C{NSMutableArray}.
 '''
-from pycocoa.internals import _Dmain_, _fmt, missing
-from pycocoa.lazily import _ALL_LAZY, _Types
+from pycocoa.baseTypes import _Types
+from pycocoa.internals import _Dmain_, missing
+from pycocoa.lazily import _ALL_LAZY,  _fmt
 from pycocoa.nstypes import NSMutableArray, _NSMtbs
 from pycocoa.pytypes import list2NS, py2NS
 from pycocoa.runtime import isMutable, isinstanceOf
@@ -19,7 +20,7 @@ except ImportError:  # Python 2-
     from itertools import izip_longest as zip_longest
 
 __all__ = _ALL_LAZY.lists
-__version__ = '25.03.13'
+__version__ = '25.04.08'
 
 
 class List(Tuple):
@@ -139,7 +140,7 @@ if __name__ == _Dmain_:
 # pycocoa.lists.__all__ = tuple(
 #  pycocoa.lists.List is <class .List>,
 # )[1]
-# pycocoa.lists.version 25.3.13, .isLazy 1, Python 3.13.2 64bit arm64, macOS 14.7.3
+# pycocoa.lists.version 25.4.8, .isLazy 1, Python 3.13.2 64bit arm64, macOS 15.4
 
 # MIT License <https://OpenSource.org/licenses/MIT>
 #

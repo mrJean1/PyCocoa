@@ -59,11 +59,11 @@
 </table>
 <!-- ==================== MODULE DESCRIPTION ==================== -->
 <h1 class="epydoc">Module deprecated</h1><p class="nomargin-top"></p>
-<p>Deprecated classes, constants, functions, internals, etc.</p>
+<p>DEPRECATED classes, constants, functions, internals, modules, etc.</p>
 
 <hr />
 <div class="fields">      <p><strong>Version:</strong>
-        25.03.16
+        25.04.08
       </p>
 </div><!-- ==================== CLASSES ==================== -->
 <a name="section-Classes"></a>
@@ -118,7 +118,15 @@
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
         <a href="pycocoa.deprecated.module_property_RO-class.html" class="summary-name">module_property_RO</a><br />
-      DEPRECATED on 2025.02.09, use <code>proxy_RO</code>.
+      DEPRECATED on 2025.02.09, use <code>Proxy1ce</code>.
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="pycocoa.deprecated.proxy_RO-class.html" class="summary-name">proxy_RO</a><br />
+      DEPRECATED on 2025.04.03, use <code>Proxy1ce</code>.
     </td>
   </tr>
 </table>
@@ -205,6 +213,41 @@
     </td><td class="summary">
       <table width="100%" cellpadding="0" cellspacing="0" border="0">
         <tr>
+          <td><span class="summary-sig"><a name="get_classes"></a><span class="summary-sig-name">get_classes</span>(<span class="summary-sig-arg">*prefixes</span>)</span><br />
+      DEPRECATED on 25.03.30, use <code>get_classes2</code>.</td>
+          <td align="right" valign="top">
+            
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a name="get_ivars"></a><span class="summary-sig-name">get_ivars</span>(<span class="summary-sig-arg">clas</span>,
+        <span class="summary-sig-arg">*prefixes</span>)</span><br />
+      DEPRECATED on 25.03.30, use <code>get_ivars4</code>.</td>
+          <td align="right" valign="top">
+            
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
           <td><span class="summary-sig"><a name="get_libPC"></a><span class="summary-sig-name">get_libPC</span>()</span><br />
       DEPRECATED on 25.02.25, use <code>Libs.PrintCore</code>.</td>
           <td align="right" valign="top">
@@ -224,6 +267,60 @@
         <tr>
           <td><span class="summary-sig"><a name="get_libs"></a><span class="summary-sig-name">get_libs</span>()</span><br />
       DEPRECATED on 25.02.25, use <code>Libs</code>.</td>
+          <td align="right" valign="top">
+            
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a name="get_methods"></a><span class="summary-sig-name">get_methods</span>(<span class="summary-sig-arg">clas</span>,
+        <span class="summary-sig-arg">*prefixes</span>)</span><br />
+      DEPRECATED on 25.03.30, use <code>get_methods4</code>.</td>
+          <td align="right" valign="top">
+            
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a name="get_properties"></a><span class="summary-sig-name">get_properties</span>(<span class="summary-sig-arg">clas_or_proto</span>,
+        <span class="summary-sig-arg">*prefixes</span>)</span><br />
+      DEPRECATED on 25.03.30, use <code>get_properties4</code>.</td>
+          <td align="right" valign="top">
+            
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a name="get_protocols"></a><span class="summary-sig-name">get_protocols</span>(<span class="summary-sig-arg">clas</span>,
+        <span class="summary-sig-arg">*prefixes</span>)</span><br />
+      DEPRECATED on 25.03.30, use <code>get_protocols2</code>.</td>
           <td align="right" valign="top">
             
             
@@ -288,104 +385,91 @@
     <td width="15%" align="right" valign="top" class="summary">
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
-        <a href="pycocoa.deprecated-module.html#libAppKit" class="summary-name">libAppKit</a> = <code title="&lt;CDLL 'AppKit.framework/AppKit', handle 7fffa7793f68 at 7f7aa057dd50&gt;">&lt;CDLL 'AppKit.framework/AppKit', handle 7fffa7793f<code class="variable-ellipsis">...</code></code><br />
-      DEPRECATED on 2025.02.25, use <code>Libs.AppKit</code>
+        <a href="pycocoa.deprecated-module.html#libAppKit" class="summary-name">libAppKit</a> = <code title="&lt;_DeprecatedCDLL 'AppKit.framework/AppKit', handle 7fff98d85100 at 7fe\
+ac04a9cd0&gt;">&lt;_DeprecatedCDLL 'AppKit.framework/AppKit', handle<code class="variable-ellipsis">...</code></code>
     </td>
   </tr>
 <tr>
     <td width="15%" align="right" valign="top" class="summary">
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
-        <a href="pycocoa.deprecated-module.html#libCF" class="summary-name">libCF</a> = <code title="&lt;CDLL 'CoreFoundation.framework/CoreFoundation', handle 7fffa779e3a0 a\
-t 7f7aa057d590&gt;">&lt;CDLL 'CoreFoundation.framework/CoreFoundation', handl<code class="variable-ellipsis">...</code></code><br />
-      DEPRECATED on 2025.02.25, use <code>Libs.CoreFoundation</code>
+        <a href="pycocoa.deprecated-module.html#libCF" class="summary-name">libCF</a> = <code title="&lt;_DeprecatedCDLL 'CoreFoundation.framework/CoreFoundation', handle 7ff\
+f98d81558 at 7feac04a9d50&gt;">&lt;_DeprecatedCDLL 'CoreFoundation.framework/CoreFoundat<code class="variable-ellipsis">...</code></code>
     </td>
   </tr>
 <tr>
     <td width="15%" align="right" valign="top" class="summary">
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
-        <a href="pycocoa.deprecated-module.html#libCG" class="summary-name">libCG</a> = <code title="&lt;CDLL 'CoreGraphics.framework/CoreGraphics', handle 7fffa7794520 at 7f\
-7aa057df10&gt;">&lt;CDLL 'CoreGraphics.framework/CoreGraphics', handle 7f<code class="variable-ellipsis">...</code></code><br />
-      DEPRECATED on 2025.02.25, use <code>Libs.CoreGraphics</code>
+        <a href="pycocoa.deprecated-module.html#libCG" class="summary-name">libCG</a> = <code title="&lt;_DeprecatedCDLL 'CoreGraphics.framework/CoreGraphics', handle 7fff98d\
+876c0 at 7feac04a9d90&gt;">&lt;_DeprecatedCDLL 'CoreGraphics.framework/CoreGraphics'<code class="variable-ellipsis">...</code></code>
     </td>
   </tr>
 <tr>
     <td width="15%" align="right" valign="top" class="summary">
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
-        <a href="pycocoa.deprecated-module.html#libCT" class="summary-name">libCT</a> = <code title="&lt;CDLL 'CoreText.framework/CoreText', handle 7fffa7790430 at 7f7a902c9e\
-90&gt;">&lt;CDLL 'CoreText.framework/CoreText', handle 7fffa77904<code class="variable-ellipsis">...</code></code><br />
-      DEPRECATED on 2025.02.25, use <code>Libs.CoreText</code>
+        <a href="pycocoa.deprecated-module.html#libCT" class="summary-name">libCT</a> = <code title="&lt;_DeprecatedCDLL 'CoreText.framework/CoreText', handle 7fff98d835c0 at\
+ 7feac04a9dd0&gt;">&lt;_DeprecatedCDLL 'CoreText.framework/CoreText', handle<code class="variable-ellipsis">...</code></code>
     </td>
   </tr>
 <tr>
     <td width="15%" align="right" valign="top" class="summary">
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
-        <a href="pycocoa.deprecated-module.html#libFoundation" class="summary-name">libFoundation</a> = <code title="&lt;CDLL 'Foundation.framework/Foundation', handle 7fffa77919a8 at 7f7a90\
-2da390&gt;">&lt;CDLL 'Foundation.framework/Foundation', handl<code class="variable-ellipsis">...</code></code><br />
-      DEPRECATED on 2025.02.25, use <code>Libs.Foundation</code>
+        <a href="pycocoa.deprecated-module.html#libFoundation" class="summary-name">libFoundation</a> = <code title="&lt;_DeprecatedCDLL 'Foundation.framework/Foundation', handle 7fff98d80b3\
+8 at 7feac04aa7d0&gt;">&lt;_DeprecatedCDLL 'Foundation.framework/Foundat<code class="variable-ellipsis">...</code></code>
     </td>
   </tr>
 <tr>
     <td width="15%" align="right" valign="top" class="summary">
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
-        <a href="pycocoa.deprecated-module.html#libobjc" class="summary-name">libobjc</a> = <code title="&lt;CDLL 'libobjc.dylib', handle 7fffa779dc6c at 7f7a902da650&gt;">&lt;CDLL 'libobjc.dylib', handle 7fffa779dc6c at 7f7a90<code class="variable-ellipsis">...</code></code><br />
-      DEPRECATED on 2025.02.25, use <code>Libs.ObjC</code>
+        <a href="pycocoa.deprecated-module.html#libobjc" class="summary-name">libobjc</a> = <code title="&lt;_DeprecatedCDLL 'libobjc.dylib', handle 7fff98d9ce24 at 7fead03d9410&gt;">&lt;_DeprecatedCDLL 'libobjc.dylib', handle 7fff98d9ce2<code class="variable-ellipsis">...</code></code>
     </td>
   </tr>
 <tr>
     <td width="15%" align="right" valign="top" class="summary">
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
-        <a href="pycocoa.deprecated-module.html#libPC" class="summary-name">libPC</a> = <code title="&lt;CDLL '/System/Library/Frameworks/ApplicationServices.framework/Framew\
-orks/PrintCore.framework/PrintCore', handle 7fffa77b1d38 at 7f7aa06242\
-d0&gt;">&lt;CDLL '/System/Library/Frameworks/ApplicationServices.<code class="variable-ellipsis">...</code></code><br />
-      DEPRECATED on 2025.02.25, use <code>Libs.PrintCore</code>
+        <a href="pycocoa.deprecated-module.html#libPC" class="summary-name">libPC</a> = <code title="&lt;_DeprecatedCDLL '/System/Library/Frameworks/ApplicationServices.frame\
+work/Frameworks/PrintCore.framework/PrintCore', handle 7fff98e60c58 at\
+ 7fead03d9490&gt;">&lt;_DeprecatedCDLL '/System/Library/Frameworks/Applicati<code class="variable-ellipsis">...</code></code>
     </td>
   </tr>
 <tr>
     <td width="15%" align="right" valign="top" class="summary">
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
-        <a name="OBJC_ASSOCIATION_ASSIGN"></a><span class="summary-name">OBJC_ASSOCIATION_ASSIGN</span> = <code title="0">0</code><br />
-      DEPRECATED on 2025.02.20, use <code>OBJC_ASSOCIATION.ASSIGN</code>.
+        <a name="OBJC_ASSOCIATION_ASSIGN"></a><span class="summary-name">OBJC_ASSOCIATION_ASSIGN</span> = <code title="0">0</code>
     </td>
   </tr>
 <tr>
     <td width="15%" align="right" valign="top" class="summary">
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
-        <a name="OBJC_ASSOCIATION_COPY"></a><span class="summary-name">OBJC_ASSOCIATION_COPY</span> = <code title="771">771</code><br />
-      DEPRECATED on 2025.02.20, use <code>OBJC_ASSOCIATION.COPY</code>.
+        <a name="OBJC_ASSOCIATION_COPY"></a><span class="summary-name">OBJC_ASSOCIATION_COPY</span> = <code title="771">771</code>
     </td>
   </tr>
 <tr>
     <td width="15%" align="right" valign="top" class="summary">
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
-        <a name="OBJC_ASSOCIATION_COPY_NONATOMIC"></a><span class="summary-name">OBJC_ASSOCIATION_COPY_NONATOMIC</span> = <code title="3">3</code><br />
-      DEPRECATED on 2025.02.20, use 
-      <code>OBJC_ASSOCIATION.COPY_NONATOMIC</code>.
+        <a name="OBJC_ASSOCIATION_COPY_NONATOMIC"></a><span class="summary-name">OBJC_ASSOCIATION_COPY_NONATOMIC</span> = <code title="3">3</code>
     </td>
   </tr>
 <tr>
     <td width="15%" align="right" valign="top" class="summary">
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
-        <a name="OBJC_ASSOCIATION_RETAIN"></a><span class="summary-name">OBJC_ASSOCIATION_RETAIN</span> = <code title="769">769</code><br />
-      DEPRECATED on 2025.02.20, use <code>OBJC_ASSOCIATION.RETAIN</code>.
+        <a name="OBJC_ASSOCIATION_RETAIN"></a><span class="summary-name">OBJC_ASSOCIATION_RETAIN</span> = <code title="769">769</code>
     </td>
   </tr>
 <tr>
     <td width="15%" align="right" valign="top" class="summary">
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
-        <a name="OBJC_ASSOCIATION_RETAIN_NONATOMIC"></a><span class="summary-name">OBJC_ASSOCIATION_RETAIN_NONATOMIC</span> = <code title="1">1</code><br />
-      DEPRECATED on 2025.02.20, use 
-      <code>OBJC_ASSOCIATION.RETAIN_NONATOMIC</code>.
+        <a name="OBJC_ASSOCIATION_RETAIN_NONATOMIC"></a><span class="summary-name">OBJC_ASSOCIATION_RETAIN_NONATOMIC</span> = <code title="1">1</code>
     </td>
   </tr>
 </table>
@@ -404,13 +488,14 @@ d0&gt;">&lt;CDLL '/System/Library/Frameworks/ApplicationServices.<code class="va
        cellspacing="0" width="100%" bgcolor="white">
 <tr><td>
   <h3 class="epydoc">libAppKit</h3>
-  <p>DEPRECATED on 2025.02.25, use <code>Libs.AppKit</code></p>
+  
   <dl class="fields">
   </dl>
   <dl class="fields">
     <dt>Value:</dt>
       <dd><table><tr><td><pre class="variable">
-&lt;CDLL 'AppKit.framework/AppKit', handle 7fffa7793f68 at 7f7aa057dd50&gt;
+&lt;_DeprecatedCDLL 'AppKit.framework/AppKit', handle 7fff98d85100 at 7fe<span class="variable-linewrap"><img src="crarr.png" alt="\" /></span>
+ac04a9cd0&gt;
 </pre></td></tr></table>
 </dd>
   </dl>
@@ -422,14 +507,14 @@ d0&gt;">&lt;CDLL '/System/Library/Frameworks/ApplicationServices.<code class="va
        cellspacing="0" width="100%" bgcolor="white">
 <tr><td>
   <h3 class="epydoc">libCF</h3>
-  <p>DEPRECATED on 2025.02.25, use <code>Libs.CoreFoundation</code></p>
+  
   <dl class="fields">
   </dl>
   <dl class="fields">
     <dt>Value:</dt>
       <dd><table><tr><td><pre class="variable">
-&lt;CDLL 'CoreFoundation.framework/CoreFoundation', handle 7fffa779e3a0 a<span class="variable-linewrap"><img src="crarr.png" alt="\" /></span>
-t 7f7aa057d590&gt;
+&lt;_DeprecatedCDLL 'CoreFoundation.framework/CoreFoundation', handle 7ff<span class="variable-linewrap"><img src="crarr.png" alt="\" /></span>
+f98d81558 at 7feac04a9d50&gt;
 </pre></td></tr></table>
 </dd>
   </dl>
@@ -441,14 +526,14 @@ t 7f7aa057d590&gt;
        cellspacing="0" width="100%" bgcolor="white">
 <tr><td>
   <h3 class="epydoc">libCG</h3>
-  <p>DEPRECATED on 2025.02.25, use <code>Libs.CoreGraphics</code></p>
+  
   <dl class="fields">
   </dl>
   <dl class="fields">
     <dt>Value:</dt>
       <dd><table><tr><td><pre class="variable">
-&lt;CDLL 'CoreGraphics.framework/CoreGraphics', handle 7fffa7794520 at 7f<span class="variable-linewrap"><img src="crarr.png" alt="\" /></span>
-7aa057df10&gt;
+&lt;_DeprecatedCDLL 'CoreGraphics.framework/CoreGraphics', handle 7fff98d<span class="variable-linewrap"><img src="crarr.png" alt="\" /></span>
+876c0 at 7feac04a9d90&gt;
 </pre></td></tr></table>
 </dd>
   </dl>
@@ -460,14 +545,14 @@ t 7f7aa057d590&gt;
        cellspacing="0" width="100%" bgcolor="white">
 <tr><td>
   <h3 class="epydoc">libCT</h3>
-  <p>DEPRECATED on 2025.02.25, use <code>Libs.CoreText</code></p>
+  
   <dl class="fields">
   </dl>
   <dl class="fields">
     <dt>Value:</dt>
       <dd><table><tr><td><pre class="variable">
-&lt;CDLL 'CoreText.framework/CoreText', handle 7fffa7790430 at 7f7a902c9e<span class="variable-linewrap"><img src="crarr.png" alt="\" /></span>
-90&gt;
+&lt;_DeprecatedCDLL 'CoreText.framework/CoreText', handle 7fff98d835c0 at<span class="variable-linewrap"><img src="crarr.png" alt="\" /></span>
+ 7feac04a9dd0&gt;
 </pre></td></tr></table>
 </dd>
   </dl>
@@ -479,14 +564,14 @@ t 7f7aa057d590&gt;
        cellspacing="0" width="100%" bgcolor="white">
 <tr><td>
   <h3 class="epydoc">libFoundation</h3>
-  <p>DEPRECATED on 2025.02.25, use <code>Libs.Foundation</code></p>
+  
   <dl class="fields">
   </dl>
   <dl class="fields">
     <dt>Value:</dt>
       <dd><table><tr><td><pre class="variable">
-&lt;CDLL 'Foundation.framework/Foundation', handle 7fffa77919a8 at 7f7a90<span class="variable-linewrap"><img src="crarr.png" alt="\" /></span>
-2da390&gt;
+&lt;_DeprecatedCDLL 'Foundation.framework/Foundation', handle 7fff98d80b3<span class="variable-linewrap"><img src="crarr.png" alt="\" /></span>
+8 at 7feac04aa7d0&gt;
 </pre></td></tr></table>
 </dd>
   </dl>
@@ -498,13 +583,13 @@ t 7f7aa057d590&gt;
        cellspacing="0" width="100%" bgcolor="white">
 <tr><td>
   <h3 class="epydoc">libobjc</h3>
-  <p>DEPRECATED on 2025.02.25, use <code>Libs.ObjC</code></p>
+  
   <dl class="fields">
   </dl>
   <dl class="fields">
     <dt>Value:</dt>
       <dd><table><tr><td><pre class="variable">
-&lt;CDLL 'libobjc.dylib', handle 7fffa779dc6c at 7f7a902da650&gt;
+&lt;_DeprecatedCDLL 'libobjc.dylib', handle 7fff98d9ce24 at 7fead03d9410&gt;
 </pre></td></tr></table>
 </dd>
   </dl>
@@ -516,15 +601,15 @@ t 7f7aa057d590&gt;
        cellspacing="0" width="100%" bgcolor="white">
 <tr><td>
   <h3 class="epydoc">libPC</h3>
-  <p>DEPRECATED on 2025.02.25, use <code>Libs.PrintCore</code></p>
+  
   <dl class="fields">
   </dl>
   <dl class="fields">
     <dt>Value:</dt>
       <dd><table><tr><td><pre class="variable">
-&lt;CDLL '/System/Library/Frameworks/ApplicationServices.framework/Framew<span class="variable-linewrap"><img src="crarr.png" alt="\" /></span>
-orks/PrintCore.framework/PrintCore', handle 7fffa77b1d38 at 7f7aa06242<span class="variable-linewrap"><img src="crarr.png" alt="\" /></span>
-d0&gt;
+&lt;_DeprecatedCDLL '/System/Library/Frameworks/ApplicationServices.frame<span class="variable-linewrap"><img src="crarr.png" alt="\" /></span>
+work/Frameworks/PrintCore.framework/PrintCore', handle 7fff98e60c58 at<span class="variable-linewrap"><img src="crarr.png" alt="\" /></span>
+ 7fead03d9490&gt;
 </pre></td></tr></table>
 </dd>
   </dl>
@@ -562,7 +647,7 @@ d0&gt;
 <table border="0" cellpadding="0" cellspacing="0" width="100%%">
   <tr>
     <td align="left" class="footer">
-    Generated by Epydoc 3.0.1 on Wed Mar 26 10:28:31 2025
+    Generated by Epydoc 3.0.1 on Tue Apr  8 11:26:16 2025
     </td>
     <td align="right" class="footer">
       <a target="mainFrame" href="http://epydoc.sourceforge.net"

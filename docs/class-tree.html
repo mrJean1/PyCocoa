@@ -149,6 +149,19 @@
     </li>
     </ul>
     </li>
+    <li> <strong class="uidlink"><a href="pycocoa.basics.Proxy1ce-class.html">pycocoa.basics.Proxy1ce</a></strong>:
+      <em class="summary">Decorator for a lazily evaluated dict or lazily imported module or 
+        singleton, <i>avoiding circular imports</i> and providing access to
+        the dict's items or the singleton's or module's attributes.</em>
+    <ul>
+    <li> <strong class="uidlink"><a href="pycocoa.deprecated.module_property_RO-class.html">pycocoa.deprecated.module_property_RO</a></strong>:
+      <em class="summary">DEPRECATED on 2025.02.09, use <code>Proxy1ce</code>.</em>
+    </li>
+    <li> <strong class="uidlink"><a href="pycocoa.deprecated.proxy_RO-class.html">pycocoa.deprecated.proxy_RO</a></strong>:
+      <em class="summary">DEPRECATED on 2025.04.03, use <code>Proxy1ce</code>.</em>
+    </li>
+    </ul>
+    </li>
     <li> <strong class="uidlink">_CData</strong>:
       <em class="summary">XXX to be provided</em>
     <ul>
@@ -217,15 +230,15 @@
     <ul>
     <li> <strong class="uidlink"><a href="ctypes.c_uint.__ctype_be__-class.html">ctypes.c_uint.__ctype_be__</a></strong>
     </li>
+    <li> <strong class="uidlink"><a href="ctypes.c_ushort.__ctype_be__-class.html">ctypes.c_ushort.__ctype_be__</a></strong>
+    </li>
     <li> <strong class="uidlink"><a href="ctypes.c_float.__ctype_be__-class.html">ctypes.c_float.__ctype_be__</a></strong>
     </li>
-    <li> <strong class="uidlink"><a href="ctypes.c_int.__ctype_be__-class.html">ctypes.c_int.__ctype_be__</a></strong>
-    </li>
-    <li> <strong class="uidlink"><a href="ctypes.c_ushort.__ctype_be__-class.html">ctypes.c_ushort.__ctype_be__</a></strong>
+    <li> <strong class="uidlink"><a href="ctypes.c_double.__ctype_be__-class.html">ctypes.c_double.__ctype_be__</a></strong>
     </li>
     <li> <strong class="uidlink"><a href="ctypes.c_ulong.__ctype_be__-class.html">ctypes.c_ulong.__ctype_be__</a></strong>
     </li>
-    <li> <strong class="uidlink"><a href="ctypes.c_double.__ctype_be__-class.html">ctypes.c_double.__ctype_be__</a></strong>
+    <li> <strong class="uidlink"><a href="ctypes.c_int.__ctype_be__-class.html">ctypes.c_int.__ctype_be__</a></strong>
     </li>
     <li> <strong class="uidlink"><a href="ctypes.c_long.__ctype_be__-class.html">ctypes.c_long.__ctype_be__</a></strong>
     </li>
@@ -324,6 +337,9 @@
     </li>
     </ul>
     </li>
+    <li> <strong class="uidlink">pycocoa.internals._Objectype</strong>:
+      <em class="summary">Base class with <code>typename</code>.</em>
+    <ul>
     <li> <strong class="uidlink">pycocoa.runtime._ObjCBase</strong>:
       <em class="summary">(INTERNAL) Base class for <code>runtime.ObjC...</code> classes.</em>
     <ul>
@@ -384,7 +400,7 @@
     </li>
     </ul>
     </li>
-    <li> <strong class="uidlink">pycocoa.bases._Type0</strong>:
+    <li> <strong class="uidlink">pycocoa.baseTypes._Type0</strong>:
       <em class="summary">(INTERNAL) The base Type, just property NS.</em>
     <ul>
     <li> <strong class="uidlink"><a href="pycocoa.colors.Color-class.html">pycocoa.colors.Color</a></strong>:
@@ -549,10 +565,10 @@
     </li>
     </ul>
     </li>
-    <li> <strong class="uidlink">pycocoa.bases._Type1</strong>:
+    <li> <strong class="uidlink">pycocoa.baseTypes._Type1</strong>:
       <em class="summary">(INTERNAL) Basic Type with properties app, delegate and NS.</em>
     <ul>
-    <li> <strong class="uidlink">pycocoa.bases._Type2</strong>:
+    <li> <strong class="uidlink">pycocoa.baseTypes._Type2</strong>:
       <em class="summary">(INTERNAL) Basic Type with properties app, delegate, NS, tag and 
         title.</em>
     <ul>
@@ -646,6 +662,8 @@
     </li>
     </ul>
     </li>
+    </ul>
+    </li>
     <li> <strong class="uidlink">basestring</strong>:
       <em class="summary">Type basestring cannot be instantiated; it is the base for str and 
         unicode.</em>
@@ -678,7 +696,7 @@ dict(iterable) -&gt; new dictionary initialized as if via:
 dict(**kwargs) -&gt; new dictionary initialized with the name=value pairs
     in the keyword argument list.</em>
     <ul>
-    <li> <strong class="uidlink"><a href="pycocoa.internals.Adict-class.html">pycocoa.internals.Adict</a></strong>:
+    <li> <strong class="uidlink"><a href="pycocoa.basics.Adict-class.html">pycocoa.basics.Adict</a></strong>:
       <em class="summary">A <code>dict</code> with key <i>and</i> attribute access to the 
         items and callable to add items.</em>
     </li>
@@ -692,10 +710,10 @@ dict(**kwargs) -&gt; new dictionary initialized with the name=value pairs
     </li>
     </ul>
     </li>
-    <li> <strong class="uidlink">pycocoa.internals._frozendictbase</strong>:
+    <li> <strong class="uidlink">pycocoa.basics._frozendictbase</strong>:
       <em class="summary">(INTERNAL) Base class for immutable <code>dict</code> types.</em>
     <ul>
-    <li> <strong class="uidlink"><a href="pycocoa.internals.frozendict-class.html">pycocoa.internals.frozendict</a></strong>:
+    <li> <strong class="uidlink"><a href="pycocoa.basics.frozendict-class.html">pycocoa.basics.frozendict</a></strong>:
       <em class="summary">An immutable Python <code>dict</code> with key <i>and</i> attribute
         access to the items.</em>
     </li>
@@ -710,15 +728,6 @@ dict(**kwargs) -&gt; new dictionary initialized with the name=value pairs
     <li> <strong class="uidlink"><a href="pycocoa.sets.FrozenSet-class.html">pycocoa.sets.FrozenSet</a></strong>:
       <em class="summary">Python <code>frozenset</code> Type, wrapping an immutable ObjC 
         <code>NSSet</code>.</em>
-    </li>
-    </ul>
-    </li>
-    <li> <strong class="uidlink"><a href="pycocoa.internals.proxy_RO-class.html">pycocoa.internals.proxy_RO</a></strong>:
-      <em class="summary">Decorator for a lazy module <code>dict</code> or 
-        <code>Read-Only</code> module property.</em>
-    <ul>
-    <li> <strong class="uidlink"><a href="pycocoa.deprecated.module_property_RO-class.html">pycocoa.deprecated.module_property_RO</a></strong>:
-      <em class="summary">DEPRECATED on 2025.02.09, use <code>proxy_RO</code>.</em>
     </li>
     </ul>
     </li>
@@ -765,7 +774,7 @@ dict(**kwargs) -&gt; new dictionary initialized with the name=value pairs
 <table border="0" cellpadding="0" cellspacing="0" width="100%%">
   <tr>
     <td align="left" class="footer">
-    Generated by Epydoc 3.0.1 on Wed Mar 26 10:28:30 2025
+    Generated by Epydoc 3.0.1 on Tue Apr  8 11:26:16 2025
     </td>
     <td align="right" class="footer">
       <a target="mainFrame" href="http://epydoc.sourceforge.net"

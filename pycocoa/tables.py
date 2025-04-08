@@ -8,15 +8,15 @@
 # <https://StackOverflow.com/questions/15519296/pyobjc-crashes-by-using-nstableview>
 # <https://GitHub.com/versluis/Mac-TableViewCode/tree/master/Mac%20TableViewCode>
 
-from pycocoa.bases import _Type2
+from pycocoa.baseTypes import _Type2,  _Types
+from pycocoa.basics import _Globals, Proxy1ce
 from pycocoa.fonts import Font
 from pycocoa.geometry import Rect4
-from pycocoa.internals import _COLON_, _Dmain_, _fmt, _fmt_invalid, _Globals, \
-                              _NN_, property_RO, proxy_RO
-from pycocoa.lazily import _ALL_LAZY, _Types
+from pycocoa.internals import _COLON_, _Dmain_, _fmt, _fmt_invalid, _NN_, property_RO
+# from pycocoa.lazily import _ALL_LAZY  # from .octypes
 from pycocoa.nstypes import NSMain, NSScrollView, NSStr, _NSStr, NSTableColumn, \
                             NSTableView  # isNone, NSTextField
-from pycocoa.octypes import NSSize_t
+from pycocoa.octypes import NSSize_t,  _ALL_LAZY
 from pycocoa.oslibs import NSTableViewSolidHorizontalGridLineMask, \
                            NSTableViewSolidVerticalGridLineMask, \
                            NSTextAlignmentCenter, NSTextAlignmentJustified, \
@@ -29,7 +29,7 @@ from pycocoa.screens import Screens,  isinstanceOf
 from pycocoa.windows import Window, WindowStyle
 
 __all__ = _ALL_LAZY.tables
-__version__ = '25.02.19'
+__version__ = '25.04.03'
 
 _Alignment = dict(center=NSTextAlignmentCenter,
                justified=NSTextAlignmentJustified,
@@ -306,7 +306,7 @@ class _NSTableViewDelegate(object):
 #       return cellView }
 
 
-@proxy_RO
+@Proxy1ce
 def NSTableViewDelegate():
     '''The L{ObjCClass}C{(_NSTableViewDelegate.__name__)}.
     '''
@@ -393,11 +393,11 @@ if __name__ == _Dmain_:
 #
 # pycocoa.tables.__all__ = tuple(
 #  pycocoa.tables.closeTables is <function .closeTables at 0x100bb65c0>,
-#  pycocoa.tables.NSTableViewDelegate is <pycocoa.utils.proxy_RO object at 0x100b59e50>,
+#  pycocoa.tables.NSTableViewDelegate is <pycocoa.utils.Proxy1ce object at 0x100b59e50>,
 #  pycocoa.tables.Table is <class .Table>,
 #  pycocoa.tables.TableWindow is <class .TableWindow>,
 # )[4]
-# pycocoa.tables.version 25.2.19, .isLazy 1, Python 3.13.1 64bit arm64, macOS 14.7.3
+# pycocoa.tables.version 25.4.3, .isLazy 1, Python 3.13.2 64bit arm64, macOS 15.4
 
 # MIT License <https://OpenSource.org/licenses/MIT>
 #

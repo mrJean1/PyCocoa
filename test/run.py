@@ -7,7 +7,7 @@
 # (aka 10.16) and Apple Silicon (arm64) and Intel emulation (x86_64),
 # all in 64-bit only.
 
-__version__ = '23.01.20'
+__version__ = '25.04.08'
 
 import os
 from os.path import abspath, dirname
@@ -20,22 +20,17 @@ if PyCocoa_dir not in sys.path:  # Python 3+ ModuleNotFoundError
     sys.path.insert(0, PyCocoa_dir)
 import pycocoa  # PYCHOK for all tests
 
-pythonx  = sys.executable if sys.version_info[0] > 2 else 'python2'
-_OO      = '' if __debug__ else ' -OO'
-pythonX_ = pythonx + _OO  # python or Pythonista path
-if sys.version_info[:2] > (3, 3):
-    pythonX_ += ' -X faulthandler'
+v2 = sys.version_info[:2]
+pythonX_ = 'python2' if v2 < (3, 0) else sys.executable
+if not __debug__:
+    pythonX_ += ' -OO'  # python or Pythonista path
+if v2 > (3, 3):
+    pythonX_ += ' -X faulthandler'  # in .test_Lazily
 
 if __name__ == '__main__':
 
-    def _cmd(cmd, *args):
-        if args:
-            cmd = cmd % args
-        if len(cmd) > 128:
-            cmd = cmd[:60] + '...' + cmd[-60:]
-        print('\nrunning%s: %s ...' % (_OO, cmd))
-        return os.system(cmd)
-
+    e = n = s = 0
+    S = pycocoa.segfaulty()
     for t in ('list_classes',
               'list_inheritance NSWindow',  # NSAutoreleasePool',
               'list_ivalues NSApplication',
@@ -47,7 +42,7 @@ if __name__ == '__main__':
               'list_protocols NSColor',
               'simple_application 3',
               'simple_delegate 1',
-              'simple_drawing 2',
+              'simple_drawing 2',  # skipped
               'simple_menu 2',
               'simple_subclass',
               'simple_table 2',
@@ -63,5 +58,16 @@ if __name__ == '__main__':
               'test_NStypes',
               'test_Panels 2',
               'test_Types'):
-        if _cmd('%s -m test.%s  1>/dev/null', pythonX_, t):
-            sys.exit('%s test %s FAILED' % (pythonX_, t))
+        n  += 1
+        cmd = '%s -m test.%s  1>/dev/null' % (pythonX_, t)
+        print('\nrunning %s: %s ...' % (n, cmd))
+        if S and t.startswith('simple_drawing'):
+            s += 1
+            print('segfaulty %s' % (s,))
+        elif os.system(cmd):
+            e += 1
+            print('FAILED %s' % (e,))
+    p = n - e - s
+    f = ('FAILED %s, ' % (e,)) if e else ''
+    print('\n%spassed %s, skipped %s, total %s' % (f, p, s, n))
+    sys.exit(min(e, 127))

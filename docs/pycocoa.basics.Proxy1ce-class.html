@@ -3,7 +3,7 @@
           "DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
 <head>
-  <title>pycocoa.internals.proxy_RO</title>
+  <title>pycocoa.basics.Proxy1ce</title>
   <link rel="stylesheet" href="epydoc.css" type="text/css" />
   <script type="text/javascript" src="epydoc.js"></script>
 </head>
@@ -43,8 +43,8 @@
     <td width="100%">
       <span class="breadcrumbs">
         <a href="pycocoa-module.html">Package&nbsp;pycocoa</a> ::
-        <a href="pycocoa.internals-module.html">Module&nbsp;internals</a> ::
-        Class&nbsp;proxy_RO
+        <a href="pycocoa.basics-module.html">Module&nbsp;basics</a> ::
+        Class&nbsp;Proxy1ce
       </span>
     </td>
     <td>
@@ -52,29 +52,30 @@
         <!-- hide/show private -->
         <tr><td align="right"><span class="options"
             >[<a href="frames.html" target="_top">frames</a
-            >]&nbsp;|&nbsp;<a href="pycocoa.internals.proxy_RO-class.html"
+            >]&nbsp;|&nbsp;<a href="pycocoa.basics.Proxy1ce-class.html"
             target="_top">no&nbsp;frames</a>]</span></td></tr>
       </table>
     </td>
   </tr>
 </table>
 <!-- ==================== CLASS DESCRIPTION ==================== -->
-<h1 class="epydoc">Class proxy_RO</h1><p class="nomargin-top"></p>
+<h1 class="epydoc">Class Proxy1ce</h1><p class="nomargin-top"></p>
 <pre class="base-tree">
 object --+
          |
-        <strong class="uidshort">proxy_RO</strong>
+        <strong class="uidshort">Proxy1ce</strong>
 </pre>
 
 <dl><dt>Known Subclasses:</dt>
 <dd>
       <ul class="subclass-list">
-<li><a href="pycocoa.deprecated.module_property_RO-class.html">deprecated.module_property_RO</a></li>  </ul>
+<li><a href="pycocoa.deprecated.module_property_RO-class.html">deprecated.module_property_RO</a></li><li>, <a href="pycocoa.deprecated.proxy_RO-class.html">deprecated.proxy_RO</a></li>  </ul>
 </dd></dl>
 
 <hr />
-<p>Decorator for a lazy module <code>dict</code> or 
-  <code>Read-Only</code> module property.</p>
+<p>Decorator for a lazily evaluated dict or lazily imported module or 
+  singleton, <i>avoiding circular imports</i> and providing access to the 
+  dict's items or the singleton's or module's attributes.</p>
 
 <hr />
 <div class="fields">      <p><strong>See Also:</strong>
@@ -130,10 +131,10 @@ object --+
     </td><td class="summary">
       <table width="100%" cellpadding="0" cellspacing="0" border="0">
         <tr>
-          <td><span class="summary-sig"><a href="pycocoa.internals.proxy_RO-class.html#__init__" class="summary-sig-name">__init__</a>(<span class="summary-sig-arg">self</span>,
-        <span class="summary-sig-arg">func</span>)</span><br />
-      New <a href="pycocoa.internals.proxy_RO-class.html" 
-      class="link">proxy_RO</a>.</td>
+          <td><span class="summary-sig"><a href="pycocoa.basics.Proxy1ce-class.html#__init__" class="summary-sig-name">__init__</a>(<span class="summary-sig-arg">self</span>,
+        <span class="summary-sig-arg">mlf0</span>)</span><br />
+      New <a href="pycocoa.basics.Proxy1ce-class.html" 
+      class="link">Proxy1ce</a>.</td>
           <td align="right" valign="top">
             
             
@@ -195,7 +196,7 @@ object --+
   <table width="100%" cellpadding="0" cellspacing="0" border="0">
   <tr valign="top"><td>
   <h3 class="epydoc"><span class="sig"><span class="sig-name">__init__</span>(<span class="sig-arg">self</span>,
-        <span class="sig-arg">func</span>)</span>
+        <span class="sig-arg">mlf0</span>)</span>
     <br /><em class="fname">(Constructor)</em>
   </h3>
   </td><td align="right" valign="top"
@@ -203,32 +204,53 @@ object --+
     </td>
   </tr></table>
   
-  <p>New <a href="pycocoa.internals.proxy_RO-class.html" 
-  class="link">proxy_RO</a>.</p>
+  <p>New <a href="pycocoa.basics.Proxy1ce-class.html" 
+  class="link">Proxy1ce</a>.</p>
   <dl class="fields">
     <dt>Parameters:</dt>
     <dd><ul class="nomargin-top">
-        <li><strong class="pname"><code>func</code></strong> - Function to be decorated as <code>property</code> 
-          (<code>callable, invoked without args</code>).</li>
+        <li><strong class="pname"><code>mlf0</code></strong> - Module-level function representing the dict, module or singleton 
+          to be decorated (<code>callable</code>, <i>invoked lazily, only 
+          once and without parameters</i>).</li>
     </ul></dd>
     <dt>Overrides:
         object.__init__
     </dt>
   </dl>
-<div class="fields">      <p><strong>Example:</strong>
+<div class="fields">      <p><strong>Note:</strong>
+        The first key or attribute access of the <i>decorated</i> 
+        <code>mlf0</code> invokes <code>mlf0</code> <i>and</i> replaces 
+        <code>mlf0</code>'s module-level Proxy1ce with <code>mlf0</code>'s 
+        returned result.
+      </p>
+      <p><strong>Example:</strong>
         <pre class="py-doctest">
-<span class="py-prompt">&gt;&gt;&gt; </span>@proxy_RO
-<span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">def</span> <span class="py-defname">mattr</span>():  <span class="py-comment"># no args</span>
-<span class="py-prompt">&gt;&gt;&gt; </span>    return ro  <span class="py-comment"># singleton</span></pre>
+<span class="py-prompt">&gt;&gt;&gt; </span>@Proxy1ce
+<span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">def</span> <span class="py-defname">_dict</span>():  <span class="py-comment"># no args</span>
+<span class="py-prompt">&gt;&gt;&gt; </span>    d = dict(...)  <span class="py-comment"># compute once</span>
+<span class="py-prompt">&gt;&gt;&gt; </span>    return d  <span class="py-comment"># singleton</span>
+<span class="py-prompt">&gt;&gt;&gt;</span>
+<span class="py-prompt">&gt;&gt;&gt; </span>s = type(_dict)  <span class="py-comment"># Proxy1ce</span>
+<span class="py-prompt">&gt;&gt;&gt; </span>x = _dict[k]
+<span class="py-prompt">&gt;&gt;&gt; </span>t = type(_dict)  <span class="py-comment"># type(d)</span></pre>
 <pre class="py-doctest">
-<span class="py-prompt">&gt;&gt;&gt; </span>x = [module.]mattr</pre>
+<span class="py-prompt">&gt;&gt;&gt; </span>@Proxy1ce
+<span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">def</span> <span class="py-defname">_singleton</span>():  <span class="py-comment"># no args</span>
+<span class="py-prompt">&gt;&gt;&gt; </span>    <span class="py-keyword">from</span> somewhere <span class="py-keyword">import</span> singleton
+<span class="py-prompt">&gt;&gt;&gt; </span>    return singleton
+<span class="py-prompt">&gt;&gt;&gt;</span>
+<span class="py-prompt">&gt;&gt;&gt; </span>s = type(_singleton)  <span class="py-comment"># Proxy1ce</span>
+<span class="py-prompt">&gt;&gt;&gt; </span>x = _singleton.attr
+<span class="py-prompt">&gt;&gt;&gt; </span>t = type(_singleton)  <span class="py-comment"># type(singleton)</span></pre>
 <pre class="py-doctest">
-<span class="py-prompt">&gt;&gt;&gt; </span>@proxy_RO
-<span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">def</span> <span class="py-defname">mdict</span>():  <span class="py-comment"># no args</span>
-<span class="py-prompt">&gt;&gt;&gt; </span>    d = dict(...)
-<span class="py-prompt">&gt;&gt;&gt; </span>    return d <span class="py-comment"># singleton</span></pre>
-<pre class="py-doctest">
-<span class="py-prompt">&gt;&gt;&gt; </span>x = [module.]mdict[k]</pre>
+<span class="py-prompt">&gt;&gt;&gt; </span>@Proxy1ce
+<span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">def</span> <span class="py-defname">_module</span>():  <span class="py-comment"># no args</span>
+<span class="py-prompt">&gt;&gt;&gt; </span>    <span class="py-keyword">import</span> module <span class="py-keyword">as</span> mod
+<span class="py-prompt">&gt;&gt;&gt; </span>    return mod
+<span class="py-prompt">&gt;&gt;&gt;</span>
+<span class="py-prompt">&gt;&gt;&gt; </span>s = type(_module)  <span class="py-comment"># Proxy1ce</span>
+<span class="py-prompt">&gt;&gt;&gt; </span>x = _module.attr
+<span class="py-prompt">&gt;&gt;&gt; </span>t = type(_module)  <span class="py-comment"># type(mod)</span></pre>
       </p>
 </div></td></tr></table>
 </div>
@@ -264,7 +286,7 @@ object --+
 <table border="0" cellpadding="0" cellspacing="0" width="100%%">
   <tr>
     <td align="left" class="footer">
-    Generated by Epydoc 3.0.1 on Wed Mar 26 10:28:31 2025
+    Generated by Epydoc 3.0.1 on Tue Apr  8 11:26:16 2025
     </td>
     <td align="right" class="footer">
       <a target="mainFrame" href="http://epydoc.sourceforge.net"
