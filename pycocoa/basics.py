@@ -7,10 +7,11 @@
 private (INTERNAL) functions and singletons.
 '''
 from pycocoa.internals import _COLONSPACE_, _COMMA_, _COMMASPACE_, _Dmain_, _docOf, \
-                              _DOT_, _EQUALS_, _fmt, _fmt_invalid, _instr, _int2str, \
-                              _istr, _invalid_, _kwdstr, missing, _nameOf, _NL_, _NN_, \
-                              _not_, _Objectype, property_RO, _pycocoa_, _sortuples, \
-                              _SPACE_, _TypeError, _UNDER_,  sys  # PYCHOK used
+                              _DOT_, _EQUALS_, _fmt, _fmt_invalid, _int2str, _istr, \
+                              _invalid_, _kwdstr, missing, _nameOf, _NL_, _NN_, \
+                              _Objectype, property_RO, _sortuples, _SPACE_, _UNDER_
+from pycocoa.internals import _pycocoa_,  sys  # PYCHOK used!
+
 import inspect
 # import sys  # from .internals
 
@@ -567,7 +568,7 @@ def _lazily():  # lazily import lazily, I{once}
 
 
 __all__ = tuple(map(_nameOf, (Adict, frozendict, lambda1, Proxy1ce)))
-__version__ = '25.04.08'
+__version__ = '25.06.09'
 
 if __name__ == _Dmain_:
 
@@ -587,7 +588,7 @@ if __name__ == _Dmain_:
 
 # MIT License <https://OpenSource.org/licenses/MIT>
 #
-# Copyright (C) 2017-2025 -- mrJean1 at Gmail -- All Rights Reserved.
+# Copyright (C) 2017-2026 -- mrJean1 at Gmail -- All Rights Reserved.
 #
 # Permission is hereby granted, free of charge, to any person obtaining
 # a copy of this software and associated documentation files (the "Software"),

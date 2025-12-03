@@ -18,7 +18,7 @@ PyCocoa_dir = dirname(test_dir)
 # extend sys.path to include the ../.. directory
 if PyCocoa_dir not in sys.path:  # Python 3+ ModuleNotFoundError
     sys.path.insert(0, PyCocoa_dir)
-import pycocoa  # PYCHOK for all tests
+import pycocoa  # noqa: E402 PYCHOK for all tests
 
 v2 = sys.version_info[:2]
 pythonX_ = 'python2' if v2 < (3, 0) else sys.executable

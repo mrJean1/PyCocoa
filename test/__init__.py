@@ -35,7 +35,7 @@
 # ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 # POSSIBILITY OF SUCH DAMAGE.
 
-# Copyright (C) 2017-2025 -- mrJean1 at Gmail -- All Rights Reserved.
+# Copyright (C) 2017-2026 -- mrJean1 at Gmail -- All Rights Reserved.
 #
 # Permission is hereby granted, free of charge, to any person obtaining
 # a copy of this software and associated documentation files (the "Software"),
@@ -68,7 +68,7 @@ if d not in sys.path:
 
 del d, os, sys
 
-from testsuite import TestSuite  # PYCHOK for setup.py
+from testsuite import TestSuite  # noqa: E402 PYCHOK for setup.py
 
 __all__ = ('TestSuite',)
 __version__ = '20.12.10'

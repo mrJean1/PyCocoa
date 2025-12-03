@@ -19,10 +19,11 @@ import platform as _platform
 # import sys  # from .lazily
 
 __all__ = _ALL_LAZY.utils
-__version__ = '25.04.07'
+__version__ = '25.12.04'
 
 _bCOL      = b':'  # in .octypes
 _MACHINE   = _platform.machine().replace(_COMMA_, _UNDER_)  # arm64, x86_64, other?
+__arm__    = _MACHINE == 'arm'     # PYCHOK 32-bit
 __arm64__  = _MACHINE == _arm64_   # PYCHOK see .oslibs._isAppleSi
 __i386__   = _MACHINE == 'i386'    # PYCHOK expected
 _x86_64_   =             'x86_64'
@@ -648,7 +649,7 @@ if __name__ == _Dmain_:
 
 # MIT License <https://OpenSource.org/licenses/MIT>
 #
-# Copyright (C) 2017-2025 -- mrJean1 at Gmail -- All Rights Reserved.
+# Copyright (C) 2017-2026 -- mrJean1 at Gmail -- All Rights Reserved.
 #
 # Permission is hereby granted, free of charge, to any person obtaining
 # a copy of this software and associated documentation files (the "Software"),

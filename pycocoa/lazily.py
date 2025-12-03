@@ -324,7 +324,7 @@ def _lazy_import2(pack):  # MCCABE 18
              U{PEP 562<https://www.Python.org/dev/peps/pep-0562>} and
              U{Werkzeug<https://GitHub.com/pallets/werkzeug/blob/master/werkzeug/__init__.py>}.
     '''
-    global isLazy
+    global isLazy  # PYCHOK used!
 
     if sys.version_info[:2] < (3, 7):  # not supported
         t = _DOT_(pack, _nameOf(_lazy_import2))
@@ -409,7 +409,7 @@ def _lazy_init3(pack):
 
        @note: Global C{isLazy} is set accordingly.
     '''
-    global isLazy
+    global isLazy  # PYCHOK used!
 
     if pack != _pycocoa_:  # assert
         t = _fmt_invalid(repr(_pycocoa_), pack=repr(pack))
@@ -440,7 +440,7 @@ def _lazy_init3(pack):
 
 
 __all__ = _ALL_LAZY.lazily
-__version__ = '25.04.08'
+__version__ = '25.06.09'
 
 if __name__ == _Dmain_:
 
@@ -478,7 +478,7 @@ if __name__ == _Dmain_:
 
 # MIT License <https://OpenSource.org/licenses/MIT>
 #
-# Copyright (C) 2018-2025 -- mrJean1 at Gmail -- All Rights Reserved.
+# Copyright (C) 2018-2026 -- mrJean1 at Gmail -- All Rights Reserved.
 #
 # Permission is hereby granted, free of charge, to any person obtaining a
 # copy of this software and associated documentation files (the "Software"),

@@ -1172,7 +1172,7 @@ def _NS2Tpy2s():
     from pycocoa.dicts import Dict, FrozenDict
     from pycocoa.lists import List,  Tuple
     from pycocoa.sets import Set, FrozenSet
-    from pycocoa.strs import Str  # PYCHOK fill .baseTypes._Types...
+    from pycocoa.strs import Str  # noqa: F401 fill .baseTypes._Types...
 #   from pycocoa.tuples import Tuple  # from .lists
     # _Types.Attrs, validate with test/test_Dicts, -_Fonts, -_Lazily
     d = {}
@@ -1512,7 +1512,7 @@ if __name__ == _Dmain_:
 
 # MIT License <https://OpenSource.org/licenses/MIT>
 #
-# Copyright (C) 2017-2025 -- mrJean1 at Gmail -- All Rights Reserved.
+# Copyright (C) 2017-2026 -- mrJean1 at Gmail -- All Rights Reserved.
 #
 # Permission is hereby granted, free of charge, to any person obtaining
 # a copy of this software and associated documentation files (the "Software"),

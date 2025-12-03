@@ -35,7 +35,7 @@ from pycocoa.octypes import Allocator_t, Array_t, BOOL_t, CFIndex_t, CFRange_t, 
                             objc_property_t, objc_property_attribute_t, Protocol_t, \
                             RunLoop_t, SEL_t, Set_t, String_t, TypeID_t, TypeRef_t, \
                             UniChar_t, URL_t
-from pycocoa.utils import __arm64__, __i386__, macOSver2, __x86_64__,  _ALL_LAZY
+from pycocoa.utils import __arm__, __arm64__, __i386__, macOSver2, __x86_64__,  _ALL_LAZY
 
 from copy import copy as _copy
 from ctypes import byref, cast, CDLL, c_buffer, c_byte, c_char, \
@@ -51,7 +51,7 @@ except ImportError:  # XXX Pythonista/iOS
 from os.path import join as _join, sep as _SEP
 
 __all__ = _ALL_LAZY.oslibs
-__version__ = '25.04.07'
+__version__ = '25.12.04'
 
 _framework_ = 'framework'
 _leaked2    = []  # leaked memory, 2-tuples (ptr, size)
@@ -1115,13 +1115,16 @@ if _libObjC:
     _csignature(_libObjC.objc_msgSend, Id_t, Id_t, SEL_t)
     # Id_t objc_msgSendSuper(struct objc_super_t *super, SEL_t op, ...)
     _csignature(_libObjC.objc_msgSendSuper, Id_t, c_void_p, SEL_t)
-    if __i386__ or __x86_64__:  # only for Intel processor and Intel emulatiom
+    if __i386__ or __x86_64__:  # only for Intel processor and Intel emulation
         # double objc_msgSend_fpret(Id_t self, SEL_t op, ...)
         _csignature(_libObjC.objc_msgSend_fpret, c_float, Id_t, SEL_t)  # c_float, c_longdouble
         # void objc_msgSend_stret(void *stretAddr, Id_t theReceiver, SEL_t theSelector,  ...)
         _csignature(_libObjC.objc_msgSend_stret, c_void, c_void_p, Id_t, SEL_t)
         # void objc_msgSendSuper_stret(struct objc_super_t *super, SEL_t op, ...)
         _csignature(_libObjC.objc_msgSendSuper_stret, c_void, c_void_p, SEL_t)
+    elif __arm__:  # 32-bit
+        # void objc_msgSend_stret(void *stretAddr, Id_t theReceiver, SEL_t theSelector,  ...)
+        _csignature(_libObjC.objc_msgSend_stret, c_void, c_void_p, Id_t, SEL_t)
 
     # Id_t object_copy(Id_t obj, size_t size)
     _csignature(_libObjC.object_copy, Id_t, Id_t, c_size_t)
@@ -1401,7 +1404,7 @@ if __name__ == _Dmain_:
 
 # MIT License <https://OpenSource.org/licenses/MIT>
 #
-# Copyright (C) 2017-2025 -- mrJean1 at Gmail -- All Rights Reserved.
+# Copyright (C) 2017-2026 -- mrJean1 at Gmail -- All Rights Reserved.
 #
 # Permission is hereby granted, free of charge, to any person obtaining
 # a copy of this software and associated documentation files (the "Software"),

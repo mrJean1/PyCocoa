@@ -47,7 +47,7 @@ class Tuple(_Type0):  # note, List subclasses Tuple
            or C{NS[Mutable]Array}.
         '''
         if _Types.List is None:  # circular import
-            import pycocoa.lists as _  # PYCHOK _
+            import pycocoa.lists as _  # noqa: F401 PYCHOK _
             assert _Types.List is not None, '_Types.List None'
 
         if isinstanceOf(ns_tuple, list, tuple):
@@ -217,7 +217,7 @@ if __name__ == _Dmain_:
 
 # MIT License <https://OpenSource.org/licenses/MIT>
 #
-# Copyright (C) 2017-2025 -- mrJean1 at Gmail -- All Rights Reserved.
+# Copyright (C) 2017-2026 -- mrJean1 at Gmail -- All Rights Reserved.
 #
 # Permission is hereby granted, free of charge, to any person obtaining
 # a copy of this software and associated documentation files (the "Software"),

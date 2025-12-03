@@ -1,11 +1,11 @@
 
 # -*- coding: utf-8 -*-
 
-import run as _  # PYCHOK sys.path
+import run as _  # noqa: F401 PYCHOK sys.path
 from pycocoa import AlertPanel, AlertStyle, BrowserPanel, \
                     Fonts, PanelButton, TextPanel
 
-__version__ = '23.01.18'
+__version__ = '25.12.04'
 
 
 def test(timeout):
@@ -13,17 +13,17 @@ def test(timeout):
     x = PanelButton.TimedOut
 
     a = AlertPanel(info='Informative text 1')
-    assert(a.show('Main text 2', timeout=timeout) is x)
-    assert(a.show('Main text 3', timeout=timeout) is x)
+    assert (a.show('Main text 2', timeout=timeout) is x)
+    assert (a.show('Main text 3', timeout=timeout) is x)
 
     a = AlertPanel(title='Title 1', style=AlertStyle.Warning, suppressable=True)
-    assert(a.show('Main text 4', timeout=timeout) is x)
-    assert(a.show('Main text 5', timeout=timeout) is x)
+    assert (a.show('Main text 4', timeout=timeout) is x)
+    assert (a.show('Main text 5', timeout=timeout) is x)
 
     t = TextPanel()
-    assert(t.show('Main text 7', timeout=timeout) is x)
-    assert(t.show(open('test/__init__.py'), timeout=timeout) is x)
-    assert(t.show(open('test/__init__.py'), font=Fonts.Italic, timeout=timeout) is x)
+    assert (t.show('Main text 7', timeout=timeout) is x)
+    assert (t.show(open('test/__init__.py'), timeout=timeout) is x)
+    assert (t.show(open('test/__init__.py'), font=Fonts.Italic, timeout=timeout) is x)
 
     b = BrowserPanel()
     # XXX there is no good way to kill or close the
@@ -46,7 +46,7 @@ if __name__ == '__main__':
 
 # MIT License <https://OpenSource.org/licenses/MIT>
 #
-# Copyright (C) 2017-2025 -- mrJean1 at Gmail -- All Rights Reserved.
+# Copyright (C) 2017-2026 -- mrJean1 at Gmail -- All Rights Reserved.
 #
 # Permission is hereby granted, free of charge, to any person obtaining a
 # copy of this software and associated documentation files (the "Software"),

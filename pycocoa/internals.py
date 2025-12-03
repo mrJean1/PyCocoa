@@ -11,7 +11,7 @@ L{missing} and private (INTERNAL) constants.
 '''
 import inspect
 import os
-import sys  # PYCHOK used!p
+import sys  # noqa: F401 shared
 
 _env_get = os.environ.get  # in .basics, .faults, .lazily, .runtime
 
@@ -59,7 +59,7 @@ def _docOf(obj, dflt=_NN_, line=None):
     '''
     # inspect.getdoc(obj)  # cleandoc()
     d = getattr(obj, '__doc__', None) or dflt
-    if line is not None:
+    if d and line is not None:
         d = d.lstrip().split(_NL_)[line].strip()
     return d
 
@@ -444,7 +444,7 @@ def unicodec(codec=None):
 __all__ = tuple(map(_nameOf, (bytes2repr, bytes2str, iterbytes,
                               type(missing), property_RO,
                               str2bytes, unicodec)))
-__version__ = '25.04.07'
+__version__ = '25.06.09'
 
 if __name__ == _Dmain_:
 
@@ -467,7 +467,7 @@ if __name__ == _Dmain_:
 
 # MIT License <https://OpenSource.org/licenses/MIT>
 #
-# Copyright (C) 2017-2025 -- mrJean1 at Gmail -- All Rights Reserved.
+# Copyright (C) 2017-2026 -- mrJean1 at Gmail -- All Rights Reserved.
 #
 # Permission is hereby granted, free of charge, to any person obtaining
 # a copy of this software and associated documentation files (the "Software"),

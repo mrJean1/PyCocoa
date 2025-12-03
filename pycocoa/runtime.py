@@ -45,11 +45,11 @@ from pycocoa.getters import _ivar_ctype, get_c_func_t, get_class, \
                              get_metaclass, get_protocol, get_selector, \
                              get_superclassof,  Proxy1ce
 from pycocoa.internals import _alloc_, _bNN_, bytes2str, _ByteStrs, _COLONSPACE_, \
-                              _COMMASPACE_, _c_tstr, _Dmain_, _docOf, _DOT_, \
-                              _env_get, _fmt, _fmt_invalid, _instr, missing, \
-                              _kwdstr, _NA_, _name_, _nameOf, _NL_, _NN_, _no,\
-                              _NSObject_, _property2, property_RO, _raiser_name, \
-                              _SPACE_, str2bytes, _TypeError,  sys  # PYCHOK used!
+                              _COMMASPACE_, _c_tstr, _docOf, _DOT_, _env_get, \
+                              _fmt, _fmt_invalid, _instr, missing, _kwdstr, _NA_, \
+                              _name_, _nameOf, _NN_, _no, _NSObject_, property_RO, \
+                              _property2, _raiser_name, _SPACE_, str2bytes, \
+                              _TypeError,  sys, _Dmain_  # PYCHOK used!
 # from pycocoa.lazily import _ALL_LAZY  # from .utils
 # from pycocoa import nstypes as _nstypes  # circular, see Proxy1ce
 from pycocoa.octypes import _bAT, _bHASH  # PYCHOK used!
@@ -58,7 +58,7 @@ from pycocoa.octypes import c_struct_t, c_void, ctype2encoding, emcoding2ctype, 
                             objc_super_t_ptr, ObjC_t, SEL_t, split_emcoding2, \
                             TypeCodeError
 from pycocoa.oslibs import cfString2str, _csignature, _dllattr, _libObjC
-from pycocoa.utils import __i386__, isinstanceOf, logf, name2py,  _ALL_LAZY
+from pycocoa.utils import isinstanceOf, logf, name2py,  _ALL_LAZY
 
 from ctypes import alignment, ArgumentError, byref, cast, c_buffer, \
                    c_char_p, c_double, c_float, CFUNCTYPE, c_longdouble, \
@@ -70,7 +70,7 @@ from ctypes import alignment, ArgumentError, byref, cast, c_buffer, \
 # import sys  # from .internals
 
 __all__ = _ALL_LAZY.runtime
-__version__ = '25.04.07'
+__version__ = '25.12.04'
 
 _OBJC_ENV = 'PYCOCOA_OBJC_LOG'
 _OBJC_LOG =  dict((_, 0) for _ in _env_get(_OBJC_ENV, _NN_).upper()
@@ -507,9 +507,11 @@ class ObjCInstance(_ObjCBase):
         # remove from _objc_cache
         # if self.retained():  # or self.inPool < _nstypes.NSAutoreleasePools
         #     raise RuntimeError(_fmt("%r is retained, can't be deleted", self))
+        auto = self.inPool
         objc = self._objc_cache.pop(self.ptr.value, None)
-        _ObjC_log(self, 'del', 'I', auto=self.inPool, cached=objc is self)
-        # self._cache_clear()
+        if objc:
+            _ObjC_log(self, 'del', 'I', auto=auto, cached=objc is self)
+            # self._cache_clear()
 
 #   def __eq__(self, other):
 #       return bool(isinstance(other, ObjCInstance) and
@@ -1315,7 +1317,8 @@ def _libobjcall(objc_, restype, argtypes, *args):  # in printer.py
     return r
 
 
-if __i386__:  # or __x86_64__  # Intel-emulation?
+from pycocoa.utils import __arm__, __i386__, __x86_64__  # __arm64__
+if __i386__ or __arm__ or __x86_64__:  # MCCABE 13
     from pycocoa.octypes import __LP64__
 
     # <https://www.SealieSoftware.com/blog/archive/2008/11/16/objc_explain_objc_msgSend_fpret.html>
@@ -1344,23 +1347,29 @@ if __i386__:  # or __x86_64__  # Intel-emulation?
     #         return False
     #     return True
 
-    if __LP64__:
+    if __arm__:  # 32-bit
+        _C_FLOATS = ()
+
+        def _stret(unused):
+            return True  # always
+
+    elif __LP64__ or __x86_64__:
         _C_FLOATS = {c_longdouble,}
 
-        def _istruct(restype):
+        def _stret(restype):
             return issubclass(restype, c_struct_t) and sizeof(restype) > 16
     else:
         _C_FLOATS = {c_longdouble, c_float, c_double}
         _1_2_4_8  = {1, 2, 4, 8}  # XXX > 8
 
-        def _istruct(restype):  # PYCHOK expected
+        def _stret(restype):  # PYCHOK expected
             return issubclass(restype, c_struct_t) and sizeof(restype) not in _1_2_4_8
 
     def _libobjc_msgSend(restype, argtypes, *args):
         # invoke _libObjC.objc_msgSend, _fpret or _stret
         if restype in _C_FLOATS:  # _x86_use_fpret(restype)
             objc_ = _libObjC.objc_msgSend_fpret
-        elif _istruct(restype):  # _x86_use_stret(restype)
+        elif _stret(restype):  # _x86_use_stret(restype)
             objc_ = _libObjC.objc_msgSend_stret
             # args.insert(0, byref(restype()))
             args = (byref(restype()),) + args
@@ -1372,7 +1381,7 @@ if __i386__:  # or __x86_64__  # Intel-emulation?
 
     def _libobjc_msgSendSuper(restype, *argtypes_args):
         # invoke _libObjC.objc_msgSendSuper or _stret
-        objc_ = _libObjC.objc_msgSendSuper_stret if _istruct(restype) else \
+        objc_ = _libObjC.objc_msgSendSuper_stret if _stret(restype) else \
                 _libObjC.objc_msgSendSuper  # _x86_use_stret(restype)
         return _libobjcall(objc_, restype, *argtypes_args)
 
@@ -1444,7 +1453,7 @@ def _ObjC_log(inst, what, T, *args, **kwds):  # B, C, D, I, M, S
     '''(INTERNAL) Log a new/del Instance, Sub-/Class, Bound-/Method
        call or pool/cache Drain.
     '''
-    if inst and T in _OBJC_LOG:
+    if inst and _OBJC_LOG and T in _OBJC_LOG:
         _OBJC_LOG[T] += 1
         r = _instr(inst, *args)
         t = _kwdstr(kwds) if kwds else _NN_
@@ -1790,7 +1799,7 @@ class _ObjCDeallocObserver(object):  # XXX (_ObjCBase):  # must be last
 _PyRes_t2 = {_bAT:   (ObjCInstance, Id_t),
              _bHASH: (ObjCClass, Class_t)}
 
-from ctypes import sizeof  # see from ctypes ... comments at the top
+from ctypes import sizeof  # noqa: E402 see from ctypes ... comments at the top
 
 if __name__ == _Dmain_:
 
@@ -1800,22 +1809,26 @@ if __name__ == _Dmain_:
 
     _all_listing(__all__, locals())
 
-# % python3 -m pycocoa.runtime
+del __arm__, __i386__, __x86_64__  # __arm64__
+
+# % python3.14 -m pycocoa.runtime
 #
 # pycocoa.runtime.__all__ = tuple(
-#  pycocoa.runtime.add_ivar is <function .add_ivar at 0x1010ffec0>,
-#  pycocoa.runtime.add_method is <function .add_method at 0x10113a160>,
-#  pycocoa.runtime.add_protocol is <function .add_protocol at 0x10113a200>,
-#  pycocoa.runtime.add_subclass is <function .add_subclass at 0x10113a2a0>,
-#  pycocoa.runtime.drain is <function .drain at 0x10113a340>,
-#  pycocoa.runtime.isClass is <function .isClass at 0x10113a3e0>,
-#  pycocoa.runtime.isImmutable is <function .isImmutable at 0x10113a480>,
-#  pycocoa.runtime.isMetaClass is <function .isMetaClass at 0x10113a5c0>,
-#  pycocoa.runtime.isMutable is <function .isMutable at 0x10113a660>,
-#  pycocoa.runtime.isObjCInstanceOf is <function .isObjCInstanceOf at 0x10113a700>,
+#  pycocoa.runtime.add_ivar is <function .add_ivar at 0x109ff0ca0>,
+#  pycocoa.runtime.add_method is <function .add_method at 0x109ff3110>,
+#  pycocoa.runtime.add_protocol is <function .add_protocol at 0x109ff31c0>,
+#  pycocoa.runtime.add_subclass is <function .add_subclass at 0x109ff3270>,
+#  pycocoa.runtime.drain is <function .drain at 0x109ff3320>,
+#  pycocoa.runtime.isClass is <function .isClass at 0x109ff33d0>,
+#  pycocoa.runtime.isImmutable is <function .isImmutable at 0x109ff3480>,
+#  pycocoa.runtime.isMetaClass is <function .isMetaClass at 0x109ff35e0>,
+#  pycocoa.runtime.isMutable is <function .isMutable at 0x109ff3690>,
+#  pycocoa.runtime.isObjCInstanceOf is <function .isObjCInstanceOf at 0x109ff3740>,
 #  pycocoa.runtime.OBJC_ASSOCIATION.ASSIGN=0,
 #                                  .COPY=771,
+#                                  .COPY_NONATOMIC=3,
 #                                  .RETAIN=769,
+#                                  .RETAIN_NONATOMIC=1,
 #  pycocoa.runtime.ObjCBoundClassMethod is <class .ObjCBoundClassMethod>,
 #  pycocoa.runtime.ObjCBoundMethod is <class .ObjCBoundMethod>,
 #  pycocoa.runtime.ObjCClass is <class .ObjCClass>,
@@ -1825,19 +1838,19 @@ if __name__ == _Dmain_:
 #  pycocoa.runtime.ObjCInstance is <class .ObjCInstance>,
 #  pycocoa.runtime.ObjCMethod is <class .ObjCMethod>,
 #  pycocoa.runtime.ObjCSubclass is <class .ObjCSubclass>,
-#  pycocoa.runtime.register_subclass is <function .register_subclass at 0x10113af20>,
-#  pycocoa.runtime.release is <function .release at 0x10113afc0>,
-#  pycocoa.runtime.retain is <function .retain at 0x10113b060>,
-#  pycocoa.runtime.send_message is <function .send_message at 0x10113b100>,
-#  pycocoa.runtime.send_super is <function .send_super at 0x10113b1a0>,
-#  pycocoa.runtime.send_super_init is <function .send_super_init at 0x10113b240>,
-#  pycocoa.runtime.set_ivar is <function .set_ivar at 0x10113b2e0>,
+#  pycocoa.runtime.register_subclass is <function .register_subclass at 0x109ff40f0>,
+#  pycocoa.runtime.release is <function .release at 0x109ff41a0>,
+#  pycocoa.runtime.retain is <function .retain at 0x109ff4250>,
+#  pycocoa.runtime.send_message is <function .send_message at 0x109ff4300>,
+#  pycocoa.runtime.send_super is <function .send_super at 0x109ff43b0>,
+#  pycocoa.runtime.send_super_init is <function .send_super_init at 0x109ff4460>,
+#  pycocoa.runtime.set_ivar is <function .set_ivar at 0x109ff4510>,
 # )[27]
-# pycocoa.runtime.version 25.4.7, .isLazy 1, Python 3.13.2 64bit arm64, macOS 15.4
+# pycocoa.runtime.version 25.12.4, .isLazy 1, Python 3.14.0 64bit arm64, macOS 26.1
 
 # MIT License <https://OpenSource.org/licenses/MIT>
 #
-# Copyright (C) 2017-2025 -- mrJean1 at Gmail -- All Rights Reserved.
+# Copyright (C) 2017-2026 -- mrJean1 at Gmail -- All Rights Reserved.
 #
 # Permission is hereby granted, free of charge, to any person obtaining
 # a copy of this software and associated documentation files (the "Software"),

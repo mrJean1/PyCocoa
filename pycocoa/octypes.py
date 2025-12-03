@@ -37,8 +37,8 @@ are ObjC types defined in terms of a C{ctypes} C{c_} type.
 '''
 # from pycocoa.getters import get_selectornameof
 from pycocoa.internals import _bNN_, bytes2str, _Dmain_, _fmt_invalid, \
-                              _fmt, _invalid_, iterbytes, missing, _name_, \
-                              _nameOf, _NN_, property_RO, _SPACE_, str2bytes
+                              _fmt, _invalid_, iterbytes, missing, _NN_, \
+                              _nameOf, property_RO, _SPACE_, str2bytes
 # from pycocoa.lazily import _ALL_LAZY  # from .utils
 from pycocoa.utils import _bCOL, inst2strepr,  _ALL_LAZY
 
@@ -53,7 +53,7 @@ except ImportError:
     c_void = None
 
 __all__ = _ALL_LAZY.octypes
-__version__ = '25.04.07'
+__version__ = '25.06.09'
 
 _bAT        = b'@'  # in .runtime
 _bHASH      = b'#'  # in .runtime
@@ -109,6 +109,11 @@ class TypeCodeError(ValueError):
 def _bJoin(codes):
     # join bytes
     return _bNN_.join(codes)
+
+
+def _field2(**kwd1):
+    # assert len(kwd1) == 1
+    return kwd1.popitem()
 
 
 # Note CGBase.h at /System/Library/Frameworks/ApplicationServices
@@ -310,7 +315,7 @@ class VoidPtr_t(ObjC_t):
 class objc_method_description_t(c_struct_t):
     '''ObjC C{struct} with fields C{name} and C{types} (C{SEL_t}, C{c_char_p}).
     '''
-    _fields_ = (_name_, SEL_t), ('types', c_char_p)
+    _fields_ = _field2(name=SEL_t), _field2(types=c_char_p)
 
 
 class objc_property_t(ObjC_t):
@@ -322,13 +327,13 @@ class objc_property_t(ObjC_t):
 class objc_property_attribute_t(c_struct_t):
     '''ObjC C{struct} with fields C{name} and C{value} (both C{c_char_p}).
     '''
-    _fields_ = (_name_, c_char_p), ('value', c_char_p)
+    _fields_ = _field2(name=c_char_p), _field2(value=c_char_p)
 
 
 class objc_super_t(c_struct_t):
     '''ObjC C{struct} with fields C{receiver} and C{class} (C{Id_t}, C{Class_t}).
     '''
-    _fields_ = ('receiver', Id_t), ('super_class', Class_t)
+    _fields_ = _field2(receiver=Id_t), _field2(super_class=Class_t)
 
 
 objc_super_t_ptr = POINTER(objc_super_t)  # used in .runtime.send_super and .__init__
@@ -341,34 +346,34 @@ NSFloat_t  = c_float   # always 32-bit float
 class NSRange_t(c_struct_t):
     '''ObjC C{struct} with fields C{loc[ation]} and C{len[gth]} (both C{NSUInteger_t}).
     '''
-    _fields_ = ('location', NSUInteger_t), ('length', NSUInteger_t)
+    _fields_ = _field2(location=NSUInteger_t), _field2(length=NSUInteger_t)
 
 
 # CF/Range struct defined in CFBase.h
 class CFRange_t(c_struct_t):
     '''ObjC C{struct} with fields C{loc[ation]} and C{len[gth]} (both C{CFIndex_t}).
     '''
-    _fields_ = ('location', CFIndex_t), ('length', CFIndex_t)
+    _fields_ = _field2(location=CFIndex_t), _field2(length=CFIndex_t)
 
 
 # from /System/Library/Frameworks/Foundation.framework/Headers/NSGeometry.h
 class NSPoint_t(c_struct_t):  # == CGPoint_t
     '''ObjC C{struct} with fields C{x} and C{y} (both C{CGFloat_t}).
     '''
-    _fields_ = ('x', CGFloat_t), ('y', CGFloat_t)
+    _fields_ = _field2(x=CGFloat_t), _field2(y=CGFloat_t)
 
 
 # from /System/Library/Frameworks/Foundation.framework/Headers/NSGeometry.h
 class NSSize_t(c_struct_t):  # == CGSize_t
     '''ObjC C{struct} with fields C{width} and C{height} (both C{CGFloat_t}).
     '''
-    _fields_ = ('width', CGFloat_t), ('height', CGFloat_t)
+    _fields_ = _field2(width=CGFloat_t), _field2(height=CGFloat_t)
 
 
 class NSRect_t(c_struct_t):  # == CGRect_t
     '''ObjC C{struct} with fields C{origin} and C{size} (C{NSPoint_t}, C{NSSize_t}).
     '''
-    _fields_ = ('origin', NSPoint_t), ('size', NSSize_t)
+    _fields_ = _field2(origin=NSPoint_t), _field2(size=NSSize_t)
 
 
 class NSRect4_t(NSRect_t):
@@ -466,11 +471,11 @@ NSPointZero = NSPoint_t(0, 0)
 NSTimeInterval_t = c_double  # a ctype, != TimeInterval_t
 
 # map ctypes type to ObjC encoding type code
-_ctype2encoding = {c_char:    b'c', c_ubyte:   b'C',
-                   c_int:     b'i', c_uint:    b'I',
-                   c_short:   b's', c_ushort:  b'S',
-                   c_long:    b'l', c_ulong:   b'L',
-                   c_float:   b'f', c_double:  b'd',
+_ctype2encoding = {c_char:    b'c', c_ubyte:  b'C',
+                   c_int:     b'i', c_uint:   b'I',
+                   c_short:   b's', c_ushort: b'S',
+                   c_long:    b'l', c_ulong:  b'L',
+                   c_float:   b'f', c_double: b'd',
                    c_bool:    b'B',
                    c_char_p:  b'*',
                    c_void_p: _bAT,  # c_void: b'v',
@@ -1005,7 +1010,7 @@ if __name__ == _Dmain_:
 
 # MIT License <https://OpenSource.org/licenses/MIT>
 #
-# Copyright (C) 2017-2025 -- mrJean1 at Gmail -- All Rights Reserved.
+# Copyright (C) 2017-2026 -- mrJean1 at Gmail -- All Rights Reserved.
 #
 # Permission is hereby granted, free of charge, to any person obtaining
 # a copy of this software and associated documentation files (the "Software"),

@@ -4,7 +4,7 @@
 # Reworked from <https://GitHub.com/ActiveState/code/tree/master/recipes/Python/303058_Simple_PyObjC_Example>
 # showing an NSWindow with a basic, drawable NSView.
 
-import run as _  # PYCHOK sys.path
+import run as _  # noqa: F401 PYCHOK sys.path
 # all imports listed explicitly to help PyChecker
 from pycocoa import NSApplication, NSAutoreleasePool, NSBackingStoreBuffered, \
                     NSBezierPath, NSColor, NSDate, NSMakeRect, NSPoint_t, \
@@ -14,7 +14,7 @@ from pycocoa import NSApplication, NSAutoreleasePool, NSBackingStoreBuffered, \
 
 from math import sin, cos, pi as PI
 
-__version__ = '25.03.21'
+__version__ = '25.12.04'  # '25.03.21'
 
 NSRectFill = Libs.AppKit.NSRectFill
 
@@ -114,8 +114,10 @@ def main(timeout=None):
 if __name__ == '__main__':
 
     import sys
+    from pycocoa import machine
 
-    if segfaulty():
+    m = machine()
+    if segfaulty() or m == 'arm64':
         x = segfaulty.__name__
     else:
         try:  # may hang
@@ -127,12 +129,12 @@ if __name__ == '__main__':
         except SegfaultError as x:
             x = repr(x)
     if x:
-        print('%s: %s' % (__file__, x))
+        print('%s: %s (on %s)' % (__file__, x, m))
         exit(9)
 
 # MIT License <https://OpenSource.org/licenses/MIT>
 #
-# Copyright (C) 2017-2025 -- mrJean1 at Gmail -- All Rights Reserved.
+# Copyright (C) 2017-2026 -- mrJean1 at Gmail -- All Rights Reserved.
 #
 # Permission is hereby granted, free of charge, to any person obtaining a
 # copy of this software and associated documentation files (the "Software"),

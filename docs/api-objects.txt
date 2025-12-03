@@ -504,7 +504,6 @@ pycocoa.basics._EQUALS_	pycocoa.basics-module.html#_EQUALS_
 pycocoa.basics._UNDER_	pycocoa.basics-module.html#_UNDER_
 pycocoa.basics._pycocoa_	pycocoa.basics-module.html#_pycocoa_
 pycocoa.basics._fmt	pycocoa.internals-module.html#_fmt
-pycocoa.basics._instr	pycocoa.internals-module.html#_instr
 pycocoa.basics._docOf	pycocoa.internals-module.html#_docOf
 pycocoa.basics.__package__	pycocoa.basics-module.html#__package__
 pycocoa.basics._caller3	pycocoa.basics-module.html#_caller3
@@ -513,14 +512,12 @@ pycocoa.basics._nameOf	pycocoa.internals-module.html#_nameOf
 pycocoa.basics._NN_	pycocoa.basics-module.html#_NN_
 pycocoa.basics._lazily	pycocoa.basics-module.html#_lazily
 pycocoa.basics._isPyChOK	pycocoa.basics-module.html#_isPyChOK
-pycocoa.basics._TypeError	pycocoa.internals-module.html#_TypeError
 pycocoa.basics._AssertX	pycocoa.basics-module.html#_AssertX
 pycocoa.basics.property_RO	pycocoa.internals-module.html#property_RO
 pycocoa.basics._COMMASPACE_	pycocoa.basics-module.html#_COMMASPACE_
 pycocoa.basics.missing	pycocoa.basics-module.html#missing
 pycocoa.basics._invalid_	pycocoa.basics-module.html#_invalid_
 pycocoa.basics._SPACE_	pycocoa.basics-module.html#_SPACE_
-pycocoa.basics._not_	pycocoa.basics-module.html#_not_
 pycocoa.basics._fmt_invalid	pycocoa.internals-module.html#_fmt_invalid
 pycocoa.basics._istr	pycocoa.basics-module.html#_istr
 pycocoa.basics._COMMA_	pycocoa.basics-module.html#_COMMA_
@@ -1050,6 +1047,7 @@ pycocoa.octypes.NSIntegerEncoding	pycocoa.octypes-module.html#NSIntegerEncoding
 pycocoa.octypes._nameOf	pycocoa.internals-module.html#_nameOf
 pycocoa.octypes.CGImageEncoding	pycocoa.octypes-module.html#CGImageEncoding
 pycocoa.octypes.e	pycocoa.octypes-module.html#e
+pycocoa.octypes._field2	pycocoa.octypes-module.html#_field2
 pycocoa.octypes.NSPointEncoding	pycocoa.octypes-module.html#NSPointEncoding
 pycocoa.octypes.property_RO	pycocoa.internals-module.html#property_RO
 pycocoa.octypes.NSSizeEncoding	pycocoa.octypes-module.html#NSSizeEncoding
@@ -1396,6 +1394,7 @@ pycocoa.printers._fmt_invalid	pycocoa.internals-module.html#_fmt_invalid
 pycocoa.printers._nameOf	pycocoa.internals-module.html#_nameOf
 pycocoa.printers.ns2py	pycocoa.nstypes-module.html#ns2py
 pycocoa.printers.kPMErrors	pycocoa.printers-module.html#kPMErrors
+pycocoa.printers._field2	pycocoa.octypes-module.html#_field2
 pycocoa.printers.property_RO	pycocoa.internals-module.html#property_RO
 pycocoa.printers.cfString	pycocoa.oslibs-module.html#cfString
 pycocoa.printers._nsArray2items	pycocoa.nstypes-module.html#_nsArray2items
@@ -1465,7 +1464,6 @@ pycocoa.runtime._fmt	pycocoa.internals-module.html#_fmt
 pycocoa.runtime._instr	pycocoa.internals-module.html#_instr
 pycocoa.runtime._objc_super	pycocoa.runtime-module.html#_objc_super
 pycocoa.runtime.add_protocol	pycocoa.runtime-module.html#add_protocol
-pycocoa.runtime._istruct	pycocoa.runtime-module.html#_istruct
 pycocoa.runtime.release	pycocoa.runtime-module.html#release
 pycocoa.runtime.isMutable	pycocoa.runtime-module.html#isMutable
 pycocoa.runtime._objc_dealloc	pycocoa.runtime-module.html#_objc_dealloc
@@ -1504,6 +1502,7 @@ pycocoa.runtime.get_metaclass	pycocoa.getters-module.html#get_metaclass
 pycocoa.runtime._no	pycocoa.internals-module.html#_no
 pycocoa.runtime._TypeError	pycocoa.internals-module.html#_TypeError
 pycocoa.runtime.property_RO	pycocoa.internals-module.html#property_RO
+pycocoa.runtime._stret	pycocoa.runtime-module.html#_stret
 pycocoa.runtime._libobject_setInstanceVariable	pycocoa.runtime-module.html#_libobject_setInstanceVariable
 pycocoa.runtime.add_ivar	pycocoa.runtime-module.html#add_ivar
 pycocoa.runtime.drain	pycocoa.runtime-module.html#drain
@@ -1641,6 +1640,7 @@ pycocoa.utils._fmt_invalid	pycocoa.internals-module.html#_fmt_invalid
 pycocoa.utils._all_listing	pycocoa.utils-module.html#_all_listing
 pycocoa.utils._int2	pycocoa.internals-module.html#_int2
 pycocoa.utils.macOSver	pycocoa.utils-module.html#macOSver
+pycocoa.utils._dirbasename2	pycocoa.utils-module.html#_dirbasename2
 pycocoa.utils.zfstr	pycocoa.utils-module.html#zfstr
 pycocoa.utils._nameOf	pycocoa.internals-module.html#_nameOf
 pycocoa.utils.clipstr	pycocoa.utils-module.html#clipstr
@@ -1648,7 +1648,7 @@ pycocoa.utils._writef	pycocoa.basics-module.html#_writef
 pycocoa.utils.name2py	pycocoa.utils-module.html#name2py
 pycocoa.utils.aspect_ratio	pycocoa.utils-module.html#aspect_ratio
 pycocoa.utils.__i386__	pycocoa.utils-module.html#__i386__
-pycocoa.utils._dirbasename2	pycocoa.utils-module.html#_dirbasename2
+pycocoa.utils.__arm__	pycocoa.utils-module.html#__arm__
 pycocoa.windows	pycocoa.windows-module.html
 pycocoa.windows.retain	pycocoa.runtime-module.html#retain
 pycocoa.windows.autoResizes	pycocoa.windows-module.html#autoResizes

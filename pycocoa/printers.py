@@ -18,7 +18,7 @@ from pycocoa.nstypes import _nsArray2items, nsDictionary2dict, \
                              NSPrintInfo, NSPrintOperation, ns2py, \
                              NSStr, NSTableView, NSTextView
 from pycocoa.octypes import Array_t, BOOL_t, c_struct_t, Dictionary_t, \
-                            Id_t, ObjC_t, String_t, URL_t
+                           _field2, Id_t, ObjC_t, String_t, URL_t
 from pycocoa.oslibs import cfNumber2bool, cfString, cfString2str, \
                            cfURL2str, _csignature, _free_memory, \
                            get_lib_framework, YES
@@ -29,7 +29,7 @@ from ctypes import ArgumentError, byref, cast, c_char_p, c_double, \
                    c_int, c_void_p, POINTER, sizeof
 
 __all__ = _ALL_LAZY.printers
-__version__ = '25.04.07'
+__version__ = '25.06.09'
 
 kPMServerLocal        = None
 kPMPPDDescriptionType = cfString('PMPPDDescriptionType')  # PYCHOK false
@@ -65,14 +65,14 @@ class PMPrinter_t(ObjC_t):
 class PMRect_t(c_struct_t):
     '''ObjC C{struct} with fields C{bottom}, C{left}, C{right} and C{top} (C{c_double}-s).
     '''
-    _fields_ = ('bottom', c_double), ('left', c_double), \
-               ('right',  c_double), ('top',  c_double)
+    _fields_ = _field2(bottom=c_double), _field2(left=c_double), \
+               _field2(right=c_double),  _field2(top=c_double)
 
 
 class PMResolution_t(c_struct_t):
     '''ObjC C{struct} with fields C{hRes} and C{vRes} (C{c_double}-s).
     '''
-    _fields_ = ('hRes', c_double), ('vRes', c_double)
+    _fields_ = _field2(hRes=c_double), _field2(vRes=c_double)
 
 
 class PMServer_t(ObjC_t):
@@ -1011,7 +1011,7 @@ if __name__ == _Dmain_:
 
 # MIT License <https://OpenSource.org/licenses/MIT>
 #
-# Copyright (C) 2017-2025 -- mrJean1 at Gmail -- All Rights Reserved.
+# Copyright (C) 2017-2026 -- mrJean1 at Gmail -- All Rights Reserved.
 #
 # Permission is hereby granted, free of charge, to any person obtaining
 # a copy of this software and associated documentation files (the "Software"),

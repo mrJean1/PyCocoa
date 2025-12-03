@@ -3,7 +3,7 @@
 
 # List all Fonts.
 
-import run as __  # PYCHOK sys.path
+import run as __  # noqa: F401 PYCHOK sys.path
 from pycocoa import fontfamilies, fontsof4, fontTraitstrs
 
 __version__ = '23.01.18'
@@ -794,7 +794,7 @@ del _
 
 # MIT License <https://OpenSource.org/licenses/MIT>
 #
-# Copyright (C) 2017-2025 -- mrJean1 at Gmail -- All Rights Reserved.
+# Copyright (C) 2017-2026 -- mrJean1 at Gmail -- All Rights Reserved.
 #
 # Permission is hereby granted, free of charge, to any person obtaining a
 # copy of this software and associated documentation files (the "Software"),

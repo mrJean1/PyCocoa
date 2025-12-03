@@ -4,7 +4,7 @@
 # Reworked from <https://Gist.GitHub.com/kaloprominat/6105220>
 # showing the need to set the delegate for the NSWindow.
 
-import run as _  # PYCHOK sys.path
+import run as _  # noqa: F401 PYCHOK sys.path
 # all imports listed explicitly to help PyChecker
 from pycocoa import NSApplication, NSBackingStoreBuffered, \
                     NSMakeRect, NSStr, NSWindow, \
@@ -91,7 +91,7 @@ if __name__ == '__main__':
 
 # MIT License <https://OpenSource.org/licenses/MIT>
 #
-# Copyright (C) 2017-2025 -- mrJean1 at Gmail -- All Rights Reserved.
+# Copyright (C) 2017-2026 -- mrJean1 at Gmail -- All Rights Reserved.
 #
 # Permission is hereby granted, free of charge, to any person obtaining a
 # copy of this software and associated documentation files (the "Software"),

@@ -4,7 +4,7 @@
 # Test ObjCInstance._cache_drain fixes, courtesy CaffinePills
 # Issue #4 <https://github.com/mrJean1/PyCocoa/issues/4>
 
-import run as _  # PYCHOK sys.path
+import run as _  # noqa: F401 PYCHOK sys.path
 from pycocoa import NSDate, NSAutoreleasePool, ObjCInstance  # drain
 
 import sys

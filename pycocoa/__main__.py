@@ -17,46 +17,47 @@ if len(sys.argv) > 1 and '-all'.startswith(sys.argv[-1]):
     from pycocoa import __all__ as _alls, _locals, _pycocoa_package
     assert _pycocoa_ == _pycocoa_package
     if _isPython3:  # get pycocoa.__all__ from .lazily
-        from pycocoa import *  # PYCHOK expected
+        from pycocoa import *  # noqa: F403 expected
     _all_listing(_alls, _locals(), libs=True, _file_=_pycocoa_)
 else:
     from pycocoa.runtime import _ObjCDeallocObserver
     _ObjCDeallocObserver._testIvar1()
 
 __all__ = ()
-__version__ = '25.04.04'
+__version__ = '25.12.04'
 
-# % python3 -m pycocoa -all
+# % python3.14 -m pycocoa -all
 #
-# pycocoa.version 25.4.4, .isLazy 1, Python 3.13.2 64bit arm64, macOS 15.4
+# pycocoa.version 25.12.4, .isLazy 1, Python 3.14.0 64bit arm64, macOS 26.1
 #
 # pycocoa.__all__ = tuple(
-#  pycocoa.add_ivar is <function pycocoa.runtime.add_ivar at 0x1052e82c0>,
-#  pycocoa.add_method is <function pycocoa.runtime.add_method at 0x1052ea520>,
-#  pycocoa.add_protocol is <function pycocoa.runtime.add_protocol at 0x1052ea5c0>,
-#  pycocoa.add_subclass is <function pycocoa.runtime.add_subclass at 0x1052ea660>,
-#  pycocoa.Adict is <class pycocoa.internals.Adict>,
+#  pycocoa.add_ivar is <function pycocoa.runtime.add_ivar at 0x107fa8f60>,
+#  pycocoa.add_method is <function pycocoa.runtime.add_method at 0x107fab3d0>,
+#  pycocoa.add_protocol is <function pycocoa.runtime.add_protocol at 0x107fab480>,
+#  pycocoa.add_subclass is <function pycocoa.runtime.add_subclass at 0x107fab530>,
+#  pycocoa.Adict is <class pycocoa.basics.Adict>,
 #  pycocoa.AlertPanel is <class pycocoa.panels.AlertPanel>,
 #  pycocoa.AlertStyle.Critical=2,
 #                    .Info=1,
+#                    .Informational=1,
 #                    .Warning=0,
 #  pycocoa.Allocator_t is <class pycocoa.octypes.Allocator_t>,
 #  pycocoa.App is <class pycocoa.apps.App>,
-#  pycocoa.app_title is <function pycocoa.apps.app_title at 0x10562b240>,
-#  pycocoa.apps is <module 'pycocoa.apps' from '/Users/jean/Library/CloudStorage/Dropbox/Projects/ObjC-Cocoa/PyCocoa/pycocoa/apps.py'>,
+#  pycocoa.app_title is <function pycocoa.apps.app_title at 0x1080d9b10>,
+#  pycocoa.apps is <module 'pycocoa.apps' from '.../PyCocoa/pycocoa/apps.py'>,
 #  pycocoa.Array_t is <class ctypes.c_void_p>,
-#  pycocoa.aspect_ratio is <function pycocoa.utils.aspect_ratio at 0x105190a40>,
+#  pycocoa.aspect_ratio is <function pycocoa.utils.aspect_ratio at 0x1033bae50>,
 #  pycocoa.at is <class pycocoa.nstypes.at>,
 #  pycocoa.AutoResize.HeightSizable=16 or 1<<4,
 #                    .MaxXMargin=4 or 1<<2,
-#                    .MaxYMargin=32 or 1<<5,
+#                    .MaxYMargin=32 or 2<<4,
 #                    .MinXMargin=1,
-#                    .MinYMargin=8 or 1<<3,
+#                    .MinYMargin=8 or 2<<2,
 #                    .NotSizable=0,
 #                    .Sizable=18,
 #                    .WidthSizable=2,
 #  pycocoa.AutoResizeError is <class pycocoa.windows.AutoResizeError>,
-
+#
 #  ... <deleted> ...
 
 #  pycocoa.unichar_t is <class ctypes.c_wchar>,
@@ -67,12 +68,12 @@ __version__ = '25.04.04'
 #  pycocoa.UnknownPtr_t is <class pycocoa.octypes.UnknownPtr_t>,
 #  pycocoa.url2NS is <function pycocoa.pytypes.url2NS at 0x102a5e980>,
 #  pycocoa.URL_t is <class pycocoa.octypes.URL_t>,
-#  pycocoa.utils is <module 'pycocoa.utils' from '/Users/jean/Dropbox/Projects/ObjC-Cocoa/PyCocoa/pycocoa/utils.py'>,
+#  pycocoa.utils is <module 'pycocoa.utils' from '.../PyCocoa/pycocoa/utils.py'>,
 #  pycocoa.version is '25.4.10',
 #  pycocoa.VoidPtr_t is <class pycocoa.octypes.VoidPtr_t>,
 #  pycocoa.Window is <class pycocoa.windows.Window>,
 #  pycocoa.WindowError is <class pycocoa.windows.WindowError>,
-#  pycocoa.windows is <module 'pycocoa.windows' from '/Users/jean/Dropbox/Projects/ObjC-Cocoa/PyCocoa/pycocoa/windows.py'>,
+#  pycocoa.windows is <module 'pycocoa.windows' from '.../PyCocoa/pycocoa/windows.py'>,
 #  pycocoa.WindowStyle.Closable=2,
 #                     .Miniaturizable=4 or 1<<2,
 #                     .Resizable=8 or 2<<2,
@@ -86,6 +87,9 @@ __version__ = '25.04.04'
 #  pycocoa.zfstr is <function pycocoa.utils.zfstr at 0x1025b22a0>,
 #  pycocoa.zSIstr is <function pycocoa.utils.zSIstr at 0x1025b2340>,
 # )[611]
+# pycocoa.version 25.12.4, .isLazy 1, Python 3.14.0 64bit arm64, macOS 26.1, oslibs [AppKit, C, CoreFoundation, CoreGraphics, CoreText, Foundation, libc, libobjc, ObjC, PrintCore, Quartz]
+
+# % python3.13 -m pycocoa
 # pycocoa.version 25.4.4, .isLazy 1, Python 3.13.2 64bit arm64, macOS 15.4, oslibs [AppKit, C, CoreFoundation, CoreGraphics, CoreText, Foundation, libc, libobjc, ObjC, PrintCore, Quartz]
 
 # % python3.13 -m pycocoa
@@ -114,7 +118,7 @@ __version__ = '25.04.04'
 
 # MIT License <https://OpenSource.org/licenses/MIT>
 #
-# Copyright (C) 2018-2025 -- mrJean1 at Gmail -- All Rights Reserved.
+# Copyright (C) 2018-2026 -- mrJean1 at Gmail -- All Rights Reserved.
 #
 # Permission is hereby granted, free of charge, to any person obtaining a
 # copy of this software and associated documentation files (the "Software"),

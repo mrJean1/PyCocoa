@@ -28,7 +28,7 @@ class _ImportError(ImportError):  # PYCHOK expected
         ImportError.__init__(self, t)
 
 
-import run as _  # PYCHOK sys.path
+import run as _  # noqa: E402,F401 PYCHOK sys.path
 try:  # PYCHOK expected
     from pycocoa.utils import _Globals
     _Globals.argv0 = _argv0  # for printf
@@ -45,7 +45,7 @@ from pycocoa import aspect_ratio, gcd, get_selector, machine, \
                     NSView, NSWindow, NSWindowStyleMaskUsual, \
                     ObjCClass, ObjCInstance, ObjCSubclass, \
                     printf, PyObjectEncoding, send_super, \
-                    terminating, __version__ as __PyCocoa__  # PYCHOK false
+                    terminating, __version__ as __PyCocoa__  # noqa: E402 PYCHOK false
 
 __all__  = ('simpleVLCplay',)
 __version__ = '23.01.18'
@@ -339,7 +339,7 @@ if __name__ == '__main__':
 
 # MIT License <https://OpenSource.org/licenses/MIT>
 #
-# Copyright (C) 2017-2025 -- mrJean1 at Gmail -- All Rights Reserved.
+# Copyright (C) 2017-2026 -- mrJean1 at Gmail -- All Rights Reserved.
 #
 # Permission is hereby granted, free of charge, to any person obtaining a
 # copy of this software and associated documentation files (the "Software"),
