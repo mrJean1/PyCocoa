@@ -25,7 +25,7 @@ from os import getenv
 from setuptools import setup
 
 __all__ = ()
-__version__ = '25.04.03'
+__version__ = '25.12.04'
 
 _pycocoa_ = 'pycocoa'
 _PACKAGE  = _pycocoa_  # 'PyCocoa'
@@ -93,11 +93,12 @@ setup(name=_PACKAGE,
           _c2('Programming Language', 'Python', '2.7'),
 #         _c2('Programming Language', 'Python', '3.7'),
 #         _c2('Programming Language', 'Python', '3.8'),
-          _c2('Programming Language', 'Python', '3.9'),
-          _c2('Programming Language', 'Python', '3.10'),
+#         _c2('Programming Language', 'Python', '3.9'),
+#         _c2('Programming Language', 'Python', '3.10'),
           _c2('Programming Language', 'Python', '3.11'),
           _c2('Programming Language', 'Python', '3.12'),
           _c2('Programming Language', 'Python', '3.13'),
+          _c2('Programming Language', 'Python', '3.14'),
           _c2('Topic', 'Software Development'),
           _c2('Topic', 'Software Development', 'User Interfaces'),
           _c2('Topic', 'Scientific/Engineering', 'Human Machine Interfaces'),
